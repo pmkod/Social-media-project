@@ -1,0 +1,95 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id                String             @id @default(uuid())
+  email             String             @unique
+  firstName         String?            @map("first_name")
+  lastName          String?            @map("last_name")
+  storeName         String?            @map("store_name")
+  password          String
+  role              String
+  active            Boolean            @default(false)
+  sellers           Article[]
+  userVerifications UserVerification[]
+  createdAt         DateTime           @default(now()) @map("created_at")
+  refreshTokens     RefreshToken[]
+  cartArticles      CartArticle[]
+
+  @@map("user")
+}
+
+model UserVerification {
+  id                            String    @id @default(uuid())
+  email                         String?
+  firstName                     String?   @map("first_name")
+  lastName                      String?   @map("last_name")
+  storeName                     String?   @map("store_name")
+  password                      String?
+  goal                          String?
+  verifiedAt                    DateTime? @map("verified_at")
+  goalAchievedAt                DateTime? @map("goal_achieved_at")
+  disabledAt                    DateTime? @map("disabled_at")
+  code                          String    @db.VarChar(10)
+  token                         String
+  numberOfFailedAttempts        Int       @default(0) @map("number_of_failed_attempts") @db.SmallInt
+  numberOfCodeTransfersViaEmail Int       @default(0) @map("number_of_code_transfers_via_email") @db.SmallInt
+  user                          User?     @relation(fields: [userId], references: [id])
+  userId                        String?   @map("user_id")
+  userRole                      String?   @map("user_role")
+  ip                            String?
+  agent                         String?
+  createdAt                     DateTime  @default(now()) @map("created_at")
+
+  @@map("user_verification")
+}
+
+model RefreshToken {
+  id         String    @id @default(uuid())
+  active     Boolean   @default(false)
+  user       User      @relation(fields: [userId], references: [id])
+  userId     String    @map("user_id")
+  disabledAt DateTime? @map("disabled_at")
+  ip         String?
+  agent      String?
+  createdAt  DateTime  @default(now()) @map("created_at")
+
+  @@map("refresh_token")
+}
+
+model Article {
+  id           String        @id @default(uuid())
+  title        String
+  description  String
+  price        Int
+  seller       User          @relation(fields: [sellerId], references: [id])
+  sellerId     String        @map("seller_id")
+  cartArticles CartArticle[]
+  createdAt    DateTime      @default(now()) @map("created_at")
+
+  @@map("article")
+}
+
+model CartArticle {
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String   @map("user_id")
+  article   Article  @relation(fields: [articleId], references: [id])
+  articleId String   @map("article_id")
+  quantity  Int      @default(0) @db.SmallInt
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@unique([userId, articleId])
+  @@map("cart_article")
+}
