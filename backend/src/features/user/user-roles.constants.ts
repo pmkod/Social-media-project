@@ -1,6 +1,6 @@
-const USER_ROLES = {
-  customer: "CUSTOMER",
-  seller: "SELLER",
+const UserRoles = {
+	customer: "CUSTOMER",
+	seller: "SELLER",
 };
 
-export { USER_ROLES };
+export { UserRoles };

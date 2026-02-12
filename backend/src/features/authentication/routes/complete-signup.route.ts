@@ -1,10 +1,10 @@
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases/postgresql";
-import { USER_ROLES } from "@/features/user/user-roles.constants";
+import { UserRoles } from "@/features/user/user-roles.constants";
 import { createRoute, OpenAPIHono } from "@hono/zod-openapi";
 import {
 	AuthenticationRoutesTag,
-	USER_VERIFICATION_GOALS,
+	UserVerificationGoals,
 } from "../authentication.constants";
 import { CompleteSignupValidationSchema } from "../authentication.validation-schemas";
 import { generateAccessAndRefreshToken } from "../jwt.functions";
@@ -45,7 +45,7 @@ completeSignupRoute.openapi(routeDef, async (c) => {
 			disabledAt: null,
 			goalAchievedAt: null,
 			verifiedAt: { not: null },
-			goal: USER_VERIFICATION_GOALS.signup,
+			goal: UserVerificationGoals.signup,
 		},
 		select: {
 			id: true,
@@ -110,7 +110,7 @@ completeSignupRoute.openapi(routeDef, async (c) => {
 	const { accessToken, refreshToken } = generateAccessAndRefreshToken({
 		refreshTokenId: refreshTokenInDb.id,
 		userId: user.id,
-		userRole: USER_ROLES.customer,
+		userRole: UserRoles.customer,
 	});
 
 	await prisma.userVerification.update({

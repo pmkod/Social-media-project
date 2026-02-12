@@ -1,7 +1,7 @@
-import { USER_VERIFICATION_GOALS } from "./authentication.constants";
+import { UserVerificationGoals } from "./authentication.constants";
 
-type UserVerificationGoalsKeys = keyof typeof USER_VERIFICATION_GOALS;
+type UserVerificationGoalsKeys = keyof typeof UserVerificationGoals;
 type UserVerificationGoal =
-  (typeof USER_VERIFICATION_GOALS)[UserVerificationGoalsKeys];
+	(typeof UserVerificationGoals)[UserVerificationGoalsKeys];
 
 export type { UserVerificationGoal };

@@ -4,7 +4,7 @@ import { prisma } from "../../../core/databases/postgresql";
 import { sendMail } from "../../mail/mail.service";
 import {
 	AuthenticationRoutesTag,
-	USER_VERIFICATION_GOALS,
+	UserVerificationGoals,
 } from "../authentication.constants";
 import {
 	generateUserVerificationCode,
@@ -60,7 +60,7 @@ passwordResetRoute.openapi(routeDef, async (c) => {
 			// ip,
 			numberOfFailedAttempts: 0,
 			numberOfCodeTransfersViaEmail: 0,
-			goal: USER_VERIFICATION_GOALS.passwordReset,
+			goal: UserVerificationGoals.passwordReset,
 			userId: userWithGivenEmail.id,
 		},
 		select: {

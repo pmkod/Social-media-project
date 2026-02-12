@@ -4,7 +4,7 @@ import { sendMail } from "@/features/mail/mail.service";
 import { createRoute, OpenAPIHono } from "@hono/zod-openapi";
 import {
 	AuthenticationRoutesTag,
-	USER_VERIFICATION_GOALS,
+	UserVerificationGoals,
 } from "../authentication.constants";
 import {
 	generateUserVerificationCode,
@@ -64,7 +64,7 @@ signupRoute.openapi(routeDef, async (c) => {
 			// ip,
 			numberOfFailedAttempts: 0,
 			numberOfCodeTransfersViaEmail: 0,
-			goal: USER_VERIFICATION_GOALS.signup,
+			goal: UserVerificationGoals.signup,
 			userRole: role,
 		},
 		select: {

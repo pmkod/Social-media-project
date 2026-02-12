@@ -1,7 +1,7 @@
 import type { HonoContextVariables } from "@/core/types/hono-context-variables";
 import type { Context, Next } from "hono";
 import { verifyAccessToken } from "../authentication/jwt.functions";
-import { USER_ROLES } from "../user/user-roles.constants";
+import { UserRoles } from "../user/user-roles.constants";
 
 type ControlUserAccessOptions = {
 	roles: string[];
@@ -43,14 +43,14 @@ const controlUserAccess = (options?: ControlUserAccessOptions) => {
 };
 
 const controlUserAccessForCustomer = controlUserAccess({
-	roles: [USER_ROLES.customer],
+	roles: [UserRoles.customer],
 });
 const controlUserAccessForSeller = controlUserAccess({
-	roles: [USER_ROLES.seller],
+	roles: [UserRoles.seller],
 });
 
 const controlUserAccessForCustomerAndSeller = controlUserAccess({
-	roles: [USER_ROLES.customer, USER_ROLES.seller],
+	roles: [UserRoles.customer, UserRoles.seller],
 });
 
 export {

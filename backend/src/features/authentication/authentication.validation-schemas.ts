@@ -1,5 +1,5 @@
 import { z } from "@hono/zod-openapi";
-import { USER_ROLES } from "../user/user-roles.constants";
+import { UserRoles } from "../user/user-roles.constants";
 import { UserValidationSchema } from "../user/user.validation.schemas";
 
 const SignupValidationSchema = z.object({
@@ -8,7 +8,7 @@ const SignupValidationSchema = z.object({
 	lastName: UserValidationSchema.shape.lastName.optional(),
 	email: UserValidationSchema.shape.email,
 	password: UserValidationSchema.shape.password,
-	role: z.enum([USER_ROLES.customer, USER_ROLES.seller]),
+	role: z.enum([UserRoles.customer, UserRoles.seller]),
 });
 
 type SignupValidationSchemaType = z.infer<typeof SignupValidationSchema>;
