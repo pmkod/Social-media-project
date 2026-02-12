@@ -1,5 +1,6 @@
 import { OpenAPIHono } from "@hono/zod-openapi";
 import { Scalar } from "@scalar/hono-api-reference";
+import { exceptionHandler } from "./core/exceptions/exception.handler";
 import { authenticationRouter } from "./features/authentication/routes";
 import { userRouter } from "./features/user/routes";
 
@@ -12,6 +13,8 @@ app.route("/", userRouter);
 // app.route("/", userRouter);
 // app.route("/", authenticationRouter);
 // app.route("/", authenticationRouter);
+
+app.onError(exceptionHandler);
 
 app.doc("/documentation", {
 	openapi: "3.0.0",

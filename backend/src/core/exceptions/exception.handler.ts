@@ -1,19 +1,13 @@
-import type { NextFunction, Request, Response } from "express";
+import type { ErrorHandler } from "hono";
 
-const exceptionHandler = (
-  err: Error,
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  if (res.headersSent) {
-    return next(err);
-  }
-  console.log(err.message);
-  console.log(err);
+const exceptionHandler: ErrorHandler = (err, c) => {
+	// if (c.headersSent) {
+	// 	return next(err);
+	// }
+	console.log(err.message);
+	console.log(err);
 
-  res.status(500);
-  res.json({ message: err.message || "Something went wrong" });
+	return c.json({ message: err.message || "Something went wrong" }, 400);
 };
 
 export { exceptionHandler };
