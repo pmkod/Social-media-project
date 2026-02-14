@@ -7,9 +7,9 @@ import {
 
 export default [
 	layout("./core/layouts/base.layout.tsx", [
-		layout("./core/layouts/main.layout.tsx", [
+		layout("./core/layouts/presentation.layout.tsx", [
 			layout("./features/authentication/layouts/authentication.layout.tsx", [
-				route("login", "./features/authentication/pages/login.page.tsx"),
+				index("./features/authentication/pages/login.page.tsx"),
 				route("signup", "./features/authentication/pages/signup.page.tsx"),
 				route(
 					"password-reset",

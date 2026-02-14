@@ -1,17 +1,8 @@
 "use client";
 
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-
-import {
-	CardContent,
-	CardDescription,
-	CardHeader,
-	CardTitle,
-} from "@/core/components/ui/card";
-import { Input } from "@/core/components/ui/input";
+import { Alert, AlertDescription } from "@/core/components/ui/alert";
 import { Button } from "@/core/components/ui/button";
-import { signupValidationSchema } from "../../authentication.validation-schemas";
+import { CardContent, CardHeader, CardTitle } from "@/core/components/ui/card";
 import {
 	Form,
 	FormControl,
@@ -20,13 +11,16 @@ import {
 	FormLabel,
 	FormMessage,
 } from "@/core/components/ui/form";
-import { Link, useNavigate } from "react-router";
+import { Input } from "@/core/components/ui/input";
 import { PasswordInput } from "@/core/components/ui/password-input";
-import { useSignup } from "../../mutations/use-signup";
 import { routesBuilder } from "@/core/routes-builder";
-import { USER_VERIFICATION_GOALS } from "../../authentication.constants";
-import { Alert, AlertDescription } from "@/core/components/ui/alert";
 import { USER_ROLES } from "@/features/user/constants/user-roles.constants";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { Link, useNavigate } from "react-router";
+import { USER_VERIFICATION_GOALS } from "../../authentication.constants";
+import { signupValidationSchema } from "../../authentication.validation-schemas";
+import { useSignup } from "../../mutations/use-signup";
 
 const SignupForm = () => {
 	const { mutate, isPending } = useSignup();
@@ -182,7 +176,7 @@ const SignupForm = () => {
 				</Form>
 				<div className="mt-4 text-center text-sm">
 					Already have an account?{" "}
-					<Link to="/login" className="underline">
+					<Link to="/" className="underline">
 						Login
 					</Link>
 				</div>
