@@ -2,18 +2,18 @@ import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases/postgresql";
 import type { HonoContextVariables } from "@/core/types/hono-context-variables";
 import { createRoute, OpenAPIHono } from "@hono/zod-openapi";
-import { PostRoutesTag } from "../post.constants";
-import { LikePostValidationSchema } from "../post.validation-schemas";
+import { PostRoutesTag } from "../../post/post.constants";
+import { LikeCommentValidationSchema } from "../comment.validation-schemas";
 
 // import type { HttpStatus } from "@/core/constants/http-status";
 
 const routeDef = createRoute({
 	method: "post",
-	path: "/:postId/like",
-	summary: "Like post",
+	path: "/:commentId/like",
+	summary: "Like comment",
 	tags: [PostRoutesTag],
 	request: {
-		params: LikePostValidationSchema,
+		params: LikeCommentValidationSchema,
 	},
 	responses: {
 		[HttpStatus.OK.code]: {
@@ -22,7 +22,7 @@ const routeDef = createRoute({
 	},
 });
 
-const likePostRoute = new OpenAPIHono<HonoContextVariables>().openapi(
+const likeCommentRoute = new OpenAPIHono<HonoContextVariables>().openapi(
 	routeDef,
 	async (c) => {
 		const reqParams = c.req.valid("param");
@@ -32,9 +32,9 @@ const likePostRoute = new OpenAPIHono<HonoContextVariables>().openapi(
 			throw Error();
 		}
 
-		await prisma.postLike.create({
+		await prisma.commentLike.create({
 			data: {
-				postId: reqParams.postId,
+				commentId: reqParams.commentId,
 				likerId: loggedInUser.id,
 			},
 		});
@@ -43,4 +43,4 @@ const likePostRoute = new OpenAPIHono<HonoContextVariables>().openapi(
 	},
 );
 
-export { likePostRoute };
+export { likeCommentRoute };

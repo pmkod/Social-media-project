@@ -11,4 +11,17 @@ const CreateCommentValidationSchema = z.object({
 	postId: PostValidationSchema.shape.id,
 });
 
-export { CommentValidationSchema, CreateCommentValidationSchema };
+const LikeCommentValidationSchema = z.object({
+	commentId: CommentValidationSchema.shape.id,
+});
+
+const UnlikeCommentValidationSchema = z.object({
+	commentId: CommentValidationSchema.shape.id,
+});
+
+export {
+	CommentValidationSchema,
+	CreateCommentValidationSchema,
+	LikeCommentValidationSchema,
+	UnlikeCommentValidationSchema,
+};

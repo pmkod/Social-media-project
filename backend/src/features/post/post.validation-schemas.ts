@@ -10,11 +10,11 @@ const CreatePostValidationSchema = z.object({
 });
 
 const LikePostValidationSchema = z.object({
-	postId: PostValidationSchema.shape.content,
+	postId: PostValidationSchema.shape.id,
 });
 
 const UnlikePostValidationSchema = z.object({
-	postId: PostValidationSchema.shape.content,
+	postId: PostValidationSchema.shape.id,
 });
 
 export {

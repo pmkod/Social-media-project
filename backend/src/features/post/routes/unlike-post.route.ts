@@ -13,13 +13,7 @@ const routeDef = createRoute({
 	summary: "Unlike post",
 	tags: [PostRoutesTag],
 	request: {
-		body: {
-			content: {
-				"application/json": {
-					schema: UnlikePostValidationSchema,
-				},
-			},
-		},
+		params: UnlikePostValidationSchema,
 	},
 	responses: {
 		[HttpStatus.OK.code]: {
@@ -31,7 +25,7 @@ const routeDef = createRoute({
 const unlikePostRoute = new OpenAPIHono<HonoContextVariables>().openapi(
 	routeDef,
 	async (c) => {
-		const reqBody = c.req.valid("json");
+		const reqParams = c.req.valid("param");
 		const loggedInUser = c.get("loggedInUser");
 
 		if (!loggedInUser) {
@@ -41,7 +35,7 @@ const unlikePostRoute = new OpenAPIHono<HonoContextVariables>().openapi(
 		await prisma.postLike.delete({
 			where: {
 				postId_likerId: {
-					postId: reqBody.postId,
+					postId: reqParams.postId,
 					likerId: loggedInUser.id,
 				},
 			},
