@@ -9,7 +9,7 @@ export function meta(params: Route.MetaArgs) {
 
 export default function Home() {
 	return (
-		<div className="flex-1 pt-7">
+		<div className="flex-1 py-7">
 			<Feed />
 		</div>
 	);

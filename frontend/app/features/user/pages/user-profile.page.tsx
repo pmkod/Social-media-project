@@ -67,7 +67,7 @@ const UserProfilePage = () => {
 								{userData.name}
 							</h1>
 							<p className="text-muted-foreground line-clamp-1">
-								{userData.state && userData.state + ", "}
+								{userData.state && `${userData.state}, `}
 								{userData.country}
 							</p>
 						</div>

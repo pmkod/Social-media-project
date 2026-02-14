@@ -1,4 +1,6 @@
 import { routesBuilder } from "@/core/routes-builder";
+import { LoggedInUserDropdownMenu } from "@/features/user/components/logged-in-user.dropdown-menu";
+import { userData } from "@/features/user/pages/user-profile.page";
 import { Compass, Home, MessageCircleMore, User } from "lucide-react";
 import type { ReactNode } from "react";
 import { Link } from "react-router";
@@ -24,11 +26,11 @@ const SidebarLink = ({ icon, path, name }: SidebarLinkProps) => {
 
 const Sidebar = () => {
 	return (
-		<div className="w-72 h-screen sticky top-0 pt-7">
+		<div className="w-72 h-screen flex flex-col sticky top-0 pt-7">
 			<div className="pl-4 pb-7">
 				<Logo />
 			</div>
-			<div className="">
+			<div className="flex-1">
 				<SidebarLink icon={<Home />} path={routesBuilder.home} name="Home" />
 				<SidebarLink
 					icon={<Compass />}
@@ -51,7 +53,9 @@ const Sidebar = () => {
 					name="Profile"
 				/>
 			</div>
-			<div></div>
+			<div className="pb-4 w-full">
+				<LoggedInUserDropdownMenu user={userData} />
+			</div>
 		</div>
 	);
 };
