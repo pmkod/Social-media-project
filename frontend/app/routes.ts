@@ -24,7 +24,12 @@ export default [
 					"./features/authentication/pages/user-verification.page.tsx",
 				),
 			]),
-			index("features/home/home.page.tsx"),
+		]),
+		layout("./core/layouts/main.layout.tsx", [
+			layout("./core/layouts/with-right-side-default-content.layout.tsx", [
+				route("home", "features/home/home.page.tsx"),
+				route("users/:userName", "features/user/pages/user-profile.page.tsx"),
+			]),
 		]),
 	]),
 ] satisfies RouteConfig;

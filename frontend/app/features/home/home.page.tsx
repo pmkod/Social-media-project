@@ -1,4 +1,5 @@
 import type { Route } from "../../+types/root";
+import { Feed } from "../post/components/feed";
 export function meta(params: Route.MetaArgs) {
 	return [
 		{ title: "New React Router App" },
@@ -8,10 +9,8 @@ export function meta(params: Route.MetaArgs) {
 
 export default function Home() {
 	return (
-		<div>
-			<div className="p-8">
-				<div className="grid grid-cols-5 gap-4"></div>
-			</div>
+		<div className="flex-1 pt-7">
+			<Feed />
 		</div>
 	);
 }

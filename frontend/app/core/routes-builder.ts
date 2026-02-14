@@ -19,6 +19,7 @@ const routesBuilder = {
 	home: "/home",
 	discussions: "/discussions",
 	explore: "/explore",
+	userProfile: (userName: string) => `/users/${userName}`,
 };
 
 export { routesBuilder };

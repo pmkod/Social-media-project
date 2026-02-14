@@ -1,7 +1,13 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { Alert, AlertDescription } from "@/core/components/ui/alert";
+import { Button } from "@/core/components/ui/button";
+import {
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from "@/core/components/ui/card";
 import {
 	Form,
 	FormControl,
@@ -10,26 +16,19 @@ import {
 	FormLabel,
 	FormMessage,
 } from "@/core/components/ui/form";
-import { Button } from "@/core/components/ui/button";
-import {
-	CardContent,
-	CardDescription,
-	CardHeader,
-	CardTitle,
-} from "@/core/components/ui/card";
 import { Input } from "@/core/components/ui/input";
-import { userVerificationValidationSchema } from "../../authentication.validation-schemas";
-import { useUserVerification } from "../../mutations/use-user-verification";
-import { useNavigate, useSearchParams } from "react-router";
 import { routesBuilder } from "@/core/routes-builder";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { useNavigate, useSearchParams } from "react-router";
 import {
 	USER_VERIFICATION_FIELDS_KEYS,
 	USER_VERIFICATION_GOALS,
 } from "../../authentication.constants";
-import { useCompleteSignup } from "../../mutations/use-complete-signup";
+import { userVerificationValidationSchema } from "../../authentication.validation-schemas";
 import { useCompleteLogin } from "../../mutations/use-complete-login";
-import { Alert, AlertDescription } from "@/core/components/ui/alert";
-import { USER_ROLES } from "@/features/user/constants/user-roles.constants";
+import { useCompleteSignup } from "../../mutations/use-complete-signup";
+import { useUserVerification } from "../../mutations/use-user-verification";
 
 const UserVerificationForm = () => {
 	const {
@@ -62,16 +61,8 @@ const UserVerificationForm = () => {
 			onSuccess: () => {
 				if (goal === USER_VERIFICATION_GOALS.signup) {
 					completeSignupMutation(undefined, {
-						onSuccess: (data) => {
-							if (data.user.role === USER_ROLES.customer) {
-								navigate(routesBuilder.first);
-								return;
-							}
-							if (data.user.role === USER_ROLES.seller) {
-								navigate(routesBuilder.seller.home);
-								return;
-							}
-							navigate(routesBuilder.first);
+						onSuccess: () => {
+							navigate(routesBuilder.home);
 						},
 						onError: (error) => {
 							form.setError("root", {
@@ -83,16 +74,8 @@ const UserVerificationForm = () => {
 				}
 				if (goal === USER_VERIFICATION_GOALS.login) {
 					completeLoginMutation(undefined, {
-						onSuccess: (data) => {
-							if (data.user.role === USER_ROLES.customer) {
-								navigate(routesBuilder.first);
-								return;
-							}
-							if (data.user.role === USER_ROLES.seller) {
-								navigate(routesBuilder.seller.home);
-								return;
-							}
-							navigate(routesBuilder.first);
+						onSuccess: () => {
+							navigate(routesBuilder.home);
 						},
 						onError: (error) => {
 							form.setError("root", {

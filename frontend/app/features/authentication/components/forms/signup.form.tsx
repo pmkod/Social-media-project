@@ -14,7 +14,6 @@ import {
 import { Input } from "@/core/components/ui/input";
 import { PasswordInput } from "@/core/components/ui/password-input";
 import { routesBuilder } from "@/core/routes-builder";
-import { USER_ROLES } from "@/features/user/constants/user-roles.constants";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router";
@@ -38,26 +37,20 @@ const SignupForm = () => {
 	const rootErrorMessage = form.formState.errors.root?.message;
 
 	const onSubmit = form.handleSubmit((data) => {
-		mutate(
-			{
-				...data,
-				role: USER_ROLES.customer,
+		mutate(data, {
+			onSuccess: () => {
+				navigate(
+					routesBuilder.userVerification({
+						goal: USER_VERIFICATION_GOALS.signup,
+					}),
+				);
 			},
-			{
-				onSuccess: () => {
-					navigate(
-						routesBuilder.userVerification({
-							goal: USER_VERIFICATION_GOALS.signup,
-						}),
-					);
-				},
-				onError: (error) => {
-					form.setError("root", {
-						message: error.message,
-					});
-				},
+			onError: (error) => {
+				form.setError("root", {
+					message: error.message,
+				});
 			},
-		);
+		});
 	});
 
 	return (

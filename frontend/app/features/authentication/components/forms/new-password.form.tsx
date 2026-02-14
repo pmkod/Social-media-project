@@ -1,10 +1,8 @@
 "use client";
 
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-
+import { Alert, AlertDescription } from "@/core/components/ui/alert";
+import { Button } from "@/core/components/ui/button";
+import { CardContent, CardHeader, CardTitle } from "@/core/components/ui/card";
 import {
 	Form,
 	FormControl,
@@ -13,21 +11,13 @@ import {
 	FormLabel,
 	FormMessage,
 } from "@/core/components/ui/form";
-import { Button } from "@/core/components/ui/button";
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardHeader,
-	CardTitle,
-} from "@/core/components/ui/card";
-import { Input } from "@/core/components/ui/input";
 import { PasswordInput } from "@/core/components/ui/password-input";
-import { newPasswordValidationSchema } from "../../authentication.validation-schemas";
-import { Alert, AlertDescription } from "@/core/components/ui/alert";
-import { useNewPassword } from "../../mutations/use-new-password";
-import { useNavigate } from "react-router";
 import { routesBuilder } from "@/core/routes-builder";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router";
+import { newPasswordValidationSchema } from "../../authentication.validation-schemas";
+import { useNewPassword } from "../../mutations/use-new-password";
 
 function NewPasswordForm() {
 	const { mutate, isPending } = useNewPassword();
@@ -55,7 +45,7 @@ function NewPasswordForm() {
 			},
 			{
 				onSuccess: () => {
-					navigate(routesBuilder.first);
+					navigate(routesBuilder.home);
 				},
 				onError: (error) => {
 					form.setError("root", {

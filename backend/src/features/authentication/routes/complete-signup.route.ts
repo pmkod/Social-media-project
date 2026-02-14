@@ -123,9 +123,6 @@ completeSignupRoute.openapi(routeDef, async (c) => {
 	return c.json({
 		accessToken,
 		refreshToken,
-		user: {
-			role: user.role,
-		},
 	});
 });
 
