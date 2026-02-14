@@ -55,12 +55,27 @@ export type UserVerification = Prisma.UserVerificationModel
  */
 export type RefreshToken = Prisma.RefreshTokenModel
 /**
- * Model Article
+ * Model Post
  * 
  */
-export type Article = Prisma.ArticleModel
+export type Post = Prisma.PostModel
 /**
- * Model CartArticle
+ * Model PostLike
  * 
  */
-export type CartArticle = Prisma.CartArticleModel
+export type PostLike = Prisma.PostLikeModel
+/**
+ * Model Comment
+ * 
+ */
+export type Comment = Prisma.CommentModel
+/**
+ * Model CommentLike
+ * 
+ */
+export type CommentLike = Prisma.CommentLikeModel
+/**
+ * Model Follow
+ * 
+ */
+export type Follow = Prisma.FollowModel

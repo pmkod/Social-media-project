@@ -26,9 +26,10 @@ const getMeRoute = new OpenAPIHono<HonoContextVariables>().openapi(
 			throw Error();
 		}
 
-		const user = await prisma.user.findUnique({
+		const user = await prisma.user.findUniqueOrThrow({
 			where: {
 				id: loggedInUser.id,
+				active: true,
 			},
 			select: {
 				id: true,

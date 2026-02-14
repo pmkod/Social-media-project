@@ -22,11 +22,15 @@ model User {
   password          String
   role              String
   active            Boolean            @default(false)
-  sellers           Article[]
   userVerifications UserVerification[]
   createdAt         DateTime           @default(now()) @map("created_at")
   refreshTokens     RefreshToken[]
-  cartArticles      CartArticle[]
+  posts             Post[]
+  comments          Comment[]
+  postLikes         PostLike[]
+  commentLikes      CommentLike[]
+  followers         Follow[]           @relation("followed")
+  follows           Follow[]           @relation("follower")
 
   @@map("user")
 }
@@ -69,27 +73,67 @@ model RefreshToken {
   @@map("refresh_token")
 }
 
-model Article {
-  id           String        @id @default(uuid())
-  title        String
-  description  String
-  price        Int
-  seller       User          @relation(fields: [sellerId], references: [id])
-  sellerId     String        @map("seller_id")
-  cartArticles CartArticle[]
-  createdAt    DateTime      @default(now()) @map("created_at")
-
-  @@map("article")
-}
-
-model CartArticle {
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String   @map("user_id")
-  article   Article  @relation(fields: [articleId], references: [id])
-  articleId String   @map("article_id")
-  quantity  Int      @default(0) @db.SmallInt
+model Post {
+  id        String   @id @default(uuid())
+  content   String
   createdAt DateTime @default(now()) @map("created_at")
 
-  @@unique([userId, articleId])
-  @@map("cart_article")
+  author   User   @relation(fields: [authorId], references: [id])
+  authorId String @map("author_id")
+
+  comments  Comment[]
+  postLikes PostLike[]
+
+  @@map("post")
+}
+
+model PostLike {
+  post    Post   @relation(fields: [postId], references: [id])
+  postId  String @map("post_id")
+  liker   User   @relation(fields: [likerId], references: [id])
+  likerId String @map("liker_id")
+
+  likedAt DateTime @default(now()) @map("liked_at")
+
+  @@id([postId, likerId])
+  @@map("post_like")
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  content   String
+  createdAt DateTime @default(now()) @map("created_at")
+
+  author       User          @relation(fields: [authorId], references: [id])
+  authorId     String        @map("author_id")
+  post         Post          @relation(fields: [postId], references: [id])
+  postId       String        @map("post_id")
+  commentLikes CommentLike[]
+
+  @@map("comment")
+}
+
+model CommentLike {
+  liker     User    @relation(fields: [likerId], references: [id])
+  likerId   String  @map("liker_id")
+  comment   Comment @relation(fields: [commentId], references: [id])
+  commentId String  @map("comment_id")
+
+  likedAt DateTime @default(now()) @map("liked_at")
+
+  @@id([commentId, likerId])
+  @@map("comment_like")
+}
+
+model Follow {
+  follower   User   @relation("follower", fields: [followerId], references: [id])
+  followerId String @map("follower_id")
+
+  followed   User   @relation("followed", fields: [followedId], references: [id])
+  followedId String @map("followed_id")
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@id([followerId, followedId])
+  @@map("follow")
 }

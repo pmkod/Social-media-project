@@ -54,8 +54,11 @@ export const ModelName = {
   User: 'User',
   UserVerification: 'UserVerification',
   RefreshToken: 'RefreshToken',
-  Article: 'Article',
-  CartArticle: 'CartArticle'
+  Post: 'Post',
+  PostLike: 'PostLike',
+  Comment: 'Comment',
+  CommentLike: 'CommentLike',
+  Follow: 'Follow'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -127,26 +130,52 @@ export const RefreshTokenScalarFieldEnum = {
 export type RefreshTokenScalarFieldEnum = (typeof RefreshTokenScalarFieldEnum)[keyof typeof RefreshTokenScalarFieldEnum]
 
 
-export const ArticleScalarFieldEnum = {
+export const PostScalarFieldEnum = {
   id: 'id',
-  title: 'title',
-  description: 'description',
-  price: 'price',
-  sellerId: 'sellerId',
+  content: 'content',
+  createdAt: 'createdAt',
+  authorId: 'authorId'
+} as const
+
+export type PostScalarFieldEnum = (typeof PostScalarFieldEnum)[keyof typeof PostScalarFieldEnum]
+
+
+export const PostLikeScalarFieldEnum = {
+  postId: 'postId',
+  likerId: 'likerId',
+  likedAt: 'likedAt'
+} as const
+
+export type PostLikeScalarFieldEnum = (typeof PostLikeScalarFieldEnum)[keyof typeof PostLikeScalarFieldEnum]
+
+
+export const CommentScalarFieldEnum = {
+  id: 'id',
+  content: 'content',
+  createdAt: 'createdAt',
+  authorId: 'authorId',
+  postId: 'postId'
+} as const
+
+export type CommentScalarFieldEnum = (typeof CommentScalarFieldEnum)[keyof typeof CommentScalarFieldEnum]
+
+
+export const CommentLikeScalarFieldEnum = {
+  likerId: 'likerId',
+  commentId: 'commentId',
+  likedAt: 'likedAt'
+} as const
+
+export type CommentLikeScalarFieldEnum = (typeof CommentLikeScalarFieldEnum)[keyof typeof CommentLikeScalarFieldEnum]
+
+
+export const FollowScalarFieldEnum = {
+  followerId: 'followerId',
+  followedId: 'followedId',
   createdAt: 'createdAt'
 } as const
 
-export type ArticleScalarFieldEnum = (typeof ArticleScalarFieldEnum)[keyof typeof ArticleScalarFieldEnum]
-
-
-export const CartArticleScalarFieldEnum = {
-  userId: 'userId',
-  articleId: 'articleId',
-  quantity: 'quantity',
-  createdAt: 'createdAt'
-} as const
-
-export type CartArticleScalarFieldEnum = (typeof CartArticleScalarFieldEnum)[keyof typeof CartArticleScalarFieldEnum]
+export type FollowScalarFieldEnum = (typeof FollowScalarFieldEnum)[keyof typeof FollowScalarFieldEnum]
 
 
 export const SortOrder = {
