@@ -1,7 +1,7 @@
 import { routesBuilder } from "@/core/routes-builder";
 import { LoggedInUserDropdownMenu } from "@/features/user/components/logged-in-user.dropdown-menu";
 import { userData } from "@/features/user/pages/user-profile.page";
-import { Compass, Home, MessageCircleMore, User } from "lucide-react";
+import { Compass, Home, MessageCircleMore, Settings, User } from "lucide-react";
 import type { ReactNode } from "react";
 import { Link } from "react-router";
 import { Logo } from "../logo";
@@ -34,23 +34,24 @@ const Sidebar = () => {
 				<SidebarLink icon={<Home />} path={routesBuilder.home} name="Home" />
 				<SidebarLink
 					icon={<Compass />}
-					path={routesBuilder.explore}
+					path={routesBuilder.home}
 					name="Explore"
 				/>
 				<SidebarLink
 					icon={<MessageCircleMore />}
-					path={routesBuilder.discussions}
+					path={routesBuilder.home}
 					name="Discussions"
 				/>
-				<SidebarLink
-					icon={<Compass />}
-					path={routesBuilder.explore}
-					name="Explore"
-				/>
+
 				<SidebarLink
 					icon={<User />}
-					path={routesBuilder.userProfile("pmkod")}
+					path={routesBuilder.userProfile("p")}
 					name="Profile"
+				/>
+				<SidebarLink
+					icon={<Settings />}
+					path={routesBuilder.home}
+					name="Settings"
 				/>
 			</div>
 			<div className="pb-4 w-full">
