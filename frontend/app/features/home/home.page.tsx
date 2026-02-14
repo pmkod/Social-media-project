@@ -1,4 +1,5 @@
 import type { Route } from "../../+types/root";
+import { CreatePostForm } from "../post/components/create-post.form";
 import { Feed } from "../post/components/feed";
 export function meta(params: Route.MetaArgs) {
 	return [
@@ -9,7 +10,10 @@ export function meta(params: Route.MetaArgs) {
 
 export default function Home() {
 	return (
-		<div className="flex-1 py-7">
+		<div className="flex-1 pt-12 pb-7 fle">
+			<div className="mb-7">
+				<CreatePostForm />
+			</div>
 			<Feed />
 		</div>
 	);

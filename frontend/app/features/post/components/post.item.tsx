@@ -40,7 +40,7 @@ const visibilityIcons: Record<Post["visibility"], DynamicIconNameType> = {
 
 export function PostItem({ data }: { data: Post }) {
 	return (
-		<Card className="pb-0 rounded-lg shadow-none">
+		<Card className="pb-0 rounded-md border border-gray-300 shadow-none">
 			<article>
 				<CardHeader className="flex-row flex mb-3 justify-between items-center gap-x-3 space-y-0">
 					<div className="flex items-center gap-x-2">

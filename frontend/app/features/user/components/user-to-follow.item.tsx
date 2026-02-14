@@ -22,7 +22,7 @@ export function UserToFollowItem({ data }: { data: UserProfileType }) {
 					{formatNumberToCompact(data.connections)} connections
 				</p>
 			</div>
-			<Button className="ms-auto">Connect</Button>
+			<Button className="ms-auto">Follow</Button>
 		</li>
 	);
 }

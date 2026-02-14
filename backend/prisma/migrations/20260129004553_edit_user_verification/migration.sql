@@ -1,6 +1,0 @@
--- AlterTable
-ALTER TABLE "user_verification" ALTER COLUMN "email" SET DATA TYPE TEXT,
-ALTER COLUMN "password" SET DATA TYPE TEXT,
-ALTER COLUMN "verified_at" DROP DEFAULT,
-ALTER COLUMN "disabled_at" DROP DEFAULT,
-ALTER COLUMN "goal_achieved_at" DROP DEFAULT;
