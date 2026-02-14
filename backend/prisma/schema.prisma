@@ -16,11 +16,9 @@ datasource db {
 model User {
   id                String             @id @default(uuid())
   email             String             @unique
-  firstName         String?            @map("first_name")
-  lastName          String?            @map("last_name")
-  storeName         String?            @map("store_name")
+  fullName          String?            @map("full_name")
+  username          String?            @map("username")
   password          String
-  role              String
   active            Boolean            @default(false)
   userVerifications UserVerification[]
   createdAt         DateTime           @default(now()) @map("created_at")
@@ -38,9 +36,6 @@ model User {
 model UserVerification {
   id                            String    @id @default(uuid())
   email                         String?
-  firstName                     String?   @map("first_name")
-  lastName                      String?   @map("last_name")
-  storeName                     String?   @map("store_name")
   password                      String?
   goal                          String?
   verifiedAt                    DateTime? @map("verified_at")

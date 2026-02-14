@@ -39,9 +39,6 @@ export type UserVerificationSumAggregateOutputType = {
 export type UserVerificationMinAggregateOutputType = {
   id: string | null
   email: string | null
-  firstName: string | null
-  lastName: string | null
-  storeName: string | null
   password: string | null
   goal: string | null
   verifiedAt: Date | null
@@ -61,9 +58,6 @@ export type UserVerificationMinAggregateOutputType = {
 export type UserVerificationMaxAggregateOutputType = {
   id: string | null
   email: string | null
-  firstName: string | null
-  lastName: string | null
-  storeName: string | null
   password: string | null
   goal: string | null
   verifiedAt: Date | null
@@ -83,9 +77,6 @@ export type UserVerificationMaxAggregateOutputType = {
 export type UserVerificationCountAggregateOutputType = {
   id: number
   email: number
-  firstName: number
-  lastName: number
-  storeName: number
   password: number
   goal: number
   verifiedAt: number
@@ -117,9 +108,6 @@ export type UserVerificationSumAggregateInputType = {
 export type UserVerificationMinAggregateInputType = {
   id?: true
   email?: true
-  firstName?: true
-  lastName?: true
-  storeName?: true
   password?: true
   goal?: true
   verifiedAt?: true
@@ -139,9 +127,6 @@ export type UserVerificationMinAggregateInputType = {
 export type UserVerificationMaxAggregateInputType = {
   id?: true
   email?: true
-  firstName?: true
-  lastName?: true
-  storeName?: true
   password?: true
   goal?: true
   verifiedAt?: true
@@ -161,9 +146,6 @@ export type UserVerificationMaxAggregateInputType = {
 export type UserVerificationCountAggregateInputType = {
   id?: true
   email?: true
-  firstName?: true
-  lastName?: true
-  storeName?: true
   password?: true
   goal?: true
   verifiedAt?: true
@@ -270,9 +252,6 @@ export type UserVerificationGroupByArgs<ExtArgs extends runtime.Types.Extensions
 export type UserVerificationGroupByOutputType = {
   id: string
   email: string | null
-  firstName: string | null
-  lastName: string | null
-  storeName: string | null
   password: string | null
   goal: string | null
   verifiedAt: Date | null
@@ -315,9 +294,6 @@ export type UserVerificationWhereInput = {
   NOT?: Prisma.UserVerificationWhereInput | Prisma.UserVerificationWhereInput[]
   id?: Prisma.StringFilter<"UserVerification"> | string
   email?: Prisma.StringNullableFilter<"UserVerification"> | string | null
-  firstName?: Prisma.StringNullableFilter<"UserVerification"> | string | null
-  lastName?: Prisma.StringNullableFilter<"UserVerification"> | string | null
-  storeName?: Prisma.StringNullableFilter<"UserVerification"> | string | null
   password?: Prisma.StringNullableFilter<"UserVerification"> | string | null
   goal?: Prisma.StringNullableFilter<"UserVerification"> | string | null
   verifiedAt?: Prisma.DateTimeNullableFilter<"UserVerification"> | Date | string | null
@@ -338,9 +314,6 @@ export type UserVerificationWhereInput = {
 export type UserVerificationOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   email?: Prisma.SortOrderInput | Prisma.SortOrder
-  firstName?: Prisma.SortOrderInput | Prisma.SortOrder
-  lastName?: Prisma.SortOrderInput | Prisma.SortOrder
-  storeName?: Prisma.SortOrderInput | Prisma.SortOrder
   password?: Prisma.SortOrderInput | Prisma.SortOrder
   goal?: Prisma.SortOrderInput | Prisma.SortOrder
   verifiedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -364,9 +337,6 @@ export type UserVerificationWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.UserVerificationWhereInput[]
   NOT?: Prisma.UserVerificationWhereInput | Prisma.UserVerificationWhereInput[]
   email?: Prisma.StringNullableFilter<"UserVerification"> | string | null
-  firstName?: Prisma.StringNullableFilter<"UserVerification"> | string | null
-  lastName?: Prisma.StringNullableFilter<"UserVerification"> | string | null
-  storeName?: Prisma.StringNullableFilter<"UserVerification"> | string | null
   password?: Prisma.StringNullableFilter<"UserVerification"> | string | null
   goal?: Prisma.StringNullableFilter<"UserVerification"> | string | null
   verifiedAt?: Prisma.DateTimeNullableFilter<"UserVerification"> | Date | string | null
@@ -387,9 +357,6 @@ export type UserVerificationWhereUniqueInput = Prisma.AtLeast<{
 export type UserVerificationOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   email?: Prisma.SortOrderInput | Prisma.SortOrder
-  firstName?: Prisma.SortOrderInput | Prisma.SortOrder
-  lastName?: Prisma.SortOrderInput | Prisma.SortOrder
-  storeName?: Prisma.SortOrderInput | Prisma.SortOrder
   password?: Prisma.SortOrderInput | Prisma.SortOrder
   goal?: Prisma.SortOrderInput | Prisma.SortOrder
   verifiedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -417,9 +384,6 @@ export type UserVerificationScalarWhereWithAggregatesInput = {
   NOT?: Prisma.UserVerificationScalarWhereWithAggregatesInput | Prisma.UserVerificationScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"UserVerification"> | string
   email?: Prisma.StringNullableWithAggregatesFilter<"UserVerification"> | string | null
-  firstName?: Prisma.StringNullableWithAggregatesFilter<"UserVerification"> | string | null
-  lastName?: Prisma.StringNullableWithAggregatesFilter<"UserVerification"> | string | null
-  storeName?: Prisma.StringNullableWithAggregatesFilter<"UserVerification"> | string | null
   password?: Prisma.StringNullableWithAggregatesFilter<"UserVerification"> | string | null
   goal?: Prisma.StringNullableWithAggregatesFilter<"UserVerification"> | string | null
   verifiedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"UserVerification"> | Date | string | null
@@ -439,9 +403,6 @@ export type UserVerificationScalarWhereWithAggregatesInput = {
 export type UserVerificationCreateInput = {
   id?: string
   email?: string | null
-  firstName?: string | null
-  lastName?: string | null
-  storeName?: string | null
   password?: string | null
   goal?: string | null
   verifiedAt?: Date | string | null
@@ -461,9 +422,6 @@ export type UserVerificationCreateInput = {
 export type UserVerificationUncheckedCreateInput = {
   id?: string
   email?: string | null
-  firstName?: string | null
-  lastName?: string | null
-  storeName?: string | null
   password?: string | null
   goal?: string | null
   verifiedAt?: Date | string | null
@@ -483,9 +441,6 @@ export type UserVerificationUncheckedCreateInput = {
 export type UserVerificationUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  storeName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   goal?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -505,9 +460,6 @@ export type UserVerificationUpdateInput = {
 export type UserVerificationUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  storeName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   goal?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -527,9 +479,6 @@ export type UserVerificationUncheckedUpdateInput = {
 export type UserVerificationCreateManyInput = {
   id?: string
   email?: string | null
-  firstName?: string | null
-  lastName?: string | null
-  storeName?: string | null
   password?: string | null
   goal?: string | null
   verifiedAt?: Date | string | null
@@ -549,9 +498,6 @@ export type UserVerificationCreateManyInput = {
 export type UserVerificationUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  storeName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   goal?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -570,9 +516,6 @@ export type UserVerificationUpdateManyMutationInput = {
 export type UserVerificationUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  storeName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   goal?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -602,9 +545,6 @@ export type UserVerificationOrderByRelationAggregateInput = {
 export type UserVerificationCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   email?: Prisma.SortOrder
-  firstName?: Prisma.SortOrder
-  lastName?: Prisma.SortOrder
-  storeName?: Prisma.SortOrder
   password?: Prisma.SortOrder
   goal?: Prisma.SortOrder
   verifiedAt?: Prisma.SortOrder
@@ -629,9 +569,6 @@ export type UserVerificationAvgOrderByAggregateInput = {
 export type UserVerificationMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   email?: Prisma.SortOrder
-  firstName?: Prisma.SortOrder
-  lastName?: Prisma.SortOrder
-  storeName?: Prisma.SortOrder
   password?: Prisma.SortOrder
   goal?: Prisma.SortOrder
   verifiedAt?: Prisma.SortOrder
@@ -651,9 +588,6 @@ export type UserVerificationMaxOrderByAggregateInput = {
 export type UserVerificationMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   email?: Prisma.SortOrder
-  firstName?: Prisma.SortOrder
-  lastName?: Prisma.SortOrder
-  storeName?: Prisma.SortOrder
   password?: Prisma.SortOrder
   goal?: Prisma.SortOrder
   verifiedAt?: Prisma.SortOrder
@@ -732,9 +666,6 @@ export type IntFieldUpdateOperationsInput = {
 export type UserVerificationCreateWithoutUserInput = {
   id?: string
   email?: string | null
-  firstName?: string | null
-  lastName?: string | null
-  storeName?: string | null
   password?: string | null
   goal?: string | null
   verifiedAt?: Date | string | null
@@ -753,9 +684,6 @@ export type UserVerificationCreateWithoutUserInput = {
 export type UserVerificationUncheckedCreateWithoutUserInput = {
   id?: string
   email?: string | null
-  firstName?: string | null
-  lastName?: string | null
-  storeName?: string | null
   password?: string | null
   goal?: string | null
   verifiedAt?: Date | string | null
@@ -803,9 +731,6 @@ export type UserVerificationScalarWhereInput = {
   NOT?: Prisma.UserVerificationScalarWhereInput | Prisma.UserVerificationScalarWhereInput[]
   id?: Prisma.StringFilter<"UserVerification"> | string
   email?: Prisma.StringNullableFilter<"UserVerification"> | string | null
-  firstName?: Prisma.StringNullableFilter<"UserVerification"> | string | null
-  lastName?: Prisma.StringNullableFilter<"UserVerification"> | string | null
-  storeName?: Prisma.StringNullableFilter<"UserVerification"> | string | null
   password?: Prisma.StringNullableFilter<"UserVerification"> | string | null
   goal?: Prisma.StringNullableFilter<"UserVerification"> | string | null
   verifiedAt?: Prisma.DateTimeNullableFilter<"UserVerification"> | Date | string | null
@@ -825,9 +750,6 @@ export type UserVerificationScalarWhereInput = {
 export type UserVerificationCreateManyUserInput = {
   id?: string
   email?: string | null
-  firstName?: string | null
-  lastName?: string | null
-  storeName?: string | null
   password?: string | null
   goal?: string | null
   verifiedAt?: Date | string | null
@@ -846,9 +768,6 @@ export type UserVerificationCreateManyUserInput = {
 export type UserVerificationUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  storeName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   goal?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -867,9 +786,6 @@ export type UserVerificationUpdateWithoutUserInput = {
 export type UserVerificationUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  storeName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   goal?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -888,9 +804,6 @@ export type UserVerificationUncheckedUpdateWithoutUserInput = {
 export type UserVerificationUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  firstName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  storeName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   goal?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   verifiedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -911,9 +824,6 @@ export type UserVerificationUncheckedUpdateManyWithoutUserInput = {
 export type UserVerificationSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   email?: boolean
-  firstName?: boolean
-  lastName?: boolean
-  storeName?: boolean
   password?: boolean
   goal?: boolean
   verifiedAt?: boolean
@@ -934,9 +844,6 @@ export type UserVerificationSelect<ExtArgs extends runtime.Types.Extensions.Inte
 export type UserVerificationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   email?: boolean
-  firstName?: boolean
-  lastName?: boolean
-  storeName?: boolean
   password?: boolean
   goal?: boolean
   verifiedAt?: boolean
@@ -957,9 +864,6 @@ export type UserVerificationSelectCreateManyAndReturn<ExtArgs extends runtime.Ty
 export type UserVerificationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   email?: boolean
-  firstName?: boolean
-  lastName?: boolean
-  storeName?: boolean
   password?: boolean
   goal?: boolean
   verifiedAt?: boolean
@@ -980,9 +884,6 @@ export type UserVerificationSelectUpdateManyAndReturn<ExtArgs extends runtime.Ty
 export type UserVerificationSelectScalar = {
   id?: boolean
   email?: boolean
-  firstName?: boolean
-  lastName?: boolean
-  storeName?: boolean
   password?: boolean
   goal?: boolean
   verifiedAt?: boolean
@@ -999,7 +900,7 @@ export type UserVerificationSelectScalar = {
   createdAt?: boolean
 }
 
-export type UserVerificationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "firstName" | "lastName" | "storeName" | "password" | "goal" | "verifiedAt" | "goalAchievedAt" | "disabledAt" | "code" | "token" | "numberOfFailedAttempts" | "numberOfCodeTransfersViaEmail" | "userId" | "userRole" | "ip" | "agent" | "createdAt", ExtArgs["result"]["userVerification"]>
+export type UserVerificationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "password" | "goal" | "verifiedAt" | "goalAchievedAt" | "disabledAt" | "code" | "token" | "numberOfFailedAttempts" | "numberOfCodeTransfersViaEmail" | "userId" | "userRole" | "ip" | "agent" | "createdAt", ExtArgs["result"]["userVerification"]>
 export type UserVerificationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserVerification$userArgs<ExtArgs>
 }
@@ -1018,9 +919,6 @@ export type $UserVerificationPayload<ExtArgs extends runtime.Types.Extensions.In
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     email: string | null
-    firstName: string | null
-    lastName: string | null
-    storeName: string | null
     password: string | null
     goal: string | null
     verifiedAt: Date | null
@@ -1461,9 +1359,6 @@ export interface Prisma__UserVerificationClient<T, Null = never, ExtArgs extends
 export interface UserVerificationFieldRefs {
   readonly id: Prisma.FieldRef<"UserVerification", 'String'>
   readonly email: Prisma.FieldRef<"UserVerification", 'String'>
-  readonly firstName: Prisma.FieldRef<"UserVerification", 'String'>
-  readonly lastName: Prisma.FieldRef<"UserVerification", 'String'>
-  readonly storeName: Prisma.FieldRef<"UserVerification", 'String'>
   readonly password: Prisma.FieldRef<"UserVerification", 'String'>
   readonly goal: Prisma.FieldRef<"UserVerification", 'String'>
   readonly verifiedAt: Prisma.FieldRef<"UserVerification", 'DateTime'>

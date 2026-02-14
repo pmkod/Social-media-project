@@ -50,8 +50,8 @@ const createPostRoute = new OpenAPIHono<HonoContextVariables>().openapi(
 				author: {
 					select: {
 						id: true,
-						firstName: true,
-						lastName: true,
+						fullName: true,
+						username: true,
 					},
 				},
 			},

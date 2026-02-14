@@ -1,6 +1,5 @@
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases/postgresql";
-import { UserRoles } from "@/features/user/user-roles.constants";
 import { createRoute, OpenAPIHono } from "@hono/zod-openapi";
 import {
 	AuthenticationRoutesTag,
@@ -8,6 +7,7 @@ import {
 } from "../authentication.constants";
 import { CompleteSignupValidationSchema } from "../authentication.validation-schemas";
 import { generateAccessAndRefreshToken } from "../jwt.functions";
+import { hashPassword } from "../password.functions";
 
 // import type { HttpStatus } from "@/core/constants/http-status";
 
@@ -35,7 +35,8 @@ const routeDef = createRoute({
 });
 
 completeSignupRoute.openapi(routeDef, async (c) => {
-	const { userVerification } = c.req.valid("json");
+	const { userVerification, fullName, username, password } =
+		c.req.valid("json");
 
 	// console.log(userVerification);
 
@@ -51,9 +52,6 @@ completeSignupRoute.openapi(routeDef, async (c) => {
 			id: true,
 			code: true,
 			token: true,
-			firstName: true,
-			lastName: true,
-			storeName: true,
 			email: true,
 			password: true,
 			numberOfCodeTransfersViaEmail: true,
@@ -75,28 +73,21 @@ completeSignupRoute.openapi(routeDef, async (c) => {
 		});
 		throw Error("Sometthing went wrong");
 	}
-	if (
-		!userVerificatinInDb.email ||
-		!userVerificatinInDb.password ||
-		!userVerificatinInDb.userRole
-	) {
+	if (!userVerificatinInDb.email) {
 		throw Error();
 	}
 
+	const passwordHash = hashPassword(password);
+
 	const user = await prisma.user.create({
 		data: {
-			firstName: userVerificatinInDb.firstName,
-			lastName: userVerificatinInDb.lastName,
-			storeName: userVerificatinInDb.storeName,
+			fullName: fullName,
+			username: username,
 			email: userVerificatinInDb.email,
-			password: userVerificatinInDb.password,
+			password: passwordHash,
 			active: true,
-			role: userVerificatinInDb.userRole,
 		},
 	});
-
-	// const agent = req.headers["user-agent"];
-	// const ip = req.ip;
 
 	const refreshTokenInDb = await prisma.refreshToken.create({
 		data: {
@@ -110,7 +101,6 @@ completeSignupRoute.openapi(routeDef, async (c) => {
 	const { accessToken, refreshToken } = generateAccessAndRefreshToken({
 		refreshTokenId: refreshTokenInDb.id,
 		userId: user.id,
-		userRole: UserRoles.customer,
 	});
 
 	await prisma.userVerification.update({

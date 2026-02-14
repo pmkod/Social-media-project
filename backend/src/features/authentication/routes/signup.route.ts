@@ -11,7 +11,6 @@ import {
 	generateUserVerificationToken,
 } from "../authentication.functions";
 import { SignupValidationSchema } from "../authentication.validation-schemas";
-import { hashPassword } from "../password.functions";
 
 // import type { HttpStatus } from "@/core/constants/http-status";
 
@@ -41,7 +40,7 @@ const routeDef = createRoute({
 signupRoute.openapi(routeDef, async (c) => {
 	const reqBody = c.req.valid("json");
 
-	const { firstName, lastName, email, password, storeName, role } = reqBody;
+	const { email } = reqBody;
 	const userWithGivenEmail = await prisma.user.findUnique({ where: { email } });
 	if (userWithGivenEmail !== null) {
 		throw Error("Email already taken");
@@ -50,14 +49,9 @@ signupRoute.openapi(routeDef, async (c) => {
 	// const agent = req.headers["user-agent"];
 	const code = generateUserVerificationCode();
 	const token = generateUserVerificationToken();
-	const passwordHash = hashPassword(password);
 	const userVerification = await prisma.userVerification.create({
 		data: {
-			firstName,
-			lastName,
 			email,
-			storeName,
-			password: passwordHash,
 			code,
 			token,
 			// agent,
@@ -65,7 +59,6 @@ signupRoute.openapi(routeDef, async (c) => {
 			numberOfFailedAttempts: 0,
 			numberOfCodeTransfersViaEmail: 0,
 			goal: UserVerificationGoals.signup,
-			userRole: role,
 		},
 		select: {
 			id: true,

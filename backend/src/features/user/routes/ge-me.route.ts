@@ -33,8 +33,8 @@ const getMeRoute = new OpenAPIHono<HonoContextVariables>().openapi(
 			},
 			select: {
 				id: true,
-				firstName: true,
-				lastName: true,
+				fullName: true,
+				username: true,
 			},
 		});
 

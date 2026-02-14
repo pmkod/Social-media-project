@@ -20,7 +20,6 @@ const REFRESH_TOKEN_DURATION = 60 * 60 * 24 * 90;
 type AccessTokenPayload = {
 	refreshTokenId: string;
 	userId: string;
-	userRole: string;
 };
 
 type GenerateAccessTokenParams = AccessTokenPayload;
@@ -28,15 +27,10 @@ type GenerateAccessTokenParams = AccessTokenPayload;
 const generateAccessToken = ({
 	refreshTokenId,
 	userId,
-	userRole,
 }: GenerateAccessTokenParams) => {
-	return jwt.sign(
-		{ userId, refreshTokenId, userRole },
-		ACCESS_TOKEN_SECRET_KEY,
-		{
-			expiresIn: ACCESS_TOKEN_DURATION,
-		},
-	);
+	return jwt.sign({ userId, refreshTokenId }, ACCESS_TOKEN_SECRET_KEY, {
+		expiresIn: ACCESS_TOKEN_DURATION,
+	});
 };
 
 const verifyAccessToken = (token: string) => {
@@ -87,18 +81,15 @@ const verifyRefreshToken = (token: string) => {
 type GenerateAccessAndRefreshTokenParams = {
 	refreshTokenId: string;
 	userId: string;
-	userRole: string;
 };
 
 const generateAccessAndRefreshToken = ({
 	refreshTokenId,
 	userId,
-	userRole,
 }: GenerateAccessAndRefreshTokenParams) => {
 	const accessToken = generateAccessToken({
 		refreshTokenId,
 		userId,
-		userRole,
 	});
 	const refreshToken = generateRefreshToken({ refreshTokenId });
 	return { accessToken, refreshToken };
