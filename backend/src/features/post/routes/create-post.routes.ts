@@ -38,21 +38,6 @@ const createPostRoute = new OpenAPIHono<HonoContextVariables>().openapi(
 			throw Error();
 		}
 
-		const user = await prisma.user.findUnique({
-			where: {
-				id: loggedInUser.id,
-				active: true,
-			},
-			select: {
-				id: true,
-				firstName: true,
-				lastName: true,
-			},
-		});
-		if (user === null) {
-			throw Error();
-		}
-
 		const post = await prisma.post.create({
 			data: {
 				content: reqBody.content,

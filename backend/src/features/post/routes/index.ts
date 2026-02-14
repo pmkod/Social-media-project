@@ -2,9 +2,8 @@ import { controlUserAccess } from "@/features/authorization/authorization.middle
 import { OpenAPIHono } from "@hono/zod-openapi";
 import { createPostRoute } from "./create-post.routes";
 
-const postRouter = new OpenAPIHono()
-	.basePath("/posts")
-	.use(controlUserAccess)
-	.route("/", createPostRoute);
+const postRouter = new OpenAPIHono().basePath("/posts");
+
+postRouter.use(controlUserAccess).route("/", createPostRoute);
 
 export { postRouter };

@@ -10,17 +10,16 @@ import { passwordResetRoute } from "./password-reset.route";
 import { resendUserVerificationCode } from "./resend-user-verification-code.route";
 import { signupRoute } from "./signup.route";
 
-const authenticationRouter = new OpenAPIHono()
-	.basePath("/authentication")
-	.route("/", loginRoute)
-	.route("/", completeLoginRoute)
-	.route("/", signupRoute)
-	.route("/", completeSignupRoute)
-	.route("/", passwordResetRoute)
-	.route("/", newPasswordRoute)
-	.route("/", generateNewAccessTokenRoute)
-	.route("/", resendUserVerificationCode)
-	.route("/", doUserVerificationRoute)
-	.route("/", logoutRoute);
+const authenticationRouter = new OpenAPIHono().basePath("/authentication");
+
+authenticationRouter.route("/", loginRoute).route("/", completeLoginRoute);
+authenticationRouter.route("/", signupRoute);
+authenticationRouter.route("/", completeSignupRoute);
+authenticationRouter.route("/", passwordResetRoute);
+authenticationRouter.route("/", newPasswordRoute);
+authenticationRouter.route("/", generateNewAccessTokenRoute);
+authenticationRouter.route("/", resendUserVerificationCode);
+authenticationRouter.route("/", doUserVerificationRoute);
+authenticationRouter.route("/", logoutRoute);
 
 export { authenticationRouter };
