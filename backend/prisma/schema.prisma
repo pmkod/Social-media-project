@@ -72,6 +72,8 @@ model Post {
   id        String   @id @default(uuid())
   content   String
   createdAt DateTime @default(now()) @map("created_at")
+  exists    Boolean  @default(true)
+  visible   Boolean  @default(true)
 
   author   User   @relation(fields: [authorId], references: [id])
   authorId String @map("author_id")
@@ -98,6 +100,8 @@ model Comment {
   id        String   @id @default(uuid())
   content   String
   createdAt DateTime @default(now()) @map("created_at")
+  exists    Boolean  @default(true)
+  visible   Boolean  @default(true)
 
   author       User          @relation(fields: [authorId], references: [id])
   authorId     String        @map("author_id")

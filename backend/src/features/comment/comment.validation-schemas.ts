@@ -6,6 +6,10 @@ const CommentValidationSchema = z.object({
 	content: z.string(),
 });
 
+const GetCommentsValidationSchema = z.object({
+	postId: PostValidationSchema.shape.id,
+});
+
 const CreateCommentValidationSchema = z.object({
 	content: CommentValidationSchema.shape.content,
 	postId: PostValidationSchema.shape.id,
@@ -22,6 +26,7 @@ const UnlikeCommentValidationSchema = z.object({
 export {
 	CommentValidationSchema,
 	CreateCommentValidationSchema,
+	GetCommentsValidationSchema,
 	LikeCommentValidationSchema,
 	UnlikeCommentValidationSchema,
 };
