@@ -4,12 +4,7 @@ import { useMutation } from "@tanstack/react-query";
 import { saveUserVerificationDataToLocalStorage } from "../authentication.utils";
 
 type SignupRequestBody = {
-	storeName?: string;
-
-	firstName?: string;
-	lastName?: string;
 	email: string;
-	password: string;
 };
 
 const useSignup = () => {

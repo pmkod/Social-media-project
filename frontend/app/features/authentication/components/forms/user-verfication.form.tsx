@@ -60,19 +60,8 @@ const UserVerificationForm = () => {
 		userVerificationMutation(values, {
 			onSuccess: () => {
 				if (goal === USER_VERIFICATION_GOALS.signup) {
-					completeSignupMutation(undefined, {
-						onSuccess: () => {
-							navigate(routesBuilder.home);
-						},
-						onError: (error) => {
-							form.setError("root", {
-								message: error.message,
-							});
-						},
-					});
-					return;
-				}
-				if (goal === USER_VERIFICATION_GOALS.login) {
+					navigate(routesBuilder.completeSignup);
+				} else if (goal === USER_VERIFICATION_GOALS.login) {
 					completeLoginMutation(undefined, {
 						onSuccess: () => {
 							navigate(routesBuilder.home);
@@ -83,11 +72,8 @@ const UserVerificationForm = () => {
 							});
 						},
 					});
-					return;
-				}
-				if (goal === USER_VERIFICATION_GOALS.passwordReset) {
+				} else if (goal === USER_VERIFICATION_GOALS.passwordReset) {
 					navigate(routesBuilder.newPassword);
-					return;
 				}
 			},
 			onError: (error) => {

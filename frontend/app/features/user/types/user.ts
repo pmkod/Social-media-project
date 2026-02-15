@@ -1,9 +1,8 @@
 type User = {
-  id: string;
-  firstName?: string;
-  lastName?: string;
-  storeName?: string;
-  email: string;
+	id: string;
+	fullName: string;
+	username: string;
+	email: string;
 };
 
 export type { User };

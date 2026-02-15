@@ -1,6 +1,5 @@
 import { routesBuilder } from "@/core/routes-builder";
 import { LoggedInUserDropdownMenu } from "@/features/user/components/logged-in-user.dropdown-menu";
-import { userData } from "@/features/user/pages/user-profile.page";
 import { Compass, Home, MessageCircleMore, Settings, User } from "lucide-react";
 import type { ReactNode } from "react";
 import { Link } from "react-router";
@@ -55,7 +54,7 @@ const Sidebar = () => {
 				/>
 			</div>
 			<div className="pb-4 w-full">
-				<LoggedInUserDropdownMenu user={userData} />
+				<LoggedInUserDropdownMenu />
 			</div>
 		</div>
 	);

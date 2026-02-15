@@ -2,6 +2,7 @@ const routesBuilder = {
 	first: "/",
 	login: "/login",
 	signup: "/signup",
+	completeSignup: "/complete-signup",
 	passwordReset: "/password-reset",
 	newPassword: "/new-password",
 	userVerification: (params?: { goal: string }) => {

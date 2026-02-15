@@ -12,6 +12,10 @@ export default [
 				index("./features/authentication/pages/login.page.tsx"),
 				route("signup", "./features/authentication/pages/signup.page.tsx"),
 				route(
+					"complete-signup",
+					"./features/authentication/pages/complete-signup.page.tsx",
+				),
+				route(
 					"password-reset",
 					"./features/authentication/pages/password-reset.page.tsx",
 				),

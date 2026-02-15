@@ -16,21 +16,20 @@ import { PasswordInput } from "@/core/components/ui/password-input";
 import { routesBuilder } from "@/core/routes-builder";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router";
-import { USER_VERIFICATION_GOALS } from "../../authentication.constants";
-import { storeSignupValidationSchema } from "../../authentication.validation-schemas";
-import { useSignup } from "../../mutations/use-signup";
+import { useNavigate } from "react-router";
+import { CompleteSignupValidationSchema } from "../../authentication.validation-schemas";
+import { useCompleteSignup } from "../../mutations/use-complete-signup";
 
-const SellerSignupForm = () => {
-	const { mutate, isPending } = useSignup();
+const CompleteSignupForm = () => {
+	const { mutate, isPending } = useCompleteSignup();
 
 	const navigate = useNavigate();
 	const form = useForm({
-		resolver: zodResolver(storeSignupValidationSchema),
+		resolver: zodResolver(CompleteSignupValidationSchema),
 		defaultValues: {
-			storeName: "Kod store",
-			email: "kodstore@gmail.com",
-			password: "kodstore@gmail.com",
+			fullName: "Kodossou",
+			username: "pmkod",
+			password: "pierremariekod@gmail.com",
 		},
 	});
 	const rootErrorMessage = form.formState.errors.root?.message;
@@ -38,11 +37,7 @@ const SellerSignupForm = () => {
 	const onSubmit = form.handleSubmit((data) => {
 		mutate(data, {
 			onSuccess: () => {
-				navigate(
-					routesBuilder.userVerification({
-						goal: USER_VERIFICATION_GOALS.signup,
-					}),
-				);
+				navigate(routesBuilder.home);
 			},
 			onError: (error) => {
 				form.setError("root", {
@@ -55,7 +50,7 @@ const SellerSignupForm = () => {
 	return (
 		<>
 			<CardHeader className="mb-5">
-				<CardTitle className="text-2xl">Seller sign up</CardTitle>
+				<CardTitle className="text-2xl">Sign up</CardTitle>
 			</CardHeader>
 			<CardContent>
 				{rootErrorMessage ? (
@@ -71,33 +66,26 @@ const SellerSignupForm = () => {
 							{/* Name Field */}
 							<FormField
 								control={form.control}
-								name="storeName"
+								name="fullName"
 								render={({ field }) => (
 									<FormItem className="grid gap-2">
-										<FormLabel htmlFor="name">Store Name</FormLabel>
+										<FormLabel htmlFor="name">Full Name</FormLabel>
 										<FormControl>
-											<Input placeholder="Name of your store" {...field} />
+											<Input placeholder="" {...field} />
 										</FormControl>
 										<FormMessage />
 									</FormItem>
 								)}
 							/>
 
-							{/* Email Field */}
 							<FormField
 								control={form.control}
-								name="email"
+								name="username"
 								render={({ field }) => (
 									<FormItem className="grid gap-2">
-										<FormLabel htmlFor="email">Email</FormLabel>
+										<FormLabel>Username</FormLabel>
 										<FormControl>
-											<Input
-												id="email"
-												placeholder="johndoe@mail.com"
-												type="email"
-												autoComplete="email"
-												{...field}
-											/>
+											<Input placeholder="John Doe" {...field} />
 										</FormControl>
 										<FormMessage />
 									</FormItem>
@@ -124,43 +112,15 @@ const SellerSignupForm = () => {
 								)}
 							/>
 
-							{/* Confirm Password Field */}
-							{/* <FormField
-								control={form.control}
-								name="confirmPassword"
-								render={({ field }) => (
-									<FormItem className="grid gap-2">
-										<FormLabel htmlFor="confirmPassword">
-											Confirm Password
-										</FormLabel>
-										<FormControl>
-											<PasswordInput
-												id="confirmPassword"
-												placeholder="******"
-												autoComplete="new-password"
-												{...field}
-											/>
-										</FormControl>
-										<FormMessage />
-									</FormItem>
-								)}
-							/> */}
-
 							<Button type="submit" isLoading={isPending}>
-								Register
+								Complete signup
 							</Button>
 						</div>
 					</form>
 				</Form>
-				<div className="mt-4 text-center text-sm">
-					Already have an account?{" "}
-					<Link to="/login" className="underline">
-						Login
-					</Link>
-				</div>
 			</CardContent>
 		</>
 	);
 };
 
-export { SellerSignupForm };
+export { CompleteSignupForm };

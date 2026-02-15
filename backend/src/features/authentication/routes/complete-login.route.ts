@@ -1,6 +1,5 @@
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases/postgresql";
-import { UserRoles } from "@/features/user/user-roles.constants";
 import { createRoute, OpenAPIHono } from "@hono/zod-openapi";
 import {
 	AuthenticationRoutesTag,
@@ -68,7 +67,7 @@ completeLoginRoute.openapi(routeDef, async (c) => {
 
 	const user = await prisma.user.findUniqueOrThrow({
 		where: { id: userVerificatinInDb.userId },
-		select: { id: true, role: true },
+		select: { id: true },
 	});
 
 	// const agent = req.headers["user-agent"];
@@ -86,7 +85,6 @@ completeLoginRoute.openapi(routeDef, async (c) => {
 	const { accessToken, refreshToken } = generateAccessAndRefreshToken({
 		refreshTokenId: refreshTokenInDb.id,
 		userId: user.id,
-		userRole: UserRoles.customer,
 	});
 
 	await prisma.userVerification.update({

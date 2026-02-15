@@ -6,11 +6,7 @@ import {
 	ThumbsUp,
 } from "lucide-react";
 
-import {
-	Avatar,
-	AvatarFallback,
-	AvatarImage,
-} from "@/core/components/ui/avatar";
+import { Avatar } from "@/core/components/ui/avatar";
 import { Button } from "@/core/components/ui/button";
 import {
 	Card,
@@ -25,11 +21,7 @@ import { DynamicIcon } from "@/core/components/ui/dynamic-icon";
 import { MediaGrid } from "@/core/components/ui/media-grid";
 import { Separator } from "@/core/components/ui/separator";
 import { Toggle } from "@/core/components/ui/toggle";
-import {
-	formatDistance,
-	formatNumberToCompact,
-	getInitials,
-} from "@/core/lib/utils";
+import { formatDistance, formatNumberToCompact } from "@/core/lib/utils";
 import type { Post } from "@/features/post/types/post";
 
 const visibilityIcons: Record<Post["visibility"], DynamicIconNameType> = {
@@ -44,10 +36,7 @@ export function PostItem({ data }: { data: Post }) {
 			<article>
 				<CardHeader className="flex-row flex mb-3 justify-between items-center gap-x-3 space-y-0">
 					<div className="flex items-center gap-x-2">
-						<Avatar>
-							<AvatarImage src={data.user.avatar} alt="" />
-							<AvatarFallback>{getInitials(data.user.name)}</AvatarFallback>
-						</Avatar>
+						<Avatar src={data.user.avatar} />
 						<div>
 							<CardTitle>{data.user.name}</CardTitle>
 							<CardDescription className="inline-flex items-baseline">

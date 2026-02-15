@@ -49,7 +49,6 @@ export type UserVerificationMinAggregateOutputType = {
   numberOfFailedAttempts: number | null
   numberOfCodeTransfersViaEmail: number | null
   userId: string | null
-  userRole: string | null
   ip: string | null
   agent: string | null
   createdAt: Date | null
@@ -68,7 +67,6 @@ export type UserVerificationMaxAggregateOutputType = {
   numberOfFailedAttempts: number | null
   numberOfCodeTransfersViaEmail: number | null
   userId: string | null
-  userRole: string | null
   ip: string | null
   agent: string | null
   createdAt: Date | null
@@ -87,7 +85,6 @@ export type UserVerificationCountAggregateOutputType = {
   numberOfFailedAttempts: number
   numberOfCodeTransfersViaEmail: number
   userId: number
-  userRole: number
   ip: number
   agent: number
   createdAt: number
@@ -118,7 +115,6 @@ export type UserVerificationMinAggregateInputType = {
   numberOfFailedAttempts?: true
   numberOfCodeTransfersViaEmail?: true
   userId?: true
-  userRole?: true
   ip?: true
   agent?: true
   createdAt?: true
@@ -137,7 +133,6 @@ export type UserVerificationMaxAggregateInputType = {
   numberOfFailedAttempts?: true
   numberOfCodeTransfersViaEmail?: true
   userId?: true
-  userRole?: true
   ip?: true
   agent?: true
   createdAt?: true
@@ -156,7 +151,6 @@ export type UserVerificationCountAggregateInputType = {
   numberOfFailedAttempts?: true
   numberOfCodeTransfersViaEmail?: true
   userId?: true
-  userRole?: true
   ip?: true
   agent?: true
   createdAt?: true
@@ -262,7 +256,6 @@ export type UserVerificationGroupByOutputType = {
   numberOfFailedAttempts: number
   numberOfCodeTransfersViaEmail: number
   userId: string | null
-  userRole: string | null
   ip: string | null
   agent: string | null
   createdAt: Date
@@ -304,7 +297,6 @@ export type UserVerificationWhereInput = {
   numberOfFailedAttempts?: Prisma.IntFilter<"UserVerification"> | number
   numberOfCodeTransfersViaEmail?: Prisma.IntFilter<"UserVerification"> | number
   userId?: Prisma.StringNullableFilter<"UserVerification"> | string | null
-  userRole?: Prisma.StringNullableFilter<"UserVerification"> | string | null
   ip?: Prisma.StringNullableFilter<"UserVerification"> | string | null
   agent?: Prisma.StringNullableFilter<"UserVerification"> | string | null
   createdAt?: Prisma.DateTimeFilter<"UserVerification"> | Date | string
@@ -324,7 +316,6 @@ export type UserVerificationOrderByWithRelationInput = {
   numberOfFailedAttempts?: Prisma.SortOrder
   numberOfCodeTransfersViaEmail?: Prisma.SortOrder
   userId?: Prisma.SortOrderInput | Prisma.SortOrder
-  userRole?: Prisma.SortOrderInput | Prisma.SortOrder
   ip?: Prisma.SortOrderInput | Prisma.SortOrder
   agent?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -347,7 +338,6 @@ export type UserVerificationWhereUniqueInput = Prisma.AtLeast<{
   numberOfFailedAttempts?: Prisma.IntFilter<"UserVerification"> | number
   numberOfCodeTransfersViaEmail?: Prisma.IntFilter<"UserVerification"> | number
   userId?: Prisma.StringNullableFilter<"UserVerification"> | string | null
-  userRole?: Prisma.StringNullableFilter<"UserVerification"> | string | null
   ip?: Prisma.StringNullableFilter<"UserVerification"> | string | null
   agent?: Prisma.StringNullableFilter<"UserVerification"> | string | null
   createdAt?: Prisma.DateTimeFilter<"UserVerification"> | Date | string
@@ -367,7 +357,6 @@ export type UserVerificationOrderByWithAggregationInput = {
   numberOfFailedAttempts?: Prisma.SortOrder
   numberOfCodeTransfersViaEmail?: Prisma.SortOrder
   userId?: Prisma.SortOrderInput | Prisma.SortOrder
-  userRole?: Prisma.SortOrderInput | Prisma.SortOrder
   ip?: Prisma.SortOrderInput | Prisma.SortOrder
   agent?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -394,7 +383,6 @@ export type UserVerificationScalarWhereWithAggregatesInput = {
   numberOfFailedAttempts?: Prisma.IntWithAggregatesFilter<"UserVerification"> | number
   numberOfCodeTransfersViaEmail?: Prisma.IntWithAggregatesFilter<"UserVerification"> | number
   userId?: Prisma.StringNullableWithAggregatesFilter<"UserVerification"> | string | null
-  userRole?: Prisma.StringNullableWithAggregatesFilter<"UserVerification"> | string | null
   ip?: Prisma.StringNullableWithAggregatesFilter<"UserVerification"> | string | null
   agent?: Prisma.StringNullableWithAggregatesFilter<"UserVerification"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"UserVerification"> | Date | string
@@ -412,7 +400,6 @@ export type UserVerificationCreateInput = {
   token: string
   numberOfFailedAttempts?: number
   numberOfCodeTransfersViaEmail?: number
-  userRole?: string | null
   ip?: string | null
   agent?: string | null
   createdAt?: Date | string
@@ -432,7 +419,6 @@ export type UserVerificationUncheckedCreateInput = {
   numberOfFailedAttempts?: number
   numberOfCodeTransfersViaEmail?: number
   userId?: string | null
-  userRole?: string | null
   ip?: string | null
   agent?: string | null
   createdAt?: Date | string
@@ -450,7 +436,6 @@ export type UserVerificationUpdateInput = {
   token?: Prisma.StringFieldUpdateOperationsInput | string
   numberOfFailedAttempts?: Prisma.IntFieldUpdateOperationsInput | number
   numberOfCodeTransfersViaEmail?: Prisma.IntFieldUpdateOperationsInput | number
-  userRole?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   agent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -470,7 +455,6 @@ export type UserVerificationUncheckedUpdateInput = {
   numberOfFailedAttempts?: Prisma.IntFieldUpdateOperationsInput | number
   numberOfCodeTransfersViaEmail?: Prisma.IntFieldUpdateOperationsInput | number
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  userRole?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   agent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -489,7 +473,6 @@ export type UserVerificationCreateManyInput = {
   numberOfFailedAttempts?: number
   numberOfCodeTransfersViaEmail?: number
   userId?: string | null
-  userRole?: string | null
   ip?: string | null
   agent?: string | null
   createdAt?: Date | string
@@ -507,7 +490,6 @@ export type UserVerificationUpdateManyMutationInput = {
   token?: Prisma.StringFieldUpdateOperationsInput | string
   numberOfFailedAttempts?: Prisma.IntFieldUpdateOperationsInput | number
   numberOfCodeTransfersViaEmail?: Prisma.IntFieldUpdateOperationsInput | number
-  userRole?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   agent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -526,7 +508,6 @@ export type UserVerificationUncheckedUpdateManyInput = {
   numberOfFailedAttempts?: Prisma.IntFieldUpdateOperationsInput | number
   numberOfCodeTransfersViaEmail?: Prisma.IntFieldUpdateOperationsInput | number
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  userRole?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   agent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -555,7 +536,6 @@ export type UserVerificationCountOrderByAggregateInput = {
   numberOfFailedAttempts?: Prisma.SortOrder
   numberOfCodeTransfersViaEmail?: Prisma.SortOrder
   userId?: Prisma.SortOrder
-  userRole?: Prisma.SortOrder
   ip?: Prisma.SortOrder
   agent?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -579,7 +559,6 @@ export type UserVerificationMaxOrderByAggregateInput = {
   numberOfFailedAttempts?: Prisma.SortOrder
   numberOfCodeTransfersViaEmail?: Prisma.SortOrder
   userId?: Prisma.SortOrder
-  userRole?: Prisma.SortOrder
   ip?: Prisma.SortOrder
   agent?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -598,7 +577,6 @@ export type UserVerificationMinOrderByAggregateInput = {
   numberOfFailedAttempts?: Prisma.SortOrder
   numberOfCodeTransfersViaEmail?: Prisma.SortOrder
   userId?: Prisma.SortOrder
-  userRole?: Prisma.SortOrder
   ip?: Prisma.SortOrder
   agent?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -655,14 +633,6 @@ export type NullableDateTimeFieldUpdateOperationsInput = {
   set?: Date | string | null
 }
 
-export type IntFieldUpdateOperationsInput = {
-  set?: number
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
-}
-
 export type UserVerificationCreateWithoutUserInput = {
   id?: string
   email?: string | null
@@ -675,7 +645,6 @@ export type UserVerificationCreateWithoutUserInput = {
   token: string
   numberOfFailedAttempts?: number
   numberOfCodeTransfersViaEmail?: number
-  userRole?: string | null
   ip?: string | null
   agent?: string | null
   createdAt?: Date | string
@@ -693,7 +662,6 @@ export type UserVerificationUncheckedCreateWithoutUserInput = {
   token: string
   numberOfFailedAttempts?: number
   numberOfCodeTransfersViaEmail?: number
-  userRole?: string | null
   ip?: string | null
   agent?: string | null
   createdAt?: Date | string
@@ -741,7 +709,6 @@ export type UserVerificationScalarWhereInput = {
   numberOfFailedAttempts?: Prisma.IntFilter<"UserVerification"> | number
   numberOfCodeTransfersViaEmail?: Prisma.IntFilter<"UserVerification"> | number
   userId?: Prisma.StringNullableFilter<"UserVerification"> | string | null
-  userRole?: Prisma.StringNullableFilter<"UserVerification"> | string | null
   ip?: Prisma.StringNullableFilter<"UserVerification"> | string | null
   agent?: Prisma.StringNullableFilter<"UserVerification"> | string | null
   createdAt?: Prisma.DateTimeFilter<"UserVerification"> | Date | string
@@ -759,7 +726,6 @@ export type UserVerificationCreateManyUserInput = {
   token: string
   numberOfFailedAttempts?: number
   numberOfCodeTransfersViaEmail?: number
-  userRole?: string | null
   ip?: string | null
   agent?: string | null
   createdAt?: Date | string
@@ -777,7 +743,6 @@ export type UserVerificationUpdateWithoutUserInput = {
   token?: Prisma.StringFieldUpdateOperationsInput | string
   numberOfFailedAttempts?: Prisma.IntFieldUpdateOperationsInput | number
   numberOfCodeTransfersViaEmail?: Prisma.IntFieldUpdateOperationsInput | number
-  userRole?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   agent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -795,7 +760,6 @@ export type UserVerificationUncheckedUpdateWithoutUserInput = {
   token?: Prisma.StringFieldUpdateOperationsInput | string
   numberOfFailedAttempts?: Prisma.IntFieldUpdateOperationsInput | number
   numberOfCodeTransfersViaEmail?: Prisma.IntFieldUpdateOperationsInput | number
-  userRole?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   agent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -813,7 +777,6 @@ export type UserVerificationUncheckedUpdateManyWithoutUserInput = {
   token?: Prisma.StringFieldUpdateOperationsInput | string
   numberOfFailedAttempts?: Prisma.IntFieldUpdateOperationsInput | number
   numberOfCodeTransfersViaEmail?: Prisma.IntFieldUpdateOperationsInput | number
-  userRole?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   agent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -834,7 +797,6 @@ export type UserVerificationSelect<ExtArgs extends runtime.Types.Extensions.Inte
   numberOfFailedAttempts?: boolean
   numberOfCodeTransfersViaEmail?: boolean
   userId?: boolean
-  userRole?: boolean
   ip?: boolean
   agent?: boolean
   createdAt?: boolean
@@ -854,7 +816,6 @@ export type UserVerificationSelectCreateManyAndReturn<ExtArgs extends runtime.Ty
   numberOfFailedAttempts?: boolean
   numberOfCodeTransfersViaEmail?: boolean
   userId?: boolean
-  userRole?: boolean
   ip?: boolean
   agent?: boolean
   createdAt?: boolean
@@ -874,7 +835,6 @@ export type UserVerificationSelectUpdateManyAndReturn<ExtArgs extends runtime.Ty
   numberOfFailedAttempts?: boolean
   numberOfCodeTransfersViaEmail?: boolean
   userId?: boolean
-  userRole?: boolean
   ip?: boolean
   agent?: boolean
   createdAt?: boolean
@@ -894,13 +854,12 @@ export type UserVerificationSelectScalar = {
   numberOfFailedAttempts?: boolean
   numberOfCodeTransfersViaEmail?: boolean
   userId?: boolean
-  userRole?: boolean
   ip?: boolean
   agent?: boolean
   createdAt?: boolean
 }
 
-export type UserVerificationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "password" | "goal" | "verifiedAt" | "goalAchievedAt" | "disabledAt" | "code" | "token" | "numberOfFailedAttempts" | "numberOfCodeTransfersViaEmail" | "userId" | "userRole" | "ip" | "agent" | "createdAt", ExtArgs["result"]["userVerification"]>
+export type UserVerificationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "password" | "goal" | "verifiedAt" | "goalAchievedAt" | "disabledAt" | "code" | "token" | "numberOfFailedAttempts" | "numberOfCodeTransfersViaEmail" | "userId" | "ip" | "agent" | "createdAt", ExtArgs["result"]["userVerification"]>
 export type UserVerificationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserVerification$userArgs<ExtArgs>
 }
@@ -929,7 +888,6 @@ export type $UserVerificationPayload<ExtArgs extends runtime.Types.Extensions.In
     numberOfFailedAttempts: number
     numberOfCodeTransfersViaEmail: number
     userId: string | null
-    userRole: string | null
     ip: string | null
     agent: string | null
     createdAt: Date
@@ -1369,7 +1327,6 @@ export interface UserVerificationFieldRefs {
   readonly numberOfFailedAttempts: Prisma.FieldRef<"UserVerification", 'Int'>
   readonly numberOfCodeTransfersViaEmail: Prisma.FieldRef<"UserVerification", 'Int'>
   readonly userId: Prisma.FieldRef<"UserVerification", 'String'>
-  readonly userRole: Prisma.FieldRef<"UserVerification", 'String'>
   readonly ip: Prisma.FieldRef<"UserVerification", 'String'>
   readonly agent: Prisma.FieldRef<"UserVerification", 'String'>
   readonly createdAt: Prisma.FieldRef<"UserVerification", 'DateTime'>

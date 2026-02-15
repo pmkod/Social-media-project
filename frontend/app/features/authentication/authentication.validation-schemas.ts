@@ -1,42 +1,39 @@
 import z from "zod";
+import { UserValidationSchema } from "../user/user.validation-schemas";
 
 const loginValidationSchema = z.object({
-  email: z.email("Invalid email address"),
-  password: z.string().min(8, "Password must be at least 8 characters long"),
+	email: UserValidationSchema.shape.email,
+	password: UserValidationSchema.shape.password,
 });
 
-const signupValidationSchema = z.object({
-  firstName: z.string("First name field required"),
-  lastName: z.string("Last name field required"),
-  email: z.email("Invalid email address"),
-  password: z.string().min(8, "Password must be at least 8 characters long"),
+const SignupValidationSchema = z.object({
+	email: UserValidationSchema.shape.email,
 });
 
-const storeSignupValidationSchema = z.object({
-  storeName: z.string("Store name field required"),
-  email: z.email("Invalid email address"),
-  password: z.string().min(8, "Password must be at least 8 characters long"),
+const CompleteSignupValidationSchema = z.object({
+	fullName: UserValidationSchema.shape.fullName,
+	username: UserValidationSchema.shape.username,
+	password: UserValidationSchema.shape.password,
 });
-
 // Schema for email validation
 const passordResetValidationSchema = z.object({
-  email: z.string().email("Invalid email address"),
+	email: UserValidationSchema.shape.email,
 });
 
 const newPasswordValidationSchema = z.object({
-  newPassword: z.string().min(8, "Password must be at least 8 characters long"),
-  confirmNewPassword: z.string(),
+	newPassword: UserValidationSchema.shape.password,
+	confirmNewPassword: z.string(),
 });
 
 const userVerificationValidationSchema = z.object({
-  code: z.string(),
+	code: z.string(),
 });
 
 export {
-  loginValidationSchema,
-  signupValidationSchema,
-  passordResetValidationSchema,
-  newPasswordValidationSchema,
-  userVerificationValidationSchema,
-  storeSignupValidationSchema,
+	CompleteSignupValidationSchema,
+	loginValidationSchema,
+	newPasswordValidationSchema,
+	passordResetValidationSchema,
+	SignupValidationSchema,
+	userVerificationValidationSchema,
 };

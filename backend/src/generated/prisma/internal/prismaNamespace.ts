@@ -1048,6 +1048,9 @@ export const UserScalarFieldEnum = {
   fullName: 'fullName',
   username: 'username',
   password: 'password',
+  postCount: 'postCount',
+  followerCount: 'followerCount',
+  followCount: 'followCount',
   active: 'active',
   createdAt: 'createdAt'
 } as const
@@ -1068,7 +1071,6 @@ export const UserVerificationScalarFieldEnum = {
   numberOfFailedAttempts: 'numberOfFailedAttempts',
   numberOfCodeTransfersViaEmail: 'numberOfCodeTransfersViaEmail',
   userId: 'userId',
-  userRole: 'userRole',
   ip: 'ip',
   agent: 'agent',
   createdAt: 'createdAt'
@@ -1094,6 +1096,10 @@ export const PostScalarFieldEnum = {
   id: 'id',
   content: 'content',
   createdAt: 'createdAt',
+  exists: 'exists',
+  visible: 'visible',
+  likeCount: 'likeCount',
+  commentCount: 'commentCount',
   authorId: 'authorId'
 } as const
 
@@ -1113,8 +1119,13 @@ export const CommentScalarFieldEnum = {
   id: 'id',
   content: 'content',
   createdAt: 'createdAt',
+  exists: 'exists',
+  visible: 'visible',
+  likeCount: 'likeCount',
+  childCommentCount: 'childCommentCount',
   authorId: 'authorId',
-  postId: 'postId'
+  postId: 'postId',
+  parentCommentId: 'parentCommentId'
 } as const
 
 export type CommentScalarFieldEnum = (typeof CommentScalarFieldEnum)[keyof typeof CommentScalarFieldEnum]
@@ -1183,6 +1194,20 @@ export type ListStringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaMod
 
 
 /**
+ * Reference to a field of type 'Int'
+ */
+export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
+    
+
+
+/**
+ * Reference to a field of type 'Int[]'
+ */
+export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+/**
  * Reference to a field of type 'Boolean'
  */
 export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
@@ -1200,20 +1225,6 @@ export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel
  * Reference to a field of type 'DateTime[]'
  */
 export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
-    
-
-
-/**
- * Reference to a field of type 'Int'
- */
-export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
-    
-
-
-/**
- * Reference to a field of type 'Int[]'
- */
-export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
     
 
 

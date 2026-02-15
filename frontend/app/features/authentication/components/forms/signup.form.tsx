@@ -12,13 +12,12 @@ import {
 	FormMessage,
 } from "@/core/components/ui/form";
 import { Input } from "@/core/components/ui/input";
-import { PasswordInput } from "@/core/components/ui/password-input";
 import { routesBuilder } from "@/core/routes-builder";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router";
 import { USER_VERIFICATION_GOALS } from "../../authentication.constants";
-import { signupValidationSchema } from "../../authentication.validation-schemas";
+import { SignupValidationSchema } from "../../authentication.validation-schemas";
 import { useSignup } from "../../mutations/use-signup";
 
 const SignupForm = () => {
@@ -26,12 +25,9 @@ const SignupForm = () => {
 
 	const navigate = useNavigate();
 	const form = useForm({
-		resolver: zodResolver(signupValidationSchema),
+		resolver: zodResolver(SignupValidationSchema),
 		defaultValues: {
-			firstName: "Kodossou",
-			lastName: "Kouassi",
 			email: "pierremariekod@gmail.com",
-			password: "pierremariekod@gmail.com",
 		},
 	});
 	const rootErrorMessage = form.formState.errors.root?.message;
@@ -69,36 +65,6 @@ const SignupForm = () => {
 				<Form {...form}>
 					<form onSubmit={onSubmit} className="space-y-8 mt-7">
 						<div className="grid gap-4">
-							{/* Name Field */}
-							<FormField
-								control={form.control}
-								name="firstName"
-								render={({ field }) => (
-									<FormItem className="grid gap-2">
-										<FormLabel htmlFor="name">First Name</FormLabel>
-										<FormControl>
-											<Input placeholder="John Doe" {...field} />
-										</FormControl>
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
-
-							<FormField
-								control={form.control}
-								name="lastName"
-								render={({ field }) => (
-									<FormItem className="grid gap-2">
-										<FormLabel>Last Name</FormLabel>
-										<FormControl>
-											<Input placeholder="John Doe" {...field} />
-										</FormControl>
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
-
-							{/* Email Field */}
 							<FormField
 								control={form.control}
 								name="email"
@@ -119,57 +85,15 @@ const SignupForm = () => {
 								)}
 							/>
 
-							{/* Password Field */}
-							<FormField
-								control={form.control}
-								name="password"
-								render={({ field }) => (
-									<FormItem className="grid gap-2">
-										<FormLabel htmlFor="password">Password</FormLabel>
-										<FormControl>
-											<PasswordInput
-												id="password"
-												placeholder="******"
-												autoComplete="new-password"
-												{...field}
-											/>
-										</FormControl>
-										<FormMessage />
-									</FormItem>
-								)}
-							/>
-
-							{/* Confirm Password Field */}
-							{/* <FormField
-								control={form.control}
-								name="confirmPassword"
-								render={({ field }) => (
-									<FormItem className="grid gap-2">
-										<FormLabel htmlFor="confirmPassword">
-											Confirm Password
-										</FormLabel>
-										<FormControl>
-											<PasswordInput
-												id="confirmPassword"
-												placeholder="******"
-												autoComplete="new-password"
-												{...field}
-											/>
-										</FormControl>
-										<FormMessage />
-									</FormItem>
-								)}
-							/> */}
-
 							<Button type="submit" isLoading={isPending}>
-								Register
+								Signup
 							</Button>
 						</div>
 					</form>
 				</Form>
 				<div className="mt-4 text-center text-sm">
 					Already have an account?{" "}
-					<Link to="/" className="underline">
+					<Link to={routesBuilder.login} className="underline">
 						Login
 					</Link>
 				</div>

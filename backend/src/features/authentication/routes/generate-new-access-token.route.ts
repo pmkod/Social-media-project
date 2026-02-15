@@ -46,13 +46,12 @@ generateNewAccessTokenRoute.openapi(routeDef, async (c) => {
 
 	const user = await prisma.user.findUniqueOrThrow({
 		where: { id: refreshTokenInDb.userId, active: true },
-		select: { id: true, role: true },
+		select: { id: true },
 	});
 
 	const accessToken = generateAccessToken({
 		refreshTokenId: refreshTokenInDb.id,
 		userId: user.id,
-		userRole: user.role,
 	});
 
 	return c.json({ accessToken });

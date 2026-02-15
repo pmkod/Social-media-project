@@ -56,7 +56,6 @@ completeSignupRoute.openapi(routeDef, async (c) => {
 			password: true,
 			numberOfCodeTransfersViaEmail: true,
 			user: true,
-			userRole: true,
 		},
 	});
 

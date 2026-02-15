@@ -1,8 +1,4 @@
-import {
-	Avatar,
-	AvatarFallback,
-	AvatarImage,
-} from "@/core/components/ui/avatar";
+import { Avatar } from "@/core/components/ui/avatar";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -10,35 +6,28 @@ import {
 	DropdownMenuTrigger,
 } from "@/core/components/ui/dropdown-menu";
 import { ChevronsUpDown, LogOut } from "lucide-react";
+import { useLoggedInUser } from "../use-logged-in-user";
 
-type NavUserProps = {
-	user: {
-		name: string;
-		email: string;
-		avatar: string;
-	};
-};
+const LoggedInUserDropdownMenu = () => {
+	const { data, isLoading, isSuccess } = useLoggedInUser();
 
-export function LoggedInUserDropdownMenu({ user }: NavUserProps) {
-	//   const { isMobile } = useSidebar()
-	//   const [open, setOpen] = useDialogState()
-
-	return (
+	return isLoading ? (
+		<div></div>
+	) : isSuccess ? (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
 				<button
 					type="button"
 					className="w-full flex items-center justify-between hover:bg-gray-100 px-3 py-2 rounded cursor-pointer transition-colors"
 				>
-					<Avatar className="size-12 rounded-lg mr-2">
-						<AvatarImage src={user.avatar} alt={user.name} />
-						<AvatarFallback className="rounded-lg">SN</AvatarFallback>
-					</Avatar>
+					<div className="mr-3">
+						<Avatar size="lg" />
+					</div>
 					<div className="grid flex-1 text-start leading-tight">
 						<span className="truncate text-base font-semibold">
-							{user.name}
+							{data.user.fullName}
 						</span>
-						<span className="truncate text-sm">{user.email}</span>
+						<span className="truncate text-sm">@{data.user.username}</span>
 					</div>
 					<ChevronsUpDown className="ms-auto size-4 ml-1" />
 				</button>
@@ -58,5 +47,7 @@ export function LoggedInUserDropdownMenu({ user }: NavUserProps) {
 				</DropdownMenuItem>
 			</DropdownMenuContent>
 		</DropdownMenu>
-	);
-}
+	) : null;
+};
+
+export { LoggedInUserDropdownMenu };

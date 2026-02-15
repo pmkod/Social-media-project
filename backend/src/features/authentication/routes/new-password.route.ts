@@ -1,5 +1,4 @@
 import { HttpStatus } from "@/core/constants/http-status";
-import { UserRoles } from "@/features/user/user-roles.constants";
 import { createRoute, OpenAPIHono } from "@hono/zod-openapi";
 import { prisma } from "../../../core/databases/postgresql";
 import {
@@ -88,7 +87,6 @@ newPasswordRoute.openapi(routeDef, async (c) => {
 	const { accessToken, refreshToken } = generateAccessAndRefreshToken({
 		refreshTokenId: refreshTokenInDb.id,
 		userId: user.id,
-		userRole: UserRoles.customer,
 	});
 
 	await prisma.userVerification.update({

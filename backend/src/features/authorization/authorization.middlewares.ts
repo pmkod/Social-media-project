@@ -25,10 +25,11 @@ const controlUserAccess = async (
 			id: accessTokenPayload.userId,
 			refreshTokenId: accessTokenPayload.refreshTokenId,
 		};
+
 		c.set("loggedInUser", loggedInUser);
-		await next();
+		return await next();
 	} catch (_error) {
-		c.json({ message: "Not found" }, 401);
+		return c.json({ message: "Not found" }, 401);
 	}
 };
 
