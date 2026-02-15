@@ -8,4 +8,8 @@ const UserValidationSchema = z.object({
 	password: z.string(),
 });
 
-export { UserValidationSchema };
+const GetUserValidationSchema = z.object({
+	username: UserValidationSchema.shape.username,
+});
+
+export { GetUserValidationSchema, UserValidationSchema };

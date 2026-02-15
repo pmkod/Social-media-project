@@ -12,7 +12,8 @@ import { signupRoute } from "./signup.route";
 
 const authenticationRouter = new OpenAPIHono().basePath("/authentication");
 
-authenticationRouter.route("/", loginRoute).route("/", completeLoginRoute);
+authenticationRouter.route("/", loginRoute);
+authenticationRouter.route("/", completeLoginRoute);
 authenticationRouter.route("/", signupRoute);
 authenticationRouter.route("/", completeSignupRoute);
 authenticationRouter.route("/", passwordResetRoute);

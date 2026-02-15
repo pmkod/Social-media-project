@@ -1,7 +1,8 @@
 import { createQueryKeys } from "@lukemorales/query-key-factory";
 
 const userQueryKeys = createQueryKeys("user", {
-  loggedInUser: null,
+	loggedInUser: null,
+	getUser: (username: string) => [username],
 });
 
 export { userQueryKeys };

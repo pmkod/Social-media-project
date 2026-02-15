@@ -1,6 +1,7 @@
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases/postgresql";
 import type { HonoContextVariables } from "@/core/types/hono-context-variables";
+import { controlUserAccess } from "@/features/authorization/authorization.middlewares";
 import { createRoute, OpenAPIHono } from "@hono/zod-openapi";
 import { UserRoutesTag } from "../user.constants";
 
@@ -16,6 +17,7 @@ const routeDef = createRoute({
 			description: "Success",
 		},
 	},
+	middleware: [controlUserAccess],
 });
 
 const getMeRoute = new OpenAPIHono<HonoContextVariables>().openapi(

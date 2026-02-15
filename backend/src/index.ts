@@ -4,6 +4,7 @@ import { cors } from "hono/cors";
 import { exceptionHandler } from "./core/exceptions/exception.handler";
 import { authenticationRouter } from "./features/authentication/routes";
 import { commentRouter } from "./features/comment/routes";
+import { followRouter } from "./features/follow/routes";
 import { postRouter } from "./features/post/routes";
 import { userRouter } from "./features/user/routes";
 
@@ -22,7 +23,7 @@ app.route("/", authenticationRouter);
 app.route("/", userRouter);
 app.route("/", postRouter);
 app.route("/", commentRouter);
-// app.route("/", authenticationRouter);
+app.route("/", followRouter);
 // app.route("/", authenticationRouter);
 
 app.onError(exceptionHandler);

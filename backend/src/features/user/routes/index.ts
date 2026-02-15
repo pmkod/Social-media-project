@@ -1,9 +1,10 @@
-import { controlUserAccess } from "@/features/authorization/authorization.middlewares";
 import { OpenAPIHono } from "@hono/zod-openapi";
-import { getMeRoute } from "./ge-me.route";
+import { getMeRoute } from "./get-me.route";
+import { getUserRoute } from "./get-user.route";
 
 const userRouter = new OpenAPIHono().basePath("/users");
 
-userRouter.use(controlUserAccess).route("/", getMeRoute);
+userRouter.route("/", getMeRoute);
+userRouter.route("/", getUserRoute);
 
 export { userRouter };

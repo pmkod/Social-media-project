@@ -221,7 +221,7 @@ export type UserGroupByOutputType = {
   id: string
   email: string
   fullName: string | null
-  username: string | null
+  username: string
   password: string
   postCount: number
   followerCount: number
@@ -257,7 +257,7 @@ export type UserWhereInput = {
   id?: Prisma.StringFilter<"User"> | string
   email?: Prisma.StringFilter<"User"> | string
   fullName?: Prisma.StringNullableFilter<"User"> | string | null
-  username?: Prisma.StringNullableFilter<"User"> | string | null
+  username?: Prisma.StringFilter<"User"> | string
   password?: Prisma.StringFilter<"User"> | string
   postCount?: Prisma.IntFilter<"User"> | number
   followerCount?: Prisma.IntFilter<"User"> | number
@@ -278,7 +278,7 @@ export type UserOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   email?: Prisma.SortOrder
   fullName?: Prisma.SortOrderInput | Prisma.SortOrder
-  username?: Prisma.SortOrderInput | Prisma.SortOrder
+  username?: Prisma.SortOrder
   password?: Prisma.SortOrder
   postCount?: Prisma.SortOrder
   followerCount?: Prisma.SortOrder
@@ -298,11 +298,11 @@ export type UserOrderByWithRelationInput = {
 export type UserWhereUniqueInput = Prisma.AtLeast<{
   id?: string
   email?: string
+  username?: string
   AND?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   OR?: Prisma.UserWhereInput[]
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   fullName?: Prisma.StringNullableFilter<"User"> | string | null
-  username?: Prisma.StringNullableFilter<"User"> | string | null
   password?: Prisma.StringFilter<"User"> | string
   postCount?: Prisma.IntFilter<"User"> | number
   followerCount?: Prisma.IntFilter<"User"> | number
@@ -317,13 +317,13 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   commentLikes?: Prisma.CommentLikeListRelationFilter
   followers?: Prisma.FollowListRelationFilter
   follows?: Prisma.FollowListRelationFilter
-}, "id" | "email">
+}, "id" | "email" | "username">
 
 export type UserOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   email?: Prisma.SortOrder
   fullName?: Prisma.SortOrderInput | Prisma.SortOrder
-  username?: Prisma.SortOrderInput | Prisma.SortOrder
+  username?: Prisma.SortOrder
   password?: Prisma.SortOrder
   postCount?: Prisma.SortOrder
   followerCount?: Prisma.SortOrder
@@ -344,7 +344,7 @@ export type UserScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"User"> | string
   email?: Prisma.StringWithAggregatesFilter<"User"> | string
   fullName?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
-  username?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  username?: Prisma.StringWithAggregatesFilter<"User"> | string
   password?: Prisma.StringWithAggregatesFilter<"User"> | string
   postCount?: Prisma.IntWithAggregatesFilter<"User"> | number
   followerCount?: Prisma.IntWithAggregatesFilter<"User"> | number
@@ -357,7 +357,7 @@ export type UserCreateInput = {
   id?: string
   email: string
   fullName?: string | null
-  username?: string | null
+  username: string
   password: string
   postCount?: number
   followerCount?: number
@@ -378,7 +378,7 @@ export type UserUncheckedCreateInput = {
   id?: string
   email: string
   fullName?: string | null
-  username?: string | null
+  username: string
   password: string
   postCount?: number
   followerCount?: number
@@ -399,7 +399,7 @@ export type UserUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   postCount?: Prisma.IntFieldUpdateOperationsInput | number
   followerCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -420,7 +420,7 @@ export type UserUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   postCount?: Prisma.IntFieldUpdateOperationsInput | number
   followerCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -441,7 +441,7 @@ export type UserCreateManyInput = {
   id?: string
   email: string
   fullName?: string | null
-  username?: string | null
+  username: string
   password: string
   postCount?: number
   followerCount?: number
@@ -454,7 +454,7 @@ export type UserUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   postCount?: Prisma.IntFieldUpdateOperationsInput | number
   followerCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -467,7 +467,7 @@ export type UserUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   postCount?: Prisma.IntFieldUpdateOperationsInput | number
   followerCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -679,7 +679,7 @@ export type UserCreateWithoutUserVerificationsInput = {
   id?: string
   email: string
   fullName?: string | null
-  username?: string | null
+  username: string
   password: string
   postCount?: number
   followerCount?: number
@@ -699,7 +699,7 @@ export type UserUncheckedCreateWithoutUserVerificationsInput = {
   id?: string
   email: string
   fullName?: string | null
-  username?: string | null
+  username: string
   password: string
   postCount?: number
   followerCount?: number
@@ -735,7 +735,7 @@ export type UserUpdateWithoutUserVerificationsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   postCount?: Prisma.IntFieldUpdateOperationsInput | number
   followerCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -755,7 +755,7 @@ export type UserUncheckedUpdateWithoutUserVerificationsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   postCount?: Prisma.IntFieldUpdateOperationsInput | number
   followerCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -775,7 +775,7 @@ export type UserCreateWithoutRefreshTokensInput = {
   id?: string
   email: string
   fullName?: string | null
-  username?: string | null
+  username: string
   password: string
   postCount?: number
   followerCount?: number
@@ -795,7 +795,7 @@ export type UserUncheckedCreateWithoutRefreshTokensInput = {
   id?: string
   email: string
   fullName?: string | null
-  username?: string | null
+  username: string
   password: string
   postCount?: number
   followerCount?: number
@@ -831,7 +831,7 @@ export type UserUpdateWithoutRefreshTokensInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   postCount?: Prisma.IntFieldUpdateOperationsInput | number
   followerCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -851,7 +851,7 @@ export type UserUncheckedUpdateWithoutRefreshTokensInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   postCount?: Prisma.IntFieldUpdateOperationsInput | number
   followerCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -871,7 +871,7 @@ export type UserCreateWithoutPostsInput = {
   id?: string
   email: string
   fullName?: string | null
-  username?: string | null
+  username: string
   password: string
   postCount?: number
   followerCount?: number
@@ -891,7 +891,7 @@ export type UserUncheckedCreateWithoutPostsInput = {
   id?: string
   email: string
   fullName?: string | null
-  username?: string | null
+  username: string
   password: string
   postCount?: number
   followerCount?: number
@@ -927,7 +927,7 @@ export type UserUpdateWithoutPostsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   postCount?: Prisma.IntFieldUpdateOperationsInput | number
   followerCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -947,7 +947,7 @@ export type UserUncheckedUpdateWithoutPostsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   postCount?: Prisma.IntFieldUpdateOperationsInput | number
   followerCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -967,7 +967,7 @@ export type UserCreateWithoutPostLikesInput = {
   id?: string
   email: string
   fullName?: string | null
-  username?: string | null
+  username: string
   password: string
   postCount?: number
   followerCount?: number
@@ -987,7 +987,7 @@ export type UserUncheckedCreateWithoutPostLikesInput = {
   id?: string
   email: string
   fullName?: string | null
-  username?: string | null
+  username: string
   password: string
   postCount?: number
   followerCount?: number
@@ -1023,7 +1023,7 @@ export type UserUpdateWithoutPostLikesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   postCount?: Prisma.IntFieldUpdateOperationsInput | number
   followerCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1043,7 +1043,7 @@ export type UserUncheckedUpdateWithoutPostLikesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   postCount?: Prisma.IntFieldUpdateOperationsInput | number
   followerCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1063,7 +1063,7 @@ export type UserCreateWithoutCommentsInput = {
   id?: string
   email: string
   fullName?: string | null
-  username?: string | null
+  username: string
   password: string
   postCount?: number
   followerCount?: number
@@ -1083,7 +1083,7 @@ export type UserUncheckedCreateWithoutCommentsInput = {
   id?: string
   email: string
   fullName?: string | null
-  username?: string | null
+  username: string
   password: string
   postCount?: number
   followerCount?: number
@@ -1119,7 +1119,7 @@ export type UserUpdateWithoutCommentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   postCount?: Prisma.IntFieldUpdateOperationsInput | number
   followerCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1139,7 +1139,7 @@ export type UserUncheckedUpdateWithoutCommentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   postCount?: Prisma.IntFieldUpdateOperationsInput | number
   followerCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1159,7 +1159,7 @@ export type UserCreateWithoutCommentLikesInput = {
   id?: string
   email: string
   fullName?: string | null
-  username?: string | null
+  username: string
   password: string
   postCount?: number
   followerCount?: number
@@ -1179,7 +1179,7 @@ export type UserUncheckedCreateWithoutCommentLikesInput = {
   id?: string
   email: string
   fullName?: string | null
-  username?: string | null
+  username: string
   password: string
   postCount?: number
   followerCount?: number
@@ -1215,7 +1215,7 @@ export type UserUpdateWithoutCommentLikesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   postCount?: Prisma.IntFieldUpdateOperationsInput | number
   followerCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1235,7 +1235,7 @@ export type UserUncheckedUpdateWithoutCommentLikesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   postCount?: Prisma.IntFieldUpdateOperationsInput | number
   followerCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1255,7 +1255,7 @@ export type UserCreateWithoutFollowsInput = {
   id?: string
   email: string
   fullName?: string | null
-  username?: string | null
+  username: string
   password: string
   postCount?: number
   followerCount?: number
@@ -1275,7 +1275,7 @@ export type UserUncheckedCreateWithoutFollowsInput = {
   id?: string
   email: string
   fullName?: string | null
-  username?: string | null
+  username: string
   password: string
   postCount?: number
   followerCount?: number
@@ -1300,7 +1300,7 @@ export type UserCreateWithoutFollowersInput = {
   id?: string
   email: string
   fullName?: string | null
-  username?: string | null
+  username: string
   password: string
   postCount?: number
   followerCount?: number
@@ -1320,7 +1320,7 @@ export type UserUncheckedCreateWithoutFollowersInput = {
   id?: string
   email: string
   fullName?: string | null
-  username?: string | null
+  username: string
   password: string
   postCount?: number
   followerCount?: number
@@ -1356,7 +1356,7 @@ export type UserUpdateWithoutFollowsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   postCount?: Prisma.IntFieldUpdateOperationsInput | number
   followerCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1376,7 +1376,7 @@ export type UserUncheckedUpdateWithoutFollowsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   postCount?: Prisma.IntFieldUpdateOperationsInput | number
   followerCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1407,7 +1407,7 @@ export type UserUpdateWithoutFollowersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   postCount?: Prisma.IntFieldUpdateOperationsInput | number
   followerCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1427,7 +1427,7 @@ export type UserUncheckedUpdateWithoutFollowersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  username?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  username?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.StringFieldUpdateOperationsInput | string
   postCount?: Prisma.IntFieldUpdateOperationsInput | number
   followerCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1629,7 +1629,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     id: string
     email: string
     fullName: string | null
-    username: string | null
+    username: string
     password: string
     postCount: number
     followerCount: number

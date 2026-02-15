@@ -2,7 +2,11 @@ type User = {
 	id: string;
 	fullName: string;
 	username: string;
-	email: string;
+	postCount: number;
+
+	followerCount: number;
+
+	followCount: number;
 };
 
 export type { User };

@@ -32,7 +32,7 @@ export default [
 		layout("./core/layouts/main.layout.tsx", [
 			layout("./core/layouts/with-right-side-default-content.layout.tsx", [
 				route("home", "features/home/home.page.tsx"),
-				route("users/:userName", "features/user/pages/user-profile.page.tsx"),
+				route("users/:username", "features/user/pages/user-profile.page.tsx"),
 			]),
 		]),
 	]),

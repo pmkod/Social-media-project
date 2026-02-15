@@ -34,10 +34,10 @@ function Avatar({
 			<AvatarPrimitive.Fallback
 				data-slot="avatar-fallback"
 				className={cn(
-					"bg-muted text-muted-foreground flex size-full items-center justify-center text-sm group-data-[size=sm]/avatar:text-xs",
+					"size-full bg-muted text-muted-foreground flex items-center justify-center text-sm group-data-[size=sm]/avatar:text-xs",
 				)}
 			>
-				<User />
+				<User className="size-1/2" />
 			</AvatarPrimitive.Fallback>
 		</AvatarPrimitive.Root>
 	);

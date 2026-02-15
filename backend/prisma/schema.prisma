@@ -17,7 +17,7 @@ model User {
   id                String             @id @default(uuid())
   email             String             @unique
   fullName          String?            @map("full_name")
-  username          String?            @map("username")
+  username          String             @unique @map("username")
   password          String
   postCount         Int                @default(0) @map("post_count")
   followerCount     Int                @default(0) @map("follower_count")
