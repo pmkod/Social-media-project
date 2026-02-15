@@ -10,6 +10,8 @@ const useCreatePost = () => {
 		mutationFn: ({ content }: CreatePostRequestBody) => {
 			const formData = new FormData();
 			formData.set("content", content);
+			console.log(formData.values());
+
 			return httpClient
 				.post("posts", {
 					body: formData,

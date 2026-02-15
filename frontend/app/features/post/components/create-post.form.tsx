@@ -4,6 +4,7 @@ import { Form, FormField } from "@/core/components/ui/form";
 import { Textarea } from "@/core/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { CreatePostValidationSchema } from "../post.validation-schemas";
 import { useCreatePost } from "../use-create-post";
 
@@ -21,7 +22,10 @@ const CreatePostForm = () => {
 
 	const onSubmit = form.handleSubmit((data) => {
 		mutate(data, {
-			onSuccess: () => {},
+			onSuccess: () => {
+				toast.success("Votre post a été publié");
+				form.reset();
+			},
 			onError: (error) => {
 				form.setError("root", {
 					message: error.message,
@@ -57,9 +61,6 @@ const CreatePostForm = () => {
 								Publish
 							</Button>
 						</div>
-						{/* <Button variant="outline" className="w-full">
-								Login with Google
-							</Button> */}
 					</div>
 				</form>
 			</Form>

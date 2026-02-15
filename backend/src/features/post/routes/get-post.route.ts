@@ -6,7 +6,7 @@ import { PostRoutesTag } from "../post.constants";
 import { GetPostValidationSchema } from "../post.validation-schemas";
 
 const routeDef = createRoute({
-	method: "post",
+	method: "get",
 	path: "/:postId",
 	summary: "Get posts",
 	tags: [PostRoutesTag],

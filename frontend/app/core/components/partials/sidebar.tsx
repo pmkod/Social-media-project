@@ -1,5 +1,6 @@
 import { routesBuilder } from "@/core/routes-builder";
 import { LoggedInUserDropdownMenu } from "@/features/user/components/logged-in-user.dropdown-menu";
+import { useLoggedInUser } from "@/features/user/use-logged-in-user";
 import { Compass, Home, MessageCircleMore, Settings, User } from "lucide-react";
 import type { ReactNode } from "react";
 import { Link } from "react-router";
@@ -24,6 +25,8 @@ const SidebarLink = ({ icon, path, name }: SidebarLinkProps) => {
 };
 
 const Sidebar = () => {
+	const { data } = useLoggedInUser();
+
 	return (
 		<div className="w-72 h-screen flex flex-col sticky top-0 pt-7">
 			<div className="pl-4 pb-7">
@@ -41,12 +44,14 @@ const Sidebar = () => {
 					path={routesBuilder.home}
 					name="Discussions"
 				/>
+				{data ? (
+					<SidebarLink
+						icon={<User />}
+						path={routesBuilder.userProfile(data.user.username)}
+						name="Profile"
+					/>
+				) : null}
 
-				<SidebarLink
-					icon={<User />}
-					path={routesBuilder.userProfile("p")}
-					name="Profile"
-				/>
 				<SidebarLink
 					icon={<Settings />}
 					path={routesBuilder.home}

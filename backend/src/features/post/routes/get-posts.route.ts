@@ -5,7 +5,7 @@ import { createRoute, OpenAPIHono } from "@hono/zod-openapi";
 import { PostRoutesTag } from "../post.constants";
 
 const routeDef = createRoute({
-	method: "post",
+	method: "get",
 	path: "/",
 	summary: "Get posts",
 	tags: [PostRoutesTag],
@@ -30,6 +30,8 @@ const getPostsRoute = new OpenAPIHono<HonoContextVariables>().openapi(
 				id: true,
 				content: true,
 				createdAt: true,
+				likeCount: true,
+				commentCount: true,
 				author: {
 					select: {
 						id: true,

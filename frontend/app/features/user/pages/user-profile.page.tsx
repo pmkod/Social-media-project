@@ -1,15 +1,10 @@
 import { AspectRatio } from "@/core/components/ui/aspect-ratio";
-import {
-	Avatar,
-	AvatarFallback,
-	AvatarImage,
-} from "@/core/components/ui/avatar";
+import { Avatar } from "@/core/components/ui/avatar";
 import { Button } from "@/core/components/ui/button";
-import { formatNumberToCompact, getInitials } from "@/core/lib/utils";
+import { formatNumberToCompact } from "@/core/lib/utils";
 import { UserPosts } from "@/features/post/components/user-posts";
-import type { User } from "@/features/post/types/post";
 
-export const userData: User = {
+export const userData: any = {
 	id: "1",
 	firstName: "John",
 	lastName: "Doe",
@@ -51,16 +46,7 @@ const UserProfilePage = () => {
 					)}
 				</AspectRatio>
 				<div className="relative w-full flex flex-col items-center gap-7 p-4 md:flex-row">
-					<Avatar className="size-32 -mt-20 md:size-40 border bg-white border-gray-300 rounded-lg">
-						<AvatarImage
-							src={userData.avatar}
-							alt="Profile Avatar"
-							className="border-4 border-background"
-						/>
-						<AvatarFallback className="border-4 border-background">
-							{getInitials(userData.name)}
-						</AvatarFallback>
-					</Avatar>
+					<Avatar className="size-32 -mt-20 md:size-40 border bg-white border-gray-300 rounded-lg" />
 					<div className="text-center md:text-start">
 						<div>
 							<h1 className="text-2xl font-bold line-clamp-1">

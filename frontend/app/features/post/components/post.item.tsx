@@ -1,10 +1,4 @@
-import {
-	EllipsisVertical,
-	Forward,
-	MessagesSquare,
-	Repeat,
-	ThumbsUp,
-} from "lucide-react";
+import { EllipsisVertical } from "lucide-react";
 
 import { Avatar } from "@/core/components/ui/avatar";
 import { Button } from "@/core/components/ui/button";
@@ -16,37 +10,24 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/core/components/ui/card";
-import type { DynamicIconNameType } from "@/core/components/ui/dynamic-icon";
-import { DynamicIcon } from "@/core/components/ui/dynamic-icon";
-import { MediaGrid } from "@/core/components/ui/media-grid";
-import { Separator } from "@/core/components/ui/separator";
-import { Toggle } from "@/core/components/ui/toggle";
-import { formatDistance, formatNumberToCompact } from "@/core/lib/utils";
+import { formatDistance } from "@/core/lib/utils";
 import type { Post } from "@/features/post/types/post";
 
-const visibilityIcons: Record<Post["visibility"], DynamicIconNameType> = {
-	public: "Globe",
-	friends: "Users",
-	private: "Lock",
-};
-
-export function PostItem({ data }: { data: Post }) {
+export function PostItem({ post }: { post: Post }) {
 	return (
-		<Card className="pb-0 rounded-md border border-gray-300 shadow-none">
+		<Card className="pb-2 rounded-md border border-gray-300 shadow-none">
 			<article>
 				<CardHeader className="flex-row flex mb-3 justify-between items-center gap-x-3 space-y-0">
 					<div className="flex items-center gap-x-2">
-						<Avatar src={data.user.avatar} />
+						<Avatar />
 						<div>
-							<CardTitle>{data.user.name}</CardTitle>
+							<CardTitle>{post.author.fullName}</CardTitle>
 							<CardDescription className="inline-flex items-baseline">
-								<span className="after:content-['\00b7'] after:mx-1">
-									{formatDistance(data.updatedAt)}
+								<p className="">@{post.author.username}</p>
+								<span className="mx-2">-</span>
+								<span className="text-xs">
+									{formatDistance(post.createdAt)}
 								</span>
-								<DynamicIcon
-									name={visibilityIcons[data.visibility]}
-									className="h-3 w-3 translate-y-[0.125rem]"
-								/>
 							</CardDescription>
 						</div>
 					</div>
@@ -60,11 +41,11 @@ export function PostItem({ data }: { data: Post }) {
 					</Button>
 				</CardHeader>
 				<CardContent>
-					{data.text && <p>{data.text}</p>}
-					{data.media && <MediaGrid className="mt-2" data={data.media} />}
+					{post.content && <p>{post.content}</p>}
+					{/* {data.media && <MediaGrid className="mt-2" data={data.media} />} */}
 				</CardContent>
 				<CardFooter className="grid gap-y-1.5 pb-3">
-					<div className="w-full flex justify-between text-sm text-muted-foreground">
+					{/* <div className="w-full flex justify-between text-sm text-muted-foreground">
 						<p>{formatNumberToCompact(data.totalLikes)} likes</p>
 						<div className="inline-flex">
 							<p className="after:content-['\00b7'] after:mx-1">
@@ -111,7 +92,7 @@ export function PostItem({ data }: { data: Post }) {
 							<Forward className="h-4 w-4 shrink-0 md:me-2" />
 							<span>Share</span>
 						</Button>
-					</div>
+					</div> */}
 				</CardFooter>
 			</article>
 		</Card>

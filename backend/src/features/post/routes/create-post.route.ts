@@ -15,7 +15,7 @@ const routeDef = createRoute({
 	request: {
 		body: {
 			content: {
-				"application/json": {
+				"multipart/form-data": {
 					schema: CreatePostValidationSchema,
 				},
 			},
@@ -31,7 +31,8 @@ const routeDef = createRoute({
 const createPostRoute = new OpenAPIHono<HonoContextVariables>().openapi(
 	routeDef,
 	async (c) => {
-		const reqBody = c.req.valid("json");
+		const reqBody = c.req.valid("form");
+		reqBody.content;
 		const loggedInUser = c.get("loggedInUser");
 
 		if (!loggedInUser) {

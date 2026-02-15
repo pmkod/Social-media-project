@@ -38,8 +38,6 @@ const getMeRoute = new OpenAPIHono<HonoContextVariables>().openapi(
 			},
 		});
 
-		console.log(user);
-
 		return c.json({ user });
 	},
 );

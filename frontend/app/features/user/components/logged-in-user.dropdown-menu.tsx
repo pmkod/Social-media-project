@@ -21,7 +21,7 @@ const LoggedInUserDropdownMenu = () => {
 					className="w-full flex items-center justify-between hover:bg-gray-100 px-3 py-2 rounded cursor-pointer transition-colors"
 				>
 					<div className="mr-3">
-						<Avatar size="lg" />
+						<Avatar />
 					</div>
 					<div className="grid flex-1 text-start leading-tight">
 						<span className="truncate text-base font-semibold">
