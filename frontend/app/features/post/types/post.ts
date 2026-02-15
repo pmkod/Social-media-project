@@ -37,10 +37,7 @@ export interface Post {
 	content: string;
 	createdAt: Date;
 	author: User;
-	// totalComments: number;
-	// totalReposts: number;
-	// totalLikes: number;
-	// media?: Array<MediaType>;
-	// visibility: PostVisibility;
+	commentCount: number;
+	likeCount: number;
 	// isLiked: boolean;
 }
