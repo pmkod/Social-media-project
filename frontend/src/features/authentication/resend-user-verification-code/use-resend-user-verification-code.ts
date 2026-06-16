@@ -1,0 +1,27 @@
+import { useMutation } from "@tanstack/react-query";
+import { baseHttpClient } from "@/core/http-clients/http-client.ts";
+import { getUserVerificationDataFromLocalStorage } from "../common/authentication.utils.ts";
+
+const useResendUserVerificationCode = () => {
+	return useMutation({
+		mutationFn: () => {
+			const data = getUserVerificationDataFromLocalStorage();
+			if (!data?.userVerification) {
+				throw new Error("Données de vérification introuvables");
+			}
+			return baseHttpClient.post(
+				"authentication/resend-user-verification-code",
+				{
+					json: {
+						userVerification: {
+							id: data.userVerification.id,
+							token: data.userVerification.token,
+						},
+					},
+				},
+			);
+		},
+	});
+};
+
+export { useResendUserVerificationCode };

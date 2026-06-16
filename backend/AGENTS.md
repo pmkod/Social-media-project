@@ -1,0 +1,144 @@
+# Backend Agent Guide — Social Media Microservices
+
+Ce document est partagé entre tous les agents travaillant sur le backend. Il décrit l'architecture, les conventions et les choix techniques validés.
+
+## Architecture
+
+- **Style** : microservices
+- **Services actuels** : `authentication-service`, `user-service`, `content-service`, `authorization-service`
+- **Gateway** : Kong (exposition publique unifiée)
+- **Communication inter-service** : HTTP/REST classique (JSON)
+- **Base de données** : PostgreSQL, **une base par service**
+- **Conteneurisation** : Docker + docker-compose
+
+## Stack technique
+
+| Couche | Outil |
+|--------|-------|
+| Runtime | Bun |
+| Framework API | Hono + `@hono/zod-openapi` |
+| Validation | Zod |
+| ORM | Drizzle ORM |
+| DB | PostgreSQL |
+| Gateway | Kong |
+| Inter-service | HTTP/REST classique (`fetch`) |
+| Auth | JWT stateless |
+| Hash | bcrypt |
+| IDs | UUID v7 (`uuidv7` npm) |
+| Lint/format | Biome |
+
+## Organisation d'un service
+
+```
+services/<service-name>/
+├── src/
+│   ├── index.ts                              # bootstrap Hono + gRPC
+│   ├── core/
+│   │   ├── config/                           # env, variables
+│   │   ├── db/                               # client Drizzle + schémas
+│   │   ├── errors/                           # handlers et classes d'erreur
+│   │   ├── clients/                          # clients HTTP inter-service
+│   │   └── middleware/                       # auth, errors, cors, etc.
+│   └── features/<feature>/
+│       ├── routes/                           # une route par fichier
+│       ├── schemas/                          # Zod schemas
+│       ├── services/                         # logique métier
+│       └── types/                            # types TypeScript
+├── drizzle/
+│   ├── schema.ts
+│   └── migrations/                           # générées par drizzle-kit
+├── clients/                                  # clients HTTP inter-service
+├── Dockerfile
+├── package.json
+├── tsconfig.json
+├── biome.json
+├── drizzle.config.ts
+└── .env.example
+```
+
+## Conventions de code
+
+- **Une route par fichier** dans `features/<feature>/routes/`. Exemple : `signup.route.ts`.
+- Les routes utilisent `createRoute` + `defineOpenAPIRoute` de `@hono/zod-openapi`.
+- Les noms de fichiers sont en **kebab-case**.
+- Les imports utilisent l'alias `@/*` → `./src/*`.
+- **Organisation sans `features/`** pour `authentication-service`, `user-service` et `authorization-service` (routes/schemas/services/constants/functions à plat sous `src/`).
+- **Organisation feature-based** uniquement pour `content-service`.
+- Les erreurs HTTP retournent le format :
+  ```json
+  { "success": false, "error": { "code": "...", "message": "...", "details?": {} } }
+  ```
+- Pas de partage de code métier entre services. Seuls les contrats OpenAPI et ce fichier sont partagés.
+
+## Variables d'environnement standardisées
+
+| Variable | Description |
+|----------|-------------|
+| `PORT` | Port HTTP du service (ex: 8001) |
+| `DATABASE_URL` | URL PostgreSQL du service |
+| `AUTH_SERVICE_URL` | URL HTTP de `authentication-service` (ex: `http://localhost:8001`) |
+| `JWT_SECRET` | Clé secrète pour signer les JWT |
+| `JWT_ACCESS_EXPIRATION` | Durée de vie d'un access token (ex: 15m) |
+| `JWT_REFRESH_EXPIRATION` | Durée de vie d'un refresh token (ex: 7d) |
+| `NODE_ENV` | development / production |
+
+## Ports réservés (dev local)
+
+| Service | HTTP | PostgreSQL |
+|---------|------|------------|
+| authentication-service | 8001 | 54321 |
+| user-service | 8002 | 54322 |
+| content-service | 8003 | 54323 |
+| authorization-service | 8004 | 54324 |
+| Kong Gateway | 8000 (proxy) / 8001 (admin) | — | — |
+| Zookeeper | — | — | 2181 |
+
+## Routes Kong publiques
+
+| Préfixe Kong | Service cible |
+|--------------|---------------|
+| `/authentication/*` | authentication-service:8001 |
+| `/users/*` | user-service:8002 |
+| `/posts/*` | content-service:8003 |
+
+## Endpoints internes partagés
+
+Les communications inter-service passent par HTTP/REST. Les endpoints internes ne sont pas exposés publiquement par Kong.
+
+- `POST /internal/auth/validate-token` (authentication-service) : valide un access token et retourne `{ isValid, userId }`
+
+## Commandes utiles
+
+```bash
+# Démarrer toute l'infrastructure Docker
+cd backend && docker compose up -d
+
+# Démarrer un service en dev (depuis le dossier du service)
+cd backend/services/<service> && bun run dev
+
+# Générer et appliquer les migrations Drizzle
+cd backend/services/<service> && bun run db:generate
+cd backend/services/<service> && bun run db:migrate
+
+# Type check
+cd backend/services/<service> && bunx tsc --noEmit
+
+# Linter / formatter
+cd backend/services/<service> && bun run check
+```
+
+## Principes microservices
+
+1. **Database-per-service** : chaque service possède sa propre base.
+2. **API Gateway** : le client (frontend) ne parle qu'à Kong.
+3. **Inter-service synchrone** : HTTP/REST classique pour les lectures/validations synchrones.
+4. **Inter-service asynchrone** : Kafka sera ajouté plus tard pour les événements.
+5. **Pas de partage de tables** entre services ; utiliser les APIs REST/HTTP.
+
+## Évolutions prévues
+
+- Kafka pour les events (`UserCreated`, `PostCreated`).
+- Refresh tokens avec rotation.
+- Upload médias.
+- Permissions fines dans authorization-service.
+- Tests unitaires et E2E.
