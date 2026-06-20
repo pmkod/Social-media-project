@@ -3,7 +3,6 @@ import { z } from "@hono/zod-openapi";
 const environmentSchema = z.object({
 	PORT: z.string().default("8082"),
 	DATABASE_URL: z.string(),
-	AUTH_SERVICE_URL: z.string().default("http://localhost:8081"),
 	NODE_ENV: z.enum(["development", "production", "test"]).default("development"),
 });
 

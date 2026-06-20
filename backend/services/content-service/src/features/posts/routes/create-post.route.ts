@@ -2,7 +2,7 @@ import { createRoute, defineOpenAPIRoute } from "@hono/zod-openapi";
 import { uuidv7 } from "uuidv7";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/database";
-import type { AuthContext } from "@/core/middleware/auth.middleware";
+import { AppError, ErrorCodes } from "@/core/errors/app-error";
 import { PostsRoutesTag } from "../posts.constants";
 import { CreatePostValidationSchema } from "../posts.validation-schemas";
 
@@ -27,10 +27,19 @@ const routeDef = createRoute({
 	},
 });
 
-const createPostRoute = defineOpenAPIRoute<typeof routeDef, AuthContext>({
+const createPostRoute = defineOpenAPIRoute<typeof routeDef>({
 	route: routeDef,
 	handler: async (c) => {
-		const authorId = c.get("userId");
+		const authorId = c.req.header("X-User-Id");
+
+		if (!authorId) {
+			throw new AppError({
+				message: "Missing user identity",
+				code: ErrorCodes.UNAUTHORIZED,
+				statusCode: 401,
+			});
+		}
+
 		const body = c.req.valid("json");
 
 		const post = await prisma.post.create({

@@ -2,12 +2,10 @@ import { OpenAPIHono } from "@hono/zod-openapi";
 import { serve } from "bun";
 import { environment } from "@/config/environment.configuration";
 import { handleError } from "@/errors/error-handler";
-import { authMiddleware } from "@/middleware/auth.middleware";
 import { usersRoutes } from "@/routes";
 
 const app = new OpenAPIHono();
 
-app.use("/users/*", authMiddleware);
 app.onError(handleError);
 app.openapiRoutes(usersRoutes);
 

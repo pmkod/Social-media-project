@@ -17,6 +17,13 @@ services:
         paths:
           - /users
         strip_path: false
+    plugins:
+      - name: jwt-auth
+        config:
+          secret: __JWT_SECRET__
+          issuer: social-media-app
+          user_id_claim: userId
+          upstream_header: X-User-Id
 
   - name: content-service
     url: http://content-service:8083
@@ -25,6 +32,13 @@ services:
         paths:
           - /posts
         strip_path: false
+    plugins:
+      - name: jwt-auth
+        config:
+          secret: __JWT_SECRET__
+          issuer: social-media-app
+          user_id_claim: userId
+          upstream_header: X-User-Id
 
 plugins:
   - name: cors

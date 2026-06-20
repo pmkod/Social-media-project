@@ -3,7 +3,6 @@ import { HttpStatus } from "@/constants/http-status";
 import { UsersRoutesTag } from "@/constants/users.constants";
 import { prisma } from "@/database";
 import { AppError, ErrorCodes } from "@/errors/app-error";
-import type { AuthContext } from "@/middleware/auth.middleware";
 
 const routeDef = createRoute({
 	method: "get",
@@ -17,10 +16,18 @@ const routeDef = createRoute({
 	},
 });
 
-const getMeRoute = defineOpenAPIRoute<typeof routeDef, AuthContext>({
+const getMeRoute = defineOpenAPIRoute<typeof routeDef>({
 	route: routeDef,
 	handler: async (c) => {
-		const userId = c.get("userId");
+		const userId = c.req.header("X-User-Id");
+
+		if (!userId) {
+			throw new AppError({
+				message: "Missing user identity",
+				code: ErrorCodes.UNAUTHORIZED,
+				statusCode: 401,
+			});
+		}
 
 		const user = await prisma.user.findUnique({
 			where: { id: userId },

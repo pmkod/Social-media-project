@@ -76,8 +76,7 @@ services/<service-name>/
 |----------|-------------|
 | `PORT` | Port HTTP du service (ex: 8081) |
 | `DATABASE_URL` | URL PostgreSQL du service |
-| `AUTH_SERVICE_URL` | URL HTTP de `authentication-service` (ex: `http://localhost:8081`) |
-| `JWT_SECRET` | Clé secrète pour signer les JWT |
+| `JWT_SECRET` | Clé secrète partagée pour signer et vérifier les JWT |
 | `JWT_ACCESS_EXPIRATION` | Durée de vie d'un access token (ex: 15m) |
 | `JWT_REFRESH_EXPIRATION` | Durée de vie d'un refresh token (ex: 7d) |
 | `NODE_ENV` | development / production |
@@ -100,11 +99,19 @@ services/<service-name>/
 | `/users/*` | user-service:8082 |
 | `/posts/*` | content-service:8083 |
 
+## Authentification
+
+La vérification des JWT est effectuée au niveau de **Kong**, pas dans les services protégés.
+
+- Le plugin custom `jwt-auth` (`backend/kong/plugins/jwt-auth`) vérifie la signature HS256, l'issuer (`iss`) et l'expiration du token, puis forward l'identifiant utilisateur dans le header `X-User-Id`.
+- `authentication-service` émet des tokens avec `iss: "social-media-app"`.
+- `user-service` et `content-service` ne possèdent plus de middleware d'authentification. Les routes protégées lisent simplement le header `X-User-Id` injecté par Kong.
+
 ## Endpoints internes partagés
 
 Les communications inter-service passent par HTTP/REST. Les endpoints internes ne sont pas exposés publiquement par Kong.
 
-- `POST /internal/auth/validate-token` (authentication-service) : valide un access token et retourne `{ isValid, userId }`
+Aucun endpoint interne d'authentification n'est requis : Kong valide les JWT directement via le plugin `jwt-auth`.
 
 ## Commandes utiles
 

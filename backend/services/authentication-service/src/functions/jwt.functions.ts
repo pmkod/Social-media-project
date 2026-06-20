@@ -7,7 +7,7 @@ export type AccessTokenPayload = {
 };
 
 export function generateAccessToken(payload: AccessTokenPayload): string {
-	return jwt.sign(payload, environment.JWT_SECRET, {
+	return jwt.sign({ ...payload, iss: "social-media-app" }, environment.JWT_SECRET, {
 		expiresIn: environment.JWT_ACCESS_EXPIRATION as jwt.SignOptions["expiresIn"],
 	});
 }
