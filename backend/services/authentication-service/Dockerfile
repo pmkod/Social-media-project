@@ -8,6 +8,6 @@ COPY src ./src
 
 RUN bun install --production
 
-EXPOSE 8001
+EXPOSE 8081
 
 CMD ["bun", "src/index.ts"]

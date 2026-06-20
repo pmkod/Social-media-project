@@ -1,124 +1,17 @@
 version: "3.9"
 
 services:
-  # PostgreSQL for authentication-service
-  postgres-authentication:
-    image: postgres:16-alpine
-    container_name: social-media-postgres-authentication
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: authentication_db
-    ports:
-      - "54321:5432"
-    volumes:
-      - postgres-authentication-data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d authentication_db"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
-
-  # PostgreSQL for user-service
-  postgres-user:
-    image: postgres:16-alpine
-    container_name: social-media-postgres-user
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: user_db
-    ports:
-      - "54322:5432"
-    volumes:
-      - postgres-user-data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d user_db"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
-
-  # PostgreSQL for content-service
-  postgres-content:
-    image: postgres:16-alpine
-    container_name: social-media-postgres-content
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: content_db
-    ports:
-      - "54323:5432"
-    volumes:
-      - postgres-content-data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d content_db"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
-
-  # PostgreSQL for authorization-service
-  postgres-authorization:
-    image: postgres:16-alpine
-    container_name: social-media-postgres-authorization
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: authorization_db
-    ports:
-      - "54324:5432"
-    volumes:
-      - postgres-authorization-data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d authorization_db"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
-
-  # Kong database
-  postgres-kong:
-    image: postgres:16-alpine
-    container_name: social-media-postgres-kong
-    environment:
-      POSTGRES_USER: kong
-      POSTGRES_PASSWORD: kong
-      POSTGRES_DB: kong
-    volumes:
-      - postgres-kong-data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U kong -d kong"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
-
-  # Kong migrations
-  kong-migrations:
-    image: kong:3.7
-    container_name: social-media-kong-migrations
-    command: kong migrations bootstrap
-    environment:
-      KONG_DATABASE: postgres
-      KONG_PG_HOST: postgres-kong
-      KONG_PG_USER: kong
-      KONG_PG_PASSWORD: kong
-      KONG_PG_DATABASE: kong
-    depends_on:
-      postgres-kong:
-        condition: service_healthy
-
   # Kong Gateway
   kong:
     image: kong:3.7
     container_name: social-media-kong
     environment:
-      KONG_DATABASE: postgres
-      KONG_PG_HOST: postgres-kong
-      KONG_PG_USER: kong
-      KONG_PG_PASSWORD: kong
-      KONG_PG_DATABASE: kong
+      KONG_DATABASE: "off"
+      KONG_DECLARATIVE_CONFIG: /kong/declarative/kong.yml
       KONG_PROXY_ACCESS_LOG: /dev/stdout
       KONG_ADMIN_ACCESS_LOG: /dev/stdout
       KONG_PROXY_ERROR_LOG: /dev/stderr
       KONG_ADMIN_ERROR_LOG: /dev/stderr
-      KONG_DECLARATIVE_CONFIG: /kong/declarative/kong.yml
       KONG_PROXY_LISTEN: 0.0.0.0:8000
       KONG_ADMIN_LISTEN: 0.0.0.0:8001
     ports:
@@ -126,25 +19,3 @@ services:
       - "8001:8001"
     volumes:
       - ./kong:/kong/declarative:ro
-    depends_on:
-      postgres-kong:
-        condition: service_healthy
-      kong-migrations:
-        condition: service_completed_successfully
-
-  # Zookeeper (preparation for Kafka)
-  zookeeper:
-    image: confluentinc/cp-zookeeper:7.7.0
-    container_name: social-media-zookeeper
-    environment:
-      ZOOKEEPER_CLIENT_PORT: 2181
-      ZOOKEEPER_TICK_TIME: 2000
-    ports:
-      - "2181:2181"
-
-volumes:
-  postgres-authentication-data:
-  postgres-user-data:
-  postgres-content-data:
-  postgres-authorization-data:
-  postgres-kong-data:

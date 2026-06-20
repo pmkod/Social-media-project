@@ -3,7 +3,7 @@ _transform: true
 
 services:
   - name: authentication-service
-    url: http://authentication-service:8001
+    url: http://authentication-service:8081
     routes:
       - name: authentication-routes
         paths:
@@ -11,7 +11,7 @@ services:
         strip_path: false
 
   - name: user-service
-    url: http://user-service:8002
+    url: http://user-service:8082
     routes:
       - name: user-routes
         paths:
@@ -19,7 +19,7 @@ services:
         strip_path: false
 
   - name: content-service
-    url: http://content-service:8003
+    url: http://content-service:8083
     routes:
       - name: post-routes
         paths:

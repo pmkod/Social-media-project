@@ -5,7 +5,7 @@ Ce document est partagé entre tous les agents travaillant sur le backend. Il d�
 ## Architecture
 
 - **Style** : microservices
-- **Services actuels** : `authentication-service`, `user-service`, `content-service`, `authorization-service`
+- **Services actuels** : `authentication-service`, `user-service`, `content-service`
 - **Gateway** : Kong (exposition publique unifiée)
 - **Communication inter-service** : HTTP/REST classique (JSON)
 - **Base de données** : PostgreSQL, **une base par service**
@@ -62,7 +62,7 @@ services/<service-name>/
 - Les routes utilisent `createRoute` + `defineOpenAPIRoute` de `@hono/zod-openapi`.
 - Les noms de fichiers sont en **kebab-case**.
 - Les imports utilisent l'alias `@/*` → `./src/*`.
-- **Organisation sans `features/`** pour `authentication-service`, `user-service` et `authorization-service` (routes/schemas/services/constants/functions à plat sous `src/`).
+- **Organisation sans `features/`** pour `authentication-service` et `user-service` (routes/schemas/services/constants/functions à plat sous `src/`).
 - **Organisation feature-based** uniquement pour `content-service`.
 - Les erreurs HTTP retournent le format :
   ```json
@@ -74,9 +74,9 @@ services/<service-name>/
 
 | Variable | Description |
 |----------|-------------|
-| `PORT` | Port HTTP du service (ex: 8001) |
+| `PORT` | Port HTTP du service (ex: 8081) |
 | `DATABASE_URL` | URL PostgreSQL du service |
-| `AUTH_SERVICE_URL` | URL HTTP de `authentication-service` (ex: `http://localhost:8001`) |
+| `AUTH_SERVICE_URL` | URL HTTP de `authentication-service` (ex: `http://localhost:8081`) |
 | `JWT_SECRET` | Clé secrète pour signer les JWT |
 | `JWT_ACCESS_EXPIRATION` | Durée de vie d'un access token (ex: 15m) |
 | `JWT_REFRESH_EXPIRATION` | Durée de vie d'un refresh token (ex: 7d) |
@@ -86,10 +86,9 @@ services/<service-name>/
 
 | Service | HTTP | PostgreSQL |
 |---------|------|------------|
-| authentication-service | 8001 | 54321 |
-| user-service | 8002 | 54322 |
-| content-service | 8003 | 54323 |
-| authorization-service | 8004 | 54324 |
+| authentication-service | 8081 | 54321 |
+| user-service | 8082 | 54322 |
+| content-service | 8083 | 54323 |
 | Kong Gateway | 8000 (proxy) / 8001 (admin) | — | — |
 | Zookeeper | — | — | 2181 |
 
@@ -97,9 +96,9 @@ services/<service-name>/
 
 | Préfixe Kong | Service cible |
 |--------------|---------------|
-| `/authentication/*` | authentication-service:8001 |
-| `/users/*` | user-service:8002 |
-| `/posts/*` | content-service:8003 |
+| `/authentication/*` | authentication-service:8081 |
+| `/users/*` | user-service:8082 |
+| `/posts/*` | content-service:8083 |
 
 ## Endpoints internes partagés
 
@@ -140,5 +139,4 @@ cd backend/services/<service> && bun run check
 - Kafka pour les events (`UserCreated`, `PostCreated`).
 - Refresh tokens avec rotation.
 - Upload médias.
-- Permissions fines dans authorization-service.
 - Tests unitaires et E2E.

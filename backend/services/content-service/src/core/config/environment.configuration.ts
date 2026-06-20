@@ -1,9 +1,9 @@
 import { z } from "zod";
 
 const environmentSchema = z.object({
-	PORT: z.string().default("8003"),
+	PORT: z.string().default("8083"),
 	DATABASE_URL: z.string(),
-	AUTH_SERVICE_URL: z.string().default("http://localhost:8001"),
+	AUTH_SERVICE_URL: z.string().default("http://localhost:8081"),
 	NODE_ENV: z.enum(["development", "production", "test"]).default("development"),
 });
 
