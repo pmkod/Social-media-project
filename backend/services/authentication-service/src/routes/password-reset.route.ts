@@ -1,8 +1,19 @@
 import { createRoute, defineOpenAPIRoute } from "@hono/zod-openapi";
-import { HttpStatus } from "@/core/constants/http-status";
+import { uuidv7 } from "uuidv7";
+import { getUserByEmail } from "@/clients/user-client";
+import {
+	AuthenticationRoutesTag,
+	UserVerificationGoals,
+} from "@/constants/authentication.constants";
+import { HttpStatus } from "@/constants/http-status";
+import { prisma } from "@/db";
+import { AppError, ErrorCodes } from "@/errors/app-error";
+import {
+	generateUserVerificationCode,
+	generateUserVerificationToken,
+} from "@/functions/authentication.functions";
 import { PasswordResetValidationSchema } from "@/schemas/authentication.validation-schemas";
-import { AuthenticationRoutesTag } from "@/constants/authentication.constants";
-import { createPasswordResetVerification } from "@/services/authentication.service";
+import { sendMail } from "@/services/mail.service";
 
 const passwordResetRoute = defineOpenAPIRoute({
 	route: createRoute({
@@ -27,8 +38,40 @@ const passwordResetRoute = defineOpenAPIRoute({
 	}),
 	handler: async (c) => {
 		const body = c.req.valid("json");
-		const userVerification = await createPasswordResetVerification(body);
-		return c.json({ success: true, data: { userVerification } }, HttpStatus.OK.code);
+
+		const user = await getUserByEmail(body.email);
+
+		if (!user || !user.active) {
+			throw new AppError({
+				message: "Email not found",
+				code: ErrorCodes.NOT_FOUND,
+				statusCode: 404,
+			});
+		}
+
+		const code = generateUserVerificationCode();
+		const token = generateUserVerificationToken();
+
+		const verification = await prisma.userVerification.create({
+			data: {
+				id: uuidv7(),
+				userId: user.id,
+				email: body.email,
+				code,
+				token,
+				goal: UserVerificationGoals.passwordReset,
+				numberOfCodeTransfersViaEmail: 1,
+			},
+			select: { id: true, token: true },
+		});
+
+		await sendMail({
+			receiver: body.email,
+			subject: "Reset your password",
+			content: `Your password reset code is: ${code}`,
+		});
+
+		return c.json({ success: true, data: { userVerification: verification } }, HttpStatus.OK.code);
 	},
 });
 

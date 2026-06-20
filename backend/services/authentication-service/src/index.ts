@@ -1,7 +1,7 @@
 import { OpenAPIHono } from "@hono/zod-openapi";
 import { serve } from "bun";
-import { environment } from "@/core/config/environment.configuration";
-import { handleError } from "@/core/errors/error-handler";
+import { environment } from "@/config/environment.configuration";
+import { handleError } from "@/errors/error-handler";
 import { authenticationRoutes } from "@/routes";
 
 const app = new OpenAPIHono();

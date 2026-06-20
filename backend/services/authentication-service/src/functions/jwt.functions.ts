@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { environment } from "@/core/config/environment.configuration";
+import { environment } from "@/config/environment.configuration";
 
 export type AccessTokenPayload = {
 	userId: string;

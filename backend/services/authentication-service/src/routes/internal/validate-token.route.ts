@@ -1,7 +1,7 @@
 import { createRoute, defineOpenAPIRoute } from "@hono/zod-openapi";
 import { z } from "zod";
+import { HttpStatus } from "@/constants/http-status";
 import { InternalRoutesTag } from "@/constants/internal.constants";
-import { HttpStatus } from "@/core/constants/http-status";
 import { verifyAccessToken } from "@/functions/jwt.functions";
 
 const ValidateTokenRequestSchema = z.object({

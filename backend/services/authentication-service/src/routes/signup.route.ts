@@ -1,8 +1,20 @@
 import { createRoute, defineOpenAPIRoute } from "@hono/zod-openapi";
-import { HttpStatus } from "@/core/constants/http-status";
+import { uuidv7 } from "uuidv7";
+import { getUserByEmail } from "@/clients/user-client";
+import {
+	AuthenticationRoutesTag,
+	UserVerificationGoals,
+} from "@/constants/authentication.constants";
+import { HttpStatus } from "@/constants/http-status";
+import { prisma } from "@/db";
+import { AppError, ErrorCodes } from "@/errors/app-error";
+import {
+	generateUserVerificationCode,
+	generateUserVerificationToken,
+} from "@/functions/authentication.functions";
+import { hashPassword } from "@/functions/password.functions";
 import { SignupValidationSchema } from "@/schemas/authentication.validation-schemas";
-import { AuthenticationRoutesTag } from "@/constants/authentication.constants";
-import { createSignupVerification } from "@/services/authentication.service";
+import { sendMail } from "@/services/mail.service";
 
 const signupRoute = defineOpenAPIRoute({
 	route: createRoute({
@@ -27,8 +39,42 @@ const signupRoute = defineOpenAPIRoute({
 	}),
 	handler: async (c) => {
 		const body = c.req.valid("json");
-		const userVerification = await createSignupVerification(body);
-		return c.json({ success: true, data: { userVerification } }, HttpStatus.OK.code);
+
+		const existingUser = await getUserByEmail(body.email);
+
+		if (existingUser?.active) {
+			throw new AppError({
+				message: "Email already taken",
+				code: ErrorCodes.CONFLICT,
+				statusCode: 409,
+			});
+		}
+
+		const code = generateUserVerificationCode();
+		const token = generateUserVerificationToken();
+		const passwordHash = await hashPassword(body.password);
+
+		const verification = await prisma.userVerification.create({
+			data: {
+				id: uuidv7(),
+				email: body.email,
+				fullName: body.fullName,
+				passwordHash,
+				code,
+				token,
+				goal: UserVerificationGoals.signup,
+				numberOfCodeTransfersViaEmail: 1,
+			},
+			select: { id: true, token: true },
+		});
+
+		await sendMail({
+			receiver: body.email,
+			subject: "Verify your account",
+			content: `Your verification code is: ${code}`,
+		});
+
+		return c.json({ success: true, data: { userVerification: verification } }, HttpStatus.OK.code);
 	},
 });
 

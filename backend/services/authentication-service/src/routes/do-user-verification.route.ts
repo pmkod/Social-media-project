@@ -1,8 +1,14 @@
 import { createRoute, defineOpenAPIRoute } from "@hono/zod-openapi";
-import { HttpStatus } from "@/core/constants/http-status";
+import {
+	AuthenticationRoutesTag,
+	MAX_NUMBER_OF_USER_VERIFICATION_ATTEMPTS,
+	USER_VERIFICATION_DURATION_IN_MINUTES,
+} from "@/constants/authentication.constants";
+import { HttpStatus } from "@/constants/http-status";
+import { prisma } from "@/db";
+import { AppError, ErrorCodes } from "@/errors/app-error";
 import { DoUserVerificationValidationSchema } from "@/schemas/authentication.validation-schemas";
-import { AuthenticationRoutesTag } from "@/constants/authentication.constants";
-import { markVerificationAsVerified, verifyUserVerificationCode } from "@/services/user-verification.service";
+import { markVerificationAsVerified } from "@/services/user-verification.service";
 
 const doUserVerificationRoute = defineOpenAPIRoute({
 	route: createRoute({
@@ -29,10 +35,64 @@ const doUserVerificationRoute = defineOpenAPIRoute({
 		const body = c.req.valid("json");
 		const { userVerification } = body;
 
-		const verification = await verifyUserVerificationCode({
-			id: userVerification.id,
-			token: userVerification.token,
+		const verification = await prisma.userVerification.findFirst({
+			where: { id: userVerification.id },
 		});
+
+		if (!verification) {
+			throw new AppError({
+				message: "Verification not found",
+				code: ErrorCodes.NOT_FOUND,
+				statusCode: 404,
+			});
+		}
+
+		if (
+			verification.disabledAt !== null ||
+			verification.verifiedAt !== null ||
+			verification.goalAchievedAt !== null
+		) {
+			throw new AppError({
+				message: "Verification is no longer valid",
+				code: ErrorCodes.VERIFICATION_INVALID,
+				statusCode: 400,
+			});
+		}
+
+		const expirationDate = new Date(
+			verification.createdAt.getTime() + USER_VERIFICATION_DURATION_IN_MINUTES * 60 * 1000,
+		);
+		if (expirationDate < new Date()) {
+			await prisma.userVerification.update({
+				where: { id: userVerification.id },
+				data: { disabledAt: new Date() },
+			});
+			throw new AppError({
+				message: "Verification code expired",
+				code: ErrorCodes.VERIFICATION_EXPIRED,
+				statusCode: 400,
+			});
+		}
+
+		if (verification.token !== userVerification.token) {
+			await prisma.userVerification.update({
+				where: { id: userVerification.id },
+				data: { disabledAt: new Date() },
+			});
+			throw new AppError({
+				message: "Invalid verification token",
+				code: ErrorCodes.VERIFICATION_INVALID,
+				statusCode: 400,
+			});
+		}
+
+		if (verification.numberOfFailedAttempts >= MAX_NUMBER_OF_USER_VERIFICATION_ATTEMPTS) {
+			throw new AppError({
+				message: "Too many failed attempts",
+				code: ErrorCodes.VERIFICATION_INVALID,
+				statusCode: 400,
+			});
+		}
 
 		if (verification.code !== userVerification.code) {
 			return c.json(

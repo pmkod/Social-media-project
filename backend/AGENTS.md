@@ -18,7 +18,7 @@ Ce document est partagé entre tous les agents travaillant sur le backend. Il d�
 | Runtime | Bun |
 | Framework API | Hono + `@hono/zod-openapi` |
 | Validation | Zod |
-| ORM | Drizzle ORM |
+| ORM | Prisma ORM |
 | DB | PostgreSQL |
 | Gateway | Kong |
 | Inter-service | HTTP/REST classique (`fetch`) |
@@ -33,26 +33,24 @@ Ce document est partagé entre tous les agents travaillant sur le backend. Il d�
 services/<service-name>/
 ├── src/
 │   ├── index.ts                              # bootstrap Hono + gRPC
-│   ├── core/
-│   │   ├── config/                           # env, variables
-│   │   ├── db/                               # client Drizzle + schémas
-│   │   ├── errors/                           # handlers et classes d'erreur
-│   │   ├── clients/                          # clients HTTP inter-service
-│   │   └── middleware/                       # auth, errors, cors, etc.
+│   ├── config/                               # env, variables
+│   ├── db/                                   # client Prisma singleton
+│   ├── errors/                               # handlers et classes d'erreur
+│   ├── clients/                              # clients HTTP inter-service
+│   ├── middleware/                           # auth, errors, cors, etc.
 │   └── features/<feature>/
 │       ├── routes/                           # une route par fichier
 │       ├── schemas/                          # Zod schemas
-│       ├── services/                         # logique métier
+│       ├── services/                         # logique métier (optionnel, voir conventions)
 │       └── types/                            # types TypeScript
-├── drizzle/
-│   ├── schema.ts
-│   └── migrations/                           # générées par drizzle-kit
+├── prisma/
+│   ├── schema.prisma                         # schéma Prisma
+│   └── migrations/                           # générées par Prisma Migrate
 ├── clients/                                  # clients HTTP inter-service
 ├── Dockerfile
 ├── package.json
 ├── tsconfig.json
 ├── biome.json
-├── drizzle.config.ts
 └── .env.example
 ```
 
@@ -68,6 +66,8 @@ services/<service-name>/
   ```json
   { "success": false, "error": { "code": "...", "message": "...", "details?": {} } }
   ```
+- **Logique métier dans les routes** : la logique d'une route doit vivre directement dans le fichier route (`features/<feature>/routes/`). Pas de service séparé pour encapsuler une logique qui n'est utilisée que par cette route.
+- **Services uniquement si partagés** : le dossier `services/` est réservé aux logiques réutilisées par **plusieurs routes** ou appelées par **d'autres services**. Si la logique n'est pas partagée, elle reste dans la route.
 - Pas de partage de code métier entre services. Seuls les contrats OpenAPI et ce fichier sont partagés.
 
 ## Variables d'environnement standardisées
@@ -88,7 +88,7 @@ services/<service-name>/
 |---------|------|------------|
 | authentication-service | 8081 | 54321 |
 | user-service | 8082 | 54322 |
-| content-service | 8083 | 54323 |
+| content-service | 8083 | 54324 |
 | Kong Gateway | 8000 (proxy) / 8001 (admin) | — | — |
 | Zookeeper | — | — | 2181 |
 
@@ -115,7 +115,7 @@ cd backend && docker compose up -d
 # Démarrer un service en dev (depuis le dossier du service)
 cd backend/services/<service> && bun run dev
 
-# Générer et appliquer les migrations Drizzle
+# Générer le client Prisma et appliquer les migrations
 cd backend/services/<service> && bun run db:generate
 cd backend/services/<service> && bun run db:migrate
 

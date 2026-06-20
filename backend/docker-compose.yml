@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   # Kong Gateway
   kong:
@@ -19,3 +17,63 @@ services:
       - "8001:8001"
     volumes:
       - ./kong:/kong/declarative:ro
+    depends_on:
+      - authentication-service-postgres
+      - user-service-postgres
+      - content-service-postgres
+    networks:
+      - social-media-network
+
+  # PostgreSQL for authentication-service
+  authentication-service-postgres:
+    image: postgres:16-alpine
+    container_name: social-media-authentication-service-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: social_media_authentication
+    ports:
+      - "54321:5432"
+    volumes:
+      - authentication-service-postgres-data:/var/lib/postgresql/data
+    networks:
+      - social-media-network
+
+  # PostgreSQL for user-service
+  user-service-postgres:
+    image: postgres:16-alpine
+    container_name: social-media-user-service-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: social_media_user
+    ports:
+      - "54322:5432"
+    volumes:
+      - user-service-postgres-data:/var/lib/postgresql/data
+    networks:
+      - social-media-network
+
+  # PostgreSQL for content-service
+  content-service-postgres:
+    image: postgres:16-alpine
+    container_name: social-media-content-service-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: social_media_content
+    ports:
+      - "54324:5432"
+    volumes:
+      - content-service-postgres-data:/var/lib/postgresql/data
+    networks:
+      - social-media-network
+
+volumes:
+  authentication-service-postgres-data:
+  user-service-postgres-data:
+  content-service-postgres-data:
+
+networks:
+  social-media-network:
+    driver: bridge

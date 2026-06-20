@@ -1,0 +1,61 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Post {
+  id        String   @id @db.Uuid
+  authorId  String   @db.Uuid
+  content   String   @db.Text
+  mediaUrls String[]
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
+
+  comments  Comment[]
+  postLikes PostLike[]
+
+  @@map("post")
+}
+
+model Comment {
+  id        String   @id @db.Uuid
+  postId    String   @db.Uuid
+  authorId  String   @db.Uuid
+  content   String   @db.Text
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
+
+  post         Post          @relation(fields: [postId], references: [id])
+  commentLikes CommentLike[]
+
+  @@map("comment")
+}
+
+model PostLike {
+  id        String   @id @db.Uuid
+  postId    String   @db.Uuid
+  authorId  String   @db.Uuid
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+
+  post Post @relation(fields: [postId], references: [id])
+
+  @@unique([postId, authorId])
+  @@map("post_like")
+}
+
+model CommentLike {
+  id        String   @id @db.Uuid
+  commentId String   @db.Uuid
+  authorId  String   @db.Uuid
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+
+  comment Comment @relation(fields: [commentId], references: [id])
+
+  @@unique([commentId, authorId])
+  @@map("comment_like")
+}

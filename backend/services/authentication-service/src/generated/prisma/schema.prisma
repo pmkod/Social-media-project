@@ -1,0 +1,39 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model UserVerification {
+  id                            String    @id @db.Uuid
+  userId                        String?   @db.Uuid
+  email                         String    @db.VarChar(255)
+  fullName                      String?   @db.VarChar(255)
+  passwordHash                  String?   @db.VarChar(255)
+  code                          String    @db.VarChar(10)
+  token                         String    @db.VarChar(255)
+  goal                          String    @db.VarChar(50)
+  numberOfFailedAttempts        Int       @default(0)
+  numberOfCodeTransfersViaEmail Int       @default(0)
+  createdAt                     DateTime  @default(now()) @db.Timestamptz(6)
+  verifiedAt                    DateTime? @db.Timestamptz(6)
+  disabledAt                    DateTime? @db.Timestamptz(6)
+  goalAchievedAt                DateTime? @db.Timestamptz(6)
+
+  @@map("user_verification")
+}
+
+model RefreshToken {
+  id        String    @id @db.Uuid
+  userId    String    @db.Uuid
+  tokenHash String    @db.Text
+  active    Boolean   @default(true)
+  createdAt DateTime  @default(now()) @db.Timestamptz(6)
+  revokedAt DateTime? @db.Timestamptz(6)
+
+  @@map("refresh_token")
+}

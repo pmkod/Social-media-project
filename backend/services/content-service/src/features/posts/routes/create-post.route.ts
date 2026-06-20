@@ -1,9 +1,10 @@
 import { createRoute, defineOpenAPIRoute } from "@hono/zod-openapi";
+import { uuidv7 } from "uuidv7";
 import { HttpStatus } from "@/core/constants/http-status";
+import { prisma } from "@/core/db";
+import type { AuthContext } from "@/core/middleware/auth.middleware";
 import { PostsRoutesTag } from "../posts.constants";
 import { CreatePostValidationSchema } from "../posts.validation-schemas";
-import { createPost } from "../posts.service";
-import type { AuthContext } from "@/core/middleware/auth.middleware";
 
 const routeDef = createRoute({
 	method: "post",
@@ -31,11 +32,16 @@ const createPostRoute = defineOpenAPIRoute<typeof routeDef, AuthContext>({
 	handler: async (c) => {
 		const authorId = c.get("userId");
 		const body = c.req.valid("json");
-		const post = await createPost({
-			authorId,
-			content: body.content,
-			mediaUrls: body.mediaUrls,
+
+		const post = await prisma.post.create({
+			data: {
+				id: uuidv7(),
+				authorId,
+				content: body.content,
+				mediaUrls: body.mediaUrls ?? [],
+			},
 		});
+
 		return c.json(
 			{
 				success: true,
