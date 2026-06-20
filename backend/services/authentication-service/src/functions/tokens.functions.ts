@@ -1,5 +1,5 @@
 import { uuidv7 } from "uuidv7";
-import { prisma } from "@/db";
+import { prisma } from "@/database";
 import { generateAccessToken } from "@/functions/jwt.functions";
 import { generateRefreshTokenString, hashRefreshToken } from "@/functions/refresh-token.functions";
 

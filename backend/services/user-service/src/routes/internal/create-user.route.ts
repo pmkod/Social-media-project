@@ -1,7 +1,7 @@
 import { createRoute, defineOpenAPIRoute } from "@hono/zod-openapi";
 import { uuidv7 } from "uuidv7";
 import { HttpStatus } from "@/constants/http-status";
-import { prisma } from "@/db";
+import { prisma } from "@/database";
 import { AppError, ErrorCodes } from "@/errors/app-error";
 import { CreateUserBodySchema } from "@/schemas/users.validation-schemas";
 

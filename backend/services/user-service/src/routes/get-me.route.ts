@@ -1,7 +1,7 @@
 import { createRoute, defineOpenAPIRoute } from "@hono/zod-openapi";
 import { HttpStatus } from "@/constants/http-status";
 import { UsersRoutesTag } from "@/constants/users.constants";
-import { prisma } from "@/db";
+import { prisma } from "@/database";
 import { AppError, ErrorCodes } from "@/errors/app-error";
 import type { AuthContext } from "@/middleware/auth.middleware";
 

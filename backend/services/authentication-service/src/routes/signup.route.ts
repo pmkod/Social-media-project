@@ -6,7 +6,7 @@ import {
 	UserVerificationGoals,
 } from "@/constants/authentication.constants";
 import { HttpStatus } from "@/constants/http-status";
-import { prisma } from "@/db";
+import { prisma } from "@/database";
 import { AppError, ErrorCodes } from "@/errors/app-error";
 import {
 	generateUserVerificationCode,

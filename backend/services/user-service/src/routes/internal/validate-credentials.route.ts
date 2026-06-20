@@ -1,6 +1,6 @@
 import { createRoute, defineOpenAPIRoute } from "@hono/zod-openapi";
 import { HttpStatus } from "@/constants/http-status";
-import { prisma } from "@/db";
+import { prisma } from "@/database";
 import { AppError, ErrorCodes } from "@/errors/app-error";
 import { comparePasswordToHash } from "@/functions/password.functions";
 import { ValidateCredentialsBodySchema } from "@/schemas/users.validation-schemas";

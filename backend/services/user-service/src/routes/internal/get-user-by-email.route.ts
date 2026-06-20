@@ -1,6 +1,6 @@
 import { createRoute, defineOpenAPIRoute } from "@hono/zod-openapi";
 import { HttpStatus } from "@/constants/http-status";
-import { prisma } from "@/db";
+import { prisma } from "@/database";
 import { GetUserByEmailQuerySchema } from "@/schemas/users.validation-schemas";
 
 const routeDef = createRoute({

@@ -2,7 +2,7 @@ import {
 	MAX_NUMBER_OF_USER_VERIFICATION_ATTEMPTS,
 	USER_VERIFICATION_DURATION_IN_MINUTES,
 } from "@/constants/authentication.constants";
-import { prisma } from "@/db";
+import { prisma } from "@/database";
 import { AppError, ErrorCodes } from "@/errors/app-error";
 
 type VerifyInput = {

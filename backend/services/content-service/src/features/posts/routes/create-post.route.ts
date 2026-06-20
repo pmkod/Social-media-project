@@ -1,7 +1,7 @@
 import { createRoute, defineOpenAPIRoute } from "@hono/zod-openapi";
 import { uuidv7 } from "uuidv7";
 import { HttpStatus } from "@/core/constants/http-status";
-import { prisma } from "@/core/db";
+import { prisma } from "@/core/database";
 import type { AuthContext } from "@/core/middleware/auth.middleware";
 import { PostsRoutesTag } from "../posts.constants";
 import { CreatePostValidationSchema } from "../posts.validation-schemas";
