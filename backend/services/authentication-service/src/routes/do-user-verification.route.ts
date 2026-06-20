@@ -8,7 +8,6 @@ import { HttpStatus } from "@/constants/http-status";
 import { prisma } from "@/database";
 import { AppError, ErrorCodes } from "@/errors/app-error";
 import { DoUserVerificationValidationSchema } from "@/schemas/authentication.validation-schemas";
-import { markVerificationAsVerified } from "@/services/user-verification.service";
 
 const doUserVerificationRoute = defineOpenAPIRoute({
 	route: createRoute({
@@ -107,7 +106,10 @@ const doUserVerificationRoute = defineOpenAPIRoute({
 			);
 		}
 
-		await markVerificationAsVerified(verification.id);
+		await prisma.userVerification.update({
+			where: { id: verification.id },
+			data: { verifiedAt: new Date() },
+		});
 
 		return c.newResponse(null, HttpStatus.OK.code);
 	},

@@ -2,6 +2,8 @@ import { createRoute, defineOpenAPIRoute } from "@hono/zod-openapi";
 import { createUser, getUserByUsername } from "@/clients/user-client";
 import {
 	AuthenticationRoutesTag,
+	MAX_NUMBER_OF_USER_VERIFICATION_ATTEMPTS,
+	USER_VERIFICATION_DURATION_IN_MINUTES,
 	UserVerificationGoals,
 } from "@/constants/authentication.constants";
 import { HttpStatus } from "@/constants/http-status";
@@ -9,10 +11,6 @@ import { prisma } from "@/database";
 import { AppError, ErrorCodes } from "@/errors/app-error";
 import { createTokenPair } from "@/functions/tokens.functions";
 import { CompleteSignupValidationSchema } from "@/schemas/authentication.validation-schemas";
-import {
-	markVerificationAsVerified,
-	verifyIfUserVerificationCompleted,
-} from "@/services/user-verification.service";
 
 const completeSignupRoute = defineOpenAPIRoute({
 	route: createRoute({
@@ -39,11 +37,72 @@ const completeSignupRoute = defineOpenAPIRoute({
 		const body = c.req.valid("json");
 		const { userVerification } = body;
 
-		const verification = await verifyIfUserVerificationCompleted({
-			id: userVerification.id,
-			token: userVerification.token,
-			goal: UserVerificationGoals.signup,
+		const verification = await prisma.userVerification.findFirst({
+			where: { id: userVerification.id },
 		});
+
+		if (!verification) {
+			throw new AppError({
+				message: "Verification not found",
+				code: ErrorCodes.NOT_FOUND,
+				statusCode: 404,
+			});
+		}
+
+		if (
+			verification.disabledAt !== null ||
+			verification.verifiedAt !== null ||
+			verification.goalAchievedAt !== null
+		) {
+			throw new AppError({
+				message: "Verification is no longer valid",
+				code: ErrorCodes.VERIFICATION_INVALID,
+				statusCode: 400,
+			});
+		}
+
+		if (verification.goal !== UserVerificationGoals.signup) {
+			throw new AppError({
+				message: "Invalid verification goal",
+				code: ErrorCodes.VERIFICATION_INVALID,
+				statusCode: 400,
+			});
+		}
+
+		const expirationDate = new Date(
+			verification.createdAt.getTime() + USER_VERIFICATION_DURATION_IN_MINUTES * 60 * 1000,
+		);
+		if (expirationDate < new Date()) {
+			await prisma.userVerification.update({
+				where: { id: verification.id },
+				data: { disabledAt: new Date() },
+			});
+			throw new AppError({
+				message: "Verification code expired",
+				code: ErrorCodes.VERIFICATION_EXPIRED,
+				statusCode: 400,
+			});
+		}
+
+		if (verification.token !== userVerification.token) {
+			await prisma.userVerification.update({
+				where: { id: verification.id },
+				data: { disabledAt: new Date() },
+			});
+			throw new AppError({
+				message: "Invalid verification token",
+				code: ErrorCodes.VERIFICATION_INVALID,
+				statusCode: 400,
+			});
+		}
+
+		if (verification.numberOfFailedAttempts >= MAX_NUMBER_OF_USER_VERIFICATION_ATTEMPTS) {
+			throw new AppError({
+				message: "Too many failed attempts",
+				code: ErrorCodes.VERIFICATION_INVALID,
+				statusCode: 400,
+			});
+		}
 
 		if (verification.code !== userVerification.code) {
 			await prisma.userVerification.update({
@@ -83,7 +142,10 @@ const completeSignupRoute = defineOpenAPIRoute({
 			fullName: verification.fullName,
 		});
 
-		await markVerificationAsVerified(verification.id);
+		await prisma.userVerification.update({
+			where: { id: verification.id },
+			data: { verifiedAt: new Date() },
+		});
 		await prisma.userVerification.update({
 			where: { id: verification.id },
 			data: { goalAchievedAt: new Date() },
