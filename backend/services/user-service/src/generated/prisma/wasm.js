@@ -168,6 +168,7 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
@@ -176,8 +177,8 @@ const config = {
       }
     }
   },
-  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"../src/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id            String   @id @db.Uuid\n  email         String   @unique @db.VarChar(255)\n  username      String   @unique @db.VarChar(50)\n  passwordHash  String   @db.VarChar(255)\n  fullName      String   @db.VarChar(255)\n  emailVerified Boolean  @default(false)\n  active        Boolean  @default(true)\n  displayName   String?  @db.VarChar(255)\n  bio           String?  @db.Text\n  avatarUrl     String?  @db.Text\n  location      String?  @db.VarChar(255)\n  website       String?  @db.VarChar(255)\n  createdAt     DateTime @default(now()) @db.Timestamptz(6)\n  updatedAt     DateTime @updatedAt @db.Timestamptz(6)\n\n  @@map(\"user\")\n}\n",
-  "inlineSchemaHash": "b63717686b98c57cc27d7d28fa03d9b440822f82b2c10f0453417c26776c9858",
+  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"../src/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id            String   @id @default(uuid()) @db.Uuid\n  email         String   @unique @db.VarChar(255)\n  username      String   @unique @db.VarChar(50)\n  passwordHash  String   @db.VarChar(255)\n  fullName      String   @db.VarChar(255)\n  emailVerified Boolean  @default(false)\n  active        Boolean  @default(true)\n  displayName   String?  @db.VarChar(255)\n  bio           String?  @db.Text\n  avatarUrl     String?  @db.Text\n  location      String?  @db.VarChar(255)\n  website       String?  @db.VarChar(255)\n  createdAt     DateTime @default(now()) @db.Timestamptz(6)\n  updatedAt     DateTime @updatedAt @db.Timestamptz(6)\n\n  @@map(\"user\")\n}\n",
+  "inlineSchemaHash": "7e96f57eeed6f5e42481b2f269b1194b6c7c077b0c68493ed82a0b7c46f1234b",
   "copyEngine": true
 }
 config.dirname = '/'

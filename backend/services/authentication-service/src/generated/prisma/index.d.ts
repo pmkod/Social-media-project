@@ -3408,7 +3408,7 @@ export namespace Prisma {
   }
 
   export type UserVerificationCreateInput = {
-    id: string
+    id?: string
     userId?: string | null
     email: string
     fullName?: string | null
@@ -3425,7 +3425,7 @@ export namespace Prisma {
   }
 
   export type UserVerificationUncheckedCreateInput = {
-    id: string
+    id?: string
     userId?: string | null
     email: string
     fullName?: string | null
@@ -3476,7 +3476,7 @@ export namespace Prisma {
   }
 
   export type UserVerificationCreateManyInput = {
-    id: string
+    id?: string
     userId?: string | null
     email: string
     fullName?: string | null
@@ -3527,7 +3527,7 @@ export namespace Prisma {
   }
 
   export type RefreshTokenCreateInput = {
-    id: string
+    id?: string
     userId: string
     tokenHash: string
     active?: boolean
@@ -3536,7 +3536,7 @@ export namespace Prisma {
   }
 
   export type RefreshTokenUncheckedCreateInput = {
-    id: string
+    id?: string
     userId: string
     tokenHash: string
     active?: boolean
@@ -3563,7 +3563,7 @@ export namespace Prisma {
   }
 
   export type RefreshTokenCreateManyInput = {
-    id: string
+    id?: string
     userId: string
     tokenHash: string
     active?: boolean

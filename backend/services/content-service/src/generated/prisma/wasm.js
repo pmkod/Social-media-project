@@ -181,6 +181,7 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
@@ -189,8 +190,8 @@ const config = {
       }
     }
   },
-  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"../src/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel Post {\n  id        String   @id @db.Uuid\n  authorId  String   @db.Uuid\n  content   String   @db.Text\n  mediaUrls String[]\n  createdAt DateTime @default(now()) @db.Timestamptz(6)\n  updatedAt DateTime @updatedAt @db.Timestamptz(6)\n\n  comments  Comment[]\n  postLikes PostLike[]\n\n  @@map(\"post\")\n}\n\nmodel Comment {\n  id        String   @id @db.Uuid\n  postId    String   @db.Uuid\n  authorId  String   @db.Uuid\n  content   String   @db.Text\n  createdAt DateTime @default(now()) @db.Timestamptz(6)\n  updatedAt DateTime @updatedAt @db.Timestamptz(6)\n\n  post         Post          @relation(fields: [postId], references: [id])\n  commentLikes CommentLike[]\n\n  @@map(\"comment\")\n}\n\nmodel PostLike {\n  id        String   @id @db.Uuid\n  postId    String   @db.Uuid\n  authorId  String   @db.Uuid\n  createdAt DateTime @default(now()) @db.Timestamptz(6)\n\n  post Post @relation(fields: [postId], references: [id])\n\n  @@unique([postId, authorId])\n  @@map(\"post_like\")\n}\n\nmodel CommentLike {\n  id        String   @id @db.Uuid\n  commentId String   @db.Uuid\n  authorId  String   @db.Uuid\n  createdAt DateTime @default(now()) @db.Timestamptz(6)\n\n  comment Comment @relation(fields: [commentId], references: [id])\n\n  @@unique([commentId, authorId])\n  @@map(\"comment_like\")\n}\n",
-  "inlineSchemaHash": "f9ca63ded56a7c635ffe85b27876c76982203918982ba3ae282bc8ddfca526c2",
+  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"../src/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel Post {\n  id        String   @id @default(uuid()) @db.Uuid\n  authorId  String   @db.Uuid\n  content   String   @db.Text\n  mediaUrls String[]\n  createdAt DateTime @default(now()) @db.Timestamptz(6)\n  updatedAt DateTime @updatedAt @db.Timestamptz(6)\n\n  comments  Comment[]\n  postLikes PostLike[]\n\n  @@map(\"post\")\n}\n\nmodel Comment {\n  id        String   @id @default(uuid()) @db.Uuid\n  postId    String   @db.Uuid\n  authorId  String   @db.Uuid\n  content   String   @db.Text\n  createdAt DateTime @default(now()) @db.Timestamptz(6)\n  updatedAt DateTime @updatedAt @db.Timestamptz(6)\n\n  post         Post          @relation(fields: [postId], references: [id])\n  commentLikes CommentLike[]\n\n  @@map(\"comment\")\n}\n\nmodel PostLike {\n  id        String   @id @default(uuid()) @db.Uuid\n  postId    String   @db.Uuid\n  authorId  String   @db.Uuid\n  createdAt DateTime @default(now()) @db.Timestamptz(6)\n\n  post Post @relation(fields: [postId], references: [id])\n\n  @@unique([postId, authorId])\n  @@map(\"post_like\")\n}\n\nmodel CommentLike {\n  id        String   @id @default(uuid()) @db.Uuid\n  commentId String   @db.Uuid\n  authorId  String   @db.Uuid\n  createdAt DateTime @default(now()) @db.Timestamptz(6)\n\n  comment Comment @relation(fields: [commentId], references: [id])\n\n  @@unique([commentId, authorId])\n  @@map(\"comment_like\")\n}\n",
+  "inlineSchemaHash": "99676103673193dc023639535dc631d31e0fb81c7bf976477595b3a7095c2af1",
   "copyEngine": true
 }
 config.dirname = '/'

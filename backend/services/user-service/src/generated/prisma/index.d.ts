@@ -2186,7 +2186,7 @@ export namespace Prisma {
   }
 
   export type UserCreateInput = {
-    id: string
+    id?: string
     email: string
     username: string
     passwordHash: string
@@ -2203,7 +2203,7 @@ export namespace Prisma {
   }
 
   export type UserUncheckedCreateInput = {
-    id: string
+    id?: string
     email: string
     username: string
     passwordHash: string
@@ -2254,7 +2254,7 @@ export namespace Prisma {
   }
 
   export type UserCreateManyInput = {
-    id: string
+    id?: string
     email: string
     username: string
     passwordHash: string

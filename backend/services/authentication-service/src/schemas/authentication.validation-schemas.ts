@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from "@hono/zod-openapi";
 
 export const SignupValidationSchema = z.object({
 	fullName: z.string().min(2).max(255),

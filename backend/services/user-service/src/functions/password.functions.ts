@@ -1,9 +1,9 @@
-import { compare, hash } from "bcrypt";
-
-const SALT_ROUNDS = 12;
-
 export async function hashPassword(password: string): Promise<string> {
-	return hash(password, SALT_ROUNDS);
+	return Bun.password.hash(password, {
+		algorithm: "argon2id",
+		memoryCost: 65536,
+		timeCost: 3,
+	});
 }
 
 export async function comparePasswordToHash({
@@ -13,5 +13,5 @@ export async function comparePasswordToHash({
 	password: string;
 	hash: string;
 }): Promise<boolean> {
-	return compare(password, hash);
+	return Bun.password.verify(password, hash);
 }

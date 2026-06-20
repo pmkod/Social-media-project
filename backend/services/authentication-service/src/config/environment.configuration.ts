@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from "@hono/zod-openapi";
 
 const environmentSchema = z.object({
 	PORT: z.string().default("8081"),

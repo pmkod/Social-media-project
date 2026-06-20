@@ -5855,7 +5855,7 @@ export namespace Prisma {
   }
 
   export type PostCreateInput = {
-    id: string
+    id?: string
     authorId: string
     content: string
     mediaUrls?: PostCreatemediaUrlsInput | string[]
@@ -5866,7 +5866,7 @@ export namespace Prisma {
   }
 
   export type PostUncheckedCreateInput = {
-    id: string
+    id?: string
     authorId: string
     content: string
     mediaUrls?: PostCreatemediaUrlsInput | string[]
@@ -5899,7 +5899,7 @@ export namespace Prisma {
   }
 
   export type PostCreateManyInput = {
-    id: string
+    id?: string
     authorId: string
     content: string
     mediaUrls?: PostCreatemediaUrlsInput | string[]
@@ -5926,7 +5926,7 @@ export namespace Prisma {
   }
 
   export type CommentCreateInput = {
-    id: string
+    id?: string
     authorId: string
     content: string
     createdAt?: Date | string
@@ -5936,7 +5936,7 @@ export namespace Prisma {
   }
 
   export type CommentUncheckedCreateInput = {
-    id: string
+    id?: string
     postId: string
     authorId: string
     content: string
@@ -5966,7 +5966,7 @@ export namespace Prisma {
   }
 
   export type CommentCreateManyInput = {
-    id: string
+    id?: string
     postId: string
     authorId: string
     content: string
@@ -5992,14 +5992,14 @@ export namespace Prisma {
   }
 
   export type PostLikeCreateInput = {
-    id: string
+    id?: string
     authorId: string
     createdAt?: Date | string
     post: PostCreateNestedOneWithoutPostLikesInput
   }
 
   export type PostLikeUncheckedCreateInput = {
-    id: string
+    id?: string
     postId: string
     authorId: string
     createdAt?: Date | string
@@ -6020,7 +6020,7 @@ export namespace Prisma {
   }
 
   export type PostLikeCreateManyInput = {
-    id: string
+    id?: string
     postId: string
     authorId: string
     createdAt?: Date | string
@@ -6040,14 +6040,14 @@ export namespace Prisma {
   }
 
   export type CommentLikeCreateInput = {
-    id: string
+    id?: string
     authorId: string
     createdAt?: Date | string
     comment: CommentCreateNestedOneWithoutCommentLikesInput
   }
 
   export type CommentLikeUncheckedCreateInput = {
-    id: string
+    id?: string
     commentId: string
     authorId: string
     createdAt?: Date | string
@@ -6068,7 +6068,7 @@ export namespace Prisma {
   }
 
   export type CommentLikeCreateManyInput = {
-    id: string
+    id?: string
     commentId: string
     authorId: string
     createdAt?: Date | string
@@ -6602,7 +6602,7 @@ export namespace Prisma {
   }
 
   export type CommentCreateWithoutPostInput = {
-    id: string
+    id?: string
     authorId: string
     content: string
     createdAt?: Date | string
@@ -6611,7 +6611,7 @@ export namespace Prisma {
   }
 
   export type CommentUncheckedCreateWithoutPostInput = {
-    id: string
+    id?: string
     authorId: string
     content: string
     createdAt?: Date | string
@@ -6630,13 +6630,13 @@ export namespace Prisma {
   }
 
   export type PostLikeCreateWithoutPostInput = {
-    id: string
+    id?: string
     authorId: string
     createdAt?: Date | string
   }
 
   export type PostLikeUncheckedCreateWithoutPostInput = {
-    id: string
+    id?: string
     authorId: string
     createdAt?: Date | string
   }
@@ -6706,7 +6706,7 @@ export namespace Prisma {
   }
 
   export type PostCreateWithoutCommentsInput = {
-    id: string
+    id?: string
     authorId: string
     content: string
     mediaUrls?: PostCreatemediaUrlsInput | string[]
@@ -6716,7 +6716,7 @@ export namespace Prisma {
   }
 
   export type PostUncheckedCreateWithoutCommentsInput = {
-    id: string
+    id?: string
     authorId: string
     content: string
     mediaUrls?: PostCreatemediaUrlsInput | string[]
@@ -6731,13 +6731,13 @@ export namespace Prisma {
   }
 
   export type CommentLikeCreateWithoutCommentInput = {
-    id: string
+    id?: string
     authorId: string
     createdAt?: Date | string
   }
 
   export type CommentLikeUncheckedCreateWithoutCommentInput = {
-    id: string
+    id?: string
     authorId: string
     createdAt?: Date | string
   }
@@ -6810,7 +6810,7 @@ export namespace Prisma {
   }
 
   export type PostCreateWithoutPostLikesInput = {
-    id: string
+    id?: string
     authorId: string
     content: string
     mediaUrls?: PostCreatemediaUrlsInput | string[]
@@ -6820,7 +6820,7 @@ export namespace Prisma {
   }
 
   export type PostUncheckedCreateWithoutPostLikesInput = {
-    id: string
+    id?: string
     authorId: string
     content: string
     mediaUrls?: PostCreatemediaUrlsInput | string[]
@@ -6866,7 +6866,7 @@ export namespace Prisma {
   }
 
   export type CommentCreateWithoutCommentLikesInput = {
-    id: string
+    id?: string
     authorId: string
     content: string
     createdAt?: Date | string
@@ -6875,7 +6875,7 @@ export namespace Prisma {
   }
 
   export type CommentUncheckedCreateWithoutCommentLikesInput = {
-    id: string
+    id?: string
     postId: string
     authorId: string
     content: string
@@ -6918,7 +6918,7 @@ export namespace Prisma {
   }
 
   export type CommentCreateManyPostInput = {
-    id: string
+    id?: string
     authorId: string
     content: string
     createdAt?: Date | string
@@ -6926,7 +6926,7 @@ export namespace Prisma {
   }
 
   export type PostLikeCreateManyPostInput = {
-    id: string
+    id?: string
     authorId: string
     createdAt?: Date | string
   }
@@ -6976,7 +6976,7 @@ export namespace Prisma {
   }
 
   export type CommentLikeCreateManyCommentInput = {
-    id: string
+    id?: string
     authorId: string
     createdAt?: Date | string
   }
