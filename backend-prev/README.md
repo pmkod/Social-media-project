@@ -1,1 +1,0 @@
-Backend of a social media in microservices architecture
