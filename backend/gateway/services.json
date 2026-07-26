@@ -1,0 +1,6 @@
+[
+	{ "path": "/authentication", "target": "http://localhost:8001" },
+	{ "path": "/users", "target": "http://localhost:8001" },
+	{ "path": "/posts", "target": "http://localhost:8002" },
+	{ "path": "/comments", "target": "http://localhost:8002" }
+]

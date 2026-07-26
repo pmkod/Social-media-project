@@ -1,0 +1,25 @@
+import { z } from "@hono/zod-openapi";
+
+const UpdateProfileValidationSchema = z.object({
+	fullName: z.string().min(1).optional(),
+	displayName: z.string().min(1).optional(),
+	bio: z.string().optional(),
+	avatarUrl: z.string().url().optional().or(z.literal("")),
+	location: z.string().optional(),
+	website: z.string().url().optional().or(z.literal("")),
+});
+
+const UserProfileResponseBody = z.object({
+	id: z.string(),
+	email: z.string(),
+	username: z.string(),
+	fullName: z.string().nullable(),
+	displayName: z.string().nullable(),
+	bio: z.string().nullable(),
+	avatarUrl: z.string().nullable(),
+	location: z.string().nullable(),
+	website: z.string().nullable(),
+	createdAt: z.date(),
+});
+
+export { UpdateProfileValidationSchema, UserProfileResponseBody };

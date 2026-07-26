@@ -1,0 +1,60 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id                String             @id @default(cuid())
+  email             String             @unique
+  username          String             @unique
+  password          String
+  fullName          String?
+  displayName       String?
+  bio               String?
+  avatarUrl         String?
+  location          String?
+  website           String?
+  emailVerified     Boolean            @default(false)
+  active            Boolean            @default(true)
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  refreshTokens     RefreshToken[]
+  userVerifications UserVerification[]
+}
+
+model RefreshToken {
+  id         String    @id @default(cuid())
+  token      String?   @unique
+  active     Boolean   @default(true)
+  userId     String?
+  disabledAt DateTime?
+  ip         String?
+  agent      String?
+  createdAt  DateTime  @default(now())
+  user       User?     @relation(fields: [userId], references: [id])
+}
+
+model UserVerification {
+  id                            String    @id @default(cuid())
+  email                         String?
+  username                      String?
+  fullName                      String?
+  password                      String?
+  goal                          String?
+  verifiedAt                    DateTime?
+  goalAchievedAt                DateTime?
+  disabledAt                    DateTime?
+  code                          String
+  token                         String
+  numberOfFailedAttempts        Int       @default(0)
+  numberOfCodeTransfersViaEmail Int       @default(0)
+  userId                        String?
+  ip                            String?
+  agent                         String?
+  createdAt                     DateTime  @default(now())
+  user                          User?     @relation(fields: [userId], references: [id])
+}
