@@ -1,5 +1,5 @@
 {
-	"name": "@social-media/content-service",
+	"name": "@social-media/content",
 	"version": "0.1.0",
 	"private": true,
 	"type": "module",
