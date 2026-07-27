@@ -10,7 +10,7 @@ BLUE='\033[1;34m'
 GRAY='\033[0;90m'
 RESET='\033[0m'
 
-# Répertoire du script (backend/)
+# Répertoire du script (racine du projet)
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$SCRIPT_DIR" || exit 1
 
@@ -55,10 +55,10 @@ run_service() {
     PIDS+=($!)
 }
 
-# Lancement des microservices et de l'API Gateway depuis backend/
-run_service "USER-SERVICE   " "services/user" "$CYAN" 8001
-run_service "CONTENT-SERVICE" "services/content" "$GREEN" 8002
-run_service "API-GATEWAY    " "gateway" "$MAGENTA" 8000
+# Lancement des microservices et de l'API Gateway depuis la racine du projet
+run_service "USER-SERVICE   " "backend/services/user" "$CYAN" 8001
+run_service "CONTENT-SERVICE" "backend/services/content" "$GREEN" 8002
+run_service "API-GATEWAY    " "backend/api-gateway" "$MAGENTA" 8000
 
 echo -e "\n${GREEN}✔ Tous les services ont été démarrés !${RESET}"
 echo -e "${GRAY}Appuyez sur Ctrl+C pour tout arrêter.${RESET}\n"

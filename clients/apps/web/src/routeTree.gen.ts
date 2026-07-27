@@ -8,208 +8,200 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { Route as rootRouteImport } from "./routes/__root.tsx";
-import { Route as BaseRouteRouteImport } from "./routes/_base/route.tsx";
-import { Route as BaseAuthenticationRouteRouteImport } from "./routes/_base/_authentication/route.tsx";
-import { Route as BaseAuthenticationIndexRouteImport } from "./routes/_base/_authentication/index";
-import { Route as BaseAuthenticationUserVerificationRouteImport } from "./routes/_base/_authentication/user-verification.tsx";
-import { Route as BaseAuthenticationSignupRouteImport } from "./routes/_base/_authentication/signup.tsx";
-import { Route as BaseAuthenticationPasswordResetRouteImport } from "./routes/_base/_authentication/password-reset.tsx";
-import { Route as BaseAuthenticationNewPasswordRouteImport } from "./routes/_base/_authentication/new-password.tsx";
+import { Route as rootRouteImport } from './routes/__root'
+import { Route as BaseRouteRouteImport } from './routes/_base/route'
+import { Route as BaseAuthenticationRouteRouteImport } from './routes/_base/_authentication/route'
+import { Route as BaseAuthenticationIndexRouteImport } from './routes/_base/_authentication/index'
+import { Route as BaseAuthenticationNewPasswordRouteImport } from './routes/_base/_authentication/new-password'
+import { Route as BaseAuthenticationPasswordResetRouteImport } from './routes/_base/_authentication/password-reset'
+import { Route as BaseAuthenticationSignupRouteImport } from './routes/_base/_authentication/signup'
+import { Route as BaseAuthenticationUserVerificationRouteImport } from './routes/_base/_authentication/user-verification'
 
 const BaseRouteRoute = BaseRouteRouteImport.update({
-	id: "/_base",
-	getParentRoute: () => rootRouteImport,
-} as any);
+  id: '/_base',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const BaseAuthenticationRouteRoute = BaseAuthenticationRouteRouteImport.update({
-	id: "/_authentication",
-	getParentRoute: () => BaseRouteRoute,
-} as any);
+  id: '/_authentication',
+  getParentRoute: () => BaseRouteRoute,
+} as any)
 const BaseAuthenticationIndexRoute = BaseAuthenticationIndexRouteImport.update({
-	id: "/",
-	path: "/",
-	getParentRoute: () => BaseAuthenticationRouteRoute,
-} as any);
-const BaseAuthenticationUserVerificationRoute =
-	BaseAuthenticationUserVerificationRouteImport.update({
-		id: "/user-verification",
-		path: "/user-verification",
-		getParentRoute: () => BaseAuthenticationRouteRoute,
-	} as any);
-const BaseAuthenticationSignupRoute =
-	BaseAuthenticationSignupRouteImport.update({
-		id: "/signup",
-		path: "/signup",
-		getParentRoute: () => BaseAuthenticationRouteRoute,
-	} as any);
-const BaseAuthenticationPasswordResetRoute =
-	BaseAuthenticationPasswordResetRouteImport.update({
-		id: "/password-reset",
-		path: "/password-reset",
-		getParentRoute: () => BaseAuthenticationRouteRoute,
-	} as any);
+  id: '/',
+  path: '/',
+  getParentRoute: () => BaseAuthenticationRouteRoute,
+} as any)
 const BaseAuthenticationNewPasswordRoute =
-	BaseAuthenticationNewPasswordRouteImport.update({
-		id: "/new-password",
-		path: "/new-password",
-		getParentRoute: () => BaseAuthenticationRouteRoute,
-	} as any);
+  BaseAuthenticationNewPasswordRouteImport.update({
+    id: '/new-password',
+    path: '/new-password',
+    getParentRoute: () => BaseAuthenticationRouteRoute,
+  } as any)
+const BaseAuthenticationPasswordResetRoute =
+  BaseAuthenticationPasswordResetRouteImport.update({
+    id: '/password-reset',
+    path: '/password-reset',
+    getParentRoute: () => BaseAuthenticationRouteRoute,
+  } as any)
+const BaseAuthenticationSignupRoute =
+  BaseAuthenticationSignupRouteImport.update({
+    id: '/signup',
+    path: '/signup',
+    getParentRoute: () => BaseAuthenticationRouteRoute,
+  } as any)
+const BaseAuthenticationUserVerificationRoute =
+  BaseAuthenticationUserVerificationRouteImport.update({
+    id: '/user-verification',
+    path: '/user-verification',
+    getParentRoute: () => BaseAuthenticationRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
-	"/": typeof BaseAuthenticationIndexRoute;
-	"/new-password": typeof BaseAuthenticationNewPasswordRoute;
-	"/password-reset": typeof BaseAuthenticationPasswordResetRoute;
-	"/signup": typeof BaseAuthenticationSignupRoute;
-	"/user-verification": typeof BaseAuthenticationUserVerificationRoute;
+  '/': typeof BaseAuthenticationIndexRoute
+  '/new-password': typeof BaseAuthenticationNewPasswordRoute
+  '/password-reset': typeof BaseAuthenticationPasswordResetRoute
+  '/signup': typeof BaseAuthenticationSignupRoute
+  '/user-verification': typeof BaseAuthenticationUserVerificationRoute
 }
 export interface FileRoutesByTo {
-	"/": typeof BaseAuthenticationIndexRoute;
-	"/new-password": typeof BaseAuthenticationNewPasswordRoute;
-	"/password-reset": typeof BaseAuthenticationPasswordResetRoute;
-	"/signup": typeof BaseAuthenticationSignupRoute;
-	"/user-verification": typeof BaseAuthenticationUserVerificationRoute;
+  '/': typeof BaseAuthenticationIndexRoute
+  '/new-password': typeof BaseAuthenticationNewPasswordRoute
+  '/password-reset': typeof BaseAuthenticationPasswordResetRoute
+  '/signup': typeof BaseAuthenticationSignupRoute
+  '/user-verification': typeof BaseAuthenticationUserVerificationRoute
 }
 export interface FileRoutesById {
-	__root__: typeof rootRouteImport;
-	"/_base": typeof BaseRouteRouteWithChildren;
-	"/_base/_authentication": typeof BaseAuthenticationRouteRouteWithChildren;
-	"/_base/_authentication/new-password": typeof BaseAuthenticationNewPasswordRoute;
-	"/_base/_authentication/password-reset": typeof BaseAuthenticationPasswordResetRoute;
-	"/_base/_authentication/signup": typeof BaseAuthenticationSignupRoute;
-	"/_base/_authentication/user-verification": typeof BaseAuthenticationUserVerificationRoute;
-	"/_base/_authentication/": typeof BaseAuthenticationIndexRoute;
+  __root__: typeof rootRouteImport
+  '/_base': typeof BaseRouteRouteWithChildren
+  '/_base/_authentication': typeof BaseAuthenticationRouteRouteWithChildren
+  '/_base/_authentication/new-password': typeof BaseAuthenticationNewPasswordRoute
+  '/_base/_authentication/password-reset': typeof BaseAuthenticationPasswordResetRoute
+  '/_base/_authentication/signup': typeof BaseAuthenticationSignupRoute
+  '/_base/_authentication/user-verification': typeof BaseAuthenticationUserVerificationRoute
+  '/_base/_authentication/': typeof BaseAuthenticationIndexRoute
 }
 export interface FileRouteTypes {
-	fileRoutesByFullPath: FileRoutesByFullPath;
-	fullPaths:
-		| "/"
-		| "/new-password"
-		| "/password-reset"
-		| "/signup"
-		| "/user-verification";
-	fileRoutesByTo: FileRoutesByTo;
-	to:
-		| "/"
-		| "/new-password"
-		| "/password-reset"
-		| "/signup"
-		| "/user-verification";
-	id:
-		| "__root__"
-		| "/_base"
-		| "/_base/_authentication"
-		| "/_base/_authentication/new-password"
-		| "/_base/_authentication/password-reset"
-		| "/_base/_authentication/signup"
-		| "/_base/_authentication/user-verification"
-		| "/_base/_authentication/";
-	fileRoutesById: FileRoutesById;
+  fileRoutesByFullPath: FileRoutesByFullPath
+  fullPaths:
+    '/' | '/new-password' | '/password-reset' | '/signup' | '/user-verification'
+  fileRoutesByTo: FileRoutesByTo
+  to:
+    '/' | '/new-password' | '/password-reset' | '/signup' | '/user-verification'
+  id:
+    | '__root__'
+    | '/_base'
+    | '/_base/_authentication'
+    | '/_base/_authentication/new-password'
+    | '/_base/_authentication/password-reset'
+    | '/_base/_authentication/signup'
+    | '/_base/_authentication/user-verification'
+    | '/_base/_authentication/'
+  fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-	BaseRouteRoute: typeof BaseRouteRouteWithChildren;
+  BaseRouteRoute: typeof BaseRouteRouteWithChildren
 }
 
-declare module "@tanstack/react-router" {
-	interface FileRoutesByPath {
-		"/_base": {
-			id: "/_base";
-			path: "";
-			fullPath: "/";
-			preLoaderRoute: typeof BaseRouteRouteImport;
-			parentRoute: typeof rootRouteImport;
-		};
-		"/_base/_authentication": {
-			id: "/_base/_authentication";
-			path: "";
-			fullPath: "/";
-			preLoaderRoute: typeof BaseAuthenticationRouteRouteImport;
-			parentRoute: typeof BaseRouteRoute;
-		};
-		"/_base/_authentication/": {
-			id: "/_base/_authentication/";
-			path: "/";
-			fullPath: "/";
-			preLoaderRoute: typeof BaseAuthenticationIndexRouteImport;
-			parentRoute: typeof BaseAuthenticationRouteRoute;
-		};
-		"/_base/_authentication/user-verification": {
-			id: "/_base/_authentication/user-verification";
-			path: "/user-verification";
-			fullPath: "/user-verification";
-			preLoaderRoute: typeof BaseAuthenticationUserVerificationRouteImport;
-			parentRoute: typeof BaseAuthenticationRouteRoute;
-		};
-		"/_base/_authentication/signup": {
-			id: "/_base/_authentication/signup";
-			path: "/signup";
-			fullPath: "/signup";
-			preLoaderRoute: typeof BaseAuthenticationSignupRouteImport;
-			parentRoute: typeof BaseAuthenticationRouteRoute;
-		};
-		"/_base/_authentication/password-reset": {
-			id: "/_base/_authentication/password-reset";
-			path: "/password-reset";
-			fullPath: "/password-reset";
-			preLoaderRoute: typeof BaseAuthenticationPasswordResetRouteImport;
-			parentRoute: typeof BaseAuthenticationRouteRoute;
-		};
-		"/_base/_authentication/new-password": {
-			id: "/_base/_authentication/new-password";
-			path: "/new-password";
-			fullPath: "/new-password";
-			preLoaderRoute: typeof BaseAuthenticationNewPasswordRouteImport;
-			parentRoute: typeof BaseAuthenticationRouteRoute;
-		};
-	}
+declare module '@tanstack/react-router' {
+  interface FileRoutesByPath {
+    '/_base': {
+      id: '/_base'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof BaseRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_base/_authentication': {
+      id: '/_base/_authentication'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof BaseAuthenticationRouteRouteImport
+      parentRoute: typeof BaseRouteRoute
+    }
+    '/_base/_authentication/': {
+      id: '/_base/_authentication/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof BaseAuthenticationIndexRouteImport
+      parentRoute: typeof BaseAuthenticationRouteRoute
+    }
+    '/_base/_authentication/new-password': {
+      id: '/_base/_authentication/new-password'
+      path: '/new-password'
+      fullPath: '/new-password'
+      preLoaderRoute: typeof BaseAuthenticationNewPasswordRouteImport
+      parentRoute: typeof BaseAuthenticationRouteRoute
+    }
+    '/_base/_authentication/password-reset': {
+      id: '/_base/_authentication/password-reset'
+      path: '/password-reset'
+      fullPath: '/password-reset'
+      preLoaderRoute: typeof BaseAuthenticationPasswordResetRouteImport
+      parentRoute: typeof BaseAuthenticationRouteRoute
+    }
+    '/_base/_authentication/signup': {
+      id: '/_base/_authentication/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof BaseAuthenticationSignupRouteImport
+      parentRoute: typeof BaseAuthenticationRouteRoute
+    }
+    '/_base/_authentication/user-verification': {
+      id: '/_base/_authentication/user-verification'
+      path: '/user-verification'
+      fullPath: '/user-verification'
+      preLoaderRoute: typeof BaseAuthenticationUserVerificationRouteImport
+      parentRoute: typeof BaseAuthenticationRouteRoute
+    }
+  }
 }
 
 interface BaseAuthenticationRouteRouteChildren {
-	BaseAuthenticationNewPasswordRoute: typeof BaseAuthenticationNewPasswordRoute;
-	BaseAuthenticationPasswordResetRoute: typeof BaseAuthenticationPasswordResetRoute;
-	BaseAuthenticationSignupRoute: typeof BaseAuthenticationSignupRoute;
-	BaseAuthenticationUserVerificationRoute: typeof BaseAuthenticationUserVerificationRoute;
-	BaseAuthenticationIndexRoute: typeof BaseAuthenticationIndexRoute;
+  BaseAuthenticationNewPasswordRoute: typeof BaseAuthenticationNewPasswordRoute
+  BaseAuthenticationPasswordResetRoute: typeof BaseAuthenticationPasswordResetRoute
+  BaseAuthenticationSignupRoute: typeof BaseAuthenticationSignupRoute
+  BaseAuthenticationUserVerificationRoute: typeof BaseAuthenticationUserVerificationRoute
+  BaseAuthenticationIndexRoute: typeof BaseAuthenticationIndexRoute
 }
 
 const BaseAuthenticationRouteRouteChildren: BaseAuthenticationRouteRouteChildren =
-	{
-		BaseAuthenticationNewPasswordRoute: BaseAuthenticationNewPasswordRoute,
-		BaseAuthenticationPasswordResetRoute: BaseAuthenticationPasswordResetRoute,
-		BaseAuthenticationSignupRoute: BaseAuthenticationSignupRoute,
-		BaseAuthenticationUserVerificationRoute:
-			BaseAuthenticationUserVerificationRoute,
-		BaseAuthenticationIndexRoute: BaseAuthenticationIndexRoute,
-	};
+  {
+    BaseAuthenticationNewPasswordRoute: BaseAuthenticationNewPasswordRoute,
+    BaseAuthenticationPasswordResetRoute: BaseAuthenticationPasswordResetRoute,
+    BaseAuthenticationSignupRoute: BaseAuthenticationSignupRoute,
+    BaseAuthenticationUserVerificationRoute:
+      BaseAuthenticationUserVerificationRoute,
+    BaseAuthenticationIndexRoute: BaseAuthenticationIndexRoute,
+  }
 
 const BaseAuthenticationRouteRouteWithChildren =
-	BaseAuthenticationRouteRoute._addFileChildren(
-		BaseAuthenticationRouteRouteChildren,
-	);
+  BaseAuthenticationRouteRoute._addFileChildren(
+    BaseAuthenticationRouteRouteChildren,
+  )
 
 interface BaseRouteRouteChildren {
-	BaseAuthenticationRouteRoute: typeof BaseAuthenticationRouteRouteWithChildren;
+  BaseAuthenticationRouteRoute: typeof BaseAuthenticationRouteRouteWithChildren
 }
 
 const BaseRouteRouteChildren: BaseRouteRouteChildren = {
-	BaseAuthenticationRouteRoute: BaseAuthenticationRouteRouteWithChildren,
-};
+  BaseAuthenticationRouteRoute: BaseAuthenticationRouteRouteWithChildren,
+}
 
 const BaseRouteRouteWithChildren = BaseRouteRoute._addFileChildren(
-	BaseRouteRouteChildren,
-);
+  BaseRouteRouteChildren,
+)
 
 const rootRouteChildren: RootRouteChildren = {
-	BaseRouteRoute: BaseRouteRouteWithChildren,
-};
+  BaseRouteRoute: BaseRouteRouteWithChildren,
+}
 export const routeTree = rootRouteImport
-	._addFileChildren(rootRouteChildren)
-	._addFileTypes<FileRouteTypes>();
+  ._addFileChildren(rootRouteChildren)
+  ._addFileTypes<FileRouteTypes>()
 
-import type { getRouter } from "./router.tsx";
-import type { createStart } from "@tanstack/react-start";
-declare module "@tanstack/react-start" {
-	interface Register {
-		ssr: true;
-		router: Awaited<ReturnType<typeof getRouter>>;
-	}
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
 }

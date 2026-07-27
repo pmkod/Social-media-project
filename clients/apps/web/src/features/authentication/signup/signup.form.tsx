@@ -173,7 +173,7 @@ function SignupForm({ onSuccess }: SignupFormProps) {
 			<p className="text-center text-sm text-muted-foreground">
 				Déjà un compte ?{" "}
 				<Link
-					to="/login"
+					to="/"
 					className="text-foreground underline underline-offset-3 hover:text-foreground/80"
 				>
 					Se connecter
