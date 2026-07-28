@@ -10,28 +10,43 @@ const SignupValidationSchema = z.object({
 const LoginValidationSchema = z.object({
 	emailOrUsername: z.string().min(1),
 	password: z.string().min(1),
+
 });
 
-const UserVerificationInputSchema = z.object({
+const UserVerificationSchema = z.object({
 	id: z.string(),
 	token: z.string(),
+	code: z.string().length(6)
 });
 
 const CompleteSignupValidationSchema = z.object({
-	userVerification: UserVerificationInputSchema,
+	userVerification: z.object({
+		id: UserVerificationSchema.shape.id,
+		token: UserVerificationSchema.shape.token,
+	}),
 });
 
 const CompleteLoginValidationSchema = z.object({
-	userVerification: UserVerificationInputSchema,
+	userVerification: z.object({
+		id: UserVerificationSchema.shape.id,
+		token: UserVerificationSchema.shape.token,
+	}),
 });
 
 const DoUserVerificationValidationSchema = z.object({
-	userVerification: UserVerificationInputSchema,
-	code: z.string().length(6),
+	userVerification: z.object({
+		id: UserVerificationSchema.shape.id,
+		token: UserVerificationSchema.shape.token,
+		code: UserVerificationSchema.shape.code,
+
+	}),
 });
 
 const ResendUserVerificationCodeValidationSchema = z.object({
-	userVerification: UserVerificationInputSchema,
+	userVerification: z.object({
+		id: UserVerificationSchema.shape.id,
+		token: UserVerificationSchema.shape.token,
+	}),
 });
 
 const PasswordResetValidationSchema = z.object({
@@ -39,7 +54,10 @@ const PasswordResetValidationSchema = z.object({
 });
 
 const NewPasswordValidationSchema = z.object({
-	userVerification: UserVerificationInputSchema,
+	userVerification: z.object({
+		id: UserVerificationSchema.shape.id,
+		token: UserVerificationSchema.shape.token,
+	}),
 	newPassword: z.string().min(8),
 });
 

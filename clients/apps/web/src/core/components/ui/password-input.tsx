@@ -1,9 +1,8 @@
-import * as React from "react";
 import { Eye, EyeOff } from "lucide-react";
-
-import { cn } from "@/core/lib/utils.ts";
-import { Input, type InputProps } from "@/core/components/ui/input.tsx";
+import * as React from "react";
 import { Button } from "@/core/components/ui/button.tsx";
+import { Input, type InputProps } from "@/core/components/ui/input.tsx";
+import { cn } from "@/core/lib/utils.ts";
 
 type PasswordInputProps = Omit<InputProps, "type">;
 

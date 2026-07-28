@@ -1,8 +1,8 @@
 import { useForm } from "@tanstack/react-form";
-import { z } from "zod";
+import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
+import { z } from "zod";
 import { Alert, AlertDescription } from "@/core/components/ui/alert.tsx";
-import { useNewPassword } from "./use-new-password";
 import { Button } from "@/core/components/ui/button.tsx";
 import {
 	Field,
@@ -14,7 +14,7 @@ import {
 import { PasswordInput } from "@/core/components/ui/password-input.tsx";
 import { UserValidationSchema } from "@/features/user/common/user.validation-schemas.ts";
 import { loggedInUserQueryKey } from "@/features/user/get-logged-in-user/use-logged-in-user.ts";
-import { useQueryClient } from "@tanstack/react-query";
+import { useNewPassword } from "./use-new-password";
 
 const newPasswordSchema = z
 	.object({
@@ -40,8 +40,8 @@ function NewPasswordForm({ onSuccess }: NewPasswordFormProps) {
 
 	const form = useForm({
 		defaultValues: {
-			password: "",
-			confirmPassword: "",
+			password: "pierremariekod@gmail.com",
+			confirmPassword: "pierremariekod@gmail.com",
 		},
 		validators: {
 			onSubmit: newPasswordSchema,

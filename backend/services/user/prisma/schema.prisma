@@ -12,49 +12,55 @@ model User {
   email             String             @unique
   username          String             @unique
   password          String
-  fullName          String?
-  displayName       String?
+  fullName          String?            @map("full_name")
+  displayName       String?            @map("display_name")
   bio               String?
-  avatarUrl         String?
+  avatarUrl         String?            @map("avatar_url")
   location          String?
   website           String?
-  emailVerified     Boolean            @default(false)
+  emailVerified     Boolean            @default(false) @map("email_verified")
   active            Boolean            @default(true)
-  createdAt         DateTime           @default(now())
-  updatedAt         DateTime           @updatedAt
+  createdAt         DateTime           @default(now()) @map("created_at")
+  updatedAt         DateTime           @updatedAt @map("updated_at")
   refreshTokens     RefreshToken[]
   userVerifications UserVerification[]
+
+  @@map("user")
 }
 
 model RefreshToken {
   id         String    @id @default(cuid())
   token      String?   @unique
   active     Boolean   @default(true)
-  userId     String?
-  disabledAt DateTime?
+  userId     String?   @map("user_id")
+  disabledAt DateTime? @map("disabled_at")
   ip         String?
   agent      String?
-  createdAt  DateTime  @default(now())
+  createdAt  DateTime  @default(now()) @map("created_at")
   user       User?     @relation(fields: [userId], references: [id])
+
+  @@map("refresh_token")
 }
 
 model UserVerification {
   id                            String    @id @default(cuid())
   email                         String?
   username                      String?
-  fullName                      String?
+  fullName                      String?   @map("full_name")
   password                      String?
   goal                          String?
-  verifiedAt                    DateTime?
-  goalAchievedAt                DateTime?
-  disabledAt                    DateTime?
+  verifiedAt                    DateTime? @map("verified_at")
+  goalAchievedAt                DateTime? @map("goal_achieved_at")
+  disabledAt                    DateTime? @map("disabled_at")
   code                          String
   token                         String
-  numberOfFailedAttempts        Int       @default(0)
-  numberOfCodeTransfersViaEmail Int       @default(0)
-  userId                        String?
+  numberOfFailedAttempts        Int       @default(0) @map("number_of_failed_attempts")
+  numberOfCodeTransfersViaEmail Int       @default(0) @map("number_of_code_transfers_via_email")
+  userId                        String?   @map("user_id")
   ip                            String?
   agent                         String?
-  createdAt                     DateTime  @default(now())
+  createdAt                     DateTime  @default(now()) @map("created_at")
   user                          User?     @relation(fields: [userId], references: [id])
+
+  @@map("user_verification")
 }

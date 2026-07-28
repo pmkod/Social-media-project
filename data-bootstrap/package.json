@@ -1,12 +1,22 @@
 {
-	"name": "data-bootstrap",
-	"module": "./src/index.ts",
-	"type": "module",
-	"private": true,
-	"devDependencies": {
-		"@types/bun": "latest"
-	},
-	"peerDependencies": {
-		"typescript": "^5"
-	}
+  "name": "data-bootstrap",
+  "module": "./src/index.ts",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "bootstrap": "bun run ./src/index.ts",
+    "typecheck": "bun tsc --noEmit"
+  },
+  "dependencies": {
+    "@prisma/adapter-pg": "^7.2.0",
+    "@prisma/client": "7.8.0",
+    "jsonwebtoken": "^9.0.3",
+    "pg": "^8.17.1"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/pg": "^8.16.0",
+    "typescript": "^5"
+  }
 }

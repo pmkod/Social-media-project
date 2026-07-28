@@ -26,7 +26,7 @@ const doUserVerificationRoute = defineOpenAPIRoute({
 		},
 	}),
 	handler: async (c) => {
-		const { userVerification, code } = c.req.valid("json");
+		const { userVerification } = c.req.valid("json");
 
 		const verificationInDb = await prisma.userVerification.findFirst({
 			where: {
@@ -40,7 +40,10 @@ const doUserVerificationRoute = defineOpenAPIRoute({
 			throw new Error("Verification attempt not found or expired");
 		}
 
-		if (verificationInDb.code !== code) {
+		if (verificationInDb.code !== userVerification.code) {
+			console.log(userVerification.code);
+			console.log(userVerification.code);
+
 			await prisma.userVerification.update({
 				where: { id: verificationInDb.id },
 				data: { numberOfFailedAttempts: { increment: 1 } },

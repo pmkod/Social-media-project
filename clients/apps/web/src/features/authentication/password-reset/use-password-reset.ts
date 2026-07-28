@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { baseHttpClient } from "@/core/http-clients/http-client.ts";
-import type { UserVerificationResponse } from "../common/user-verification-response.ts";
 import { saveUserVerificationDataToLocalStorage } from "../common/authentication.utils.ts";
+import type { UserVerificationResponse } from "../common/user-verification-response.ts";
 
 type PasswordResetRequestBody = {
 	email: string;

@@ -33,10 +33,10 @@ function SignupForm({ onSuccess }: SignupFormProps) {
 
 	const form = useForm({
 		defaultValues: {
-			firstName: "",
-			lastName: "",
-			email: "",
-			password: "",
+			firstName: "Kodossou",
+			lastName: "Kouassi",
+			email: "pierremariekod@gmail.com",
+			password: "pierremariekod@gmail.com",
 		},
 		validators: {
 			onSubmit: signupSchema,

@@ -1,8 +1,12 @@
 import { USER_VERIFICATION_FIELDS_KEYS } from "./authentication.constants.ts";
 
 const getUserVerificationDataFromLocalStorage = () => {
-	const userVerificationId = localStorage.getItem(USER_VERIFICATION_FIELDS_KEYS.id);
-	const userVerificationToken = localStorage.getItem(USER_VERIFICATION_FIELDS_KEYS.token);
+	const userVerificationId = localStorage.getItem(
+		USER_VERIFICATION_FIELDS_KEYS.id,
+	);
+	const userVerificationToken = localStorage.getItem(
+		USER_VERIFICATION_FIELDS_KEYS.token,
+	);
 
 	if (
 		userVerificationId === null ||
@@ -34,4 +38,7 @@ const saveUserVerificationDataToLocalStorage = ({
 	localStorage.setItem(USER_VERIFICATION_FIELDS_KEYS.token, token);
 };
 
-export { getUserVerificationDataFromLocalStorage, saveUserVerificationDataToLocalStorage };
+export {
+	getUserVerificationDataFromLocalStorage,
+	saveUserVerificationDataToLocalStorage,
+};

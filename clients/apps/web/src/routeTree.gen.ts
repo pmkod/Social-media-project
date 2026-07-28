@@ -10,7 +10,13 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as BaseRouteRouteImport } from './routes/_base/route'
+import { Route as MainRouteRouteImport } from './routes/_main/route'
 import { Route as BaseAuthenticationRouteRouteImport } from './routes/_base/_authentication/route'
+import { Route as MainBookmarksRouteImport } from './routes/_main/bookmarks'
+import { Route as MainDiscussionsRouteImport } from './routes/_main/discussions'
+import { Route as MainExploreRouteImport } from './routes/_main/explore'
+import { Route as MainHomeRouteImport } from './routes/_main/home'
+import { Route as MainNotificationsRouteImport } from './routes/_main/notifications'
 import { Route as BaseAuthenticationIndexRouteImport } from './routes/_base/_authentication/index'
 import { Route as BaseAuthenticationNewPasswordRouteImport } from './routes/_base/_authentication/new-password'
 import { Route as BaseAuthenticationPasswordResetRouteImport } from './routes/_base/_authentication/password-reset'
@@ -21,9 +27,38 @@ const BaseRouteRoute = BaseRouteRouteImport.update({
   id: '/_base',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MainRouteRoute = MainRouteRouteImport.update({
+  id: '/_main',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const BaseAuthenticationRouteRoute = BaseAuthenticationRouteRouteImport.update({
   id: '/_authentication',
   getParentRoute: () => BaseRouteRoute,
+} as any)
+const MainBookmarksRoute = MainBookmarksRouteImport.update({
+  id: '/bookmarks',
+  path: '/bookmarks',
+  getParentRoute: () => MainRouteRoute,
+} as any)
+const MainDiscussionsRoute = MainDiscussionsRouteImport.update({
+  id: '/discussions',
+  path: '/discussions',
+  getParentRoute: () => MainRouteRoute,
+} as any)
+const MainExploreRoute = MainExploreRouteImport.update({
+  id: '/explore',
+  path: '/explore',
+  getParentRoute: () => MainRouteRoute,
+} as any)
+const MainHomeRoute = MainHomeRouteImport.update({
+  id: '/home',
+  path: '/home',
+  getParentRoute: () => MainRouteRoute,
+} as any)
+const MainNotificationsRoute = MainNotificationsRouteImport.update({
+  id: '/notifications',
+  path: '/notifications',
+  getParentRoute: () => MainRouteRoute,
 } as any)
 const BaseAuthenticationIndexRoute = BaseAuthenticationIndexRouteImport.update({
   id: '/',
@@ -57,6 +92,11 @@ const BaseAuthenticationUserVerificationRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof BaseAuthenticationIndexRoute
+  '/bookmarks': typeof MainBookmarksRoute
+  '/discussions': typeof MainDiscussionsRoute
+  '/explore': typeof MainExploreRoute
+  '/home': typeof MainHomeRoute
+  '/notifications': typeof MainNotificationsRoute
   '/new-password': typeof BaseAuthenticationNewPasswordRoute
   '/password-reset': typeof BaseAuthenticationPasswordResetRoute
   '/signup': typeof BaseAuthenticationSignupRoute
@@ -64,6 +104,11 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof BaseAuthenticationIndexRoute
+  '/bookmarks': typeof MainBookmarksRoute
+  '/discussions': typeof MainDiscussionsRoute
+  '/explore': typeof MainExploreRoute
+  '/home': typeof MainHomeRoute
+  '/notifications': typeof MainNotificationsRoute
   '/new-password': typeof BaseAuthenticationNewPasswordRoute
   '/password-reset': typeof BaseAuthenticationPasswordResetRoute
   '/signup': typeof BaseAuthenticationSignupRoute
@@ -72,7 +117,13 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_base': typeof BaseRouteRouteWithChildren
+  '/_main': typeof MainRouteRouteWithChildren
   '/_base/_authentication': typeof BaseAuthenticationRouteRouteWithChildren
+  '/_main/bookmarks': typeof MainBookmarksRoute
+  '/_main/discussions': typeof MainDiscussionsRoute
+  '/_main/explore': typeof MainExploreRoute
+  '/_main/home': typeof MainHomeRoute
+  '/_main/notifications': typeof MainNotificationsRoute
   '/_base/_authentication/new-password': typeof BaseAuthenticationNewPasswordRoute
   '/_base/_authentication/password-reset': typeof BaseAuthenticationPasswordResetRoute
   '/_base/_authentication/signup': typeof BaseAuthenticationSignupRoute
@@ -82,14 +133,38 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/new-password' | '/password-reset' | '/signup' | '/user-verification'
+    | '/'
+    | '/bookmarks'
+    | '/discussions'
+    | '/explore'
+    | '/home'
+    | '/notifications'
+    | '/new-password'
+    | '/password-reset'
+    | '/signup'
+    | '/user-verification'
   fileRoutesByTo: FileRoutesByTo
   to:
-    '/' | '/new-password' | '/password-reset' | '/signup' | '/user-verification'
+    | '/'
+    | '/bookmarks'
+    | '/discussions'
+    | '/explore'
+    | '/home'
+    | '/notifications'
+    | '/new-password'
+    | '/password-reset'
+    | '/signup'
+    | '/user-verification'
   id:
     | '__root__'
     | '/_base'
+    | '/_main'
     | '/_base/_authentication'
+    | '/_main/bookmarks'
+    | '/_main/discussions'
+    | '/_main/explore'
+    | '/_main/home'
+    | '/_main/notifications'
     | '/_base/_authentication/new-password'
     | '/_base/_authentication/password-reset'
     | '/_base/_authentication/signup'
@@ -99,6 +174,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   BaseRouteRoute: typeof BaseRouteRouteWithChildren
+  MainRouteRoute: typeof MainRouteRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
@@ -110,12 +186,54 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BaseRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_main': {
+      id: '/_main'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof MainRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_base/_authentication': {
       id: '/_base/_authentication'
       path: ''
       fullPath: '/'
       preLoaderRoute: typeof BaseAuthenticationRouteRouteImport
       parentRoute: typeof BaseRouteRoute
+    }
+    '/_main/bookmarks': {
+      id: '/_main/bookmarks'
+      path: '/bookmarks'
+      fullPath: '/bookmarks'
+      preLoaderRoute: typeof MainBookmarksRouteImport
+      parentRoute: typeof MainRouteRoute
+    }
+    '/_main/discussions': {
+      id: '/_main/discussions'
+      path: '/discussions'
+      fullPath: '/discussions'
+      preLoaderRoute: typeof MainDiscussionsRouteImport
+      parentRoute: typeof MainRouteRoute
+    }
+    '/_main/explore': {
+      id: '/_main/explore'
+      path: '/explore'
+      fullPath: '/explore'
+      preLoaderRoute: typeof MainExploreRouteImport
+      parentRoute: typeof MainRouteRoute
+    }
+    '/_main/home': {
+      id: '/_main/home'
+      path: '/home'
+      fullPath: '/home'
+      preLoaderRoute: typeof MainHomeRouteImport
+      parentRoute: typeof MainRouteRoute
+    }
+    '/_main/notifications': {
+      id: '/_main/notifications'
+      path: '/notifications'
+      fullPath: '/notifications'
+      preLoaderRoute: typeof MainNotificationsRouteImport
+      parentRoute: typeof MainRouteRoute
     }
     '/_base/_authentication/': {
       id: '/_base/_authentication/'
@@ -190,8 +308,29 @@ const BaseRouteRouteWithChildren = BaseRouteRoute._addFileChildren(
   BaseRouteRouteChildren,
 )
 
+interface MainRouteRouteChildren {
+  MainBookmarksRoute: typeof MainBookmarksRoute
+  MainDiscussionsRoute: typeof MainDiscussionsRoute
+  MainExploreRoute: typeof MainExploreRoute
+  MainHomeRoute: typeof MainHomeRoute
+  MainNotificationsRoute: typeof MainNotificationsRoute
+}
+
+const MainRouteRouteChildren: MainRouteRouteChildren = {
+  MainBookmarksRoute: MainBookmarksRoute,
+  MainDiscussionsRoute: MainDiscussionsRoute,
+  MainExploreRoute: MainExploreRoute,
+  MainHomeRoute: MainHomeRoute,
+  MainNotificationsRoute: MainNotificationsRoute,
+}
+
+const MainRouteRouteWithChildren = MainRouteRoute._addFileChildren(
+  MainRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   BaseRouteRoute: BaseRouteRouteWithChildren,
+  MainRouteRoute: MainRouteRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

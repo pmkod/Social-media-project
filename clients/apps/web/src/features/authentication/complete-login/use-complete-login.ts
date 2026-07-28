@@ -1,8 +1,8 @@
 import { useMutation } from "@tanstack/react-query";
 import { baseHttpClient } from "@/core/http-clients/http-client.ts";
 import { saveAccessAndRefreshToken } from "@/core/utils/token.utils.ts";
-import { getUserVerificationDataFromLocalStorage } from "../common/authentication.utils.ts";
 import type { AuthenticatedResponse } from "../common/authenticated-response.ts";
+import { getUserVerificationDataFromLocalStorage } from "../common/authentication.utils.ts";
 
 type UseCompleteLoginResponseBody = AuthenticatedResponse & {
 	hasStore: boolean;

@@ -21,8 +21,8 @@ Ce backend suit une architecture microservices identique à celle du projet Ecom
 1. **Créer les bases de données PostgreSQL** :
 
 ```sql
-CREATE DATABASE social_media_user;
-CREATE DATABASE social_media_content;
+CREATE DATABASE social_media_project_user;
+CREATE DATABASE social_media_project_content;
 ```
 
 2. **Copier les fichiers d'environnement** :

@@ -1,6 +1,7 @@
 import { useForm } from "@tanstack/react-form";
-import { z } from "zod";
+import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
+import { z } from "zod";
 import { Alert, AlertDescription } from "@/core/components/ui/alert.tsx";
 import { Button } from "@/core/components/ui/button.tsx";
 import {
@@ -10,15 +11,13 @@ import {
 	FieldLabel,
 } from "@/core/components/ui/field.tsx";
 import { Input } from "@/core/components/ui/input.tsx";
-import { useUserVerification } from "./use-user-verification";
-import { useResendUserVerificationCode } from "../resend-user-verification-code/use-resend-user-verification-code";
+import { loggedInUserQueryKey } from "@/features/user/get-logged-in-user/use-logged-in-user.ts";
 import { useCompleteLogin } from "../complete-login/use-complete-login";
 import { useCompleteSignup } from "../complete-signup/use-complete-signup";
-import type { UserVerificationGoalType } from "./user-verification-goal.type";
+import { useResendUserVerificationCode } from "../resend-user-verification-code/use-resend-user-verification-code";
+import { useUserVerification } from "./use-user-verification";
 import { UserVerificationGoals } from "./user-verification-gloal";
-
-import { useQueryClient } from "@tanstack/react-query";
-import { loggedInUserQueryKey } from "@/features/user/get-logged-in-user/use-logged-in-user.ts";
+import type { UserVerificationGoalType } from "./user-verification-goal.type";
 
 const verificationSchema = z.object({
 	code: z
@@ -60,10 +59,10 @@ function UserVerificationForm({ onSuccess, goal }: UserVerificationFormProps) {
 				await userVerification.mutateAsync({ code: value.code });
 				if (goal === UserVerificationGoals.login) {
 					await completeLogin.mutateAsync();
-					await queryClient.fetchQuery({ queryKey: loggedInUserQueryKey });
+					// await queryClient.fetchQuery({ queryKey: loggedInUserQueryKey });
 				} else if (goal === UserVerificationGoals.signup) {
 					await completeSignup.mutateAsync();
-					await queryClient.fetchQuery({ queryKey: loggedInUserQueryKey });
+					// await queryClient.fetchQuery({ queryKey: loggedInUserQueryKey });
 				}
 				await onSuccess();
 			} catch (error: any) {

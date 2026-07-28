@@ -1,6 +1,6 @@
 import { createFileRoute, Outlet } from "@tanstack/react-router";
-import { Header } from "@/core/components/partials/header";
 import { Footer } from "@/core/components/partials/footer";
+import { Header } from "@/core/components/partials/header";
 
 export const Route = createFileRoute("/_base")({
 	component: RouteComponent,

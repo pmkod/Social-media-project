@@ -3,7 +3,6 @@ import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { z } from "zod";
 import { Alert, AlertDescription } from "@/core/components/ui/alert.tsx";
-import { usePasswordReset } from "./use-password-reset";
 import { Button } from "@/core/components/ui/button.tsx";
 import {
 	Field,
@@ -14,6 +13,7 @@ import {
 } from "@/core/components/ui/field.tsx";
 import { Input } from "@/core/components/ui/input.tsx";
 import { UserValidationSchema } from "@/features/user/common/user.validation-schemas.ts";
+import { usePasswordReset } from "./use-password-reset";
 
 const passwordResetSchema = z.object({
 	email: UserValidationSchema.shape.email,
@@ -30,7 +30,7 @@ function PasswordResetForm({ onSuccess }: PasswordResetFormProps) {
 
 	const form = useForm({
 		defaultValues: {
-			email: "",
+			email: "pierremariekod@gmail.com",
 		},
 		validators: {
 			onSubmit: passwordResetSchema,
@@ -107,7 +107,7 @@ function PasswordResetForm({ onSuccess }: PasswordResetFormProps) {
 			<p className="text-center text-sm text-muted-foreground">
 				Retour à la{" "}
 				<Link
-					to="/login"
+					to="/"
 					className="text-foreground underline underline-offset-3 hover:text-foreground/80"
 				>
 					connexion

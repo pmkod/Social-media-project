@@ -1,16 +1,15 @@
 import ky from "ky";
+import { ApiConfig } from "@/core/configs/api.config.ts";
 import {
 	getAccessToken,
 	getRefreshToken,
 	saveAccessToken,
 } from "@/core/utils/token.utils.ts";
-
-import { baseHttpClient } from "./base.http-client.ts";
-import { ApiConfig } from "@/core/configs/api.config.ts";
 import type {
 	RefreshTokenRequest,
 	RefreshTokenResponse,
 } from "@/features/authentication/common/refresh-token.ts";
+import { baseHttpClient } from "./base.http-client.ts";
 
 const httpClient = baseHttpClient.extend({
 	hooks: {

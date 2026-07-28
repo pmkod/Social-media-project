@@ -9,42 +9,48 @@ datasource db {
 
 model Post {
   id        String     @id @default(cuid())
-  authorId  String
+  authorId  String     @map("author_id")
   content   String
-  mediaUrls String[]   @default([])
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
+  mediaUrls String[]   @default([]) @map("media_urls")
+  createdAt DateTime   @default(now()) @map("created_at")
+  updatedAt DateTime   @updatedAt @map("updated_at")
   comments  Comment[]
   postLikes PostLike[]
+
+  @@map("post")
 }
 
 model Comment {
   id           String        @id @default(cuid())
-  postId       String
-  authorId     String
+  postId       String        @map("post_id")
+  authorId     String        @map("author_id")
   content      String
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
+  createdAt    DateTime      @default(now()) @map("created_at")
+  updatedAt    DateTime      @updatedAt @map("updated_at")
   post         Post          @relation(fields: [postId], references: [id], onDelete: Cascade)
   commentLikes CommentLike[]
+
+  @@map("comment")
 }
 
 model PostLike {
   id        String   @id @default(cuid())
-  postId    String
-  authorId  String
-  createdAt DateTime @default(now())
+  postId    String   @map("post_id")
+  authorId  String   @map("author_id")
+  createdAt DateTime @default(now()) @map("created_at")
   post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
 
   @@unique([postId, authorId])
+  @@map("post_like")
 }
 
 model CommentLike {
   id        String   @id @default(cuid())
-  commentId String
-  authorId  String
-  createdAt DateTime @default(now())
+  commentId String   @map("comment_id")
+  authorId  String   @map("author_id")
+  createdAt DateTime @default(now()) @map("created_at")
   comment   Comment  @relation(fields: [commentId], references: [id], onDelete: Cascade)
 
   @@unique([commentId, authorId])
+  @@map("comment_like")
 }

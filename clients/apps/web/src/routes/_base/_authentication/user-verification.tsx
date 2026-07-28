@@ -24,9 +24,9 @@ function RouteComponent() {
 
 	const handleSuccess = async () => {
 		if (goal === UserVerificationGoals.login) {
-			await navigate({ to: "/" });
+			await navigate({ to: "/home" });
 		} else if (goal === UserVerificationGoals.signup) {
-			await navigate({ to: "/" });
+			await navigate({ to: "/home" });
 		} else {
 			await navigate({ to: "/new-password" });
 		}
