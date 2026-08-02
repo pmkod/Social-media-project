@@ -32,9 +32,13 @@ type GetFileParams = {
 	bucket?: string;
 };
 
-const getFile = async ({ fileName, bucket }: GetFileParams) => {
+const getS3File = ({ fileName, bucket }: GetFileParams) => {
 	const targetBucket = bucket || Configurations.storage.s3.bucket;
-	const file = s3Client.file(fileName, { bucket: targetBucket });
+	return s3Client.file(fileName, { bucket: targetBucket });
+};
+
+const getFile = async ({ fileName, bucket }: GetFileParams) => {
+	const file = getS3File({ fileName, bucket });
 	return await file.arrayBuffer();
 };
 
@@ -48,4 +52,4 @@ const deleteFile = async ({ fileName, bucket }: DeleteFileParams) => {
 	await s3Client.delete(fileName, { bucket: targetBucket });
 };
 
-export { setFile, getFile, deleteFile };
+export { setFile, getFile, getS3File, deleteFile };

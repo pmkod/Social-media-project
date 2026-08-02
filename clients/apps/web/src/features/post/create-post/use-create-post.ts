@@ -15,12 +15,18 @@ const CURRENT_USER = {
 };
 
 type CreatedPostResponse = {
-	id: string;
-	authorId: string;
-	text: string;
-	mediaUrls: string[];
-	createdAt: string;
-	updatedAt: string;
+	message: string;
+	post: {
+		id: string;
+		text: string;
+		medias?: Array<{
+			id: string;
+			position: number;
+			highQualityFile?: {
+				filename: string;
+			} | null;
+		}>;
+	};
 };
 
 const createPost = async (input: CreatePostInput): Promise<Post> => {
@@ -41,13 +47,13 @@ const createPost = async (input: CreatePostInput): Promise<Post> => {
 			})
 			.json<CreatedPostResponse>();
 
+		const createdPost = response.post;
+
 		return {
-			id: response.id,
+			id: createdPost.id,
 			author: CURRENT_USER,
 			createdAt: "À l'instant",
-			content: response.text,
-			mediaUrls:
-				response.mediaUrls?.length > 0 ? response.mediaUrls : undefined,
+			content: createdPost.text,
 			stats: {
 				comments: 0,
 				reposts: 0,

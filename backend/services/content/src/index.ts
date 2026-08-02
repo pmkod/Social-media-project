@@ -8,12 +8,15 @@ import { commentsRoutes } from "./features/comments/routes";
 import { postLikesRoutes } from "./features/post-likes/routes";
 import { postsRoutes } from "./features/posts/routes";
 
+import { mediaRoutes } from "./features/media/routes";
+
 const app = new OpenAPIHono();
 
 app.openapiRoutes(postsRoutes);
 app.openapiRoutes(commentsRoutes);
 app.openapiRoutes(postLikesRoutes);
 app.openapiRoutes(commentLikesRoutes);
+app.openapiRoutes(mediaRoutes);
 
 app.onError(exceptionHandler);
 app.get("/health", (c) => c.json({ status: "ok" }));
