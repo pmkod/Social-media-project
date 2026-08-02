@@ -67,11 +67,13 @@ export function PostDetail({ postId }: PostDetailProps) {
 	}
 
 	const mediaList =
-		post.mediaUrls && post.mediaUrls.length > 0
-			? post.mediaUrls
-			: post.images && post.images.length > 0
-				? post.images
-				: [];
+		post.medias && post.medias.length > 0
+			? post.medias.map((m) => m.highQualityUrl || m.lowQualityUrl)
+			: post.mediaUrls && post.mediaUrls.length > 0
+				? post.mediaUrls
+				: post.images && post.images.length > 0
+					? post.images
+					: [];
 
 	const likesCount = (post.stats.likes ?? 0) + (isLiked ? 1 : 0);
 	const repostsCount = (post.stats.reposts ?? 0) + (isReposted ? 1 : 0);

@@ -1,12 +1,13 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { httpClient } from "@/core/http-clients/http-client.ts";
-import type { Post } from "../common/post.ts";
+import type { Post, PostMediaItem } from "../common/post.ts";
 
 type ApiPostItem = {
 	id: string;
 	authorId?: string;
 	text: string;
 	mediaUrls?: string[];
+	medias?: PostMediaItem[];
 	createdAt: string;
 	updatedAt?: string;
 	_count?: {
@@ -178,6 +179,7 @@ const fetchPostsPage = async ({
 			}),
 			content: item.text,
 			mediaUrls: item.mediaUrls ?? [],
+			medias: item.medias ?? [],
 			stats: {
 				comments: item._count?.comments ?? 0,
 				reposts: 0,

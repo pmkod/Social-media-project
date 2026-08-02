@@ -190,23 +190,14 @@ export function PostItem({ post, onBookmarkToggle }: PostItemProps) {
 		}
 	};
 
-	const handleRepost = (e: React.MouseEvent) => {
-		e.stopPropagation();
-		if (isReposted) {
-			setIsReposted(false);
-			setRepostsCount((prev) => prev - 1);
-		} else {
-			setIsReposted(true);
-			setRepostsCount((prev) => prev + 1);
-		}
-	};
-
 	const mediaList =
-		post.mediaUrls && post.mediaUrls.length > 0
-			? post.mediaUrls
-			: post.images && post.images.length > 0
-				? post.images
-				: [];
+		post.medias && post.medias.length > 0
+			? post.medias.map((m) => m.lowQualityUrl || m.highQualityUrl)
+			: post.mediaUrls && post.mediaUrls.length > 0
+				? post.mediaUrls
+				: post.images && post.images.length > 0
+					? post.images
+					: [];
 
 	return (
 		<article className="border-x border-t last:border-b first:rounded-t-xl last:rounded-b-xl border-slate-200/80 dark:border-slate-800 p-4 dark:hover:bg-slate-900/50 transition-colors">

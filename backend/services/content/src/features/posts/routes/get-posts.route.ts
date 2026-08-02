@@ -1,7 +1,16 @@
 import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
+import { Configurations } from "@/core/configurations";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
 import { PostsRoutesTag } from "../posts.constants";
+
+const getFilePublicUrl = (filename?: string | null): string => {
+	if (!filename) return "";
+	const publicUrl =
+		Configurations.storage.s3.publicUrl ||
+		`${Configurations.storage.s3.endpoint}/${Configurations.storage.s3.bucket}`;
+	return `${publicUrl}/${filename}`;
+};
 
 const routeDef = createRoute({
 	method: "get",
@@ -39,6 +48,13 @@ const getPostsRoute = defineOpenAPIRoute({
 				skip,
 				take: limit,
 				include: {
+					medias: {
+						include: {
+							lowQualityFile: true,
+							highQualityFile: true,
+						},
+						orderBy: { position: "asc" },
+					},
 					_count: {
 						select: {
 							comments: true,
@@ -52,8 +68,22 @@ const getPostsRoute = defineOpenAPIRoute({
 
 		return c.json({
 			data: posts.map((post) => {
-				const { content, ...rest } = post;
-				return { ...rest, text: content };
+				const { content, medias, ...rest } = post;
+
+				const formattedMedias = (medias || []).map((m) => ({
+					id: m.id,
+					mediaType: m.mediaType,
+					position: m.position,
+					lowQualityUrl: getFilePublicUrl(m.lowQualityFile?.filename),
+					highQualityUrl: getFilePublicUrl(m.highQualityFile?.filename),
+				}));
+
+				return {
+					...rest,
+					text: content,
+					medias: formattedMedias,
+					mediaUrls: formattedMedias.map((m) => m.lowQualityUrl),
+				};
 			}),
 			meta: {
 				total,

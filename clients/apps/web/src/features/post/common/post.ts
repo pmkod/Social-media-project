@@ -11,6 +11,14 @@ export interface PostStats {
 	shares: number;
 }
 
+export interface PostMediaItem {
+	id?: string;
+	mediaType: "image" | "video";
+	position?: number;
+	lowQualityUrl: string;
+	highQualityUrl: string;
+}
+
 export interface Post {
 	id: string;
 	author: PostAuthor;
@@ -18,6 +26,7 @@ export interface Post {
 	content: string;
 	images?: string[];
 	mediaUrls?: string[];
+	medias?: PostMediaItem[];
 	stats: PostStats;
 	isLiked?: boolean;
 	isBookmarked?: boolean;

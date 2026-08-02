@@ -8,16 +8,42 @@ datasource db {
 }
 
 model Post {
-  id        String     @id @default(cuid())
-  authorId  String     @map("author_id")
+  id        String      @id @default(cuid())
+  authorId  String      @map("author_id")
   content   String
-  mediaUrls String[]   @default([]) @map("media_urls")
-  createdAt DateTime   @default(now()) @map("created_at")
-  updatedAt DateTime   @updatedAt @map("updated_at")
+  createdAt DateTime    @default(now()) @map("created_at")
+  updatedAt DateTime    @updatedAt @map("updated_at")
+  medias    PostMedia[]
   comments  Comment[]
   postLikes PostLike[]
 
   @@map("post")
+}
+
+model PostMedia {
+  id                String   @id @default(uuid())
+  postId            String   @map("post_id")
+  post              Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  position          Int      @default(1)
+  mediaType         String   @map("media_type") @db.VarChar(50)
+  createdAt         DateTime @default(now()) @map("created_at")
+  lowQualityFileId  String?  @unique @map("low_quality_file_id")
+  lowQualityFile    File?    @relation("PostMediaLowQuality", fields: [lowQualityFileId], references: [id], onDelete: SetNull)
+  highQualityFileId String?  @unique @map("high_quality_file_id")
+  highQualityFile   File?    @relation("PostMediaHighQuality", fields: [highQualityFileId], references: [id], onDelete: SetNull)
+
+  @@map("post_media")
+}
+
+model File {
+  id                   String     @id @default(uuid())
+  mimeType             String?    @map("mime_type") @db.VarChar(50)
+  filename             String     @db.VarChar(255)
+  createdAt            DateTime   @default(now()) @map("created_at")
+  lowQualityPostMedia  PostMedia? @relation("PostMediaLowQuality")
+  highQualityPostMedia PostMedia? @relation("PostMediaHighQuality")
+
+  @@map("file")
 }
 
 model Comment {
