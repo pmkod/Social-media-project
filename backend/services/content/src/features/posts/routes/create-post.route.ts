@@ -1,23 +1,43 @@
-import { createRoute, defineOpenAPIRoute } from "@hono/zod-openapi";
-import { Configurations } from "@/core/configurations";
+import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { requireUserAuthentication } from "@/features/authentication/middlewares/require-user-authentication.middleware";
-import { createPostMedias } from "@/features/media/services/create-post-medias.service";
-import { PostsRoutesTag } from "../posts.constants";
+import {
+	PostMediaCompressionFormat,
+	PostMediaTypes,
+	PostsRoutesTag,
+} from "../posts.constants";
+import { PostValidationSchema } from "../posts.validation-schemas";
+import { compressPostMediaFile } from "../services/post-media-compression.service";
+import { setPostMediaFile } from "../services/post-media-storage.service";
 
-
+const CreatePostRequestBody = z.object({
+	text: PostValidationSchema.shape.text,
+	medias: PostValidationSchema.shape.medias.optional(),
+});
 
 const routeDef = createRoute({
 	method: "post",
 	path: "/posts",
-	summary: "Create a new post with multi-quality S3 media files",
-	tags: [PostsRoutesTag],
 	middleware: [requireUserAuthentication],
+	summary: "Create post",
+	tags: [PostsRoutesTag],
+	request: {
+		body: {
+			content: {
+				"multipart/form-data": { schema: CreatePostRequestBody },
+			},
+		},
+	},
 	responses: {
 		[HttpStatus.CREATED.code]: {
-			description: "Post created successfully",
+			content: {
+				"application/json": {
+					schema: z.object({ message: z.string(), post: z.object() }),
+				},
+			},
+			description: "Created post",
 		},
 	},
 });
@@ -33,96 +53,99 @@ const createPostRoute = defineOpenAPIRoute<
 			throw new Error("Unauthorized");
 		}
 
-		let text = "";
-		const mediaFiles: File[] = [];
-		let jsonMedias: Array<{
-			mediaType?: string;
-			lowQualityFileId?: string;
-			highQualityFileId?: string;
-		}> = [];
-
-		const contentType = c.req.header("content-type") || "";
-
-		if (contentType.includes("multipart/form-data")) {
-			const formData = await c.req.formData();
-			text = (formData.get("text") as string) || "";
-
-			const medias = formData.getAll("medias");
-			const singleMedia = formData.get("medias");
-
-			if (singleMedia && singleMedia instanceof File && singleMedia.size > 0) {
-				mediaFiles.push(singleMedia);
-			}
-
-			if (medias && medias.length > 0) {
-				for (const m of medias) {
-					if (m instanceof File && m.size > 0 && !mediaFiles.includes(m)) {
-						mediaFiles.push(m);
-					}
-				}
-			}
-		} else {
-			try {
-				const jsonBody = await c.req.json();
-				text = jsonBody.text || "";
-				if (Array.isArray(jsonBody.medias)) {
-					jsonMedias = jsonBody.medias;
-				}
-			} catch {
-				// Empty body or unrecognized format
-			}
-		}
+		const { text, medias } = c.req.valid("form");
 
 		const post = await prisma.post.create({
 			data: {
 				authorId: authenticatedUserId,
 				content: text,
 			},
+			select: {
+				id: true,
+			},
 		});
 
-		let createdMediasList = [];
+		if (medias && medias.length > 0) {
+			const startingPosition = 1;
+			for (let i = 0; i < medias.length; i++) {
+				const media = medias[i];
+				if (!(media instanceof File)) continue;
+				const position = startingPosition + i;
 
-		if (mediaFiles.length > 0) {
-			createdMediasList = await createPostMedias({
-				postId: post.id,
-				medias: mediaFiles.slice(0, 4),
-			});
-		} else if (jsonMedias.length > 0) {
-			for (let i = 0; i < jsonMedias.length; i++) {
-				const item = jsonMedias[i];
-				const postMedia = await prisma.postMedia.create({
-					data: {
-						postId: post.id,
-						position: i + 1,
-						mediaType: item.mediaType || "image",
-						lowQualityFileId: item.lowQualityFileId,
-						highQualityFileId: item.highQualityFileId,
-					},
-					include: {
-						lowQualityFile: true,
-						highQualityFile: true,
-					},
+				const isVideo = media.type.startsWith("video/");
+				const mediaType = isVideo ? PostMediaTypes.VIDEO : PostMediaTypes.IMAGE;
+
+				const lowQualityFile = isVideo
+					? media
+					: await compressPostMediaFile({
+							file: media,
+							quality: 50,
+						});
+				const highQualityFile = media;
+
+				const lowQualityFileExt = isVideo
+					? media.name.split(".").pop() || "mp4"
+					: PostMediaCompressionFormat.ext;
+				const highQualityFileExt =
+					highQualityFile.name.split(".").pop() || "webp";
+
+				const lowQualityMediaFileName = `post_${post.id}_low_${Date.now()}_${i}.${lowQualityFileExt}`;
+				const highQualityMediaFileName = `post_${post.id}_high_${Date.now()}_${i}.${highQualityFileExt}`;
+
+				await setPostMediaFile({
+					file: lowQualityFile,
+					filename: lowQualityMediaFileName,
+				});
+				await setPostMediaFile({
+					file: highQualityFile,
+					filename: highQualityMediaFileName,
 				});
 
-				createdMediasList.push({
-					id: postMedia.id,
-					mediaType: postMedia.mediaType,
-					position: postMedia.position,
-					lowQualityUrl: getFilePublicUrl(postMedia.lowQualityFile?.filename),
-					highQualityUrl: getFilePublicUrl(postMedia.highQualityFile?.filename),
+				await prisma.postMedia.create({
+					data: {
+						post: {
+							connect: {
+								id: post.id,
+							},
+						},
+						position: position,
+						mediaType: mediaType,
+						lowQualityFile: {
+							create: {
+								filename: lowQualityMediaFileName,
+								mimeType: lowQualityFile.type,
+							},
+						},
+						highQualityFile: {
+							create: {
+								filename: highQualityMediaFileName,
+								mimeType: highQualityFile.type,
+							},
+						},
+					},
 				});
 			}
 		}
 
-		const { content, ...rest } = post;
+		const postToSend = await prisma.post.findUniqueOrThrow({
+			where: {
+				id: post.id,
+			},
+			select: {
+				id: true,
+				text: true,
+				medias: {
+					select: {
+						id: true,
+						highQualityFile: { select: { filename: true } },
+						position: true,
+					},
+				},
+			},
+		});
 
 		return c.json(
-			{
-				...rest,
-				text: content,
-				medias: createdMediasList,
-				mediaUrls: createdMediasList.map((m) => m.lowQualityUrl),
-			},
+			{ message: "Post created successfully", post: postToSend },
 			HttpStatus.CREATED.code,
 		);
 	},

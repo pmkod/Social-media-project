@@ -26,7 +26,7 @@ const routeDef = createRoute({
 	},
 	responses: {
 		[HttpStatus.OK.code]: {
-			description: "List of posts",
+			description: "List of posts with medias",
 		},
 	},
 });
@@ -47,11 +47,31 @@ const getPostsRoute = defineOpenAPIRoute({
 				orderBy: { createdAt: "desc" },
 				skip,
 				take: limit,
-				include: {
+				select: {
+					id: true,
+					authorId: true,
+					content: true,
+					createdAt: true,
+					updatedAt: true,
 					medias: {
-						include: {
-							lowQualityFile: true,
-							highQualityFile: true,
+						select: {
+							id: true,
+							position: true,
+							mediaType: true,
+							lowQualityFile: {
+								select: {
+									id: true,
+									mimeType: true,
+									filename: true,
+								},
+							},
+							highQualityFile: {
+								select: {
+									id: true,
+									mimeType: true,
+									filename: true,
+								},
+							},
 						},
 						orderBy: { position: "asc" },
 					},
@@ -72,10 +92,12 @@ const getPostsRoute = defineOpenAPIRoute({
 
 				const formattedMedias = (medias || []).map((m) => ({
 					id: m.id,
-					mediaType: m.mediaType,
 					position: m.position,
+					mediaType: m.mediaType,
 					lowQualityUrl: getFilePublicUrl(m.lowQualityFile?.filename),
 					highQualityUrl: getFilePublicUrl(m.highQualityFile?.filename),
+					lowQualityFile: m.lowQualityFile,
+					highQualityFile: m.highQualityFile,
 				}));
 
 				return {

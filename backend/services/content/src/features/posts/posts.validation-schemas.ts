@@ -1,26 +1,24 @@
 import { z } from "@hono/zod-openapi";
 
-const CreatePostValidationSchema = z.object({
-	text: z.string().min(1).max(5000),
-	mediaUrls: z.array(z.string().url()).optional().default([]),
-});
-
-const UpdatePostValidationSchema = z.object({
-	text: z.string().min(1).max(5000).optional(),
-	mediaUrls: z.array(z.string().url()).optional(),
-});
-
-const PostResponseBody = z.object({
+const PostValidationSchema = z.object({
 	id: z.string(),
-	authorId: z.string(),
-	text: z.string(),
-	mediaUrls: z.array(z.string()),
-	createdAt: z.date(),
-	updatedAt: z.date(),
+	text: z.string().min(1).max(5000),
+	createdAt: z.string(),
+	medias: z
+		.array(
+			z
+				.file()
+				.mime([
+					"image/jpeg",
+					"image/png",
+					"image/webp",
+					"video/mp4",
+					"video/webm",
+					"video/ogg",
+				])
+				.max(20_000_000),
+		)
+		.max(4),
 });
 
-export {
-	CreatePostValidationSchema,
-	UpdatePostValidationSchema,
-	PostResponseBody,
-};
+export { PostValidationSchema };
