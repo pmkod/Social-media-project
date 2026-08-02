@@ -1,37 +1,135 @@
 import {
 	IconBookmark,
 	IconBookmarkFilled,
+	IconChevronLeft,
+	IconChevronRight,
 	IconDots,
 	IconHeart,
 	IconHeartFilled,
 	IconMessageCircle,
+	IconPlus,
 	IconRepeat,
-	IconShare,
+	IconSend,
 } from "@tabler/icons-react";
-import { useState } from "react";
-
-export interface Post {
-	id: string;
-	author: {
-		name: string;
-		handle: string;
-		avatar: string;
-	};
-	createdAt: string;
-	content: string;
-	image?: string;
-	stats: {
-		comments: number;
-		reposts: number;
-		likes: number;
-	};
-	isLiked?: boolean;
-	isBookmarked?: boolean;
-}
+import { useEffect, useRef, useState } from "react";
+import { cn } from "@/core/lib/utils.ts";
+import type { Post } from "./post.ts";
 
 interface PostItemProps {
 	post: Post;
 	onBookmarkToggle?: (postId: string) => void;
+}
+
+function PostImageGrid({ images }: { images: string[] }) {
+	const count = images.length;
+	const base =
+		"mt-3 overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800 grid gap-1";
+	const imgBase =
+		"h-full w-full object-cover hover:scale-[1.01] transition-transform duration-200";
+
+	if (count === 1) {
+		return (
+			<div className={base}>
+				<img
+					src={images[0]}
+					alt="Post media"
+					className="w-full max-h-96 object-cover hover:scale-[1.01] transition-transform duration-200"
+				/>
+			</div>
+		);
+	}
+
+	if (count === 2) {
+		return (
+			<div className={cn(base, "grid-cols-2 h-64")}>
+				{images.map((src) => (
+					<img key={src} src={src} alt="Post media" className={imgBase} />
+				))}
+			</div>
+		);
+	}
+
+	return <PostImageSlider images={images} />;
+}
+
+function PostImageSlider({ images }: { images: string[] }) {
+	const trackRef = useRef<HTMLDivElement>(null);
+	const [canScrollLeft, setCanScrollLeft] = useState(false);
+	const [canScrollRight, setCanScrollRight] = useState(images.length > 3);
+
+	const updateScrollState = useCallback(() => {
+		const track = trackRef.current;
+		if (!track) return;
+		setCanScrollLeft(track.scrollLeft > 0);
+		setCanScrollRight(
+			track.scrollLeft + track.clientWidth < track.scrollWidth - 1,
+		);
+	}, []);
+
+	useEffect(() => {
+		updateScrollState();
+	}, [updateScrollState]);
+
+	const scrollBy = (direction: 1 | -1) => {
+		const track = trackRef.current;
+		if (!track) return;
+		const slideWidth = track.clientWidth / 3;
+		track.scrollBy({ left: direction * slideWidth, behavior: "smooth" });
+	};
+
+	const extraCount = images.length - 3;
+
+	return (
+		<div className="mt-3 relative overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800">
+			{extraCount > 0 ? (
+				<div className="absolute top-2 right-2 z-10 flex items-center gap-1 rounded-full bg-black/60 px-2 py-1 text-xs font-semibold text-white">
+					<IconPlus className="h-3 w-3" />
+					<span>{extraCount}</span>
+				</div>
+			) : null}
+
+			<div
+				ref={trackRef}
+				onScroll={updateScrollState}
+				className="flex h-80 gap-1 overflow-x-auto snap-x snap-mandatory"
+			>
+				{images.map((src) => (
+					<div
+						key={src}
+						className="relative shrink-0 snap-start w-[calc(33.333%-0.25rem)] h-full"
+					>
+						<img
+							src={src}
+							alt="Post media"
+							className="h-full w-full object-cover rounded-lg"
+						/>
+					</div>
+				))}
+			</div>
+
+			{canScrollLeft ? (
+				<button
+					type="button"
+					onClick={() => scrollBy(-1)}
+					className="absolute left-2 top-1/2 -translate-y-1/2 p-1.5 rounded-full bg-black/50 text-white hover:bg-black/70 transition-colors"
+					aria-label="Image précédente"
+				>
+					<IconChevronLeft className="h-4 w-4" />
+				</button>
+			) : null}
+
+			{canScrollRight ? (
+				<button
+					type="button"
+					onClick={() => scrollBy(1)}
+					className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded-full bg-black/50 text-white hover:bg-black/70 transition-colors"
+					aria-label="Image suivante"
+				>
+					<IconChevronRight className="h-4 w-4" />
+				</button>
+			) : null}
+		</div>
+	);
 }
 
 export function PostItem({ post, onBookmarkToggle }: PostItemProps) {
@@ -111,20 +209,32 @@ export function PostItem({ post, onBookmarkToggle }: PostItemProps) {
 						{post.content}
 					</p>
 
-					{/* Optional Media */}
-					{post.image ? (
-						<div className="mt-3 overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800">
-							<img
-								src={post.image}
-								alt="Post media"
-								className="w-full max-h-96 object-cover hover:scale-[1.01] transition-transform duration-200"
-							/>
-						</div>
+					{/* Media Grid */}
+					{post.images && post.images.length > 0 ? (
+						<PostImageGrid images={post.images} />
 					) : null}
 
 					{/* Action Buttons */}
 					<div className="mt-3 flex items-center justify-between text-slate-500 dark:text-slate-400 text-xs max-w-md">
-						{/* Comments */}
+						{/* Like */}
+						<button
+							type="button"
+							onClick={handleLike}
+							className={`flex items-center gap-1.5 transition-colors group ${
+								isLiked ? "text-rose-500" : "hover:text-rose-500"
+							}`}
+						>
+							<div className="p-1.5 rounded-full group-hover:bg-rose-500/10">
+								{isLiked ? (
+									<IconHeartFilled className="h-4 w-4 text-rose-500" />
+								) : (
+									<IconHeart className="h-4 w-4" />
+								)}
+							</div>
+							<span>{likesCount}</span>
+						</button>
+
+						{/* Comment */}
 						<button
 							type="button"
 							className="flex items-center gap-1.5 hover:text-sky-500 transition-colors group"
@@ -149,50 +259,35 @@ export function PostItem({ post, onBookmarkToggle }: PostItemProps) {
 							<span>{repostsCount}</span>
 						</button>
 
-						{/* Like */}
-						<button
-							type="button"
-							onClick={handleLike}
-							className={`flex items-center gap-1.5 transition-colors group ${
-								isLiked ? "text-rose-500" : "hover:text-rose-500"
-							}`}
-						>
-							<div className="p-1.5 rounded-full group-hover:bg-rose-500/10">
-								{isLiked ? (
-									<IconHeartFilled className="h-4 w-4 text-rose-500" />
-								) : (
-									<IconHeart className="h-4 w-4" />
-								)}
-							</div>
-							<span>{likesCount}</span>
-						</button>
-
-						{/* Bookmark */}
-						<button
-							type="button"
-							onClick={handleBookmark}
-							className={`flex items-center gap-1.5 transition-colors group ${
-								isBookmarked ? "text-amber-500" : "hover:text-amber-500"
-							}`}
-						>
-							<div className="p-1.5 rounded-full group-hover:bg-amber-500/10">
-								{isBookmarked ? (
-									<IconBookmarkFilled className="h-4 w-4 text-amber-500" />
-								) : (
-									<IconBookmark className="h-4 w-4" />
-								)}
-							</div>
-						</button>
-
 						{/* Share */}
 						<button
 							type="button"
 							className="flex items-center gap-1.5 hover:text-sky-500 transition-colors group"
 						>
 							<div className="p-1.5 rounded-full group-hover:bg-sky-500/10">
-								<IconShare className="h-4 w-4" />
+								<IconSend className="h-4 w-4" />
 							</div>
+							<span>{post.stats.shares ?? 0}</span>
 						</button>
+
+						{/* Bookmark (only when a toggle handler is provided) */}
+						{onBookmarkToggle ? (
+							<button
+								type="button"
+								onClick={handleBookmark}
+								className={`flex items-center gap-1.5 transition-colors group ${
+									isBookmarked ? "text-amber-500" : "hover:text-amber-500"
+								}`}
+							>
+								<div className="p-1.5 rounded-full group-hover:bg-amber-500/10">
+									{isBookmarked ? (
+										<IconBookmarkFilled className="h-4 w-4 text-amber-500" />
+									) : (
+										<IconBookmark className="h-4 w-4" />
+									)}
+								</div>
+							</button>
+						) : null}
 					</div>
 				</div>
 			</div>

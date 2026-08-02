@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 import { Config } from "../config";
 import { logger } from "./logger";
 
-type CreatePostBody = { content: string; mediaUrls?: string[] };
+type CreatePostBody = { text: string; mediaUrls?: string[] };
 type CreateCommentBody = { content: string };
 
 const generateAccessToken = (userId: string): string => {

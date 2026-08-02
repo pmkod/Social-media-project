@@ -27,7 +27,7 @@ const createSinglePost = async (user: SeededUser, index: number): Promise<Seeded
       const mediaUrl = await generateMedia(`api-${user.id}-${index}-${m}`, m);
       mediaUrls.push(mediaUrl);
     }
-    const post = await createPostViaApi(user.id, { content, mediaUrls });
+    const post = await createPostViaApi(user.id, { text: content, mediaUrls });
     logger.success(`Created post via API: ${post.id} by ${user.username}`);
     return { id: post.id, authorId: user.id, content };
   }

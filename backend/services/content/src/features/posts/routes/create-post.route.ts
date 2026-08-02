@@ -36,17 +36,19 @@ const createPostRoute = defineOpenAPIRoute<typeof routeDef, HonoAuthenticatedEnv
 			throw new Error("Unauthorized");
 		}
 
-		const { content, mediaUrls } = c.req.valid("json");
+		const { text, mediaUrls } = c.req.valid("json");
 
 		const post = await prisma.post.create({
 			data: {
 				authorId: authenticatedUserId,
-				content,
+				content: text,
 				mediaUrls: mediaUrls ?? [],
 			},
 		});
 
-		return c.json(post, HttpStatus.CREATED.code);
+		const { content, ...rest } = post;
+
+		return c.json({ ...rest, text: content }, HttpStatus.CREATED.code);
 	},
 });
 

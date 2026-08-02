@@ -41,7 +41,9 @@ const getPostByIdRoute = defineOpenAPIRoute({
 			throw new Error("Post not found");
 		}
 
-		return c.json(post);
+		const { content, ...rest } = post;
+
+		return c.json({ ...rest, text: content });
 	},
 });
 

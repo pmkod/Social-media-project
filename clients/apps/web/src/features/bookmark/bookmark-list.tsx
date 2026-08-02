@@ -1,6 +1,6 @@
 import { IconBookmark } from "@tabler/icons-react";
 import { useState } from "react";
-import type { Post } from "@/features/post/common/post-item";
+import type { Post } from "@/features/post/common/post.ts";
 import { PostItem } from "@/features/post/common/post-item";
 
 const INITIAL_BOOKMARKS: Post[] = [
@@ -15,12 +15,14 @@ const INITIAL_BOOKMARKS: Post[] = [
 		createdAt: "il y a 2h",
 		content:
 			"Ravi de lancer notre nouvelle interface sur Graphy ! Dites-moi ce que vous en pensez en commentaire 🚀🚀✨",
-		image:
+		images: [
 			"https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&auto=format&fit=crop&q=80",
+		],
 		stats: {
 			comments: 18,
 			reposts: 5,
 			likes: 124,
+			shares: 12,
 		},
 		isLiked: true,
 		isBookmarked: true,
@@ -36,12 +38,14 @@ const INITIAL_BOOKMARKS: Post[] = [
 		createdAt: "il y a 6h",
 		content:
 			"Petite réflexion du jour sur l'accessibilité web : des contrastes élevés et une navigation clavier fluide changent radicalement l'expérience utilisateur.",
-		image:
+		images: [
 			"https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?w=800&auto=format&fit=crop&q=80",
+		],
 		stats: {
 			comments: 24,
 			reposts: 31,
 			likes: 240,
+			shares: 18,
 		},
 		isLiked: false,
 		isBookmarked: true,

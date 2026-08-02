@@ -11,12 +11,12 @@ export const Route = createFileRoute("/_main")({
 function MainLayoutComponent() {
 	return (
 		<div className="">
-			<div className="min-h-screen w-full flex flex-col md:flex-row">
+			<div className="min-h-screen w-full flex justify-between">
 				{/* Desktop & Tablet Sidebar */}
 				<Sidebar />
 
 				{/* Mobile Header */}
-				<header className="md:hidden flex items-center justify-between p-3 px-4 border-b border-slate-200/80 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md sticky top-0 z-40">
+				{/* <header className="md:hidden flex items-center justify-between p-3 px-4 border-b border-slate-200/80 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md sticky top-0 z-40">
 					<Logo />
 					<Link
 						to="/"
@@ -25,10 +25,10 @@ function MainLayoutComponent() {
 					>
 						<IconLogout className="h-5 w-5" />
 					</Link>
-				</header>
+				</header> */}
 
 				{/* Main Content Area */}
-				<main className="flex-1 min-w-0 max-w-2xl border-r border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900 min-h-screen">
+				<main className="flex-1 min-w-0 max-w-2xl border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900 min-h-screen">
 					<Outlet />
 				</main>
 

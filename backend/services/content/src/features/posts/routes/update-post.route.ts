@@ -56,10 +56,15 @@ const updatePostRoute = defineOpenAPIRoute<typeof routeDef, HonoAuthenticatedEnv
 
 		const updatedPost = await prisma.post.update({
 			where: { id },
-			data: body,
+			data: {
+				...(body.text !== undefined ? { content: body.text } : {}),
+				...(body.mediaUrls !== undefined ? { mediaUrls: body.mediaUrls } : {}),
+			},
 		});
 
-		return c.json(updatedPost);
+		const { content, ...rest } = updatedPost;
+
+		return c.json({ ...rest, text: content });
 	},
 });
 

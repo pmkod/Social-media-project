@@ -1,17 +1,58 @@
-import {
-	IconCalendar,
-	IconListDetails,
-	IconMoodSmile,
-	IconPhoto,
-	IconSend,
-} from "@tabler/icons-react";
 import { useState } from "react";
-import type { Post } from "../common/post-item";
+import type { Post } from "../common/post.ts";
 import { PostItem } from "../common/post-item";
+import { CreatePostForm } from "../create-post/create-post-form";
+import { useCreatePost } from "../create-post/use-create-post";
 
 const FAKE_POSTS: Post[] = [
 	{
 		id: "post-1",
+		author: {
+			name: "insomnia_315",
+			handle: "insomnia_315",
+			avatar:
+				"https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80",
+		},
+		createdAt: "il y a 10h",
+		content: "Tokyo apartment",
+		images: [
+			"https://images.unsplash.com/photo-1507089947368-19c1da9775ae?w=800&auto=format&fit=crop&q=80",
+			"https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800&auto=format&fit=crop&q=80",
+			"https://images.unsplash.com/photo-1554995207-c18c203602cb?w=800&auto=format&fit=crop&q=80",
+		],
+		stats: {
+			comments: 23,
+			reposts: 28,
+			likes: 849,
+			shares: 23,
+		},
+		isLiked: false,
+		isBookmarked: false,
+	},
+	{
+		id: "post-2",
+		author: {
+			name: "terrano_geek",
+			handle: "terrano_geek",
+			avatar:
+				"https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80",
+		},
+		createdAt: "il y a 23h",
+		content: "Amo los USB C por qué ya no necesitan energía los monitores 🖥️⚡",
+		images: [
+			"https://images.unsplash.com/photo-1593640408182-31c70c8268f5?w=800&auto=format&fit=crop&q=80",
+		],
+		stats: {
+			comments: 45,
+			reposts: 12,
+			likes: 356,
+			shares: 8,
+		},
+		isLiked: false,
+		isBookmarked: false,
+	},
+	{
+		id: "post-3",
 		author: {
 			name: "Sophie Martin",
 			handle: "sophiem",
@@ -21,18 +62,20 @@ const FAKE_POSTS: Post[] = [
 		createdAt: "il y a 2h",
 		content:
 			"Ravi de lancer notre nouvelle interface sur Graphy ! Dites-moi ce que vous en pensez en commentaire 🚀🚀✨",
-		image:
+		images: [
 			"https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&auto=format&fit=crop&q=80",
+		],
 		stats: {
 			comments: 18,
 			reposts: 5,
 			likes: 124,
+			shares: 12,
 		},
 		isLiked: true,
 		isBookmarked: true,
 	},
 	{
-		id: "post-2",
+		id: "post-4",
 		author: {
 			name: "Alexandre Dubois",
 			handle: "alex_dev",
@@ -46,12 +89,13 @@ const FAKE_POSTS: Post[] = [
 			comments: 7,
 			reposts: 12,
 			likes: 89,
+			shares: 4,
 		},
 		isLiked: false,
 		isBookmarked: false,
 	},
 	{
-		id: "post-3",
+		id: "post-5",
 		author: {
 			name: "Emma Laurent",
 			handle: "emma_design",
@@ -61,12 +105,15 @@ const FAKE_POSTS: Post[] = [
 		createdAt: "il y a 6h",
 		content:
 			"Petite réflexion du jour sur l'accessibilité web : des contrastes élevés et une navigation clavier fluide changent radicalement l'expérience utilisateur.",
-		image:
+		images: [
 			"https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?w=800&auto=format&fit=crop&q=80",
+			"https://images.unsplash.com/photo-1461749280684-dccae630c504?w=800&auto=format&fit=crop&q=80",
+		],
 		stats: {
 			comments: 24,
 			reposts: 31,
 			likes: 240,
+			shares: 18,
 		},
 		isLiked: false,
 		isBookmarked: true,
@@ -75,98 +122,20 @@ const FAKE_POSTS: Post[] = [
 
 export function Feed() {
 	const [posts, setPosts] = useState<Post[]>(FAKE_POSTS);
-	const [newPostText, setNewPostText] = useState("");
+	const { mutate, isPending } = useCreatePost();
 
-	const handleCreatePost = (e: React.FormEvent) => {
-		e.preventDefault();
-		if (!newPostText.trim()) return;
-
-		const newPost: Post = {
-			id: `post-${Date.now()}`,
-			author: {
-				name: "Vous",
-				handle: "mon_compte",
-				avatar:
-					"https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80",
+	const handleCreatePost = (input: { text: string; mediaUrls: string[] }) => {
+		mutate(input, {
+			onSuccess: (newPost) => {
+				setPosts((prev) => [newPost, ...prev]);
 			},
-			createdAt: "À l'instant",
-			content: newPostText,
-			stats: {
-				comments: 0,
-				reposts: 0,
-				likes: 0,
-			},
-			isLiked: false,
-			isBookmarked: false,
-		};
-
-		setPosts([newPost, ...posts]);
-		setNewPostText("");
+		});
 	};
 
 	return (
 		<div className="divide-y divide-slate-200/80 dark:divide-slate-800">
-			{/* Composer Header */}
-			<div className="p-4 border-b border-slate-200/80 dark:border-slate-800">
-				<form onSubmit={handleCreatePost} className="space-y-3">
-					<div className="flex gap-3">
-						<img
-							src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80"
-							alt="Avatar"
-							className="h-10 w-10 rounded-full object-cover shrink-0 ring-1 ring-slate-200 dark:ring-slate-800"
-						/>
-						<textarea
-							value={newPostText}
-							onChange={(e) => setNewPostText(e.target.value)}
-							placeholder="Quoi de neuf ?"
-							rows={3}
-							className="w-full resize-none bg-transparent text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none"
-						/>
-					</div>
-
-					<div className="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-slate-800/60">
-						<div className="flex items-center gap-1 text-slate-400">
-							<button
-								type="button"
-								className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-sky-500 transition-colors"
-								title="Ajouter une image"
-							>
-								<IconPhoto className="h-5 w-5" />
-							</button>
-							<button
-								type="button"
-								className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-sky-500 transition-colors"
-								title="Ajouter un sondage"
-							>
-								<IconListDetails className="h-5 w-5" />
-							</button>
-							<button
-								type="button"
-								className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-sky-500 transition-colors"
-								title="Emojis"
-							>
-								<IconMoodSmile className="h-5 w-5" />
-							</button>
-							<button
-								type="button"
-								className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-sky-500 transition-colors"
-								title="Programmer"
-							>
-								<IconCalendar className="h-5 w-5" />
-							</button>
-						</div>
-
-						<button
-							type="submit"
-							disabled={!newPostText.trim()}
-							className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-sky-500 hover:bg-sky-600 disabled:opacity-50 text-white font-medium text-xs transition-colors"
-						>
-							<IconSend className="h-3.5 w-3.5" />
-							<span>Publier</span>
-						</button>
-					</div>
-				</form>
-			</div>
+			{/* Composer */}
+			<CreatePostForm onSubmit={handleCreatePost} isPending={isPending} />
 
 			{/* Feed Posts */}
 			<div>

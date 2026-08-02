@@ -51,7 +51,10 @@ const getPostsRoute = defineOpenAPIRoute({
 		]);
 
 		return c.json({
-			data: posts,
+			data: posts.map((post) => {
+				const { content, ...rest } = post;
+				return { ...rest, text: content };
+			}),
 			meta: {
 				total,
 				page,
