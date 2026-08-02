@@ -97,7 +97,7 @@ function PasswordResetForm({ onSuccess }: PasswordResetFormProps) {
 
 				<form.Subscribe selector={(state) => state.isSubmitting}>
 					{(isSubmitting) => (
-						<Button type="submit" className="w-full" disabled={isSubmitting}>
+						<Button type="submit" fullWidth disabled={isSubmitting}>
 							{isSubmitting ? "Envoi..." : "Envoyer le lien"}
 						</Button>
 					)}

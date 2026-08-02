@@ -28,7 +28,7 @@ function MainLayoutComponent() {
 				</header> */}
 
 				{/* Main Content Area */}
-				<main className="flex-1 min-w-0 max-w-2xl border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900 min-h-screen">
+				<main className="flex-1 min-w-0 border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900 min-h-screen">
 					<Outlet />
 				</main>
 

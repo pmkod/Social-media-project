@@ -17,6 +17,7 @@ export interface Post {
 	createdAt: string;
 	content: string;
 	images?: string[];
+	mediaUrls?: string[];
 	stats: PostStats;
 	isLiked?: boolean;
 	isBookmarked?: boolean;

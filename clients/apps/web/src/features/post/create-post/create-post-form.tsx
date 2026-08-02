@@ -1,23 +1,35 @@
-import { IconPhoto, IconSend, IconX } from "@tabler/icons-react";
+import {
+	IconPhoto,
+	IconPlayerPlay,
+	IconSend,
+	IconVideo,
+	IconX,
+} from "@tabler/icons-react";
 import { useEffect, useId, useRef, useState } from "react";
 import { Button } from "@/core/components/ui/button.tsx";
 import { Textarea } from "@/core/components/ui/textarea.tsx";
 import { cn } from "@/core/lib/utils.ts";
+import { useCreatePost } from "@/features/post/create-post/use-create-post";
 
-type CreatePostFormProps = {
-	onSubmit: (input: { text: string; mediaUrls: string[] }) => void;
-	isPending?: boolean;
+export type MediaPreviewItem = {
+	url: string;
+	type: "image" | "video";
 };
 
 const CURRENT_USER_AVATAR =
 	"https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80";
 
-function CreatePostForm({ onSubmit, isPending = false }: CreatePostFormProps) {
+const MAX_MEDIA = 4;
+
+function CreatePostForm() {
+	const { mutate, isPending } = useCreatePost();
+
+	const handleCreatePost = (input: { text: string; mediaUrls: string[] }) => {};
 	const [text, setText] = useState("");
-	const [previews, setPreviews] = useState<string[]>([]);
+	const [previews, setPreviews] = useState<MediaPreviewItem[]>([]);
 	const fileInputId = useId();
 	const fileInputRef = useRef<HTMLInputElement>(null);
-	const pendingPreviewsRef = useRef<string[]>([]);
+	const pendingPreviewsRef = useRef<MediaPreviewItem[]>([]);
 
 	useEffect(() => {
 		pendingPreviewsRef.current = previews;
@@ -25,8 +37,8 @@ function CreatePostForm({ onSubmit, isPending = false }: CreatePostFormProps) {
 
 	useEffect(() => {
 		return () => {
-			for (const url of pendingPreviewsRef.current) {
-				URL.revokeObjectURL(url);
+			for (const item of pendingPreviewsRef.current) {
+				URL.revokeObjectURL(item.url);
 			}
 		};
 	}, []);
@@ -35,8 +47,14 @@ function CreatePostForm({ onSubmit, isPending = false }: CreatePostFormProps) {
 		const selected = event.target.files;
 		if (!selected || selected.length === 0) return;
 
-		const newFiles = Array.from(selected);
-		const newPreviews = newFiles.map((file) => URL.createObjectURL(file));
+		const remainingSlots = MAX_MEDIA - previews.length;
+		if (remainingSlots <= 0) return;
+
+		const filesToProcess = Array.from(selected).slice(0, remainingSlots);
+		const newPreviews: MediaPreviewItem[] = filesToProcess.map((file) => ({
+			url: URL.createObjectURL(file),
+			type: file.type.startsWith("video/") ? "video" : "image",
+		}));
 
 		setPreviews((prev) => [...prev, ...newPreviews]);
 
@@ -46,9 +64,9 @@ function CreatePostForm({ onSubmit, isPending = false }: CreatePostFormProps) {
 		}
 	};
 
-	const removeImage = (index: number) => {
+	const removeMedia = (index: number) => {
 		const removed = previews[index];
-		URL.revokeObjectURL(removed);
+		URL.revokeObjectURL(removed.url);
 		setPreviews((prev) => prev.filter((_, i) => i !== index));
 	};
 
@@ -57,17 +75,26 @@ function CreatePostForm({ onSubmit, isPending = false }: CreatePostFormProps) {
 		if (!text.trim() && previews.length === 0) return;
 		if (isPending) return;
 
-		onSubmit({ text: text.trim(), mediaUrls: previews });
+		mutate(
+			{
+				text: text.trim(),
+				mediaUrls: previews.map((item) => item.url),
+			},
+			{
+				onSuccess: (newPost) => {},
+			},
+		);
 		setText("");
 		setPreviews([]);
 	};
 
 	const hasContent = Boolean(text.trim()) || previews.length > 0;
+	const isMaxMediaReached = previews.length >= MAX_MEDIA;
 
 	return (
 		<form
 			onSubmit={handleSubmit}
-			className="p-4 border-b border-slate-200/80 dark:border-slate-800"
+			className="pb-4 px-4 pt-6 border border-slate-200 rounded-xl"
 		>
 			<div className="flex gap-3">
 				<img
@@ -77,124 +104,84 @@ function CreatePostForm({ onSubmit, isPending = false }: CreatePostFormProps) {
 				/>
 
 				<div className="flex-1 min-w-0 space-y-3">
-					<Textarea
+					<textarea
 						value={text}
 						onChange={(e) => setText(e.target.value)}
 						placeholder="Quoi de neuf ?"
 						rows={3}
 						disabled={isPending}
-						className="min-h-0 resize-none border-0 bg-transparent px-0 py-0 text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus-visible:ring-0 focus-visible:ring-offset-0 disabled:opacity-60"
+						className="min-h-0 w-full resize-none font-normal placeholder:font-normal border-0 bg-transparent px-0 py-0 text-xl text-slate-900 dark:text-slate-100 placeholder:text-slate-300 focus-visible:ring-0 ring-0 outline-none disabled:opacity-60"
 					/>
 
 					{previews.length > 0 ? (
 						<div
 							className={cn(
 								"grid gap-1 overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800",
-								previews.length === 1 && "grid-cols-1 h-48",
-								previews.length === 2 && "grid-cols-2 h-48",
+								previews.length === 1 && "grid-cols-1 h-52",
+								previews.length === 2 && "grid-cols-2 h-52",
 								previews.length >= 3 && "grid-cols-2 grid-rows-2 h-72",
 							)}
 						>
-							{previews.length > 4
-								? previews.slice(0, 3).map((src, index) => (
-										<div key={src} className="relative h-full w-full">
-											<img
-												src={src}
-												alt={`Aperçu ${index + 1}`}
+							{previews.map((item, index) => (
+								<div
+									key={item.url}
+									className={cn(
+										"relative h-full w-full overflow-hidden bg-slate-900",
+										previews.length === 3 && index === 0 ? "row-span-2" : "",
+									)}
+								>
+									{item.type === "video" ? (
+										<div className="relative h-full w-full">
+											<video
+												src={item.url}
 												className="h-full w-full object-cover"
+												muted
+												loop
+												autoPlay
+												playsInline
 											/>
-											<button
-												type="button"
-												onClick={() => removeImage(index)}
-												disabled={isPending}
-												className="absolute top-1 right-1 p-1 rounded-full bg-slate-900/70 text-white hover:bg-slate-900 transition-colors disabled:opacity-50"
-												aria-label="Retirer l'image"
-											>
-												<IconX className="h-3.5 w-3.5" />
-											</button>
+											<div className="absolute bottom-2 left-2 flex items-center gap-1 rounded-full bg-black/60 px-2 py-0.5 text-xs text-white">
+												<IconPlayerPlay className="h-3 w-3 fill-current" />
+												<span>Vidéo</span>
+											</div>
 										</div>
-									))
-								: previews.map((src, index) => (
-										<div
-											key={src}
-											className={cn(
-												"relative h-full w-full",
-												previews.length === 3 && index === 0
-													? "row-span-2"
-													: "",
-											)}
-										>
-											<img
-												src={src}
-												alt={`Aperçu ${index + 1}`}
-												className="h-full w-full object-cover"
-											/>
-											<button
-												type="button"
-												onClick={() => removeImage(index)}
-												disabled={isPending}
-												className="absolute top-1 right-1 p-1 rounded-full bg-slate-900/70 text-white hover:bg-slate-900 transition-colors disabled:opacity-50"
-												aria-label="Retirer l'image"
-											>
-												<IconX className="h-3.5 w-3.5" />
-											</button>
-										</div>
-									))}
-							{previews.length > 4 ? (
-								<div className="relative h-full w-full">
-									<img
-										src={previews[3]}
-										alt="Aperçu"
-										className="h-full w-full object-cover"
-									/>
-									<div className="absolute inset-0 flex items-center justify-center rounded-2xl bg-black/50 text-sm font-semibold text-white">
-										+{previews.length - 4}
-									</div>
+									) : (
+										<img
+											src={item.url}
+											alt={`Aperçu ${index + 1}`}
+											className="h-full w-full object-cover"
+										/>
+									)}
 									<button
 										type="button"
-										onClick={() => removeImage(3)}
+										onClick={() => removeMedia(index)}
 										disabled={isPending}
-										className="absolute top-1 right-1 p-1 rounded-full bg-slate-900/70 text-white hover:bg-slate-900 transition-colors disabled:opacity-50"
-										aria-label="Retirer l'image"
+										className="absolute top-2 right-2 p-1.5 rounded-full bg-black/70 text-white hover:bg-black transition-colors disabled:opacity-50 z-10"
+										aria-label="Retirer le média"
 									>
 										<IconX className="h-3.5 w-3.5" />
 									</button>
 								</div>
-							) : null}
+							))}
 						</div>
 					) : null}
 				</div>
 			</div>
 
 			<div className="mt-3 flex items-center justify-between pt-3 border-t border-slate-100 dark:border-slate-800/60">
-				<div className="flex items-center gap-1">
-					<input
-						ref={fileInputRef}
-						id={fileInputId}
-						type="file"
-						accept="image/*"
-						multiple
-						onChange={handleFileChange}
-						disabled={isPending}
-						className="sr-only"
-					/>
-					<label
-						htmlFor={fileInputId}
-						className={cn(
-							"inline-flex cursor-pointer items-center justify-center rounded-full p-2 text-sky-500 transition-colors hover:bg-sky-500/10",
-							isPending && "pointer-events-none opacity-50",
-						)}
-						title="Ajouter une image"
-					>
-						<IconPhoto className="h-5 w-5" />
-					</label>
+				<div className="flex items-center gap-2">
+					<Button variant="ghost">
+						<IconPhoto className="h-4 w-4" />
+						Photo / vidéo
+					</Button>
+					{previews.length > 0 ? (
+						<span className="text-xs text-slate-400 font-medium">
+							{previews.length}/{MAX_MEDIA}
+						</span>
+					) : null}
 				</div>
 
-				<Button
-					type="submit"
-					disabled={!hasContent || isPending}
-					className="rounded-full px-5"
-				>
+				<Button type="submit" disabled={!hasContent || isPending}>
 					<IconSend className="h-4 w-4" />
 					<span>Publier</span>
 				</Button>
@@ -204,4 +191,3 @@ function CreatePostForm({ onSubmit, isPending = false }: CreatePostFormProps) {
 }
 
 export { CreatePostForm };
-export type { CreatePostFormProps };

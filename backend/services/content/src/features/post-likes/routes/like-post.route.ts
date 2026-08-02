@@ -23,40 +23,42 @@ const routeDef = createRoute({
 	},
 });
 
-const likePostRoute = defineOpenAPIRoute<typeof routeDef, HonoAuthenticatedEnv>({
-	route: routeDef,
-	handler: async (c) => {
-		const authenticatedUserId = c.get("authenticatedUserId");
-		if (!authenticatedUserId) {
-			throw new Error("Unauthorized");
-		}
+const likePostRoute = defineOpenAPIRoute<typeof routeDef, HonoAuthenticatedEnv>(
+	{
+		route: routeDef,
+		handler: async (c) => {
+			const authenticatedUserId = c.get("authenticatedUserId");
+			if (!authenticatedUserId) {
+				throw new Error("Unauthorized");
+			}
 
-		const { postId } = c.req.valid("param");
+			const { postId } = c.req.valid("param");
 
-		const post = await prisma.post.findUnique({
-			where: { id: postId },
-		});
+			const post = await prisma.post.findUnique({
+				where: { id: postId },
+			});
 
-		if (!post) {
-			throw new Error("Post not found");
-		}
+			if (!post) {
+				throw new Error("Post not found");
+			}
 
-		const postLike = await prisma.postLike.upsert({
-			where: {
-				postId_authorId: {
+			const postLike = await prisma.postLike.upsert({
+				where: {
+					postId_authorId: {
+						postId,
+						authorId: authenticatedUserId,
+					},
+				},
+				update: {},
+				create: {
 					postId,
 					authorId: authenticatedUserId,
 				},
-			},
-			update: {},
-			create: {
-				postId,
-				authorId: authenticatedUserId,
-			},
-		});
+			});
 
-		return c.json(postLike);
+			return c.json(postLike);
+		},
 	},
-});
+);
 
 export { likePostRoute };

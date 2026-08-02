@@ -22,6 +22,7 @@ import { Route as BaseAuthenticationNewPasswordRouteImport } from './routes/_bas
 import { Route as BaseAuthenticationPasswordResetRouteImport } from './routes/_base/_authentication/password-reset'
 import { Route as BaseAuthenticationSignupRouteImport } from './routes/_base/_authentication/signup'
 import { Route as BaseAuthenticationUserVerificationRouteImport } from './routes/_base/_authentication/user-verification'
+import { Route as MainPostsPostIdRouteImport } from './routes/_main/posts.$postId'
 
 const BaseRouteRoute = BaseRouteRouteImport.update({
   id: '/_base',
@@ -89,6 +90,11 @@ const BaseAuthenticationUserVerificationRoute =
     path: '/user-verification',
     getParentRoute: () => BaseAuthenticationRouteRoute,
   } as any)
+const MainPostsPostIdRoute = MainPostsPostIdRouteImport.update({
+  id: '/posts/$postId',
+  path: '/posts/$postId',
+  getParentRoute: () => MainRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof BaseAuthenticationIndexRoute
@@ -101,6 +107,7 @@ export interface FileRoutesByFullPath {
   '/password-reset': typeof BaseAuthenticationPasswordResetRoute
   '/signup': typeof BaseAuthenticationSignupRoute
   '/user-verification': typeof BaseAuthenticationUserVerificationRoute
+  '/posts/$postId': typeof MainPostsPostIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof BaseAuthenticationIndexRoute
@@ -113,6 +120,7 @@ export interface FileRoutesByTo {
   '/password-reset': typeof BaseAuthenticationPasswordResetRoute
   '/signup': typeof BaseAuthenticationSignupRoute
   '/user-verification': typeof BaseAuthenticationUserVerificationRoute
+  '/posts/$postId': typeof MainPostsPostIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -128,6 +136,7 @@ export interface FileRoutesById {
   '/_base/_authentication/password-reset': typeof BaseAuthenticationPasswordResetRoute
   '/_base/_authentication/signup': typeof BaseAuthenticationSignupRoute
   '/_base/_authentication/user-verification': typeof BaseAuthenticationUserVerificationRoute
+  '/_main/posts/$postId': typeof MainPostsPostIdRoute
   '/_base/_authentication/': typeof BaseAuthenticationIndexRoute
 }
 export interface FileRouteTypes {
@@ -143,6 +152,7 @@ export interface FileRouteTypes {
     | '/password-reset'
     | '/signup'
     | '/user-verification'
+    | '/posts/$postId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -155,6 +165,7 @@ export interface FileRouteTypes {
     | '/password-reset'
     | '/signup'
     | '/user-verification'
+    | '/posts/$postId'
   id:
     | '__root__'
     | '/_base'
@@ -169,6 +180,7 @@ export interface FileRouteTypes {
     | '/_base/_authentication/password-reset'
     | '/_base/_authentication/signup'
     | '/_base/_authentication/user-verification'
+    | '/_main/posts/$postId'
     | '/_base/_authentication/'
   fileRoutesById: FileRoutesById
 }
@@ -270,6 +282,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BaseAuthenticationUserVerificationRouteImport
       parentRoute: typeof BaseAuthenticationRouteRoute
     }
+    '/_main/posts/$postId': {
+      id: '/_main/posts/$postId'
+      path: '/posts/$postId'
+      fullPath: '/posts/$postId'
+      preLoaderRoute: typeof MainPostsPostIdRouteImport
+      parentRoute: typeof MainRouteRoute
+    }
   }
 }
 
@@ -314,6 +333,7 @@ interface MainRouteRouteChildren {
   MainExploreRoute: typeof MainExploreRoute
   MainHomeRoute: typeof MainHomeRoute
   MainNotificationsRoute: typeof MainNotificationsRoute
+  MainPostsPostIdRoute: typeof MainPostsPostIdRoute
 }
 
 const MainRouteRouteChildren: MainRouteRouteChildren = {
@@ -322,6 +342,7 @@ const MainRouteRouteChildren: MainRouteRouteChildren = {
   MainExploreRoute: MainExploreRoute,
   MainHomeRoute: MainHomeRoute,
   MainNotificationsRoute: MainNotificationsRoute,
+  MainPostsPostIdRoute: MainPostsPostIdRoute,
 }
 
 const MainRouteRouteWithChildren = MainRouteRoute._addFileChildren(

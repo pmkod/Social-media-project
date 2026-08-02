@@ -163,7 +163,7 @@ function SignupForm({ onSuccess }: SignupFormProps) {
 
 				<form.Subscribe selector={(state) => state.isSubmitting}>
 					{(isSubmitting) => (
-						<Button type="submit" className="w-full" disabled={isSubmitting}>
+						<Button type="submit" fullWidth disabled={isSubmitting}>
 							{isSubmitting ? "Création..." : "Créer un compte"}
 						</Button>
 					)}

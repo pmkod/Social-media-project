@@ -119,7 +119,7 @@ function UserVerificationForm({ onSuccess, goal }: UserVerificationFormProps) {
 
 				<form.Subscribe selector={(state) => state.isSubmitting}>
 					{(isSubmitting) => (
-						<Button type="submit" className="w-full" disabled={isSubmitting}>
+						<Button type="submit" fullWidth disabled={isSubmitting}>
 							{isSubmitting ? "Vérification..." : "Vérifier"}
 						</Button>
 					)}

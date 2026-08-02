@@ -1,148 +1,83 @@
-import { useState } from "react";
-import type { Post } from "../common/post.ts";
+import { IconLoader2 } from "@tabler/icons-react";
+import { useEffect, useRef } from "react";
 import { PostItem } from "../common/post-item";
-import { CreatePostForm } from "../create-post/create-post-form";
-import { useCreatePost } from "../create-post/use-create-post";
-
-const FAKE_POSTS: Post[] = [
-	{
-		id: "post-1",
-		author: {
-			name: "insomnia_315",
-			handle: "insomnia_315",
-			avatar:
-				"https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80",
-		},
-		createdAt: "il y a 10h",
-		content: "Tokyo apartment",
-		images: [
-			"https://images.unsplash.com/photo-1507089947368-19c1da9775ae?w=800&auto=format&fit=crop&q=80",
-			"https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800&auto=format&fit=crop&q=80",
-			"https://images.unsplash.com/photo-1554995207-c18c203602cb?w=800&auto=format&fit=crop&q=80",
-		],
-		stats: {
-			comments: 23,
-			reposts: 28,
-			likes: 849,
-			shares: 23,
-		},
-		isLiked: false,
-		isBookmarked: false,
-	},
-	{
-		id: "post-2",
-		author: {
-			name: "terrano_geek",
-			handle: "terrano_geek",
-			avatar:
-				"https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80",
-		},
-		createdAt: "il y a 23h",
-		content: "Amo los USB C por qué ya no necesitan energía los monitores 🖥️⚡",
-		images: [
-			"https://images.unsplash.com/photo-1593640408182-31c70c8268f5?w=800&auto=format&fit=crop&q=80",
-		],
-		stats: {
-			comments: 45,
-			reposts: 12,
-			likes: 356,
-			shares: 8,
-		},
-		isLiked: false,
-		isBookmarked: false,
-	},
-	{
-		id: "post-3",
-		author: {
-			name: "Sophie Martin",
-			handle: "sophiem",
-			avatar:
-				"https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80",
-		},
-		createdAt: "il y a 2h",
-		content:
-			"Ravi de lancer notre nouvelle interface sur Graphy ! Dites-moi ce que vous en pensez en commentaire 🚀🚀✨",
-		images: [
-			"https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&auto=format&fit=crop&q=80",
-		],
-		stats: {
-			comments: 18,
-			reposts: 5,
-			likes: 124,
-			shares: 12,
-		},
-		isLiked: true,
-		isBookmarked: true,
-	},
-	{
-		id: "post-4",
-		author: {
-			name: "Alexandre Dubois",
-			handle: "alex_dev",
-			avatar:
-				"https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80",
-		},
-		createdAt: "il y a 4h",
-		content:
-			"TypeScript 5.5 apporte tellement d'améliorations pour le typage des prédicats de types ! Qui d'autre a déjà migré ?",
-		stats: {
-			comments: 7,
-			reposts: 12,
-			likes: 89,
-			shares: 4,
-		},
-		isLiked: false,
-		isBookmarked: false,
-	},
-	{
-		id: "post-5",
-		author: {
-			name: "Emma Laurent",
-			handle: "emma_design",
-			avatar:
-				"https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80",
-		},
-		createdAt: "il y a 6h",
-		content:
-			"Petite réflexion du jour sur l'accessibilité web : des contrastes élevés et une navigation clavier fluide changent radicalement l'expérience utilisateur.",
-		images: [
-			"https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?w=800&auto=format&fit=crop&q=80",
-			"https://images.unsplash.com/photo-1461749280684-dccae630c504?w=800&auto=format&fit=crop&q=80",
-		],
-		stats: {
-			comments: 24,
-			reposts: 31,
-			likes: 240,
-			shares: 18,
-		},
-		isLiked: false,
-		isBookmarked: true,
-	},
-];
+import { useGetInfinitePosts } from "./use-get-infinite-posts";
 
 export function Feed() {
-	const [posts, setPosts] = useState<Post[]>(FAKE_POSTS);
-	const { mutate, isPending } = useCreatePost();
+	const observerTargetRef = useRef<HTMLDivElement>(null);
 
-	const handleCreatePost = (input: { text: string; mediaUrls: string[] }) => {
-		mutate(input, {
-			onSuccess: (newPost) => {
-				setPosts((prev) => [newPost, ...prev]);
+	const {
+		data,
+		fetchNextPage,
+		hasNextPage,
+		isFetchingNextPage,
+		isLoading,
+		isError,
+	} = useGetInfinitePosts();
+
+	useEffect(() => {
+		const target = observerTargetRef.current;
+		if (!target) return;
+
+		const observer = new IntersectionObserver(
+			(entries) => {
+				if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
+					fetchNextPage();
+				}
 			},
-		});
-	};
+			{ threshold: 0.1 },
+		);
+
+		observer.observe(target);
+
+		return () => {
+			observer.disconnect();
+		};
+	}, [hasNextPage, isFetchingNextPage, fetchNextPage]);
+
+	const allPosts = data?.pages.flatMap((page) => page.data) ?? [];
 
 	return (
-		<div className="divide-y divide-slate-200/80 dark:divide-slate-800">
+		<div className="divide-y divide-slate-200/80 dark:divide-slate-800 min-h-screen">
 			{/* Composer */}
-			<CreatePostForm onSubmit={handleCreatePost} isPending={isPending} />
 
-			{/* Feed Posts */}
-			<div>
-				{posts.map((post) => (
-					<PostItem key={post.id} post={post} />
-				))}
-			</div>
+			{/* Loading Initial State */}
+			{isLoading ? (
+				<div className="p-8 text-center text-slate-500 flex flex-col items-center justify-center gap-2">
+					<IconLoader2 className="h-6 w-6 animate-spin text-sky-500" />
+					<span className="text-sm">Chargement des posts...</span>
+				</div>
+			) : isError ? (
+				<div className="p-8 text-center text-rose-500 text-sm">
+					Une erreur s'est produite lors du chargement des publications.
+				</div>
+			) : (
+				/* Feed Posts */
+				<div>
+					{allPosts.map((post) => (
+						<PostItem key={post.id} post={post} />
+					))}
+
+					{/* IntersectionObserver Sentinel for Infinite Scroll */}
+					<div
+						ref={observerTargetRef}
+						className="p-6 flex items-center justify-center text-xs text-slate-400 min-h-16"
+					>
+						{isFetchingNextPage ? (
+							<div className="flex items-center gap-2 text-sky-500">
+								<IconLoader2 className="h-4 w-4 animate-spin" />
+								<span>Chargement des publications suivantes...</span>
+							</div>
+						) : hasNextPage ? (
+							<span>Défiler pour charger plus...</span>
+						) : allPosts.length > 0 ? (
+							<span>Vous avez tout vu ! 🎉</span>
+						) : (
+							<span>Aucune publication pour le moment.</span>
+						)}
+					</div>
+				</div>
+			)}
 		</div>
 	);
 }

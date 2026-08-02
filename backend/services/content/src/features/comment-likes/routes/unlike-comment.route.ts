@@ -23,7 +23,10 @@ const routeDef = createRoute({
 	},
 });
 
-const unlikeCommentRoute = defineOpenAPIRoute<typeof routeDef, HonoAuthenticatedEnv>({
+const unlikeCommentRoute = defineOpenAPIRoute<
+	typeof routeDef,
+	HonoAuthenticatedEnv
+>({
 	route: routeDef,
 	handler: async (c) => {
 		const authenticatedUserId = c.get("authenticatedUserId");

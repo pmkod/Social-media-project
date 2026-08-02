@@ -11,28 +11,52 @@ import {
 	IconRepeat,
 	IconSend,
 } from "@tabler/icons-react";
-import { useEffect, useRef, useState } from "react";
+import { Link } from "@tanstack/react-router";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { cn } from "@/core/lib/utils.ts";
 import type { Post } from "./post.ts";
+import { Button } from "@/core/components/ui/button.tsx";
 
 interface PostItemProps {
 	post: Post;
 	onBookmarkToggle?: (postId: string) => void;
 }
 
-function PostImageGrid({ images }: { images: string[] }) {
-	const count = images.length;
+function isVideoUrl(url: string): boolean {
+	const lower = url.toLowerCase();
+	return (
+		lower.endsWith(".mp4") ||
+		lower.endsWith(".webm") ||
+		lower.endsWith(".ogg") ||
+		lower.includes("video/") ||
+		(lower.startsWith("blob:") && lower.includes("video"))
+	);
+}
+
+function MediaElement({ src, className }: { src: string; className: string }) {
+	if (isVideoUrl(src)) {
+		return (
+			<video
+				src={src}
+				controls
+				className={className}
+				onClick={(e) => e.stopPropagation()}
+			/>
+		);
+	}
+	return <img src={src} alt="Post media" className={className} />;
+}
+
+function PostMediaGrid({ media }: { media: string[] }) {
+	const count = media.length;
 	const base =
-		"mt-3 overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800 grid gap-1";
-	const imgBase =
-		"h-full w-full object-cover hover:scale-[1.01] transition-transform duration-200";
+		"mt-3 overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800 grid gap-1 bg-black/5 dark:bg-black/40";
 
 	if (count === 1) {
 		return (
 			<div className={base}>
-				<img
-					src={images[0]}
-					alt="Post media"
+				<MediaElement
+					src={media[0]}
 					className="w-full max-h-96 object-cover hover:scale-[1.01] transition-transform duration-200"
 				/>
 			</div>
@@ -42,20 +66,24 @@ function PostImageGrid({ images }: { images: string[] }) {
 	if (count === 2) {
 		return (
 			<div className={cn(base, "grid-cols-2 h-64")}>
-				{images.map((src) => (
-					<img key={src} src={src} alt="Post media" className={imgBase} />
+				{media.map((src) => (
+					<MediaElement
+						key={src}
+						src={src}
+						className="h-full w-full object-cover hover:scale-[1.01] transition-transform duration-200"
+					/>
 				))}
 			</div>
 		);
 	}
 
-	return <PostImageSlider images={images} />;
+	return <PostMediaSlider media={media} />;
 }
 
-function PostImageSlider({ images }: { images: string[] }) {
+function PostMediaSlider({ media }: { media: string[] }) {
 	const trackRef = useRef<HTMLDivElement>(null);
 	const [canScrollLeft, setCanScrollLeft] = useState(false);
-	const [canScrollRight, setCanScrollRight] = useState(images.length > 3);
+	const [canScrollRight, setCanScrollRight] = useState(media.length > 3);
 
 	const updateScrollState = useCallback(() => {
 		const track = trackRef.current;
@@ -77,10 +105,10 @@ function PostImageSlider({ images }: { images: string[] }) {
 		track.scrollBy({ left: direction * slideWidth, behavior: "smooth" });
 	};
 
-	const extraCount = images.length - 3;
+	const extraCount = media.length - 3;
 
 	return (
-		<div className="mt-3 relative overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800">
+		<div className="mt-3 relative overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800 bg-black/5 dark:bg-black/40">
 			{extraCount > 0 ? (
 				<div className="absolute top-2 right-2 z-10 flex items-center gap-1 rounded-full bg-black/60 px-2 py-1 text-xs font-semibold text-white">
 					<IconPlus className="h-3 w-3" />
@@ -93,14 +121,13 @@ function PostImageSlider({ images }: { images: string[] }) {
 				onScroll={updateScrollState}
 				className="flex h-80 gap-1 overflow-x-auto snap-x snap-mandatory"
 			>
-				{images.map((src) => (
+				{media.map((src) => (
 					<div
 						key={src}
 						className="relative shrink-0 snap-start w-[calc(33.333%-0.25rem)] h-full"
 					>
-						<img
+						<MediaElement
 							src={src}
-							alt="Post media"
 							className="h-full w-full object-cover rounded-lg"
 						/>
 					</div>
@@ -110,9 +137,12 @@ function PostImageSlider({ images }: { images: string[] }) {
 			{canScrollLeft ? (
 				<button
 					type="button"
-					onClick={() => scrollBy(-1)}
-					className="absolute left-2 top-1/2 -translate-y-1/2 p-1.5 rounded-full bg-black/50 text-white hover:bg-black/70 transition-colors"
-					aria-label="Image précédente"
+					onClick={(e) => {
+						e.stopPropagation();
+						scrollBy(-1);
+					}}
+					className="absolute left-2 top-1/2 -translate-y-1/2 p-1.5 rounded-full bg-black/50 text-white hover:bg-black/70 transition-colors z-10"
+					aria-label="Média précédent"
 				>
 					<IconChevronLeft className="h-4 w-4" />
 				</button>
@@ -121,9 +151,12 @@ function PostImageSlider({ images }: { images: string[] }) {
 			{canScrollRight ? (
 				<button
 					type="button"
-					onClick={() => scrollBy(1)}
-					className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded-full bg-black/50 text-white hover:bg-black/70 transition-colors"
-					aria-label="Image suivante"
+					onClick={(e) => {
+						e.stopPropagation();
+						scrollBy(1);
+					}}
+					className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded-full bg-black/50 text-white hover:bg-black/70 transition-colors z-10"
+					aria-label="Média suivant"
 				>
 					<IconChevronRight className="h-4 w-4" />
 				</button>
@@ -139,7 +172,8 @@ export function PostItem({ post, onBookmarkToggle }: PostItemProps) {
 	const [isReposted, setIsReposted] = useState(false);
 	const [repostsCount, setRepostsCount] = useState(post.stats.reposts);
 
-	const handleLike = () => {
+	const handleLike = (e: React.MouseEvent) => {
+		e.stopPropagation();
 		if (isLiked) {
 			setIsLiked(false);
 			setLikesCount((prev) => prev - 1);
@@ -149,7 +183,8 @@ export function PostItem({ post, onBookmarkToggle }: PostItemProps) {
 		}
 	};
 
-	const handleBookmark = () => {
+	const handleBookmark = (e: React.MouseEvent) => {
+		e.stopPropagation();
 		const nextState = !isBookmarked;
 		setIsBookmarked(nextState);
 		if (onBookmarkToggle) {
@@ -157,7 +192,8 @@ export function PostItem({ post, onBookmarkToggle }: PostItemProps) {
 		}
 	};
 
-	const handleRepost = () => {
+	const handleRepost = (e: React.MouseEvent) => {
+		e.stopPropagation();
 		if (isReposted) {
 			setIsReposted(false);
 			setRepostsCount((prev) => prev - 1);
@@ -167,37 +203,47 @@ export function PostItem({ post, onBookmarkToggle }: PostItemProps) {
 		}
 	};
 
+	const mediaList =
+		post.mediaUrls && post.mediaUrls.length > 0
+			? post.mediaUrls
+			: post.images && post.images.length > 0
+				? post.images
+				: [];
+
 	return (
-		<article className="border-b border-slate-200/80 dark:border-slate-800 p-4 hover:bg-slate-50/50 dark:hover:bg-slate-900/50 transition-colors">
+		<article className="border-x border-t last:border-b first:rounded-t-xl last:rounded-b-xl border-slate-200/80 dark:border-slate-800 p-4 dark:hover:bg-slate-900/50 transition-colors">
 			<div className="flex gap-3">
 				{/* Avatar */}
 				<img
 					src={post.author.avatar}
 					alt={post.author.name}
-					className="h-10 w-10 rounded-full object-cover shrink-0 ring-1 ring-slate-200 dark:ring-slate-800"
+					className="size-12 rounded-full object-cover shrink-0 ring-1 ring-slate-200 dark:ring-slate-800"
 				/>
 
 				{/* Content Container */}
 				<div className="flex-1 min-w-0">
 					{/* Header */}
 					<div className="flex items-center justify-between gap-2">
-						<div className="flex items-center gap-1.5 min-w-0 flex-wrap">
-							<span className="font-semibold text-slate-900 dark:text-slate-100 truncate text-sm">
+						<Link
+							to="/posts/$postId"
+							params={{ postId: post.id }}
+							className="flex items-center gap-1.5 min-w-0 flex-wrap hover:underline text-lg"
+						>
+							<span className="font-semibold text-slate-900 dark:text-slate-100 truncate text-base">
 								{post.author.name}
 							</span>
-							<span className="text-xs text-slate-500 dark:text-slate-400 truncate">
+							<span className="text-sm text-slate-500 truncate">
 								@{post.author.handle}
 							</span>
-							<span className="text-xs text-slate-400 dark:text-slate-500">
-								·
-							</span>
-							<span className="text-xs text-slate-500 dark:text-slate-400">
+							<span className="text-sm text-slate-400">·</span>
+							<span className="text-sm font-normal text-slate-500">
 								{post.createdAt}
 							</span>
-						</div>
+						</Link>
 						<button
 							type="button"
 							aria-label="Options"
+							onClick={(e) => e.stopPropagation()}
 							className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 p-1 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
 						>
 							<IconDots className="h-4 w-4" />
@@ -205,72 +251,50 @@ export function PostItem({ post, onBookmarkToggle }: PostItemProps) {
 					</div>
 
 					{/* Post Content */}
-					<p className="mt-2 text-sm text-slate-800 dark:text-slate-200 whitespace-pre-line leading-relaxed">
-						{post.content}
-					</p>
+					<Link
+						to="/posts/$postId"
+						params={{ postId: post.id }}
+						className="block mt-0.5"
+					>
+						<p className="text-sm text-slate-800 dark:text-slate-200 whitespace-pre-line leading-relaxed">
+							{post.content}
+						</p>
+					</Link>
 
 					{/* Media Grid */}
-					{post.images && post.images.length > 0 ? (
-						<PostImageGrid images={post.images} />
-					) : null}
+					{mediaList.length > 0 ? <PostMediaGrid media={mediaList} /> : null}
 
 					{/* Action Buttons */}
-					<div className="mt-3 flex items-center justify-between text-slate-500 dark:text-slate-400 text-xs max-w-md">
+					<div className="mt-1 flex items-center gap-x-4 text-slate-500 dark:text-slate-400 text-xs max-w-md">
 						{/* Like */}
 						<button
 							type="button"
 							onClick={handleLike}
-							className={`flex items-center gap-1.5 transition-colors group ${
+							className={`flex items-center gap-1.5 transition-colors group -ml-2 p-2 rounded-full hover:bg-gray-100 ${
 								isLiked ? "text-rose-500" : "hover:text-rose-500"
 							}`}
 						>
-							<div className="p-1.5 rounded-full group-hover:bg-rose-500/10">
-								{isLiked ? (
-									<IconHeartFilled className="h-4 w-4 text-rose-500" />
-								) : (
-									<IconHeart className="h-4 w-4" />
-								)}
-							</div>
-							<span>{likesCount}</span>
+							{isLiked ? (
+								<IconHeartFilled className="size-6 text-rose-500" />
+							) : (
+								<IconHeart className="size-6" />
+							)}
+							<span className="text-base font-light">{likesCount}</span>
 						</button>
 
 						{/* Comment */}
-						<button
-							type="button"
-							className="flex items-center gap-1.5 hover:text-sky-500 transition-colors group"
+						<Link
+							to="/posts/$postId"
+							params={{ postId: post.id }}
+							className="flex items-center gap-1.5 transition-colors group -ml-2 p-2 rounded-full hover:bg-gray-100"
 						>
-							<div className="p-1.5 rounded-full group-hover:bg-sky-500/10">
-								<IconMessageCircle className="h-4 w-4" />
-							</div>
-							<span>{post.stats.comments}</span>
-						</button>
+							<IconMessageCircle className="size-6" />
+							<span className="text-base font-light">
+								{post.stats.comments}
+							</span>
+						</Link>
 
-						{/* Repost */}
-						<button
-							type="button"
-							onClick={handleRepost}
-							className={`flex items-center gap-1.5 transition-colors group ${
-								isReposted ? "text-emerald-500" : "hover:text-emerald-500"
-							}`}
-						>
-							<div className="p-1.5 rounded-full group-hover:bg-emerald-500/10">
-								<IconRepeat className="h-4 w-4" />
-							</div>
-							<span>{repostsCount}</span>
-						</button>
-
-						{/* Share */}
-						<button
-							type="button"
-							className="flex items-center gap-1.5 hover:text-sky-500 transition-colors group"
-						>
-							<div className="p-1.5 rounded-full group-hover:bg-sky-500/10">
-								<IconSend className="h-4 w-4" />
-							</div>
-							<span>{post.stats.shares ?? 0}</span>
-						</button>
-
-						{/* Bookmark (only when a toggle handler is provided) */}
+						{/* Bookmark */}
 						{onBookmarkToggle ? (
 							<button
 								type="button"
