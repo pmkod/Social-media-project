@@ -14,15 +14,15 @@ export function Footer() {
 	const currentYear = new Date().getFullYear();
 
 	return (
-		<footer className="border-t border-border bg-muted">
-			<div className="mx-auto max-w-7xl px-6 py-8">
+		<footer className="border-t border-border px-6 py-8">
+			<div className="mx-auto max-w-7xl">
 				{/* Top level */}
 				<div className="flex items-center justify-between">
 					<Logo />
 				</div>
 
 				{/* Bottom level */}
-				<div className="mt-6 flex flex-col items-center justify-between gap-4 border-t border-border pt-6 sm:flex-row">
+				<div className="mt-6 flex flex-col items-center justify-between gap-4 sm:flex-row">
 					<p className="text-sm text-muted-foreground">
 						© {currentYear} Graphy. All rights reserved.
 					</p>

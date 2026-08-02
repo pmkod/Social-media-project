@@ -5,7 +5,7 @@ import { Logo } from "./logo";
 export function Header() {
 	return (
 		<header className="w-full">
-			<div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+			<div className="mx-auto flex max-w-screen-2xl items-center justify-between px-6 py-4">
 				{/* Logo */}
 				<Link to="/" className="inline-flex items-center gap-2.5">
 					<Logo />

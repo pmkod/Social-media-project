@@ -128,7 +128,7 @@ function LoginForm({ onSuccess }: LoginFormProps) {
 
 				<form.Subscribe selector={(state) => state.isSubmitting}>
 					{(isSubmitting) => (
-						<Button type="submit" fullWidth disabled={isSubmitting}>
+						<Button type="submit" size={"lg"} fullWidth disabled={isSubmitting}>
 							{isSubmitting ? "Connexion..." : "Se connecter"}
 						</Button>
 					)}

@@ -38,7 +38,7 @@ function RouteComponent() {
 
 					{/* Auth form */}
 					<div className="order-2 flex items-center justify-center lg:justify-end">
-						<div className="w-full max-w-sm rounded-2xl border border-border bg-card p-6 sm:p-8">
+						<div className="w-full max-w-lg">
 							<Outlet />
 						</div>
 					</div>
