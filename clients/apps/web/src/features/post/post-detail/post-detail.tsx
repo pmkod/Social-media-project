@@ -1,14 +1,14 @@
 import {
-	IconArrowLeft,
-	IconBookmark,
-	IconBookmarkFilled,
-	IconHeart,
-	IconHeartFilled,
-	IconLoader2,
-	IconMessageCircle,
-	IconRepeat,
-	IconSend,
-} from "@tabler/icons-react";
+	RiArrowLeftLine,
+	RiBookmarkFill,
+	RiBookmarkLine,
+	RiChat3Line,
+	RiHeartFill,
+	RiHeartLine,
+	RiLoader4Line,
+	RiRepeatLine,
+	RiSendPlane2Line,
+} from "@remixicon/react";
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Button } from "@/core/components/ui/button.tsx";
@@ -41,7 +41,7 @@ export function PostDetail({ postId }: PostDetailProps) {
 	if (isLoading) {
 		return (
 			<div className="p-12 text-center text-slate-500 flex flex-col items-center justify-center gap-3">
-				<IconLoader2 className="h-8 w-8 animate-spin text-sky-500" />
+				<RiLoader4Line className="h-8 w-8 animate-spin text-sky-500" />
 				<span className="text-sm font-medium">
 					Chargement de la publication...
 				</span>
@@ -59,7 +59,7 @@ export function PostDetail({ postId }: PostDetailProps) {
 					to="/home"
 					className="inline-flex items-center gap-2 text-sky-500 hover:underline text-sm font-medium"
 				>
-					<IconArrowLeft className="h-4 w-4" />
+					<RiArrowLeftLine className="h-4 w-4" />
 					<span>Retour au flux</span>
 				</Link>
 			</div>
@@ -85,7 +85,7 @@ export function PostDetail({ postId }: PostDetailProps) {
 					className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-slate-600 dark:text-slate-300"
 					aria-label="Retour"
 				>
-					<IconArrowLeft className="h-5 w-5" />
+					<RiArrowLeftLine className="h-5 w-5" />
 				</Link>
 				<h1 className="text-lg font-bold text-slate-900 dark:text-slate-100">
 					Publication
@@ -158,16 +158,16 @@ export function PostDetail({ postId }: PostDetailProps) {
 						}`}
 					>
 						{isLiked ? (
-							<IconHeartFilled className="h-5 w-5 text-rose-500" />
+							<RiHeartFill className="h-5 w-5 text-rose-500" />
 						) : (
-							<IconHeart className="h-5 w-5" />
+							<RiHeartLine className="h-5 w-5" />
 						)}
 						<span>{likesCount}</span>
 					</button>
 
 					{/* Comments count */}
 					<div className="flex items-center gap-2">
-						<IconMessageCircle className="h-5 w-5" />
+						<RiChat3Line className="h-5 w-5" />
 						<span>{post.stats.comments}</span>
 					</div>
 
@@ -179,7 +179,7 @@ export function PostDetail({ postId }: PostDetailProps) {
 							isReposted ? "text-emerald-500" : "hover:text-emerald-500"
 						}`}
 					>
-						<IconRepeat className="h-5 w-5" />
+						<RiRepeatLine className="h-5 w-5" />
 						<span>{repostsCount}</span>
 					</button>
 
@@ -192,9 +192,9 @@ export function PostDetail({ postId }: PostDetailProps) {
 						}`}
 					>
 						{isBookmarked ? (
-							<IconBookmarkFilled className="h-5 w-5 text-amber-500" />
+							<RiBookmarkFill className="h-5 w-5 text-amber-500" />
 						) : (
-							<IconBookmark className="h-5 w-5" />
+							<RiBookmarkLine className="h-5 w-5" />
 						)}
 					</button>
 				</div>
@@ -227,7 +227,7 @@ export function PostDetail({ postId }: PostDetailProps) {
 							className="rounded-full px-4"
 							size="sm"
 						>
-							<IconSend className="h-3.5 w-3.5" />
+							<RiSendPlane2Line className="h-3.5 w-3.5" />
 							<span>Répondre</span>
 						</Button>
 					</div>

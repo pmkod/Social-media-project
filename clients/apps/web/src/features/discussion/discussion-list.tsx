@@ -1,11 +1,10 @@
 import {
-	IconCheck,
-	IconChecks,
-	IconDotsVertical,
-	IconMessageCircle,
-	IconSearch,
-	IconSend,
-} from "@tabler/icons-react";
+	RiChat3Line,
+	RiCheckDoubleLine,
+	RiMore2Line,
+	RiSearchLine,
+	RiSendPlane2Line,
+} from "@remixicon/react";
 import { useState } from "react";
 
 interface Conversation {
@@ -114,11 +113,11 @@ export function DiscussionList() {
 			<div className="w-full md:w-80 border-b md:border-b-0 md:border-r border-slate-200/80 dark:border-slate-800 flex flex-col shrink-0">
 				<div className="p-4 border-b border-slate-200/80 dark:border-slate-800 space-y-3">
 					<h1 className="text-xl font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-						<IconMessageCircle className="h-6 w-6 text-sky-500" />
+						<RiChat3Line className="h-6 w-6 text-sky-500" />
 						<span>Discussions</span>
 					</h1>
 					<div className="relative">
-						<IconSearch className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
+						<RiSearchLine className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
 						<input
 							type="text"
 							placeholder="Rechercher une discussion..."
@@ -195,7 +194,7 @@ export function DiscussionList() {
 						type="button"
 						className="p-1.5 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400"
 					>
-						<IconDotsVertical className="h-5 w-5" />
+						<RiMore2Line className="h-5 w-5" />
 					</button>
 				</div>
 
@@ -220,7 +219,9 @@ export function DiscussionList() {
 									}`}
 								>
 									<span>{msg.time}</span>
-									{msg.sender === "me" && <IconChecks className="h-3 w-3" />}
+									{msg.sender === "me" && (
+										<RiCheckDoubleLine className="h-3 w-3" />
+									)}
 								</div>
 							</div>
 						</div>
@@ -244,7 +245,7 @@ export function DiscussionList() {
 						disabled={!messageText.trim()}
 						className="p-2.5 rounded-full bg-sky-500 hover:bg-sky-600 disabled:opacity-50 text-white transition-colors"
 					>
-						<IconSend className="h-4 w-4" />
+						<RiSendPlane2Line className="h-4 w-4" />
 					</button>
 				</form>
 			</div>

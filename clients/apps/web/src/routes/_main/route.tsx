@@ -1,4 +1,4 @@
-import { IconLogout } from "@tabler/icons-react";
+import { RiLogoutBoxLine } from "@remixicon/react";
 import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
 import { BottomNav } from "@/core/components/partials/bottom-nav";
 import { Logo } from "@/core/components/partials/logo";
@@ -23,7 +23,7 @@ function MainLayoutComponent() {
 						className="text-slate-500 hover:text-rose-500 p-2 rounded-full"
 						title="Se déconnecter"
 					>
-						<IconLogout className="h-5 w-5" />
+						<RiLogoutBoxLine className="h-5 w-5" />
 					</Link>
 				</header> */}
 

@@ -1,4 +1,4 @@
-import { IconLogout } from "@tabler/icons-react";
+import { RiLogoutBoxLine } from "@remixicon/react";
 import { Link } from "@tanstack/react-router";
 import { Logo } from "@/core/components/partials/logo";
 import { Button } from "@/core/components/ui/button.tsx";
@@ -62,7 +62,7 @@ export function Sidebar() {
 							className="text-slate-400 hover:text-rose-500 p-1.5 rounded-full hover:bg-rose-500/10 transition-colors"
 							title="Se déconnecter"
 						>
-							<IconLogout className="h-4 w-4" />
+							<RiLogoutBoxLine className="h-4 w-4" />
 						</Link>
 					</div>
 				</div>

@@ -1,9 +1,9 @@
 import {
-	IconCompass,
-	IconSearch,
-	IconTrendingUp,
-	IconUserPlus,
-} from "@tabler/icons-react";
+	RiCompassLine,
+	RiLineChartLine,
+	RiSearchLine,
+	RiUserAddLine,
+} from "@remixicon/react";
 
 interface Trend {
 	category: string;
@@ -40,11 +40,11 @@ export function ExploreView() {
 			{/* Search Header */}
 			<div className="p-4 border-b border-slate-200/80 dark:border-slate-800 space-y-3">
 				<h1 className="text-xl font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-					<IconCompass className="h-6 w-6 text-sky-500" />
+					<RiCompassLine className="h-6 w-6 text-sky-500" />
 					<span>Explorer</span>
 				</h1>
 				<div className="relative">
-					<IconSearch className="absolute left-3.5 top-3 h-4 w-4 text-slate-400" />
+					<RiSearchLine className="absolute left-3.5 top-3 h-4 w-4 text-slate-400" />
 					<input
 						type="text"
 						placeholder="Rechercher sur Graphy..."
@@ -56,7 +56,7 @@ export function ExploreView() {
 			{/* Trending Section */}
 			<div className="p-4">
 				<h2 className="text-sm font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2 mb-3">
-					<IconTrendingUp className="h-4 w-4 text-emerald-500" />
+					<RiLineChartLine className="h-4 w-4 text-emerald-500" />
 					<span>Tendances pour vous</span>
 				</h2>
 
@@ -102,7 +102,7 @@ export function ExploreView() {
 							type="button"
 							className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 text-xs font-medium hover:opacity-90 transition-opacity"
 						>
-							<IconUserPlus className="h-3.5 w-3.5" />
+							<RiUserAddLine className="h-3.5 w-3.5" />
 							<span>Suivre</span>
 						</button>
 					</div>

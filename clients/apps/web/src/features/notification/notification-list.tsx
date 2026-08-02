@@ -1,10 +1,10 @@
 import {
-	IconBell,
-	IconHeartFilled,
-	IconMessageCircle,
-	IconRepeat,
-	IconUserPlus,
-} from "@tabler/icons-react";
+	RiChat3Line,
+	RiHeartFill,
+	RiNotification3Line,
+	RiRepeatLine,
+	RiUserAddLine,
+} from "@remixicon/react";
 import { useState } from "react";
 
 interface NotificationItem {
@@ -77,7 +77,7 @@ export function NotificationList() {
 			{/* Header */}
 			<div className="p-4 border-b border-slate-200/80 dark:border-slate-800">
 				<h1 className="text-xl font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-					<IconBell className="h-6 w-6 text-sky-500" />
+					<RiNotification3Line className="h-6 w-6 text-sky-500" />
 					<span>Notifications</span>
 				</h1>
 
@@ -118,16 +118,16 @@ export function NotificationList() {
 						{/* Icon Badge */}
 						<div className="shrink-0 pt-0.5">
 							{notif.type === "like" && (
-								<IconHeartFilled className="h-5 w-5 text-rose-500" />
+								<RiHeartFill className="h-5 w-5 text-rose-500" />
 							)}
 							{notif.type === "repost" && (
-								<IconRepeat className="h-5 w-5 text-emerald-500" />
+								<RiRepeatLine className="h-5 w-5 text-emerald-500" />
 							)}
 							{notif.type === "comment" && (
-								<IconMessageCircle className="h-5 w-5 text-sky-500" />
+								<RiChat3Line className="h-5 w-5 text-sky-500" />
 							)}
 							{notif.type === "follow" && (
-								<IconUserPlus className="h-5 w-5 text-indigo-500" />
+								<RiUserAddLine className="h-5 w-5 text-indigo-500" />
 							)}
 						</div>
 

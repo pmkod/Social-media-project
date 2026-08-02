@@ -1,4 +1,4 @@
-import { IconBookmark } from "@tabler/icons-react";
+import { RiBookmarkLine } from "@remixicon/react";
 import { useState } from "react";
 import type { Post } from "@/features/post/common/post.ts";
 import { PostItem } from "@/features/post/common/post-item";
@@ -63,7 +63,7 @@ export function BookmarkList() {
 		<div className="divide-y divide-slate-200/80 dark:divide-slate-800">
 			<div className="p-4 border-b border-slate-200/80 dark:border-slate-800">
 				<h1 className="text-xl font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-					<IconBookmark className="h-6 w-6 text-amber-500" />
+					<RiBookmarkLine className="h-6 w-6 text-amber-500" />
 					<span>Signets (Bookmarks)</span>
 				</h1>
 				<p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
@@ -73,7 +73,7 @@ export function BookmarkList() {
 
 			{bookmarks.length === 0 ? (
 				<div className="p-8 text-center text-slate-500 dark:text-slate-400 space-y-2">
-					<IconBookmark className="h-12 w-12 mx-auto text-slate-300 dark:text-slate-700" />
+					<RiBookmarkLine className="h-12 w-12 mx-auto text-slate-300 dark:text-slate-700" />
 					<p className="font-medium text-slate-700 dark:text-slate-300">
 						Aucun signet pour le moment
 					</p>

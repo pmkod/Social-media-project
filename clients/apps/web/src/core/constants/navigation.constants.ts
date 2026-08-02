@@ -1,10 +1,10 @@
 import {
-	IconBell,
-	IconBookmark,
-	IconCompass,
-	IconHome,
-	IconMessageCircle,
-} from "@tabler/icons-react";
+	RiBookmarkLine,
+	RiChat3Line,
+	RiCompassLine,
+	RiHomeLine,
+	RiNotification3Line,
+} from "@remixicon/react";
 
 export interface NavItem {
 	label: string;
@@ -13,9 +13,9 @@ export interface NavItem {
 }
 
 export const NAV_ITEMS: NavItem[] = [
-	{ label: "Home", to: "/home", icon: IconHome },
-	{ label: "Explorer", to: "/explore", icon: IconCompass },
-	{ label: "Notifications", to: "/notifications", icon: IconBell },
-	{ label: "Discussions", to: "/discussions", icon: IconMessageCircle },
-	{ label: "Bookmarks", to: "/bookmarks", icon: IconBookmark },
+	{ label: "Home", to: "/home", icon: RiHomeLine },
+	{ label: "Explorer", to: "/explore", icon: RiCompassLine },
+	{ label: "Notifications", to: "/notifications", icon: RiNotification3Line },
+	{ label: "Discussions", to: "/discussions", icon: RiChat3Line },
+	{ label: "Bookmarks", to: "/bookmarks", icon: RiBookmarkLine },
 ];

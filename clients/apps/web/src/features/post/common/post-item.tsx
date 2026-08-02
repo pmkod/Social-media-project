@@ -1,21 +1,19 @@
 import {
-	IconBookmark,
-	IconBookmarkFilled,
-	IconChevronLeft,
-	IconChevronRight,
-	IconDots,
-	IconHeart,
-	IconHeartFilled,
-	IconMessageCircle,
-	IconPlus,
-	IconRepeat,
-	IconSend,
-} from "@tabler/icons-react";
+	RiAddLine,
+	RiArrowLeftSLine,
+	RiArrowRightSLine,
+	RiBookmarkFill,
+	RiBookmarkLine,
+	RiChat3Line,
+	RiHeartFill,
+	RiHeartLine,
+	RiMoreLine,
+} from "@remixicon/react";
 import { Link } from "@tanstack/react-router";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { Button } from "@/core/components/ui/button.tsx";
 import { cn } from "@/core/lib/utils.ts";
 import type { Post } from "./post.ts";
-import { Button } from "@/core/components/ui/button.tsx";
 
 interface PostItemProps {
 	post: Post;
@@ -111,7 +109,7 @@ function PostMediaSlider({ media }: { media: string[] }) {
 		<div className="mt-3 relative overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800 bg-black/5 dark:bg-black/40">
 			{extraCount > 0 ? (
 				<div className="absolute top-2 right-2 z-10 flex items-center gap-1 rounded-full bg-black/60 px-2 py-1 text-xs font-semibold text-white">
-					<IconPlus className="h-3 w-3" />
+					<RiAddLine className="h-3 w-3" />
 					<span>{extraCount}</span>
 				</div>
 			) : null}
@@ -144,7 +142,7 @@ function PostMediaSlider({ media }: { media: string[] }) {
 					className="absolute left-2 top-1/2 -translate-y-1/2 p-1.5 rounded-full bg-black/50 text-white hover:bg-black/70 transition-colors z-10"
 					aria-label="Média précédent"
 				>
-					<IconChevronLeft className="h-4 w-4" />
+					<RiArrowLeftSLine className="h-4 w-4" />
 				</button>
 			) : null}
 
@@ -158,7 +156,7 @@ function PostMediaSlider({ media }: { media: string[] }) {
 					className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded-full bg-black/50 text-white hover:bg-black/70 transition-colors z-10"
 					aria-label="Média suivant"
 				>
-					<IconChevronRight className="h-4 w-4" />
+					<RiArrowRightSLine className="h-4 w-4" />
 				</button>
 			) : null}
 		</div>
@@ -246,7 +244,7 @@ export function PostItem({ post, onBookmarkToggle }: PostItemProps) {
 							onClick={(e) => e.stopPropagation()}
 							className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 p-1 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
 						>
-							<IconDots className="h-4 w-4" />
+							<RiMoreLine className="h-4 w-4" />
 						</button>
 					</div>
 
@@ -275,9 +273,9 @@ export function PostItem({ post, onBookmarkToggle }: PostItemProps) {
 							}`}
 						>
 							{isLiked ? (
-								<IconHeartFilled className="size-6 text-rose-500" />
+								<RiHeartFill className="size-6 text-rose-500" />
 							) : (
-								<IconHeart className="size-6" />
+								<RiHeartLine className="size-6" />
 							)}
 							<span className="text-base font-light">{likesCount}</span>
 						</button>
@@ -288,7 +286,7 @@ export function PostItem({ post, onBookmarkToggle }: PostItemProps) {
 							params={{ postId: post.id }}
 							className="flex items-center gap-1.5 transition-colors group -ml-2 p-2 rounded-full hover:bg-gray-100"
 						>
-							<IconMessageCircle className="size-6" />
+							<RiChat3Line className="size-6" />
 							<span className="text-base font-light">
 								{post.stats.comments}
 							</span>
@@ -305,9 +303,9 @@ export function PostItem({ post, onBookmarkToggle }: PostItemProps) {
 							>
 								<div className="p-1.5 rounded-full group-hover:bg-amber-500/10">
 									{isBookmarked ? (
-										<IconBookmarkFilled className="h-4 w-4 text-amber-500" />
+										<RiBookmarkFill className="h-4 w-4 text-amber-500" />
 									) : (
-										<IconBookmark className="h-4 w-4" />
+										<RiBookmarkLine className="h-4 w-4" />
 									)}
 								</div>
 							</button>

@@ -4,7 +4,7 @@ import type { Post } from "../common/post.ts";
 
 export type CreatePostInput = {
 	text: string;
-	mediaUrls: string[];
+	medias?: File[];
 };
 
 const CURRENT_USER = {
@@ -23,57 +23,21 @@ type CreatedPostResponse = {
 	updatedAt: string;
 };
 
-const uploadBlobMedia = async (urls: string[]): Promise<string[]> => {
-	const blobUrls = urls.filter((url) => url.startsWith("blob:"));
-	const normalUrls = urls.filter((url) => !url.startsWith("blob:"));
-
-	if (blobUrls.length === 0) {
-		return urls;
-	}
-
-	const formData = new FormData();
-	for (let i = 0; i < blobUrls.length; i++) {
-		try {
-			const blobRes = await fetch(blobUrls[i]);
-			const blob = await blobRes.blob();
-			const ext = blob.type.split("/")[1] || "bin";
-			const file = new File([blob], `media-${i}.${ext}`, { type: blob.type });
-			formData.append("files", file);
-		} catch {
-			normalUrls.push(blobUrls[i]);
-		}
-	}
-
-	try {
-		const uploadRes = await httpClient
-			.post("media/upload", {
-				body: formData,
-			})
-			.json<{ mediaUrls: string[] }>();
-
-		if (uploadRes?.mediaUrls && uploadRes.mediaUrls.length > 0) {
-			return [...normalUrls, ...uploadRes.mediaUrls];
-		}
-	} catch (error) {
-		console.warn(
-			"Upload S3 failed or unavailable, fallback to preview URLs:",
-			error,
-		);
-	}
-
-	return urls;
-};
-
 const createPost = async (input: CreatePostInput): Promise<Post> => {
-	const finalMediaUrls = await uploadBlobMedia(input.mediaUrls);
+	const formData = new FormData();
+	if (input.text) {
+		formData.append("text", input.text);
+	}
+	if (input.medias && input.medias.length > 0) {
+		for (const file of input.medias) {
+			formData.append("medias", file);
+		}
+	}
 
 	try {
 		const response = await httpClient
 			.post("posts", {
-				json: {
-					text: input.text,
-					mediaUrls: finalMediaUrls,
-				},
+				body: formData,
 			})
 			.json<CreatedPostResponse>();
 
@@ -82,7 +46,8 @@ const createPost = async (input: CreatePostInput): Promise<Post> => {
 			author: CURRENT_USER,
 			createdAt: "À l'instant",
 			content: response.text,
-			mediaUrls: response.mediaUrls.length > 0 ? response.mediaUrls : undefined,
+			mediaUrls:
+				response.mediaUrls?.length > 0 ? response.mediaUrls : undefined,
 			stats: {
 				comments: 0,
 				reposts: 0,
@@ -94,12 +59,16 @@ const createPost = async (input: CreatePostInput): Promise<Post> => {
 		};
 	} catch {
 		// Local fallback post if API endpoint is unavailable
+		const fallbackMediaUrls = (input.medias || []).map((file) =>
+			URL.createObjectURL(file),
+		);
+
 		return {
 			id: `post-created-${Date.now()}`,
 			author: CURRENT_USER,
 			createdAt: "À l'instant",
 			content: input.text,
-			mediaUrls: finalMediaUrls.length > 0 ? finalMediaUrls : undefined,
+			mediaUrls: fallbackMediaUrls.length > 0 ? fallbackMediaUrls : undefined,
 			stats: {
 				comments: 0,
 				reposts: 0,

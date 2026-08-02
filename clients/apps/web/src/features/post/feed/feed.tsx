@@ -1,4 +1,4 @@
-import { IconLoader2 } from "@tabler/icons-react";
+import { RiLoader4Line } from "@remixicon/react";
 import { useEffect, useRef } from "react";
 import { PostItem } from "../common/post-item";
 import { useGetInfinitePosts } from "./use-get-infinite-posts";
@@ -44,7 +44,7 @@ export function Feed() {
 			{/* Loading Initial State */}
 			{isLoading ? (
 				<div className="p-8 text-center text-slate-500 flex flex-col items-center justify-center gap-2">
-					<IconLoader2 className="h-6 w-6 animate-spin text-sky-500" />
+					<RiLoader4Line className="h-6 w-6 animate-spin text-sky-500" />
 					<span className="text-sm">Chargement des posts...</span>
 				</div>
 			) : isError ? (
@@ -65,7 +65,7 @@ export function Feed() {
 					>
 						{isFetchingNextPage ? (
 							<div className="flex items-center gap-2 text-sky-500">
-								<IconLoader2 className="h-4 w-4 animate-spin" />
+								<RiLoader4Line className="h-4 w-4 animate-spin" />
 								<span>Chargement des publications suivantes...</span>
 							</div>
 						) : hasNextPage ? (
