@@ -11,17 +11,27 @@ import {
 } from "@remixicon/react";
 import { Link } from "@tanstack/react-router";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Button } from "@/core/components/ui/button.tsx";
 import { cn } from "@/core/lib/utils.ts";
-import type { Post } from "./post.ts";
+import type { Post, PostMediaItem } from "./post.ts";
+
+import { buildImageUrl, buildVideoUrl } from "../post-media.functions.ts";
 
 interface PostItemProps {
 	post: Post;
 	onBookmarkToggle?: (postId: string) => void;
 }
 
-function isVideoUrl(url: string): boolean {
-	const lower = url.toLowerCase();
+export type RenderMediaItem = {
+	url: string;
+	isVideo: boolean;
+};
+
+export function isVideoMedia(m: PostMediaItem): boolean {
+	if (m.mediaType?.toUpperCase() === "VIDEO") return true;
+	const file = m.lowQualityFile || m.highQualityFile;
+	const filename = file?.filename || file?.url;
+	if (!filename) return false;
+	const lower = filename.toLowerCase();
 	return (
 		lower.endsWith(".mp4") ||
 		lower.endsWith(".webm") ||
@@ -31,21 +41,30 @@ function isVideoUrl(url: string): boolean {
 	);
 }
 
-function MediaElement({ src, className }: { src: string; className: string }) {
-	if (isVideoUrl(src)) {
+export function getMediaUrl(m: PostMediaItem): RenderMediaItem | null {
+	const file = m.lowQualityFile || m.highQualityFile;
+	const filename = file?.filename || file?.url;
+	if (!filename) return null;
+	const isVideo = isVideoMedia(m);
+	const url = isVideo ? buildVideoUrl(filename) : buildImageUrl(filename);
+	return url ? { url, isVideo } : null;
+}
+
+function MediaElement({ item, className }: { item: RenderMediaItem; className: string }) {
+	if (item.isVideo) {
 		return (
 			<video
-				src={src}
+				src={item.url}
 				controls
 				className={className}
 				onClick={(e) => e.stopPropagation()}
 			/>
 		);
 	}
-	return <img src={src} alt="Post media" className={className} />;
+	return <img src={item.url} alt="Post media" className={className} />;
 }
 
-function PostMediaGrid({ media }: { media: string[] }) {
+function PostMediaGrid({ media }: { media: RenderMediaItem[] }) {
 	const count = media.length;
 	const base =
 		"mt-3 overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800 grid gap-1 bg-black/5 dark:bg-black/40";
@@ -54,7 +73,7 @@ function PostMediaGrid({ media }: { media: string[] }) {
 		return (
 			<div className={base}>
 				<MediaElement
-					src={media[0]}
+					item={media[0]}
 					className="w-full max-h-96 object-cover hover:scale-[1.01] transition-transform duration-200"
 				/>
 			</div>
@@ -64,10 +83,10 @@ function PostMediaGrid({ media }: { media: string[] }) {
 	if (count === 2) {
 		return (
 			<div className={cn(base, "grid-cols-2 h-64")}>
-				{media.map((src) => (
+				{media.map((item) => (
 					<MediaElement
-						key={src}
-						src={src}
+						key={item.url}
+						item={item}
 						className="h-full w-full object-cover hover:scale-[1.01] transition-transform duration-200"
 					/>
 				))}
@@ -78,7 +97,7 @@ function PostMediaGrid({ media }: { media: string[] }) {
 	return <PostMediaSlider media={media} />;
 }
 
-function PostMediaSlider({ media }: { media: string[] }) {
+function PostMediaSlider({ media }: { media: RenderMediaItem[] }) {
 	const trackRef = useRef<HTMLDivElement>(null);
 	const [canScrollLeft, setCanScrollLeft] = useState(false);
 	const [canScrollRight, setCanScrollRight] = useState(media.length > 3);
@@ -119,13 +138,13 @@ function PostMediaSlider({ media }: { media: string[] }) {
 				onScroll={updateScrollState}
 				className="flex h-80 gap-1 overflow-x-auto snap-x snap-mandatory"
 			>
-				{media.map((src) => (
+				{media.map((item) => (
 					<div
-						key={src}
+						key={item.url}
 						className="relative shrink-0 snap-start w-[calc(33.333%-0.25rem)] h-full"
 					>
 						<MediaElement
-							src={src}
+							item={item}
 							className="h-full w-full object-cover rounded-lg"
 						/>
 					</div>
@@ -190,14 +209,9 @@ export function PostItem({ post, onBookmarkToggle }: PostItemProps) {
 		}
 	};
 
-	const mediaList =
-		post.medias && post.medias.length > 0
-			? post.medias.map((m) => m.lowQualityUrl || m.highQualityUrl)
-			: post.mediaUrls && post.mediaUrls.length > 0
-				? post.mediaUrls
-				: post.images && post.images.length > 0
-					? post.images
-					: [];
+	const mediaList: RenderMediaItem[] = (post.medias ?? [])
+		.map((m) => getMediaUrl(m))
+		.filter((item): item is RenderMediaItem => item !== null);
 
 	return (
 		<article className="border-x border-t last:border-b first:rounded-t-xl last:rounded-b-xl border-slate-200/80 dark:border-slate-800 p-4 dark:hover:bg-slate-900/50 transition-colors">

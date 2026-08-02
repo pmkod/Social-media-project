@@ -11,12 +11,24 @@ export interface PostStats {
 	shares: number;
 }
 
+export interface PostFileItem {
+	id?: string;
+	mimeType?: string | null;
+	filename: string;
+	createdAt?: string;
+	url?: string;
+}
+
 export interface PostMediaItem {
 	id?: string;
-	mediaType: "image" | "video";
+	postId?: string;
 	position?: number;
-	lowQualityUrl: string;
-	highQualityUrl: string;
+	mediaType?: string;
+	createdAt?: string;
+	lowQualityFileId?: string | null;
+	highQualityFileId?: string | null;
+	lowQualityFile?: PostFileItem | null;
+	highQualityFile?: PostFileItem | null;
 }
 
 export interface Post {
@@ -24,8 +36,6 @@ export interface Post {
 	author: PostAuthor;
 	createdAt: string;
 	content: string;
-	images?: string[];
-	mediaUrls?: string[];
 	medias?: PostMediaItem[];
 	stats: PostStats;
 	isLiked?: boolean;

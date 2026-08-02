@@ -1,16 +1,7 @@
 import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
-import { Configurations } from "@/core/configurations";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
 import { PostsRoutesTag } from "../posts.constants";
-
-const getFilePublicUrl = (filename?: string | null): string => {
-	if (!filename) return "";
-	const publicUrl =
-		Configurations.storage.s3.publicUrl ||
-		`${Configurations.storage.s3.endpoint}/${Configurations.storage.s3.bucket}`;
-	return `${publicUrl}/${filename}`;
-};
 
 const routeDef = createRoute({
 	method: "get",
@@ -50,26 +41,32 @@ const getPostsRoute = defineOpenAPIRoute({
 				select: {
 					id: true,
 					authorId: true,
-					content: true,
+					text: true,
 					createdAt: true,
 					updatedAt: true,
 					medias: {
 						select: {
 							id: true,
+							postId: true,
 							position: true,
 							mediaType: true,
+							createdAt: true,
+							lowQualityFileId: true,
 							lowQualityFile: {
 								select: {
 									id: true,
 									mimeType: true,
 									filename: true,
+									createdAt: true,
 								},
 							},
+							highQualityFileId: true,
 							highQualityFile: {
 								select: {
 									id: true,
 									mimeType: true,
 									filename: true,
+									createdAt: true,
 								},
 							},
 						},
@@ -87,26 +84,7 @@ const getPostsRoute = defineOpenAPIRoute({
 		]);
 
 		return c.json({
-			data: posts.map((post) => {
-				const { content, medias, ...rest } = post;
-
-				const formattedMedias = (medias || []).map((m) => ({
-					id: m.id,
-					position: m.position,
-					mediaType: m.mediaType,
-					lowQualityUrl: getFilePublicUrl(m.lowQualityFile?.filename),
-					highQualityUrl: getFilePublicUrl(m.highQualityFile?.filename),
-					lowQualityFile: m.lowQualityFile,
-					highQualityFile: m.highQualityFile,
-				}));
-
-				return {
-					...rest,
-					text: content,
-					medias: formattedMedias,
-					mediaUrls: formattedMedias.map((m) => m.lowQualityUrl),
-				};
-			}),
+			posts,
 			meta: {
 				total,
 				page,

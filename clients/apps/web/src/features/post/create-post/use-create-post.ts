@@ -54,6 +54,7 @@ const createPost = async (input: CreatePostInput): Promise<Post> => {
 			author: CURRENT_USER,
 			createdAt: "À l'instant",
 			content: createdPost.text,
+			medias: createdPost.medias,
 			stats: {
 				comments: 0,
 				reposts: 0,
@@ -65,16 +66,24 @@ const createPost = async (input: CreatePostInput): Promise<Post> => {
 		};
 	} catch {
 		// Local fallback post if API endpoint is unavailable
-		const fallbackMediaUrls = (input.medias || []).map((file) =>
-			URL.createObjectURL(file),
-		);
+		const fallbackMedias = (input.medias || []).map((file, idx) => {
+			const isVideo = file.type.startsWith("video/");
+			const url = URL.createObjectURL(file);
+			return {
+				id: `temp-${idx}`,
+				mediaType: isVideo ? "VIDEO" : "IMAGE",
+				highQualityFile: {
+					filename: url,
+				},
+			};
+		});
 
 		return {
 			id: `post-created-${Date.now()}`,
 			author: CURRENT_USER,
 			createdAt: "À l'instant",
 			content: input.text,
-			mediaUrls: fallbackMediaUrls.length > 0 ? fallbackMediaUrls : undefined,
+			medias: fallbackMedias.length > 0 ? fallbackMedias : undefined,
 			stats: {
 				comments: 0,
 				reposts: 0,

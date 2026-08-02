@@ -5,9 +5,14 @@ import { ApiConfig } from "@/core/configs/api.config";
  * @param fileName Le nom du fichier image (ex: "upload_high_12345.webp") ou son chemin/URL
  * @returns L'URL de la route /images/$fileName
  */
-export function buildPostImageUrl(fileName?: string | null): string {
+export function buildImageUrl(fileName?: string | null): string {
 	if (!fileName) return "";
-	if (fileName.startsWith("http://") || fileName.startsWith("https://")) {
+	if (
+		fileName.startsWith("http://") ||
+		fileName.startsWith("https://") ||
+		fileName.startsWith("blob:") ||
+		fileName.startsWith("data:")
+	) {
 		return fileName;
 	}
 	const cleanFileName = fileName.startsWith("/")
@@ -21,9 +26,14 @@ export function buildPostImageUrl(fileName?: string | null): string {
  * @param fileName Le nom du fichier vidéo (ex: "upload_high_12345.mp4") ou son chemin/URL
  * @returns L'URL de la route /videos/$fileName
  */
-export function buildPostVideoUrl(fileName?: string | null): string {
+export function buildVideoUrl(fileName?: string | null): string {
 	if (!fileName) return "";
-	if (fileName.startsWith("http://") || fileName.startsWith("https://")) {
+	if (
+		fileName.startsWith("http://") ||
+		fileName.startsWith("https://") ||
+		fileName.startsWith("blob:") ||
+		fileName.startsWith("data:")
+	) {
 		return fileName;
 	}
 	const cleanFileName = fileName.startsWith("/")
@@ -33,6 +43,9 @@ export function buildPostVideoUrl(fileName?: string | null): string {
 }
 
 /**
- * Alias de rétrocompatibilité pour buildPostVideoUrl
+ * Aliases de rétrocompatibilité
  */
-export const postVideoUrl = buildPostVideoUrl;
+export const buildPostImageUrl = buildImageUrl;
+export const buildPostVideoUrl = buildVideoUrl;
+export const postVideoUrl = buildVideoUrl;
+

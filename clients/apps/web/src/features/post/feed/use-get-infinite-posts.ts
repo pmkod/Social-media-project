@@ -6,7 +6,6 @@ type ApiPostItem = {
 	id: string;
 	authorId?: string;
 	text: string;
-	mediaUrls?: string[];
 	medias?: PostMediaItem[];
 	createdAt: string;
 	updatedAt?: string;
@@ -17,7 +16,7 @@ type ApiPostItem = {
 };
 
 type GetPostsResponse = {
-	data: ApiPostItem[];
+	posts: ApiPostItem[];
 	meta: {
 		total: number;
 		page: number;
@@ -50,10 +49,31 @@ const MOCK_POSTS_PAGES: Record<number, Post[]> = {
 			},
 			createdAt: "il y a 10h",
 			content: "Tokyo apartment 🏙️ Studio tour",
-			mediaUrls: [
-				"https://images.unsplash.com/photo-1507089947368-19c1da9775ae?w=800&auto=format&fit=crop&q=80",
-				"https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800&auto=format&fit=crop&q=80",
-				"https://images.unsplash.com/photo-1554995207-c18c203602cb?w=800&auto=format&fit=crop&q=80",
+			medias: [
+				{
+					id: "m1",
+					mediaType: "IMAGE",
+					highQualityFile: {
+						filename:
+							"https://images.unsplash.com/photo-1507089947368-19c1da9775ae?w=800&auto=format&fit=crop&q=80",
+					},
+				},
+				{
+					id: "m2",
+					mediaType: "IMAGE",
+					highQualityFile: {
+						filename:
+							"https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800&auto=format&fit=crop&q=80",
+					},
+				},
+				{
+					id: "m3",
+					mediaType: "IMAGE",
+					highQualityFile: {
+						filename:
+							"https://images.unsplash.com/photo-1554995207-c18c203602cb?w=800&auto=format&fit=crop&q=80",
+					},
+				},
 			],
 			stats: { comments: 23, reposts: 28, likes: 849, shares: 23 },
 			isLiked: false,
@@ -70,8 +90,15 @@ const MOCK_POSTS_PAGES: Record<number, Post[]> = {
 			createdAt: "il y a 23h",
 			content:
 				"Amo los USB C por qué ya no necesitan energía los monitores 🖥️⚡",
-			mediaUrls: [
-				"https://images.unsplash.com/photo-1593640408182-31c70c8268f5?w=800&auto=format&fit=crop&q=80",
+			medias: [
+				{
+					id: "m4",
+					mediaType: "IMAGE",
+					highQualityFile: {
+						filename:
+							"https://images.unsplash.com/photo-1593640408182-31c70c8268f5?w=800&auto=format&fit=crop&q=80",
+					},
+				},
 			],
 			stats: { comments: 45, reposts: 12, likes: 356, shares: 8 },
 			isLiked: false,
@@ -88,8 +115,15 @@ const MOCK_POSTS_PAGES: Record<number, Post[]> = {
 			createdAt: "il y a 2h",
 			content:
 				"Ravi de lancer notre nouvelle interface sur Graphy ! Dites-moi ce que vous en pensez en commentaire 🚀🚀✨",
-			mediaUrls: [
-				"https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&auto=format&fit=crop&q=80",
+			medias: [
+				{
+					id: "m5",
+					mediaType: "IMAGE",
+					highQualityFile: {
+						filename:
+							"https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&auto=format&fit=crop&q=80",
+					},
+				},
 			],
 			stats: { comments: 18, reposts: 5, likes: 124, shares: 12 },
 			isLiked: true,
@@ -108,7 +142,7 @@ const MOCK_POSTS_PAGES: Record<number, Post[]> = {
 			createdAt: "il y a 4h",
 			content:
 				"TypeScript 5.5 apporte tellement d'améliorations pour le typage des prédicats de types ! Qui d'autre a déjà migré ?",
-			mediaUrls: [],
+			medias: [],
 			stats: { comments: 7, reposts: 12, likes: 89, shares: 4 },
 			isLiked: false,
 			isBookmarked: false,
@@ -124,9 +158,23 @@ const MOCK_POSTS_PAGES: Record<number, Post[]> = {
 			createdAt: "il y a 6h",
 			content:
 				"Petite réflexion du jour sur l'accessibilité web : des contrastes élevés et une navigation clavier fluide changent radicalement l'expérience utilisateur.",
-			mediaUrls: [
-				"https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?w=800&auto=format&fit=crop&q=80",
-				"https://images.unsplash.com/photo-1461749280684-dccae630c504?w=800&auto=format&fit=crop&q=80",
+			medias: [
+				{
+					id: "m6",
+					mediaType: "IMAGE",
+					highQualityFile: {
+						filename:
+							"https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?w=800&auto=format&fit=crop&q=80",
+					},
+				},
+				{
+					id: "m7",
+					mediaType: "IMAGE",
+					highQualityFile: {
+						filename:
+							"https://images.unsplash.com/photo-1461749280684-dccae630c504?w=800&auto=format&fit=crop&q=80",
+					},
+				},
 			],
 			stats: { comments: 24, reposts: 31, likes: 240, shares: 18 },
 			isLiked: false,
@@ -145,8 +193,15 @@ const MOCK_POSTS_PAGES: Record<number, Post[]> = {
 			createdAt: "il y a 12h",
 			content:
 				"Session code nocturne ☕ 💻 Qu'est-ce que vous buvez pour rester concentré ?",
-			mediaUrls: [
-				"https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&auto=format&fit=crop&q=80",
+			medias: [
+				{
+					id: "m8",
+					mediaType: "IMAGE",
+					highQualityFile: {
+						filename:
+							"https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&auto=format&fit=crop&q=80",
+					},
+				},
 			],
 			stats: { comments: 12, reposts: 3, likes: 78, shares: 2 },
 			isLiked: false,
@@ -170,25 +225,27 @@ const fetchPostsPage = async ({
 			})
 			.json<GetPostsResponse>();
 
-		const posts: Post[] = res.data.map((item) => ({
-			id: item.id,
-			author: DEFAULT_AUTHOR,
-			createdAt: new Date(item.createdAt).toLocaleDateString("fr-FR", {
-				hour: "2-digit",
-				minute: "2-digit",
-			}),
-			content: item.text,
-			mediaUrls: item.mediaUrls ?? [],
-			medias: item.medias ?? [],
-			stats: {
-				comments: item._count?.comments ?? 0,
-				reposts: 0,
-				likes: item._count?.postLikes ?? 0,
-				shares: 0,
-			},
-			isLiked: false,
-			isBookmarked: false,
-		}));
+		const rawPosts = res.posts ?? (res as unknown as { data: ApiPostItem[] }).data ?? [];
+		const posts: Post[] = rawPosts.map((item) => {
+			return {
+				id: item.id,
+				author: DEFAULT_AUTHOR,
+				createdAt: new Date(item.createdAt).toLocaleDateString("fr-FR", {
+					hour: "2-digit",
+					minute: "2-digit",
+				}),
+				content: item.text,
+				medias: item.medias ?? [],
+				stats: {
+					comments: item._count?.comments ?? 0,
+					reposts: 0,
+					likes: item._count?.postLikes ?? 0,
+					shares: 0,
+				},
+				isLiked: false,
+				isBookmarked: false,
+			};
+		});
 
 		return {
 			data: posts,

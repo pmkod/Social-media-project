@@ -7,7 +7,7 @@ type ApiSinglePost = {
 	id: string;
 	authorId?: string;
 	text: string;
-	mediaUrls?: string[];
+	medias?: Post["medias"];
 	createdAt: string;
 	updatedAt?: string;
 	_count?: {
@@ -34,7 +34,7 @@ const fetchPostById = async (postId: string): Promise<Post> => {
 			minute: "2-digit",
 		}),
 		content: res.text,
-		mediaUrls: res.mediaUrls ?? [],
+		medias: res.medias ?? [],
 		stats: {
 			comments: res._count?.comments ?? 0,
 			reposts: 0,
@@ -78,10 +78,31 @@ export const useGetPostById = (postId: string) => {
 					},
 					createdAt: "il y a 10h",
 					content: "Tokyo apartment 🏙️ Studio tour",
-					mediaUrls: [
-						"https://images.unsplash.com/photo-1507089947368-19c1da9775ae?w=800&auto=format&fit=crop&q=80",
-						"https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800&auto=format&fit=crop&q=80",
-						"https://images.unsplash.com/photo-1554995207-c18c203602cb?w=800&auto=format&fit=crop&q=80",
+					medias: [
+						{
+							id: "m1",
+							mediaType: "IMAGE",
+							highQualityFile: {
+								filename:
+									"https://images.unsplash.com/photo-1507089947368-19c1da9775ae?w=800&auto=format&fit=crop&q=80",
+							},
+						},
+						{
+							id: "m2",
+							mediaType: "IMAGE",
+							highQualityFile: {
+								filename:
+									"https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800&auto=format&fit=crop&q=80",
+							},
+						},
+						{
+							id: "m3",
+							mediaType: "IMAGE",
+							highQualityFile: {
+								filename:
+									"https://images.unsplash.com/photo-1554995207-c18c203602cb?w=800&auto=format&fit=crop&q=80",
+							},
+						},
 					],
 					stats: { comments: 23, reposts: 28, likes: 849, shares: 23 },
 					isLiked: false,

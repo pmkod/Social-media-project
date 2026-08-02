@@ -58,7 +58,7 @@ const createPostRoute = defineOpenAPIRoute<
 		const post = await prisma.post.create({
 			data: {
 				authorId: authenticatedUserId,
-				content: text,
+				text,
 			},
 			select: {
 				id: true,

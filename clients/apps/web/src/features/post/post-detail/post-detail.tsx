@@ -13,22 +13,15 @@ import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Button } from "@/core/components/ui/button.tsx";
 import { Textarea } from "@/core/components/ui/textarea.tsx";
+import {
+	getMediaUrl,
+	type RenderMediaItem,
+} from "../common/post-item.tsx";
 import { useGetPostById } from "./use-get-post-by-id";
 
 type PostDetailProps = {
 	postId: string;
 };
-
-function isVideoUrl(url: string): boolean {
-	const lower = url.toLowerCase();
-	return (
-		lower.endsWith(".mp4") ||
-		lower.endsWith(".webm") ||
-		lower.endsWith(".ogg") ||
-		lower.includes("video/") ||
-		(lower.startsWith("blob:") && lower.includes("video"))
-	);
-}
 
 export function PostDetail({ postId }: PostDetailProps) {
 	const { data: post, isLoading, isError } = useGetPostById(postId);
@@ -66,14 +59,9 @@ export function PostDetail({ postId }: PostDetailProps) {
 		);
 	}
 
-	const mediaList =
-		post.medias && post.medias.length > 0
-			? post.medias.map((m) => m.highQualityUrl || m.lowQualityUrl)
-			: post.mediaUrls && post.mediaUrls.length > 0
-				? post.mediaUrls
-				: post.images && post.images.length > 0
-					? post.images
-					: [];
+	const mediaList: RenderMediaItem[] = (post.medias ?? [])
+		.map((m) => getMediaUrl(m))
+		.filter((item): item is RenderMediaItem => item !== null);
 
 	const likesCount = (post.stats.likes ?? 0) + (isLiked ? 1 : 0);
 	const repostsCount = (post.stats.reposts ?? 0) + (isReposted ? 1 : 0);
@@ -121,20 +109,20 @@ export function PostDetail({ postId }: PostDetailProps) {
 				{/* Media Gallery */}
 				{mediaList.length > 0 ? (
 					<div className="space-y-2 mt-4">
-						{mediaList.map((url) => (
+						{mediaList.map((item) => (
 							<div
-								key={url}
+								key={item.url}
 								className="overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800 bg-black/5 dark:bg-black/40"
 							>
-								{isVideoUrl(url) ? (
+								{item.isVideo ? (
 									<video
-										src={url}
+										src={item.url}
 										controls
 										className="w-full max-h-[500px] object-contain mx-auto"
 									/>
 								) : (
 									<img
-										src={url}
+										src={item.url}
 										alt="Média du post"
 										className="w-full max-h-[500px] object-cover mx-auto"
 									/>

@@ -10,7 +10,7 @@ datasource db {
 model Post {
   id        String      @id @default(cuid())
   authorId  String      @map("author_id")
-  content   String
+  text      String      @map("content")
   createdAt DateTime    @default(now()) @map("created_at")
   updatedAt DateTime    @updatedAt @map("updated_at")
   medias    PostMedia[]
