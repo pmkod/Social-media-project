@@ -2,16 +2,19 @@ import { createFileRoute, Outlet } from "@tanstack/react-router";
 
 function AuthShowcase() {
 	return (
-		<div className="flex h-full w-full flex-col justify-center gap-10 lg:gap-12">
+		<div className="flex h-full w-full flex-col justify-center gap-6 lg:gap-12">
 			{/* Texte */}
-			<div className="flex flex-col gap-3">
-				<h1 className="text-5xl font-semibold tracking-tight text-balance xl:text-6xl text-slate-900 dark:text-slate-100">
+			<div className="flex flex-col gap-3 text-center lg:text-left">
+				<h1 className="text-3xl font-semibold tracking-tight text-balance sm:text-4xl lg:text-5xl xl:text-6xl text-slate-900 dark:text-slate-100">
 					Un espace pour partager, échanger et se retrouver.
 				</h1>
 			</div>
 
-			{/* Photos en éventail — 3 cartes portrait alignées à gauche avec le texte */}
-			<div className="relative w-full" style={{ height: "310px" }}>
+			{/* Photos en éventail — 3 cartes portrait alignées à gauche avec le texte (masquées sur mobile) */}
+			<div
+				className="hidden lg:block relative w-full"
+				style={{ height: "310px" }}
+			>
 				{/* Carte gauche — inclinée à gauche, derrière */}
 				<div
 					className="absolute overflow-hidden rounded-[20px] shadow-xl"
@@ -99,14 +102,14 @@ export const Route = createFileRoute("/_base/_authentication")({
 function RouteComponent() {
 	return (
 		<div className="flex w-full flex-1 flex-col">
-			<main className="flex flex-1 items-center justify-center px-4 py-10 sm:px-6">
-				<div className="flex w-full max-w-7xl items-center justify-between gap-8 lg:gap-12 relative">
-					{/* Showcase — hidden on mobile, left on desktop */}
-					<div className="hidden lg:block flex-1 max-w-xl">
+			<main className="flex flex-1 items-center justify-center px-4 py-8 sm:px-6 lg:py-10">
+				<div className="flex w-full max-w-7xl flex-col items-center justify-center gap-8 lg:flex-row lg:justify-between lg:gap-12 relative">
+					{/* Showcase — text visible on mobile & desktop, trio of images hidden on mobile */}
+					<div className="w-full lg:flex-1 max-w-xl">
 						<AuthShowcase />
 					</div>
 
-					{/* Thin vertical separator line that doesn't take full height */}
+					{/* Thin vertical separator line that doesn't take full height on desktop */}
 					<div className="hidden lg:block w-px h-80 max-h-[480px] bg-slate-200 dark:border-slate-800 dark:bg-slate-800 self-center shrink-0 rounded-full" />
 
 					{/* Auth form — right on desktop */}
