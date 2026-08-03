@@ -10,18 +10,18 @@ function AuthShowcase() {
 				</h1>
 			</div>
 
-			{/* Photos en éventail — 3 cartes portrait */}
-			<div className="relative w-full bg-blue-200" style={{ height: "300px" }}>
+			{/* Photos en éventail — 3 cartes portrait alignées à gauche avec le texte */}
+			<div className="relative w-full" style={{ height: "310px" }}>
 				{/* Carte gauche — inclinée à gauche, derrière */}
 				<div
 					className="absolute overflow-hidden rounded-[20px] shadow-xl"
 					style={{
-						width: "148px",
-						height: "248px",
-						top: "50%",
-						left: "50%",
-						transform:
-							"translate(-50%, -50%) rotate(-14deg) translateX(-120px)",
+						width: "150px",
+						height: "250px",
+						top: "25px",
+						left: "48px",
+						transform: "rotate(-12deg)",
+						transformOrigin: "bottom center",
 						zIndex: 1,
 					}}
 				>
@@ -42,11 +42,10 @@ function AuthShowcase() {
 				<div
 					className="absolute overflow-hidden rounded-[20px] shadow-2xl"
 					style={{
-						width: "168px",
-						height: "282px",
-						top: "50%",
-						left: "50%",
-						transform: "translate(-50%, -50%)",
+						width: "170px",
+						height: "280px",
+						top: "10px",
+						left: "135px",
 						zIndex: 3,
 					}}
 				>
@@ -67,11 +66,12 @@ function AuthShowcase() {
 				<div
 					className="absolute overflow-hidden rounded-[20px] shadow-xl"
 					style={{
-						width: "148px",
-						height: "248px",
-						top: "50%",
-						left: "50%",
-						transform: "translate(-50%, -50%) rotate(14deg) translateX(120px)",
+						width: "150px",
+						height: "250px",
+						top: "25px",
+						left: "245px",
+						transform: "rotate(12deg)",
+						transformOrigin: "bottom center",
 						zIndex: 2,
 					}}
 				>
