@@ -11,10 +11,7 @@ function AuthShowcase() {
 			</div>
 
 			{/* Photos en éventail — 3 cartes portrait */}
-			<div
-				className="relative w-full"
-				style={{ height: "320px" }}
-			>
+			<div className="relative w-full bg-blue-200" style={{ height: "300px" }}>
 				{/* Carte gauche — inclinée à gauche, derrière */}
 				<div
 					className="absolute overflow-hidden rounded-[20px] shadow-xl"
@@ -23,7 +20,8 @@ function AuthShowcase() {
 						height: "248px",
 						top: "50%",
 						left: "50%",
-						transform: "translate(-50%, -50%) rotate(-14deg) translateX(-120px)",
+						transform:
+							"translate(-50%, -50%) rotate(-14deg) translateX(-120px)",
 						zIndex: 1,
 					}}
 				>
@@ -93,7 +91,6 @@ function AuthShowcase() {
 		</div>
 	);
 }
-
 
 export const Route = createFileRoute("/_base/_authentication")({
 	component: RouteComponent,
