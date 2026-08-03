@@ -46,7 +46,7 @@ const loginRoute = defineOpenAPIRoute({
 		});
 
 		if (!user) {
-			throw new Error("Invalid credentials");
+			throw new Error("Invalid email/username or password. Please try again");
 		}
 
 		const isPasswordValid = await comparePasswordToHash({
@@ -55,7 +55,7 @@ const loginRoute = defineOpenAPIRoute({
 		});
 
 		if (!isPasswordValid) {
-			throw new Error("Invalid credentials");
+			throw new Error("Invalid email/username or password. Please try again");
 		}
 
 		const code = generateUserVerificationCode();

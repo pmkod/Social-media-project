@@ -42,7 +42,7 @@ const signupRoute = defineOpenAPIRoute({
 			where: { email },
 		});
 		if (existingUser !== null) {
-			throw new Error("Email already taken");
+			throw new Error("An account with this email address already exists.");
 		}
 
 		const code = generateUserVerificationCode();

@@ -48,7 +48,7 @@ const doUserVerificationRoute = defineOpenAPIRoute({
 				where: { id: verificationInDb.id },
 				data: { numberOfFailedAttempts: { increment: 1 } },
 			});
-			throw new Error("Invalid verification code");
+			throw new Error("Invalid verification code. Please try again.");
 		}
 
 		await prisma.userVerification.update({

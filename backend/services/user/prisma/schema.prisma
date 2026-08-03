@@ -45,6 +45,7 @@ model RefreshToken {
 model UserVerification {
   id                            String    @id @default(cuid())
   email                         String?
+  username                      String?
   fullName                      String?   @map("full_name")
   password                      String?
   goal                          String?
