@@ -2,28 +2,98 @@ import { createFileRoute, Outlet } from "@tanstack/react-router";
 
 function AuthShowcase() {
 	return (
-		<div className="flex h-full w-full flex-col justify-center gap-8 lg:gap-10">
+		<div className="flex h-full w-full flex-col justify-center gap-10 lg:gap-12">
+			{/* Texte */}
 			<div className="flex flex-col gap-3">
 				<h1 className="text-5xl font-semibold tracking-tight text-balance xl:text-6xl text-slate-900 dark:text-slate-100">
 					Un espace pour partager, échanger et se retrouver.
 				</h1>
-				<p className="max-w-md text-2xl leading-relaxed text-muted-foreground">
-					Connectez-vous pour explorer, partager et interagir avec votre
-					communauté.
-				</p>
 			</div>
 
-			{/* <div className="overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800 shadow-md">
-				<img
-					src="/auth-illustration.jpg"
-					alt="Illustration réseau social"
-					className="h-auto w-full object-cover"
-					loading="lazy"
-				/>
-			</div> */}
+			{/* Photos en éventail — 3 cartes portrait */}
+			<div
+				className="relative w-full"
+				style={{ height: "320px" }}
+			>
+				{/* Carte gauche — inclinée à gauche, derrière */}
+				<div
+					className="absolute overflow-hidden rounded-[20px] shadow-xl"
+					style={{
+						width: "148px",
+						height: "248px",
+						top: "50%",
+						left: "50%",
+						transform: "translate(-50%, -50%) rotate(-14deg) translateX(-120px)",
+						zIndex: 1,
+					}}
+				>
+					<img
+						src="/auth-photo-1.jpg"
+						alt="Moment quotidien"
+						style={{
+							width: "100%",
+							height: "100%",
+							objectFit: "cover",
+							objectPosition: "center top",
+							display: "block",
+						}}
+					/>
+				</div>
+
+				{/* Carte centre — droite, devant */}
+				<div
+					className="absolute overflow-hidden rounded-[20px] shadow-2xl"
+					style={{
+						width: "168px",
+						height: "282px",
+						top: "50%",
+						left: "50%",
+						transform: "translate(-50%, -50%)",
+						zIndex: 3,
+					}}
+				>
+					<img
+						src="/auth-photo-2.jpg"
+						alt="Moment quotidien"
+						style={{
+							width: "100%",
+							height: "100%",
+							objectFit: "cover",
+							objectPosition: "center top",
+							display: "block",
+						}}
+					/>
+				</div>
+
+				{/* Carte droite — inclinée à droite, entre les deux */}
+				<div
+					className="absolute overflow-hidden rounded-[20px] shadow-xl"
+					style={{
+						width: "148px",
+						height: "248px",
+						top: "50%",
+						left: "50%",
+						transform: "translate(-50%, -50%) rotate(14deg) translateX(120px)",
+						zIndex: 2,
+					}}
+				>
+					<img
+						src="/auth-photo-3.jpg"
+						alt="Moment quotidien"
+						style={{
+							width: "100%",
+							height: "100%",
+							objectFit: "cover",
+							objectPosition: "center top",
+							display: "block",
+						}}
+					/>
+				</div>
+			</div>
 		</div>
 	);
 }
+
 
 export const Route = createFileRoute("/_base/_authentication")({
 	component: RouteComponent,
