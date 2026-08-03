@@ -2,6 +2,10 @@ import { z } from "zod";
 
 const UserValidationSchema = z.object({
 	id: z.string(),
+	username: z
+		.string()
+		.min(3, "Le nom d'utilisateur doit contenir au moins 3 caractères")
+		.max(50, "Le nom d'utilisateur ne doit pas dépasser 50 caractères"),
 	firstName: z
 		.string()
 		.min(1, "Le prénom est requis")

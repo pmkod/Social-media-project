@@ -36,13 +36,13 @@ const signupRoute = defineOpenAPIRoute({
 	}),
 	handler: async (c) => {
 		const reqBody = c.req.valid("json");
-		const { email, username, password, fullName } = reqBody;
+		const { email, password, fullName } = reqBody;
 
 		const existingUser = await prisma.user.findFirst({
-			where: { OR: [{ email }, { username }] },
+			where: { email },
 		});
 		if (existingUser !== null) {
-			throw new Error("Email or username already taken");
+			throw new Error("Email already taken");
 		}
 
 		const code = generateUserVerificationCode();
@@ -52,7 +52,6 @@ const signupRoute = defineOpenAPIRoute({
 		const userVerification = await prisma.userVerification.create({
 			data: {
 				email,
-				username,
 				fullName,
 				password: passwordHash,
 				code,

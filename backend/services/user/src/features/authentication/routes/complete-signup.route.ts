@@ -49,7 +49,7 @@ const completeSignupRoute = defineOpenAPIRoute({
 		},
 	}),
 	handler: async (c) => {
-		const { userVerification } = c.req.valid("json");
+		const { userVerification, username } = c.req.valid("json");
 
 		const verificationInDb = await verifyIfUserVerificationCompleted({
 			id: userVerification.id,
@@ -57,14 +57,21 @@ const completeSignupRoute = defineOpenAPIRoute({
 			goal: UserVerificationGoals.signup,
 		});
 
-		if (!verificationInDb.email || !verificationInDb.username || !verificationInDb.password) {
+		if (!verificationInDb.email || !verificationInDb.password) {
 			throw new Error("Invalid verification data");
+		}
+
+		const existingUsernameUser = await prisma.user.findFirst({
+			where: { username },
+		});
+		if (existingUsernameUser !== null) {
+			throw new Error("username-already-used");
 		}
 
 		const user = await prisma.user.create({
 			data: {
 				email: verificationInDb.email,
-				username: verificationInDb.username,
+				username,
 				fullName: verificationInDb.fullName,
 				password: verificationInDb.password,
 				emailVerified: true,

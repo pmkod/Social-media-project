@@ -26,7 +26,7 @@ function RouteComponent() {
 		if (goal === UserVerificationGoals.login) {
 			await navigate({ to: "/home" });
 		} else if (goal === UserVerificationGoals.signup) {
-			await navigate({ to: "/home" });
+			await navigate({ to: "/complete-signup" });
 		} else {
 			await navigate({ to: "/new-password" });
 		}

@@ -2,7 +2,6 @@ import { z } from "@hono/zod-openapi";
 
 const SignupValidationSchema = z.object({
 	email: z.string().email(),
-	username: z.string().min(3).max(50),
 	password: z.string().min(8),
 	fullName: z.string().min(1).optional(),
 });
@@ -24,6 +23,7 @@ const CompleteSignupValidationSchema = z.object({
 		id: UserVerificationSchema.shape.id,
 		token: UserVerificationSchema.shape.token,
 	}),
+	username: z.string().min(3).max(50),
 });
 
 const CompleteLoginValidationSchema = z.object({

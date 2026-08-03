@@ -18,6 +18,7 @@ import { Route as MainExploreRouteImport } from './routes/_main/explore'
 import { Route as MainHomeRouteImport } from './routes/_main/home'
 import { Route as MainNotificationsRouteImport } from './routes/_main/notifications'
 import { Route as BaseAuthenticationIndexRouteImport } from './routes/_base/_authentication/index'
+import { Route as BaseAuthenticationCompleteSignupRouteImport } from './routes/_base/_authentication/complete-signup'
 import { Route as BaseAuthenticationNewPasswordRouteImport } from './routes/_base/_authentication/new-password'
 import { Route as BaseAuthenticationPasswordResetRouteImport } from './routes/_base/_authentication/password-reset'
 import { Route as BaseAuthenticationSignupRouteImport } from './routes/_base/_authentication/signup'
@@ -66,6 +67,12 @@ const BaseAuthenticationIndexRoute = BaseAuthenticationIndexRouteImport.update({
   path: '/',
   getParentRoute: () => BaseAuthenticationRouteRoute,
 } as any)
+const BaseAuthenticationCompleteSignupRoute =
+  BaseAuthenticationCompleteSignupRouteImport.update({
+    id: '/complete-signup',
+    path: '/complete-signup',
+    getParentRoute: () => BaseAuthenticationRouteRoute,
+  } as any)
 const BaseAuthenticationNewPasswordRoute =
   BaseAuthenticationNewPasswordRouteImport.update({
     id: '/new-password',
@@ -103,6 +110,7 @@ export interface FileRoutesByFullPath {
   '/explore': typeof MainExploreRoute
   '/home': typeof MainHomeRoute
   '/notifications': typeof MainNotificationsRoute
+  '/complete-signup': typeof BaseAuthenticationCompleteSignupRoute
   '/new-password': typeof BaseAuthenticationNewPasswordRoute
   '/password-reset': typeof BaseAuthenticationPasswordResetRoute
   '/signup': typeof BaseAuthenticationSignupRoute
@@ -116,6 +124,7 @@ export interface FileRoutesByTo {
   '/explore': typeof MainExploreRoute
   '/home': typeof MainHomeRoute
   '/notifications': typeof MainNotificationsRoute
+  '/complete-signup': typeof BaseAuthenticationCompleteSignupRoute
   '/new-password': typeof BaseAuthenticationNewPasswordRoute
   '/password-reset': typeof BaseAuthenticationPasswordResetRoute
   '/signup': typeof BaseAuthenticationSignupRoute
@@ -132,6 +141,7 @@ export interface FileRoutesById {
   '/_main/explore': typeof MainExploreRoute
   '/_main/home': typeof MainHomeRoute
   '/_main/notifications': typeof MainNotificationsRoute
+  '/_base/_authentication/complete-signup': typeof BaseAuthenticationCompleteSignupRoute
   '/_base/_authentication/new-password': typeof BaseAuthenticationNewPasswordRoute
   '/_base/_authentication/password-reset': typeof BaseAuthenticationPasswordResetRoute
   '/_base/_authentication/signup': typeof BaseAuthenticationSignupRoute
@@ -148,6 +158,7 @@ export interface FileRouteTypes {
     | '/explore'
     | '/home'
     | '/notifications'
+    | '/complete-signup'
     | '/new-password'
     | '/password-reset'
     | '/signup'
@@ -161,6 +172,7 @@ export interface FileRouteTypes {
     | '/explore'
     | '/home'
     | '/notifications'
+    | '/complete-signup'
     | '/new-password'
     | '/password-reset'
     | '/signup'
@@ -176,6 +188,7 @@ export interface FileRouteTypes {
     | '/_main/explore'
     | '/_main/home'
     | '/_main/notifications'
+    | '/_base/_authentication/complete-signup'
     | '/_base/_authentication/new-password'
     | '/_base/_authentication/password-reset'
     | '/_base/_authentication/signup'
@@ -254,6 +267,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BaseAuthenticationIndexRouteImport
       parentRoute: typeof BaseAuthenticationRouteRoute
     }
+    '/_base/_authentication/complete-signup': {
+      id: '/_base/_authentication/complete-signup'
+      path: '/complete-signup'
+      fullPath: '/complete-signup'
+      preLoaderRoute: typeof BaseAuthenticationCompleteSignupRouteImport
+      parentRoute: typeof BaseAuthenticationRouteRoute
+    }
     '/_base/_authentication/new-password': {
       id: '/_base/_authentication/new-password'
       path: '/new-password'
@@ -293,6 +313,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface BaseAuthenticationRouteRouteChildren {
+  BaseAuthenticationCompleteSignupRoute: typeof BaseAuthenticationCompleteSignupRoute
   BaseAuthenticationNewPasswordRoute: typeof BaseAuthenticationNewPasswordRoute
   BaseAuthenticationPasswordResetRoute: typeof BaseAuthenticationPasswordResetRoute
   BaseAuthenticationSignupRoute: typeof BaseAuthenticationSignupRoute
@@ -302,6 +323,8 @@ interface BaseAuthenticationRouteRouteChildren {
 
 const BaseAuthenticationRouteRouteChildren: BaseAuthenticationRouteRouteChildren =
   {
+    BaseAuthenticationCompleteSignupRoute:
+      BaseAuthenticationCompleteSignupRoute,
     BaseAuthenticationNewPasswordRoute: BaseAuthenticationNewPasswordRoute,
     BaseAuthenticationPasswordResetRoute: BaseAuthenticationPasswordResetRoute,
     BaseAuthenticationSignupRoute: BaseAuthenticationSignupRoute,

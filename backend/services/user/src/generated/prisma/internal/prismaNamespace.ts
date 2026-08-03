@@ -704,7 +704,6 @@ export type RefreshTokenScalarFieldEnum = (typeof RefreshTokenScalarFieldEnum)[k
 export const UserVerificationScalarFieldEnum = {
   id: 'id',
   email: 'email',
-  username: 'username',
   fullName: 'fullName',
   password: 'password',
   goal: 'goal',

@@ -1,5 +1,4 @@
 import { useForm } from "@tanstack/react-form";
-import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { z } from "zod";
 import { Alert, AlertDescription } from "@/core/components/ui/alert.tsx";
@@ -11,9 +10,7 @@ import {
 	FieldLabel,
 } from "@/core/components/ui/field.tsx";
 import { Input } from "@/core/components/ui/input.tsx";
-import { loggedInUserQueryKey } from "@/features/user/get-logged-in-user/use-logged-in-user.ts";
 import { useCompleteLogin } from "../complete-login/use-complete-login";
-import { useCompleteSignup } from "../complete-signup/use-complete-signup";
 import { useResendUserVerificationCode } from "../resend-user-verification-code/use-resend-user-verification-code";
 import { useUserVerification } from "./use-user-verification";
 import { UserVerificationGoals } from "./user-verification-gloal";
@@ -37,8 +34,6 @@ function UserVerificationForm({ onSuccess, goal }: UserVerificationFormProps) {
 	const userVerification = useUserVerification();
 	const resend = useResendUserVerificationCode();
 	const completeLogin = useCompleteLogin();
-	const completeSignup = useCompleteSignup();
-	const queryClient = useQueryClient();
 	const [errorMessage, setErrorMessage] = useState<string | null>(null);
 	const clearErrorMessage = () => setErrorMessage(null);
 
@@ -59,10 +54,6 @@ function UserVerificationForm({ onSuccess, goal }: UserVerificationFormProps) {
 				await userVerification.mutateAsync({ code: value.code });
 				if (goal === UserVerificationGoals.login) {
 					await completeLogin.mutateAsync();
-					// await queryClient.fetchQuery({ queryKey: loggedInUserQueryKey });
-				} else if (goal === UserVerificationGoals.signup) {
-					await completeSignup.mutateAsync();
-					// await queryClient.fetchQuery({ queryKey: loggedInUserQueryKey });
 				}
 				await onSuccess();
 			} catch (error: any) {
