@@ -78,6 +78,7 @@ function PasswordResetForm({ onSuccess }: PasswordResetFormProps) {
 								<FieldLabel htmlFor={field.name}>Email</FieldLabel>
 								<Input
 									id={field.name}
+									size="lg"
 									type="email"
 									placeholder="you@example.com"
 									value={field.state.value}
@@ -97,7 +98,7 @@ function PasswordResetForm({ onSuccess }: PasswordResetFormProps) {
 
 				<form.Subscribe selector={(state) => state.isSubmitting}>
 					{(isSubmitting) => (
-						<Button type="submit" fullWidth disabled={isSubmitting}>
+						<Button type="submit" size="lg" fullWidth disabled={isSubmitting}>
 							{isSubmitting ? "Envoi..." : "Envoyer le lien"}
 						</Button>
 					)}

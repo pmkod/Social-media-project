@@ -86,6 +86,7 @@ function LoginForm({ onSuccess }: LoginFormProps) {
 								</FieldLabel>
 								<Input
 									id={field.name}
+									size="lg"
 									type="text"
 									placeholder="Email ou nom d'utilisateur"
 									value={field.state.value}
@@ -113,6 +114,7 @@ function LoginForm({ onSuccess }: LoginFormProps) {
 								</div>
 								<PasswordInput
 									id={field.name}
+									size="lg"
 									placeholder="••••••••"
 									value={field.state.value}
 									onBlur={field.handleBlur}

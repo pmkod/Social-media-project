@@ -103,6 +103,7 @@ function UserVerificationForm({ onSuccess, goal }: UserVerificationFormProps) {
 								</FieldLabel>
 								<Input
 									id={field.name}
+									size="lg"
 									type="text"
 									inputMode="numeric"
 									placeholder="123456"
@@ -119,7 +120,7 @@ function UserVerificationForm({ onSuccess, goal }: UserVerificationFormProps) {
 
 				<form.Subscribe selector={(state) => state.isSubmitting}>
 					{(isSubmitting) => (
-						<Button type="submit" fullWidth disabled={isSubmitting}>
+						<Button type="submit" size="lg" fullWidth disabled={isSubmitting}>
 							{isSubmitting ? "Vérification..." : "Vérifier"}
 						</Button>
 					)}

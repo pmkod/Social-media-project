@@ -93,6 +93,7 @@ function NewPasswordForm({ onSuccess }: NewPasswordFormProps) {
 								</FieldLabel>
 								<PasswordInput
 									id={field.name}
+									size="lg"
 									placeholder="••••••••"
 									value={field.state.value}
 									onBlur={field.handleBlur}
@@ -114,6 +115,7 @@ function NewPasswordForm({ onSuccess }: NewPasswordFormProps) {
 								</FieldLabel>
 								<PasswordInput
 									id={field.name}
+									size="lg"
 									placeholder="••••••••"
 									value={field.state.value}
 									onBlur={field.handleBlur}
@@ -129,7 +131,7 @@ function NewPasswordForm({ onSuccess }: NewPasswordFormProps) {
 
 				<form.Subscribe selector={(state) => state.isSubmitting}>
 					{(isSubmitting) => (
-						<Button type="submit" fullWidth disabled={isSubmitting}>
+						<Button type="submit" size="lg" fullWidth disabled={isSubmitting}>
 							{isSubmitting
 								? "Enregistrement..."
 								: "Enregistrer le mot de passe"}

@@ -90,6 +90,7 @@ function SignupForm({ onSuccess }: SignupFormProps) {
 									<FieldLabel htmlFor={field.name}>Prénom</FieldLabel>
 									<Input
 										id={field.name}
+										size="lg"
 										type="text"
 										placeholder="Jean"
 										value={field.state.value}
@@ -109,6 +110,7 @@ function SignupForm({ onSuccess }: SignupFormProps) {
 									<FieldLabel htmlFor={field.name}>Nom</FieldLabel>
 									<Input
 										id={field.name}
+										size="lg"
 										type="text"
 										placeholder="Dupont"
 										value={field.state.value}
@@ -129,6 +131,7 @@ function SignupForm({ onSuccess }: SignupFormProps) {
 								<FieldLabel htmlFor={field.name}>Email</FieldLabel>
 								<Input
 									id={field.name}
+									size="lg"
 									type="email"
 									placeholder="you@example.com"
 									value={field.state.value}
@@ -148,6 +151,7 @@ function SignupForm({ onSuccess }: SignupFormProps) {
 								<FieldLabel htmlFor={field.name}>Mot de passe</FieldLabel>
 								<PasswordInput
 									id={field.name}
+									size="lg"
 									placeholder="••••••••"
 									value={field.state.value}
 									onBlur={field.handleBlur}
@@ -163,7 +167,7 @@ function SignupForm({ onSuccess }: SignupFormProps) {
 
 				<form.Subscribe selector={(state) => state.isSubmitting}>
 					{(isSubmitting) => (
-						<Button type="submit" fullWidth disabled={isSubmitting}>
+						<Button type="submit" size="lg" fullWidth disabled={isSubmitting}>
 							{isSubmitting ? "Création..." : "Créer un compte"}
 						</Button>
 					)}
