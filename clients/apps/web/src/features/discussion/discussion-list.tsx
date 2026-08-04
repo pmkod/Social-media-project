@@ -108,25 +108,25 @@ export function DiscussionList() {
 	};
 
 	return (
-		<div className="h-[calc(100vh-2rem)] flex flex-col md:flex-row border-r border-slate-200/80 dark:border-slate-800">
+		<div className="h-[calc(100vh-2rem)] flex flex-col md:flex-row border-r border-border">
 			{/* Left Column: Conversations List */}
-			<div className="w-full md:w-80 border-b md:border-b-0 md:border-r border-slate-200/80 dark:border-slate-800 flex flex-col shrink-0">
-				<div className="p-4 border-b border-slate-200/80 dark:border-slate-800 space-y-3">
-					<h1 className="text-xl font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+			<div className="w-full md:w-80 border-b md:border-b-0 md:border-r border-border flex flex-col shrink-0">
+				<div className="p-4 border-b border-border space-y-3">
+					<h1 className="text-xl font-bold text-foreground flex items-center gap-2">
 						<RiChat3Line className="h-6 w-6 text-sky-500" />
 						<span>Discussions</span>
 					</h1>
 					<div className="relative">
-						<RiSearchLine className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
+						<RiSearchLine className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
 						<input
 							type="text"
 							placeholder="Rechercher une discussion..."
-							className="w-full pl-9 pr-4 py-2 bg-slate-100 dark:bg-slate-800/80 rounded-xl text-xs text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-sky-500"
+							className="w-full pl-9 pr-4 py-2 bg-muted rounded-xl text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-sky-500"
 						/>
 					</div>
 				</div>
 
-				<div className="flex-1 overflow-y-auto divide-y divide-slate-100 dark:divide-slate-800/50">
+				<div className="flex-1 overflow-y-auto divide-y divide-border">
 					{conversations.map((conv) => (
 						<button
 							key={conv.id}
@@ -135,7 +135,7 @@ export function DiscussionList() {
 							className={`w-full p-3.5 flex items-center gap-3 text-left transition-colors ${
 								activeConvId === conv.id
 									? "bg-sky-50 dark:bg-sky-950/30 border-l-4 border-sky-500"
-									: "hover:bg-slate-50 dark:hover:bg-slate-900/40"
+									: "hover:bg-accent hover:text-accent-foreground"
 							}`}
 						>
 							<div className="relative shrink-0">
@@ -145,19 +145,19 @@ export function DiscussionList() {
 									className="h-10 w-10 rounded-full object-cover"
 								/>
 								{conv.user.online ? (
-									<span className="absolute bottom-0 right-0 h-3 w-3 rounded-full bg-emerald-500 ring-2 ring-white dark:ring-slate-900" />
+									<span className="absolute bottom-0 right-0 h-3 w-3 rounded-full bg-emerald-500 ring-2 ring-background" />
 								) : null}
 							</div>
 							<div className="flex-1 min-w-0">
 								<div className="flex justify-between items-baseline">
-									<span className="font-semibold text-xs text-slate-900 dark:text-slate-100 truncate">
+									<span className="font-semibold text-xs text-foreground truncate">
 										{conv.user.name}
 									</span>
-									<span className="text-[10px] text-slate-400">
+									<span className="text-[10px] text-muted-foreground">
 										{conv.time}
 									</span>
 								</div>
-								<p className="text-xs text-slate-500 dark:text-slate-400 truncate mt-0.5">
+								<p className="text-xs text-muted-foreground truncate mt-0.5">
 									{conv.lastMessage}
 								</p>
 							</div>
@@ -172,9 +172,9 @@ export function DiscussionList() {
 			</div>
 
 			{/* Right Column: Chat Window */}
-			<div className="flex-1 flex flex-col min-w-0 bg-slate-50/30 dark:bg-slate-900/20">
+			<div className="flex-1 flex flex-col min-w-0 bg-background">
 				{/* Chat Header */}
-				<div className="p-3.5 px-4 border-b border-slate-200/80 dark:border-slate-800 flex items-center justify-between bg-white dark:bg-slate-900">
+				<div className="p-3.5 px-4 border-b border-border flex items-center justify-between bg-card text-card-foreground">
 					<div className="flex items-center gap-3">
 						<img
 							src={selectedConv.user.avatar}
@@ -182,17 +182,17 @@ export function DiscussionList() {
 							className="h-9 w-9 rounded-full object-cover"
 						/>
 						<div>
-							<div className="font-semibold text-sm text-slate-900 dark:text-slate-100">
+							<div className="font-semibold text-sm text-foreground">
 								{selectedConv.user.name}
 							</div>
-							<div className="text-[11px] text-slate-500">
+							<div className="text-[11px] text-muted-foreground">
 								@{selectedConv.user.handle}
 							</div>
 						</div>
 					</div>
 					<button
 						type="button"
-						className="p-1.5 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400"
+						className="p-1.5 rounded-full hover:bg-accent text-muted-foreground"
 					>
 						<RiMore2Line className="h-5 w-5" />
 					</button>
@@ -209,13 +209,13 @@ export function DiscussionList() {
 								className={`max-w-xs md:max-w-md p-3 rounded-2xl text-xs leading-relaxed ${
 									msg.sender === "me"
 										? "bg-sky-500 text-white rounded-br-none"
-										: "bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 border border-slate-200 dark:border-slate-700/60 rounded-bl-none"
+										: "bg-muted text-foreground border border-border rounded-bl-none"
 								}`}
 							>
 								<p>{msg.text}</p>
 								<div
 									className={`text-[9px] mt-1 text-right flex items-center justify-end gap-1 ${
-										msg.sender === "me" ? "text-sky-100" : "text-slate-400"
+										msg.sender === "me" ? "text-sky-100" : "text-muted-foreground"
 									}`}
 								>
 									<span>{msg.time}</span>
@@ -231,14 +231,14 @@ export function DiscussionList() {
 				{/* Message Input */}
 				<form
 					onSubmit={handleSendMessage}
-					className="p-3 border-t border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900 flex items-center gap-2"
+					className="p-3 border-t border-border bg-card flex items-center gap-2"
 				>
 					<input
 						type="text"
 						value={messageText}
 						onChange={(e) => setMessageText(e.target.value)}
 						placeholder="Écrire un message..."
-						className="flex-1 px-4 py-2 bg-slate-100 dark:bg-slate-800 rounded-full text-xs text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none"
+						className="flex-1 px-4 py-2 bg-muted rounded-full text-xs text-foreground placeholder:text-muted-foreground focus:outline-none"
 					/>
 					<button
 						type="submit"

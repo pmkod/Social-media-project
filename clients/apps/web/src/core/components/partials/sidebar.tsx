@@ -28,9 +28,9 @@ export function Sidebar() {
 							<Link
 								key={item.to}
 								to={item.to}
-								className="flex items-center gap-3.5 px-4 py-2 rounded-md text-slate-700 hover:bg-gray-200 font-normal text-lg transition-colors"
+								className="flex items-center gap-3.5 px-4 py-2 rounded-md text-muted-foreground hover:bg-accent hover:text-accent-foreground font-normal text-lg transition-colors"
 								activeProps={{
-									className: "bg-gray-200 text-sky-600 dark:text-sky-400",
+									className: "bg-accent text-accent-foreground font-medium",
 								}}
 							>
 								<IconComponent className="siz-7 shrink-0" />
@@ -47,8 +47,8 @@ export function Sidebar() {
 						Publier
 					</Button>
 				</div>
-				<div className="border-t border-slate-200/80 dark:border-slate-800 pt-4 px-2">
-					<div className="flex items-center justify-between p-2 rounded-2xl hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition-colors cursor-pointer">
+				<div className="border-t border-border pt-4 px-2">
+					<div className="flex items-center justify-between p-2 rounded-2xl hover:bg-accent transition-colors cursor-pointer">
 						<div className="flex items-center gap-3 min-w-0">
 							<img
 								src={avatar}
@@ -56,17 +56,17 @@ export function Sidebar() {
 								className="h-9 w-9 rounded-full object-cover shrink-0"
 							/>
 							<div className="min-w-0">
-								<div className="text-xs font-semibold truncate text-slate-900 dark:text-slate-100">
+								<div className="text-xs font-semibold truncate text-foreground">
 									{user?.fullName}
 								</div>
-								<div className="text-[11px] text-slate-500 truncate">
+								<div className="text-[11px] text-muted-foreground truncate">
 									{user?.username}
 								</div>
 							</div>
 						</div>
 						<Link
 							to="/"
-							className="text-slate-400 hover:text-rose-500 p-1.5 rounded-full hover:bg-rose-500/10 transition-colors"
+							className="text-muted-foreground hover:text-rose-500 p-1.5 rounded-full hover:bg-rose-500/10 transition-colors"
 							title="Se déconnecter"
 						>
 							<RiLogoutBoxLine className="h-4 w-4" />

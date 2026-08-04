@@ -38,12 +38,12 @@ export function Feed() {
 	const allPosts = data?.pages.flatMap((page) => page.data) ?? [];
 
 	return (
-		<div className="divide-y divide-slate-200/80 dark:divide-slate-800 min-h-screen">
+		<div className="divide-y divide-border min-h-screen">
 			{/* Composer */}
 
 			{/* Loading Initial State */}
 			{isLoading ? (
-				<div className="p-8 text-center text-slate-500 flex flex-col items-center justify-center gap-2">
+				<div className="p-8 text-center text-muted-foreground flex flex-col items-center justify-center gap-2">
 					<RiLoader4Line className="h-6 w-6 animate-spin text-sky-500" />
 					<span className="text-sm">Chargement des posts...</span>
 				</div>
@@ -61,7 +61,7 @@ export function Feed() {
 					{/* IntersectionObserver Sentinel for Infinite Scroll */}
 					<div
 						ref={observerTargetRef}
-						className="p-6 flex items-center justify-center text-xs text-slate-400 min-h-16"
+						className="p-6 flex items-center justify-center text-xs text-muted-foreground min-h-16"
 					>
 						{isFetchingNextPage ? (
 							<div className="flex items-center gap-2 text-sky-500">

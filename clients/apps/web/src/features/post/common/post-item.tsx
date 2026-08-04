@@ -67,7 +67,7 @@ function MediaElement({ item, className }: { item: RenderMediaItem; className: s
 function PostMediaGrid({ media }: { media: RenderMediaItem[] }) {
 	const count = media.length;
 	const base =
-		"mt-3 overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800 grid gap-1 bg-black/5 dark:bg-black/40";
+		"mt-3 overflow-hidden rounded-2xl border border-border grid gap-1 bg-muted/40";
 
 	if (count === 1) {
 		return (
@@ -125,7 +125,7 @@ function PostMediaSlider({ media }: { media: RenderMediaItem[] }) {
 	const extraCount = media.length - 3;
 
 	return (
-		<div className="mt-3 relative overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800 bg-black/5 dark:bg-black/40">
+		<div className="mt-3 relative overflow-hidden rounded-2xl border border-border bg-muted/40">
 			{extraCount > 0 ? (
 				<div className="absolute top-2 right-2 z-10 flex items-center gap-1 rounded-full bg-black/60 px-2 py-1 text-xs font-semibold text-white">
 					<RiAddLine className="h-3 w-3" />
@@ -214,13 +214,13 @@ export function PostItem({ post, onBookmarkToggle }: PostItemProps) {
 		.filter((item): item is RenderMediaItem => item !== null);
 
 	return (
-		<article className="border-x border-t last:border-b first:rounded-t-xl last:rounded-b-xl border-slate-200/80 dark:border-slate-800 p-4 dark:hover:bg-slate-900/50 transition-colors">
+		<article className="border-x border-t last:border-b first:rounded-t-xl last:rounded-b-xl border-border p-4 hover:bg-muted/30 transition-colors">
 			<div className="flex gap-3">
 				{/* Avatar */}
 				<img
 					src={post.author.avatar}
 					alt={post.author.name}
-					className="size-12 rounded-full object-cover shrink-0 ring-1 ring-slate-200 dark:ring-slate-800"
+					className="size-12 rounded-full object-cover shrink-0 ring-1 ring-border"
 				/>
 
 				{/* Content Container */}
@@ -232,14 +232,14 @@ export function PostItem({ post, onBookmarkToggle }: PostItemProps) {
 							params={{ postId: post.id }}
 							className="flex items-center gap-1.5 min-w-0 flex-wrap hover:underline text-lg"
 						>
-							<span className="font-semibold text-slate-900 dark:text-slate-100 truncate text-base">
+							<span className="font-semibold text-foreground truncate text-base">
 								{post.author.name}
 							</span>
-							<span className="text-sm text-slate-500 truncate">
+							<span className="text-sm text-muted-foreground truncate">
 								@{post.author.handle}
 							</span>
-							<span className="text-sm text-slate-400">·</span>
-							<span className="text-sm font-normal text-slate-500">
+							<span className="text-sm text-muted-foreground">·</span>
+							<span className="text-sm font-normal text-muted-foreground">
 								{post.createdAt}
 							</span>
 						</Link>
@@ -247,7 +247,7 @@ export function PostItem({ post, onBookmarkToggle }: PostItemProps) {
 							type="button"
 							aria-label="Options"
 							onClick={(e) => e.stopPropagation()}
-							className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 p-1 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+							className="text-muted-foreground hover:text-foreground p-1 rounded-full hover:bg-accent transition-colors"
 						>
 							<RiMoreLine className="h-4 w-4" />
 						</button>
@@ -259,7 +259,7 @@ export function PostItem({ post, onBookmarkToggle }: PostItemProps) {
 						params={{ postId: post.id }}
 						className="block mt-0.5"
 					>
-						<p className="text-sm text-slate-800 dark:text-slate-200 whitespace-pre-line leading-relaxed">
+						<p className="text-sm text-foreground whitespace-pre-line leading-relaxed">
 							{post.content}
 						</p>
 					</Link>
@@ -268,12 +268,12 @@ export function PostItem({ post, onBookmarkToggle }: PostItemProps) {
 					{mediaList.length > 0 ? <PostMediaGrid media={mediaList} /> : null}
 
 					{/* Action Buttons */}
-					<div className="mt-1 flex items-center gap-x-4 text-slate-500 dark:text-slate-400 text-xs max-w-md">
+					<div className="mt-1 flex items-center gap-x-4 text-muted-foreground text-xs max-w-md">
 						{/* Like */}
 						<button
 							type="button"
 							onClick={handleLike}
-							className={`flex items-center gap-1.5 transition-colors group -ml-2 p-2 rounded-full hover:bg-gray-100 ${
+							className={`flex items-center gap-1.5 transition-colors group -ml-2 p-2 rounded-full hover:bg-accent ${
 								isLiked ? "text-rose-500" : "hover:text-rose-500"
 							}`}
 						>
@@ -289,7 +289,7 @@ export function PostItem({ post, onBookmarkToggle }: PostItemProps) {
 						<Link
 							to="/posts/$postId"
 							params={{ postId: post.id }}
-							className="flex items-center gap-1.5 transition-colors group -ml-2 p-2 rounded-full hover:bg-gray-100"
+							className="flex items-center gap-1.5 transition-colors group -ml-2 p-2 rounded-full hover:bg-accent"
 						>
 							<RiChat3Line className="size-6" />
 							<span className="text-base font-light">

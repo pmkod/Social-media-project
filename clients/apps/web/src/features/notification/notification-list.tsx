@@ -73,23 +73,23 @@ export function NotificationList() {
 	const [activeTab, setActiveTab] = useState<"all" | "mentions">("all");
 
 	return (
-		<div className="divide-y divide-slate-200/80 dark:divide-slate-800">
+		<div className="divide-y divide-border">
 			{/* Header */}
-			<div className="p-4 border-b border-slate-200/80 dark:border-slate-800">
-				<h1 className="text-xl font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+			<div className="p-4 border-b border-border">
+				<h1 className="text-xl font-bold text-foreground flex items-center gap-2">
 					<RiNotification3Line className="h-6 w-6 text-sky-500" />
 					<span>Notifications</span>
 				</h1>
 
 				{/* Tabs */}
-				<div className="flex gap-4 mt-4 border-b border-slate-100 dark:border-slate-800">
+				<div className="flex gap-4 mt-4 border-b border-border">
 					<button
 						type="button"
 						onClick={() => setActiveTab("all")}
 						className={`pb-2 text-xs font-semibold border-b-2 transition-colors ${
 							activeTab === "all"
 								? "border-sky-500 text-sky-500"
-								: "border-transparent text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"
+								: "border-transparent text-muted-foreground hover:text-foreground"
 						}`}
 					>
 						Toutes
@@ -100,7 +100,7 @@ export function NotificationList() {
 						className={`pb-2 text-xs font-semibold border-b-2 transition-colors ${
 							activeTab === "mentions"
 								? "border-sky-500 text-sky-500"
-								: "border-transparent text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"
+								: "border-transparent text-muted-foreground hover:text-foreground"
 						}`}
 					>
 						Mentions
@@ -109,11 +109,11 @@ export function NotificationList() {
 			</div>
 
 			{/* List */}
-			<div className="divide-y divide-slate-100 dark:divide-slate-800/60">
+			<div className="divide-y divide-border">
 				{FAKE_NOTIFICATIONS.map((notif) => (
 					<div
 						key={notif.id}
-						className="p-4 flex gap-3 hover:bg-slate-50/60 dark:hover:bg-slate-900/40 transition-colors"
+						className="p-4 flex gap-3 hover:bg-accent/60 transition-colors"
 					>
 						{/* Icon Badge */}
 						<div className="shrink-0 pt-0.5">
@@ -140,10 +140,10 @@ export function NotificationList() {
 									className="h-8 w-8 rounded-full object-cover shrink-0"
 								/>
 								<div className="min-w-0 text-xs">
-									<span className="font-semibold text-slate-900 dark:text-slate-100">
+									<span className="font-semibold text-foreground">
 										{notif.user.name}
 									</span>{" "}
-									<span className="text-slate-500">
+									<span className="text-muted-foreground">
 										{notif.type === "like" && "a aimé votre publication"}
 										{notif.type === "repost" && "a repartagé votre publication"}
 										{notif.type === "comment" && "a commenté votre publication"}
@@ -153,12 +153,12 @@ export function NotificationList() {
 							</div>
 
 							{notif.contentSnippet && (
-								<p className="mt-2 text-xs text-slate-600 dark:text-slate-400 bg-slate-100/60 dark:bg-slate-800/60 p-2.5 rounded-xl border border-slate-200/50 dark:border-slate-800">
+								<p className="mt-2 text-xs text-muted-foreground bg-muted/60 p-2.5 rounded-xl border border-border">
 									"{notif.contentSnippet}"
 								</p>
 							)}
 
-							<span className="text-[10px] text-slate-400 mt-1 block">
+							<span className="text-[10px] text-muted-foreground mt-1 block">
 								{notif.time}
 							</span>
 						</div>

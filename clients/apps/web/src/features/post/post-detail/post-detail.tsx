@@ -33,7 +33,7 @@ export function PostDetail({ postId }: PostDetailProps) {
 
 	if (isLoading) {
 		return (
-			<div className="p-12 text-center text-slate-500 flex flex-col items-center justify-center gap-3">
+			<div className="p-12 text-center text-muted-foreground flex flex-col items-center justify-center gap-3">
 				<RiLoader4Line className="h-8 w-8 animate-spin text-sky-500" />
 				<span className="text-sm font-medium">
 					Chargement de la publication...
@@ -67,42 +67,42 @@ export function PostDetail({ postId }: PostDetailProps) {
 	const repostsCount = (post.stats.reposts ?? 0) + (isReposted ? 1 : 0);
 
 	return (
-		<div className="min-h-screen border-r border-l border-slate-200/80 dark:border-slate-800">
+		<div className="min-h-screen border-r border-l border-border">
 			{/* Top Header */}
-			<div className="sticky top-0 z-10 backdrop-blur-md bg-white/80 dark:bg-slate-900/80 p-4 border-b border-slate-200/80 dark:border-slate-800 flex items-center gap-4">
+			<div className="sticky top-0 z-10 backdrop-blur-md bg-background/80 p-4 border-b border-border flex items-center gap-4">
 				<Link
 					to="/home"
-					className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-slate-600 dark:text-slate-300"
+					className="p-2 rounded-full hover:bg-accent transition-colors text-muted-foreground hover:text-foreground"
 					aria-label="Retour"
 				>
 					<RiArrowLeftLine className="h-5 w-5" />
 				</Link>
-				<h1 className="text-lg font-bold text-slate-900 dark:text-slate-100">
+				<h1 className="text-lg font-bold text-foreground">
 					Publication
 				</h1>
 			</div>
 
 			{/* Main Post Details */}
-			<article className="p-4 border-b border-slate-200/80 dark:border-slate-800 space-y-4">
+			<article className="p-4 border-b border-border space-y-4">
 				{/* Author Meta */}
 				<div className="flex items-center gap-3">
 					<img
 						src={post.author.avatar}
 						alt={post.author.name}
-						className="h-12 w-12 rounded-full object-cover ring-1 ring-slate-200 dark:ring-slate-800"
+						className="h-12 w-12 rounded-full object-cover ring-1 ring-border"
 					/>
 					<div>
-						<h2 className="font-semibold text-slate-900 dark:text-slate-100 text-base">
+						<h2 className="font-semibold text-foreground text-base">
 							{post.author.name}
 						</h2>
-						<p className="text-xs text-slate-500 dark:text-slate-400">
+						<p className="text-xs text-muted-foreground">
 							@{post.author.handle}
 						</p>
 					</div>
 				</div>
 
 				{/* Content */}
-				<p className="text-base text-slate-900 dark:text-slate-100 whitespace-pre-line leading-relaxed">
+				<p className="text-base text-foreground whitespace-pre-line leading-relaxed">
 					{post.content}
 				</p>
 
@@ -112,7 +112,7 @@ export function PostDetail({ postId }: PostDetailProps) {
 						{mediaList.map((item) => (
 							<div
 								key={item.url}
-								className="overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800 bg-black/5 dark:bg-black/40"
+								className="overflow-hidden rounded-2xl border border-border bg-muted/40"
 							>
 								{item.isVideo ? (
 									<video
@@ -133,12 +133,12 @@ export function PostDetail({ postId }: PostDetailProps) {
 				) : null}
 
 				{/* Date & Time */}
-				<div className="pt-2 text-xs text-slate-400 border-t border-slate-100 dark:border-slate-800/60">
+				<div className="pt-2 text-xs text-muted-foreground border-t border-border">
 					<span>Publié {post.createdAt}</span>
 				</div>
 
 				{/* Stats Row */}
-				<div className="py-3 border-t border-b border-slate-100 dark:border-slate-800/60 flex items-center justify-around text-slate-500 dark:text-slate-400 text-sm">
+				<div className="py-3 border-t border-b border-border flex items-center justify-around text-muted-foreground text-sm">
 					{/* Likes */}
 					<button
 						type="button"
@@ -191,8 +191,8 @@ export function PostDetail({ postId }: PostDetailProps) {
 			</article>
 
 			{/* Add Comment Section */}
-			<div className="p-4 border-b border-slate-200/80 dark:border-slate-800">
-				<h3 className="text-sm font-semibold text-slate-900 dark:text-slate-100 mb-3">
+			<div className="p-4 border-b border-border">
+				<h3 className="text-sm font-semibold text-foreground mb-3">
 					Laisser un commentaire
 				</h3>
 				<form

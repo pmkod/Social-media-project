@@ -60,21 +60,21 @@ export function BookmarkList() {
 	};
 
 	return (
-		<div className="divide-y divide-slate-200/80 dark:divide-slate-800">
-			<div className="p-4 border-b border-slate-200/80 dark:border-slate-800">
-				<h1 className="text-xl font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+		<div className="divide-y divide-border">
+			<div className="p-4 border-b border-border">
+				<h1 className="text-xl font-bold text-foreground flex items-center gap-2">
 					<RiBookmarkLine className="h-6 w-6 text-amber-500" />
 					<span>Signets (Bookmarks)</span>
 				</h1>
-				<p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+				<p className="text-xs text-muted-foreground mt-1">
 					Vos publications enregistrées pour plus tard
 				</p>
 			</div>
 
 			{bookmarks.length === 0 ? (
-				<div className="p-8 text-center text-slate-500 dark:text-slate-400 space-y-2">
-					<RiBookmarkLine className="h-12 w-12 mx-auto text-slate-300 dark:text-slate-700" />
-					<p className="font-medium text-slate-700 dark:text-slate-300">
+				<div className="p-8 text-center text-muted-foreground space-y-2">
+					<RiBookmarkLine className="h-12 w-12 mx-auto text-muted-foreground/60" />
+					<p className="font-medium text-foreground">
 						Aucun signet pour le moment
 					</p>
 					<p className="text-xs">

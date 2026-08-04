@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { Logo } from "./logo";
+import { ThemeSwitcher } from "./theme-switcher";
 
 const footerLinks = [
 	{ label: "Home", to: "/" },
@@ -14,11 +15,12 @@ export function Footer() {
 	const currentYear = new Date().getFullYear();
 
 	return (
-		<footer className="border-t border-gray-200 px-6 py-8 bg-gray-100">
+		<footer className="border-t border-border px-6 py-8 bg-muted">
 			<div className="mx-auto max-w-7xl">
 				{/* Top level */}
 				<div className="flex items-center justify-between">
 					<Logo />
+					<ThemeSwitcher />
 				</div>
 
 				{/* Bottom level */}

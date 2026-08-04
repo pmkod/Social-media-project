@@ -5,7 +5,7 @@ function AuthShowcase() {
 		<div className="flex h-full w-full flex-col justify-center gap-6 lg:gap-12">
 			{/* Texte */}
 			<div className="flex flex-col gap-3 text-center lg:text-left">
-				<h1 className="text-3xl font-semibold tracking-tight text-balance sm:text-4xl lg:text-5xl xl:text-6xl text-slate-900 dark:text-slate-100">
+				<h1 className="text-3xl font-semibold tracking-tight text-balance sm:text-4xl lg:text-5xl xl:text-6xl text-foreground">
 					Un espace pour partager, échanger et se retrouver.
 				</h1>
 			</div>
@@ -110,7 +110,7 @@ function RouteComponent() {
 					</div>
 
 					{/* Thin vertical separator line that doesn't take full height on desktop */}
-					<div className="hidden lg:block w-px h-80 max-h-[480px] bg-slate-200 dark:border-slate-800 dark:bg-slate-800 self-center shrink-0 rounded-full" />
+					<div className="hidden lg:block w-px h-80 max-h-[480px] bg-border self-center shrink-0 rounded-full" />
 
 					{/* Auth form — right on desktop */}
 					<div className="flex-1 w-full max-w-lg flex items-center justify-center lg:justify-start">

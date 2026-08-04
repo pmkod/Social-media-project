@@ -122,13 +122,13 @@ function CreatePostForm() {
 				e.stopPropagation();
 				form.handleSubmit();
 			}}
-			className="pb-4 px-4 pt-6 border border-slate-200 rounded-xl"
+			className="pb-4 px-4 pt-6 border border-border rounded-xl"
 		>
 			<div className="flex gap-3">
 				<img
 					src={CURRENT_USER_AVATAR}
 					alt="Votre avatar"
-					className="h-10 w-10 rounded-full object-cover shrink-0 ring-1 ring-slate-200 dark:ring-slate-800"
+					className="h-10 w-10 rounded-full object-cover shrink-0 ring-1 ring-border"
 				/>
 
 				<div className="flex-1 min-w-0 space-y-3">
@@ -141,7 +141,7 @@ function CreatePostForm() {
 								placeholder="Quoi de neuf ?"
 								rows={3}
 								disabled={isPending}
-								className="min-h-0 w-full resize-none font-normal placeholder:font-normal border-0 bg-transparent px-0 py-0 text-xl text-slate-900 dark:text-slate-100 placeholder:text-slate-300 focus-visible:ring-0 ring-0 outline-none disabled:opacity-60"
+								className="min-h-0 w-full resize-none font-normal placeholder:font-normal border-0 bg-transparent px-0 py-0 text-xl text-foreground placeholder:text-muted-foreground focus-visible:ring-0 ring-0 outline-none disabled:opacity-60"
 							/>
 						)}
 					</form.Field>
@@ -152,7 +152,7 @@ function CreatePostForm() {
 								<div
 									key={`${item.file.name}-${item.file.lastModified}-${item.file.size}`}
 									className={
-										"relative size-24 rounded-2xl overflow-hidden bg-slate-900 group"
+										"relative size-24 rounded-2xl overflow-hidden bg-muted group"
 									}
 								>
 									<button
@@ -200,7 +200,7 @@ function CreatePostForm() {
 				</div>
 			</div>
 
-			<div className="mt-3 flex items-center justify-between pt-3 border-t border-slate-100 dark:border-slate-800/60">
+			<div className="mt-3 flex items-center justify-between pt-3 border-t border-border">
 				<div className="flex items-center gap-2">
 					<Button
 						type="button"
@@ -212,7 +212,7 @@ function CreatePostForm() {
 						Médias
 					</Button>
 					{(medias || []).length > 0 ? (
-						<span className="text-xs text-slate-400 font-medium">
+						<span className="text-xs text-muted-foreground font-medium">
 							{(medias || []).length}/{MAX_MEDIA}
 						</span>
 					) : null}

@@ -36,26 +36,26 @@ const TRENDING_TOPICS: Trend[] = [
 
 export function ExploreView() {
 	return (
-		<div className="divide-y divide-slate-200/80 dark:divide-slate-800">
+		<div className="divide-y divide-border">
 			{/* Search Header */}
-			<div className="p-4 border-b border-slate-200/80 dark:border-slate-800 space-y-3">
-				<h1 className="text-xl font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+			<div className="p-4 border-b border-border space-y-3">
+				<h1 className="text-xl font-bold text-foreground flex items-center gap-2">
 					<RiCompassLine className="h-6 w-6 text-sky-500" />
 					<span>Explorer</span>
 				</h1>
 				<div className="relative">
-					<RiSearchLine className="absolute left-3.5 top-3 h-4 w-4 text-slate-400" />
+					<RiSearchLine className="absolute left-3.5 top-3 h-4 w-4 text-muted-foreground" />
 					<input
 						type="text"
 						placeholder="Rechercher sur Graphy..."
-						className="w-full pl-10 pr-4 py-2.5 bg-slate-100 dark:bg-slate-800/80 rounded-2xl text-xs text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-sky-500"
+						className="w-full pl-10 pr-4 py-2.5 bg-muted rounded-2xl text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-sky-500"
 					/>
 				</div>
 			</div>
 
 			{/* Trending Section */}
 			<div className="p-4">
-				<h2 className="text-sm font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2 mb-3">
+				<h2 className="text-sm font-bold text-foreground flex items-center gap-2 mb-3">
 					<RiLineChartLine className="h-4 w-4 text-emerald-500" />
 					<span>Tendances pour vous</span>
 				</h2>
@@ -64,13 +64,13 @@ export function ExploreView() {
 					{TRENDING_TOPICS.map((trend) => (
 						<div
 							key={trend.topic}
-							className="p-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors cursor-pointer"
+							className="p-3 rounded-xl hover:bg-accent hover:text-accent-foreground transition-colors cursor-pointer"
 						>
-							<div className="text-[11px] text-slate-500">{trend.category}</div>
-							<div className="text-sm font-bold text-slate-900 dark:text-slate-100 mt-0.5">
+							<div className="text-[11px] text-muted-foreground">{trend.category}</div>
+							<div className="text-sm font-bold text-foreground mt-0.5">
 								{trend.topic}
 							</div>
-							<div className="text-[11px] text-slate-400 mt-0.5">
+							<div className="text-[11px] text-muted-foreground mt-0.5">
 								{trend.postsCount}
 							</div>
 						</div>
@@ -80,7 +80,7 @@ export function ExploreView() {
 
 			{/* Who to follow Section */}
 			<div className="p-4">
-				<h2 className="text-sm font-bold text-slate-900 dark:text-slate-100 mb-3">
+				<h2 className="text-sm font-bold text-foreground mb-3">
 					Suggestions de comptes
 				</h2>
 				<div className="space-y-3">
@@ -92,15 +92,15 @@ export function ExploreView() {
 								className="h-9 w-9 rounded-full object-cover"
 							/>
 							<div>
-								<div className="text-xs font-semibold text-slate-900 dark:text-slate-100">
+								<div className="text-xs font-semibold text-foreground">
 									Claire Durand
 								</div>
-								<div className="text-[11px] text-slate-500">@claire_design</div>
+								<div className="text-[11px] text-muted-foreground">@claire_design</div>
 							</div>
 						</div>
 						<button
 							type="button"
-							className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 text-xs font-medium hover:opacity-90 transition-opacity"
+							className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-foreground text-background text-xs font-medium hover:opacity-90 transition-opacity"
 						>
 							<RiUserAddLine className="h-3.5 w-3.5" />
 							<span>Suivre</span>

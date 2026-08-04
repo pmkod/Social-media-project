@@ -28,15 +28,15 @@ function MainLayoutComponent() {
 				</header> */}
 
 				{/* Main Content Area */}
-				<main className="flex-1 min-w-0 border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900 min-h-screen">
+				<main className="flex-1 min-w-0 border-border bg-background text-foreground min-h-screen">
 					<Outlet />
 				</main>
 
 				{/* Right Sidebar (Desktop Recommendations / Widgets) */}
 				<aside className="hidden lg:block w-80 p-4 space-y-4 h-screen sticky top-0 overflow-y-auto">
 					{/* Search Box */}
-					<div className="p-3 bg-slate-100 dark:bg-slate-800/60 rounded-2xl border border-slate-200/50 dark:border-slate-700/50">
-						<h3 className="text-xs font-bold text-slate-900 dark:text-slate-100 mb-2">
+					<div className="p-3 bg-muted/60 rounded-2xl border border-border">
+						<h3 className="text-xs font-bold text-foreground mb-2">
 							À suivre absolument
 						</h3>
 						<div className="space-y-3">
@@ -48,10 +48,10 @@ function MainLayoutComponent() {
 										className="h-8 w-8 rounded-full object-cover"
 									/>
 									<div className="min-w-0 text-xs">
-										<div className="font-semibold text-slate-900 dark:text-slate-100 truncate">
+										<div className="font-semibold text-foreground truncate">
 											Sophie Martin
 										</div>
-										<div className="text-[10px] text-slate-500 truncate">
+										<div className="text-[10px] text-muted-foreground truncate">
 											@sophiem
 										</div>
 									</div>
