@@ -1,7 +1,10 @@
 import { createRoute, defineOpenAPIRoute } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
-import { AuthenticationRoutesTag } from "../authentication.constants";
+import {
+	AuthenticationRoutesTag,
+	MAXIMUM_NUMBER_OF_FAILED_ATTEMPTS,
+} from "../authentication.constants";
 import { DoUserVerificationValidationSchema } from "../authentication.validation-schemas";
 
 const doUserVerificationRoute = defineOpenAPIRoute({
@@ -40,10 +43,20 @@ const doUserVerificationRoute = defineOpenAPIRoute({
 			throw new Error("Verification attempt not found or expired");
 		}
 
-		if (verificationInDb.code !== userVerification.code) {
-			console.log(userVerification.code);
-			console.log(userVerification.code);
+		if (
+			verificationInDb.numberOfFailedAttempts >=
+			MAXIMUM_NUMBER_OF_FAILED_ATTEMPTS
+		) {
+			await prisma.userVerification.update({
+				where: { id: verificationInDb.id },
+				data: { disabledAt: new Date() },
+			});
+			throw new Error(
+				`Vous avez atteint le nombre maximal de tentatives (${MAXIMUM_NUMBER_OF_FAILED_ATTEMPTS}).`,
+			);
+		}
 
+		if (verificationInDb.code !== userVerification.code) {
 			await prisma.userVerification.update({
 				where: { id: verificationInDb.id },
 				data: { numberOfFailedAttempts: { increment: 1 } },
