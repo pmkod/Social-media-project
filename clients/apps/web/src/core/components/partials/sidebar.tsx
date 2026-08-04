@@ -3,8 +3,15 @@ import { Link } from "@tanstack/react-router";
 import { Logo } from "@/core/components/partials/logo";
 import { Button } from "@/core/components/ui/button.tsx";
 import { NAV_ITEMS } from "@/core/constants/navigation.constants";
+import { useAuthenticatedUser } from "@/features/user/get-authenticated-user/use-authenticated-user.ts";
 
 export function Sidebar() {
+	const { data: user } = useAuthenticatedUser();
+
+	const avatar =
+		user?.avatarUrl ||
+		"https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80";
+
 	return (
 		<aside className="hidden md:flex flex-col justify-between w-64 lg:w-72 p-4 h-screen sticky top-0 shrink-0">
 			<div className="space-y-6">
@@ -44,16 +51,16 @@ export function Sidebar() {
 					<div className="flex items-center justify-between p-2 rounded-2xl hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition-colors cursor-pointer">
 						<div className="flex items-center gap-3 min-w-0">
 							<img
-								src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80"
+								src={avatar}
 								alt="User Avatar"
 								className="h-9 w-9 rounded-full object-cover shrink-0"
 							/>
 							<div className="min-w-0">
 								<div className="text-xs font-semibold truncate text-slate-900 dark:text-slate-100">
-									Mon Compte
+									{user?.fullName}
 								</div>
 								<div className="text-[11px] text-slate-500 truncate">
-									@mon_compte
+									{user?.username}
 								</div>
 							</div>
 						</div>

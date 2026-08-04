@@ -4,8 +4,7 @@ import { saveUserVerificationDataToLocalStorage } from "../common/authentication
 import type { UserVerificationResponse } from "../common/user-verification-response.ts";
 
 type SignupRequestBody = {
-	firstName: string;
-	lastName: string;
+	fullName: string;
 	email: string;
 	password: string;
 };

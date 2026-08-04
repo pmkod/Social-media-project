@@ -16,8 +16,7 @@ import { UserValidationSchema } from "@/features/user/common/user.validation-sch
 import { useSignup } from "./use-signup";
 
 const signupSchema = z.object({
-	firstName: UserValidationSchema.shape.firstName,
-	lastName: UserValidationSchema.shape.lastName,
+	fullName: UserValidationSchema.shape.fullName,
 	email: UserValidationSchema.shape.email,
 	password: UserValidationSchema.shape.password,
 });
@@ -33,8 +32,7 @@ function SignupForm({ onSuccess }: SignupFormProps) {
 
 	const form = useForm({
 		defaultValues: {
-			firstName: "Kodossou",
-			lastName: "Kouassi",
+			fullName: "Kodossou Kouassi",
 			email: "pierremariekod@gmail.com",
 			password: "pierremariekod@gmail.com",
 		},
@@ -45,8 +43,7 @@ function SignupForm({ onSuccess }: SignupFormProps) {
 			clearErrorMessage();
 			try {
 				await signup.mutateAsync({
-					firstName: value.firstName,
-					lastName: value.lastName,
+					fullName: value.fullName,
 					email: value.email,
 					password: value.password,
 				});
@@ -83,47 +80,25 @@ function SignupForm({ onSuccess }: SignupFormProps) {
 				className="flex flex-col gap-6"
 			>
 				<FieldGroup>
-					<div className="grid grid-cols-2 gap-3">
-						<form.Field name="firstName">
-							{(field) => (
-								<Field data-invalid={!field.state.meta.isValid}>
-									<FieldLabel htmlFor={field.name}>Prénom</FieldLabel>
-									<Input
-										id={field.name}
-										size="lg"
-										type="text"
-										placeholder="Jean"
-										value={field.state.value}
-										onBlur={field.handleBlur}
-										onChange={(e) => field.handleChange(e.target.value)}
-										autoComplete="given-name"
-										aria-invalid={!field.state.meta.isValid}
-									/>
-									<FieldError errors={field.state.meta.errors} />
-								</Field>
-							)}
-						</form.Field>
-
-						<form.Field name="lastName">
-							{(field) => (
-								<Field data-invalid={!field.state.meta.isValid}>
-									<FieldLabel htmlFor={field.name}>Nom</FieldLabel>
-									<Input
-										id={field.name}
-										size="lg"
-										type="text"
-										placeholder="Dupont"
-										value={field.state.value}
-										onBlur={field.handleBlur}
-										onChange={(e) => field.handleChange(e.target.value)}
-										autoComplete="family-name"
-										aria-invalid={!field.state.meta.isValid}
-									/>
-									<FieldError errors={field.state.meta.errors} />
-								</Field>
-							)}
-						</form.Field>
-					</div>
+					<form.Field name="fullName">
+						{(field) => (
+							<Field data-invalid={!field.state.meta.isValid}>
+								<FieldLabel htmlFor={field.name}>Nom complet</FieldLabel>
+								<Input
+									id={field.name}
+									size="lg"
+									type="text"
+									placeholder="Jean Dupont"
+									value={field.state.value}
+									onBlur={field.handleBlur}
+									onChange={(e) => field.handleChange(e.target.value)}
+									autoComplete="name"
+									aria-invalid={!field.state.meta.isValid}
+								/>
+								<FieldError errors={field.state.meta.errors} />
+							</Field>
+						)}
+					</form.Field>
 
 					<form.Field name="email">
 						{(field) => (

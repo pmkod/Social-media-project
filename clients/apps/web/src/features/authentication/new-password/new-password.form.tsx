@@ -13,7 +13,7 @@ import {
 } from "@/core/components/ui/field.tsx";
 import { PasswordInput } from "@/core/components/ui/password-input.tsx";
 import { UserValidationSchema } from "@/features/user/common/user.validation-schemas.ts";
-import { loggedInUserQueryKey } from "@/features/user/get-logged-in-user/use-logged-in-user.ts";
+import { authenticatedUserQueryKey } from "@/features/user/get-authenticated-user/use-authenticated-user.ts";
 import { useNewPassword } from "./use-new-password";
 
 const newPasswordSchema = z
@@ -50,7 +50,7 @@ function NewPasswordForm({ onSuccess }: NewPasswordFormProps) {
 			clearErrorMessage();
 			try {
 				await newPassword.mutateAsync({ newPassword: value.password });
-				await queryClient.fetchQuery({ queryKey: loggedInUserQueryKey });
+				await queryClient.fetchQuery({ queryKey: authenticatedUserQueryKey });
 
 				onSuccess();
 			} catch (error: any) {

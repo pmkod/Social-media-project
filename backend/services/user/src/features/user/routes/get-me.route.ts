@@ -41,6 +41,7 @@ const getMeRoute = defineOpenAPIRoute<typeof routeDef, HonoAuthenticatedEnv>({
 				createdAt: true,
 			},
 		});
+		console.log(user);
 
 		if (!user) {
 			throw new Error("User not found");

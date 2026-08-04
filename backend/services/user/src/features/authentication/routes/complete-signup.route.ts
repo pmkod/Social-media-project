@@ -65,7 +65,7 @@ const completeSignupRoute = defineOpenAPIRoute({
 			where: { username },
 		});
 		if (existingUsernameUser !== null) {
-			throw new Error("username-already-used");
+			throw new Error("An account with this username already exists");
 		}
 
 		const user = await prisma.user.create({

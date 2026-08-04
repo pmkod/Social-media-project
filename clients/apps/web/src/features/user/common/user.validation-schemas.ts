@@ -6,14 +6,10 @@ const UserValidationSchema = z.object({
 		.string()
 		.min(3, "Le nom d'utilisateur doit contenir au moins 3 caractères")
 		.max(50, "Le nom d'utilisateur ne doit pas dépasser 50 caractères"),
-	firstName: z
+	fullName: z
 		.string()
-		.min(1, "Le prénom est requis")
-		.max(100, "Le prénom ne doit pas dépasser 100 caractères"),
-	lastName: z
-		.string()
-		.min(1, "Le nom est requis")
-		.max(100, "Le nom ne doit pas dépasser 100 caractères"),
+		.min(1, "Le nom complet est requis")
+		.max(100, "Le nom complet ne doit pas dépasser 100 caractères"),
 	email: z
 		.string()
 		.min(1, "L'email est requis")
