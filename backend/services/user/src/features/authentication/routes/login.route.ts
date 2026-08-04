@@ -7,11 +7,12 @@ import {
 	UserVerificationGoals,
 } from "../authentication.constants";
 import {
+	comparePasswordToHash,
 	generateUserVerificationCode,
 	generateUserVerificationToken,
+	hashUserVerificationCode,
 } from "../authentication.functions";
 import { LoginValidationSchema } from "../authentication.validation-schemas";
-import { comparePasswordToHash } from "../password.functions";
 
 const loginRoute = defineOpenAPIRoute({
 	route: createRoute({
@@ -60,12 +61,13 @@ const loginRoute = defineOpenAPIRoute({
 
 		const code = generateUserVerificationCode();
 		const token = generateUserVerificationToken();
+		const codeHash = await hashUserVerificationCode(code);
 
 		const userVerification = await prisma.userVerification.create({
 			data: {
 				email: user.email,
 				username: user.username,
-				code,
+				code: codeHash,
 				token,
 				numberOfFailedAttempts: 0,
 				numberOfCodeTransfersViaEmail: 1,

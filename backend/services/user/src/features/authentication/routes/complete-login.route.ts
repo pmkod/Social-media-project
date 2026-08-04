@@ -5,13 +5,13 @@ import {
 	AuthenticationRoutesTag,
 	UserVerificationGoals,
 } from "../authentication.constants";
-import { isUserVerificationExpired } from "../authentication.functions";
-import { CompleteLoginValidationSchema } from "../authentication.validation-schemas";
-import { generateAccessToken } from "../jwt.functions";
 import {
 	generateRefreshTokenString,
 	hashRefreshToken,
-} from "../refresh-token.functions";
+	isUserVerificationExpired,
+} from "../authentication.functions";
+import { CompleteLoginValidationSchema } from "../authentication.validation-schemas";
+import { generateAccessToken } from "../jwt.functions";
 import { verifyIfUserVerificationCompleted } from "../user-verification.service";
 
 const CompleteLoginResponseBody = z.object({

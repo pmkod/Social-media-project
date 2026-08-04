@@ -2,12 +2,12 @@ import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
 import { AuthenticationRoutesTag } from "../authentication.constants";
-import { RefreshTokenValidationSchema } from "../authentication.validation-schemas";
-import { generateAccessToken } from "../jwt.functions";
 import {
 	generateRefreshTokenString,
 	hashRefreshToken,
-} from "../refresh-token.functions";
+} from "../authentication.functions";
+import { RefreshTokenValidationSchema } from "../authentication.validation-schemas";
+import { generateAccessToken } from "../jwt.functions";
 
 const RefreshTokenResponseBody = z.object({
 	accessToken: z.string(),

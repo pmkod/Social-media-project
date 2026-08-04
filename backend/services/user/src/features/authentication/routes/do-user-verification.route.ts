@@ -5,7 +5,10 @@ import {
 	AuthenticationRoutesTag,
 	MAXIMUM_NUMBER_OF_FAILED_ATTEMPTS,
 } from "../authentication.constants";
-import { isUserVerificationExpired } from "../authentication.functions";
+import {
+	compareUserVerificationCodeToHash,
+	isUserVerificationExpired,
+} from "../authentication.functions";
 import { DoUserVerificationValidationSchema } from "../authentication.validation-schemas";
 
 const doUserVerificationRoute = defineOpenAPIRoute({
@@ -61,7 +64,12 @@ const doUserVerificationRoute = defineOpenAPIRoute({
 			);
 		}
 
-		if (verificationInDb.code !== userVerification.code) {
+		const isCodeValid = await compareUserVerificationCodeToHash({
+			code: userVerification.code,
+			hash: verificationInDb.code ?? "",
+		});
+
+		if (!isCodeValid) {
 			await prisma.userVerification.update({
 				where: { id: verificationInDb.id },
 				data: { numberOfFailedAttempts: { increment: 1 } },

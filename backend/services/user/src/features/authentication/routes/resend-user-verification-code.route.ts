@@ -8,6 +8,7 @@ import {
 } from "../authentication.constants";
 import {
 	generateUserVerificationCode,
+	hashUserVerificationCode,
 	isUserVerificationExpired,
 } from "../authentication.functions";
 import { ResendUserVerificationCodeValidationSchema } from "../authentication.validation-schemas";
@@ -62,11 +63,12 @@ const resendUserVerificationCodeRoute = defineOpenAPIRoute({
 		}
 
 		const newCode = generateUserVerificationCode();
+		const newCodeHash = await hashUserVerificationCode(newCode);
 
 		await prisma.userVerification.update({
 			where: { id: verificationInDb.id },
 			data: {
-				code: newCode,
+				code: newCodeHash,
 				numberOfCodeTransfersViaEmail: { increment: 1 },
 			},
 		});

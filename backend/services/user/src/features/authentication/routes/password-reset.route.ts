@@ -9,6 +9,7 @@ import {
 import {
 	generateUserVerificationCode,
 	generateUserVerificationToken,
+	hashUserVerificationCode,
 } from "../authentication.functions";
 import { PasswordResetValidationSchema } from "../authentication.validation-schemas";
 
@@ -46,11 +47,12 @@ const passwordResetRoute = defineOpenAPIRoute({
 
 		const code = generateUserVerificationCode();
 		const token = generateUserVerificationToken();
+		const codeHash = await hashUserVerificationCode(code);
 
 		const userVerification = await prisma.userVerification.create({
 			data: {
 				email,
-				code,
+				code: codeHash,
 				token,
 				numberOfFailedAttempts: 0,
 				numberOfCodeTransfersViaEmail: 1,

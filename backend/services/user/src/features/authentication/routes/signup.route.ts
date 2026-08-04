@@ -9,9 +9,10 @@ import {
 import {
 	generateUserVerificationCode,
 	generateUserVerificationToken,
+	hashPassword,
+	hashUserVerificationCode,
 } from "../authentication.functions";
 import { SignupValidationSchema } from "../authentication.validation-schemas";
-import { hashPassword } from "../password.functions";
 
 const signupRoute = defineOpenAPIRoute({
 	route: createRoute({
@@ -48,13 +49,14 @@ const signupRoute = defineOpenAPIRoute({
 		const code = generateUserVerificationCode();
 		const token = generateUserVerificationToken();
 		const passwordHash = await hashPassword(password);
+		const codeHash = await hashUserVerificationCode(code);
 
 		const userVerification = await prisma.userVerification.create({
 			data: {
 				email,
 				fullName,
 				password: passwordHash,
-				code,
+				code: codeHash,
 				token,
 				numberOfFailedAttempts: 0,
 				numberOfCodeTransfersViaEmail: 1,
