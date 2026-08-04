@@ -6,4 +6,10 @@ const UserVerificationGoals = {
 	passwordReset: "password_reset",
 } as const;
 
-export { AuthenticationRoutesTag, UserVerificationGoals };
+const MAXIMUM_NUMBER_OF_CODE_TRANSFERS_VIA_EMAIL = 5;
+
+export {
+	AuthenticationRoutesTag,
+	UserVerificationGoals,
+	MAXIMUM_NUMBER_OF_CODE_TRANSFERS_VIA_EMAIL,
+};

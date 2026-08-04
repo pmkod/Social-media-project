@@ -1,3 +1,4 @@
+import { RiLoader4Line } from "@remixicon/react";
 import { useForm } from "@tanstack/react-form";
 import { useState } from "react";
 import { z } from "zod";
@@ -38,7 +39,12 @@ function UserVerificationForm({ onSuccess, goal }: UserVerificationFormProps) {
 	const clearErrorMessage = () => setErrorMessage(null);
 
 	const resendCode = async () => {
-		await resend.mutateAsync();
+		clearErrorMessage();
+		try {
+			await resend.mutateAsync();
+		} catch (error: any) {
+			setErrorMessage(error.message);
+		}
 	};
 
 	const form = useForm({
@@ -118,14 +124,18 @@ function UserVerificationForm({ onSuccess, goal }: UserVerificationFormProps) {
 				</form.Subscribe>
 			</form>
 
-			<p className="text-center text-sm text-muted-foreground">
+			<p className="flex items-center justify-center gap-2 text-center text-sm text-muted-foreground">
 				Vous n'avez pas reçu de code ?{" "}
 				<button
 					type="button"
 					onClick={resendCode}
-					className="text-foreground underline underline-offset-3 hover:text-foreground/80"
+					disabled={resend.isPending}
+					className="inline-flex cursor-pointer items-center gap-1.5 text-foreground underline underline-offset-3 hover:text-foreground/80 disabled:pointer-events-none disabled:opacity-50"
 				>
 					Renvoyer
+					{resend.isPending ? (
+						<RiLoader4Line className="size-3.5 animate-spin" />
+					) : null}
 				</button>
 			</p>
 		</div>

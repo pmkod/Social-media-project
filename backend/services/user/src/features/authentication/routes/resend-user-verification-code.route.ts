@@ -2,7 +2,10 @@ import { createRoute, defineOpenAPIRoute } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
 import { sendMail } from "@/core/services/mail.service";
-import { AuthenticationRoutesTag } from "../authentication.constants";
+import {
+	AuthenticationRoutesTag,
+	MAXIMUM_NUMBER_OF_CODE_TRANSFERS_VIA_EMAIL,
+} from "../authentication.constants";
 import { generateUserVerificationCode } from "../authentication.functions";
 import { ResendUserVerificationCodeValidationSchema } from "../authentication.validation-schemas";
 
@@ -40,6 +43,15 @@ const resendUserVerificationCodeRoute = defineOpenAPIRoute({
 
 		if (!verificationInDb || !verificationInDb.email) {
 			throw new Error("Verification attempt not found or expired");
+		}
+
+		if (
+			verificationInDb.numberOfCodeTransfersViaEmail >=
+			MAXIMUM_NUMBER_OF_CODE_TRANSFERS_VIA_EMAIL
+		) {
+			throw new Error(
+				`Vous avez atteint le nombre maximal de renvois de code (${MAXIMUM_NUMBER_OF_CODE_TRANSFERS_VIA_EMAIL}).`,
+			);
 		}
 
 		const newCode = generateUserVerificationCode();
