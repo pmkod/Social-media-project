@@ -6,7 +6,10 @@ import {
 	AuthenticationRoutesTag,
 	MAXIMUM_NUMBER_OF_CODE_TRANSFERS_VIA_EMAIL,
 } from "../authentication.constants";
-import { generateUserVerificationCode } from "../authentication.functions";
+import {
+	generateUserVerificationCode,
+	isUserVerificationExpired,
+} from "../authentication.functions";
 import { ResendUserVerificationCodeValidationSchema } from "../authentication.validation-schemas";
 
 const resendUserVerificationCodeRoute = defineOpenAPIRoute({
@@ -43,6 +46,10 @@ const resendUserVerificationCodeRoute = defineOpenAPIRoute({
 
 		if (!verificationInDb || !verificationInDb.email) {
 			throw new Error("Verification attempt not found or expired");
+		}
+
+		if (isUserVerificationExpired(verificationInDb)) {
+			throw new Error("Verification attempt has expired");
 		}
 
 		if (

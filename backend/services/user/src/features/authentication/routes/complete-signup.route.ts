@@ -5,6 +5,7 @@ import {
 	AuthenticationRoutesTag,
 	UserVerificationGoals,
 } from "../authentication.constants";
+import { isUserVerificationExpired } from "../authentication.functions";
 import { CompleteSignupValidationSchema } from "../authentication.validation-schemas";
 import { generateAccessToken } from "../jwt.functions";
 import {
@@ -56,6 +57,10 @@ const completeSignupRoute = defineOpenAPIRoute({
 			token: userVerification.token,
 			goal: UserVerificationGoals.signup,
 		});
+
+		if (isUserVerificationExpired(verificationInDb)) {
+			throw new Error("Verification attempt has expired");
+		}
 
 		if (!verificationInDb.email || !verificationInDb.password) {
 			throw new Error("Invalid verification data");

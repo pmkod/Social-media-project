@@ -5,6 +5,7 @@ import {
 	AuthenticationRoutesTag,
 	UserVerificationGoals,
 } from "../authentication.constants";
+import { isUserVerificationExpired } from "../authentication.functions";
 import { CompleteLoginValidationSchema } from "../authentication.validation-schemas";
 import { generateAccessToken } from "../jwt.functions";
 import {
@@ -56,6 +57,10 @@ const completeLoginRoute = defineOpenAPIRoute({
 			token: userVerification.token,
 			goal: UserVerificationGoals.login,
 		});
+
+		if (isUserVerificationExpired(verificationInDb)) {
+			throw new Error("Verification attempt has expired");
+		}
 
 		if (!verificationInDb.userId) {
 			throw new Error("User ID missing from verification");

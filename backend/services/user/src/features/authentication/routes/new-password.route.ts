@@ -5,6 +5,7 @@ import {
 	AuthenticationRoutesTag,
 	UserVerificationGoals,
 } from "../authentication.constants";
+import { isUserVerificationExpired } from "../authentication.functions";
 import { NewPasswordValidationSchema } from "../authentication.validation-schemas";
 import { hashPassword } from "../password.functions";
 import { verifyIfUserVerificationCompleted } from "../user-verification.service";
@@ -38,6 +39,10 @@ const newPasswordRoute = defineOpenAPIRoute({
 			token: userVerification.token,
 			goal: UserVerificationGoals.passwordReset,
 		});
+
+		if (isUserVerificationExpired(verificationInDb)) {
+			throw new Error("Verification attempt has expired");
+		}
 
 		if (!verificationInDb.userId) {
 			throw new Error("User ID missing from verification");

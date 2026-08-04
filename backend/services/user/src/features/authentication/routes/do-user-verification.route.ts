@@ -5,6 +5,7 @@ import {
 	AuthenticationRoutesTag,
 	MAXIMUM_NUMBER_OF_FAILED_ATTEMPTS,
 } from "../authentication.constants";
+import { isUserVerificationExpired } from "../authentication.functions";
 import { DoUserVerificationValidationSchema } from "../authentication.validation-schemas";
 
 const doUserVerificationRoute = defineOpenAPIRoute({
@@ -41,6 +42,10 @@ const doUserVerificationRoute = defineOpenAPIRoute({
 
 		if (!verificationInDb) {
 			throw new Error("Verification attempt not found or expired");
+		}
+
+		if (isUserVerificationExpired(verificationInDb)) {
+			throw new Error("Verification attempt has expired");
 		}
 
 		if (
