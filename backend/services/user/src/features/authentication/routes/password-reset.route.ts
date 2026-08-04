@@ -41,7 +41,7 @@ const passwordResetRoute = defineOpenAPIRoute({
 		});
 
 		if (!user) {
-			throw new Error("User with given email does not exist");
+			return c.json({ message: "Ok" });
 		}
 
 		const code = generateUserVerificationCode();
