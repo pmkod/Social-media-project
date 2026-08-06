@@ -73,7 +73,7 @@ export function PostDetail({ postId }: PostDetailProps) {
 	const allComments = commentsData?.pages.flatMap((page) => page.data) ?? [];
 
 	return (
-		<div className="min-h-screen border-r border-l border-border">
+		<div className="mx-auto max-w-2xl min-h-screen border-r border-l border-border">
 			{/* Top Header */}
 			<div className="sticky top-0 z-10 backdrop-blur-md bg-background/80 p-4 border-b border-border flex items-center gap-4">
 				<Link
