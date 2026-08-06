@@ -7,16 +7,14 @@ import {
 	RiHeartLine,
 	RiLoader4Line,
 	RiRepeatLine,
-	RiSendPlane2Line,
 } from "@remixicon/react";
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Button } from "@/core/components/ui/button.tsx";
-import { Textarea } from "@/core/components/ui/textarea.tsx";
-import {
-	getMediaUrl,
-	type RenderMediaItem,
-} from "../common/post-item.tsx";
+import { CommentItem } from "../common/comment-item.tsx";
+import { getMediaUrl, type RenderMediaItem } from "../common/post-item.tsx";
+import { CreateCommentForm } from "../create-comment/create-comment-form.tsx";
+import { useGetComments } from "./use-get-comments";
 import { useGetPostById } from "./use-get-post-by-id";
 
 type PostDetailProps = {
@@ -25,7 +23,13 @@ type PostDetailProps = {
 
 export function PostDetail({ postId }: PostDetailProps) {
 	const { data: post, isLoading, isError } = useGetPostById(postId);
-	const [commentText, setCommentText] = useState("");
+	const {
+		data: commentsData,
+		fetchNextPage,
+		hasNextPage,
+		isFetchingNextPage,
+		isLoading: isCommentsLoading,
+	} = useGetComments(postId, Boolean(post));
 
 	const [isLiked, setIsLiked] = useState(false);
 	const [isBookmarked, setIsBookmarked] = useState(false);
@@ -66,6 +70,8 @@ export function PostDetail({ postId }: PostDetailProps) {
 	const likesCount = (post.stats.likes ?? 0) + (isLiked ? 1 : 0);
 	const repostsCount = (post.stats.reposts ?? 0) + (isReposted ? 1 : 0);
 
+	const allComments = commentsData?.pages.flatMap((page) => page.data) ?? [];
+
 	return (
 		<div className="min-h-screen border-r border-l border-border">
 			{/* Top Header */}
@@ -77,9 +83,7 @@ export function PostDetail({ postId }: PostDetailProps) {
 				>
 					<RiArrowLeftLine className="h-5 w-5" />
 				</Link>
-				<h1 className="text-lg font-bold text-foreground">
-					Publication
-				</h1>
+				<h1 className="text-lg font-bold text-foreground">Publication</h1>
 			</div>
 
 			{/* Main Post Details */}
@@ -115,6 +119,7 @@ export function PostDetail({ postId }: PostDetailProps) {
 								className="overflow-hidden rounded-2xl border border-border bg-muted/40"
 							>
 								{item.isVideo ? (
+									/* biome-ignore lint/a11y/useMediaCaption: Media preview player */
 									<video
 										src={item.url}
 										controls
@@ -190,39 +195,53 @@ export function PostDetail({ postId }: PostDetailProps) {
 				</div>
 			</article>
 
-			{/* Add Comment Section */}
-			<div className="p-4 border-b border-border">
-				<h3 className="text-sm font-semibold text-foreground mb-3">
-					Laisser un commentaire
+			{/* Add Comment Form */}
+			<CreateCommentForm postId={post.id} />
+
+			{/* Comments Section */}
+			<section className="border-b border-border">
+				<h3 className="px-4 py-3 text-sm font-semibold text-foreground border-b border-border">
+					Commentaires ({post.stats.comments})
 				</h3>
-				<form
-					onSubmit={(e) => {
-						e.preventDefault();
-						if (!commentText.trim()) return;
-						setCommentText("");
-					}}
-					className="space-y-3"
-				>
-					<Textarea
-						value={commentText}
-						onChange={(e) => setCommentText(e.target.value)}
-						placeholder="Poster votre réponse..."
-						rows={2}
-						className="resize-none text-sm"
-					/>
-					<div className="flex justify-end">
-						<Button
-							type="submit"
-							disabled={!commentText.trim()}
-							className="rounded-full px-4"
-							size="sm"
-						>
-							<RiSendPlane2Line className="h-3.5 w-3.5" />
-							<span>Répondre</span>
-						</Button>
+
+				{isCommentsLoading ? (
+					<div className="p-8 text-center text-muted-foreground flex items-center justify-center gap-2">
+						<RiLoader4Line className="h-5 w-5 animate-spin text-sky-500" />
+						<span className="text-sm">Chargement des commentaires...</span>
 					</div>
-				</form>
-			</div>
+				) : allComments.length === 0 ? (
+					<div className="p-8 text-center text-muted-foreground text-sm">
+						Aucun commentaire pour le moment.
+					</div>
+				) : (
+					<div>
+						{allComments.map((comment) => (
+							<CommentItem key={comment.id} comment={comment} />
+						))}
+
+						{hasNextPage ? (
+							<div className="p-4 flex justify-center">
+								<Button
+									type="button"
+									variant="outline"
+									size="sm"
+									onClick={() => fetchNextPage()}
+									disabled={isFetchingNextPage}
+								>
+									{isFetchingNextPage ? (
+										<RiLoader4Line className="h-4 w-4 animate-spin" />
+									) : null}
+									<span>
+										{isFetchingNextPage
+											? "Chargement..."
+											: "Voir plus de commentaires"}
+									</span>
+								</Button>
+							</div>
+						) : null}
+					</div>
+				)}
+			</section>
 		</div>
 	);
 }

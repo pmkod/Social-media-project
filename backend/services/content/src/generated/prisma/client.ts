@@ -62,6 +62,11 @@ export type File = Prisma.FileModel
  */
 export type Comment = Prisma.CommentModel
 /**
+ * Model CommentMedia
+ * 
+ */
+export type CommentMedia = Prisma.CommentMediaModel
+/**
  * Model PostLike
  * 
  */

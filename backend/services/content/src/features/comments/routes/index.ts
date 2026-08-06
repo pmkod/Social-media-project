@@ -1,6 +1,6 @@
 import { createCommentRoute } from "./create-comment.route";
-import { getCommentsRoute } from "./get-comments.route";
 import { deleteCommentRoute } from "./delete-comment.route";
+import { getCommentsRoute } from "./get-comments.route";
 
 const commentsRoutes = [
 	createCommentRoute,

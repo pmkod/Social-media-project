@@ -11,10 +11,12 @@ import {
 } from "@remixicon/react";
 import { Link } from "@tanstack/react-router";
 import { useCallback, useEffect, useRef, useState } from "react";
+import NiceModal from "@/core/components/ui/nice-modal.tsx";
 import { cn } from "@/core/lib/utils.ts";
-import type { Post, PostMediaItem } from "./post.ts";
-
+import { CommentModal } from "../create-comment/comment-modal.tsx";
 import { buildImageUrl, buildVideoUrl } from "../post-media.functions.ts";
+import { CommentItem } from "./comment-item.tsx";
+import type { Post, PostMediaItem } from "./post.ts";
 
 interface PostItemProps {
 	post: Post;
@@ -50,9 +52,16 @@ export function getMediaUrl(m: PostMediaItem): RenderMediaItem | null {
 	return url ? { url, isVideo } : null;
 }
 
-function MediaElement({ item, className }: { item: RenderMediaItem; className: string }) {
+export function MediaElement({
+	item,
+	className,
+}: {
+	item: RenderMediaItem;
+	className: string;
+}) {
 	if (item.isVideo) {
 		return (
+			/* biome-ignore lint/a11y/useMediaCaption: Media preview player */
 			<video
 				src={item.url}
 				controls
@@ -61,10 +70,10 @@ function MediaElement({ item, className }: { item: RenderMediaItem; className: s
 			/>
 		);
 	}
-	return <img src={item.url} alt="Post media" className={className} />;
+	return <img src={item.url} alt="Média du post" className={className} />;
 }
 
-function PostMediaGrid({ media }: { media: RenderMediaItem[] }) {
+export function PostMediaGrid({ media }: { media: RenderMediaItem[] }) {
 	const count = media.length;
 	const base =
 		"mt-3 overflow-hidden rounded-2xl border border-border grid gap-1 bg-muted/40";
@@ -186,8 +195,6 @@ export function PostItem({ post, onBookmarkToggle }: PostItemProps) {
 	const [isLiked, setIsLiked] = useState(post.isLiked ?? false);
 	const [likesCount, setLikesCount] = useState(post.stats.likes);
 	const [isBookmarked, setIsBookmarked] = useState(post.isBookmarked ?? false);
-	const [isReposted, setIsReposted] = useState(false);
-	const [repostsCount, setRepostsCount] = useState(post.stats.reposts);
 
 	const handleLike = (e: React.MouseEvent) => {
 		e.stopPropagation();
@@ -207,6 +214,11 @@ export function PostItem({ post, onBookmarkToggle }: PostItemProps) {
 		if (onBookmarkToggle) {
 			onBookmarkToggle(post.id);
 		}
+	};
+
+	const handleOpenCommentModal = (e: React.MouseEvent) => {
+		e.stopPropagation();
+		NiceModal.show(CommentModal, { postId: post.id });
 	};
 
 	const mediaList: RenderMediaItem[] = (post.medias ?? [])
@@ -286,16 +298,16 @@ export function PostItem({ post, onBookmarkToggle }: PostItemProps) {
 						</button>
 
 						{/* Comment */}
-						<Link
-							to="/posts/$postId"
-							params={{ postId: post.id }}
-							className="flex items-center gap-1.5 transition-colors group -ml-2 p-2 rounded-full hover:bg-accent"
+						<button
+							type="button"
+							onClick={handleOpenCommentModal}
+							className="flex items-center gap-1.5 transition-colors group -ml-2 p-2 rounded-full hover:bg-accent hover:text-sky-500"
 						>
 							<RiChat3Line className="size-6" />
 							<span className="text-base font-light">
 								{post.stats.comments}
 							</span>
-						</Link>
+						</button>
 
 						{/* Bookmark */}
 						{onBookmarkToggle ? (
@@ -316,6 +328,15 @@ export function PostItem({ post, onBookmarkToggle }: PostItemProps) {
 							</button>
 						) : null}
 					</div>
+
+					{/* Recent Comments */}
+					{(post.comments ?? []).length > 0 ? (
+						<div className="mt-2 -ml-1 border-l-2 border-border pl-3 space-y-1">
+							{(post.comments ?? []).map((comment) => (
+								<CommentItem key={comment.id} comment={comment} compact />
+							))}
+						</div>
+					) : null}
 				</div>
 			</div>
 		</article>

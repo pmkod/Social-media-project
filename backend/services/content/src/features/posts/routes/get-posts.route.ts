@@ -72,6 +72,48 @@ const getPostsRoute = defineOpenAPIRoute({
 						},
 						orderBy: { position: "asc" },
 					},
+					comments: {
+						take: 2,
+						orderBy: { createdAt: "desc" },
+						select: {
+							id: true,
+							postId: true,
+							authorId: true,
+							content: true,
+							createdAt: true,
+							updatedAt: true,
+							medias: {
+								select: {
+									id: true,
+									position: true,
+									mediaType: true,
+									createdAt: true,
+									lowQualityFileId: true,
+									lowQualityFile: {
+										select: {
+											id: true,
+											mimeType: true,
+											filename: true,
+											createdAt: true,
+										},
+									},
+									highQualityFileId: true,
+									highQualityFile: {
+										select: {
+											id: true,
+											mimeType: true,
+											filename: true,
+											createdAt: true,
+										},
+									},
+								},
+								orderBy: { position: "asc" },
+							},
+							_count: {
+								select: { commentLikes: true },
+							},
+						},
+					},
 					_count: {
 						select: {
 							comments: true,

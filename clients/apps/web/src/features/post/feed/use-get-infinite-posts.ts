@@ -1,12 +1,27 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { httpClient } from "@/core/http-clients/http-client.ts";
+import type { Comment } from "../common/comment.ts";
 import type { Post, PostMediaItem } from "../common/post.ts";
+
+type ApiComment = {
+	id: string;
+	postId?: string;
+	authorId?: string;
+	content: string;
+	createdAt: string;
+	updatedAt?: string;
+	medias?: PostMediaItem[];
+	_count?: {
+		commentLikes: number;
+	};
+};
 
 type ApiPostItem = {
 	id: string;
 	authorId?: string;
 	text: string;
 	medias?: PostMediaItem[];
+	comments?: ApiComment[];
 	createdAt: string;
 	updatedAt?: string;
 	_count?: {
@@ -36,6 +51,12 @@ const DEFAULT_AUTHOR = {
 	avatar:
 		"https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80",
 };
+
+const formatDate = (value: string) =>
+	new Date(value).toLocaleDateString("fr-FR", {
+		hour: "2-digit",
+		minute: "2-digit",
+	});
 
 const MOCK_POSTS_PAGES: Record<number, Post[]> = {
 	1: [
@@ -225,15 +246,23 @@ const fetchPostsPage = async ({
 			})
 			.json<GetPostsResponse>();
 
-		const rawPosts = res.posts ?? (res as unknown as { data: ApiPostItem[] }).data ?? [];
+		const rawPosts =
+			res.posts ?? (res as unknown as { data: ApiPostItem[] }).data ?? [];
 		const posts: Post[] = rawPosts.map((item) => {
+			const comments: Comment[] = (item.comments ?? []).map((rawComment) => ({
+				id: rawComment.id,
+				postId: rawComment.postId ?? item.id,
+				author: DEFAULT_AUTHOR,
+				content: rawComment.content,
+				createdAt: formatDate(rawComment.createdAt),
+				medias: rawComment.medias ?? [],
+				likesCount: rawComment._count?.commentLikes ?? 0,
+			}));
+
 			return {
 				id: item.id,
 				author: DEFAULT_AUTHOR,
-				createdAt: new Date(item.createdAt).toLocaleDateString("fr-FR", {
-					hour: "2-digit",
-					minute: "2-digit",
-				}),
+				createdAt: formatDate(item.createdAt),
 				content: item.text,
 				medias: item.medias ?? [],
 				stats: {
@@ -244,6 +273,7 @@ const fetchPostsPage = async ({
 				},
 				isLiked: false,
 				isBookmarked: false,
+				comments,
 			};
 		});
 

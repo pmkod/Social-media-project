@@ -388,6 +388,7 @@ export const ModelName = {
   PostMedia: 'PostMedia',
   File: 'File',
   Comment: 'Comment',
+  CommentMedia: 'CommentMedia',
   PostLike: 'PostLike',
   CommentLike: 'CommentLike'
 } as const
@@ -405,7 +406,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "post" | "postMedia" | "file" | "comment" | "postLike" | "commentLike"
+    modelProps: "post" | "postMedia" | "file" | "comment" | "commentMedia" | "postLike" | "commentLike"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -705,6 +706,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    CommentMedia: {
+      payload: Prisma.$CommentMediaPayload<ExtArgs>
+      fields: Prisma.CommentMediaFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CommentMediaFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommentMediaPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CommentMediaFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommentMediaPayload>
+        }
+        findFirst: {
+          args: Prisma.CommentMediaFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommentMediaPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CommentMediaFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommentMediaPayload>
+        }
+        findMany: {
+          args: Prisma.CommentMediaFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommentMediaPayload>[]
+        }
+        create: {
+          args: Prisma.CommentMediaCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommentMediaPayload>
+        }
+        createMany: {
+          args: Prisma.CommentMediaCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CommentMediaCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommentMediaPayload>[]
+        }
+        delete: {
+          args: Prisma.CommentMediaDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommentMediaPayload>
+        }
+        update: {
+          args: Prisma.CommentMediaUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommentMediaPayload>
+        }
+        deleteMany: {
+          args: Prisma.CommentMediaDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CommentMediaUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CommentMediaUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommentMediaPayload>[]
+        }
+        upsert: {
+          args: Prisma.CommentMediaUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CommentMediaPayload>
+        }
+        aggregate: {
+          args: Prisma.CommentMediaAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCommentMedia>
+        }
+        groupBy: {
+          args: Prisma.CommentMediaGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CommentMediaGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CommentMediaCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CommentMediaCountAggregateOutputType> | number
+        }
+      }
+    }
     PostLike: {
       payload: Prisma.$PostLikePayload<ExtArgs>
       fields: Prisma.PostLikeFieldRefs
@@ -938,6 +1013,19 @@ export const CommentScalarFieldEnum = {
 export type CommentScalarFieldEnum = (typeof CommentScalarFieldEnum)[keyof typeof CommentScalarFieldEnum]
 
 
+export const CommentMediaScalarFieldEnum = {
+  id: 'id',
+  commentId: 'commentId',
+  position: 'position',
+  mediaType: 'mediaType',
+  createdAt: 'createdAt',
+  lowQualityFileId: 'lowQualityFileId',
+  highQualityFileId: 'highQualityFileId'
+} as const
+
+export type CommentMediaScalarFieldEnum = (typeof CommentMediaScalarFieldEnum)[keyof typeof CommentMediaScalarFieldEnum]
+
+
 export const PostLikeScalarFieldEnum = {
   id: 'id',
   postId: 'postId',
@@ -1157,6 +1245,7 @@ export type GlobalOmitConfig = {
   postMedia?: Prisma.PostMediaOmit
   file?: Prisma.FileOmit
   comment?: Prisma.CommentOmit
+  commentMedia?: Prisma.CommentMediaOmit
   postLike?: Prisma.PostLikeOmit
   commentLike?: Prisma.CommentLikeOmit
 }

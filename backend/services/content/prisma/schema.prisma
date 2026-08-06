@@ -36,27 +36,45 @@ model PostMedia {
 }
 
 model File {
-  id                   String     @id @default(uuid())
-  mimeType             String?    @map("mime_type") @db.VarChar(50)
-  filename             String     @db.VarChar(255)
-  createdAt            DateTime   @default(now()) @map("created_at")
-  lowQualityPostMedia  PostMedia? @relation("PostMediaLowQuality")
-  highQualityPostMedia PostMedia? @relation("PostMediaHighQuality")
+  id                   String        @id @default(uuid())
+  mimeType             String?       @map("mime_type") @db.VarChar(50)
+  filename             String        @db.VarChar(255)
+  createdAt            DateTime      @default(now()) @map("created_at")
+  lowQualityPostMedia  PostMedia?    @relation("PostMediaLowQuality")
+  highQualityPostMedia PostMedia?    @relation("PostMediaHighQuality")
+  lowQualityCommentMedia  CommentMedia? @relation("CommentMediaLowQuality")
+  highQualityCommentMedia CommentMedia? @relation("CommentMediaHighQuality")
 
   @@map("file")
 }
 
 model Comment {
-  id           String        @id @default(cuid())
-  postId       String        @map("post_id")
-  authorId     String        @map("author_id")
+  id           String         @id @default(cuid())
+  postId       String         @map("post_id")
+  authorId     String         @map("author_id")
   content      String
-  createdAt    DateTime      @default(now()) @map("created_at")
-  updatedAt    DateTime      @updatedAt @map("updated_at")
-  post         Post          @relation(fields: [postId], references: [id], onDelete: Cascade)
+  createdAt    DateTime       @default(now()) @map("created_at")
+  updatedAt    DateTime       @updatedAt @map("updated_at")
+  post         Post           @relation(fields: [postId], references: [id], onDelete: Cascade)
+  medias       CommentMedia[]
   commentLikes CommentLike[]
 
   @@map("comment")
+}
+
+model CommentMedia {
+  id                String   @id @default(uuid())
+  commentId         String   @map("comment_id")
+  comment           Comment  @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  position          Int      @default(1)
+  mediaType         String   @map("media_type") @db.VarChar(50)
+  createdAt         DateTime @default(now()) @map("created_at")
+  lowQualityFileId  String?  @unique @map("low_quality_file_id")
+  lowQualityFile    File?    @relation("CommentMediaLowQuality", fields: [lowQualityFileId], references: [id], onDelete: SetNull)
+  highQualityFileId String?  @unique @map("high_quality_file_id")
+  highQualityFile   File?    @relation("CommentMediaHighQuality", fields: [highQualityFileId], references: [id], onDelete: SetNull)
+
+  @@map("comment_media")
 }
 
 model PostLike {

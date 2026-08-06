@@ -1,3 +1,5 @@
+import type { Comment } from "./comment.ts";
+
 export interface PostAuthor {
 	name: string;
 	handle: string;
@@ -40,4 +42,5 @@ export interface Post {
 	stats: PostStats;
 	isLiked?: boolean;
 	isBookmarked?: boolean;
+	comments?: Comment[];
 }

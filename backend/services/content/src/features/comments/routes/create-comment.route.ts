@@ -5,6 +5,12 @@ import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { requireUserAuthentication } from "@/features/authentication/middlewares/require-user-authentication.middleware";
 import { CommentsRoutesTag } from "../comments.constants";
 import { CreateCommentValidationSchema } from "../comments.validation-schemas";
+import { createCommentMedias } from "../services/comment-media.service";
+
+const CreateCommentRequestBody = z.object({
+	content: CreateCommentValidationSchema.shape.content.optional(),
+	medias: CreateCommentValidationSchema.shape.medias.optional(),
+});
 
 const routeDef = createRoute({
 	method: "post",
@@ -18,8 +24,8 @@ const routeDef = createRoute({
 		}),
 		body: {
 			content: {
-				"application/json": {
-					schema: CreateCommentValidationSchema,
+				"multipart/form-data": {
+					schema: CreateCommentRequestBody,
 				},
 			},
 		},
@@ -43,25 +49,94 @@ const createCommentRoute = defineOpenAPIRoute<
 		}
 
 		const { postId } = c.req.valid("param");
-		const { content } = c.req.valid("json");
+		const { content, medias } = c.req.valid("form");
+
+		const hasContent = Boolean(content?.trim());
+		const hasMedias = Boolean(medias && medias.length > 0);
+		if (!hasContent && !hasMedias) {
+			return c.json(
+				{
+					error: "Le commentaire doit contenir du texte ou au moins un média",
+				},
+				HttpStatus.BAD_REQUEST.code,
+			);
+		}
 
 		const post = await prisma.post.findUnique({
 			where: { id: postId },
+			select: { id: true },
 		});
 
 		if (!post) {
-			throw new Error("Post not found");
+			return c.json({ error: "Post not found" }, HttpStatus.NOT_FOUND.code);
 		}
 
 		const comment = await prisma.comment.create({
 			data: {
 				postId,
 				authorId: authenticatedUserId,
-				content,
+				content: content?.trim() ?? "",
+			},
+			select: {
+				id: true,
 			},
 		});
 
-		return c.json(comment, HttpStatus.CREATED.code);
+		if (medias && medias.length > 0) {
+			await createCommentMedias({
+				commentId: comment.id,
+				medias,
+			});
+		}
+
+		const commentToSend = await prisma.comment.findUniqueOrThrow({
+			where: {
+				id: comment.id,
+			},
+			select: {
+				id: true,
+				postId: true,
+				authorId: true,
+				content: true,
+				createdAt: true,
+				updatedAt: true,
+				medias: {
+					select: {
+						id: true,
+						position: true,
+						mediaType: true,
+						createdAt: true,
+						lowQualityFileId: true,
+						lowQualityFile: {
+							select: {
+								id: true,
+								mimeType: true,
+								filename: true,
+								createdAt: true,
+							},
+						},
+						highQualityFileId: true,
+						highQualityFile: {
+							select: {
+								id: true,
+								mimeType: true,
+								filename: true,
+								createdAt: true,
+							},
+						},
+					},
+					orderBy: { position: "asc" },
+				},
+				_count: {
+					select: { commentLikes: true },
+				},
+			},
+		});
+
+		return c.json(
+			{ message: "Comment created successfully", comment: commentToSend },
+			HttpStatus.CREATED.code,
+		);
 	},
 });
 

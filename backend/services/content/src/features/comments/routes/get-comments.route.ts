@@ -3,6 +3,32 @@ import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
 import { CommentsRoutesTag } from "../comments.constants";
 
+const commentMediaSelect = {
+	id: true,
+	commentId: true,
+	position: true,
+	mediaType: true,
+	createdAt: true,
+	lowQualityFileId: true,
+	lowQualityFile: {
+		select: {
+			id: true,
+			mimeType: true,
+			filename: true,
+			createdAt: true,
+		},
+	},
+	highQualityFileId: true,
+	highQualityFile: {
+		select: {
+			id: true,
+			mimeType: true,
+			filename: true,
+			createdAt: true,
+		},
+	},
+} as const;
+
 const routeDef = createRoute({
 	method: "get",
 	path: "/posts/{postId}/comments",
@@ -39,7 +65,17 @@ const getCommentsRoute = defineOpenAPIRoute({
 				orderBy: { createdAt: "desc" },
 				skip,
 				take: limit,
-				include: {
+				select: {
+					id: true,
+					postId: true,
+					authorId: true,
+					content: true,
+					createdAt: true,
+					updatedAt: true,
+					medias: {
+						select: commentMediaSelect,
+						orderBy: { position: "asc" },
+					},
 					_count: {
 						select: { commentLikes: true },
 					},
