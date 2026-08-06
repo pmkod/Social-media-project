@@ -1,19 +1,15 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { httpClient } from "@/core/http-clients/http-client.ts";
 import type { Comment } from "../common/comment.ts";
-import type { PostMediaItem } from "../common/post.ts";
 
 type ApiComment = {
 	id: string;
 	postId: string;
 	authorId?: string;
 	content: string;
+	likesCount?: number;
 	createdAt: string;
 	updatedAt?: string;
-	medias?: PostMediaItem[];
-	_count?: {
-		commentLikes: number;
-	};
 };
 
 type GetCommentsResponse = {
@@ -52,8 +48,7 @@ const mapComment = (raw: ApiComment): Comment => ({
 	author: DEFAULT_AUTHOR,
 	content: raw.content,
 	createdAt: formatDate(raw.createdAt),
-	medias: raw.medias ?? [],
-	likesCount: raw._count?.commentLikes ?? 0,
+	likesCount: raw.likesCount ?? 0,
 });
 
 const fetchCommentsPage = async ({

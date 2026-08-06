@@ -134,6 +134,8 @@ const createPostRoute = defineOpenAPIRoute<
 			select: {
 				id: true,
 				text: true,
+				likesCount: true,
+				commentsCount: true,
 				medias: {
 					select: {
 						id: true,

@@ -1,12 +1,10 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { httpClient } from "@/core/http-clients/http-client.ts";
 import type { Comment } from "../common/comment.ts";
-import type { PostMediaItem } from "../common/post.ts";
 
 export type CreateCommentInput = {
 	postId: string;
 	content: string;
-	medias?: File[];
 };
 
 const DEFAULT_AUTHOR = {
@@ -21,12 +19,9 @@ type ApiComment = {
 	postId: string;
 	authorId?: string;
 	content: string;
+	likesCount?: number;
 	createdAt: string;
 	updatedAt?: string;
-	medias?: PostMediaItem[];
-	_count?: {
-		commentLikes: number;
-	};
 };
 
 type CreateCommentResponse = {
@@ -40,19 +35,13 @@ const mapComment = (raw: ApiComment): Comment => ({
 	author: DEFAULT_AUTHOR,
 	content: raw.content,
 	createdAt: "À l'instant",
-	medias: raw.medias ?? [],
-	likesCount: raw._count?.commentLikes ?? 0,
+	likesCount: raw.likesCount ?? 0,
 });
 
 const createComment = async (input: CreateCommentInput): Promise<Comment> => {
 	const formData = new FormData();
 	if (input.content) {
 		formData.append("content", input.content);
-	}
-	if (input.medias && input.medias.length > 0) {
-		for (const file of input.medias) {
-			formData.append("medias", file);
-		}
 	}
 
 	try {
@@ -65,25 +54,12 @@ const createComment = async (input: CreateCommentInput): Promise<Comment> => {
 		return mapComment(response.comment);
 	} catch {
 		// Local fallback comment if API endpoint is unavailable
-		const fallbackMedias = (input.medias || []).map((file, idx) => {
-			const isVideo = file.type.startsWith("video/");
-			const url = URL.createObjectURL(file);
-			return {
-				id: `temp-${idx}`,
-				mediaType: isVideo ? "VIDEO" : "IMAGE",
-				highQualityFile: {
-					filename: url,
-				},
-			};
-		});
-
 		return {
 			id: `comment-created-${Date.now()}`,
 			postId: input.postId,
 			author: DEFAULT_AUTHOR,
 			content: input.content,
 			createdAt: "À l'instant",
-			medias: fallbackMedias.length > 0 ? fallbackMedias : [],
 			likesCount: 0,
 		};
 	}

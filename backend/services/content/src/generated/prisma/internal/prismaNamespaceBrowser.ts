@@ -55,7 +55,6 @@ export const ModelName = {
   PostMedia: 'PostMedia',
   File: 'File',
   Comment: 'Comment',
-  CommentMedia: 'CommentMedia',
   PostLike: 'PostLike',
   CommentLike: 'CommentLike'
 } as const
@@ -80,6 +79,8 @@ export const PostScalarFieldEnum = {
   id: 'id',
   authorId: 'authorId',
   text: 'text',
+  likesCount: 'likesCount',
+  commentsCount: 'commentsCount',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -115,24 +116,12 @@ export const CommentScalarFieldEnum = {
   postId: 'postId',
   authorId: 'authorId',
   content: 'content',
+  likesCount: 'likesCount',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type CommentScalarFieldEnum = (typeof CommentScalarFieldEnum)[keyof typeof CommentScalarFieldEnum]
-
-
-export const CommentMediaScalarFieldEnum = {
-  id: 'id',
-  commentId: 'commentId',
-  position: 'position',
-  mediaType: 'mediaType',
-  createdAt: 'createdAt',
-  lowQualityFileId: 'lowQualityFileId',
-  highQualityFileId: 'highQualityFileId'
-} as const
-
-export type CommentMediaScalarFieldEnum = (typeof CommentMediaScalarFieldEnum)[keyof typeof CommentMediaScalarFieldEnum]
 
 
 export const PostLikeScalarFieldEnum = {

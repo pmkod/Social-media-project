@@ -2,11 +2,6 @@ import { RiHeartFill, RiHeartLine } from "@remixicon/react";
 import { useState } from "react";
 import { cn } from "@/core/lib/utils.ts";
 import type { Comment } from "./comment.ts";
-import {
-	getMediaUrl,
-	PostMediaGrid,
-	type RenderMediaItem,
-} from "./post-item.tsx";
 
 interface CommentItemProps {
 	comment: Comment;
@@ -15,10 +10,6 @@ interface CommentItemProps {
 
 export function CommentItem({ comment, compact = false }: CommentItemProps) {
 	const [isLiked, setIsLiked] = useState(false);
-
-	const mediaList: RenderMediaItem[] = (comment.medias ?? [])
-		.map((m) => getMediaUrl(m))
-		.filter((item): item is RenderMediaItem => item !== null);
 
 	const likesCount = (comment.likesCount ?? 0) + (isLiked ? 1 : 0);
 
@@ -48,17 +39,9 @@ export function CommentItem({ comment, compact = false }: CommentItemProps) {
 					</span>
 				</div>
 
-				{comment.content ? (
-					<p className="mt-1 text-sm text-foreground whitespace-pre-line leading-relaxed">
-						{comment.content}
-					</p>
-				) : null}
-
-				{mediaList.length > 0 ? (
-					<div className={cn(!compact && "max-w-md")}>
-						<PostMediaGrid media={mediaList} />
-					</div>
-				) : null}
+				<p className="mt-1 text-sm text-foreground whitespace-pre-line leading-relaxed">
+					{comment.content}
+				</p>
 
 				<div className="mt-2 flex items-center gap-4 text-muted-foreground text-xs">
 					<button

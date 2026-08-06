@@ -5,11 +5,9 @@ import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { requireUserAuthentication } from "@/features/authentication/middlewares/require-user-authentication.middleware";
 import { CommentsRoutesTag } from "../comments.constants";
 import { CreateCommentValidationSchema } from "../comments.validation-schemas";
-import { createCommentMedias } from "../services/comment-media.service";
 
 const CreateCommentRequestBody = z.object({
-	content: CreateCommentValidationSchema.shape.content.optional(),
-	medias: CreateCommentValidationSchema.shape.medias.optional(),
+	content: CreateCommentValidationSchema.shape.content,
 });
 
 const routeDef = createRoute({
@@ -49,18 +47,7 @@ const createCommentRoute = defineOpenAPIRoute<
 		}
 
 		const { postId } = c.req.valid("param");
-		const { content, medias } = c.req.valid("form");
-
-		const hasContent = Boolean(content?.trim());
-		const hasMedias = Boolean(medias && medias.length > 0);
-		if (!hasContent && !hasMedias) {
-			return c.json(
-				{
-					error: "Le commentaire doit contenir du texte ou au moins un média",
-				},
-				HttpStatus.BAD_REQUEST.code,
-			);
-		}
+		const { content } = c.req.valid("form");
 
 		const post = await prisma.post.findUnique({
 			where: { id: postId },
@@ -71,23 +58,25 @@ const createCommentRoute = defineOpenAPIRoute<
 			return c.json({ error: "Post not found" }, HttpStatus.NOT_FOUND.code);
 		}
 
-		const comment = await prisma.comment.create({
-			data: {
-				postId,
-				authorId: authenticatedUserId,
-				content: content?.trim() ?? "",
-			},
-			select: {
-				id: true,
-			},
-		});
-
-		if (medias && medias.length > 0) {
-			await createCommentMedias({
-				commentId: comment.id,
-				medias,
+		const comment = await prisma.$transaction(async (tx) => {
+			const createdComment = await tx.comment.create({
+				data: {
+					postId,
+					authorId: authenticatedUserId,
+					content: content.trim(),
+				},
+				select: {
+					id: true,
+				},
 			});
-		}
+
+			await tx.post.update({
+				where: { id: postId },
+				data: { commentsCount: { increment: 1 } },
+			});
+
+			return createdComment;
+		});
 
 		const commentToSend = await prisma.comment.findUniqueOrThrow({
 			where: {
@@ -98,38 +87,9 @@ const createCommentRoute = defineOpenAPIRoute<
 				postId: true,
 				authorId: true,
 				content: true,
+				likesCount: true,
 				createdAt: true,
 				updatedAt: true,
-				medias: {
-					select: {
-						id: true,
-						position: true,
-						mediaType: true,
-						createdAt: true,
-						lowQualityFileId: true,
-						lowQualityFile: {
-							select: {
-								id: true,
-								mimeType: true,
-								filename: true,
-								createdAt: true,
-							},
-						},
-						highQualityFileId: true,
-						highQualityFile: {
-							select: {
-								id: true,
-								mimeType: true,
-								filename: true,
-								createdAt: true,
-							},
-						},
-					},
-					orderBy: { position: "asc" },
-				},
-				_count: {
-					select: { commentLikes: true },
-				},
 			},
 		});
 

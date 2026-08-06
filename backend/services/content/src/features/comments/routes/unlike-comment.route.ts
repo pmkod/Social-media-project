@@ -3,13 +3,13 @@ import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { requireUserAuthentication } from "@/features/authentication/middlewares/require-user-authentication.middleware";
-import { CommentLikesRoutesTag } from "../comment-likes.constants";
+import { CommentsRoutesTag } from "../comments.constants";
 
 const routeDef = createRoute({
-	method: "post",
-	path: "/comments/{commentId}/likes",
-	summary: "Like a comment",
-	tags: [CommentLikesRoutesTag],
+	method: "delete",
+	path: "/comments/{commentId}/like",
+	summary: "Unlike a comment",
+	tags: [CommentsRoutesTag],
 	middleware: [requireUserAuthentication],
 	request: {
 		params: z.object({
@@ -18,12 +18,12 @@ const routeDef = createRoute({
 	},
 	responses: {
 		[HttpStatus.OK.code]: {
-			description: "Comment liked successfully",
+			description: "Comment unliked successfully",
 		},
 	},
 });
 
-const likeCommentRoute = defineOpenAPIRoute<
+const unlikeCommentRoute = defineOpenAPIRoute<
 	typeof routeDef,
 	HonoAuthenticatedEnv
 >({
@@ -38,28 +38,42 @@ const likeCommentRoute = defineOpenAPIRoute<
 
 		const comment = await prisma.comment.findUnique({
 			where: { id: commentId },
+			select: { id: true },
 		});
 
 		if (!comment) {
 			throw new Error("Comment not found");
 		}
 
-		const commentLike = await prisma.commentLike.upsert({
+		const deleted = await prisma.commentLike.deleteMany({
 			where: {
-				commentId_authorId: {
-					commentId,
-					authorId: authenticatedUserId,
-				},
-			},
-			update: {},
-			create: {
 				commentId,
 				authorId: authenticatedUserId,
 			},
 		});
 
-		return c.json(commentLike);
+		if (deleted.count > 0) {
+			await prisma.comment.update({
+				where: { id: commentId },
+				data: {
+					likesCount: {
+						decrement: 1,
+					},
+				},
+			});
+		}
+
+		const { likesCount } = await prisma.comment.findUniqueOrThrow({
+			where: { id: commentId },
+			select: { likesCount: true },
+		});
+
+		return c.json({
+			success: true,
+			message: "Comment unliked",
+			likesCount,
+		});
 	},
 });
 
-export { likeCommentRoute };
+export { unlikeCommentRoute };

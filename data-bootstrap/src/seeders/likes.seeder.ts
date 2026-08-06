@@ -37,12 +37,18 @@ const seedLikes = async (
         continue;
       }
 
-      await prisma.postLike.create({
-        data: {
-          postId: post.id,
-          authorId: user.id,
-        },
-      });
+      await prisma.$transaction([
+        prisma.postLike.create({
+          data: {
+            postId: post.id,
+            authorId: user.id,
+          },
+        }),
+        prisma.post.update({
+          where: { id: post.id },
+          data: { likesCount: { increment: 1 } },
+        }),
+      ]);
       postLikes++;
       logger.success(`User ${user.username} liked post ${post.id}`);
     }
@@ -59,12 +65,18 @@ const seedLikes = async (
         continue;
       }
 
-      await prisma.commentLike.create({
-        data: {
-          commentId: comment.id,
-          authorId: user.id,
-        },
-      });
+      await prisma.$transaction([
+        prisma.commentLike.create({
+          data: {
+            commentId: comment.id,
+            authorId: user.id,
+          },
+        }),
+        prisma.comment.update({
+          where: { id: comment.id },
+          data: { likesCount: { increment: 1 } },
+        }),
+      ]);
       commentLikes++;
       logger.success(`User ${user.username} liked comment ${comment.id}`);
     }

@@ -8,12 +8,9 @@ type ApiComment = {
 	postId?: string;
 	authorId?: string;
 	content: string;
+	likesCount?: number;
 	createdAt: string;
 	updatedAt?: string;
-	medias?: PostMediaItem[];
-	_count?: {
-		commentLikes: number;
-	};
 };
 
 type ApiPostItem = {
@@ -255,8 +252,7 @@ const fetchPostsPage = async ({
 				author: DEFAULT_AUTHOR,
 				content: rawComment.content,
 				createdAt: formatDate(rawComment.createdAt),
-				medias: rawComment.medias ?? [],
-				likesCount: rawComment._count?.commentLikes ?? 0,
+				likesCount: rawComment.likesCount ?? 0,
 			}));
 
 			return {

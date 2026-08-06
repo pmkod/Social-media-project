@@ -48,9 +48,15 @@ const deleteCommentRoute = defineOpenAPIRoute<
 			throw new Error("You are not authorized to delete this comment");
 		}
 
-		await prisma.comment.delete({
-			where: { id },
-		});
+		await prisma.$transaction([
+			prisma.comment.delete({
+				where: { id },
+			}),
+			prisma.post.update({
+				where: { id: comment.postId },
+				data: { commentsCount: { decrement: 1 } },
+			}),
+		]);
 
 		return c.json({ success: true, message: "Comment deleted successfully" });
 	},

@@ -15,9 +15,7 @@ export function buildImageUrl(fileName?: string | null): string {
 	) {
 		return fileName;
 	}
-	const cleanFileName = fileName.startsWith("/")
-		? fileName.slice(1)
-		: fileName;
+	const cleanFileName = fileName.startsWith("/") ? fileName.slice(1) : fileName;
 	return `${ApiConfig.baseUrl}/images/${cleanFileName}`;
 }
 
@@ -36,9 +34,7 @@ export function buildVideoUrl(fileName?: string | null): string {
 	) {
 		return fileName;
 	}
-	const cleanFileName = fileName.startsWith("/")
-		? fileName.slice(1)
-		: fileName;
+	const cleanFileName = fileName.startsWith("/") ? fileName.slice(1) : fileName;
 	return `${ApiConfig.baseUrl}/videos/${cleanFileName}`;
 }
 
@@ -48,4 +44,3 @@ export function buildVideoUrl(fileName?: string | null): string {
 export const buildPostImageUrl = buildImageUrl;
 export const buildPostVideoUrl = buildVideoUrl;
 export const postVideoUrl = buildVideoUrl;
-

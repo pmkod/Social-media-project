@@ -1,4 +1,4 @@
-import type { PostAuthor, PostMediaItem } from "./post.ts";
+import type { PostAuthor } from "./post.ts";
 
 export interface Comment {
 	id: string;
@@ -6,6 +6,5 @@ export interface Comment {
 	author: PostAuthor;
 	content: string;
 	createdAt: string;
-	medias?: PostMediaItem[];
 	likesCount?: number;
 }

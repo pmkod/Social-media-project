@@ -3,13 +3,13 @@ import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { requireUserAuthentication } from "@/features/authentication/middlewares/require-user-authentication.middleware";
-import { PostLikesRoutesTag } from "../post-likes.constants";
+import { PostsRoutesTag } from "../posts.constants";
 
 const routeDef = createRoute({
 	method: "delete",
-	path: "/posts/{postId}/likes",
+	path: "/posts/{postId}/like",
 	summary: "Unlike a post",
-	tags: [PostLikesRoutesTag],
+	tags: [PostsRoutesTag],
 	middleware: [requireUserAuthentication],
 	request: {
 		params: z.object({
@@ -23,10 +23,7 @@ const routeDef = createRoute({
 	},
 });
 
-const unlikePostRoute = defineOpenAPIRoute<
-	typeof routeDef,
-	HonoAuthenticatedEnv
->({
+const unlikePostRoute = defineOpenAPIRoute<typeof routeDef, HonoAuthenticatedEnv>({
 	route: routeDef,
 	handler: async (c) => {
 		const authenticatedUserId = c.get("authenticatedUserId");
@@ -36,14 +33,43 @@ const unlikePostRoute = defineOpenAPIRoute<
 
 		const { postId } = c.req.valid("param");
 
-		await prisma.postLike.deleteMany({
+		const post = await prisma.post.findUnique({
+			where: { id: postId },
+			select: { id: true },
+		});
+
+		if (!post) {
+			throw new Error("Post not found");
+		}
+
+		const deleted = await prisma.postLike.deleteMany({
 			where: {
 				postId,
 				authorId: authenticatedUserId,
 			},
 		});
 
-		return c.json({ success: true, message: "Post unliked" });
+		if (deleted.count > 0) {
+			await prisma.post.update({
+				where: { id: postId },
+				data: {
+					likesCount: {
+						decrement: 1,
+					},
+				},
+			});
+		}
+
+		const { likesCount } = await prisma.post.findUniqueOrThrow({
+			where: { id: postId },
+			select: { likesCount: true },
+		});
+
+		return c.json({
+			success: true,
+			message: "Post unliked",
+			likesCount,
+		});
 	},
 });
 

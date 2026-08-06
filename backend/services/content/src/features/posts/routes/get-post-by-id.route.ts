@@ -31,6 +31,8 @@ const getPostByIdRoute = defineOpenAPIRoute({
 				id: true,
 				authorId: true,
 				text: true,
+				likesCount: true,
+				commentsCount: true,
 				createdAt: true,
 				updatedAt: true,
 				medias: {
@@ -60,12 +62,6 @@ const getPostByIdRoute = defineOpenAPIRoute({
 						},
 					},
 					orderBy: { position: "asc" },
-				},
-				_count: {
-					select: {
-						comments: true,
-						postLikes: true,
-					},
 				},
 			},
 		});

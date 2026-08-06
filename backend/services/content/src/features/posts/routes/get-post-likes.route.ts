@@ -1,16 +1,16 @@
 import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
-import { CommentLikesRoutesTag } from "../comment-likes.constants";
+import { PostsRoutesTag } from "../posts.constants";
 
 const routeDef = createRoute({
 	method: "get",
-	path: "/comments/{commentId}/likes",
-	summary: "Get likes for a comment",
-	tags: [CommentLikesRoutesTag],
+	path: "/posts/{postId}/likes",
+	summary: "Get likes for a post",
+	tags: [PostsRoutesTag],
 	request: {
 		params: z.object({
-			commentId: z.string(),
+			postId: z.string(),
 		}),
 	},
 	responses: {
@@ -20,14 +20,14 @@ const routeDef = createRoute({
 	},
 });
 
-const getCommentLikesRoute = defineOpenAPIRoute({
+const getPostLikesRoute = defineOpenAPIRoute({
 	route: routeDef,
 	handler: async (c) => {
-		const { commentId } = c.req.valid("param");
+		const { postId } = c.req.valid("param");
 
 		const [likes, count] = await Promise.all([
-			prisma.commentLike.findMany({
-				where: { commentId },
+			prisma.postLike.findMany({
+				where: { postId },
 				orderBy: { createdAt: "desc" },
 				select: {
 					id: true,
@@ -35,11 +35,11 @@ const getCommentLikesRoute = defineOpenAPIRoute({
 					createdAt: true,
 				},
 			}),
-			prisma.commentLike.count({ where: { commentId } }),
+			prisma.postLike.count({ where: { postId } }),
 		]);
 
 		return c.json({ count, likes });
 	},
 });
 
-export { getCommentLikesRoute };
+export { getPostLikesRoute };
