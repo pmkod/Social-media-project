@@ -236,16 +236,23 @@ export function PostItem({ post, onBookmarkToggle }: PostItemProps) {
 		<article className="border-x border-t last:border-b first:rounded-t-xl last:rounded-b-xl border-border p-4 hover:bg-muted/30 transition-colors">
 			<div className="flex gap-3">
 				{/* Avatar */}
-				<img
-					src={
-						post.author?.avatar ||
-						`https://ui-avatars.com/api/?name=${encodeURIComponent(
-							post.author?.name || "U",
-						)}&background=random`
-					}
-					alt={post.author?.name || "Auteur"}
-					className="size-12 rounded-full object-cover shrink-0 ring-1 ring-border"
-				/>
+				<Link
+					to="/$username"
+					params={{ username: `@${post.author?.handle ?? ""}` }}
+					className="h-fit shrink-0 rounded-full"
+					onClick={(event) => event.stopPropagation()}
+				>
+					<img
+						src={
+							post.author?.avatar ||
+							`https://ui-avatars.com/api/?name=${encodeURIComponent(
+								post.author?.name || "U",
+							)}&background=random`
+						}
+						alt={post.author?.name || "Auteur"}
+						className="size-12 rounded-full object-cover ring-1 ring-border"
+					/>
+				</Link>
 
 				{/* Content Container */}
 				<div className="flex-1 min-w-0">

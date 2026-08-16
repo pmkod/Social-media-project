@@ -5,28 +5,22 @@ import { getPublicUserProfile } from "../services/get-public-user-profile.servic
 
 const routeDef = createRoute({
 	method: "get",
-	path: "/users/{userId}",
-	summary: "Get user by ID",
+	path: "/users/by-username/{username}",
+	summary: "Get a public user profile by username",
 	tags: [UserRoutesTag],
-	request: {
-		params: z.object({
-			userId: z.string(),
-		}),
-	},
+	request: { params: z.object({ username: z.string().min(1) }) },
 	responses: {
-		[HttpStatus.OK.code]: {
-			description: "Success",
-		},
+		[HttpStatus.OK.code]: { description: "Public user profile" },
+		[HttpStatus.NOT_FOUND.code]: { description: "User not found" },
 	},
 });
 
-const getUserByIdRoute = defineOpenAPIRoute({
+const getUserByUsernameRoute = defineOpenAPIRoute({
 	route: routeDef,
 	handler: async (c) => {
-		const { userId } = c.req.valid("param");
-
+		const { username } = c.req.valid("param");
 		const user = await getPublicUserProfile(
-			{ id: userId },
+			{ username },
 			c.req.header("X-Authenticated-User-Id"),
 		);
 
@@ -38,4 +32,4 @@ const getUserByIdRoute = defineOpenAPIRoute({
 	},
 });
 
-export { getUserByIdRoute };
+export { getUserByUsernameRoute };

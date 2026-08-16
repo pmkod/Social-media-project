@@ -1,5 +1,6 @@
 import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
+import { userServiceClient } from "@/core/services/user-service.client";
 import { PostsRoutesTag } from "../posts.constants";
 import { getPostList } from "../services/get-post-list.service";
 
@@ -32,14 +33,23 @@ const getFeedFollowingRoute = defineOpenAPIRoute({
 			Math.max(Number.parseInt(query.limit, 10) || 10, 1),
 			50,
 		);
+		const authenticatedUserId = c.req.header("X-Authenticated-User-Id");
+		const followingIds = authenticatedUserId
+			? await userServiceClient.fetchFollowingIds(authenticatedUserId)
+			: [];
+		const feedAuthorIds = authenticatedUserId
+			? [authenticatedUserId, ...followingIds]
+			: [];
 
 		return c.json(
 			await getPostList({
-				where: query.authorId ? { authorId: query.authorId } : undefined,
+				where: query.authorId
+					? { authorId: query.authorId }
+					: { authorId: { in: feedAuthorIds } },
 				cursorId: query.cursorId,
 				cursorCreatedAt: query.cursorCreatedAt,
 				limit,
-				authenticatedUserId: c.req.header("X-Authenticated-User-Id"),
+				authenticatedUserId,
 			}),
 		);
 	},

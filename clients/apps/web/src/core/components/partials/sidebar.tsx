@@ -48,21 +48,27 @@ export function Sidebar() {
 					</Button>
 				</div>
 				<div className="border-t border-border pt-4 px-2">
-					<div className="flex items-center justify-between p-2 rounded-2xl hover:bg-accent transition-colors cursor-pointer">
+					<div className="flex items-center justify-between p-2 rounded-2xl hover:bg-accent transition-colors">
 						<div className="flex items-center gap-3 min-w-0">
-							<img
-								src={avatar}
-								alt="User Avatar"
-								className="h-9 w-9 rounded-full object-cover shrink-0"
-							/>
-							<div className="min-w-0">
-								<div className="text-xs font-semibold truncate text-foreground">
-									{user?.fullName}
+							<Link
+								to="/$username"
+								params={{ username: `@${user?.username ?? ""}` }}
+								className="flex min-w-0 items-center gap-3"
+							>
+								<img
+									src={avatar}
+									alt="User Avatar"
+									className="h-9 w-9 rounded-full object-cover shrink-0"
+								/>
+								<div className="min-w-0">
+									<div className="text-xs font-semibold truncate text-foreground">
+										{user?.fullName}
+									</div>
+									<div className="text-[11px] text-muted-foreground truncate">
+										{user?.username}
+									</div>
 								</div>
-								<div className="text-[11px] text-muted-foreground truncate">
-									{user?.username}
-								</div>
-							</div>
+							</Link>
 						</div>
 						<Link
 							to="/"

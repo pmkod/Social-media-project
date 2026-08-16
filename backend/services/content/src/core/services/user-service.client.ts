@@ -16,7 +16,6 @@ export type UserProfileDto = {
 	bio?: string | null;
 };
 
-
 export class UserServiceClient {
 	private readonly baseUrl: string;
 
@@ -75,6 +74,43 @@ export class UserServiceClient {
 		}
 
 		return authorsMap;
+	}
+
+	async fetchFollowingIds(userId: string): Promise<string[]> {
+		try {
+			const response = await fetch(
+				`${this.baseUrl}/internal/users/${encodeURIComponent(userId)}/following-ids`,
+			);
+			if (!response.ok) return [];
+			const data = (await response.json()) as { userIds: string[] };
+			return data.userIds ?? [];
+		} catch (error) {
+			console.error(
+				"[UserServiceClient] Failed to fetch following IDs:",
+				error,
+			);
+			return [];
+		}
+	}
+
+	async adjustPostCount(userId: string, delta: -1 | 1): Promise<void> {
+		try {
+			const response = await fetch(
+				`${this.baseUrl}/internal/users/${encodeURIComponent(userId)}/post-count`,
+				{
+					method: "PATCH",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify({ delta }),
+				},
+			);
+			if (!response.ok) {
+				console.error(
+					`[UserServiceClient] Failed to update post count, status: ${response.status}`,
+				);
+			}
+		} catch (error) {
+			console.error("[UserServiceClient] Failed to update post count:", error);
+		}
 	}
 }
 

@@ -20,8 +20,22 @@ export type UserModel = runtime.Types.Result.DefaultSelection<Prisma.$UserPayloa
 
 export type AggregateUser = {
   _count: UserCountAggregateOutputType | null
+  _avg: UserAvgAggregateOutputType | null
+  _sum: UserSumAggregateOutputType | null
   _min: UserMinAggregateOutputType | null
   _max: UserMaxAggregateOutputType | null
+}
+
+export type UserAvgAggregateOutputType = {
+  postCount: number | null
+  followersCount: number | null
+  followingCount: number | null
+}
+
+export type UserSumAggregateOutputType = {
+  postCount: number | null
+  followersCount: number | null
+  followingCount: number | null
 }
 
 export type UserMinAggregateOutputType = {
@@ -33,8 +47,12 @@ export type UserMinAggregateOutputType = {
   displayName: string | null
   bio: string | null
   avatarUrl: string | null
+  coverUrl: string | null
   location: string | null
   website: string | null
+  postCount: number | null
+  followersCount: number | null
+  followingCount: number | null
   emailVerified: boolean | null
   active: boolean | null
   createdAt: Date | null
@@ -50,8 +68,12 @@ export type UserMaxAggregateOutputType = {
   displayName: string | null
   bio: string | null
   avatarUrl: string | null
+  coverUrl: string | null
   location: string | null
   website: string | null
+  postCount: number | null
+  followersCount: number | null
+  followingCount: number | null
   emailVerified: boolean | null
   active: boolean | null
   createdAt: Date | null
@@ -67,8 +89,12 @@ export type UserCountAggregateOutputType = {
   displayName: number
   bio: number
   avatarUrl: number
+  coverUrl: number
   location: number
   website: number
+  postCount: number
+  followersCount: number
+  followingCount: number
   emailVerified: number
   active: number
   createdAt: number
@@ -76,6 +102,18 @@ export type UserCountAggregateOutputType = {
   _all: number
 }
 
+
+export type UserAvgAggregateInputType = {
+  postCount?: true
+  followersCount?: true
+  followingCount?: true
+}
+
+export type UserSumAggregateInputType = {
+  postCount?: true
+  followersCount?: true
+  followingCount?: true
+}
 
 export type UserMinAggregateInputType = {
   id?: true
@@ -86,8 +124,12 @@ export type UserMinAggregateInputType = {
   displayName?: true
   bio?: true
   avatarUrl?: true
+  coverUrl?: true
   location?: true
   website?: true
+  postCount?: true
+  followersCount?: true
+  followingCount?: true
   emailVerified?: true
   active?: true
   createdAt?: true
@@ -103,8 +145,12 @@ export type UserMaxAggregateInputType = {
   displayName?: true
   bio?: true
   avatarUrl?: true
+  coverUrl?: true
   location?: true
   website?: true
+  postCount?: true
+  followersCount?: true
+  followingCount?: true
   emailVerified?: true
   active?: true
   createdAt?: true
@@ -120,8 +166,12 @@ export type UserCountAggregateInputType = {
   displayName?: true
   bio?: true
   avatarUrl?: true
+  coverUrl?: true
   location?: true
   website?: true
+  postCount?: true
+  followersCount?: true
+  followingCount?: true
   emailVerified?: true
   active?: true
   createdAt?: true
@@ -166,6 +216,18 @@ export type UserAggregateArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   _count?: true | UserCountAggregateInputType
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   *
+   * Select which fields to average
+  **/
+  _avg?: UserAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   *
+   * Select which fields to sum
+  **/
+  _sum?: UserSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
    * Select which fields to find the minimum value
   **/
@@ -197,6 +259,8 @@ export type UserGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
   take?: number
   skip?: number
   _count?: UserCountAggregateInputType | true
+  _avg?: UserAvgAggregateInputType
+  _sum?: UserSumAggregateInputType
   _min?: UserMinAggregateInputType
   _max?: UserMaxAggregateInputType
 }
@@ -210,13 +274,19 @@ export type UserGroupByOutputType = {
   displayName: string | null
   bio: string | null
   avatarUrl: string | null
+  coverUrl: string | null
   location: string | null
   website: string | null
+  postCount: number
+  followersCount: number
+  followingCount: number
   emailVerified: boolean
   active: boolean
   createdAt: Date
   updatedAt: Date
   _count: UserCountAggregateOutputType | null
+  _avg: UserAvgAggregateOutputType | null
+  _sum: UserSumAggregateOutputType | null
   _min: UserMinAggregateOutputType | null
   _max: UserMaxAggregateOutputType | null
 }
@@ -248,14 +318,20 @@ export type UserWhereInput = {
   displayName?: Prisma.StringNullableFilter<"User"> | string | null
   bio?: Prisma.StringNullableFilter<"User"> | string | null
   avatarUrl?: Prisma.StringNullableFilter<"User"> | string | null
+  coverUrl?: Prisma.StringNullableFilter<"User"> | string | null
   location?: Prisma.StringNullableFilter<"User"> | string | null
   website?: Prisma.StringNullableFilter<"User"> | string | null
+  postCount?: Prisma.IntFilter<"User"> | number
+  followersCount?: Prisma.IntFilter<"User"> | number
+  followingCount?: Prisma.IntFilter<"User"> | number
   emailVerified?: Prisma.BoolFilter<"User"> | boolean
   active?: Prisma.BoolFilter<"User"> | boolean
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   refreshTokens?: Prisma.RefreshTokenListRelationFilter
   userVerifications?: Prisma.UserVerificationListRelationFilter
+  followers?: Prisma.FollowListRelationFilter
+  following?: Prisma.FollowListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -267,14 +343,20 @@ export type UserOrderByWithRelationInput = {
   displayName?: Prisma.SortOrderInput | Prisma.SortOrder
   bio?: Prisma.SortOrderInput | Prisma.SortOrder
   avatarUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  coverUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   location?: Prisma.SortOrderInput | Prisma.SortOrder
   website?: Prisma.SortOrderInput | Prisma.SortOrder
+  postCount?: Prisma.SortOrder
+  followersCount?: Prisma.SortOrder
+  followingCount?: Prisma.SortOrder
   emailVerified?: Prisma.SortOrder
   active?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   refreshTokens?: Prisma.RefreshTokenOrderByRelationAggregateInput
   userVerifications?: Prisma.UserVerificationOrderByRelationAggregateInput
+  followers?: Prisma.FollowOrderByRelationAggregateInput
+  following?: Prisma.FollowOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -289,14 +371,20 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   displayName?: Prisma.StringNullableFilter<"User"> | string | null
   bio?: Prisma.StringNullableFilter<"User"> | string | null
   avatarUrl?: Prisma.StringNullableFilter<"User"> | string | null
+  coverUrl?: Prisma.StringNullableFilter<"User"> | string | null
   location?: Prisma.StringNullableFilter<"User"> | string | null
   website?: Prisma.StringNullableFilter<"User"> | string | null
+  postCount?: Prisma.IntFilter<"User"> | number
+  followersCount?: Prisma.IntFilter<"User"> | number
+  followingCount?: Prisma.IntFilter<"User"> | number
   emailVerified?: Prisma.BoolFilter<"User"> | boolean
   active?: Prisma.BoolFilter<"User"> | boolean
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   refreshTokens?: Prisma.RefreshTokenListRelationFilter
   userVerifications?: Prisma.UserVerificationListRelationFilter
+  followers?: Prisma.FollowListRelationFilter
+  following?: Prisma.FollowListRelationFilter
 }, "id" | "email" | "username">
 
 export type UserOrderByWithAggregationInput = {
@@ -308,15 +396,21 @@ export type UserOrderByWithAggregationInput = {
   displayName?: Prisma.SortOrderInput | Prisma.SortOrder
   bio?: Prisma.SortOrderInput | Prisma.SortOrder
   avatarUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  coverUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   location?: Prisma.SortOrderInput | Prisma.SortOrder
   website?: Prisma.SortOrderInput | Prisma.SortOrder
+  postCount?: Prisma.SortOrder
+  followersCount?: Prisma.SortOrder
+  followingCount?: Prisma.SortOrder
   emailVerified?: Prisma.SortOrder
   active?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
+  _avg?: Prisma.UserAvgOrderByAggregateInput
   _max?: Prisma.UserMaxOrderByAggregateInput
   _min?: Prisma.UserMinOrderByAggregateInput
+  _sum?: Prisma.UserSumOrderByAggregateInput
 }
 
 export type UserScalarWhereWithAggregatesInput = {
@@ -331,8 +425,12 @@ export type UserScalarWhereWithAggregatesInput = {
   displayName?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   bio?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   avatarUrl?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  coverUrl?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   location?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   website?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  postCount?: Prisma.IntWithAggregatesFilter<"User"> | number
+  followersCount?: Prisma.IntWithAggregatesFilter<"User"> | number
+  followingCount?: Prisma.IntWithAggregatesFilter<"User"> | number
   emailVerified?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
   active?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
@@ -348,14 +446,20 @@ export type UserCreateInput = {
   displayName?: string | null
   bio?: string | null
   avatarUrl?: string | null
+  coverUrl?: string | null
   location?: string | null
   website?: string | null
+  postCount?: number
+  followersCount?: number
+  followingCount?: number
   emailVerified?: boolean
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
   userVerifications?: Prisma.UserVerificationCreateNestedManyWithoutUserInput
+  followers?: Prisma.FollowCreateNestedManyWithoutFollowingInput
+  following?: Prisma.FollowCreateNestedManyWithoutFollowerInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -367,14 +471,20 @@ export type UserUncheckedCreateInput = {
   displayName?: string | null
   bio?: string | null
   avatarUrl?: string | null
+  coverUrl?: string | null
   location?: string | null
   website?: string | null
+  postCount?: number
+  followersCount?: number
+  followingCount?: number
   emailVerified?: boolean
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
   userVerifications?: Prisma.UserVerificationUncheckedCreateNestedManyWithoutUserInput
+  followers?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowingInput
+  following?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowerInput
 }
 
 export type UserUpdateInput = {
@@ -386,14 +496,20 @@ export type UserUpdateInput = {
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postCount?: Prisma.IntFieldUpdateOperationsInput | number
+  followersCount?: Prisma.IntFieldUpdateOperationsInput | number
+  followingCount?: Prisma.IntFieldUpdateOperationsInput | number
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
   userVerifications?: Prisma.UserVerificationUpdateManyWithoutUserNestedInput
+  followers?: Prisma.FollowUpdateManyWithoutFollowingNestedInput
+  following?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -405,14 +521,20 @@ export type UserUncheckedUpdateInput = {
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postCount?: Prisma.IntFieldUpdateOperationsInput | number
+  followersCount?: Prisma.IntFieldUpdateOperationsInput | number
+  followingCount?: Prisma.IntFieldUpdateOperationsInput | number
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
   userVerifications?: Prisma.UserVerificationUncheckedUpdateManyWithoutUserNestedInput
+  followers?: Prisma.FollowUncheckedUpdateManyWithoutFollowingNestedInput
+  following?: Prisma.FollowUncheckedUpdateManyWithoutFollowerNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -424,8 +546,12 @@ export type UserCreateManyInput = {
   displayName?: string | null
   bio?: string | null
   avatarUrl?: string | null
+  coverUrl?: string | null
   location?: string | null
   website?: string | null
+  postCount?: number
+  followersCount?: number
+  followingCount?: number
   emailVerified?: boolean
   active?: boolean
   createdAt?: Date | string
@@ -441,8 +567,12 @@ export type UserUpdateManyMutationInput = {
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postCount?: Prisma.IntFieldUpdateOperationsInput | number
+  followersCount?: Prisma.IntFieldUpdateOperationsInput | number
+  followingCount?: Prisma.IntFieldUpdateOperationsInput | number
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -458,8 +588,12 @@ export type UserUncheckedUpdateManyInput = {
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postCount?: Prisma.IntFieldUpdateOperationsInput | number
+  followersCount?: Prisma.IntFieldUpdateOperationsInput | number
+  followingCount?: Prisma.IntFieldUpdateOperationsInput | number
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -475,12 +609,22 @@ export type UserCountOrderByAggregateInput = {
   displayName?: Prisma.SortOrder
   bio?: Prisma.SortOrder
   avatarUrl?: Prisma.SortOrder
+  coverUrl?: Prisma.SortOrder
   location?: Prisma.SortOrder
   website?: Prisma.SortOrder
+  postCount?: Prisma.SortOrder
+  followersCount?: Prisma.SortOrder
+  followingCount?: Prisma.SortOrder
   emailVerified?: Prisma.SortOrder
   active?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type UserAvgOrderByAggregateInput = {
+  postCount?: Prisma.SortOrder
+  followersCount?: Prisma.SortOrder
+  followingCount?: Prisma.SortOrder
 }
 
 export type UserMaxOrderByAggregateInput = {
@@ -492,8 +636,12 @@ export type UserMaxOrderByAggregateInput = {
   displayName?: Prisma.SortOrder
   bio?: Prisma.SortOrder
   avatarUrl?: Prisma.SortOrder
+  coverUrl?: Prisma.SortOrder
   location?: Prisma.SortOrder
   website?: Prisma.SortOrder
+  postCount?: Prisma.SortOrder
+  followersCount?: Prisma.SortOrder
+  followingCount?: Prisma.SortOrder
   emailVerified?: Prisma.SortOrder
   active?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -509,12 +657,27 @@ export type UserMinOrderByAggregateInput = {
   displayName?: Prisma.SortOrder
   bio?: Prisma.SortOrder
   avatarUrl?: Prisma.SortOrder
+  coverUrl?: Prisma.SortOrder
   location?: Prisma.SortOrder
   website?: Prisma.SortOrder
+  postCount?: Prisma.SortOrder
+  followersCount?: Prisma.SortOrder
+  followingCount?: Prisma.SortOrder
   emailVerified?: Prisma.SortOrder
   active?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type UserSumOrderByAggregateInput = {
+  postCount?: Prisma.SortOrder
+  followersCount?: Prisma.SortOrder
+  followingCount?: Prisma.SortOrder
+}
+
+export type UserScalarRelationFilter = {
+  is?: Prisma.UserWhereInput
+  isNot?: Prisma.UserWhereInput
 }
 
 export type UserNullableScalarRelationFilter = {
@@ -530,12 +693,48 @@ export type NullableStringFieldUpdateOperationsInput = {
   set?: string | null
 }
 
+export type IntFieldUpdateOperationsInput = {
+  set?: number
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
 export type BoolFieldUpdateOperationsInput = {
   set?: boolean
 }
 
 export type DateTimeFieldUpdateOperationsInput = {
   set?: Date | string
+}
+
+export type UserCreateNestedOneWithoutFollowingInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutFollowingInput, Prisma.UserUncheckedCreateWithoutFollowingInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutFollowingInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserCreateNestedOneWithoutFollowersInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutFollowersInput, Prisma.UserUncheckedCreateWithoutFollowersInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutFollowersInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutFollowingNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutFollowingInput, Prisma.UserUncheckedCreateWithoutFollowingInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutFollowingInput
+  upsert?: Prisma.UserUpsertWithoutFollowingInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutFollowingInput, Prisma.UserUpdateWithoutFollowingInput>, Prisma.UserUncheckedUpdateWithoutFollowingInput>
+}
+
+export type UserUpdateOneRequiredWithoutFollowersNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutFollowersInput, Prisma.UserUncheckedCreateWithoutFollowersInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutFollowersInput
+  upsert?: Prisma.UserUpsertWithoutFollowersInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutFollowersInput, Prisma.UserUpdateWithoutFollowersInput>, Prisma.UserUncheckedUpdateWithoutFollowersInput>
 }
 
 export type UserCreateNestedOneWithoutRefreshTokensInput = {
@@ -570,6 +769,230 @@ export type UserUpdateOneWithoutUserVerificationsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutUserVerificationsInput, Prisma.UserUpdateWithoutUserVerificationsInput>, Prisma.UserUncheckedUpdateWithoutUserVerificationsInput>
 }
 
+export type UserCreateWithoutFollowingInput = {
+  id?: string
+  email: string
+  username: string
+  password: string
+  fullName?: string | null
+  displayName?: string | null
+  bio?: string | null
+  avatarUrl?: string | null
+  coverUrl?: string | null
+  location?: string | null
+  website?: string | null
+  postCount?: number
+  followersCount?: number
+  followingCount?: number
+  emailVerified?: boolean
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  userVerifications?: Prisma.UserVerificationCreateNestedManyWithoutUserInput
+  followers?: Prisma.FollowCreateNestedManyWithoutFollowingInput
+}
+
+export type UserUncheckedCreateWithoutFollowingInput = {
+  id?: string
+  email: string
+  username: string
+  password: string
+  fullName?: string | null
+  displayName?: string | null
+  bio?: string | null
+  avatarUrl?: string | null
+  coverUrl?: string | null
+  location?: string | null
+  website?: string | null
+  postCount?: number
+  followersCount?: number
+  followingCount?: number
+  emailVerified?: boolean
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  userVerifications?: Prisma.UserVerificationUncheckedCreateNestedManyWithoutUserInput
+  followers?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowingInput
+}
+
+export type UserCreateOrConnectWithoutFollowingInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutFollowingInput, Prisma.UserUncheckedCreateWithoutFollowingInput>
+}
+
+export type UserCreateWithoutFollowersInput = {
+  id?: string
+  email: string
+  username: string
+  password: string
+  fullName?: string | null
+  displayName?: string | null
+  bio?: string | null
+  avatarUrl?: string | null
+  coverUrl?: string | null
+  location?: string | null
+  website?: string | null
+  postCount?: number
+  followersCount?: number
+  followingCount?: number
+  emailVerified?: boolean
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  userVerifications?: Prisma.UserVerificationCreateNestedManyWithoutUserInput
+  following?: Prisma.FollowCreateNestedManyWithoutFollowerInput
+}
+
+export type UserUncheckedCreateWithoutFollowersInput = {
+  id?: string
+  email: string
+  username: string
+  password: string
+  fullName?: string | null
+  displayName?: string | null
+  bio?: string | null
+  avatarUrl?: string | null
+  coverUrl?: string | null
+  location?: string | null
+  website?: string | null
+  postCount?: number
+  followersCount?: number
+  followingCount?: number
+  emailVerified?: boolean
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  userVerifications?: Prisma.UserVerificationUncheckedCreateNestedManyWithoutUserInput
+  following?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowerInput
+}
+
+export type UserCreateOrConnectWithoutFollowersInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutFollowersInput, Prisma.UserUncheckedCreateWithoutFollowersInput>
+}
+
+export type UserUpsertWithoutFollowingInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutFollowingInput, Prisma.UserUncheckedUpdateWithoutFollowingInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutFollowingInput, Prisma.UserUncheckedCreateWithoutFollowingInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutFollowingInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutFollowingInput, Prisma.UserUncheckedUpdateWithoutFollowingInput>
+}
+
+export type UserUpdateWithoutFollowingInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postCount?: Prisma.IntFieldUpdateOperationsInput | number
+  followersCount?: Prisma.IntFieldUpdateOperationsInput | number
+  followingCount?: Prisma.IntFieldUpdateOperationsInput | number
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  userVerifications?: Prisma.UserVerificationUpdateManyWithoutUserNestedInput
+  followers?: Prisma.FollowUpdateManyWithoutFollowingNestedInput
+}
+
+export type UserUncheckedUpdateWithoutFollowingInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postCount?: Prisma.IntFieldUpdateOperationsInput | number
+  followersCount?: Prisma.IntFieldUpdateOperationsInput | number
+  followingCount?: Prisma.IntFieldUpdateOperationsInput | number
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  userVerifications?: Prisma.UserVerificationUncheckedUpdateManyWithoutUserNestedInput
+  followers?: Prisma.FollowUncheckedUpdateManyWithoutFollowingNestedInput
+}
+
+export type UserUpsertWithoutFollowersInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutFollowersInput, Prisma.UserUncheckedUpdateWithoutFollowersInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutFollowersInput, Prisma.UserUncheckedCreateWithoutFollowersInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutFollowersInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutFollowersInput, Prisma.UserUncheckedUpdateWithoutFollowersInput>
+}
+
+export type UserUpdateWithoutFollowersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postCount?: Prisma.IntFieldUpdateOperationsInput | number
+  followersCount?: Prisma.IntFieldUpdateOperationsInput | number
+  followingCount?: Prisma.IntFieldUpdateOperationsInput | number
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  userVerifications?: Prisma.UserVerificationUpdateManyWithoutUserNestedInput
+  following?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
+}
+
+export type UserUncheckedUpdateWithoutFollowersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postCount?: Prisma.IntFieldUpdateOperationsInput | number
+  followersCount?: Prisma.IntFieldUpdateOperationsInput | number
+  followingCount?: Prisma.IntFieldUpdateOperationsInput | number
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  userVerifications?: Prisma.UserVerificationUncheckedUpdateManyWithoutUserNestedInput
+  following?: Prisma.FollowUncheckedUpdateManyWithoutFollowerNestedInput
+}
+
 export type UserCreateWithoutRefreshTokensInput = {
   id?: string
   email: string
@@ -579,13 +1002,19 @@ export type UserCreateWithoutRefreshTokensInput = {
   displayName?: string | null
   bio?: string | null
   avatarUrl?: string | null
+  coverUrl?: string | null
   location?: string | null
   website?: string | null
+  postCount?: number
+  followersCount?: number
+  followingCount?: number
   emailVerified?: boolean
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   userVerifications?: Prisma.UserVerificationCreateNestedManyWithoutUserInput
+  followers?: Prisma.FollowCreateNestedManyWithoutFollowingInput
+  following?: Prisma.FollowCreateNestedManyWithoutFollowerInput
 }
 
 export type UserUncheckedCreateWithoutRefreshTokensInput = {
@@ -597,13 +1026,19 @@ export type UserUncheckedCreateWithoutRefreshTokensInput = {
   displayName?: string | null
   bio?: string | null
   avatarUrl?: string | null
+  coverUrl?: string | null
   location?: string | null
   website?: string | null
+  postCount?: number
+  followersCount?: number
+  followingCount?: number
   emailVerified?: boolean
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   userVerifications?: Prisma.UserVerificationUncheckedCreateNestedManyWithoutUserInput
+  followers?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowingInput
+  following?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowerInput
 }
 
 export type UserCreateOrConnectWithoutRefreshTokensInput = {
@@ -631,13 +1066,19 @@ export type UserUpdateWithoutRefreshTokensInput = {
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postCount?: Prisma.IntFieldUpdateOperationsInput | number
+  followersCount?: Prisma.IntFieldUpdateOperationsInput | number
+  followingCount?: Prisma.IntFieldUpdateOperationsInput | number
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userVerifications?: Prisma.UserVerificationUpdateManyWithoutUserNestedInput
+  followers?: Prisma.FollowUpdateManyWithoutFollowingNestedInput
+  following?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutRefreshTokensInput = {
@@ -649,13 +1090,19 @@ export type UserUncheckedUpdateWithoutRefreshTokensInput = {
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postCount?: Prisma.IntFieldUpdateOperationsInput | number
+  followersCount?: Prisma.IntFieldUpdateOperationsInput | number
+  followingCount?: Prisma.IntFieldUpdateOperationsInput | number
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userVerifications?: Prisma.UserVerificationUncheckedUpdateManyWithoutUserNestedInput
+  followers?: Prisma.FollowUncheckedUpdateManyWithoutFollowingNestedInput
+  following?: Prisma.FollowUncheckedUpdateManyWithoutFollowerNestedInput
 }
 
 export type UserCreateWithoutUserVerificationsInput = {
@@ -667,13 +1114,19 @@ export type UserCreateWithoutUserVerificationsInput = {
   displayName?: string | null
   bio?: string | null
   avatarUrl?: string | null
+  coverUrl?: string | null
   location?: string | null
   website?: string | null
+  postCount?: number
+  followersCount?: number
+  followingCount?: number
   emailVerified?: boolean
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   refreshTokens?: Prisma.RefreshTokenCreateNestedManyWithoutUserInput
+  followers?: Prisma.FollowCreateNestedManyWithoutFollowingInput
+  following?: Prisma.FollowCreateNestedManyWithoutFollowerInput
 }
 
 export type UserUncheckedCreateWithoutUserVerificationsInput = {
@@ -685,13 +1138,19 @@ export type UserUncheckedCreateWithoutUserVerificationsInput = {
   displayName?: string | null
   bio?: string | null
   avatarUrl?: string | null
+  coverUrl?: string | null
   location?: string | null
   website?: string | null
+  postCount?: number
+  followersCount?: number
+  followingCount?: number
   emailVerified?: boolean
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   refreshTokens?: Prisma.RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+  followers?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowingInput
+  following?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowerInput
 }
 
 export type UserCreateOrConnectWithoutUserVerificationsInput = {
@@ -719,13 +1178,19 @@ export type UserUpdateWithoutUserVerificationsInput = {
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postCount?: Prisma.IntFieldUpdateOperationsInput | number
+  followersCount?: Prisma.IntFieldUpdateOperationsInput | number
+  followingCount?: Prisma.IntFieldUpdateOperationsInput | number
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   refreshTokens?: Prisma.RefreshTokenUpdateManyWithoutUserNestedInput
+  followers?: Prisma.FollowUpdateManyWithoutFollowingNestedInput
+  following?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutUserVerificationsInput = {
@@ -737,13 +1202,19 @@ export type UserUncheckedUpdateWithoutUserVerificationsInput = {
   displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postCount?: Prisma.IntFieldUpdateOperationsInput | number
+  followersCount?: Prisma.IntFieldUpdateOperationsInput | number
+  followingCount?: Prisma.IntFieldUpdateOperationsInput | number
   emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   refreshTokens?: Prisma.RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+  followers?: Prisma.FollowUncheckedUpdateManyWithoutFollowingNestedInput
+  following?: Prisma.FollowUncheckedUpdateManyWithoutFollowerNestedInput
 }
 
 
@@ -754,11 +1225,15 @@ export type UserUncheckedUpdateWithoutUserVerificationsInput = {
 export type UserCountOutputType = {
   refreshTokens: number
   userVerifications: number
+  followers: number
+  following: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   refreshTokens?: boolean | UserCountOutputTypeCountRefreshTokensArgs
   userVerifications?: boolean | UserCountOutputTypeCountUserVerificationsArgs
+  followers?: boolean | UserCountOutputTypeCountFollowersArgs
+  following?: boolean | UserCountOutputTypeCountFollowingArgs
 }
 
 /**
@@ -785,6 +1260,20 @@ export type UserCountOutputTypeCountUserVerificationsArgs<ExtArgs extends runtim
   where?: Prisma.UserVerificationWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountFollowersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.FollowWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountFollowingArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.FollowWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -795,14 +1284,20 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   displayName?: boolean
   bio?: boolean
   avatarUrl?: boolean
+  coverUrl?: boolean
   location?: boolean
   website?: boolean
+  postCount?: boolean
+  followersCount?: boolean
+  followingCount?: boolean
   emailVerified?: boolean
   active?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   refreshTokens?: boolean | Prisma.User$refreshTokensArgs<ExtArgs>
   userVerifications?: boolean | Prisma.User$userVerificationsArgs<ExtArgs>
+  followers?: boolean | Prisma.User$followersArgs<ExtArgs>
+  following?: boolean | Prisma.User$followingArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -815,8 +1310,12 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   displayName?: boolean
   bio?: boolean
   avatarUrl?: boolean
+  coverUrl?: boolean
   location?: boolean
   website?: boolean
+  postCount?: boolean
+  followersCount?: boolean
+  followingCount?: boolean
   emailVerified?: boolean
   active?: boolean
   createdAt?: boolean
@@ -832,8 +1331,12 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   displayName?: boolean
   bio?: boolean
   avatarUrl?: boolean
+  coverUrl?: boolean
   location?: boolean
   website?: boolean
+  postCount?: boolean
+  followersCount?: boolean
+  followingCount?: boolean
   emailVerified?: boolean
   active?: boolean
   createdAt?: boolean
@@ -849,18 +1352,24 @@ export type UserSelectScalar = {
   displayName?: boolean
   bio?: boolean
   avatarUrl?: boolean
+  coverUrl?: boolean
   location?: boolean
   website?: boolean
+  postCount?: boolean
+  followersCount?: boolean
+  followingCount?: boolean
   emailVerified?: boolean
   active?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "username" | "password" | "fullName" | "displayName" | "bio" | "avatarUrl" | "location" | "website" | "emailVerified" | "active" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "username" | "password" | "fullName" | "displayName" | "bio" | "avatarUrl" | "coverUrl" | "location" | "website" | "postCount" | "followersCount" | "followingCount" | "emailVerified" | "active" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   refreshTokens?: boolean | Prisma.User$refreshTokensArgs<ExtArgs>
   userVerifications?: boolean | Prisma.User$userVerificationsArgs<ExtArgs>
+  followers?: boolean | Prisma.User$followersArgs<ExtArgs>
+  following?: boolean | Prisma.User$followingArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -871,6 +1380,8 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   objects: {
     refreshTokens: Prisma.$RefreshTokenPayload<ExtArgs>[]
     userVerifications: Prisma.$UserVerificationPayload<ExtArgs>[]
+    followers: Prisma.$FollowPayload<ExtArgs>[]
+    following: Prisma.$FollowPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -881,8 +1392,12 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     displayName: string | null
     bio: string | null
     avatarUrl: string | null
+    coverUrl: string | null
     location: string | null
     website: string | null
+    postCount: number
+    followersCount: number
+    followingCount: number
     emailVerified: boolean
     active: boolean
     createdAt: Date
@@ -1283,6 +1798,8 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   readonly [Symbol.toStringTag]: "PrismaPromise"
   refreshTokens<T extends Prisma.User$refreshTokensArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$refreshTokensArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RefreshTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   userVerifications<T extends Prisma.User$userVerificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$userVerificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserVerificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  followers<T extends Prisma.User$followersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$followersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FollowPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  following<T extends Prisma.User$followingArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$followingArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FollowPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1320,8 +1837,12 @@ export interface UserFieldRefs {
   readonly displayName: Prisma.FieldRef<"User", 'String'>
   readonly bio: Prisma.FieldRef<"User", 'String'>
   readonly avatarUrl: Prisma.FieldRef<"User", 'String'>
+  readonly coverUrl: Prisma.FieldRef<"User", 'String'>
   readonly location: Prisma.FieldRef<"User", 'String'>
   readonly website: Prisma.FieldRef<"User", 'String'>
+  readonly postCount: Prisma.FieldRef<"User", 'Int'>
+  readonly followersCount: Prisma.FieldRef<"User", 'Int'>
+  readonly followingCount: Prisma.FieldRef<"User", 'Int'>
   readonly emailVerified: Prisma.FieldRef<"User", 'Boolean'>
   readonly active: Prisma.FieldRef<"User", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
@@ -1764,6 +2285,54 @@ export type User$userVerificationsArgs<ExtArgs extends runtime.Types.Extensions.
   take?: number
   skip?: number
   distinct?: Prisma.UserVerificationScalarFieldEnum | Prisma.UserVerificationScalarFieldEnum[]
+}
+
+/**
+ * User.followers
+ */
+export type User$followersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Follow
+   */
+  select?: Prisma.FollowSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Follow
+   */
+  omit?: Prisma.FollowOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FollowInclude<ExtArgs> | null
+  where?: Prisma.FollowWhereInput
+  orderBy?: Prisma.FollowOrderByWithRelationInput | Prisma.FollowOrderByWithRelationInput[]
+  cursor?: Prisma.FollowWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.FollowScalarFieldEnum | Prisma.FollowScalarFieldEnum[]
+}
+
+/**
+ * User.following
+ */
+export type User$followingArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Follow
+   */
+  select?: Prisma.FollowSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Follow
+   */
+  omit?: Prisma.FollowOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FollowInclude<ExtArgs> | null
+  where?: Prisma.FollowWhereInput
+  orderBy?: Prisma.FollowOrderByWithRelationInput | Prisma.FollowOrderByWithRelationInput[]
+  cursor?: Prisma.FollowWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.FollowScalarFieldEnum | Prisma.FollowScalarFieldEnum[]
 }
 
 /**

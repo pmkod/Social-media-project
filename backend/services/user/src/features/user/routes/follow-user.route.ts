@@ -1,0 +1,89 @@
+import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
+import { HttpStatus } from "@/core/constants/http-status";
+import { prisma } from "@/core/databases";
+import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
+import { requireUserAuthentication } from "@/features/authentication/middlewares/require-user-authentication.middleware";
+import { UserRoutesTag } from "../user.constants";
+
+const routeDef = createRoute({
+	method: "post",
+	path: "/users/{userId}/followers",
+	summary: "Follow a user",
+	tags: [UserRoutesTag],
+	middleware: [requireUserAuthentication],
+	request: { params: z.object({ userId: z.string() }) },
+	responses: {
+		[HttpStatus.CREATED.code]: { description: "User followed" },
+	},
+});
+
+const followUserRoute = defineOpenAPIRoute<
+	typeof routeDef,
+	HonoAuthenticatedEnv
+>({
+	route: routeDef,
+	handler: async (c) => {
+		const authenticatedUser = c.get("authenticatedUser");
+		if (!authenticatedUser) throw new Error("Unauthorized");
+		const { userId } = c.req.valid("param");
+
+		if (userId === authenticatedUser.id) {
+			return c.json(
+				{ message: "You cannot follow yourself" },
+				HttpStatus.BAD_REQUEST.code,
+			);
+		}
+
+		const targetUser = await prisma.user.findFirst({
+			where: { id: userId, active: true },
+			select: { id: true },
+		});
+		if (!targetUser) {
+			return c.json({ message: "User not found" }, HttpStatus.NOT_FOUND.code);
+		}
+
+		const result = await prisma.$transaction(async (tx) => {
+			const existingFollow = await tx.follow.findUnique({
+				where: {
+					followerId_followingId: {
+						followerId: authenticatedUser.id,
+						followingId: userId,
+					},
+				},
+				select: { id: true },
+			});
+
+			if (!existingFollow) {
+				await tx.follow.create({
+					data: { followerId: authenticatedUser.id, followingId: userId },
+				});
+				await Promise.all([
+					tx.user.update({
+						where: { id: authenticatedUser.id },
+						data: { followingCount: { increment: 1 } },
+					}),
+					tx.user.update({
+						where: { id: userId },
+						data: { followersCount: { increment: 1 } },
+					}),
+				]);
+			}
+
+			return tx.user.findUniqueOrThrow({
+				where: { id: userId },
+				select: { followersCount: true },
+			});
+		});
+
+		return c.json(
+			{
+				success: true,
+				isFollowedByAuthenticatedUser: true,
+				followersCount: result.followersCount,
+			},
+			HttpStatus.CREATED.code,
+		);
+	},
+});
+
+export { followUserRoute };

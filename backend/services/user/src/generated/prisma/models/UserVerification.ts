@@ -673,14 +673,6 @@ export type UserVerificationUncheckedUpdateManyWithoutUserNestedInput = {
   deleteMany?: Prisma.UserVerificationScalarWhereInput | Prisma.UserVerificationScalarWhereInput[]
 }
 
-export type IntFieldUpdateOperationsInput = {
-  set?: number
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
-}
-
 export type UserVerificationCreateWithoutUserInput = {
   id?: string
   email?: string | null

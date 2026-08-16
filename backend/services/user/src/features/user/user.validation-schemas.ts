@@ -5,6 +5,7 @@ const UpdateProfileValidationSchema = z.object({
 	displayName: z.string().min(1).optional(),
 	bio: z.string().optional(),
 	avatarUrl: z.string().url().optional().or(z.literal("")),
+	coverUrl: z.string().url().optional().or(z.literal("")),
 	location: z.string().optional(),
 	website: z.string().url().optional().or(z.literal("")),
 });
@@ -17,8 +18,12 @@ const UserProfileResponseBody = z.object({
 	displayName: z.string().nullable(),
 	bio: z.string().nullable(),
 	avatarUrl: z.string().nullable(),
+	coverUrl: z.string().nullable(),
 	location: z.string().nullable(),
 	website: z.string().nullable(),
+	postCount: z.number(),
+	followersCount: z.number(),
+	followingCount: z.number(),
 	createdAt: z.date(),
 });
 

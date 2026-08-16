@@ -36,18 +36,25 @@ const getMeRoute = defineOpenAPIRoute<typeof routeDef, HonoAuthenticatedEnv>({
 				displayName: true,
 				bio: true,
 				avatarUrl: true,
+				coverUrl: true,
 				location: true,
 				website: true,
+				postCount: true,
+				followersCount: true,
+				followingCount: true,
 				createdAt: true,
 			},
 		});
-		console.log(user);
 
 		if (!user) {
 			throw new Error("User not found");
 		}
 
-		return c.json(user);
+		return c.json({
+			...user,
+			isOwnProfile: true,
+			isFollowedByAuthenticatedUser: false,
+		});
 	},
 });
 

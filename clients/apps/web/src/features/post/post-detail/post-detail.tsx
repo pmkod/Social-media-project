@@ -97,16 +97,22 @@ export function PostDetail({ postId }: PostDetailProps) {
 			<article className="p-4 border-b border-border space-y-4">
 				{/* Author Meta */}
 				<div className="flex items-center gap-3">
-					<img
-						src={
-							post.author?.avatar ||
-							`https://ui-avatars.com/api/?name=${encodeURIComponent(
-								post.author?.name || "U",
-							)}&background=random`
-						}
-						alt={post.author?.name || "Auteur"}
-						className="h-12 w-12 rounded-full object-cover ring-1 ring-border"
-					/>
+					<Link
+						to="/$username"
+						params={{ username: `@${post.author?.handle ?? ""}` }}
+						className="shrink-0 rounded-full"
+					>
+						<img
+							src={
+								post.author?.avatar ||
+								`https://ui-avatars.com/api/?name=${encodeURIComponent(
+									post.author?.name || "U",
+								)}&background=random`
+							}
+							alt={post.author?.name || "Auteur"}
+							className="h-12 w-12 rounded-full object-cover ring-1 ring-border"
+						/>
+					</Link>
 					<div>
 						<h2 className="font-semibold text-foreground text-base">
 							{post.author?.name}

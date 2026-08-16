@@ -1,6 +1,7 @@
 import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
+import { userServiceClient } from "@/core/services/user-service.client";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { requireUserAuthentication } from "@/features/authentication/middlewares/require-user-authentication.middleware";
 import { PostsRoutesTag } from "../posts.constants";
@@ -51,6 +52,7 @@ const deletePostRoute = defineOpenAPIRoute<
 		await prisma.post.delete({
 			where: { id },
 		});
+		await userServiceClient.adjustPostCount(authenticatedUserId, -1);
 
 		return c.json({ success: true, message: "Post deleted successfully" });
 	},

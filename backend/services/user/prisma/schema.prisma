@@ -16,16 +16,36 @@ model User {
   displayName       String?            @map("display_name")
   bio               String?
   avatarUrl         String?            @map("avatar_url")
+  coverUrl          String?            @map("cover_url")
   location          String?
   website           String?
+  postCount         Int                @default(0) @map("post_count")
+  followersCount    Int                @default(0) @map("followers_count")
+  followingCount    Int                @default(0) @map("following_count")
   emailVerified     Boolean            @default(false) @map("email_verified")
   active            Boolean            @default(true)
   createdAt         DateTime           @default(now()) @map("created_at")
   updatedAt         DateTime           @updatedAt @map("updated_at")
   refreshTokens     RefreshToken[]
   userVerifications UserVerification[]
+  followers         Follow[]           @relation("UserFollowers")
+  following         Follow[]           @relation("UserFollowing")
 
   @@map("user")
+}
+
+model Follow {
+  id          String   @id @default(cuid())
+  followerId  String   @map("follower_id")
+  followingId String   @map("following_id")
+  createdAt   DateTime @default(now()) @map("created_at")
+  follower    User     @relation("UserFollowing", fields: [followerId], references: [id], onDelete: Cascade)
+  following   User     @relation("UserFollowers", fields: [followingId], references: [id], onDelete: Cascade)
+
+  @@unique([followerId, followingId])
+  @@index([followerId, createdAt])
+  @@index([followingId, createdAt])
+  @@map("follow")
 }
 
 model RefreshToken {

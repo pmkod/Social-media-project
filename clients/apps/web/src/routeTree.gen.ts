@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as BaseRouteRouteImport } from './routes/_base/route'
 import { Route as MainRouteRouteImport } from './routes/_main/route'
 import { Route as BaseAuthenticationRouteRouteImport } from './routes/_base/_authentication/route'
+import { Route as MainUsernameRouteImport } from './routes/_main/$username'
 import { Route as MainBookmarksRouteImport } from './routes/_main/bookmarks'
 import { Route as MainDiscussionsRouteImport } from './routes/_main/discussions'
 import { Route as MainHomeRouteImport } from './routes/_main/home'
@@ -36,6 +37,11 @@ const MainRouteRoute = MainRouteRouteImport.update({
 const BaseAuthenticationRouteRoute = BaseAuthenticationRouteRouteImport.update({
   id: '/_authentication',
   getParentRoute: () => BaseRouteRoute,
+} as any)
+const MainUsernameRoute = MainUsernameRouteImport.update({
+  id: '/$username',
+  path: '/$username',
+  getParentRoute: () => MainRouteRoute,
 } as any)
 const MainBookmarksRoute = MainBookmarksRouteImport.update({
   id: '/bookmarks',
@@ -105,6 +111,7 @@ const MainPostsPostIdRoute = MainPostsPostIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof BaseAuthenticationIndexRoute
+  '/$username': typeof MainUsernameRoute
   '/bookmarks': typeof MainBookmarksRoute
   '/discussions': typeof MainDiscussionsRoute
   '/home': typeof MainHomeRoute
@@ -119,6 +126,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof BaseAuthenticationIndexRoute
+  '/$username': typeof MainUsernameRoute
   '/bookmarks': typeof MainBookmarksRoute
   '/discussions': typeof MainDiscussionsRoute
   '/home': typeof MainHomeRoute
@@ -136,6 +144,7 @@ export interface FileRoutesById {
   '/_base': typeof BaseRouteRouteWithChildren
   '/_main': typeof MainRouteRouteWithChildren
   '/_base/_authentication': typeof BaseAuthenticationRouteRouteWithChildren
+  '/_main/$username': typeof MainUsernameRoute
   '/_main/bookmarks': typeof MainBookmarksRoute
   '/_main/discussions': typeof MainDiscussionsRoute
   '/_main/home': typeof MainHomeRoute
@@ -153,6 +162,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/$username'
     | '/bookmarks'
     | '/discussions'
     | '/home'
@@ -167,6 +177,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/$username'
     | '/bookmarks'
     | '/discussions'
     | '/home'
@@ -183,6 +194,7 @@ export interface FileRouteTypes {
     | '/_base'
     | '/_main'
     | '/_base/_authentication'
+    | '/_main/$username'
     | '/_main/bookmarks'
     | '/_main/discussions'
     | '/_main/home'
@@ -224,6 +236,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof BaseAuthenticationRouteRouteImport
       parentRoute: typeof BaseRouteRoute
+    }
+    '/_main/$username': {
+      id: '/_main/$username'
+      path: '/$username'
+      fullPath: '/$username'
+      preLoaderRoute: typeof MainUsernameRouteImport
+      parentRoute: typeof MainRouteRoute
     }
     '/_main/bookmarks': {
       id: '/_main/bookmarks'
@@ -351,6 +370,7 @@ const BaseRouteRouteWithChildren = BaseRouteRoute._addFileChildren(
 )
 
 interface MainRouteRouteChildren {
+  MainUsernameRoute: typeof MainUsernameRoute
   MainBookmarksRoute: typeof MainBookmarksRoute
   MainDiscussionsRoute: typeof MainDiscussionsRoute
   MainHomeRoute: typeof MainHomeRoute
@@ -360,6 +380,7 @@ interface MainRouteRouteChildren {
 }
 
 const MainRouteRouteChildren: MainRouteRouteChildren = {
+  MainUsernameRoute: MainUsernameRoute,
   MainBookmarksRoute: MainBookmarksRoute,
   MainDiscussionsRoute: MainDiscussionsRoute,
   MainHomeRoute: MainHomeRoute,

@@ -52,6 +52,7 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   User: 'User',
+  Follow: 'Follow',
   RefreshToken: 'RefreshToken',
   UserVerification: 'UserVerification'
 } as const
@@ -81,8 +82,12 @@ export const UserScalarFieldEnum = {
   displayName: 'displayName',
   bio: 'bio',
   avatarUrl: 'avatarUrl',
+  coverUrl: 'coverUrl',
   location: 'location',
   website: 'website',
+  postCount: 'postCount',
+  followersCount: 'followersCount',
+  followingCount: 'followingCount',
   emailVerified: 'emailVerified',
   active: 'active',
   createdAt: 'createdAt',
@@ -90,6 +95,16 @@ export const UserScalarFieldEnum = {
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+export const FollowScalarFieldEnum = {
+  id: 'id',
+  followerId: 'followerId',
+  followingId: 'followingId',
+  createdAt: 'createdAt'
+} as const
+
+export type FollowScalarFieldEnum = (typeof FollowScalarFieldEnum)[keyof typeof FollowScalarFieldEnum]
 
 
 export const RefreshTokenScalarFieldEnum = {

@@ -28,7 +28,10 @@ const routeDef = createRoute({
 	},
 });
 
-const updateProfileRoute = defineOpenAPIRoute<typeof routeDef, HonoAuthenticatedEnv>({
+const updateProfileRoute = defineOpenAPIRoute<
+	typeof routeDef,
+	HonoAuthenticatedEnv
+>({
 	route: routeDef,
 	handler: async (c) => {
 		const authenticatedUser = c.get("authenticatedUser");
@@ -49,8 +52,12 @@ const updateProfileRoute = defineOpenAPIRoute<typeof routeDef, HonoAuthenticated
 				displayName: true,
 				bio: true,
 				avatarUrl: true,
+				coverUrl: true,
 				location: true,
 				website: true,
+				postCount: true,
+				followersCount: true,
+				followingCount: true,
 				createdAt: true,
 				updatedAt: true,
 			},
