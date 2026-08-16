@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { httpClient } from "@/core/http-clients/http-client.ts";
 import type { Post } from "../common/post.ts";
-import { feedQueryKey } from "../feed/feed.query-key.ts";
+import { postListQueryKeys } from "../common/post-list.query-keys.ts";
 import { postsQueryKey } from "../posts.query-key.ts";
 
 export type CreatePostInput = {
@@ -41,7 +41,7 @@ const useCreatePost = () => {
 		mutationFn: createPost,
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: postsQueryKey.root });
-			queryClient.invalidateQueries({ queryKey: feedQueryKey.root });
+			queryClient.invalidateQueries({ queryKey: postListQueryKeys.root });
 		},
 	});
 };

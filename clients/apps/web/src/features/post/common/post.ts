@@ -44,6 +44,7 @@ export interface Post {
 	stats?: PostStats;
 	likesCount?: number;
 	commentsCount?: number;
+	isLikedByAuthenticatedUser?: boolean;
 	isLiked?: boolean;
 	isBookmarked?: boolean;
 	comments?: Comment[];

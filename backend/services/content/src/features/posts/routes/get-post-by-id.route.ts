@@ -71,6 +71,21 @@ const getPostByIdRoute = defineOpenAPIRoute({
 			throw new Error("Post not found");
 		}
 
+		const authenticatedUserId = c.req.header("X-Authenticated-User-Id");
+		let isLikedByAuthenticatedUser = false;
+		if (authenticatedUserId) {
+			const like = await prisma.postLike.findUnique({
+				where: {
+					postId_authorId: {
+						postId: id,
+						authorId: authenticatedUserId,
+					},
+				},
+				select: { id: true },
+			});
+			isLikedByAuthenticatedUser = Boolean(like);
+		}
+
 		const authorsMap = await userServiceClient.fetchAuthorsBatch([
 			post.authorId,
 		]);
@@ -78,6 +93,7 @@ const getPostByIdRoute = defineOpenAPIRoute({
 
 		return c.json({
 			...post,
+			isLikedByAuthenticatedUser,
 			author,
 		});
 	},

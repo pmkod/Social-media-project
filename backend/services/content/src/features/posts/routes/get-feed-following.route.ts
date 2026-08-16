@@ -140,6 +140,9 @@ const getFeedFollowingRoute = defineOpenAPIRoute({
 					}
 				: null;
 
+		const authenticatedUserId = c.req.header("X-Authenticated-User-Id");
+		const itemPostIds = items.map((p) => p.id);
+
 		// Collect all unique author IDs for posts and comments
 		const allAuthorIds = Array.from(
 			new Set(
@@ -152,10 +155,31 @@ const getFeedFollowingRoute = defineOpenAPIRoute({
 			),
 		);
 
-		const authorsMap = await userServiceClient.fetchAuthorsBatch(allAuthorIds);
+		const [authorsMap, likedPostIdsSet] = await Promise.all([
+			userServiceClient.fetchAuthorsBatch(allAuthorIds),
+			(async () => {
+				const set = new Set<string>();
+				if (authenticatedUserId && itemPostIds.length > 0) {
+					const likes = await prisma.postLike.findMany({
+						where: {
+							authorId: authenticatedUserId,
+							postId: { in: itemPostIds },
+						},
+						select: { postId: true },
+					});
+					for (const like of likes) {
+						set.add(like.postId);
+					}
+				}
+				return set;
+			})(),
+		]);
 
 		const enrichedPosts = items.map((post) => ({
 			...post,
+			isLikedByAuthenticatedUser: authenticatedUserId
+				? likedPostIdsSet.has(post.id)
+				: false,
 			author: authorsMap.get(post.authorId) ?? null,
 			comments: (post.comments ?? []).map((comment) => ({
 				...comment,

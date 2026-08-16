@@ -14,7 +14,9 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import NiceModal from "@/core/components/ui/nice-modal.tsx";
 import { cn } from "@/core/lib/utils.ts";
 import { CommentModal } from "../create-comment/comment-modal.tsx";
+import { useLikePost } from "../like-post/use-like-post.ts";
 import { buildImageUrl, buildVideoUrl } from "../post-media.functions.ts";
+import { useUnlikePost } from "../unlike-post/use-unlike-post.ts";
 import { CommentItem } from "./comment-item.tsx";
 import type { Post, PostMediaItem } from "./post.ts";
 import { formatPostCreationDate } from "./post.utils.ts";
@@ -193,19 +195,18 @@ function PostMediaSlider({ media }: { media: RenderMediaItem[] }) {
 }
 
 export function PostItem({ post, onBookmarkToggle }: PostItemProps) {
-	const initialLikes = post.likesCount ?? post.stats?.likes ?? 0;
-	const [isLiked, setIsLiked] = useState(post.isLiked ?? false);
-	const [likesCount, setLikesCount] = useState(initialLikes);
+	const isLiked = post.isLikedByAuthenticatedUser ?? post.isLiked ?? false;
+	const likesCount = post.likesCount ?? post.stats?.likes ?? 0;
 	const [isBookmarked, setIsBookmarked] = useState(post.isBookmarked ?? false);
+	const likePost = useLikePost();
+	const unlikePost = useUnlikePost();
 
 	const handleLike = (e: React.MouseEvent) => {
 		e.stopPropagation();
 		if (isLiked) {
-			setIsLiked(false);
-			setLikesCount((prev) => prev - 1);
+			unlikePost.mutate(post.id);
 		} else {
-			setIsLiked(true);
-			setLikesCount((prev) => prev + 1);
+			likePost.mutate(post.id);
 		}
 	};
 

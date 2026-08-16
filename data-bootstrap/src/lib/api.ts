@@ -49,7 +49,7 @@ const createCommentViaApi = async (userId: string, postId: string, body: CreateC
 };
 
 const likePostViaApi = async (userId: string, postId: string): Promise<{ id: string }> => {
-  return apiFetch<{ id: string }>(`/posts/${postId}/like`, userId, {
+  return apiFetch<{ id: string }>(`/posts/${postId}/likes`, userId, {
     method: "POST",
   });
 };

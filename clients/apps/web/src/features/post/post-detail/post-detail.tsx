@@ -15,6 +15,8 @@ import { CommentItem } from "../common/comment-item.tsx";
 import { getMediaUrl, type RenderMediaItem } from "../common/post-item.tsx";
 import { CreateCommentForm } from "../create-comment/create-comment-form.tsx";
 import { formatPostFullDate } from "../common/post.utils.ts";
+import { useLikePost } from "../like-post/use-like-post.ts";
+import { useUnlikePost } from "../unlike-post/use-unlike-post.ts";
 import { useComments } from "./use-comments";
 import { usePost } from "./use-post";
 
@@ -32,7 +34,8 @@ export function PostDetail({ postId }: PostDetailProps) {
 		isLoading: isCommentsLoading,
 	} = useComments(postId, Boolean(post));
 
-	const [isLiked, setIsLiked] = useState(false);
+	const likePost = useLikePost();
+	const unlikePost = useUnlikePost();
 	const [isBookmarked, setIsBookmarked] = useState(false);
 	const [isReposted, setIsReposted] = useState(false);
 
@@ -64,12 +67,13 @@ export function PostDetail({ postId }: PostDetailProps) {
 		);
 	}
 
+	const isLiked = post.isLikedByAuthenticatedUser ?? post.isLiked ?? false;
+	const likesCount = post.likesCount ?? post.stats?.likes ?? 0;
+
 	const mediaList: RenderMediaItem[] = (post.medias ?? [])
 		.map((m) => getMediaUrl(m))
 		.filter((item): item is RenderMediaItem => item !== null);
 
-	const initialLikes = post.likesCount ?? post.stats?.likes ?? 0;
-	const likesCount = initialLikes + (isLiked ? 1 : 0);
 	const repostsCount = (post.stats?.reposts ?? 0) + (isReposted ? 1 : 0);
 	const commentsCount = post.commentsCount ?? post.stats?.comments ?? 0;
 
@@ -155,7 +159,13 @@ export function PostDetail({ postId }: PostDetailProps) {
 					{/* Likes */}
 					<button
 						type="button"
-						onClick={() => setIsLiked((prev) => !prev)}
+						onClick={() => {
+							if (isLiked) {
+								unlikePost.mutate(post.id);
+							} else {
+								likePost.mutate(post.id);
+							}
+						}}
 						className={`flex items-center gap-2 transition-colors ${
 							isLiked ? "text-rose-500" : "hover:text-rose-500"
 						}`}

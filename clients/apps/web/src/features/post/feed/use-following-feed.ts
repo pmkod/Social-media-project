@@ -1,7 +1,7 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { httpClient } from "@/core/http-clients/http-client.ts";
 import type { Post } from "../common/post.ts";
-import { feedQueryKey } from "./feed.query-key.ts";
+import { postListQueryKeys } from "../common/post-list.query-keys.ts";
 
 export type FeedCursor = {
 	id: string;
@@ -42,7 +42,7 @@ export const fetchFollowingFeedPage = async ({
 
 export const useFollowingFeed = () => {
 	return useInfiniteQuery({
-		queryKey: feedQueryKey.buildFollowing(),
+		queryKey: postListQueryKeys.feedFollowing(),
 		queryFn: ({ pageParam }) => fetchFollowingFeedPage({ pageParam }),
 		initialPageParam: null as FeedCursor | null,
 		getNextPageParam: (lastPage) => {

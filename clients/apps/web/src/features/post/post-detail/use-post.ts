@@ -1,7 +1,7 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { httpClient } from "@/core/http-clients/http-client.ts";
+import { postListQueryKeys } from "../common/post-list.query-keys.ts";
 import type { Post } from "../common/post.ts";
-import { feedQueryKey } from "../feed/feed.query-key.ts";
 import type { FollowingFeedResponse } from "../feed/use-following-feed.ts";
 import { postDetailsQueryKey } from "./post-detail.query-key.ts";
 
@@ -21,7 +21,7 @@ export const usePost = (postId: string) => {
 				// Check if the post is already loaded in the following feed query cache
 				const feedData = queryClient.getQueryData<{
 					pages: FollowingFeedResponse[];
-				}>(feedQueryKey.buildFollowing());
+				}>(postListQueryKeys.feedFollowing());
 
 				if (feedData) {
 					for (const page of feedData.pages) {
