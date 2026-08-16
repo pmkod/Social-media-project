@@ -3,6 +3,7 @@ import { httpClient } from "@/core/http-clients/http-client.ts";
 import { postListQueryKeys } from "@/features/post/common/post-list.query-keys.ts";
 import type { User } from "../common/user.ts";
 import { authenticatedUserQueryKey } from "../get-authenticated-user/authenticated-user.query-key.ts";
+import { userConnectionsQueryKeys } from "./user-connections.query-keys.ts";
 import { userProfileQueryKeys } from "./user-profile.query-keys.ts";
 
 type FollowResponse = {
@@ -46,6 +47,9 @@ const useFollowUser = (username: string) => {
 					: user,
 			);
 			queryClient.invalidateQueries({ queryKey: authenticatedUserQueryKey });
+			queryClient.invalidateQueries({
+				queryKey: userConnectionsQueryKeys.root,
+			});
 			queryClient.invalidateQueries({
 				queryKey: postListQueryKeys.feedFollowing(),
 			});

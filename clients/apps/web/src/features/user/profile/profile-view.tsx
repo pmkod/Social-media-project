@@ -7,6 +7,7 @@ import {
 } from "@remixicon/react";
 import { Link } from "@tanstack/react-router";
 import { Button } from "@/core/components/ui/button.tsx";
+import NiceModal from "@/core/components/ui/nice-modal.tsx";
 import {
 	Tabs,
 	TabsContent,
@@ -18,6 +19,7 @@ import { ProfilePostList } from "./profile-post-list.tsx";
 import { useFollowUser } from "./use-follow-user.ts";
 import { useUnfollowUser } from "./use-unfollow-user.ts";
 import { useUserProfile } from "./use-user-profile.ts";
+import { UserConnectionsModal } from "./user-connections.modal.tsx";
 
 const numberFormatter = new Intl.NumberFormat("fr-FR", { notation: "compact" });
 const joinedDateFormatter = new Intl.DateTimeFormat("fr-FR", {
@@ -184,18 +186,38 @@ export function ProfileView({ username }: ProfileViewProps) {
 							</strong>{" "}
 							Posts
 						</span>
-						<span>
+						<button
+							type="button"
+							onClick={() =>
+								NiceModal.show(UserConnectionsModal, {
+									userId: user.id,
+									username: user.username,
+									type: "followers",
+								})
+							}
+							className="rounded-sm text-left transition hover:text-foreground hover:underline"
+						>
 							<strong className="text-foreground">
 								{numberFormatter.format(user.followersCount ?? 0)}
 							</strong>{" "}
 							Followers
-						</span>
-						<span>
+						</button>
+						<button
+							type="button"
+							onClick={() =>
+								NiceModal.show(UserConnectionsModal, {
+									userId: user.id,
+									username: user.username,
+									type: "following",
+								})
+							}
+							className="rounded-sm text-left transition hover:text-foreground hover:underline"
+						>
 							<strong className="text-foreground">
 								{numberFormatter.format(user.followingCount ?? 0)}
 							</strong>{" "}
 							Following
-						</span>
+						</button>
 					</div>
 				</div>
 			</section>
