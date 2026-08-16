@@ -14,22 +14,22 @@ import { Button } from "@/core/components/ui/button.tsx";
 import { CommentItem } from "../common/comment-item.tsx";
 import { getMediaUrl, type RenderMediaItem } from "../common/post-item.tsx";
 import { CreateCommentForm } from "../create-comment/create-comment-form.tsx";
-import { useGetComments } from "./use-get-comments";
-import { useGetPostById } from "./use-get-post-by-id";
+import { useComments } from "./use-comments";
+import { usePost } from "./use-post";
 
 type PostDetailProps = {
 	postId: string;
 };
 
 export function PostDetail({ postId }: PostDetailProps) {
-	const { data: post, isLoading, isError } = useGetPostById(postId);
+	const { data: post, isLoading, isError } = usePost(postId);
 	const {
 		data: commentsData,
 		fetchNextPage,
 		hasNextPage,
 		isFetchingNextPage,
 		isLoading: isCommentsLoading,
-	} = useGetComments(postId, Boolean(post));
+	} = useComments(postId, Boolean(post));
 
 	const [isLiked, setIsLiked] = useState(false);
 	const [isBookmarked, setIsBookmarked] = useState(false);

@@ -1,7 +1,7 @@
-import { RiLoader4Line } from "@remixicon/react";
 import { useEffect, useRef } from "react";
+import { PostListLoader } from "../common/components/loaders";
 import { PostItem } from "../common/post-item";
-import { useGetInfinitePosts } from "./use-get-infinite-posts";
+import { useFollowingFeed } from "./use-following-feed";
 
 export function Feed() {
 	const observerTargetRef = useRef<HTMLDivElement>(null);
@@ -13,7 +13,7 @@ export function Feed() {
 		isFetchingNextPage,
 		isLoading,
 		isError,
-	} = useGetInfinitePosts();
+	} = useFollowingFeed();
 
 	useEffect(() => {
 		const target = observerTargetRef.current;
@@ -43,10 +43,7 @@ export function Feed() {
 
 			{/* Loading Initial State */}
 			{isLoading ? (
-				<div className="p-8 text-center text-muted-foreground flex flex-col items-center justify-center gap-2">
-					<RiLoader4Line className="h-6 w-6 animate-spin text-sky-500" />
-					<span className="text-sm">Chargement des posts...</span>
-				</div>
+				<PostListLoader />
 			) : isError ? (
 				<div className="p-8 text-center text-rose-500 text-sm">
 					Une erreur s'est produite lors du chargement des publications.
@@ -58,23 +55,8 @@ export function Feed() {
 						<PostItem key={post.id} post={post} />
 					))}
 
-					{/* IntersectionObserver Sentinel for Infinite Scroll */}
-					<div
-						ref={observerTargetRef}
-						className="p-6 flex items-center justify-center text-xs text-muted-foreground min-h-16"
-					>
-						{isFetchingNextPage ? (
-							<div className="flex items-center gap-2 text-sky-500">
-								<RiLoader4Line className="h-4 w-4 animate-spin" />
-								<span>Chargement des publications suivantes...</span>
-							</div>
-						) : hasNextPage ? (
-							<span>Défiler pour charger plus...</span>
-						) : allPosts.length > 0 ? (
-							<span>Vous avez tout vu ! 🎉</span>
-						) : (
-							<span>Aucune publication pour le moment.</span>
-						)}
+					<div ref={observerTargetRef}>
+						<PostListLoader count={2} />
 					</div>
 				</div>
 			)}

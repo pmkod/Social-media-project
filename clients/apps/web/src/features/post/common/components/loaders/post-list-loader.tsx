@@ -1,0 +1,24 @@
+import { cn } from "@/core/lib/utils.ts";
+import { PostItemLoader } from "./post-item-loader.tsx";
+
+interface PostListLoaderProps {
+	count?: number;
+	className?: string;
+}
+
+function PostListLoader({ count = 5, className }: PostListLoaderProps) {
+	return (
+		<div className={cn("divide-y divide-border", className)}>
+			{Array.from({ length: count }).map((_, index) => (
+				<PostItemLoader
+					// biome-ignore lint/suspicious/noArrayIndexKey: Static array for skeleton loading placeholders
+					key={index}
+					hasMedia={index === 0}
+					contentLines={index === 0 ? 1 : (index % 2) + 1}
+				/>
+			))}
+		</div>
+	);
+}
+
+export { PostListLoader };

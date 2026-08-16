@@ -13,7 +13,7 @@ function HomePage() {
 				<CreatePostForm />
 			</div>
 
-			<div className="mt-10">
+			<div className="py-10">
 				<Feed />
 			</div>
 		</div>

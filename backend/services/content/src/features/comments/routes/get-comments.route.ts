@@ -54,7 +54,7 @@ const getCommentsRoute = defineOpenAPIRoute({
 
 		return c.json({
 			data: comments,
-			meta: {
+			pagination: {
 				total,
 				page,
 				limit,

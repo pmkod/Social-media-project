@@ -1,6 +1,9 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { httpClient } from "@/core/http-clients/http-client.ts";
 import type { Comment } from "../common/comment.ts";
+import { feedQueryKey } from "../feed/feed.query-key.ts";
+import { postDetailsQueryKey } from "../post-detail/post-detail.query-key.ts";
+import { postsQueryKey } from "../posts.query-key.ts";
 
 export type CreateCommentInput = {
 	postId: string;
@@ -71,9 +74,10 @@ const useCreateComment = () => {
 	return useMutation({
 		mutationFn: createComment,
 		onSuccess: (comment) => {
-			queryClient.invalidateQueries({ queryKey: ["posts"] });
+			queryClient.invalidateQueries({ queryKey: postsQueryKey.root });
+			queryClient.invalidateQueries({ queryKey: feedQueryKey.root });
 			queryClient.invalidateQueries({
-				queryKey: ["posts", comment.postId, "comments"],
+				queryKey: postDetailsQueryKey.buildComments(comment.postId),
 			});
 		},
 	});

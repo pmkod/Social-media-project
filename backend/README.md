@@ -76,7 +76,7 @@ Chaque service propose une interface interactive de documentation :
 | `GET /users/{userId}` | user | Non |
 | `PUT /users/me` | user | Oui |
 | `POST /posts` | content | Oui |
-| `GET /posts` | content | Non |
+| `GET /feed/following` | content | Non |
 | `GET /posts/{id}` | content | Non |
 | `PUT /posts/{id}` | content | Oui |
 | `DELETE /posts/{id}` | content | Oui |

@@ -19,6 +19,7 @@ model Post {
   comments      Comment[]
   postLikes     PostLike[]
 
+  @@index([createdAt, id])
   @@map("post")
 }
 
@@ -49,14 +50,14 @@ model File {
 }
 
 model Comment {
-  id           String         @id @default(cuid())
-  postId       String         @map("post_id")
-  authorId     String         @map("author_id")
+  id           String        @id @default(cuid())
+  postId       String        @map("post_id")
+  authorId     String        @map("author_id")
   content      String
-  likesCount   Int            @default(0) @map("likes_count")
-  createdAt    DateTime       @default(now()) @map("created_at")
-  updatedAt    DateTime       @updatedAt @map("updated_at")
-  post         Post           @relation(fields: [postId], references: [id], onDelete: Cascade)
+  likesCount   Int           @default(0) @map("likes_count")
+  createdAt    DateTime      @default(now()) @map("created_at")
+  updatedAt    DateTime      @updatedAt @map("updated_at")
+  post         Post          @relation(fields: [postId], references: [id], onDelete: Cascade)
   commentLikes CommentLike[]
 
   @@map("comment")

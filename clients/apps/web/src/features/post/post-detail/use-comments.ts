@@ -1,6 +1,7 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { httpClient } from "@/core/http-clients/http-client.ts";
 import type { Comment } from "../common/comment.ts";
+import { postDetailsQueryKey } from "./post-detail.query-key.ts";
 
 type ApiComment = {
 	id: string;
@@ -12,9 +13,9 @@ type ApiComment = {
 	updatedAt?: string;
 };
 
-type GetCommentsResponse = {
+export type CommentsResponse = {
 	data: ApiComment[];
-	meta: {
+	pagination: {
 		total: number;
 		page: number;
 		limit: number;
@@ -22,10 +23,13 @@ type GetCommentsResponse = {
 	};
 };
 
-export type GetCommentsInfiniteResult = {
+export type CommentsInfiniteResult = {
 	data: Comment[];
-	meta: GetCommentsResponse["meta"];
+	pagination: CommentsResponse["pagination"];
 };
+
+export type GetCommentsResponse = CommentsResponse;
+export type GetCommentsInfiniteResult = CommentsInfiniteResult;
 
 const DEFAULT_AUTHOR = {
 	name: "Utilisateur",
@@ -33,8 +37,6 @@ const DEFAULT_AUTHOR = {
 	avatar:
 		"https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80",
 };
-
-const MOCK_COMMENTS: Record<string, Comment[]> = {};
 
 const formatDate = (value: string) =>
 	new Date(value).toLocaleDateString("fr-FR", {
@@ -51,54 +53,37 @@ const mapComment = (raw: ApiComment): Comment => ({
 	likesCount: raw.likesCount ?? 0,
 });
 
-const fetchCommentsPage = async ({
+export const fetchCommentsPage = async ({
 	postId,
 	pageParam = 1,
 }: {
 	postId: string;
 	pageParam?: number;
-}): Promise<GetCommentsInfiniteResult> => {
-	try {
-		const res = await httpClient
-			.get(`posts/${postId}/comments`, {
-				searchParams: {
-					page: pageParam.toString(),
-					limit: "10",
-				},
-			})
-			.json<GetCommentsResponse>();
-
-		return {
-			data: (res.data ?? []).map(mapComment),
-			meta: res.meta,
-		};
-	} catch {
-		const mockComments = MOCK_COMMENTS[postId] ?? [];
-		const limit = 10;
-		const start = (pageParam - 1) * limit;
-		const pageComments = mockComments.slice(start, start + limit);
-
-		return {
-			data: pageComments,
-			meta: {
-				total: mockComments.length,
-				page: pageParam,
-				limit,
-				totalPages: Math.max(1, Math.ceil(mockComments.length / limit)),
+}): Promise<CommentsInfiniteResult> => {
+	const res = await httpClient
+		.get(`posts/${postId}/comments`, {
+			searchParams: {
+				page: pageParam.toString(),
+				limit: "10",
 			},
-		};
-	}
+		})
+		.json<CommentsResponse>();
+
+	return {
+		data: (res.data ?? []).map(mapComment),
+		pagination: res.pagination,
+	};
 };
 
-export const useGetComments = (postId: string, enabled = true) => {
+export const useComments = (postId: string, enabled = true) => {
 	return useInfiniteQuery({
-		queryKey: ["posts", postId, "comments"],
+		queryKey: postDetailsQueryKey.buildComments(postId),
 		queryFn: ({ pageParam }) => fetchCommentsPage({ postId, pageParam }),
 		initialPageParam: 1,
 		enabled: enabled && Boolean(postId),
 		getNextPageParam: (lastPage) => {
-			if (lastPage.meta.page < lastPage.meta.totalPages) {
-				return lastPage.meta.page + 1;
+			if (lastPage.pagination.page < lastPage.pagination.totalPages) {
+				return lastPage.pagination.page + 1;
 			}
 			return undefined;
 		},
