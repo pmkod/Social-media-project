@@ -1,24 +1,58 @@
-import { RiHeartFill, RiHeartLine } from "@remixicon/react";
+import {
+	RiChat3Line,
+	RiHeartFill,
+	RiHeartLine,
+	RiLoader4Line,
+} from "@remixicon/react";
 import { useState } from "react";
+import { Button } from "@/core/components/ui/button.tsx";
 import { cn } from "@/core/lib/utils.ts";
+import { CreateCommentForm } from "../create-comment/create-comment-form.tsx";
+import { useLikeComment } from "../like-comment/use-like-comment.ts";
+import { useCommentReplies } from "../post-detail/use-comment-replies.ts";
+import { useUnlikeComment } from "../unlike-comment/use-unlike-comment.ts";
 import type { Comment } from "./comment.ts";
 import { formatCommentCreationDate } from "./post.utils.ts";
 
 type CommentItemProps = {
 	comment: Comment;
 	compact?: boolean;
+	isReply?: boolean;
 };
 
-export function CommentItem({ comment, compact = false }: CommentItemProps) {
-	const [isLiked, setIsLiked] = useState(false);
+export function CommentItem({
+	comment,
+	compact = false,
+	isReply = false,
+}: CommentItemProps) {
+	const [isReplyFormOpen, setIsReplyFormOpen] = useState(false);
+	const [areRepliesExpanded, setAreRepliesExpanded] = useState(false);
+	const likeComment = useLikeComment();
+	const unlikeComment = useUnlikeComment();
+	const rootCommentId = comment.parentId ?? comment.id;
+	const repliesQuery = useCommentReplies(
+		rootCommentId,
+		!compact && !isReply && areRepliesExpanded,
+	);
 
-	const likesCount = (comment.likesCount ?? 0) + (isLiked ? 1 : 0);
+	const isLiked = comment.isLikedByAuthenticatedUser ?? false;
+	const replies = areRepliesExpanded
+		? (repliesQuery.data?.pages.flatMap((page) => page.data) ?? [])
+		: [];
+	const repliesCount = comment.repliesCount ?? 0;
+
+	const toggleLike = () => {
+		if (likeComment.isPending || unlikeComment.isPending) return;
+		if (isLiked) unlikeComment.mutate(comment.id);
+		else likeComment.mutate(comment.id);
+	};
 
 	return (
 		<article
 			className={cn(
 				"flex gap-3",
 				compact ? "px-2 py-2" : "px-4 py-4 border-b border-border",
+				isReply && "border-b-0 py-3 pr-0",
 			)}
 		>
 			<img
@@ -29,7 +63,10 @@ export function CommentItem({ comment, compact = false }: CommentItemProps) {
 					)}&background=random`
 				}
 				alt={comment.author?.name || "Auteur"}
-				className="size-10 rounded-full object-cover shrink-0 ring-1 ring-border"
+				className={cn(
+					"rounded-full object-cover shrink-0 ring-1 ring-border",
+					isReply ? "size-8" : "size-10",
+				)}
 			/>
 			<div className="flex-1 min-w-0">
 				<div className="flex items-baseline gap-1.5 flex-wrap">
@@ -49,12 +86,14 @@ export function CommentItem({ comment, compact = false }: CommentItemProps) {
 					{comment.content}
 				</p>
 
-				<div className="mt-2 flex items-center gap-4 text-muted-foreground text-xs">
+				<div className="mt-2 flex items-center gap-2 text-muted-foreground text-xs">
 					<button
 						type="button"
-						onClick={() => setIsLiked((prev) => !prev)}
+						onClick={toggleLike}
+						disabled={likeComment.isPending || unlikeComment.isPending}
+						aria-label={isLiked ? "Retirer le like" : "Liker le commentaire"}
 						className={cn(
-							"flex items-center gap-1.5 transition-colors group p-1 rounded-full hover:bg-accent",
+							"flex items-center gap-1.5 transition-colors p-1.5 rounded-full hover:bg-accent disabled:opacity-60",
 							isLiked ? "text-rose-500" : "hover:text-rose-500",
 						)}
 					>
@@ -63,9 +102,71 @@ export function CommentItem({ comment, compact = false }: CommentItemProps) {
 						) : (
 							<RiHeartLine className="size-4" />
 						)}
-						<span className="font-light">{likesCount}</span>
+						<span className="font-light">{comment.likesCount ?? 0}</span>
 					</button>
+
+					{!compact ? (
+						<button
+							type="button"
+							onClick={() => setIsReplyFormOpen((open) => !open)}
+							className="flex items-center gap-1.5 p-1.5 rounded-full hover:bg-accent hover:text-sky-500 transition-colors"
+						>
+							<RiChat3Line className="size-4" />
+							<span>Répondre</span>
+						</button>
+					) : null}
 				</div>
+
+				{isReplyFormOpen ? (
+					<div className="mt-2 overflow-hidden rounded-xl border border-border">
+						<CreateCommentForm
+							postId={comment.postId}
+							parentComment={comment}
+							onSuccess={() => {
+								setIsReplyFormOpen(false);
+								setAreRepliesExpanded(true);
+							}}
+						/>
+					</div>
+				) : null}
+
+				{!compact && !isReply && repliesCount > 0 ? (
+					<div className="mt-2">
+						<button
+							type="button"
+							onClick={() => setAreRepliesExpanded((expanded) => !expanded)}
+							className="text-xs font-semibold text-sky-500 hover:text-sky-600"
+						>
+							{areRepliesExpanded
+								? "Masquer les réponses"
+								: `Voir ${repliesCount} réponse${repliesCount > 1 ? "s" : ""}`}
+						</button>
+					</div>
+				) : null}
+
+				{repliesQuery.isLoading && areRepliesExpanded ? (
+					<div className="flex items-center gap-2 py-3 text-xs text-muted-foreground">
+						<RiLoader4Line className="size-4 animate-spin" />
+						Chargement des réponses...
+					</div>
+				) : replies.length > 0 ? (
+					<div className="mt-2 border-l-2 border-border pl-2">
+						{replies.map((reply) => (
+							<CommentItem key={reply.id} comment={reply} isReply />
+						))}
+						{areRepliesExpanded && repliesQuery.hasNextPage ? (
+							<Button
+								type="button"
+								variant="ghost"
+								size="sm"
+								onClick={() => repliesQuery.fetchNextPage()}
+								disabled={repliesQuery.isFetchingNextPage}
+							>
+								Voir plus de réponses
+							</Button>
+						) : null}
+					</div>
+				) : null}
 			</div>
 		</article>
 	);

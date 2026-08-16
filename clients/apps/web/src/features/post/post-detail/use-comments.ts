@@ -1,7 +1,7 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { httpClient } from "@/core/http-clients/http-client.ts";
+import { commentListQueryKeys } from "../common/comment-list.query-keys.ts";
 import type { Comment } from "../common/comment.ts";
-import { postDetailsQueryKey } from "./post-detail.query-key.ts";
 
 export type CommentsResponse = {
 	data: Comment[];
@@ -47,7 +47,7 @@ export const fetchCommentsPage = async ({
 
 export const useComments = (postId: string, enabled = true) => {
 	return useInfiniteQuery({
-		queryKey: postDetailsQueryKey.buildComments(postId),
+		queryKey: commentListQueryKeys.postComments(postId),
 		queryFn: ({ pageParam }) => fetchCommentsPage({ postId, pageParam }),
 		initialPageParam: 1,
 		enabled: enabled && Boolean(postId),

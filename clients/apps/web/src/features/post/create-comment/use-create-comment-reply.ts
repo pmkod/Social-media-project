@@ -5,44 +5,47 @@ import type { Comment } from "../common/comment.ts";
 import { postListQueryKeys } from "../common/post-list.query-keys.ts";
 import { postsQueryKey } from "../posts.query-key.ts";
 
-export type CreateCommentInput = {
-	postId: string;
+type CreateCommentReplyInput = {
+	comment: Comment;
 	content: string;
 };
 
-type CreateCommentResponse = {
+type CreateCommentReplyResponse = {
 	message: string;
 	comment: Comment;
 };
 
-const createComment = async (input: CreateCommentInput): Promise<Comment> => {
+const createCommentReply = async ({
+	comment,
+	content,
+}: CreateCommentReplyInput) => {
 	const formData = new FormData();
-	if (input.content) {
-		formData.append("content", input.content);
-	}
+	formData.append("content", content);
 
 	const response = await httpClient
-		.post(`posts/${input.postId}/comments`, {
-			body: formData,
-		})
-		.json<CreateCommentResponse>();
+		.post(`comments/${comment.id}/replies`, { body: formData })
+		.json<CreateCommentReplyResponse>();
 
 	return response.comment;
 };
 
-const useCreateComment = () => {
+const useCreateCommentReply = () => {
 	const queryClient = useQueryClient();
 
 	return useMutation({
-		mutationFn: createComment,
-		onSuccess: (comment) => {
+		mutationFn: createCommentReply,
+		onSuccess: (reply, input) => {
+			const rootCommentId = input.comment.parentId ?? input.comment.id;
 			queryClient.invalidateQueries({ queryKey: postsQueryKey.root });
 			queryClient.invalidateQueries({ queryKey: postListQueryKeys.root });
 			queryClient.invalidateQueries({
-				queryKey: commentListQueryKeys.postComments(comment.postId),
+				queryKey: commentListQueryKeys.postComments(reply.postId),
+			});
+			queryClient.invalidateQueries({
+				queryKey: commentListQueryKeys.replies(rootCommentId),
 			});
 		},
 	});
 };
 
-export { useCreateComment };
+export { useCreateCommentReply };

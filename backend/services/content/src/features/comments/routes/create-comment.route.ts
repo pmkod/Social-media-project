@@ -87,8 +87,10 @@ const createCommentRoute = defineOpenAPIRoute<
 				id: true,
 				postId: true,
 				authorId: true,
+				parentId: true,
 				content: true,
 				likesCount: true,
+				repliesCount: true,
 				createdAt: true,
 				updatedAt: true,
 			},
@@ -104,6 +106,7 @@ const createCommentRoute = defineOpenAPIRoute<
 				message: "Comment created successfully",
 				comment: {
 					...commentToSend,
+					isLikedByAuthenticatedUser: false,
 					author,
 				},
 			},

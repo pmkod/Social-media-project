@@ -36,7 +36,7 @@ const getCommentsRoute = defineOpenAPIRoute({
 
 		const [comments, total] = await Promise.all([
 			prisma.comment.findMany({
-				where: { postId },
+				where: { postId, parentId: null },
 				orderBy: { createdAt: "desc" },
 				skip,
 				take: limit,
@@ -44,24 +44,70 @@ const getCommentsRoute = defineOpenAPIRoute({
 					id: true,
 					postId: true,
 					authorId: true,
+					parentId: true,
 					content: true,
 					likesCount: true,
+					repliesCount: true,
 					createdAt: true,
 					updatedAt: true,
+					replies: {
+						take: 2,
+						orderBy: { createdAt: "asc" },
+						select: {
+							id: true,
+							postId: true,
+							authorId: true,
+							parentId: true,
+							content: true,
+							likesCount: true,
+							repliesCount: true,
+							createdAt: true,
+							updatedAt: true,
+						},
+					},
 				},
 			}),
-			prisma.comment.count({ where: { postId } }),
+			prisma.comment.count({ where: { postId, parentId: null } }),
 		]);
 
+		const authenticatedUserId = c.req.header("X-Authenticated-User-Id");
+		const allComments = comments.flatMap((comment) => [
+			comment,
+			...comment.replies,
+		]);
 		const authorIds = Array.from(
-			new Set(comments.map((comment) => comment.authorId).filter(Boolean)),
+			new Set(allComments.map((comment) => comment.authorId).filter(Boolean)),
 		);
-		const authorsMap = await userServiceClient.fetchAuthorsBatch(authorIds);
+		const [authorsMap, likedCommentIds] = await Promise.all([
+			userServiceClient.fetchAuthorsBatch(authorIds),
+			(async () => {
+				if (!authenticatedUserId || allComments.length === 0) {
+					return new Set<string>();
+				}
+				const likes = await prisma.commentLike.findMany({
+					where: {
+						authorId: authenticatedUserId,
+						commentId: { in: allComments.map((comment) => comment.id) },
+					},
+					select: { commentId: true },
+				});
+				return new Set(likes.map((like) => like.commentId));
+			})(),
+		]);
 
-		const enrichedComments = comments.map((comment) => ({
-			...comment,
-			author: authorsMap.get(comment.authorId) ?? null,
-		}));
+		const enrichedComments = comments.map((comment) => {
+			const { replies, ...commentData } = comment;
+			return {
+				...commentData,
+				isLikedByAuthenticatedUser: likedCommentIds.has(comment.id),
+				author: authorsMap.get(comment.authorId) ?? null,
+				replies: replies.map((reply) => ({
+					...reply,
+					isLikedByAuthenticatedUser: likedCommentIds.has(reply.id),
+					author: authorsMap.get(reply.authorId) ?? null,
+				})),
+			};
+		});
 
 		return c.json({
 			data: enrichedComments,
