@@ -4,9 +4,9 @@ import {
 	updatePostInQueryData,
 	updatePostLikeState,
 } from "../common/post-like.cache-utils.ts";
-import { postListRootQueryKey } from "../common/post-list.query-keys.ts";
 import type { Post } from "../common/post.ts";
 import { postDetailsQueryKey } from "../post-detail/post-detail.query-key.ts";
+import { postListQueryKeys } from "../common/post-list.query-keys.ts";
 
 export interface LikePostResponse {
 	success: boolean;
@@ -14,8 +14,12 @@ export interface LikePostResponse {
 	likesCount: number;
 }
 
-export const likePostApi = async (postId: string): Promise<LikePostResponse> => {
-	return await httpClient.post(`posts/${postId}/likes`).json<LikePostResponse>();
+export const likePostApi = async (
+	postId: string,
+): Promise<LikePostResponse> => {
+	return await httpClient
+		.post(`posts/${postId}/likes`)
+		.json<LikePostResponse>();
 };
 
 export const useLikePost = () => {
@@ -24,14 +28,14 @@ export const useLikePost = () => {
 	return useMutation({
 		mutationFn: (postId: string) => likePostApi(postId),
 		onMutate: async (postId: string) => {
-			await queryClient.cancelQueries({ queryKey: postListRootQueryKey });
+			await queryClient.cancelQueries({ queryKey: postListQueryKeys.root });
 
 			const previousQueries = queryClient.getQueriesData({
-				queryKey: postListRootQueryKey,
+				queryKey: postListQueryKeys.root,
 			});
 
 			queryClient.setQueriesData(
-				{ queryKey: postListRootQueryKey },
+				{ queryKey: postListQueryKeys.root },
 				(oldData) => updatePostInQueryData(oldData, postId, true),
 			);
 
@@ -53,7 +57,7 @@ export const useLikePost = () => {
 		onSuccess: (data, postId) => {
 			if (typeof data?.likesCount === "number") {
 				queryClient.setQueriesData(
-					{ queryKey: postListRootQueryKey },
+					{ queryKey: postListQueryKeys.root },
 					(oldData) =>
 						updatePostInQueryData(oldData, postId, true, data.likesCount),
 				);

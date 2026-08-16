@@ -18,12 +18,8 @@ const INITIAL_BOOKMARKS: Post[] = [
 		images: [
 			"https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&auto=format&fit=crop&q=80",
 		],
-		stats: {
-			comments: 18,
-			reposts: 5,
-			likes: 124,
-			shares: 12,
-		},
+		likesCount: 124,
+		commentsCount: 18,
 		isLiked: true,
 		isBookmarked: true,
 	},
@@ -38,15 +34,8 @@ const INITIAL_BOOKMARKS: Post[] = [
 		createdAt: "il y a 6h",
 		content:
 			"Petite réflexion du jour sur l'accessibilité web : des contrastes élevés et une navigation clavier fluide changent radicalement l'expérience utilisateur.",
-		images: [
-			"https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?w=800&auto=format&fit=crop&q=80",
-		],
-		stats: {
-			comments: 24,
-			reposts: 31,
-			likes: 240,
-			shares: 18,
-		},
+		likesCount: 240,
+		commentsCount: 24,
 		isLiked: false,
 		isBookmarked: true,
 	},

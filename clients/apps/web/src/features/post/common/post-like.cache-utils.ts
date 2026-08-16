@@ -5,7 +5,7 @@ export function updatePostLikeState(
 	isLiked: boolean,
 	explicitLikesCount?: number,
 ): Post {
-	const currentLikes = post.likesCount ?? post.stats?.likes ?? 0;
+	const currentLikes = post.likesCount ?? 0;
 	const nextLikesCount =
 		typeof explicitLikesCount === "number"
 			? explicitLikesCount
@@ -16,12 +16,6 @@ export function updatePostLikeState(
 		isLikedByAuthenticatedUser: isLiked,
 		isLiked: isLiked,
 		likesCount: nextLikesCount,
-		stats: post.stats
-			? {
-					...post.stats,
-					likes: nextLikesCount,
-				}
-			: undefined,
 	};
 }
 

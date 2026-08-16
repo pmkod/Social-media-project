@@ -4,9 +4,9 @@ import {
 	updatePostInQueryData,
 	updatePostLikeState,
 } from "../common/post-like.cache-utils.ts";
-import { postListRootQueryKey } from "../common/post-list.query-keys.ts";
 import type { Post } from "../common/post.ts";
 import { postDetailsQueryKey } from "../post-detail/post-detail.query-key.ts";
+import { postListQueryKeys } from "../common/post-list.query-keys.ts";
 
 export interface UnlikePostResponse {
 	success: boolean;
@@ -28,14 +28,14 @@ export const useUnlikePost = () => {
 	return useMutation({
 		mutationFn: (postId: string) => unlikePostApi(postId),
 		onMutate: async (postId: string) => {
-			await queryClient.cancelQueries({ queryKey: postListRootQueryKey });
+			await queryClient.cancelQueries({ queryKey: postListQueryKeys.root });
 
 			const previousQueries = queryClient.getQueriesData({
-				queryKey: postListRootQueryKey,
+				queryKey: postListQueryKeys.root,
 			});
 
 			queryClient.setQueriesData(
-				{ queryKey: postListRootQueryKey },
+				{ queryKey: postListQueryKeys.root },
 				(oldData) => updatePostInQueryData(oldData, postId, false),
 			);
 
@@ -57,7 +57,7 @@ export const useUnlikePost = () => {
 		onSuccess: (data, postId) => {
 			if (typeof data?.likesCount === "number") {
 				queryClient.setQueriesData(
-					{ queryKey: postListRootQueryKey },
+					{ queryKey: postListQueryKeys.root },
 					(oldData) =>
 						updatePostInQueryData(oldData, postId, false, data.likesCount),
 				);

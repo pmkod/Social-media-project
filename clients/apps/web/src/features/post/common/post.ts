@@ -7,13 +7,6 @@ export interface PostAuthor {
 	avatar: string;
 }
 
-export interface PostStats {
-	comments?: number;
-	reposts?: number;
-	likes?: number;
-	shares?: number;
-}
-
 export interface PostFileItem {
 	id?: string;
 	mimeType?: string | null;
@@ -41,7 +34,6 @@ export interface Post {
 	text?: string;
 	content?: string;
 	medias?: PostMediaItem[];
-	stats?: PostStats;
 	likesCount?: number;
 	commentsCount?: number;
 	isLikedByAuthenticatedUser?: boolean;

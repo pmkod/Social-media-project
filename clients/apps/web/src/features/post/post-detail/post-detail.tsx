@@ -68,14 +68,14 @@ export function PostDetail({ postId }: PostDetailProps) {
 	}
 
 	const isLiked = post.isLikedByAuthenticatedUser ?? post.isLiked ?? false;
-	const likesCount = post.likesCount ?? post.stats?.likes ?? 0;
+	const likesCount = post.likesCount ?? 0;
 
 	const mediaList: RenderMediaItem[] = (post.medias ?? [])
 		.map((m) => getMediaUrl(m))
 		.filter((item): item is RenderMediaItem => item !== null);
 
-	const repostsCount = (post.stats?.reposts ?? 0) + (isReposted ? 1 : 0);
-	const commentsCount = post.commentsCount ?? post.stats?.comments ?? 0;
+	const repostsCount = isReposted ? 1 : 0;
+	const commentsCount = post.commentsCount ?? 0;
 
 	const allComments = commentsData?.pages.flatMap((page) => page.data) ?? [];
 
@@ -219,7 +219,7 @@ export function PostDetail({ postId }: PostDetailProps) {
 			{/* Comments Section */}
 			<section className="border-b border-border">
 				<h3 className="px-4 py-3 text-sm font-semibold text-foreground border-b border-border">
-					Commentaires ({post.stats.comments})
+					Commentaires ({commentsCount})
 				</h3>
 
 				{isCommentsLoading ? (

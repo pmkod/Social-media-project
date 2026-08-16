@@ -196,7 +196,7 @@ function PostMediaSlider({ media }: { media: RenderMediaItem[] }) {
 
 export function PostItem({ post, onBookmarkToggle }: PostItemProps) {
 	const isLiked = post.isLikedByAuthenticatedUser ?? post.isLiked ?? false;
-	const likesCount = post.likesCount ?? post.stats?.likes ?? 0;
+	const likesCount = post.likesCount ?? 0;
 	const [isBookmarked, setIsBookmarked] = useState(post.isBookmarked ?? false);
 	const likePost = useLikePost();
 	const unlikePost = useUnlikePost();
@@ -228,7 +228,7 @@ export function PostItem({ post, onBookmarkToggle }: PostItemProps) {
 		.map((m) => getMediaUrl(m))
 		.filter((item): item is RenderMediaItem => item !== null);
 
-	const commentsCount = post.commentsCount ?? post.stats?.comments ?? 0;
+	const commentsCount = post.commentsCount ?? 0;
 
 	return (
 		<article className="border-x border-t last:border-b first:rounded-t-xl last:rounded-b-xl border-border p-4 hover:bg-muted/30 transition-colors">
