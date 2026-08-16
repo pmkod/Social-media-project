@@ -15,6 +15,7 @@ import NiceModal from "@/core/components/ui/nice-modal.tsx";
 import { cn } from "@/core/lib/utils.ts";
 import { useAddBookmark } from "@/features/bookmark/use-add-bookmark.ts";
 import { useRemoveBookmark } from "@/features/bookmark/use-remove-bookmark.ts";
+import { UserProfileLink } from "@/features/user/common/user-profile-link.tsx";
 import { CommentModal } from "../create-comment/comment-modal.tsx";
 import { useLikePost } from "../like-post/use-like-post.ts";
 import { buildImageUrl, buildVideoUrl } from "../post-media.functions.ts";
@@ -233,9 +234,8 @@ export function PostItem({ post }: PostItemProps) {
 		<article className="border-x border-t last:border-b first:rounded-t-xl last:rounded-b-xl border-border p-4 hover:bg-muted/30 transition-colors">
 			<div className="flex gap-3">
 				{/* Avatar */}
-				<Link
-					to="/$username"
-					params={{ username: `@${post.author?.handle ?? ""}` }}
+				<UserProfileLink
+					username={post.author?.handle}
 					className="h-fit shrink-0 rounded-full"
 					onClick={(event) => event.stopPropagation()}
 				>
@@ -249,28 +249,34 @@ export function PostItem({ post }: PostItemProps) {
 						alt={post.author?.name || "Auteur"}
 						className="size-12 rounded-full object-cover ring-1 ring-border"
 					/>
-				</Link>
+				</UserProfileLink>
 
 				{/* Content Container */}
 				<div className="flex-1 min-w-0">
 					{/* Header */}
 					<div className="flex items-center justify-between gap-2">
-						<Link
-							to="/posts/$postId"
-							params={{ postId: post.id }}
-							className="flex items-center gap-1.5 min-w-0 flex-wrap hover:underline text-lg"
-						>
-							<span className="font-semibold text-foreground truncate text-base">
-								{post.author?.name}
-							</span>
-							<span className="text-sm text-muted-foreground truncate">
-								@{post.author?.handle}
-							</span>
+						<div className="flex min-w-0 flex-wrap items-center gap-1.5 text-lg">
+							<UserProfileLink
+								username={post.author?.handle}
+								className="flex min-w-0 items-center gap-1.5 hover:underline"
+								onClick={(event) => event.stopPropagation()}
+							>
+								<span className="truncate text-base font-semibold text-foreground">
+									{post.author?.name}
+								</span>
+								<span className="truncate text-sm text-muted-foreground">
+									@{post.author?.handle}
+								</span>
+							</UserProfileLink>
 							<span className="text-sm text-muted-foreground">·</span>
-							<span className="text-sm font-normal text-muted-foreground">
+							<Link
+								to="/posts/$postId"
+								params={{ postId: post.id }}
+								className="text-sm font-normal text-muted-foreground hover:underline"
+							>
 								{formatPostCreationDate(post.createdAt)}
-							</span>
-						</Link>
+							</Link>
+						</div>
 						<button
 							type="button"
 							aria-label="Options"

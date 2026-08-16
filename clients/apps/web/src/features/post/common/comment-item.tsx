@@ -7,6 +7,7 @@ import {
 import { useState } from "react";
 import { Button } from "@/core/components/ui/button.tsx";
 import { cn } from "@/core/lib/utils.ts";
+import { UserProfileLink } from "@/features/user/common/user-profile-link.tsx";
 import { CreateCommentForm } from "../create-comment/create-comment-form.tsx";
 import { useLikeComment } from "../like-comment/use-like-comment.ts";
 import { useCommentReplies } from "../post-detail/use-comment-replies.ts";
@@ -55,27 +56,37 @@ export function CommentItem({
 				isReply && "border-b-0 py-3 pr-0",
 			)}
 		>
-			<img
-				src={
-					comment.author?.avatar ||
-					`https://ui-avatars.com/api/?name=${encodeURIComponent(
-						comment.author?.name || "U",
-					)}&background=random`
-				}
-				alt={comment.author?.name || "Auteur"}
-				className={cn(
-					"rounded-full object-cover shrink-0 ring-1 ring-border",
-					isReply ? "size-8" : "size-10",
-				)}
-			/>
+			<UserProfileLink
+				username={comment.author?.handle}
+				className="h-fit shrink-0 rounded-full"
+			>
+				<img
+					src={
+						comment.author?.avatar ||
+						`https://ui-avatars.com/api/?name=${encodeURIComponent(
+							comment.author?.name || "U",
+						)}&background=random`
+					}
+					alt={comment.author?.name || "Auteur"}
+					className={cn(
+						"rounded-full object-cover shrink-0 ring-1 ring-border",
+						isReply ? "size-8" : "size-10",
+					)}
+				/>
+			</UserProfileLink>
 			<div className="flex-1 min-w-0">
 				<div className="flex items-baseline gap-1.5 flex-wrap">
-					<span className="font-semibold text-foreground text-sm">
-						{comment.author?.name}
-					</span>
-					<span className="text-xs text-muted-foreground">
-						@{comment.author?.handle}
-					</span>
+					<UserProfileLink
+						username={comment.author?.handle}
+						className="flex min-w-0 items-baseline gap-1.5 hover:underline"
+					>
+						<span className="truncate text-sm font-semibold text-foreground">
+							{comment.author?.name}
+						</span>
+						<span className="truncate text-xs text-muted-foreground">
+							@{comment.author?.handle}
+						</span>
+					</UserProfileLink>
 					<span className="text-xs text-muted-foreground">·</span>
 					<span className="text-xs text-muted-foreground">
 						{formatCommentCreationDate(comment.createdAt)}

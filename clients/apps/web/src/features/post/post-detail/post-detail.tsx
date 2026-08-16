@@ -13,10 +13,11 @@ import { useState } from "react";
 import { Button } from "@/core/components/ui/button.tsx";
 import { useAddBookmark } from "@/features/bookmark/use-add-bookmark.ts";
 import { useRemoveBookmark } from "@/features/bookmark/use-remove-bookmark.ts";
+import { UserProfileLink } from "@/features/user/common/user-profile-link.tsx";
 import { CommentItem } from "../common/comment-item.tsx";
+import { formatPostFullDate } from "../common/post.utils.ts";
 import { getMediaUrl, type RenderMediaItem } from "../common/post-item.tsx";
 import { CreateCommentForm } from "../create-comment/create-comment-form.tsx";
-import { formatPostFullDate } from "../common/post.utils.ts";
 import { useLikePost } from "../like-post/use-like-post.ts";
 import { useUnlikePost } from "../unlike-post/use-unlike-post.ts";
 import { useComments } from "./use-comments";
@@ -101,10 +102,9 @@ export function PostDetail({ postId }: PostDetailProps) {
 			<article className="p-4 border-b border-border space-y-4">
 				{/* Author Meta */}
 				<div className="flex items-center gap-3">
-					<Link
-						to="/$username"
-						params={{ username: `@${post.author?.handle ?? ""}` }}
-						className="shrink-0 rounded-full"
+					<UserProfileLink
+						username={post.author?.handle}
+						className="flex min-w-0 items-center gap-3 rounded-xl hover:bg-muted/50"
 					>
 						<img
 							src={
@@ -116,15 +116,15 @@ export function PostDetail({ postId }: PostDetailProps) {
 							alt={post.author?.name || "Auteur"}
 							className="h-12 w-12 rounded-full object-cover ring-1 ring-border"
 						/>
-					</Link>
-					<div>
-						<h2 className="font-semibold text-foreground text-base">
-							{post.author?.name}
-						</h2>
-						<p className="text-xs text-muted-foreground">
-							@{post.author?.handle}
-						</p>
-					</div>
+						<div className="min-w-0">
+							<h2 className="truncate text-base font-semibold text-foreground hover:underline">
+								{post.author?.name}
+							</h2>
+							<p className="truncate text-xs text-muted-foreground">
+								@{post.author?.handle}
+							</p>
+						</div>
+					</UserProfileLink>
 				</div>
 
 				{/* Content */}
