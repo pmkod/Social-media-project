@@ -5,12 +5,12 @@ import { getPostList } from "../services/get-post-list.service";
 
 const routeDef = createRoute({
 	method: "get",
-	path: "/feed/following",
-	summary: "Get following feed with cursor pagination and counts",
+	path: "/posts/search",
+	summary: "Search all posts with cursor pagination",
 	tags: [PostsRoutesTag],
 	request: {
 		query: z.object({
-			authorId: z.string().optional(),
+			q: z.string().optional().default(""),
 			cursorId: z.string().optional(),
 			cursorCreatedAt: z.string().optional(),
 			limit: z.string().optional().default("10"),
@@ -18,16 +18,16 @@ const routeDef = createRoute({
 	},
 	responses: {
 		[HttpStatus.OK.code]: {
-			description:
-				"List of posts from following feed with medias, authors and cursor pagination metadata",
+			description: "Posts matching the search query",
 		},
 	},
 });
 
-const getFeedFollowingRoute = defineOpenAPIRoute({
+const searchPostsRoute = defineOpenAPIRoute({
 	route: routeDef,
 	handler: async (c) => {
 		const query = c.req.valid("query");
+		const search = query.q.trim();
 		const limit = Math.min(
 			Math.max(Number.parseInt(query.limit, 10) || 10, 1),
 			50,
@@ -35,7 +35,9 @@ const getFeedFollowingRoute = defineOpenAPIRoute({
 
 		return c.json(
 			await getPostList({
-				where: query.authorId ? { authorId: query.authorId } : undefined,
+				where: search
+					? { text: { contains: search, mode: "insensitive" } }
+					: undefined,
 				cursorId: query.cursorId,
 				cursorCreatedAt: query.cursorCreatedAt,
 				limit,
@@ -45,4 +47,4 @@ const getFeedFollowingRoute = defineOpenAPIRoute({
 	},
 });
 
-export { getFeedFollowingRoute };
+export { searchPostsRoute };

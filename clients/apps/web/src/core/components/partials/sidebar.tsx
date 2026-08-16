@@ -33,7 +33,7 @@ export function Sidebar() {
 									className: "bg-accent text-accent-foreground font-medium",
 								}}
 							>
-								<IconComponent className="siz-7 shrink-0" />
+								<IconComponent className="size-7 shrink-0" />
 								<span>{item.label}</span>
 							</Link>
 						);

@@ -23,60 +23,62 @@ const routeDef = createRoute({
 	},
 });
 
-const likePostRoute = defineOpenAPIRoute<typeof routeDef, HonoAuthenticatedEnv>({
-	route: routeDef,
-	handler: async (c) => {
-		const authenticatedUserId = c.get("authenticatedUserId");
-		if (!authenticatedUserId) {
-			throw new Error("Unauthorized");
-		}
+const likePostRoute = defineOpenAPIRoute<typeof routeDef, HonoAuthenticatedEnv>(
+	{
+		route: routeDef,
+		handler: async (c) => {
+			const authenticatedUserId = c.get("authenticatedUserId");
+			if (!authenticatedUserId) {
+				throw new Error("Unauthorized");
+			}
 
-		const { postId } = c.req.valid("param");
+			const { postId } = c.req.valid("param");
 
-		const post = await prisma.post.findUnique({
-			where: { id: postId },
-			select: { id: true },
-		});
+			const post = await prisma.post.findUnique({
+				where: { id: postId },
+				select: { id: true },
+			});
 
-		if (!post) {
-			throw new Error("Post not found");
-		}
+			if (!post) {
+				throw new Error("Post not found");
+			}
 
-		const existingLike = await prisma.postLike.findUnique({
-			where: {
-				postId_authorId: {
-					postId,
-					authorId: authenticatedUserId,
-				},
-			},
-			select: { id: true },
-		});
-
-		if (!existingLike) {
-			await prisma.$transaction([
-				prisma.postLike.create({
-					data: {
+			const existingLike = await prisma.postLike.findUnique({
+				where: {
+					postId_authorId: {
 						postId,
 						authorId: authenticatedUserId,
 					},
-				}),
-				prisma.post.update({
-					where: { id: postId },
-					data: { likesCount: { increment: 1 } },
-				}),
-			]);
-		}
+				},
+				select: { id: true },
+			});
 
-		const { likesCount } = await prisma.post.findUniqueOrThrow({
-			where: { id: postId },
-			select: { likesCount: true },
-		});
+			if (!existingLike) {
+				await prisma.$transaction([
+					prisma.postLike.create({
+						data: {
+							postId,
+							authorId: authenticatedUserId,
+						},
+					}),
+					prisma.post.update({
+						where: { id: postId },
+						data: { likesCount: { increment: 1 } },
+					}),
+				]);
+			}
 
-		return c.json(
-			{ success: true, message: "Post liked", likesCount },
-			HttpStatus.CREATED.code,
-		);
+			const { likesCount } = await prisma.post.findUniqueOrThrow({
+				where: { id: postId },
+				select: { likesCount: true },
+			});
+
+			return c.json(
+				{ success: true, message: "Post liked", likesCount },
+				HttpStatus.CREATED.code,
+			);
+		},
 	},
-});
+);
 
 export { likePostRoute };

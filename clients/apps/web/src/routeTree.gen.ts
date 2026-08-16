@@ -14,9 +14,9 @@ import { Route as MainRouteRouteImport } from './routes/_main/route'
 import { Route as BaseAuthenticationRouteRouteImport } from './routes/_base/_authentication/route'
 import { Route as MainBookmarksRouteImport } from './routes/_main/bookmarks'
 import { Route as MainDiscussionsRouteImport } from './routes/_main/discussions'
-import { Route as MainExploreRouteImport } from './routes/_main/explore'
 import { Route as MainHomeRouteImport } from './routes/_main/home'
 import { Route as MainNotificationsRouteImport } from './routes/_main/notifications'
+import { Route as MainSearchRouteImport } from './routes/_main/search'
 import { Route as BaseAuthenticationIndexRouteImport } from './routes/_base/_authentication/index'
 import { Route as BaseAuthenticationCompleteSignupRouteImport } from './routes/_base/_authentication/complete-signup'
 import { Route as BaseAuthenticationNewPasswordRouteImport } from './routes/_base/_authentication/new-password'
@@ -47,11 +47,6 @@ const MainDiscussionsRoute = MainDiscussionsRouteImport.update({
   path: '/discussions',
   getParentRoute: () => MainRouteRoute,
 } as any)
-const MainExploreRoute = MainExploreRouteImport.update({
-  id: '/explore',
-  path: '/explore',
-  getParentRoute: () => MainRouteRoute,
-} as any)
 const MainHomeRoute = MainHomeRouteImport.update({
   id: '/home',
   path: '/home',
@@ -60,6 +55,11 @@ const MainHomeRoute = MainHomeRouteImport.update({
 const MainNotificationsRoute = MainNotificationsRouteImport.update({
   id: '/notifications',
   path: '/notifications',
+  getParentRoute: () => MainRouteRoute,
+} as any)
+const MainSearchRoute = MainSearchRouteImport.update({
+  id: '/search',
+  path: '/search',
   getParentRoute: () => MainRouteRoute,
 } as any)
 const BaseAuthenticationIndexRoute = BaseAuthenticationIndexRouteImport.update({
@@ -107,9 +107,9 @@ export interface FileRoutesByFullPath {
   '/': typeof BaseAuthenticationIndexRoute
   '/bookmarks': typeof MainBookmarksRoute
   '/discussions': typeof MainDiscussionsRoute
-  '/explore': typeof MainExploreRoute
   '/home': typeof MainHomeRoute
   '/notifications': typeof MainNotificationsRoute
+  '/search': typeof MainSearchRoute
   '/complete-signup': typeof BaseAuthenticationCompleteSignupRoute
   '/new-password': typeof BaseAuthenticationNewPasswordRoute
   '/password-reset': typeof BaseAuthenticationPasswordResetRoute
@@ -121,9 +121,9 @@ export interface FileRoutesByTo {
   '/': typeof BaseAuthenticationIndexRoute
   '/bookmarks': typeof MainBookmarksRoute
   '/discussions': typeof MainDiscussionsRoute
-  '/explore': typeof MainExploreRoute
   '/home': typeof MainHomeRoute
   '/notifications': typeof MainNotificationsRoute
+  '/search': typeof MainSearchRoute
   '/complete-signup': typeof BaseAuthenticationCompleteSignupRoute
   '/new-password': typeof BaseAuthenticationNewPasswordRoute
   '/password-reset': typeof BaseAuthenticationPasswordResetRoute
@@ -138,9 +138,9 @@ export interface FileRoutesById {
   '/_base/_authentication': typeof BaseAuthenticationRouteRouteWithChildren
   '/_main/bookmarks': typeof MainBookmarksRoute
   '/_main/discussions': typeof MainDiscussionsRoute
-  '/_main/explore': typeof MainExploreRoute
   '/_main/home': typeof MainHomeRoute
   '/_main/notifications': typeof MainNotificationsRoute
+  '/_main/search': typeof MainSearchRoute
   '/_base/_authentication/complete-signup': typeof BaseAuthenticationCompleteSignupRoute
   '/_base/_authentication/new-password': typeof BaseAuthenticationNewPasswordRoute
   '/_base/_authentication/password-reset': typeof BaseAuthenticationPasswordResetRoute
@@ -155,9 +155,9 @@ export interface FileRouteTypes {
     | '/'
     | '/bookmarks'
     | '/discussions'
-    | '/explore'
     | '/home'
     | '/notifications'
+    | '/search'
     | '/complete-signup'
     | '/new-password'
     | '/password-reset'
@@ -169,9 +169,9 @@ export interface FileRouteTypes {
     | '/'
     | '/bookmarks'
     | '/discussions'
-    | '/explore'
     | '/home'
     | '/notifications'
+    | '/search'
     | '/complete-signup'
     | '/new-password'
     | '/password-reset'
@@ -185,9 +185,9 @@ export interface FileRouteTypes {
     | '/_base/_authentication'
     | '/_main/bookmarks'
     | '/_main/discussions'
-    | '/_main/explore'
     | '/_main/home'
     | '/_main/notifications'
+    | '/_main/search'
     | '/_base/_authentication/complete-signup'
     | '/_base/_authentication/new-password'
     | '/_base/_authentication/password-reset'
@@ -239,13 +239,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MainDiscussionsRouteImport
       parentRoute: typeof MainRouteRoute
     }
-    '/_main/explore': {
-      id: '/_main/explore'
-      path: '/explore'
-      fullPath: '/explore'
-      preLoaderRoute: typeof MainExploreRouteImport
-      parentRoute: typeof MainRouteRoute
-    }
     '/_main/home': {
       id: '/_main/home'
       path: '/home'
@@ -258,6 +251,13 @@ declare module '@tanstack/react-router' {
       path: '/notifications'
       fullPath: '/notifications'
       preLoaderRoute: typeof MainNotificationsRouteImport
+      parentRoute: typeof MainRouteRoute
+    }
+    '/_main/search': {
+      id: '/_main/search'
+      path: '/search'
+      fullPath: '/search'
+      preLoaderRoute: typeof MainSearchRouteImport
       parentRoute: typeof MainRouteRoute
     }
     '/_base/_authentication/': {
@@ -353,18 +353,18 @@ const BaseRouteRouteWithChildren = BaseRouteRoute._addFileChildren(
 interface MainRouteRouteChildren {
   MainBookmarksRoute: typeof MainBookmarksRoute
   MainDiscussionsRoute: typeof MainDiscussionsRoute
-  MainExploreRoute: typeof MainExploreRoute
   MainHomeRoute: typeof MainHomeRoute
   MainNotificationsRoute: typeof MainNotificationsRoute
+  MainSearchRoute: typeof MainSearchRoute
   MainPostsPostIdRoute: typeof MainPostsPostIdRoute
 }
 
 const MainRouteRouteChildren: MainRouteRouteChildren = {
   MainBookmarksRoute: MainBookmarksRoute,
   MainDiscussionsRoute: MainDiscussionsRoute,
-  MainExploreRoute: MainExploreRoute,
   MainHomeRoute: MainHomeRoute,
   MainNotificationsRoute: MainNotificationsRoute,
+  MainSearchRoute: MainSearchRoute,
   MainPostsPostIdRoute: MainPostsPostIdRoute,
 }
 
