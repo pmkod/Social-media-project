@@ -13,6 +13,8 @@ import { Link } from "@tanstack/react-router";
 import { useCallback, useEffect, useRef, useState } from "react";
 import NiceModal from "@/core/components/ui/nice-modal.tsx";
 import { cn } from "@/core/lib/utils.ts";
+import { useAddBookmark } from "@/features/bookmark/use-add-bookmark.ts";
+import { useRemoveBookmark } from "@/features/bookmark/use-remove-bookmark.ts";
 import { CommentModal } from "../create-comment/comment-modal.tsx";
 import { useLikePost } from "../like-post/use-like-post.ts";
 import { buildImageUrl, buildVideoUrl } from "../post-media.functions.ts";
@@ -21,10 +23,7 @@ import { CommentItem } from "./comment-item.tsx";
 import type { Post, PostMediaItem } from "./post.ts";
 import { formatPostCreationDate } from "./post.utils.ts";
 
-type PostItemProps = {
-	post: Post;
-	onBookmarkToggle?: (postId: string) => void;
-};
+type PostItemProps = { post: Post };
 
 export type RenderMediaItem = {
 	url: string;
@@ -194,14 +193,14 @@ function PostMediaSlider({ media }: { media: RenderMediaItem[] }) {
 	);
 }
 
-export function PostItem({ post, onBookmarkToggle }: PostItemProps) {
+export function PostItem({ post }: PostItemProps) {
 	const isLiked = post.isLikedByAuthenticatedUser ?? false;
 	const likesCount = post.likesCount ?? 0;
-	const [isBookmarked, setIsBookmarked] = useState(
-		post.isBookmarkedByAuthenticatedUser ?? false,
-	);
+	const isBookmarked = post.isBookmarkedByAuthenticatedUser ?? false;
 	const likePost = useLikePost();
 	const unlikePost = useUnlikePost();
+	const addBookmark = useAddBookmark();
+	const removeBookmark = useRemoveBookmark();
 
 	const handleLike = (e: React.MouseEvent) => {
 		e.stopPropagation();
@@ -214,11 +213,9 @@ export function PostItem({ post, onBookmarkToggle }: PostItemProps) {
 
 	const handleBookmark = (e: React.MouseEvent) => {
 		e.stopPropagation();
-		const nextState = !isBookmarked;
-		setIsBookmarked(nextState);
-		if (onBookmarkToggle) {
-			onBookmarkToggle(post.id);
-		}
+		if (addBookmark.isPending || removeBookmark.isPending) return;
+		if (isBookmarked) removeBookmark.mutate(post.id);
+		else addBookmark.mutate({ postId: post.id });
 	};
 
 	const handleOpenCommentModal = (e: React.MouseEvent) => {
@@ -327,23 +324,25 @@ export function PostItem({ post, onBookmarkToggle }: PostItemProps) {
 						</button>
 
 						{/* Bookmark */}
-						{onBookmarkToggle ? (
-							<button
-								type="button"
-								onClick={handleBookmark}
-								className={`flex items-center gap-1.5 transition-colors group ${
-									isBookmarked ? "text-amber-500" : "hover:text-amber-500"
-								}`}
-							>
-								<div className="p-1.5 rounded-full group-hover:bg-amber-500/10">
-									{isBookmarked ? (
-										<RiBookmarkFill className="h-4 w-4 text-amber-500" />
-									) : (
-										<RiBookmarkLine className="h-4 w-4" />
-									)}
-								</div>
-							</button>
-						) : null}
+						<button
+							type="button"
+							onClick={handleBookmark}
+							disabled={addBookmark.isPending || removeBookmark.isPending}
+							aria-label={
+								isBookmarked ? "Retirer des bookmarks" : "Ajouter aux bookmarks"
+							}
+							className={`flex items-center gap-1.5 transition-colors group disabled:opacity-60 ${
+								isBookmarked ? "text-amber-500" : "hover:text-amber-500"
+							}`}
+						>
+							<div className="p-1.5 rounded-full group-hover:bg-amber-500/10">
+								{isBookmarked ? (
+									<RiBookmarkFill className="h-4 w-4 text-amber-500" />
+								) : (
+									<RiBookmarkLine className="h-4 w-4" />
+								)}
+							</div>
+						</button>
 					</div>
 
 					{/* Recent Comments */}

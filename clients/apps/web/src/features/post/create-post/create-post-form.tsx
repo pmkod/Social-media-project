@@ -4,7 +4,7 @@ import {
 	RiPlayFill,
 	RiSendPlane2Line,
 } from "@remixicon/react";
-import { useForm, useSelector, useStore } from "@tanstack/react-form";
+import { useForm, useSelector } from "@tanstack/react-form";
 import { useEffect, useMemo } from "react";
 import { z } from "zod";
 import { Button } from "@/core/components/ui/button.tsx";

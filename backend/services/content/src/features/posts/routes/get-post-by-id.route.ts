@@ -72,28 +72,37 @@ const getPostByIdRoute = defineOpenAPIRoute({
 		}
 
 		const authenticatedUserId = c.req.header("X-Authenticated-User-Id");
-		let isLikedByAuthenticatedUser = false;
-		if (authenticatedUserId) {
-			const like = await prisma.postLike.findUnique({
-				where: {
-					postId_authorId: {
-						postId: id,
-						authorId: authenticatedUserId,
-					},
-				},
-				select: { id: true },
-			});
-			isLikedByAuthenticatedUser = Boolean(like);
-		}
-
-		const authorsMap = await userServiceClient.fetchAuthorsBatch([
-			post.authorId,
+		const [like, bookmark, authorsMap] = await Promise.all([
+			authenticatedUserId
+				? prisma.postLike.findUnique({
+						where: {
+							postId_authorId: {
+								postId: id,
+								authorId: authenticatedUserId,
+							},
+						},
+						select: { id: true },
+					})
+				: null,
+			authenticatedUserId
+				? prisma.bookmark.findUnique({
+						where: {
+							postId_ownerId: {
+								postId: id,
+								ownerId: authenticatedUserId,
+							},
+						},
+						select: { id: true },
+					})
+				: null,
+			userServiceClient.fetchAuthorsBatch([post.authorId]),
 		]);
 		const author = authorsMap.get(post.authorId) ?? null;
 
 		return c.json({
 			...post,
-			isLikedByAuthenticatedUser,
+			isLikedByAuthenticatedUser: Boolean(like),
+			isBookmarkedByAuthenticatedUser: Boolean(bookmark),
 			author,
 		});
 	},

@@ -1,7 +1,5 @@
-import { RiLogoutBoxLine } from "@remixicon/react";
-import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
+import { createFileRoute, Outlet } from "@tanstack/react-router";
 import { BottomNav } from "@/core/components/partials/bottom-nav";
-import { Logo } from "@/core/components/partials/logo";
 import { Sidebar } from "@/core/components/partials/sidebar";
 
 export const Route = createFileRoute("/_main")({

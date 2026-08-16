@@ -1,84 +1,317 @@
-import { RiBookmarkLine } from "@remixicon/react";
-import { useState } from "react";
-import type { Post } from "@/features/post/common/post.ts";
-import { PostItem } from "@/features/post/common/post-item";
+import {
+	RiAddLine,
+	RiBookmarkLine,
+	RiDeleteBinLine,
+	RiFolder3Line,
+	RiGlobalLine,
+	RiLoader4Line,
+	RiLockLine,
+} from "@remixicon/react";
+import { useEffect, useRef, useState } from "react";
+import { Button } from "@/core/components/ui/button.tsx";
+import { PostListLoader } from "@/features/post/common/components/loaders";
+import { PostItem } from "@/features/post/common/post-item.tsx";
+import type { BookmarkCollection } from "./common/bookmark-collection.ts";
+import { useAddPostToCollection } from "./use-add-post-to-collection.ts";
+import { useBookmarkCollections } from "./use-bookmark-collections.ts";
+import { useBookmarks } from "./use-bookmarks.ts";
+import { useCreateBookmarkCollection } from "./use-create-bookmark-collection.ts";
+import { useDeleteBookmarkCollection } from "./use-delete-bookmark-collection.ts";
+import { useRemovePostFromCollection } from "./use-remove-post-from-collection.ts";
 
-const INITIAL_BOOKMARKS: Post[] = [
-	{
-		id: "bm-1",
-		author: {
-			name: "Sophie Martin",
-			handle: "sophiem",
-			avatar:
-				"https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80",
-		},
-		createdAt: "il y a 2h",
-		content:
-			"Ravi de lancer notre nouvelle interface sur Graphy ! Dites-moi ce que vous en pensez en commentaire 🚀🚀✨",
-		images: [
-			"https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&auto=format&fit=crop&q=80",
-		],
-		likesCount: 124,
-		commentsCount: 18,
-		isLikedByAuthenticatedUser: true,
-		isBookmarkedByAuthenticatedUser: true,
-	},
-	{
-		id: "bm-2",
-		author: {
-			name: "Emma Laurent",
-			handle: "emma_design",
-			avatar:
-				"https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80",
-		},
-		createdAt: "il y a 6h",
-		content:
-			"Petite réflexion du jour sur l'accessibilité web : des contrastes élevés et une navigation clavier fluide changent radicalement l'expérience utilisateur.",
-		likesCount: 240,
-		commentsCount: 24,
-		isLikedByAuthenticatedUser: false,
-		isBookmarkedByAuthenticatedUser: true,
-	},
-];
+function CollectionOrganizer({
+	postId,
+	collections,
+}: {
+	postId: string;
+	collections: BookmarkCollection[];
+}) {
+	const [collectionId, setCollectionId] = useState(collections[0]?.id ?? "");
+	const addPost = useAddPostToCollection();
+
+	if (collections.length === 0) return null;
+
+	return (
+		<div className="flex items-center gap-2 border-x border-t border-border px-4 py-2 last:border-b">
+			<select
+				value={collectionId}
+				onChange={(event) => setCollectionId(event.target.value)}
+				aria-label="Choisir une collection"
+				className="h-8 min-w-0 flex-1 rounded-lg border border-border bg-background px-2 text-xs text-foreground outline-none focus:border-sky-500"
+			>
+				{collections.map((collection) => (
+					<option key={collection.id} value={collection.id}>
+						{collection.name}
+					</option>
+				))}
+			</select>
+			<Button
+				type="button"
+				size="sm"
+				variant="outline"
+				disabled={!collectionId || addPost.isPending}
+				onClick={() => addPost.mutate({ collectionId, postId })}
+			>
+				<RiAddLine className="size-4" />
+				Ajouter
+			</Button>
+		</div>
+	);
+}
 
 export function BookmarkList() {
-	const [bookmarks, setBookmarks] = useState<Post[]>(INITIAL_BOOKMARKS);
+	const [selectedCollectionId, setSelectedCollectionId] = useState<string>();
+	const [isCreateFormOpen, setIsCreateFormOpen] = useState(false);
+	const [name, setName] = useState("");
+	const [description, setDescription] = useState("");
+	const [isPublic, setIsPublic] = useState(false);
+	const observerTargetRef = useRef<HTMLDivElement>(null);
+	const collectionsQuery = useBookmarkCollections();
+	const bookmarksQuery = useBookmarks(selectedCollectionId);
+	const createCollection = useCreateBookmarkCollection();
+	const deleteCollection = useDeleteBookmarkCollection();
+	const removeFromCollection = useRemovePostFromCollection();
 
-	const handleBookmarkToggle = (postId: string) => {
-		setBookmarks((prev) => prev.filter((p) => p.id !== postId));
+	const collections = collectionsQuery.data?.collections ?? [];
+	const selectedCollection = collections.find(
+		(collection) => collection.id === selectedCollectionId,
+	);
+	const posts = bookmarksQuery.data?.pages.flatMap((page) => page.posts) ?? [];
+
+	useEffect(() => {
+		const target = observerTargetRef.current;
+		if (!target) return;
+		const observer = new IntersectionObserver(
+			([entry]) => {
+				if (
+					entry.isIntersecting &&
+					bookmarksQuery.hasNextPage &&
+					!bookmarksQuery.isFetchingNextPage
+				) {
+					bookmarksQuery.fetchNextPage();
+				}
+			},
+			{ rootMargin: "300px" },
+		);
+		observer.observe(target);
+		return () => observer.disconnect();
+	}, [
+		bookmarksQuery.fetchNextPage,
+		bookmarksQuery.hasNextPage,
+		bookmarksQuery.isFetchingNextPage,
+	]);
+
+	const handleCreateCollection = (event: React.FormEvent) => {
+		event.preventDefault();
+		if (!name.trim() || createCollection.isPending) return;
+		createCollection.mutate(
+			{
+				name: name.trim(),
+				description: description.trim() || undefined,
+				isPublic,
+			},
+			{
+				onSuccess: (collection) => {
+					setName("");
+					setDescription("");
+					setIsPublic(false);
+					setIsCreateFormOpen(false);
+					setSelectedCollectionId(collection.id);
+				},
+			},
+		);
 	};
 
 	return (
-		<div className="divide-y divide-border">
-			<div className="p-4 border-b border-border">
-				<h1 className="text-xl font-bold text-foreground flex items-center gap-2">
-					<RiBookmarkLine className="h-6 w-6 text-amber-500" />
-					<span>Signets (Bookmarks)</span>
-				</h1>
-				<p className="text-xs text-muted-foreground mt-1">
-					Vos publications enregistrées pour plus tard
-				</p>
+		<div className="mx-auto min-h-screen max-w-2xl border-x border-border">
+			<header className="sticky top-0 z-20 border-b border-border bg-background/90 p-4 backdrop-blur-xl">
+				<div className="flex items-center justify-between gap-3">
+					<div>
+						<h1 className="flex items-center gap-2 text-xl font-bold text-foreground">
+							<RiBookmarkLine className="size-6 text-amber-500" />
+							Bookmarks
+						</h1>
+						<p className="mt-1 text-xs text-muted-foreground">
+							Retrouvez et organisez vos publications enregistrées.
+						</p>
+					</div>
+					<Button
+						type="button"
+						size="sm"
+						onClick={() => setIsCreateFormOpen((open) => !open)}
+					>
+						<RiAddLine className="size-4" />
+						Collection
+					</Button>
+				</div>
+
+				{isCreateFormOpen ? (
+					<form
+						onSubmit={handleCreateCollection}
+						className="mt-4 space-y-3 rounded-2xl border border-border bg-muted/30 p-4"
+					>
+						<input
+							value={name}
+							onChange={(event) => setName(event.target.value)}
+							placeholder="Nom de la collection"
+							maxLength={60}
+							className="h-10 w-full rounded-lg border border-border bg-background px-3 text-sm outline-none focus:border-sky-500"
+						/>
+						<textarea
+							value={description}
+							onChange={(event) => setDescription(event.target.value)}
+							placeholder="Description (facultative)"
+							maxLength={280}
+							rows={2}
+							className="w-full resize-none rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-sky-500"
+						/>
+						<div className="flex items-center justify-between gap-3">
+							<label className="flex items-center gap-2 text-xs text-muted-foreground">
+								<input
+									type="checkbox"
+									checked={isPublic}
+									onChange={(event) => setIsPublic(event.target.checked)}
+								/>
+								Collection visible sur mon profil
+							</label>
+							<Button type="submit" size="sm" disabled={!name.trim()}>
+								Créer
+							</Button>
+						</div>
+					</form>
+				) : null}
+			</header>
+
+			<section className="border-b border-border p-4">
+				<h2 className="mb-3 text-sm font-semibold text-foreground">
+					Collections
+				</h2>
+				<div className="flex gap-2 overflow-x-auto pb-1">
+					<button
+						type="button"
+						onClick={() => setSelectedCollectionId(undefined)}
+						className={`min-w-32 rounded-xl border p-3 text-left transition ${
+							selectedCollectionId
+								? "border-border hover:bg-muted/50"
+								: "border-sky-500 bg-sky-500/10"
+						}`}
+					>
+						<RiBookmarkLine className="mb-3 size-5 text-amber-500" />
+						<span className="block text-sm font-semibold text-foreground">
+							Tous
+						</span>
+					</button>
+
+					{collectionsQuery.isLoading ? (
+						<RiLoader4Line className="m-6 size-5 animate-spin text-sky-500" />
+					) : (
+						collections.map((collection) => (
+							<button
+								type="button"
+								key={collection.id}
+								onClick={() => setSelectedCollectionId(collection.id)}
+								className={`min-w-40 rounded-xl border p-3 text-left transition ${
+									selectedCollectionId === collection.id
+										? "border-sky-500 bg-sky-500/10"
+										: "border-border hover:bg-muted/50"
+								}`}
+							>
+								<div className="mb-3 flex items-center justify-between">
+									<RiFolder3Line className="size-5 text-sky-500" />
+									{collection.isPublic ? (
+										<RiGlobalLine className="size-4 text-muted-foreground" />
+									) : (
+										<RiLockLine className="size-4 text-muted-foreground" />
+									)}
+								</div>
+								<span className="block truncate text-sm font-semibold text-foreground">
+									{collection.name}
+								</span>
+								<span className="text-xs text-muted-foreground">
+									{collection.bookmarksCount} publication
+									{collection.bookmarksCount > 1 ? "s" : ""}
+								</span>
+							</button>
+						))
+					)}
+				</div>
+			</section>
+
+			<div className="flex items-center justify-between border-b border-border px-4 py-3">
+				<h2 className="font-semibold text-foreground">
+					{selectedCollection?.name ?? "Tous les bookmarks"}
+				</h2>
+				{selectedCollection ? (
+					<Button
+						type="button"
+						variant="ghost"
+						size="sm"
+						className="text-rose-500 hover:text-rose-600"
+						disabled={deleteCollection.isPending}
+						onClick={() => {
+							if (window.confirm("Supprimer cette collection ?")) {
+								deleteCollection.mutate(selectedCollection.id, {
+									onSuccess: () => setSelectedCollectionId(undefined),
+								});
+							}
+						}}
+					>
+						<RiDeleteBinLine className="size-4" />
+						Supprimer
+					</Button>
+				) : null}
 			</div>
 
-			{bookmarks.length === 0 ? (
-				<div className="p-8 text-center text-muted-foreground space-y-2">
-					<RiBookmarkLine className="h-12 w-12 mx-auto text-muted-foreground/60" />
-					<p className="font-medium text-foreground">
-						Aucun signet pour le moment
+			{bookmarksQuery.isLoading ? (
+				<PostListLoader />
+			) : bookmarksQuery.isError ? (
+				<div className="p-10 text-center text-sm text-rose-500">
+					Impossible de charger vos bookmarks.
+				</div>
+			) : posts.length === 0 ? (
+				<div className="p-12 text-center text-muted-foreground">
+					<RiBookmarkLine className="mx-auto mb-3 size-10 opacity-60" />
+					<p className="font-semibold text-foreground">
+						Aucune publication enregistrée
 					</p>
-					<p className="text-xs">
-						Enregistrez des publications pour les retrouver facilement ici.
+					<p className="mt-1 text-xs">
+						Utilisez l’icône bookmark sous une publication pour la retrouver
+						ici.
 					</p>
 				</div>
 			) : (
 				<div>
-					{bookmarks.map((post) => (
-						<PostItem
-							key={post.id}
-							post={post}
-							onBookmarkToggle={handleBookmarkToggle}
-						/>
+					{posts.map((post) => (
+						<div key={post.id}>
+							<PostItem post={post} />
+							{selectedCollection ? (
+								<div className="flex justify-end border-x border-t border-border px-4 py-2 last:border-b">
+									<Button
+										type="button"
+										size="sm"
+										variant="ghost"
+										disabled={removeFromCollection.isPending}
+										onClick={() =>
+											removeFromCollection.mutate({
+												collectionId: selectedCollection.id,
+												postId: post.id,
+											})
+										}
+									>
+										Retirer de la collection
+									</Button>
+								</div>
+							) : (
+								<CollectionOrganizer
+									postId={post.id}
+									collections={collections}
+								/>
+							)}
+						</div>
 					))}
+					<div ref={observerTargetRef}>
+						{bookmarksQuery.hasNextPage ? <PostListLoader count={2} /> : null}
+					</div>
 				</div>
 			)}
 		</div>

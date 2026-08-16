@@ -1,7 +1,6 @@
 import {
 	RiArrowLeftLine,
 	RiCalendar2Line,
-	RiFolder3Line,
 	RiLinkM,
 	RiLoader4Line,
 	RiMapPin2Line,
@@ -14,6 +13,7 @@ import {
 	TabsList,
 	TabsTrigger,
 } from "@/core/components/ui/tabs.tsx";
+import { ProfileCollections } from "./profile-collections.tsx";
 import { ProfilePostList } from "./profile-post-list.tsx";
 import { useFollowUser } from "./use-follow-user.ts";
 import { useUnfollowUser } from "./use-unfollow-user.ts";
@@ -213,12 +213,7 @@ export function ProfileView({ username }: ProfileViewProps) {
 					<ProfilePostList userId={user.id} type="likes" />
 				</TabsContent>
 				<TabsContent value="collections">
-					<div className="p-12 text-center">
-						<RiFolder3Line className="mx-auto mb-3 size-8 text-muted-foreground" />
-						<p className="font-semibold text-foreground">
-							Aucune collection publique
-						</p>
-					</div>
+					<ProfileCollections userId={user.id} />
 				</TabsContent>
 			</Tabs>
 		</div>

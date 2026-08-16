@@ -18,6 +18,7 @@ model Post {
   medias        PostMedia[]
   comments      Comment[]
   postLikes     PostLike[]
+  bookmarks     Bookmark[]
 
   @@index([createdAt, id])
   @@map("post")
@@ -89,4 +90,46 @@ model CommentLike {
 
   @@unique([commentId, authorId])
   @@map("comment_like")
+}
+
+model Bookmark {
+  id              String                   @id @default(cuid())
+  postId          String                   @map("post_id")
+  ownerId         String                   @map("owner_id")
+  createdAt       DateTime                 @default(now()) @map("created_at")
+  post            Post                     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  collectionItems BookmarkCollectionItem[]
+
+  @@unique([postId, ownerId])
+  @@index([ownerId, createdAt])
+  @@map("bookmark")
+}
+
+model BookmarkCollection {
+  id          String                   @id @default(cuid())
+  ownerId     String                   @map("owner_id")
+  name        String                   @db.VarChar(60)
+  description String?                  @db.VarChar(280)
+  isPublic    Boolean                  @default(false) @map("is_public")
+  createdAt   DateTime                 @default(now()) @map("created_at")
+  updatedAt   DateTime                 @updatedAt @map("updated_at")
+  items       BookmarkCollectionItem[]
+
+  @@unique([ownerId, name])
+  @@index([ownerId, createdAt])
+  @@map("bookmark_collection")
+}
+
+model BookmarkCollectionItem {
+  id           String             @id @default(cuid())
+  collectionId String             @map("collection_id")
+  bookmarkId   String             @map("bookmark_id")
+  createdAt    DateTime           @default(now()) @map("created_at")
+  collection   BookmarkCollection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+  bookmark     Bookmark           @relation(fields: [bookmarkId], references: [id], onDelete: Cascade)
+
+  @@unique([collectionId, bookmarkId])
+  @@index([collectionId, createdAt])
+  @@index([bookmarkId])
+  @@map("bookmark_collection_item")
 }

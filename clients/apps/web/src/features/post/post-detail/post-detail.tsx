@@ -11,6 +11,8 @@ import {
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Button } from "@/core/components/ui/button.tsx";
+import { useAddBookmark } from "@/features/bookmark/use-add-bookmark.ts";
+import { useRemoveBookmark } from "@/features/bookmark/use-remove-bookmark.ts";
 import { CommentItem } from "../common/comment-item.tsx";
 import { getMediaUrl, type RenderMediaItem } from "../common/post-item.tsx";
 import { CreateCommentForm } from "../create-comment/create-comment-form.tsx";
@@ -36,7 +38,8 @@ export function PostDetail({ postId }: PostDetailProps) {
 
 	const likePost = useLikePost();
 	const unlikePost = useUnlikePost();
-	const [isBookmarked, setIsBookmarked] = useState(false);
+	const addBookmark = useAddBookmark();
+	const removeBookmark = useRemoveBookmark();
 	const [isReposted, setIsReposted] = useState(false);
 
 	if (isLoading) {
@@ -68,6 +71,7 @@ export function PostDetail({ postId }: PostDetailProps) {
 	}
 
 	const isLiked = post.isLikedByAuthenticatedUser ?? false;
+	const isBookmarked = post.isBookmarkedByAuthenticatedUser ?? false;
 	const likesCount = post.likesCount ?? 0;
 
 	const mediaList: RenderMediaItem[] = (post.medias ?? [])
@@ -205,7 +209,11 @@ export function PostDetail({ postId }: PostDetailProps) {
 					{/* Bookmark */}
 					<button
 						type="button"
-						onClick={() => setIsBookmarked((prev) => !prev)}
+						onClick={() => {
+							if (isBookmarked) removeBookmark.mutate(post.id);
+							else addBookmark.mutate({ postId: post.id });
+						}}
+						disabled={addBookmark.isPending || removeBookmark.isPending}
 						className={`flex items-center gap-2 transition-colors ${
 							isBookmarked ? "text-amber-500" : "hover:text-amber-500"
 						}`}

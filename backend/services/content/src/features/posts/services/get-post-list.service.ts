@@ -114,7 +114,7 @@ const getPostList = async ({
 		]),
 	);
 
-	const [authorsMap, likedPostIds] = await Promise.all([
+	const [authorsMap, likedPostIds, bookmarkedPostIds] = await Promise.all([
 		userServiceClient.fetchAuthorsBatch(authorIds),
 		(async () => {
 			if (!authenticatedUserId || postIds.length === 0) {
@@ -126,12 +126,23 @@ const getPostList = async ({
 			});
 			return new Set(likes.map((like) => like.postId));
 		})(),
+		(async () => {
+			if (!authenticatedUserId || postIds.length === 0) {
+				return new Set<string>();
+			}
+			const bookmarks = await prisma.bookmark.findMany({
+				where: { ownerId: authenticatedUserId, postId: { in: postIds } },
+				select: { postId: true },
+			});
+			return new Set(bookmarks.map((bookmark) => bookmark.postId));
+		})(),
 	]);
 
 	return {
 		posts: items.map((post) => ({
 			...post,
 			isLikedByAuthenticatedUser: likedPostIds.has(post.id),
+			isBookmarkedByAuthenticatedUser: bookmarkedPostIds.has(post.id),
 			author: authorsMap.get(post.authorId) ?? null,
 			comments: post.comments.map((comment) => ({
 				...comment,

@@ -10,6 +10,9 @@ const postListQueryKeys = {
 		[...postListRootQueryKey, "user", userId] as const,
 	userLikes: (userId: string) =>
 		[...postListRootQueryKey, "user-likes", userId] as const,
+	bookmarks: () => [...postListRootQueryKey, "bookmarks"] as const,
+	collectionPosts: (collectionId: string) =>
+		[...postListRootQueryKey, "collection", collectionId] as const,
 };
 
 export { postListQueryKeys, postListRootQueryKey };

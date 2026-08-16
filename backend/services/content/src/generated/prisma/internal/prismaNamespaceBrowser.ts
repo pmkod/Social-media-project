@@ -56,7 +56,10 @@ export const ModelName = {
   File: 'File',
   Comment: 'Comment',
   PostLike: 'PostLike',
-  CommentLike: 'CommentLike'
+  CommentLike: 'CommentLike',
+  Bookmark: 'Bookmark',
+  BookmarkCollection: 'BookmarkCollection',
+  BookmarkCollectionItem: 'BookmarkCollectionItem'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -144,6 +147,39 @@ export const CommentLikeScalarFieldEnum = {
 } as const
 
 export type CommentLikeScalarFieldEnum = (typeof CommentLikeScalarFieldEnum)[keyof typeof CommentLikeScalarFieldEnum]
+
+
+export const BookmarkScalarFieldEnum = {
+  id: 'id',
+  postId: 'postId',
+  ownerId: 'ownerId',
+  createdAt: 'createdAt'
+} as const
+
+export type BookmarkScalarFieldEnum = (typeof BookmarkScalarFieldEnum)[keyof typeof BookmarkScalarFieldEnum]
+
+
+export const BookmarkCollectionScalarFieldEnum = {
+  id: 'id',
+  ownerId: 'ownerId',
+  name: 'name',
+  description: 'description',
+  isPublic: 'isPublic',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BookmarkCollectionScalarFieldEnum = (typeof BookmarkCollectionScalarFieldEnum)[keyof typeof BookmarkCollectionScalarFieldEnum]
+
+
+export const BookmarkCollectionItemScalarFieldEnum = {
+  id: 'id',
+  collectionId: 'collectionId',
+  bookmarkId: 'bookmarkId',
+  createdAt: 'createdAt'
+} as const
+
+export type BookmarkCollectionItemScalarFieldEnum = (typeof BookmarkCollectionItemScalarFieldEnum)[keyof typeof BookmarkCollectionItemScalarFieldEnum]
 
 
 export const SortOrder = {

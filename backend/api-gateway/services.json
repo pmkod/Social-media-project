@@ -4,6 +4,8 @@
 	{ "path": "/posts", "target": "http://localhost:8002" },
 	{ "path": "/feed", "target": "http://localhost:8002" },
 	{ "path": "/comments", "target": "http://localhost:8002" },
+	{ "path": "/bookmarks", "target": "http://localhost:8002" },
+	{ "path": "/collections", "target": "http://localhost:8002" },
 	{ "path": "/media", "target": "http://localhost:8002" },
 	{ "path": "/images", "target": "http://localhost:8002" },
 	{ "path": "/videos", "target": "http://localhost:8002" }

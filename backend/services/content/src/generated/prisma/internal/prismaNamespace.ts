@@ -389,7 +389,10 @@ export const ModelName = {
   File: 'File',
   Comment: 'Comment',
   PostLike: 'PostLike',
-  CommentLike: 'CommentLike'
+  CommentLike: 'CommentLike',
+  Bookmark: 'Bookmark',
+  BookmarkCollection: 'BookmarkCollection',
+  BookmarkCollectionItem: 'BookmarkCollectionItem'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -405,7 +408,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "post" | "postMedia" | "file" | "comment" | "postLike" | "commentLike"
+    modelProps: "post" | "postMedia" | "file" | "comment" | "postLike" | "commentLike" | "bookmark" | "bookmarkCollection" | "bookmarkCollectionItem"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -853,6 +856,228 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Bookmark: {
+      payload: Prisma.$BookmarkPayload<ExtArgs>
+      fields: Prisma.BookmarkFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.BookmarkFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BookmarkPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.BookmarkFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BookmarkPayload>
+        }
+        findFirst: {
+          args: Prisma.BookmarkFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BookmarkPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.BookmarkFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BookmarkPayload>
+        }
+        findMany: {
+          args: Prisma.BookmarkFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BookmarkPayload>[]
+        }
+        create: {
+          args: Prisma.BookmarkCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BookmarkPayload>
+        }
+        createMany: {
+          args: Prisma.BookmarkCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.BookmarkCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BookmarkPayload>[]
+        }
+        delete: {
+          args: Prisma.BookmarkDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BookmarkPayload>
+        }
+        update: {
+          args: Prisma.BookmarkUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BookmarkPayload>
+        }
+        deleteMany: {
+          args: Prisma.BookmarkDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.BookmarkUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.BookmarkUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BookmarkPayload>[]
+        }
+        upsert: {
+          args: Prisma.BookmarkUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BookmarkPayload>
+        }
+        aggregate: {
+          args: Prisma.BookmarkAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateBookmark>
+        }
+        groupBy: {
+          args: Prisma.BookmarkGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BookmarkGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.BookmarkCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BookmarkCountAggregateOutputType> | number
+        }
+      }
+    }
+    BookmarkCollection: {
+      payload: Prisma.$BookmarkCollectionPayload<ExtArgs>
+      fields: Prisma.BookmarkCollectionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.BookmarkCollectionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BookmarkCollectionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.BookmarkCollectionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BookmarkCollectionPayload>
+        }
+        findFirst: {
+          args: Prisma.BookmarkCollectionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BookmarkCollectionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.BookmarkCollectionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BookmarkCollectionPayload>
+        }
+        findMany: {
+          args: Prisma.BookmarkCollectionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BookmarkCollectionPayload>[]
+        }
+        create: {
+          args: Prisma.BookmarkCollectionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BookmarkCollectionPayload>
+        }
+        createMany: {
+          args: Prisma.BookmarkCollectionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.BookmarkCollectionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BookmarkCollectionPayload>[]
+        }
+        delete: {
+          args: Prisma.BookmarkCollectionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BookmarkCollectionPayload>
+        }
+        update: {
+          args: Prisma.BookmarkCollectionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BookmarkCollectionPayload>
+        }
+        deleteMany: {
+          args: Prisma.BookmarkCollectionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.BookmarkCollectionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.BookmarkCollectionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BookmarkCollectionPayload>[]
+        }
+        upsert: {
+          args: Prisma.BookmarkCollectionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BookmarkCollectionPayload>
+        }
+        aggregate: {
+          args: Prisma.BookmarkCollectionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateBookmarkCollection>
+        }
+        groupBy: {
+          args: Prisma.BookmarkCollectionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BookmarkCollectionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.BookmarkCollectionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BookmarkCollectionCountAggregateOutputType> | number
+        }
+      }
+    }
+    BookmarkCollectionItem: {
+      payload: Prisma.$BookmarkCollectionItemPayload<ExtArgs>
+      fields: Prisma.BookmarkCollectionItemFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.BookmarkCollectionItemFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BookmarkCollectionItemPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.BookmarkCollectionItemFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BookmarkCollectionItemPayload>
+        }
+        findFirst: {
+          args: Prisma.BookmarkCollectionItemFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BookmarkCollectionItemPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.BookmarkCollectionItemFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BookmarkCollectionItemPayload>
+        }
+        findMany: {
+          args: Prisma.BookmarkCollectionItemFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BookmarkCollectionItemPayload>[]
+        }
+        create: {
+          args: Prisma.BookmarkCollectionItemCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BookmarkCollectionItemPayload>
+        }
+        createMany: {
+          args: Prisma.BookmarkCollectionItemCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.BookmarkCollectionItemCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BookmarkCollectionItemPayload>[]
+        }
+        delete: {
+          args: Prisma.BookmarkCollectionItemDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BookmarkCollectionItemPayload>
+        }
+        update: {
+          args: Prisma.BookmarkCollectionItemUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BookmarkCollectionItemPayload>
+        }
+        deleteMany: {
+          args: Prisma.BookmarkCollectionItemDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.BookmarkCollectionItemUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.BookmarkCollectionItemUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BookmarkCollectionItemPayload>[]
+        }
+        upsert: {
+          args: Prisma.BookmarkCollectionItemUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BookmarkCollectionItemPayload>
+        }
+        aggregate: {
+          args: Prisma.BookmarkCollectionItemAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateBookmarkCollectionItem>
+        }
+        groupBy: {
+          args: Prisma.BookmarkCollectionItemGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BookmarkCollectionItemGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.BookmarkCollectionItemCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BookmarkCollectionItemCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -963,6 +1188,39 @@ export const CommentLikeScalarFieldEnum = {
 export type CommentLikeScalarFieldEnum = (typeof CommentLikeScalarFieldEnum)[keyof typeof CommentLikeScalarFieldEnum]
 
 
+export const BookmarkScalarFieldEnum = {
+  id: 'id',
+  postId: 'postId',
+  ownerId: 'ownerId',
+  createdAt: 'createdAt'
+} as const
+
+export type BookmarkScalarFieldEnum = (typeof BookmarkScalarFieldEnum)[keyof typeof BookmarkScalarFieldEnum]
+
+
+export const BookmarkCollectionScalarFieldEnum = {
+  id: 'id',
+  ownerId: 'ownerId',
+  name: 'name',
+  description: 'description',
+  isPublic: 'isPublic',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BookmarkCollectionScalarFieldEnum = (typeof BookmarkCollectionScalarFieldEnum)[keyof typeof BookmarkCollectionScalarFieldEnum]
+
+
+export const BookmarkCollectionItemScalarFieldEnum = {
+  id: 'id',
+  collectionId: 'collectionId',
+  bookmarkId: 'bookmarkId',
+  createdAt: 'createdAt'
+} as const
+
+export type BookmarkCollectionItemScalarFieldEnum = (typeof BookmarkCollectionItemScalarFieldEnum)[keyof typeof BookmarkCollectionItemScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1033,6 +1291,13 @@ export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel
  */
 export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
     
+
+
+/**
+ * Reference to a field of type 'Boolean'
+ */
+export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+
 
 
 /**
@@ -1164,6 +1429,9 @@ export type GlobalOmitConfig = {
   comment?: Prisma.CommentOmit
   postLike?: Prisma.PostLikeOmit
   commentLike?: Prisma.CommentLikeOmit
+  bookmark?: Prisma.BookmarkOmit
+  bookmarkCollection?: Prisma.BookmarkCollectionOmit
+  bookmarkCollectionItem?: Prisma.BookmarkCollectionItemOmit
 }
 
 /* Types for Logging */
@@ -1226,4 +1494,3 @@ export type PrismaAction =
  * `PrismaClient` proxy available in interactive transactions.
  */
 export type TransactionClient = Omit<DefaultPrismaClient, runtime.ITXClientDenyList>
-
