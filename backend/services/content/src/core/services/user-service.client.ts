@@ -1,20 +1,20 @@
 import { Configurations } from "../configurations";
 
-export interface AuthorDto {
+export type AuthorDto = {
 	id: string;
 	name: string;
 	handle: string;
 	avatar: string;
-}
+};
 
-export interface UserProfileDto {
+export type UserProfileDto = {
 	id: string;
 	username: string;
 	fullName?: string | null;
 	displayName?: string | null;
 	avatarUrl?: string | null;
 	bio?: string | null;
-}
+};
 
 
 export class UserServiceClient {

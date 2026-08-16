@@ -11,9 +11,9 @@ import NiceModal from "@/core/components/ui/nice-modal.tsx";
 import TanStackQueryDevtools from "../core/integrations/tanstack-query/devtools";
 import appCss from "../styles.css?url";
 
-interface MyRouterContext {
+type MyRouterContext = {
 	queryClient: QueryClient;
-}
+};
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({
 	head: () => ({

@@ -21,10 +21,10 @@ import { CommentItem } from "./comment-item.tsx";
 import type { Post, PostMediaItem } from "./post.ts";
 import { formatPostCreationDate } from "./post.utils.ts";
 
-interface PostItemProps {
+type PostItemProps = {
 	post: Post;
 	onBookmarkToggle?: (postId: string) => void;
-}
+};
 
 export type RenderMediaItem = {
 	url: string;
@@ -195,9 +195,11 @@ function PostMediaSlider({ media }: { media: RenderMediaItem[] }) {
 }
 
 export function PostItem({ post, onBookmarkToggle }: PostItemProps) {
-	const isLiked = post.isLikedByAuthenticatedUser ?? post.isLiked ?? false;
+	const isLiked = post.isLikedByAuthenticatedUser ?? false;
 	const likesCount = post.likesCount ?? 0;
-	const [isBookmarked, setIsBookmarked] = useState(post.isBookmarked ?? false);
+	const [isBookmarked, setIsBookmarked] = useState(
+		post.isBookmarkedByAuthenticatedUser ?? false,
+	);
 	const likePost = useLikePost();
 	const unlikePost = useUnlikePost();
 

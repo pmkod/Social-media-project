@@ -20,8 +20,8 @@ const INITIAL_BOOKMARKS: Post[] = [
 		],
 		likesCount: 124,
 		commentsCount: 18,
-		isLiked: true,
-		isBookmarked: true,
+		isLikedByAuthenticatedUser: true,
+		isBookmarkedByAuthenticatedUser: true,
 	},
 	{
 		id: "bm-2",
@@ -36,8 +36,8 @@ const INITIAL_BOOKMARKS: Post[] = [
 			"Petite réflexion du jour sur l'accessibilité web : des contrastes élevés et une navigation clavier fluide changent radicalement l'expérience utilisateur.",
 		likesCount: 240,
 		commentsCount: 24,
-		isLiked: false,
-		isBookmarked: true,
+		isLikedByAuthenticatedUser: false,
+		isBookmarkedByAuthenticatedUser: true,
 	},
 ];
 

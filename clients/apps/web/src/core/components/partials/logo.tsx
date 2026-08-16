@@ -1,8 +1,8 @@
 import { Link } from "@tanstack/react-router";
 
-interface LogoProps {
+type LogoProps = {
 	className?: string;
-}
+};
 
 export function Logo({ className = "" }: LogoProps) {
 	return (

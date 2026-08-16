@@ -4,10 +4,10 @@ import { cn } from "@/core/lib/utils.ts";
 import type { Comment } from "./comment.ts";
 import { formatCommentCreationDate } from "./post.utils.ts";
 
-interface CommentItemProps {
+type CommentItemProps = {
 	comment: Comment;
 	compact?: boolean;
-}
+};
 
 export function CommentItem({ comment, compact = false }: CommentItemProps) {
 	const [isLiked, setIsLiked] = useState(false);

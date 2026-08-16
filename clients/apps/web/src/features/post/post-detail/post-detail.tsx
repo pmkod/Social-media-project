@@ -67,7 +67,7 @@ export function PostDetail({ postId }: PostDetailProps) {
 		);
 	}
 
-	const isLiked = post.isLikedByAuthenticatedUser ?? post.isLiked ?? false;
+	const isLiked = post.isLikedByAuthenticatedUser ?? false;
 	const likesCount = post.likesCount ?? 0;
 
 	const mediaList: RenderMediaItem[] = (post.medias ?? [])

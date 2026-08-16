@@ -1,21 +1,21 @@
 import type { Comment } from "./comment.ts";
 
-export interface PostAuthor {
+export type PostAuthor = {
 	id?: string;
 	name: string;
 	handle: string;
 	avatar: string;
-}
+};
 
-export interface PostFileItem {
+export type PostFileItem = {
 	id?: string;
 	mimeType?: string | null;
 	filename: string;
 	createdAt?: string;
 	url?: string;
-}
+};
 
-export interface PostMediaItem {
+export type PostMediaItem = {
 	id?: string;
 	postId?: string;
 	position?: number;
@@ -25,9 +25,9 @@ export interface PostMediaItem {
 	highQualityFileId?: string | null;
 	lowQualityFile?: PostFileItem | null;
 	highQualityFile?: PostFileItem | null;
-}
+};
 
-export interface Post {
+export type Post = {
 	id: string;
 	authorId?: string;
 	author?: PostAuthor | null;
@@ -37,9 +37,8 @@ export interface Post {
 	likesCount?: number;
 	commentsCount?: number;
 	isLikedByAuthenticatedUser?: boolean;
-	isLiked?: boolean;
-	isBookmarked?: boolean;
+	isBookmarkedByAuthenticatedUser?: boolean;
 	comments?: Comment[];
 	createdAt: string;
 	updatedAt?: string;
-}
+};

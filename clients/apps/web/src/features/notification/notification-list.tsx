@@ -7,7 +7,7 @@ import {
 } from "@remixicon/react";
 import { useState } from "react";
 
-interface NotificationItem {
+type NotificationItem = {
 	id: string;
 	type: "like" | "repost" | "comment" | "follow";
 	user: {
@@ -17,7 +17,7 @@ interface NotificationItem {
 	};
 	time: string;
 	contentSnippet?: string;
-}
+};
 
 const FAKE_NOTIFICATIONS: NotificationItem[] = [
 	{

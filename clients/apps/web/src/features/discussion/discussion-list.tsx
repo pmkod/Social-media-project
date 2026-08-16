@@ -7,7 +7,7 @@ import {
 } from "@remixicon/react";
 import { useState } from "react";
 
-interface Conversation {
+type Conversation = {
 	id: string;
 	user: {
 		name: string;
@@ -18,7 +18,7 @@ interface Conversation {
 	lastMessage: string;
 	time: string;
 	unreadCount?: number;
-}
+};
 
 const FAKE_CONVERSATIONS: Conversation[] = [
 	{

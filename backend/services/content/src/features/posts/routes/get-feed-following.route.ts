@@ -4,10 +4,10 @@ import { prisma } from "@/core/databases";
 import { userServiceClient } from "@/core/services/user-service.client";
 import { PostsRoutesTag } from "../posts.constants";
 
-export interface FeedCursor {
+export type FeedCursor = {
 	id: string;
 	createdAt: string;
-}
+};
 
 const routeDef = createRoute({
 	method: "get",

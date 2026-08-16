@@ -14,7 +14,6 @@ export function updatePostLikeState(
 	return {
 		...post,
 		isLikedByAuthenticatedUser: isLiked,
-		isLiked: isLiked,
 		likesCount: nextLikesCount,
 	};
 }

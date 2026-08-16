@@ -5,11 +5,11 @@ import {
 	RiUserAddLine,
 } from "@remixicon/react";
 
-interface Trend {
+type Trend = {
 	category: string;
 	topic: string;
 	postsCount: string;
-}
+};
 
 const TRENDING_TOPICS: Trend[] = [
 	{

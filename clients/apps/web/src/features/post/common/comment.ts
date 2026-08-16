@@ -1,6 +1,6 @@
 import type { PostAuthor } from "./post.ts";
 
-export interface Comment {
+export type Comment = {
 	id: string;
 	postId: string;
 	authorId?: string;
@@ -9,4 +9,4 @@ export interface Comment {
 	createdAt: string;
 	updatedAt?: string;
 	likesCount?: number;
-}
+};

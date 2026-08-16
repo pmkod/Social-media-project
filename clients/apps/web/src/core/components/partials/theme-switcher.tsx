@@ -9,10 +9,10 @@ import {
 } from "@/core/components/ui/select";
 import { useTheme, type Theme } from "@/core/hooks/use-theme";
 
-interface ThemeSwitcherProps {
+type ThemeSwitcherProps = {
 	className?: string;
 	variant?: "select" | "toggle";
-}
+};
 
 export function ThemeSwitcher({
 	className = "",

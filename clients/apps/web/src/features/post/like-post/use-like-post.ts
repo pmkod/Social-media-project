@@ -8,11 +8,11 @@ import type { Post } from "../common/post.ts";
 import { postDetailsQueryKey } from "../post-detail/post-detail.query-key.ts";
 import { postListQueryKeys } from "../common/post-list.query-keys.ts";
 
-export interface LikePostResponse {
+export type LikePostResponse = {
 	success: boolean;
 	message: string;
 	likesCount: number;
-}
+};
 
 export const likePostApi = async (
 	postId: string,

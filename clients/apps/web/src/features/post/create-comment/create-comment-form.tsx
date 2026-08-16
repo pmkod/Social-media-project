@@ -13,10 +13,10 @@ const createCommentSchema = z.object({
 	}),
 });
 
-interface CreateCommentFormProps {
+type CreateCommentFormProps = {
 	postId: string;
 	onSuccess?: () => void;
-}
+};
 
 function CreateCommentForm({ postId, onSuccess }: CreateCommentFormProps) {
 	const { mutate, isPending } = useCreateComment();

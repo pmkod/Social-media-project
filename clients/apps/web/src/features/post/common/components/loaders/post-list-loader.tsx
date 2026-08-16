@@ -1,10 +1,10 @@
 import { cn } from "@/core/lib/utils.ts";
 import { PostItemLoader } from "./post-item-loader.tsx";
 
-interface PostListLoaderProps {
+type PostListLoaderProps = {
 	count?: number;
 	className?: string;
-}
+};
 
 function PostListLoader({ count = 5, className }: PostListLoaderProps) {
 	return (

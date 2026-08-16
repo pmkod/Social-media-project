@@ -6,11 +6,11 @@ import {
 	RiNotification3Line,
 } from "@remixicon/react";
 
-export interface NavItem {
+export type NavItem = {
 	label: string;
 	to: string;
 	icon: React.ComponentType<{ className?: string }>;
-}
+};
 
 export const NAV_ITEMS: NavItem[] = [
 	{ label: "Home", to: "/home", icon: RiHomeLine },
