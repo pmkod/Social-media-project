@@ -3,18 +3,8 @@ import { httpClient } from "@/core/http-clients/http-client.ts";
 import type { Comment } from "../common/comment.ts";
 import { postDetailsQueryKey } from "./post-detail.query-key.ts";
 
-type ApiComment = {
-	id: string;
-	postId: string;
-	authorId?: string;
-	content: string;
-	likesCount?: number;
-	createdAt: string;
-	updatedAt?: string;
-};
-
 export type CommentsResponse = {
-	data: ApiComment[];
+	data: Comment[];
 	pagination: {
 		total: number;
 		page: number;
@@ -31,28 +21,6 @@ export type CommentsInfiniteResult = {
 export type GetCommentsResponse = CommentsResponse;
 export type GetCommentsInfiniteResult = CommentsInfiniteResult;
 
-const DEFAULT_AUTHOR = {
-	name: "Utilisateur",
-	handle: "utilisateur",
-	avatar:
-		"https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80",
-};
-
-const formatDate = (value: string) =>
-	new Date(value).toLocaleDateString("fr-FR", {
-		hour: "2-digit",
-		minute: "2-digit",
-	});
-
-const mapComment = (raw: ApiComment): Comment => ({
-	id: raw.id,
-	postId: raw.postId,
-	author: DEFAULT_AUTHOR,
-	content: raw.content,
-	createdAt: formatDate(raw.createdAt),
-	likesCount: raw.likesCount ?? 0,
-});
-
 export const fetchCommentsPage = async ({
 	postId,
 	pageParam = 1,
@@ -60,17 +28,19 @@ export const fetchCommentsPage = async ({
 	postId: string;
 	pageParam?: number;
 }): Promise<CommentsInfiniteResult> => {
+	const searchParams = new URLSearchParams({
+		page: pageParam.toString(),
+		limit: "10",
+	});
+
 	const res = await httpClient
 		.get(`posts/${postId}/comments`, {
-			searchParams: {
-				page: pageParam.toString(),
-				limit: "10",
-			},
+			searchParams,
 		})
 		.json<CommentsResponse>();
 
 	return {
-		data: (res.data ?? []).map(mapComment),
+		data: res.data ?? [],
 		pagination: res.pagination,
 	};
 };

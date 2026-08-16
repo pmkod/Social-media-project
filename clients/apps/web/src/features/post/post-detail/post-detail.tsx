@@ -14,6 +14,7 @@ import { Button } from "@/core/components/ui/button.tsx";
 import { CommentItem } from "../common/comment-item.tsx";
 import { getMediaUrl, type RenderMediaItem } from "../common/post-item.tsx";
 import { CreateCommentForm } from "../create-comment/create-comment-form.tsx";
+import { formatPostFullDate } from "../common/post.utils.ts";
 import { useComments } from "./use-comments";
 import { usePost } from "./use-post";
 
@@ -67,8 +68,10 @@ export function PostDetail({ postId }: PostDetailProps) {
 		.map((m) => getMediaUrl(m))
 		.filter((item): item is RenderMediaItem => item !== null);
 
-	const likesCount = (post.stats.likes ?? 0) + (isLiked ? 1 : 0);
-	const repostsCount = (post.stats.reposts ?? 0) + (isReposted ? 1 : 0);
+	const initialLikes = post.likesCount ?? post.stats?.likes ?? 0;
+	const likesCount = initialLikes + (isLiked ? 1 : 0);
+	const repostsCount = (post.stats?.reposts ?? 0) + (isReposted ? 1 : 0);
+	const commentsCount = post.commentsCount ?? post.stats?.comments ?? 0;
 
 	const allComments = commentsData?.pages.flatMap((page) => page.data) ?? [];
 
@@ -91,23 +94,28 @@ export function PostDetail({ postId }: PostDetailProps) {
 				{/* Author Meta */}
 				<div className="flex items-center gap-3">
 					<img
-						src={post.author.avatar}
-						alt={post.author.name}
+						src={
+							post.author?.avatar ||
+							`https://ui-avatars.com/api/?name=${encodeURIComponent(
+								post.author?.name || "U",
+							)}&background=random`
+						}
+						alt={post.author?.name || "Auteur"}
 						className="h-12 w-12 rounded-full object-cover ring-1 ring-border"
 					/>
 					<div>
 						<h2 className="font-semibold text-foreground text-base">
-							{post.author.name}
+							{post.author?.name}
 						</h2>
 						<p className="text-xs text-muted-foreground">
-							@{post.author.handle}
+							@{post.author?.handle}
 						</p>
 					</div>
 				</div>
 
 				{/* Content */}
 				<p className="text-base text-foreground whitespace-pre-line leading-relaxed">
-					{post.content}
+					{post.text || post.content}
 				</p>
 
 				{/* Media Gallery */}
@@ -139,7 +147,7 @@ export function PostDetail({ postId }: PostDetailProps) {
 
 				{/* Date & Time */}
 				<div className="pt-2 text-xs text-muted-foreground border-t border-border">
-					<span>Publié {post.createdAt}</span>
+					<span>Publié le {formatPostFullDate(post.createdAt)}</span>
 				</div>
 
 				{/* Stats Row */}
@@ -163,7 +171,7 @@ export function PostDetail({ postId }: PostDetailProps) {
 					{/* Comments count */}
 					<div className="flex items-center gap-2">
 						<RiChat3Line className="h-5 w-5" />
-						<span>{post.stats.comments}</span>
+						<span>{commentsCount}</span>
 					</div>
 
 					{/* Repost */}

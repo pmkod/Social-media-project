@@ -1,6 +1,7 @@
 import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
+import { userServiceClient } from "@/core/services/user-service.client";
 import { PostsRoutesTag } from "../posts.constants";
 
 export interface FeedCursor {
@@ -23,7 +24,8 @@ const routeDef = createRoute({
 	},
 	responses: {
 		[HttpStatus.OK.code]: {
-			description: "List of posts from following feed with medias and cursor pagination metadata",
+			description:
+				"List of posts from following feed with medias, authors and cursor pagination metadata",
 		},
 	},
 });
@@ -138,8 +140,31 @@ const getFeedFollowingRoute = defineOpenAPIRoute({
 					}
 				: null;
 
+		// Collect all unique author IDs for posts and comments
+		const allAuthorIds = Array.from(
+			new Set(
+				[
+					...items.map((p) => p.authorId),
+					...items.flatMap((p) =>
+						(p.comments ?? []).map((cmt) => cmt.authorId),
+					),
+				].filter((id): id is string => Boolean(id)),
+			),
+		);
+
+		const authorsMap = await userServiceClient.fetchAuthorsBatch(allAuthorIds);
+
+		const enrichedPosts = items.map((post) => ({
+			...post,
+			author: authorsMap.get(post.authorId) ?? null,
+			comments: (post.comments ?? []).map((comment) => ({
+				...comment,
+				author: authorsMap.get(comment.authorId) ?? null,
+			})),
+		}));
+
 		return c.json({
-			posts: items,
+			posts: enrichedPosts,
 			pagination: {
 				nextCursor,
 				hasNextPage,
@@ -150,4 +175,3 @@ const getFeedFollowingRoute = defineOpenAPIRoute({
 });
 
 export { getFeedFollowingRoute };
-

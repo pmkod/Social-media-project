@@ -1,6 +1,7 @@
 import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
+import { userServiceClient } from "@/core/services/user-service.client";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { requireUserAuthentication } from "@/features/authentication/middlewares/require-user-authentication.middleware";
 import { CommentsRoutesTag } from "../comments.constants";
@@ -93,8 +94,19 @@ const createCommentRoute = defineOpenAPIRoute<
 			},
 		});
 
+		const authorsMap = await userServiceClient.fetchAuthorsBatch([
+			authenticatedUserId,
+		]);
+		const author = authorsMap.get(authenticatedUserId) ?? null;
+
 		return c.json(
-			{ message: "Comment created successfully", comment: commentToSend },
+			{
+				message: "Comment created successfully",
+				comment: {
+					...commentToSend,
+					author,
+				},
+			},
 			HttpStatus.CREATED.code,
 		);
 	},

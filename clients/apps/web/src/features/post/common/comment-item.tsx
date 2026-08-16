@@ -2,6 +2,7 @@ import { RiHeartFill, RiHeartLine } from "@remixicon/react";
 import { useState } from "react";
 import { cn } from "@/core/lib/utils.ts";
 import type { Comment } from "./comment.ts";
+import { formatCommentCreationDate } from "./post.utils.ts";
 
 interface CommentItemProps {
 	comment: Comment;
@@ -21,21 +22,26 @@ export function CommentItem({ comment, compact = false }: CommentItemProps) {
 			)}
 		>
 			<img
-				src={comment.author.avatar}
-				alt={comment.author.name}
+				src={
+					comment.author?.avatar ||
+					`https://ui-avatars.com/api/?name=${encodeURIComponent(
+						comment.author?.name || "U",
+					)}&background=random`
+				}
+				alt={comment.author?.name || "Auteur"}
 				className="size-10 rounded-full object-cover shrink-0 ring-1 ring-border"
 			/>
 			<div className="flex-1 min-w-0">
 				<div className="flex items-baseline gap-1.5 flex-wrap">
 					<span className="font-semibold text-foreground text-sm">
-						{comment.author.name}
+						{comment.author?.name}
 					</span>
 					<span className="text-xs text-muted-foreground">
-						@{comment.author.handle}
+						@{comment.author?.handle}
 					</span>
 					<span className="text-xs text-muted-foreground">·</span>
 					<span className="text-xs text-muted-foreground">
-						{comment.createdAt}
+						{formatCommentCreationDate(comment.createdAt)}
 					</span>
 				</div>
 

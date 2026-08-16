@@ -1,6 +1,7 @@
 import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
+import { userServiceClient } from "@/core/services/user-service.client";
 import { CommentsRoutesTag } from "../comments.constants";
 
 const routeDef = createRoute({
@@ -19,7 +20,7 @@ const routeDef = createRoute({
 	},
 	responses: {
 		[HttpStatus.OK.code]: {
-			description: "List of comments",
+			description: "List of comments with authors",
 		},
 	},
 });
@@ -52,8 +53,18 @@ const getCommentsRoute = defineOpenAPIRoute({
 			prisma.comment.count({ where: { postId } }),
 		]);
 
+		const authorIds = Array.from(
+			new Set(comments.map((comment) => comment.authorId).filter(Boolean)),
+		);
+		const authorsMap = await userServiceClient.fetchAuthorsBatch(authorIds);
+
+		const enrichedComments = comments.map((comment) => ({
+			...comment,
+			author: authorsMap.get(comment.authorId) ?? null,
+		}));
+
 		return c.json({
-			data: comments,
+			data: enrichedComments,
 			pagination: {
 				total,
 				page,

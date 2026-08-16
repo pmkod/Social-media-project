@@ -1,6 +1,7 @@
 import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
+import { userServiceClient } from "@/core/services/user-service.client";
 import { PostsRoutesTag } from "../posts.constants";
 
 const routeDef = createRoute({
@@ -15,7 +16,7 @@ const routeDef = createRoute({
 	},
 	responses: {
 		[HttpStatus.OK.code]: {
-			description: "Post details with medias",
+			description: "Post details with medias and author",
 		},
 	},
 });
@@ -70,7 +71,15 @@ const getPostByIdRoute = defineOpenAPIRoute({
 			throw new Error("Post not found");
 		}
 
-		return c.json(post);
+		const authorsMap = await userServiceClient.fetchAuthorsBatch([
+			post.authorId,
+		]);
+		const author = authorsMap.get(post.authorId) ?? null;
+
+		return c.json({
+			...post,
+			author,
+		});
 	},
 });
 

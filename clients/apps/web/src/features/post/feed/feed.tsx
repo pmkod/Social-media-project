@@ -35,7 +35,7 @@ export function Feed() {
 		};
 	}, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
-	const allPosts = data?.pages.flatMap((page) => page.data) ?? [];
+	const allPosts = data?.pages.flatMap((page) => page.posts) ?? [];
 
 	return (
 		<div className="divide-y divide-border min-h-screen">

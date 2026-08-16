@@ -17,6 +17,7 @@ import { CommentModal } from "../create-comment/comment-modal.tsx";
 import { buildImageUrl, buildVideoUrl } from "../post-media.functions.ts";
 import { CommentItem } from "./comment-item.tsx";
 import type { Post, PostMediaItem } from "./post.ts";
+import { formatPostCreationDate } from "./post.utils.ts";
 
 interface PostItemProps {
 	post: Post;
@@ -192,8 +193,9 @@ function PostMediaSlider({ media }: { media: RenderMediaItem[] }) {
 }
 
 export function PostItem({ post, onBookmarkToggle }: PostItemProps) {
+	const initialLikes = post.likesCount ?? post.stats?.likes ?? 0;
 	const [isLiked, setIsLiked] = useState(post.isLiked ?? false);
-	const [likesCount, setLikesCount] = useState(post.stats.likes);
+	const [likesCount, setLikesCount] = useState(initialLikes);
 	const [isBookmarked, setIsBookmarked] = useState(post.isBookmarked ?? false);
 
 	const handleLike = (e: React.MouseEvent) => {
@@ -225,13 +227,20 @@ export function PostItem({ post, onBookmarkToggle }: PostItemProps) {
 		.map((m) => getMediaUrl(m))
 		.filter((item): item is RenderMediaItem => item !== null);
 
+	const commentsCount = post.commentsCount ?? post.stats?.comments ?? 0;
+
 	return (
 		<article className="border-x border-t last:border-b first:rounded-t-xl last:rounded-b-xl border-border p-4 hover:bg-muted/30 transition-colors">
 			<div className="flex gap-3">
 				{/* Avatar */}
 				<img
-					src={post.author.avatar}
-					alt={post.author.name}
+					src={
+						post.author?.avatar ||
+						`https://ui-avatars.com/api/?name=${encodeURIComponent(
+							post.author?.name || "U",
+						)}&background=random`
+					}
+					alt={post.author?.name || "Auteur"}
 					className="size-12 rounded-full object-cover shrink-0 ring-1 ring-border"
 				/>
 
@@ -245,14 +254,14 @@ export function PostItem({ post, onBookmarkToggle }: PostItemProps) {
 							className="flex items-center gap-1.5 min-w-0 flex-wrap hover:underline text-lg"
 						>
 							<span className="font-semibold text-foreground truncate text-base">
-								{post.author.name}
+								{post.author?.name}
 							</span>
 							<span className="text-sm text-muted-foreground truncate">
-								@{post.author.handle}
+								@{post.author?.handle}
 							</span>
 							<span className="text-sm text-muted-foreground">·</span>
 							<span className="text-sm font-normal text-muted-foreground">
-								{post.createdAt}
+								{formatPostCreationDate(post.createdAt)}
 							</span>
 						</Link>
 						<button
@@ -272,7 +281,7 @@ export function PostItem({ post, onBookmarkToggle }: PostItemProps) {
 						className="block mt-0.5"
 					>
 						<p className="text-sm text-foreground whitespace-pre-line leading-relaxed">
-							{post.content}
+							{post.text || post.content}
 						</p>
 					</Link>
 
@@ -304,9 +313,7 @@ export function PostItem({ post, onBookmarkToggle }: PostItemProps) {
 							className="flex items-center gap-1.5 transition-colors group -ml-2 p-2 rounded-full hover:bg-accent hover:text-sky-500"
 						>
 							<RiChat3Line className="size-6" />
-							<span className="text-base font-light">
-								{post.stats.comments}
-							</span>
+							<span className="text-base font-light">{commentsCount}</span>
 						</button>
 
 						{/* Bookmark */}

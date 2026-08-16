@@ -1,16 +1,17 @@
 import type { Comment } from "./comment.ts";
 
 export interface PostAuthor {
+	id?: string;
 	name: string;
 	handle: string;
 	avatar: string;
 }
 
 export interface PostStats {
-	comments: number;
-	reposts: number;
-	likes: number;
-	shares: number;
+	comments?: number;
+	reposts?: number;
+	likes?: number;
+	shares?: number;
 }
 
 export interface PostFileItem {
@@ -35,12 +36,17 @@ export interface PostMediaItem {
 
 export interface Post {
 	id: string;
-	author: PostAuthor;
-	createdAt: string;
-	content: string;
+	authorId?: string;
+	author?: PostAuthor | null;
+	text?: string;
+	content?: string;
 	medias?: PostMediaItem[];
-	stats: PostStats;
+	stats?: PostStats;
+	likesCount?: number;
+	commentsCount?: number;
 	isLiked?: boolean;
 	isBookmarked?: boolean;
 	comments?: Comment[];
+	createdAt: string;
+	updatedAt?: string;
 }
