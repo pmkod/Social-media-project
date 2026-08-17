@@ -32,9 +32,12 @@ function SignupForm({ onSuccess }: SignupFormProps) {
 
 	const form = useForm({
 		defaultValues: {
-			fullName: "Kodossou Kouassi",
-			email: "pierremariekod@gmail.com",
-			password: "pierremariekod@gmail.com",
+			// fullName: "Kodossou Kouassi",
+			// email: "pierremariekod@gmail.com",
+			// password: "pierremariekod@gmail.com",
+			fullName: "",
+			email: "",
+			password: "",
 		},
 		validators: {
 			onSubmit: signupSchema,

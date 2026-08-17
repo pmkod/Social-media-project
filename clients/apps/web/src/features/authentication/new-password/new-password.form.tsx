@@ -40,8 +40,10 @@ function NewPasswordForm({ onSuccess }: NewPasswordFormProps) {
 
 	const form = useForm({
 		defaultValues: {
-			password: "pierremariekod@gmail.com",
-			confirmPassword: "pierremariekod@gmail.com",
+			// password: "pierremariekod@gmail.com",
+			// confirmPassword: "pierremariekod@gmail.com",
+			password: "",
+			confirmPassword: "",
 		},
 		validators: {
 			onSubmit: newPasswordSchema,

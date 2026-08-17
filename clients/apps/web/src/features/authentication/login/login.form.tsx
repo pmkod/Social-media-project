@@ -35,6 +35,8 @@ function LoginForm({ onSuccess }: LoginFormProps) {
 		defaultValues: {
 			emailOrUsername: "pierremariekod@gmail.com",
 			password: "pierremariekod@gmail.com",
+			// emailOrUsername: "",
+			// password: "",
 		},
 		validators: {
 			onSubmit: loginSchema,

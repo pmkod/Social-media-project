@@ -30,7 +30,8 @@ function PasswordResetForm({ onSuccess }: PasswordResetFormProps) {
 
 	const form = useForm({
 		defaultValues: {
-			email: "pierremariekod@gmail.com",
+			// email: "pierremariekod@gmail.com",
+			email: "",
 		},
 		validators: {
 			onSubmit: passwordResetSchema,
