@@ -12,7 +12,7 @@ function Card({
 			data-slot="card"
 			data-size={size}
 			className={cn(
-				"group/card flex flex-col gap-6 overflow-hidden rounded-xl bg-card py-6 text-sm text-card-foreground shadow-xs has-[>img:first-child]:pt-0 data-[size=sm]:gap-4 data-[size=sm]:py-4 *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl",
+				"group/card flex flex-col gap-6 overflow-hidden rounded-xl bg-card py-6 text-sm text-card-foreground border has-[>img:first-child]:pt-0 data-[size=sm]:gap-4 data-[size=sm]:py-4 *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl",
 				className,
 			)}
 			{...props}
@@ -38,7 +38,7 @@ function CardTitle({ className, ...props }: React.ComponentProps<"div">) {
 		<div
 			data-slot="card-title"
 			className={cn(
-				"font-heading text-base leading-normal font-medium group-data-[size=sm]/card:text-sm",
+				"font-heading text-lg leading-normal font-semibold group-data-[size=sm]/card:text-sm",
 				className,
 			)}
 			{...props}
@@ -69,11 +69,18 @@ function CardAction({ className, ...props }: React.ComponentProps<"div">) {
 	);
 }
 
-function CardContent({ className, ...props }: React.ComponentProps<"div">) {
+function CardContent({
+	className,
+	paddingZero = false,
+	...props
+}: React.ComponentProps<"div"> & { paddingZero?: boolean }) {
 	return (
 		<div
 			data-slot="card-content"
-			className={cn("px-6 group-data-[size=sm]/card:px-4", className)}
+			className={cn(
+				paddingZero ? "p-0" : "px-6 group-data-[size=sm]/card:px-4",
+				className,
+			)}
 			{...props}
 		/>
 	);

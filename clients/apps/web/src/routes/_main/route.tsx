@@ -33,10 +33,10 @@ function MainLayoutComponent() {
 
 				{/* Right Sidebar (Desktop Recommendations / Widgets) */}
 				<FollowSuggestions />
-
-				{/* Mobile Navigation Bar */}
-				<BottomNav />
 			</div>
+
+			{/* Mobile Navigation Bar */}
+			<BottomNav />
 		</div>
 	);
 }
