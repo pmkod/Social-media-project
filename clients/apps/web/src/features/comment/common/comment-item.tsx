@@ -1,8 +1,4 @@
-import {
-	RiChat3Line,
-	RiHeartFill,
-	RiHeartLine,
-} from "@remixicon/react";
+import { RiChat3Line, RiHeartFill, RiHeartLine } from "@remixicon/react";
 import { useState } from "react";
 import { Button } from "@/core/components/ui/button.tsx";
 import { cn } from "@/core/lib/utils.ts";
@@ -52,7 +48,9 @@ export function CommentItem({
 		<article
 			className={cn(
 				"flex gap-3",
-				compact ? "px-2 py-2" : "px-4 py-4 border-b border-border",
+				compact
+					? "px-2 py-2"
+					: "px-4 py-4 border-b border-border last:border-b-0",
 				isReply && "border-b-0 py-3 pr-0",
 			)}
 		>

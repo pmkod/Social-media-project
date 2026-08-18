@@ -72,7 +72,7 @@ export function ProfileView({ username }: ProfileViewProps) {
 		: null;
 
 	return (
-		<div className="mx-auto min-h-screen max-w-2xl border-x border-border">
+		<div className="mx-auto">
 			<header className="sticky top-0 z-20 flex h-14 items-center gap-4 border-b border-border bg-background/90 px-4 backdrop-blur-xl">
 				<Link
 					to="/home"

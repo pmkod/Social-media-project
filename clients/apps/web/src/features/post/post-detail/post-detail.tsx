@@ -76,11 +76,12 @@ export function PostDetail({ postId, autoFocusComment }: PostDetailProps) {
 			</div>
 
 			{/* Comments Section */}
-			<section className="border-x rounded-b-xl">
+			<section className="border-x border-b rounded-b-xl overflow-hidden">
 				{isCommentsLoading ? (
 					<CommentListLoader count={3} />
 				) : allComments.length === 0 ? (
 					<EmptyBlock
+						borderless
 						title="Aucun commentaire pour le moment"
 						description="Soyez le premier à partager votre avis sur cette publication."
 					/>
