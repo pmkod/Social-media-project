@@ -43,6 +43,7 @@ export function ProfilePostList({ userId, type }: ProfilePostListProps) {
 				title="Impossible de charger les publications"
 				description="Une erreur s'est produite pendant le chargement de cette liste."
 				onRefresh={() => void query.refetch()}
+				borderless
 			/>
 		);
 	}
@@ -61,6 +62,7 @@ export function ProfilePostList({ userId, type }: ProfilePostListProps) {
 						? "Les publications de cet utilisateur apparaîtront ici."
 						: "Les publications aimées apparaîtront ici."
 				}
+				borderless
 			/>
 		);
 	}

@@ -64,6 +64,7 @@ export function ProfileCollections({ userId }: { userId: string }) {
 				title="Impossible de charger les collections"
 				description="Une erreur s'est produite pendant le chargement des collections."
 				onRefresh={() => void query.refetch()}
+				borderless
 			/>
 		);
 	}
@@ -100,11 +101,13 @@ export function ProfileCollections({ userId }: { userId: string }) {
 						title="Impossible de charger cette collection"
 						description="Une erreur s'est produite pendant le chargement des publications."
 						onRefresh={() => void postsQuery.refetch()}
+						borderless
 					/>
 				) : posts.length === 0 ? (
 					<EmptyBlock
 						title="Cette collection est vide"
 						description="Les publications ajoutées à cette collection apparaîtront ici."
+						borderless
 					/>
 				) : (
 					<div>
@@ -125,6 +128,7 @@ export function ProfileCollections({ userId }: { userId: string }) {
 			<EmptyBlock
 				title="Aucune collection visible"
 				description="Les collections publiques de cet utilisateur apparaîtront ici."
+				borderless
 			/>
 		);
 	}

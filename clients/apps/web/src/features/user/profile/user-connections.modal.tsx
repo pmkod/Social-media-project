@@ -84,6 +84,7 @@ const UserConnectionsModal = create(
 								title="Impossible de charger cette liste"
 								description="Une erreur s'est produite pendant le chargement des connexions."
 								onRefresh={() => void query.refetch()}
+								borderless
 							/>
 						) : users.length === 0 ? (
 							<EmptyBlock
@@ -91,6 +92,7 @@ const UserConnectionsModal = create(
 									type === "followers" ? "Aucun follower" : "Aucun abonnement"
 								}
 								description="Cette liste apparaîtra ici dès qu'elle contiendra des utilisateurs."
+								borderless
 							/>
 						) : (
 							<div className="divide-y divide-border">
