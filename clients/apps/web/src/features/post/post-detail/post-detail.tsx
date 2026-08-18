@@ -76,11 +76,7 @@ export function PostDetail({ postId, autoFocusComment }: PostDetailProps) {
 			</div>
 
 			{/* Comments Section */}
-			<section className="border-b border-border">
-				<h3 className="px-4 py-3 text-sm font-semibold text-foreground border-b border-border">
-					Commentaires ({commentsCount})
-				</h3>
-
+			<section className="border-x rounded-b-xl">
 				{isCommentsLoading ? (
 					<CommentListLoader count={3} />
 				) : allComments.length === 0 ? (
