@@ -1,4 +1,4 @@
-import { RiLoader4Line, RiUserLine } from "@remixicon/react";
+import { RiLoader4Line } from "@remixicon/react";
 import { Link } from "@tanstack/react-router";
 import { useEffect, useRef } from "react";
 import {
@@ -8,6 +8,8 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from "@/core/components/ui/dialog.tsx";
+import { EmptyBlock } from "@/core/components/ui/empty-block.tsx";
+import { ExceptionBlock } from "@/core/components/ui/exception-block.tsx";
 import { create, useModal } from "@/core/components/ui/nice-modal.tsx";
 import { cn } from "@/core/lib/utils.ts";
 import {
@@ -75,19 +77,21 @@ const UserConnectionsModal = create(
 					>
 						{query.isLoading ? (
 							<div className="flex min-h-48 items-center justify-center">
-								<RiLoader4Line className="size-6 animate-spin text-sky-500" />
+							<RiLoader4Line className="size-6 animate-spin text-sky-500" />
 							</div>
 						) : query.isError ? (
-							<p className="p-10 text-center text-sm text-rose-500">
-								Impossible de charger cette liste.
-							</p>
+							<ExceptionBlock
+								title="Impossible de charger cette liste"
+								description="Une erreur s'est produite pendant le chargement des connexions."
+								onRefresh={() => void query.refetch()}
+							/>
 						) : users.length === 0 ? (
-							<div className="p-12 text-center text-muted-foreground">
-								<RiUserLine className="mx-auto mb-3 size-9 opacity-60" />
-								<p className="font-semibold text-foreground">
-									{type === "followers" ? "Aucun follower" : "Aucun abonnement"}
-								</p>
-							</div>
+							<EmptyBlock
+								title={
+									type === "followers" ? "Aucun follower" : "Aucun abonnement"
+								}
+								description="Cette liste apparaîtra ici dès qu'elle contiendra des utilisateurs."
+							/>
 						) : (
 							<div className="divide-y divide-border">
 								{users.map((user) => {

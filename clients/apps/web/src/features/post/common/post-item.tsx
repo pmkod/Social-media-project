@@ -11,16 +11,14 @@ import {
 } from "@remixicon/react";
 import { Link } from "@tanstack/react-router";
 import { useCallback, useEffect, useRef, useState } from "react";
-import NiceModal from "@/core/components/ui/nice-modal.tsx";
 import { cn } from "@/core/lib/utils.ts";
 import { useAddBookmark } from "@/features/bookmark/use-add-bookmark.ts";
 import { useRemoveBookmark } from "@/features/bookmark/use-remove-bookmark.ts";
 import { UserProfileLink } from "@/features/user/common/user-profile-link.tsx";
-import { CommentModal } from "../create-comment/comment-modal.tsx";
 import { useLikePost } from "../like-post/use-like-post.ts";
 import { buildImageUrl, buildVideoUrl } from "../post-media.functions.ts";
 import { useUnlikePost } from "../unlike-post/use-unlike-post.ts";
-import { CommentItem } from "./comment-item.tsx";
+import { CommentItem } from "@/features/comment";
 import type { Post, PostMediaItem } from "./post.ts";
 import { formatPostCreationDate } from "./post.utils.ts";
 
@@ -219,11 +217,6 @@ export function PostItem({ post }: PostItemProps) {
 		else addBookmark.mutate({ postId: post.id });
 	};
 
-	const handleOpenCommentModal = (e: React.MouseEvent) => {
-		e.stopPropagation();
-		NiceModal.show(CommentModal, { postId: post.id });
-	};
-
 	const mediaList: RenderMediaItem[] = (post.medias ?? [])
 		.map((m) => getMediaUrl(m))
 		.filter((item): item is RenderMediaItem => item !== null);
@@ -320,14 +313,17 @@ export function PostItem({ post }: PostItemProps) {
 						</button>
 
 						{/* Comment */}
-						<button
-							type="button"
-							onClick={handleOpenCommentModal}
+						<Link
+							to="/posts/$postId"
+							params={{ postId: post.id }}
+							search={{ focusComment: true }}
+							onClick={(e) => e.stopPropagation()}
 							className="flex items-center gap-1.5 transition-colors group -ml-2 p-2 rounded-full hover:bg-accent hover:text-sky-500"
+							aria-label="Commenter la publication"
 						>
 							<RiChat3Line className="size-6" />
 							<span className="text-base font-light">{commentsCount}</span>
-						</button>
+						</Link>
 
 						{/* Bookmark */}
 						<button

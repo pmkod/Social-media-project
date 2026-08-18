@@ -9,6 +9,8 @@ import {
 } from "@remixicon/react";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/core/components/ui/button.tsx";
+import { EmptyBlock } from "@/core/components/ui/empty-block.tsx";
+import { ExceptionBlock } from "@/core/components/ui/exception-block.tsx";
 import { PostListLoader } from "@/features/post/common/components/loaders";
 import { PostItem } from "@/features/post/common/post-item.tsx";
 import type { BookmarkCollection } from "./common/bookmark-collection.ts";
@@ -123,7 +125,7 @@ export function BookmarkList() {
 	};
 
 	return (
-		<div className="mx-auto min-h-screen max-w-2xl border-x border-border">
+		<div className="min-h-screen border-x border-border">
 			<header className="sticky top-0 z-20 border-b border-border bg-background/90 p-4 backdrop-blur-xl">
 				<div className="flex items-center justify-between gap-3">
 					<div>
@@ -265,20 +267,16 @@ export function BookmarkList() {
 			{bookmarksQuery.isLoading ? (
 				<PostListLoader />
 			) : bookmarksQuery.isError ? (
-				<div className="p-10 text-center text-sm text-rose-500">
-					Impossible de charger vos bookmarks.
-				</div>
+				<ExceptionBlock
+					title="Impossible de charger vos bookmarks"
+					description="Une erreur s'est produite pendant le chargement de vos publications enregistrées."
+					onRefresh={() => void bookmarksQuery.refetch()}
+				/>
 			) : posts.length === 0 ? (
-				<div className="p-12 text-center text-muted-foreground">
-					<RiBookmarkLine className="mx-auto mb-3 size-10 opacity-60" />
-					<p className="font-semibold text-foreground">
-						Aucune publication enregistrée
-					</p>
-					<p className="mt-1 text-xs">
-						Utilisez l’icône bookmark sous une publication pour la retrouver
-						ici.
-					</p>
-				</div>
+				<EmptyBlock
+					title="Aucune publication enregistrée"
+					description="Utilisez l’icône bookmark sous une publication pour la retrouver ici."
+				/>
 			) : (
 				<div>
 					{posts.map((post) => (

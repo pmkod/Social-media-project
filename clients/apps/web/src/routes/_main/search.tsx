@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { MainContainer } from "@/core/components/ui/main-container.tsx";
 import { SearchView } from "@/features/post/search/search-view.tsx";
 
 export const Route = createFileRoute("/_main/search")({
@@ -6,5 +7,9 @@ export const Route = createFileRoute("/_main/search")({
 });
 
 function SearchPage() {
-	return <SearchView />;
+	return (
+		<MainContainer>
+			<SearchView />
+		</MainContainer>
+	);
 }

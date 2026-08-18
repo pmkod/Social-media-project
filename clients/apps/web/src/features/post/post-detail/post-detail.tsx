@@ -1,33 +1,29 @@
-import {
-	RiArrowLeftLine,
-	RiBookmarkFill,
-	RiBookmarkLine,
-	RiChat3Line,
-	RiHeartFill,
-	RiHeartLine,
-	RiLoader4Line,
-	RiRepeatLine,
-} from "@remixicon/react";
+import { RiArrowLeftLine, RiLoader4Line } from "@remixicon/react";
 import { Link } from "@tanstack/react-router";
-import { useState } from "react";
+import {
+	AppHeader,
+	AppHeaderGoBackButton,
+	AppHeaderLeftPart,
+	AppHeaderTitle,
+} from "@/core/components/ui/app-header.tsx";
 import { Button } from "@/core/components/ui/button.tsx";
-import { useAddBookmark } from "@/features/bookmark/use-add-bookmark.ts";
-import { useRemoveBookmark } from "@/features/bookmark/use-remove-bookmark.ts";
-import { UserProfileLink } from "@/features/user/common/user-profile-link.tsx";
-import { CommentItem } from "../common/comment-item.tsx";
-import { formatPostFullDate } from "../common/post.utils.ts";
-import { getMediaUrl, type RenderMediaItem } from "../common/post-item.tsx";
-import { CreateCommentForm } from "../create-comment/create-comment-form.tsx";
-import { useLikePost } from "../like-post/use-like-post.ts";
-import { useUnlikePost } from "../unlike-post/use-unlike-post.ts";
-import { useComments } from "./use-comments";
+import { EmptyBlock } from "@/core/components/ui/empty-block.tsx";
+import {
+	CommentItem,
+	CommentListLoader,
+	CreateCommentForm,
+	useComments,
+} from "@/features/comment";
+import { PostItemLoader } from "../common/components/loaders/post-item-loader.tsx";
+import { PostItem } from "../common/post-item.tsx";
 import { usePost } from "./use-post";
 
 type PostDetailProps = {
 	postId: string;
+	autoFocusComment?: boolean;
 };
 
-export function PostDetail({ postId }: PostDetailProps) {
+export function PostDetail({ postId, autoFocusComment }: PostDetailProps) {
 	const { data: post, isLoading, isError } = usePost(postId);
 	const {
 		data: commentsData,
@@ -37,21 +33,8 @@ export function PostDetail({ postId }: PostDetailProps) {
 		isLoading: isCommentsLoading,
 	} = useComments(postId, Boolean(post));
 
-	const likePost = useLikePost();
-	const unlikePost = useUnlikePost();
-	const addBookmark = useAddBookmark();
-	const removeBookmark = useRemoveBookmark();
-	const [isReposted, setIsReposted] = useState(false);
-
 	if (isLoading) {
-		return (
-			<div className="p-12 text-center text-muted-foreground flex flex-col items-center justify-center gap-3">
-				<RiLoader4Line className="h-8 w-8 animate-spin text-sky-500" />
-				<span className="text-sm font-medium">
-					Chargement de la publication...
-				</span>
-			</div>
-		);
+		return <PostItemLoader hasMedia={true} />;
 	}
 
 	if (isError || !post) {
@@ -71,164 +54,26 @@ export function PostDetail({ postId }: PostDetailProps) {
 		);
 	}
 
-	const isLiked = post.isLikedByAuthenticatedUser ?? false;
-	const isBookmarked = post.isBookmarkedByAuthenticatedUser ?? false;
-	const likesCount = post.likesCount ?? 0;
-
-	const mediaList: RenderMediaItem[] = (post.medias ?? [])
-		.map((m) => getMediaUrl(m))
-		.filter((item): item is RenderMediaItem => item !== null);
-
-	const repostsCount = isReposted ? 1 : 0;
 	const commentsCount = post.commentsCount ?? 0;
 
 	const allComments = commentsData?.pages.flatMap((page) => page.data) ?? [];
 
 	return (
-		<div className="mx-auto max-w-2xl min-h-screen border-r border-l border-border">
+		<div>
 			{/* Top Header */}
-			<div className="sticky top-0 z-10 backdrop-blur-md bg-background/80 p-4 border-b border-border flex items-center gap-4">
-				<Link
-					to="/home"
-					className="p-2 rounded-full hover:bg-accent transition-colors text-muted-foreground hover:text-foreground"
-					aria-label="Retour"
-				>
-					<RiArrowLeftLine className="h-5 w-5" />
-				</Link>
-				<h1 className="text-lg font-bold text-foreground">Publication</h1>
+			<AppHeader>
+				<AppHeaderLeftPart>
+					<AppHeaderGoBackButton to="/home" />
+					<AppHeaderTitle>Post</AppHeaderTitle>
+				</AppHeaderLeftPart>
+			</AppHeader>
+			<div>
+				<PostItem post={post} />
+				<div className="px-4 py-3 border-x border-y">
+					{/* Add Comment Form */}
+					<CreateCommentForm postId={post.id} autoFocus={autoFocusComment} />
+				</div>
 			</div>
-
-			{/* Main Post Details */}
-			<article className="p-4 border-b border-border space-y-4">
-				{/* Author Meta */}
-				<div className="flex items-center gap-3">
-					<UserProfileLink
-						username={post.author?.handle}
-						className="flex min-w-0 items-center gap-3 rounded-xl hover:bg-muted/50"
-					>
-						<img
-							src={
-								post.author?.avatar ||
-								`https://ui-avatars.com/api/?name=${encodeURIComponent(
-									post.author?.name || "U",
-								)}&background=random`
-							}
-							alt={post.author?.name || "Auteur"}
-							className="h-12 w-12 rounded-full object-cover ring-1 ring-border"
-						/>
-						<div className="min-w-0">
-							<h2 className="truncate text-base font-semibold text-foreground hover:underline">
-								{post.author?.name}
-							</h2>
-							<p className="truncate text-xs text-muted-foreground">
-								@{post.author?.handle}
-							</p>
-						</div>
-					</UserProfileLink>
-				</div>
-
-				{/* Content */}
-				<p className="text-base text-foreground whitespace-pre-line leading-relaxed">
-					{post.text || post.content}
-				</p>
-
-				{/* Media Gallery */}
-				{mediaList.length > 0 ? (
-					<div className="space-y-2 mt-4">
-						{mediaList.map((item) => (
-							<div
-								key={item.url}
-								className="overflow-hidden rounded-2xl border border-border bg-muted/40"
-							>
-								{item.isVideo ? (
-									/* biome-ignore lint/a11y/useMediaCaption: Media preview player */
-									<video
-										src={item.url}
-										controls
-										className="w-full max-h-[500px] object-contain mx-auto"
-									/>
-								) : (
-									<img
-										src={item.url}
-										alt="Média du post"
-										className="w-full max-h-[500px] object-cover mx-auto"
-									/>
-								)}
-							</div>
-						))}
-					</div>
-				) : null}
-
-				{/* Date & Time */}
-				<div className="pt-2 text-xs text-muted-foreground border-t border-border">
-					<span>Publié le {formatPostFullDate(post.createdAt)}</span>
-				</div>
-
-				{/* Stats Row */}
-				<div className="py-3 border-t border-b border-border flex items-center justify-around text-muted-foreground text-sm">
-					{/* Likes */}
-					<button
-						type="button"
-						onClick={() => {
-							if (isLiked) {
-								unlikePost.mutate(post.id);
-							} else {
-								likePost.mutate(post.id);
-							}
-						}}
-						className={`flex items-center gap-2 transition-colors ${
-							isLiked ? "text-rose-500" : "hover:text-rose-500"
-						}`}
-					>
-						{isLiked ? (
-							<RiHeartFill className="h-5 w-5 text-rose-500" />
-						) : (
-							<RiHeartLine className="h-5 w-5" />
-						)}
-						<span>{likesCount}</span>
-					</button>
-
-					{/* Comments count */}
-					<div className="flex items-center gap-2">
-						<RiChat3Line className="h-5 w-5" />
-						<span>{commentsCount}</span>
-					</div>
-
-					{/* Repost */}
-					<button
-						type="button"
-						onClick={() => setIsReposted((prev) => !prev)}
-						className={`flex items-center gap-2 transition-colors ${
-							isReposted ? "text-emerald-500" : "hover:text-emerald-500"
-						}`}
-					>
-						<RiRepeatLine className="h-5 w-5" />
-						<span>{repostsCount}</span>
-					</button>
-
-					{/* Bookmark */}
-					<button
-						type="button"
-						onClick={() => {
-							if (isBookmarked) removeBookmark.mutate(post.id);
-							else addBookmark.mutate({ postId: post.id });
-						}}
-						disabled={addBookmark.isPending || removeBookmark.isPending}
-						className={`flex items-center gap-2 transition-colors ${
-							isBookmarked ? "text-amber-500" : "hover:text-amber-500"
-						}`}
-					>
-						{isBookmarked ? (
-							<RiBookmarkFill className="h-5 w-5 text-amber-500" />
-						) : (
-							<RiBookmarkLine className="h-5 w-5" />
-						)}
-					</button>
-				</div>
-			</article>
-
-			{/* Add Comment Form */}
-			<CreateCommentForm postId={post.id} />
 
 			{/* Comments Section */}
 			<section className="border-b border-border">
@@ -237,14 +82,12 @@ export function PostDetail({ postId }: PostDetailProps) {
 				</h3>
 
 				{isCommentsLoading ? (
-					<div className="p-8 text-center text-muted-foreground flex items-center justify-center gap-2">
-						<RiLoader4Line className="h-5 w-5 animate-spin text-sky-500" />
-						<span className="text-sm">Chargement des commentaires...</span>
-					</div>
+					<CommentListLoader count={3} />
 				) : allComments.length === 0 ? (
-					<div className="p-8 text-center text-muted-foreground text-sm">
-						Aucun commentaire pour le moment.
-					</div>
+					<EmptyBlock
+						title="Aucun commentaire pour le moment"
+						description="Soyez le premier à partager votre avis sur cette publication."
+					/>
 				) : (
 					<div>
 						{allComments.map((comment) => (

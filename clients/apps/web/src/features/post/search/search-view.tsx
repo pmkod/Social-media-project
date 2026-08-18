@@ -1,5 +1,7 @@
 import { RiLoader4Line, RiSearchLine } from "@remixicon/react";
 import { useEffect, useRef, useState } from "react";
+import { EmptyBlock } from "@/core/components/ui/empty-block.tsx";
+import { ExceptionBlock } from "@/core/components/ui/exception-block.tsx";
 import { PostListLoader } from "../common/components/loaders";
 import { PostItem } from "../common/post-item.tsx";
 import { useSearchPosts } from "./use-search-posts.ts";
@@ -26,6 +28,7 @@ export function SearchView() {
 		isFetchingNextPage,
 		isLoading,
 		isError,
+		refetch,
 	} = useSearchPosts(debouncedSearch);
 
 	useEffect(() => {
@@ -47,7 +50,7 @@ export function SearchView() {
 	const posts = data?.pages.flatMap((page) => page.posts) ?? [];
 
 	return (
-		<div className="mx-auto max-w-2xl min-h-screen border-x border-border">
+		<div className="min-h-screen border-x border-border">
 			<header className="sticky top-0 z-20 border-b border-border bg-background/90 p-4 backdrop-blur-xl">
 				<h1 className="mb-3 text-xl font-bold text-foreground">Recherche</h1>
 				<label className="relative block">
@@ -74,17 +77,16 @@ export function SearchView() {
 			{isLoading ? (
 				<PostListLoader />
 			) : isError ? (
-				<div className="p-10 text-center text-sm text-rose-500">
-					Impossible de charger les résultats.
-				</div>
+				<ExceptionBlock
+					title="Impossible de charger les résultats"
+					description="Une erreur s'est produite pendant la recherche."
+					onRefresh={() => void refetch()}
+				/>
 			) : posts.length === 0 ? (
-				<div className="p-12 text-center">
-					<RiSearchLine className="mx-auto mb-3 size-8 text-muted-foreground" />
-					<p className="font-semibold text-foreground">Aucun résultat</p>
-					<p className="mt-1 text-sm text-muted-foreground">
-						Essayez avec d’autres mots-clés.
-					</p>
-				</div>
+				<EmptyBlock
+					title="Aucun résultat"
+					description="Essayez avec d’autres mots-clés."
+				/>
 			) : (
 				<div>
 					{posts.map((post) => (

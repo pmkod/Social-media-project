@@ -1,5 +1,6 @@
-import { RiHeartLine, RiQuillPenLine } from "@remixicon/react";
 import { useEffect, useRef } from "react";
+import { EmptyBlock } from "@/core/components/ui/empty-block.tsx";
+import { ExceptionBlock } from "@/core/components/ui/exception-block.tsx";
 import { PostListLoader } from "@/features/post/common/components/loaders";
 import { PostItem } from "@/features/post/common/post-item.tsx";
 import {
@@ -38,24 +39,29 @@ export function ProfilePostList({ userId, type }: ProfilePostListProps) {
 	if (query.isLoading) return <PostListLoader />;
 	if (query.isError) {
 		return (
-			<div className="p-10 text-center text-sm text-rose-500">
-				Impossible de charger les publications.
-			</div>
+			<ExceptionBlock
+				title="Impossible de charger les publications"
+				description="Une erreur s'est produite pendant le chargement de cette liste."
+				onRefresh={() => void query.refetch()}
+			/>
 		);
 	}
 
 	const posts = query.data?.pages.flatMap((page) => page.posts) ?? [];
 	if (posts.length === 0) {
-		const Icon = type === "posts" ? RiQuillPenLine : RiHeartLine;
 		return (
-			<div className="p-12 text-center">
-				<Icon className="mx-auto mb-3 size-8 text-muted-foreground" />
-				<p className="font-semibold text-foreground">
-					{type === "posts"
+			<EmptyBlock
+				title={
+					type === "posts"
 						? "Aucune publication pour le moment"
-						: "Aucune publication aimée"}
-				</p>
-			</div>
+						: "Aucune publication aimée"
+				}
+				description={
+					type === "posts"
+						? "Les publications de cet utilisateur apparaîtront ici."
+						: "Les publications aimées apparaîtront ici."
+				}
+			/>
 		);
 	}
 

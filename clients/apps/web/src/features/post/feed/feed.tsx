@@ -1,4 +1,6 @@
 import { useEffect, useRef } from "react";
+import { EmptyBlock } from "@/core/components/ui/empty-block.tsx";
+import { ExceptionBlock } from "@/core/components/ui/exception-block.tsx";
 import { PostListLoader } from "../common/components/loaders";
 import { PostItem } from "../common/post-item";
 import { useFollowingFeed } from "./use-following-feed";
@@ -13,6 +15,7 @@ export function Feed() {
 		isFetchingNextPage,
 		isLoading,
 		isError,
+		refetch,
 	} = useFollowingFeed();
 
 	useEffect(() => {
@@ -45,9 +48,16 @@ export function Feed() {
 			{isLoading ? (
 				<PostListLoader />
 			) : isError ? (
-				<div className="p-8 text-center text-rose-500 text-sm">
-					Une erreur s'est produite lors du chargement des publications.
-				</div>
+				<ExceptionBlock
+					title="Impossible de charger le fil"
+					description="Une erreur s'est produite lors du chargement des publications."
+					onRefresh={() => void refetch()}
+				/>
+			) : allPosts.length === 0 ? (
+				<EmptyBlock
+					title="Aucune publication pour le moment"
+					description="Suivez des utilisateurs pour retrouver leurs publications dans votre fil."
+				/>
 			) : (
 				/* Feed Posts */
 				<div>

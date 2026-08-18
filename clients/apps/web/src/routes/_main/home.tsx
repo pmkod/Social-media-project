@@ -1,6 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Feed } from "@/features/post/feed/feed";
-import { CreatePostForm } from "@/features/post/create-post/create-post-form";
+import {
+	AppHeader,
+	AppHeaderLeftPart,
+	AppHeaderTitle,
+} from "@/core/components/ui/app-header.tsx";
+import { MainContainer } from "@/core/components/ui/main-container.tsx";
+import { CreatePostForm } from "@/features/post/create-post/create-post-form.tsx";
+import { Feed } from "@/features/post/feed/feed.tsx";
 
 export const Route = createFileRoute("/_main/home")({
 	component: HomePage,
@@ -8,14 +14,17 @@ export const Route = createFileRoute("/_main/home")({
 
 function HomePage() {
 	return (
-		<div className="mx-auto max-w-2xl">
-			<div className="mt-5">
-				<CreatePostForm />
-			</div>
+		<MainContainer>
+			<AppHeader>
+				<AppHeaderLeftPart>
+					<AppHeaderTitle>Feed</AppHeaderTitle>
+				</AppHeaderLeftPart>
+			</AppHeader>
 
-			<div className="py-10">
+			<div className="space-y-5">
+				<CreatePostForm />
 				<Feed />
 			</div>
-		</div>
+		</MainContainer>
 	);
 }

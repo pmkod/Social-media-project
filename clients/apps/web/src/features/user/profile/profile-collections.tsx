@@ -7,6 +7,8 @@ import {
 } from "@remixicon/react";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/core/components/ui/button.tsx";
+import { EmptyBlock } from "@/core/components/ui/empty-block.tsx";
+import { ExceptionBlock } from "@/core/components/ui/exception-block.tsx";
 import { useBookmarkCollections } from "@/features/bookmark/use-bookmark-collections.ts";
 import { useBookmarks } from "@/features/bookmark/use-bookmarks.ts";
 import { PostListLoader } from "@/features/post/common/components/loaders";
@@ -56,6 +58,16 @@ export function ProfileCollections({ userId }: { userId: string }) {
 		);
 	}
 
+	if (query.isError) {
+		return (
+			<ExceptionBlock
+				title="Impossible de charger les collections"
+				description="Une erreur s'est produite pendant le chargement des collections."
+				onRefresh={() => void query.refetch()}
+			/>
+		);
+	}
+
 	const collections = query.data?.collections ?? [];
 	if (selectedCollection) {
 		return (
@@ -84,13 +96,16 @@ export function ProfileCollections({ userId }: { userId: string }) {
 				{postsQuery.isLoading ? (
 					<PostListLoader />
 				) : postsQuery.isError ? (
-					<p className="p-10 text-center text-sm text-rose-500">
-						Impossible de charger cette collection.
-					</p>
+					<ExceptionBlock
+						title="Impossible de charger cette collection"
+						description="Une erreur s'est produite pendant le chargement des publications."
+						onRefresh={() => void postsQuery.refetch()}
+					/>
 				) : posts.length === 0 ? (
-					<p className="p-12 text-center text-sm text-muted-foreground">
-						Cette collection est vide.
-					</p>
+					<EmptyBlock
+						title="Cette collection est vide"
+						description="Les publications ajoutées à cette collection apparaîtront ici."
+					/>
 				) : (
 					<div>
 						{posts.map((post) => (
@@ -107,12 +122,10 @@ export function ProfileCollections({ userId }: { userId: string }) {
 
 	if (collections.length === 0) {
 		return (
-			<div className="p-12 text-center">
-				<RiFolder3Line className="mx-auto mb-3 size-8 text-muted-foreground" />
-				<p className="font-semibold text-foreground">
-					Aucune collection visible
-				</p>
-			</div>
+			<EmptyBlock
+				title="Aucune collection visible"
+				description="Les collections publiques de cet utilisateur apparaîtront ici."
+			/>
 		);
 	}
 
