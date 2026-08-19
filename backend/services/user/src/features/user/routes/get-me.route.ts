@@ -52,7 +52,6 @@ const getMeRoute = defineOpenAPIRoute<typeof routeDef, HonoAuthenticatedEnv>({
 
 		return c.json({
 			...user,
-			isOwnProfile: true,
 			isFollowedByAuthenticatedUser: false,
 			isBlockedByAuthenticatedUser: false,
 			hasBlockedAuthenticatedInUser: false,

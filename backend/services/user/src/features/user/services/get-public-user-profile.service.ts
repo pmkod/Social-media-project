@@ -60,7 +60,6 @@ const getPublicUserProfile = async (
 
 	return {
 		...visibleUser,
-		isOwnProfile,
 		isFollowedByAuthenticatedUser:
 			!isBlockedByAuthenticatedUser &&
 			!hasBlockedAuthenticatedInUser &&

@@ -23,6 +23,7 @@ import {
 import { FollowButton } from "@/features/user/common/follow-button.tsx";
 import { ListFollowersModal } from "@/features/user/list-followers/list-followers.modal.tsx";
 import { ListFollowingModal } from "@/features/user/list-following/list-following.modal.tsx";
+import { useAuthenticatedUser } from "@/features/user/authenticated-user/use-authenticated-user.ts";
 import { useUserProfile } from "@/features/user/user-profile/use-user-profile.ts";
 import { UserProfileActionsDropdown } from "@/features/user/user-profile/user-profile-actions-dropdown.tsx";
 import { ProfileCollections } from "./profile-collections.tsx";
@@ -40,6 +41,7 @@ type ProfileViewProps = {
 
 export function ProfileView({ username }: ProfileViewProps) {
 	const profileQuery = useUserProfile({ username });
+	const { data: authenticatedUser } = useAuthenticatedUser();
 
 	if (profileQuery.isLoading) {
 		return (
@@ -75,6 +77,9 @@ export function ProfileView({ username }: ProfileViewProps) {
 		: null;
 	const hasBlockRelationship =
 		user.isBlockedByAuthenticatedUser || user.hasBlockedAuthenticatedInUser;
+	const isOwnProfile = Boolean(
+		authenticatedUser?.id && user && authenticatedUser.id === user.id,
+	);
 
 	return (
 		<div className="mx-auto">
@@ -117,7 +122,7 @@ export function ProfileView({ username }: ProfileViewProps) {
 								variant="outline"
 								size="lg"
 							/>
-							{user.isOwnProfile ? (
+							{isOwnProfile ? (
 								<Button variant="outline">Edit profile</Button>
 							) : !hasBlockRelationship ? (
 								<FollowButton user={user} />

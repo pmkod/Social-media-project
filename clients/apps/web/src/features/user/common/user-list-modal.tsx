@@ -12,6 +12,7 @@ import { EmptyBlock } from "@/core/components/ui/empty-block.tsx";
 import { ExceptionBlock } from "@/core/components/ui/exception-block.tsx";
 import type { NiceModalHandler } from "@/core/components/ui/nice-modal.tsx";
 import { cn } from "@/core/lib/utils.ts";
+import { useAuthenticatedUser } from "@/features/user/authenticated-user/use-authenticated-user.ts";
 import { FollowButton } from "./follow-button.tsx";
 import type { User } from "./user.ts";
 
@@ -40,6 +41,7 @@ const UserListModal = ({
 	title,
 	emptyTitle,
 }: UserListModalProps) => {
+	const { data: authenticatedUser } = useAuthenticatedUser();
 	const scrollContainerRef = useRef<HTMLDivElement>(null);
 	const observerTargetRef = useRef<HTMLDivElement>(null);
 	const { fetchNextPage, hasNextPage, isFetchingNextPage } = query;
@@ -135,7 +137,13 @@ const UserListModal = ({
 												) : null}
 											</div>
 										</Link>
-										{user.isOwnProfile ? null : <FollowButton user={user} />}
+										{Boolean(
+											authenticatedUser?.id &&
+												user.id &&
+												authenticatedUser.id === user.id,
+										) ? null : (
+											<FollowButton user={user} />
+										)}
 									</div>
 								);
 							})}

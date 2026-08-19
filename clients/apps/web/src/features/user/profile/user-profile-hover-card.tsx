@@ -9,6 +9,7 @@ import {
 import { Skeleton } from "@/core/components/ui/skeleton.tsx";
 import { cn } from "@/core/lib/utils.ts";
 import { FollowButton } from "@/features/user/common/follow-button.tsx";
+import { useAuthenticatedUser } from "@/features/user/authenticated-user/use-authenticated-user.ts";
 import { useUserProfile } from "@/features/user/user-profile/use-user-profile.ts";
 import type { User } from "../common/user.ts";
 
@@ -94,6 +95,10 @@ type UserProfilePreviewProps = {
 };
 
 function UserProfilePreview({ user }: UserProfilePreviewProps) {
+	const { data: authenticatedUser } = useAuthenticatedUser();
+	const isOwnProfile = Boolean(
+		authenticatedUser?.id && user.id && authenticatedUser.id === user.id,
+	);
 	const displayName = user.displayName || user.fullName || user.username;
 	const avatar =
 		user.avatarUrl ||
@@ -108,24 +113,24 @@ function UserProfilePreview({ user }: UserProfilePreviewProps) {
 				<div className="shrink-0">
 					<img
 						src={avatar}
-						alt={displayName}
+						alt={user.fullName}
 						className="size-16 rounded-full border-2 border-background object-cover shadow-sm ring-1 ring-border"
 					/>
 				</div>
 
-				{user.isOwnProfile ? (
+				{isOwnProfile ? (
 					<span className="rounded-full border border-border px-3 py-1.5 text-xs font-semibold text-muted-foreground">
 						Your profile
 					</span>
 				) : !user.isBlockedByAuthenticatedUser &&
 					!user.hasBlockedAuthenticatedInUser ? (
-					<FollowButton user={user} className="rounded-full px-4 font-bold" />
+					<FollowButton user={user} />
 				) : null}
 			</div>
 
 			<div className="mt-3">
 				<div className="block min-w-0 hover:underline">
-					<p className="truncate font-bold text-foreground">{displayName}</p>
+					<p className="truncate font-bold text-foreground">{user.fullName}</p>
 					<p className="truncate text-sm text-muted-foreground">
 						@{user.username}
 					</p>

@@ -80,7 +80,6 @@ const getUsersBatchRoute = defineOpenAPIRoute<
 		return c.json(
 			users.map((user) => ({
 				...user,
-				isOwnProfile: user.id === authenticatedUserId,
 				isBlockedByAuthenticatedUser:
 					blockRelationships.blockedByAuthenticatedUserIds.has(user.id),
 				hasBlockedAuthenticatedInUser:

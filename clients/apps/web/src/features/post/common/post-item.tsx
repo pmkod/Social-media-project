@@ -281,7 +281,6 @@ export function PostItem({ post }: PostItemProps) {
 							user={{
 								id: post.author?.id,
 								username: post.author?.username ?? "user",
-								isOwnProfile: post.author?.isOwnProfile,
 								isBlockedByAuthenticatedUser:
 									post.author?.isBlockedByAuthenticatedUser,
 							}}

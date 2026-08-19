@@ -1,6 +1,7 @@
 import { RiLoader4Line } from "@remixicon/react";
 import { type ComponentProps, useState } from "react";
 import { Button } from "@/core/components/ui/button.tsx";
+import { useAuthenticatedUser } from "../authenticated-user/use-authenticated-user.ts";
 import { useFollowUser } from "../follow-user/use-follow-user.ts";
 import { useUnfollowUser } from "../unfollow-user/use-unfollow-user.ts";
 import type { User } from "./user.ts";
@@ -14,17 +15,28 @@ type FollowButtonProps = {
 		| "hasBlockedAuthenticatedInUser"
 	>;
 	size?: ComponentProps<typeof Button>["size"];
-	className?: string;
 };
 
-function FollowButton({ user, size = "sm", className }: FollowButtonProps) {
+function FollowButton({ user, size = "sm" }: FollowButtonProps) {
 	const [isHovered, setIsHovered] = useState(false);
+	const [canShowUnfollow, setCanShowUnfollow] = useState(true);
+	const { data: authenticatedUser } = useAuthenticatedUser();
 	const followUser = useFollowUser();
 	const unfollowUser = useUnfollowUser();
 	const isMutationPending = followUser.isPending || unfollowUser.isPending;
 	const showUnfollow =
-		user.isFollowedByAuthenticatedUser && isHovered && !isMutationPending;
-	if (user.isBlockedByAuthenticatedUser || user.hasBlockedAuthenticatedInUser) {
+		user.isFollowedByAuthenticatedUser &&
+		isHovered &&
+		canShowUnfollow &&
+		!isMutationPending;
+	const isOwnProfile = Boolean(
+		authenticatedUser?.id && user.id && authenticatedUser.id === user.id,
+	);
+	if (
+		isOwnProfile ||
+		user.isBlockedByAuthenticatedUser ||
+		user.hasBlockedAuthenticatedInUser
+	) {
 		return null;
 	}
 
@@ -36,6 +48,7 @@ function FollowButton({ user, size = "sm", className }: FollowButtonProps) {
 			return;
 		}
 
+		setCanShowUnfollow(false);
 		followUser.mutate({ userId: user.id });
 	};
 
@@ -45,10 +58,12 @@ function FollowButton({ user, size = "sm", className }: FollowButtonProps) {
 			size={size}
 			variant={user.isFollowedByAuthenticatedUser ? "outline" : "default"}
 			colorScheme={showUnfollow ? "destructive" : "primary"}
-			className={className}
 			disabled={isMutationPending}
 			onMouseEnter={() => setIsHovered(true)}
-			onMouseLeave={() => setIsHovered(false)}
+			onMouseLeave={() => {
+				setIsHovered(false);
+				setCanShowUnfollow(true);
+			}}
 			onClick={(event) => {
 				event.stopPropagation();
 				event.preventDefault();

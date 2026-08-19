@@ -97,7 +97,6 @@ const getBlockedUsersRoute = defineOpenAPIRoute<
 		return c.json({
 			users: items.map((item) => ({
 				...item.blocked,
-				isOwnProfile: false,
 				isFollowedByAuthenticatedUser: false,
 				isBlockedByAuthenticatedUser: true,
 				hasBlockedAuthenticatedInUser: reciprocalBlockerIds.has(

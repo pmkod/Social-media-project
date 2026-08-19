@@ -13,7 +13,6 @@ type User = {
 	followersCount?: number;
 	followingCount?: number;
 	createdAt?: string | null;
-	isOwnProfile?: boolean;
 	isFollowedByAuthenticatedUser?: boolean;
 	isBlockedByAuthenticatedUser?: boolean;
 	hasBlockedAuthenticatedInUser?: boolean;

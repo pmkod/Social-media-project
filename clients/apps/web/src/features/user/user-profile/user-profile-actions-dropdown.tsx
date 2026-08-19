@@ -12,13 +12,13 @@ import {
 	DropdownMenuTrigger,
 } from "@/core/components/ui/dropdown-menu.tsx";
 import { IconButton } from "@/core/components/ui/icon-button.tsx";
+import { useAuthenticatedUser } from "@/features/user/authenticated-user/use-authenticated-user.ts";
 import { useOpenUserBlockAlertDialog } from "@/features/user/block-user/use-open-user-block-alert-dialog.ts";
 
 type UserProfileActionsDropdownProps = {
 	user: {
 		id?: string;
 		username: string;
-		isOwnProfile?: boolean;
 		isBlockedByAuthenticatedUser?: boolean;
 	};
 	size?: "xs" | "sm" | "md" | "lg";
@@ -53,7 +53,11 @@ function UserProfileActionsDropdown({
 	variant = "ghost",
 }: UserProfileActionsDropdownProps) {
 	const userBlockDialog = useOpenUserBlockAlertDialog();
-	const canManageBlock = Boolean(user.id && !user.isOwnProfile);
+	const { data: authenticatedUser } = useAuthenticatedUser();
+	const isOwnProfile = Boolean(
+		authenticatedUser?.id && user.id && authenticatedUser.id === user.id,
+	);
+	const canManageBlock = Boolean(user.id && !isOwnProfile);
 	const isBlocked = user.isBlockedByAuthenticatedUser ?? false;
 
 	return (

@@ -85,7 +85,6 @@ const getUserByUsernameRoute = defineOpenAPIRoute<
 		return c.json({
 			user: {
 				...visibleUser,
-				isOwnProfile,
 				isFollowedByAuthenticatedUser:
 					!isBlockedByAuthenticatedUser &&
 					!hasBlockedAuthenticatedInUser &&

@@ -120,7 +120,6 @@ const getUserFollowersRoute = defineOpenAPIRoute<
 		return c.json({
 			users: items.map((connection) => ({
 				...connection.follower,
-				isOwnProfile: connection.follower.id === authenticatedUserId,
 				isFollowedByAuthenticatedUser: followedUserIds.has(
 					connection.follower.id,
 				),
