@@ -7,11 +7,11 @@ import { UserRoutesTag } from "../user.constants";
 
 const routeDef = createRoute({
 	method: "delete",
-	path: "/users/{userId}/followers",
+	path: "/users/{id}/follow",
 	summary: "Unfollow a user",
 	tags: [UserRoutesTag],
 	middleware: [requireUserAuthentication],
-	request: { params: z.object({ userId: z.string() }) },
+	request: { params: z.object({ id: z.string() }) },
 	responses: {
 		[HttpStatus.OK.code]: { description: "User unfollowed" },
 	},
@@ -25,7 +25,7 @@ const unfollowUserRoute = defineOpenAPIRoute<
 	handler: async (c) => {
 		const authenticatedUser = c.get("authenticatedUser");
 		if (!authenticatedUser) throw new Error("Unauthorized");
-		const { userId } = c.req.valid("param");
+		const { id: userId } = c.req.valid("param");
 
 		const result = await prisma.$transaction(async (tx) => {
 			const deleted = await tx.follow.deleteMany({
@@ -55,9 +55,7 @@ const unfollowUserRoute = defineOpenAPIRoute<
 		}
 
 		return c.json({
-			success: true,
-			isFollowedByAuthenticatedUser: false,
-			followersCount: result.followersCount,
+			message: "Success",
 		});
 	},
 });

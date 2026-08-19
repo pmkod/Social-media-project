@@ -109,7 +109,7 @@ const getFollowSuggestionsRoute = defineOpenAPIRoute<
 				followersCount: user.followersCount,
 				followingCount: user.followingCount,
 				postCount: user.postCount,
-				isFollowedByAuthenticatedUser: false,
+				isFollowedByAuthenticatedUser: followingIds.includes(user.id),
 			};
 		});
 

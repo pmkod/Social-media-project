@@ -1,6 +1,6 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { httpClient } from "@/core/http-clients/http-client.ts";
-import type { User } from "../common/user.ts";
+import type { User } from "@/features/user/common/user.ts";
 import { userConnectionsQueryKeys } from "./user-connections.query-keys.ts";
 
 type UserConnectionType = "followers" | "following";

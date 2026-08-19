@@ -1,10 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
 import { httpClient } from "@/core/http-clients/http-client.ts";
-import { userListQueryKeys } from "../common/user-list.query-keys.ts";
 import type { User } from "../common/user.ts";
+import { userListQueryKeys } from "../common/user-list.query-keys.ts";
+
+type FollowSuggestion = User & {
+	isFollowedByAuthenticatedUser: boolean;
+};
 
 type FollowSuggestionsResponse = {
-	users: User[];
+	users: FollowSuggestion[];
 };
 
 const useFollowSuggestions = () => {

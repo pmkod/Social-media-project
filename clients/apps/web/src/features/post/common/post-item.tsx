@@ -228,7 +228,7 @@ export function PostItem({ post }: PostItemProps) {
 			<div className="flex gap-3">
 				{/* Avatar */}
 				<UserProfileHoverCard
-					username={post.author?.handle}
+					user={post.author}
 					className="h-fit shrink-0 rounded-full"
 					onClick={(event) => event.stopPropagation()}
 				>
@@ -250,7 +250,7 @@ export function PostItem({ post }: PostItemProps) {
 					<div className="flex items-center justify-between gap-2">
 						<div className="flex min-w-0 flex-wrap items-center gap-1.5 text-lg">
 							<UserProfileHoverCard
-								username={post.author?.handle}
+								user={post.author}
 								className="flex min-w-0 items-center gap-1.5 hover:underline"
 								onClick={(event) => event.stopPropagation()}
 							>

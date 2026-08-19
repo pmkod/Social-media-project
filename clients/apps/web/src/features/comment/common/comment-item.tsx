@@ -55,7 +55,7 @@ export function CommentItem({
 			)}
 		>
 			<UserProfileHoverCard
-				username={comment.author?.handle}
+				user={comment.author}
 				className="h-fit shrink-0 rounded-full"
 			>
 				<img
@@ -75,7 +75,7 @@ export function CommentItem({
 			<div className="flex-1 min-w-0">
 				<div className="flex items-baseline gap-1.5 flex-wrap">
 					<UserProfileHoverCard
-						username={comment.author?.handle}
+						user={comment.author}
 						className="flex min-w-0 items-baseline gap-1.5 hover:underline"
 					>
 						<span className="truncate text-sm font-semibold text-foreground">

@@ -181,9 +181,9 @@ curl -s -X GET http://localhost:8000/users/me/follow-suggestions \
   -H "Authorization: Bearer <VOTRE_ACCESS_TOKEN>"
 ```
 
-### 3. Suivre un utilisateur (`POST /users/:userId/followers`)
+### 3. Suivre un utilisateur (`POST /users/:id/follow`)
 
 ```bash
-curl -s -X POST http://localhost:8000/users/cmsxwrwrt0006h80m8d120a1i/followers \
+curl -s -X POST http://localhost:8000/users/cmsxwrwrt0006h80m8d120a1i/follow \
   -H "Authorization: Bearer <VOTRE_ACCESS_TOKEN>"
 ```

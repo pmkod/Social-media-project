@@ -77,7 +77,7 @@ const UserConnectionsModal = create(
 					>
 						{query.isLoading ? (
 							<div className="flex min-h-48 items-center justify-center">
-							<RiLoader4Line className="size-6 animate-spin text-sky-500" />
+								<RiLoader4Line className="size-6 animate-spin text-sky-500" />
 							</div>
 						) : query.isError ? (
 							<ExceptionBlock

@@ -7,11 +7,11 @@ import { UserRoutesTag } from "../user.constants";
 
 const routeDef = createRoute({
 	method: "post",
-	path: "/users/{userId}/followers",
+	path: "/users/{id}/follow",
 	summary: "Follow a user",
 	tags: [UserRoutesTag],
 	middleware: [requireUserAuthentication],
-	request: { params: z.object({ userId: z.string() }) },
+	request: { params: z.object({ id: z.string() }) },
 	responses: {
 		[HttpStatus.CREATED.code]: { description: "User followed" },
 	},
@@ -25,7 +25,7 @@ const followUserRoute = defineOpenAPIRoute<
 	handler: async (c) => {
 		const authenticatedUser = c.get("authenticatedUser");
 		if (!authenticatedUser) throw new Error("Unauthorized");
-		const { userId } = c.req.valid("param");
+		const { id: userId } = c.req.valid("param");
 
 		if (userId === authenticatedUser.id) {
 			return c.json(
@@ -38,7 +38,7 @@ const followUserRoute = defineOpenAPIRoute<
 			where: { id: userId, active: true },
 			select: { id: true },
 		});
-		if (!targetUser) {
+		if (targetUser === null) {
 			return c.json({ message: "User not found" }, HttpStatus.NOT_FOUND.code);
 		}
 
@@ -75,14 +75,7 @@ const followUserRoute = defineOpenAPIRoute<
 			});
 		});
 
-		return c.json(
-			{
-				success: true,
-				isFollowedByAuthenticatedUser: true,
-				followersCount: result.followersCount,
-			},
-			HttpStatus.CREATED.code,
-		);
+		return c.json({ message: "Success" }, HttpStatus.CREATED.code);
 	},
 });
 

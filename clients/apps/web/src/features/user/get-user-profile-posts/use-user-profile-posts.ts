@@ -1,7 +1,7 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { httpClient } from "@/core/http-clients/http-client.ts";
-import { postListQueryKeys } from "@/features/post/common/post-list.query-keys.ts";
 import type { Post } from "@/features/post/common/post.ts";
+import { postListQueryKeys } from "@/features/post/common/post-list.query-keys.ts";
 
 type ProfilePostListType = "posts" | "likes";
 

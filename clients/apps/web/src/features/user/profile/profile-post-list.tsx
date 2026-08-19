@@ -6,7 +6,7 @@ import { PostItem } from "@/features/post/common/post-item.tsx";
 import {
 	type ProfilePostListType,
 	useUserProfilePosts,
-} from "./use-user-profile-posts.ts";
+} from "@/features/user/get-user-profile-posts/use-user-profile-posts.ts";
 
 type ProfilePostListProps = {
 	userId: string;

@@ -5,17 +5,15 @@ import {
 	RiMapPin2Line,
 } from "@remixicon/react";
 import type { MouseEventHandler, ReactNode } from "react";
-import { Button } from "@/core/components/ui/button.tsx";
 import {
 	HoverCard,
 	HoverCardContent,
 	HoverCardTrigger,
 } from "@/core/components/ui/hover-card.tsx";
+import { FollowButton } from "@/features/user/common/follow-button.tsx";
+import { useUserProfile } from "@/features/user/get-user-profile/use-user-profile.ts";
 import type { User } from "../common/user.ts";
 import { UserProfileLink } from "../common/user-profile-link.tsx";
-import { useFollowUser } from "./use-follow-user.ts";
-import { useUnfollowUser } from "./use-unfollow-user.ts";
-import { useUserProfile } from "./use-user-profile.ts";
 
 const numberFormatter = new Intl.NumberFormat("fr-FR", {
 	notation: "compact",
@@ -27,40 +25,31 @@ const joinedDateFormatter = new Intl.DateTimeFormat("fr-FR", {
 });
 
 type UserProfileHoverCardProps = {
-	username?: string | null;
+	user?: { username: string } | { handle: string } | null;
 	children: ReactNode;
 	className?: string;
 	onClick?: MouseEventHandler<HTMLAnchorElement>;
 };
 
 function UserProfileHoverCard({
-	username,
+	user,
 	children,
 	className,
 	onClick,
 }: UserProfileHoverCardProps) {
-	const profileUsername = username ?? "";
+	const profileUsername = user
+		? "username" in user
+			? user.username
+			: user.handle
+		: "";
 	const profileQuery = useUserProfile(profileUsername);
-	const followUser = useFollowUser(profileUsername);
-	const unfollowUser = useUnfollowUser(profileUsername);
-	const user = profileQuery.data;
-	const isFollowMutationPending =
-		followUser.isPending || unfollowUser.isPending;
-
-	const handleFollowToggle = () => {
-		if (!user || isFollowMutationPending) return;
-		if (user.isFollowedByAuthenticatedUser) {
-			unfollowUser.mutate(user.id);
-		} else {
-			followUser.mutate(user.id);
-		}
-	};
+	const profileUser = profileQuery.data;
 
 	return (
 		<HoverCard openDelay={300} closeDelay={120}>
 			<HoverCardTrigger asChild>
 				<UserProfileLink
-					username={username}
+					username={profileUsername}
 					className={className}
 					onClick={onClick}
 				>
@@ -68,7 +57,7 @@ function UserProfileHoverCard({
 				</UserProfileLink>
 			</HoverCardTrigger>
 
-			{username ? (
+			{profileUsername ? (
 				<HoverCardContent
 					align="start"
 					sideOffset={8}
@@ -78,16 +67,12 @@ function UserProfileHoverCard({
 						<div className="flex items-center justify-center py-8 text-muted-foreground">
 							<RiLoader4Line className="size-5 animate-spin" />
 						</div>
-					) : profileQuery.isError || !user ? (
+					) : profileQuery.isError || !profileUser ? (
 						<p className="py-3 text-sm text-muted-foreground">
 							Profil indisponible.
 						</p>
 					) : (
-						<UserProfilePreview
-							user={user}
-							isFollowMutationPending={isFollowMutationPending}
-							onFollowToggle={handleFollowToggle}
-						/>
+						<UserProfilePreview user={profileUser} />
 					)}
 				</HoverCardContent>
 			) : null}
@@ -97,15 +82,9 @@ function UserProfileHoverCard({
 
 type UserProfilePreviewProps = {
 	user: User;
-	isFollowMutationPending: boolean;
-	onFollowToggle: () => void;
 };
 
-function UserProfilePreview({
-	user,
-	isFollowMutationPending,
-	onFollowToggle,
-}: UserProfilePreviewProps) {
+function UserProfilePreview({ user }: UserProfilePreviewProps) {
 	const displayName = user.displayName || user.fullName || user.username;
 	const avatar =
 		user.avatarUrl ||
@@ -130,23 +109,7 @@ function UserProfilePreview({
 						Votre profil
 					</span>
 				) : (
-					<Button
-						type="button"
-						variant={user.isFollowedByAuthenticatedUser ? "outline" : "default"}
-						size="sm"
-						className="rounded-full px-4 font-bold"
-						disabled={isFollowMutationPending}
-						onClick={(event) => {
-							event.stopPropagation();
-							onFollowToggle();
-						}}
-					>
-						{isFollowMutationPending
-							? "Mise à jour..."
-							: user.isFollowedByAuthenticatedUser
-								? "Abonné"
-								: "Suivre"}
-					</Button>
+					<FollowButton user={user} className="rounded-full px-4 font-bold" />
 				)}
 			</div>
 

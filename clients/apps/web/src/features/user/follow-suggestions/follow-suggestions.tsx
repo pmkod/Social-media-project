@@ -1,40 +1,16 @@
-import { RiLoader4Line, RiUserAddLine } from "@remixicon/react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { RiLoader4Line } from "@remixicon/react";
 import { Link } from "@tanstack/react-router";
-import { Button } from "@/core/components/ui/button.tsx";
 import {
 	Card,
 	CardContent,
 	CardHeader,
 	CardTitle,
 } from "@/core/components/ui/card.tsx";
-import { httpClient } from "@/core/http-clients/http-client.ts";
-import { postListQueryKeys } from "@/features/post/common/post-list.query-keys.ts";
-import { userListQueryKeys } from "@/features/user/common/user-list.query-keys.ts";
-import { authenticatedUserQueryKey } from "@/features/user/get-authenticated-user/authenticated-user.query-key.ts";
-import { userConnectionsQueryKeys } from "@/features/user/profile/user-connections.query-keys.ts";
+import { FollowButton } from "@/features/user/common/follow-button.tsx";
 import { useFollowSuggestions } from "./use-follow-suggestions.ts";
 
 function FollowSuggestions() {
 	const { data, isLoading, isError } = useFollowSuggestions();
-	const queryClient = useQueryClient();
-
-	const followMutation = useMutation({
-		mutationFn: (userId: string) =>
-			httpClient.post(`users/${userId}/followers`).json(),
-		onSuccess: () => {
-			// queryClient.invalidateQueries({
-			// 	queryKey: userListQueryKeys.followSuggestions(),
-			// });
-			queryClient.invalidateQueries({ queryKey: authenticatedUserQueryKey });
-			queryClient.invalidateQueries({
-				queryKey: userConnectionsQueryKeys.root,
-			});
-			queryClient.invalidateQueries({
-				queryKey: postListQueryKeys.feedFollowing(),
-			});
-		},
-	});
 
 	if (isError) {
 		return null;
@@ -57,23 +33,19 @@ function FollowSuggestions() {
 						</div>
 					) : (
 						<div className="pb-4">
-							{data?.users.map((suggestion) => {
-								const displayName = suggestion.fullName || suggestion.username;
+							{data?.users.map((user) => {
+								const displayName = user.fullName || user.username;
 								const avatar =
-									suggestion.avatarUrl ||
+									user.avatarUrl ||
 									`https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=random`;
-								const isFollowingThisUser =
-									followMutation.isPending &&
-									followMutation.variables === suggestion.id;
-
 								return (
 									<div
-										key={suggestion.id}
+										key={user.id}
 										className="flex items-center justify-between gap-3 hover:bg-gray-100/80 dark:hover:bg-gray-800/50 py-3 px-6 transition-colors"
 									>
 										<Link
 											to="/$username"
-											params={{ username: `@${suggestion.username}` }}
+											params={{ username: `@${user.username}` }}
 											className="flex items-center gap-2.5 min-w-0 flex-1 group"
 										>
 											<img
@@ -86,26 +58,11 @@ function FollowSuggestions() {
 													{displayName}
 												</div>
 												<div className="text-xs text-muted-foreground truncate">
-													@{suggestion.username}
+													@{user.username}
 												</div>
 											</div>
 										</Link>
-										<Button
-											type="button"
-											size="sm"
-											disabled={isFollowingThisUser}
-											onClick={() => followMutation.mutate(suggestion.id)}
-											className="shrink-0"
-										>
-											{isFollowingThisUser ? (
-												<RiLoader4Line className="size-4 animate-spin" />
-											) : (
-												<>
-													<RiUserAddLine className="size-4 mr-1" />
-													Suivre
-												</>
-											)}
-										</Button>
+										<FollowButton user={user} />
 									</div>
 								);
 							})}

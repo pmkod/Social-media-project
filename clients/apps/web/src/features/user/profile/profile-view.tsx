@@ -20,12 +20,11 @@ import {
 	TabsList,
 	TabsTrigger,
 } from "@/core/components/ui/tabs.tsx";
+import { FollowButton } from "@/features/user/common/follow-button.tsx";
+import { UserConnectionsModal } from "@/features/user/get-user-connections/user-connections.modal.tsx";
+import { useUserProfile } from "@/features/user/get-user-profile/use-user-profile.ts";
 import { ProfileCollections } from "./profile-collections.tsx";
 import { ProfilePostList } from "./profile-post-list.tsx";
-import { useFollowUser } from "./use-follow-user.ts";
-import { useUnfollowUser } from "./use-unfollow-user.ts";
-import { useUserProfile } from "./use-user-profile.ts";
-import { UserConnectionsModal } from "./user-connections.modal.tsx";
 
 const numberFormatter = new Intl.NumberFormat("fr-FR", { notation: "compact" });
 const joinedDateFormatter = new Intl.DateTimeFormat("fr-FR", {
@@ -39,8 +38,6 @@ type ProfileViewProps = {
 
 export function ProfileView({ username }: ProfileViewProps) {
 	const profileQuery = useUserProfile(username);
-	const followUser = useFollowUser(username);
-	const unfollowUser = useUnfollowUser(username);
 
 	if (profileQuery.isLoading) {
 		return (
@@ -71,8 +68,6 @@ export function ProfileView({ username }: ProfileViewProps) {
 	const avatar =
 		user.avatarUrl ||
 		`https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=random`;
-	const isFollowMutationPending =
-		followUser.isPending || unfollowUser.isPending;
 	const joinedDate = user.createdAt
 		? joinedDateFormatter.format(new Date(user.createdAt))
 		: null;
@@ -118,26 +113,11 @@ export function ProfileView({ username }: ProfileViewProps) {
 									Votre profil
 								</span>
 							) : (
-								<Button
-									variant={
-										user.isFollowedByAuthenticatedUser ? "outline" : "default"
-									}
+								<FollowButton
+									user={user}
 									className="rounded-full px-6 font-bold"
-									disabled={isFollowMutationPending}
-									onClick={() => {
-										if (user.isFollowedByAuthenticatedUser) {
-											unfollowUser.mutate(user.id);
-										} else {
-											followUser.mutate(user.id);
-										}
-									}}
-								>
-									{isFollowMutationPending
-										? "Mise à jour..."
-										: user.isFollowedByAuthenticatedUser
-											? "Abonné"
-											: "Suivre"}
-								</Button>
+									size="default"
+								/>
 							)}
 						</div>
 					</div>
