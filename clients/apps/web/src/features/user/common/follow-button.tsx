@@ -51,6 +51,7 @@ function FollowButton({ user, size = "sm", className }: FollowButtonProps) {
 			onMouseLeave={() => setIsHovered(false)}
 			onClick={(event) => {
 				event.stopPropagation();
+				event.preventDefault();
 				handleClick();
 			}}
 		>

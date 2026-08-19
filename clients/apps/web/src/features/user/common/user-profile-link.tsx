@@ -1,26 +1,26 @@
 import { Link } from "@tanstack/react-router";
-import type { MouseEventHandler, ReactNode } from "react";
+import type { ComponentProps } from "react";
 import type { User } from "./user.ts";
 
-type UserProfileLinkProps = {
+type UserProfileLinkProps = Omit<
+	ComponentProps<typeof Link>,
+	"to" | "params"
+> & {
 	user: Pick<User, "username">;
-	children: ReactNode;
-	className?: string;
-	onClick?: MouseEventHandler<HTMLAnchorElement>;
 };
 
 function UserProfileLink({
 	user,
 	children,
 	className,
-	onClick,
+	...props
 }: UserProfileLinkProps) {
 	return (
 		<Link
 			to="/$username"
 			params={{ username: `@${user.username}` }}
 			className={className}
-			onClick={onClick}
+			{...props}
 		>
 			{children}
 		</Link>

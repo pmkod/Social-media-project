@@ -75,7 +75,7 @@ function UserProfileHoverCard({ user, children }: UserProfileHoverCardProps) {
 			>
 				{profileQuery.isLoading ? (
 					<UserProfilePreviewLoader />
-				) : true ? (
+				) : profileQuery.isError ? (
 					<ExceptionBlock
 						title="Unable to load profile"
 						onRefresh={profileQuery.refetch}

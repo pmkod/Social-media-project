@@ -10,6 +10,7 @@ import { useLikeComment } from "../like-comment/use-like-comment.ts";
 import { useUnlikeComment } from "../unlike-comment/use-unlike-comment.ts";
 import type { Comment } from "./comment.ts";
 import { CommentItemLoader } from "./components/loaders/comment-item-loader.tsx";
+import { UserProfileLink } from "@/features/user/common/user-profile-link.tsx";
 
 type CommentItemProps = {
 	comment: Comment;
@@ -55,31 +56,40 @@ export function CommentItem({
 			)}
 		>
 			<UserProfileHoverCard user={comment.author}>
-				<img
-					src={
-						comment.author?.avatarUrl ||
-						`https://ui-avatars.com/api/?name=${encodeURIComponent(
-							comment.author.fullName,
-						)}&background=random`
-					}
-					alt={comment.author.fullName}
-					className={cn(
-						"rounded-full object-cover shrink-0 ring-1 ring-border",
-						isReply ? "size-8" : "size-10",
-					)}
-				/>
+				<UserProfileLink
+					user={comment.author}
+					onClick={(e) => e.stopPropagation()}
+				>
+					<img
+						src={
+							comment.author?.avatarUrl ||
+							`https://ui-avatars.com/api/?name=${encodeURIComponent(
+								comment.author.fullName,
+							)}&background=random`
+						}
+						alt={comment.author.fullName}
+						className={cn(
+							"rounded-full object-cover shrink-0 ring-1 ring-border",
+							isReply ? "size-8" : "size-10",
+						)}
+					/>
+				</UserProfileLink>
 			</UserProfileHoverCard>
 			<div className="flex-1 min-w-0">
 				<div className="flex items-baseline gap-1.5 flex-wrap">
 					<UserProfileHoverCard user={comment.author}>
-						<div className="flex min-w-0 items-baseline gap-1 cursor-pointer">
+						<UserProfileLink
+							user={comment.author}
+							onClick={(e) => e.stopPropagation()}
+							className="flex min-w-0 items-baseline gap-1 cursor-pointer"
+						>
 							<span className="truncate text-sm font-semibold text-foreground">
 								{comment.author.fullName}
 							</span>
 							<span className="truncate text-xs text-muted-foreground">
 								@{comment.author.username}
 							</span>
-						</div>
+						</UserProfileLink>
 					</UserProfileHoverCard>
 					<span className="text-xs text-muted-foreground">·</span>
 					<span className="text-xs text-muted-foreground">
