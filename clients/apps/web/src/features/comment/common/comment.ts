@@ -1,11 +1,11 @@
-import type { PostAuthor } from "@/features/post/common/post.ts";
+import type { User } from "@/features/user/common/user.ts";
 
 export type Comment = {
 	id: string;
 	postId: string;
 	authorId?: string;
 	parentId?: string | null;
-	author?: PostAuthor | null;
+	author?: User | null;
 	content: string;
 	createdAt: string;
 	updatedAt?: string;

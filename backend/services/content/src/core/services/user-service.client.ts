@@ -1,23 +1,21 @@
 import { Configurations } from "../configurations";
 
-export type AuthorDto = {
-	id: string;
-	name: string;
-	handle: string;
-	avatar: string;
-	isOwnProfile: boolean;
-	isBlockedByAuthenticatedUser: boolean;
-	hasBlockedAuthenticatedInUser: boolean;
-};
-
 export type UserProfileDto = {
 	id: string;
 	username: string;
 	fullName?: string | null;
 	displayName?: string | null;
-	avatarUrl?: string | null;
 	bio?: string | null;
+	avatarUrl?: string | null;
+	coverUrl?: string | null;
+	location?: string | null;
+	website?: string | null;
+	postCount?: number;
+	followersCount?: number;
+	followingCount?: number;
+	createdAt?: string | null;
 	isOwnProfile?: boolean;
+	isFollowedByAuthenticatedUser?: boolean;
 	isBlockedByAuthenticatedUser?: boolean;
 	hasBlockedAuthenticatedInUser?: boolean;
 };
@@ -40,7 +38,7 @@ export class UserServiceClient {
 	async fetchAuthorsBatch(
 		userIds: string[],
 		authenticatedUserId?: string,
-	): Promise<Map<string, AuthorDto>> {
+	): Promise<Map<string, UserProfileDto>> {
 		const uniqueIds = Array.from(
 			new Set(
 				userIds.filter((id): id is string =>
@@ -49,7 +47,7 @@ export class UserServiceClient {
 			),
 		);
 
-		const authorsMap = new Map<string, AuthorDto>();
+		const authorsMap = new Map<string, UserProfileDto>();
 		if (uniqueIds.length === 0) {
 			return authorsMap;
 		}
@@ -75,18 +73,7 @@ export class UserServiceClient {
 
 			const users = (await response.json()) as UserProfileDto[];
 			for (const user of users) {
-				const author: AuthorDto = {
-					id: user.id,
-					name: user.displayName || user.fullName || user.username,
-					handle: user.username,
-					avatar: user.avatarUrl || "",
-					isOwnProfile: user.isOwnProfile ?? false,
-					isBlockedByAuthenticatedUser:
-						user.isBlockedByAuthenticatedUser ?? false,
-					hasBlockedAuthenticatedInUser:
-						user.hasBlockedAuthenticatedInUser ?? false,
-				};
-				authorsMap.set(user.id, author);
+				authorsMap.set(user.id, user);
 			}
 		} catch (error) {
 			console.error(

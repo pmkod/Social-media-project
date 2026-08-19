@@ -2,25 +2,8 @@ import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
-import type { Prisma } from "@/generated/prisma/client";
 import { getBlockRelationships } from "../services/get-block-relationships.service";
 import { UserRoutesTag } from "../user.constants";
-
-const publicUserProfileSelect = {
-	id: true,
-	username: true,
-	fullName: true,
-	displayName: true,
-	bio: true,
-	avatarUrl: true,
-	coverUrl: true,
-	location: true,
-	website: true,
-	postCount: true,
-	followersCount: true,
-	followingCount: true,
-	createdAt: true,
-} satisfies Prisma.UserSelect;
 
 const routeDef = createRoute({
 	method: "get",
@@ -45,14 +28,29 @@ const getUserByUsernameRoute = defineOpenAPIRoute<
 		const authenticatedUserId = authenticatedUser?.id;
 		const user = await prisma.user.findFirst({
 			where: { username, active: true },
-			select: publicUserProfileSelect,
+			select: {
+				id: true,
+				username: true,
+				fullName: true,
+				displayName: true,
+				bio: true,
+				avatarUrl: true,
+				coverUrl: true,
+				location: true,
+				website: true,
+				postCount: true,
+				followersCount: true,
+				followingCount: true,
+				createdAt: true,
+			},
 		});
 
 		if (!user) {
-			return c.json({ message: "User not found" }, HttpStatus.NOT_FOUND.code);
+			throw Error("User not found");
 		}
 
 		const isOwnProfile = authenticatedUserId === user.id;
+
 		const [follow, blockRelationships] = await Promise.all([
 			authenticatedUserId && !isOwnProfile
 				? prisma.follow.findUnique({
@@ -67,10 +65,13 @@ const getUserByUsernameRoute = defineOpenAPIRoute<
 				: null,
 			getBlockRelationships(authenticatedUserId, [user.id]),
 		]);
+
 		const isBlockedByAuthenticatedUser =
 			blockRelationships.blockedByAuthenticatedUserIds.has(user.id);
+
 		const hasBlockedAuthenticatedInUser =
 			blockRelationships.hasBlockedAuthenticatedUserIds.has(user.id);
+
 		const visibleUser = hasBlockedAuthenticatedInUser
 			? {
 					...user,

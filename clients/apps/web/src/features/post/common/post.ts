@@ -1,14 +1,5 @@
 import type { Comment } from "@/features/comment";
-
-export type PostAuthor = {
-	id: string;
-	name: string;
-	handle: string;
-	avatar: string;
-	isOwnProfile?: boolean;
-	isBlockedByAuthenticatedUser?: boolean;
-	hasBlockedAuthenticatedInUser?: boolean;
-};
+import type { User } from "@/features/user/common/user";
 
 export type PostFileItem = {
 	id?: string;
@@ -32,8 +23,7 @@ export type PostMediaItem = {
 
 export type Post = {
 	id: string;
-	authorId?: string;
-	author?: PostAuthor | null;
+	author: User;
 	text?: string;
 	content?: string;
 	medias?: PostMediaItem[];

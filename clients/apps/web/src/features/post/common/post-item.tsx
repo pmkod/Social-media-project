@@ -200,6 +200,11 @@ export function PostItem({ post }: PostItemProps) {
 	const unlikePost = useUnlikePost();
 	const addBookmark = useAddBookmark();
 	const removeBookmark = useRemoveBookmark();
+	const authorName =
+		post.author?.displayName ||
+		post.author?.fullName ||
+		post.author?.username ||
+		"Author";
 
 	const handleLike = (e: React.MouseEvent) => {
 		e.stopPropagation();
@@ -230,12 +235,12 @@ export function PostItem({ post }: PostItemProps) {
 				<UserProfileHoverCard user={post.author}>
 					<img
 						src={
-							post.author?.avatar ||
+							post.author?.avatarUrl ||
 							`https://ui-avatars.com/api/?name=${encodeURIComponent(
-								post.author?.name || "U",
+								authorName,
 							)}&background=random`
 						}
-						alt={post.author?.name || "Author"}
+						alt={authorName}
 						className="size-12 rounded-full object-cover ring-1 ring-border"
 					/>
 				</UserProfileHoverCard>
@@ -248,10 +253,10 @@ export function PostItem({ post }: PostItemProps) {
 							<UserProfileHoverCard user={post.author}>
 								<span className="flex min-w-0 items-center gap-1.5 hover:underline">
 									<span className="truncate text-base font-semibold text-foreground">
-										{post.author?.name}
+										{authorName}
 									</span>
 									<span className="truncate text-sm text-muted-foreground">
-										@{post.author?.handle}
+										@{post.author?.username}
 									</span>
 								</span>
 							</UserProfileHoverCard>
@@ -267,7 +272,7 @@ export function PostItem({ post }: PostItemProps) {
 						<PostActionsDropdown
 							user={{
 								id: post.author?.id,
-								username: post.author?.handle ?? "user",
+								username: post.author?.username ?? "user",
 								isOwnProfile: post.author?.isOwnProfile,
 								isBlockedByAuthenticatedUser:
 									post.author?.isBlockedByAuthenticatedUser,

@@ -13,6 +13,7 @@ import {
 import { FollowButton } from "@/features/user/common/follow-button.tsx";
 import { useUserProfile } from "@/features/user/user-profile/use-user-profile.ts";
 import type { User } from "../common/user.ts";
+import { ExceptionBlock } from "@/core/components/ui/exception-block.tsx";
 
 const numberFormatter = new Intl.NumberFormat("en-US", {
 	notation: "compact",
@@ -24,38 +25,33 @@ const joinedDateFormatter = new Intl.DateTimeFormat("en-US", {
 });
 
 type UserProfileHoverCardProps = {
-	user?: { username?: string | null; handle?: string | null } | null;
+	user: User;
 	children: ReactNode;
 };
 
 function UserProfileHoverCard({ user, children }: UserProfileHoverCardProps) {
-	const profileUsername = user?.username ?? user?.handle ?? "";
-	const profileQuery = useUserProfile({ username: profileUsername });
-	const profileUser = profileQuery.data?.user;
+	const profileQuery = useUserProfile({ username: user.username });
 
 	return (
 		<HoverCard openDelay={300} closeDelay={120}>
 			<HoverCardTrigger asChild>{children}</HoverCardTrigger>
 
-			{profileUsername ? (
-				<HoverCardContent
-					align="start"
-					sideOffset={8}
-					className="w-[min(20rem,calc(100vw-2rem))] p-4"
-				>
-					{profileQuery.isLoading ? (
+			<HoverCardContent
+				align="start"
+				sideOffset={8}
+				className="w-[min(20rem,calc(100vw-2rem))] p-4"
+			>
+				{
+					profileQuery.isLoading ? (
 						<div className="flex items-center justify-center py-8 text-muted-foreground">
 							<RiLoader4Line className="size-5 animate-spin" />
 						</div>
-					) : profileQuery.isError || !profileUser ? (
-						<p className="py-3 text-sm text-muted-foreground">
-							Profile unavailable.
-						</p>
-					) : (
-						<UserProfilePreview user={profileUser} />
-					)}
-				</HoverCardContent>
-			) : null}
+					) : profileQuery.isError ? (
+						<ExceptionBlock title="Erreur de chargement" description="" />
+					) : null
+					// <UserProfilePreview user={profileUser} />
+				}
+			</HoverCardContent>
 		</HoverCard>
 	);
 }

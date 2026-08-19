@@ -109,7 +109,7 @@ function CreateCommentForm({
 								onBlur={field.handleBlur}
 								placeholder={
 									parentComment
-										? `Reply to @${parentComment.author?.handle ?? "user"}...`
+										? `Reply to @${parentComment.author?.username ?? "user"}...`
 										: "Post your comment..."
 								}
 								disabled={isPending}
