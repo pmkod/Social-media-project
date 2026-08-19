@@ -9,16 +9,17 @@ const buttonVariants = cva(
 	{
 		variants: {
 			variant: {
-				default: "bg-primary text-primary-foreground hover:bg-primary/90",
-				destructive:
-					"bg-destructive text-white hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:bg-destructive/60 dark:focus-visible:ring-destructive/40",
+				default: "",
 				outline:
-					"border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50",
-				secondary:
-					"bg-secondary text-secondary-foreground hover:bg-secondary/80",
-				ghost:
-					"hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
-				link: "text-primary underline-offset-4 hover:underline",
+					"border bg-background shadow-xs dark:border-input dark:bg-input/30",
+				secondary: "",
+				ghost: "",
+				link: "underline-offset-4 hover:underline",
+			},
+			colorScheme: {
+				primary: "",
+				destructive: "",
+				white: "",
 			},
 			fullWidth: {
 				true: "w-full",
@@ -35,8 +36,92 @@ const buttonVariants = cva(
 				"icon-lg": "size-10",
 			},
 		},
+		compoundVariants: [
+			{
+				variant: "default",
+				colorScheme: "primary",
+				class: "bg-primary text-primary-foreground hover:bg-primary/90",
+			},
+			{
+				variant: "default",
+				colorScheme: "destructive",
+				class:
+					"bg-destructive text-white hover:bg-destructive/90 focus-visible:border-destructive/40 focus-visible:ring-destructive/20 dark:bg-destructive/60 dark:focus-visible:ring-destructive/40",
+			},
+			{
+				variant: "outline",
+				colorScheme: "primary",
+				class:
+					"hover:bg-accent hover:text-accent-foreground dark:hover:bg-input/50",
+			},
+			{
+				variant: "outline",
+				colorScheme: "destructive",
+				class:
+					"border-destructive text-destructive hover:bg-destructive/10 focus-visible:border-destructive/40 focus-visible:ring-destructive/20 dark:hover:bg-destructive/20",
+			},
+			{
+				variant: "secondary",
+				colorScheme: "primary",
+				class: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
+			},
+			{
+				variant: "secondary",
+				colorScheme: "destructive",
+				class:
+					"bg-destructive/10 text-destructive hover:bg-destructive/20 dark:bg-destructive/20 dark:hover:bg-destructive/30",
+			},
+			{
+				variant: "ghost",
+				colorScheme: "primary",
+				class:
+					"hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
+			},
+			{
+				variant: "ghost",
+				colorScheme: "destructive",
+				class:
+					"text-destructive hover:bg-destructive/10 dark:hover:bg-destructive/20",
+			},
+			{
+				variant: "link",
+				colorScheme: "primary",
+				class: "text-primary",
+			},
+			{
+				variant: "link",
+				colorScheme: "destructive",
+				class: "text-destructive",
+			},
+			{
+				variant: "default",
+				colorScheme: "white",
+				class: "bg-white text-black hover:bg-white/90",
+			},
+			{
+				variant: "outline",
+				colorScheme: "white",
+				class: "border-white text-white hover:bg-white/10",
+			},
+			{
+				variant: "secondary",
+				colorScheme: "white",
+				class: "bg-white/10 text-white hover:bg-white/20",
+			},
+			{
+				variant: "ghost",
+				colorScheme: "white",
+				class: "text-white hover:bg-white/10",
+			},
+			{
+				variant: "link",
+				colorScheme: "white",
+				class: "text-white",
+			},
+		],
 		defaultVariants: {
 			variant: "default",
+			colorScheme: "primary",
 			size: "default",
 		},
 	},
@@ -45,6 +130,7 @@ const buttonVariants = cva(
 function Button({
 	className,
 	variant = "default",
+	colorScheme = "primary",
 	size = "default",
 	fullWidth = false,
 	asChild = false,
@@ -59,8 +145,11 @@ function Button({
 		<Comp
 			data-slot="button"
 			data-variant={variant}
+			data-color-scheme={colorScheme}
 			data-size={size}
-			className={cn(buttonVariants({ variant, size, fullWidth, className }))}
+			className={cn(
+				buttonVariants({ variant, colorScheme, size, fullWidth, className }),
+			)}
 			{...props}
 		/>
 	);

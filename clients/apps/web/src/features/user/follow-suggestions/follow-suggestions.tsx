@@ -1,20 +1,16 @@
-import { RiLoader4Line } from "@remixicon/react";
-import { Link } from "@tanstack/react-router";
 import {
 	Card,
 	CardContent,
 	CardHeader,
 	CardTitle,
 } from "@/core/components/ui/card.tsx";
-import { FollowButton } from "@/features/user/common/follow-button.tsx";
+import { ExceptionBlock } from "@/core/components/ui/exception-block.tsx";
+import { UserRowItem } from "@/features/user/common/components/user-row-item.tsx";
+import { UserRowItemListLoader } from "@/features/user/common/components/user-row-item-list-loader.tsx";
 import { useFollowSuggestions } from "./use-follow-suggestions.ts";
 
 function FollowSuggestions() {
-	const { data, isLoading, isError } = useFollowSuggestions();
-
-	if (isError) {
-		return null;
-	}
+	const { data, isLoading, isError, refetch } = useFollowSuggestions();
 
 	return (
 		<aside className="hidden lg:block w-100 pt-4 pr-4 h-screen sticky top-0 overflow-y-auto">
@@ -24,48 +20,24 @@ function FollowSuggestions() {
 				</CardHeader>
 				<CardContent paddingZero>
 					{isLoading ? (
-						<div className="flex items-center justify-center py-8">
-							<RiLoader4Line className="size-6 animate-spin text-sky-500" />
-						</div>
+						<UserRowItemListLoader className="pb-4" />
+					) : isError ? (
+						<ExceptionBlock
+							title="Impossible de charger les suggestions"
+							description="Une erreur s'est produite lors du chargement des profils à suivre."
+							onRefresh={() => void refetch()}
+							borderless
+							className="min-h-48"
+						/>
 					) : data?.users.length === 0 ? (
 						<div className="py-6 px-6 text-center text-sm text-muted-foreground">
 							Aucune suggestion pour le moment
 						</div>
 					) : (
 						<div className="pb-4">
-							{data?.users.map((user) => {
-								const displayName = user.fullName || user.username;
-								const avatar =
-									user.avatarUrl ||
-									`https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=random`;
-								return (
-									<div
-										key={user.id}
-										className="flex items-center justify-between gap-3 hover:bg-gray-100/80 dark:hover:bg-gray-800/50 py-3 px-6 transition-colors"
-									>
-										<Link
-											to="/$username"
-											params={{ username: `@${user.username}` }}
-											className="flex items-center gap-2.5 min-w-0 flex-1 group"
-										>
-											<img
-												src={avatar}
-												alt={displayName}
-												className="size-10 shrink-0 rounded-full object-cover ring-1 ring-border"
-											/>
-											<div className="min-w-0 flex-1">
-												<div className="font-semibold text-foreground truncate group-hover:underline text-sm">
-													{displayName}
-												</div>
-												<div className="text-xs text-muted-foreground truncate">
-													@{user.username}
-												</div>
-											</div>
-										</Link>
-										<FollowButton user={user} />
-									</div>
-								);
-							})}
+							{data?.users.map((user) => (
+								<UserRowItem key={user.id} user={user} />
+							))}
 						</div>
 					)}
 				</CardContent>

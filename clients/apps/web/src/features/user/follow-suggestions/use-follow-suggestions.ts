@@ -3,12 +3,8 @@ import { httpClient } from "@/core/http-clients/http-client.ts";
 import type { User } from "../common/user.ts";
 import { userListQueryKeys } from "../common/user-list.query-keys.ts";
 
-type FollowSuggestion = User & {
-	isFollowedByAuthenticatedUser: boolean;
-};
-
 type FollowSuggestionsResponse = {
-	users: FollowSuggestion[];
+	users: User[];
 };
 
 const useFollowSuggestions = () => {

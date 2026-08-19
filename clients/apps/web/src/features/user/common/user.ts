@@ -1,7 +1,6 @@
 type User = {
 	id: string;
-	fullName: string | null;
-	displayName?: string | null;
+	fullName: string;
 	username: string;
 	email?: string;
 	bio?: string | null;
