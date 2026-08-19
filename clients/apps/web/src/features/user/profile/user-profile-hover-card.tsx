@@ -1,19 +1,16 @@
-import {
-	RiCalendar2Line,
-	RiLinkM,
-	RiLoader4Line,
-	RiMapPin2Line,
-} from "@remixicon/react";
+import { RiCalendar2Line, RiLinkM, RiMapPin2Line } from "@remixicon/react";
 import type { ReactNode } from "react";
+import { ExceptionBlock } from "@/core/components/ui/exception-block.tsx";
 import {
 	HoverCard,
 	HoverCardContent,
 	HoverCardTrigger,
 } from "@/core/components/ui/hover-card.tsx";
+import { Skeleton } from "@/core/components/ui/skeleton.tsx";
+import { cn } from "@/core/lib/utils.ts";
 import { FollowButton } from "@/features/user/common/follow-button.tsx";
 import { useUserProfile } from "@/features/user/user-profile/use-user-profile.ts";
 import type { User } from "../common/user.ts";
-import { ExceptionBlock } from "@/core/components/ui/exception-block.tsx";
 
 const numberFormatter = new Intl.NumberFormat("en-US", {
 	notation: "compact",
@@ -24,6 +21,40 @@ const joinedDateFormatter = new Intl.DateTimeFormat("en-US", {
 	year: "numeric",
 });
 
+type UserProfilePreviewLoaderProps = {
+	className?: string;
+};
+
+function UserProfilePreviewLoader({
+	className,
+}: UserProfilePreviewLoaderProps) {
+	return (
+		<div className={cn("space-y-5", className)} aria-hidden="true">
+			{/* Top Row: Avatar & Follow Button */}
+			<div className="flex items-start justify-between gap-3">
+				<Skeleton className="size-16 rounded-full shrink-0" />
+				<Skeleton className="h-8 w-20 rounded-full shrink-0" />
+			</div>
+
+			<div className="space-y-1.5">
+				<Skeleton className="h-4 w-32 rounded" />
+				<Skeleton className="h-3.5 w-20 rounded" />
+			</div>
+
+			<div className="space-y-1.5">
+				<Skeleton className="h-3.5 w-full rounded" />
+				<Skeleton className="h-3.5 w-4/5 rounded" />
+			</div>
+
+			{/* Meta details (location, website, joined date) */}
+			<div className="flex flex-wrap gap-x-3 gap-y-1.5">
+				<Skeleton className="h-3.5 w-14 rounded" />
+				<Skeleton className="h-3.5 w-16 rounded" />
+			</div>
+		</div>
+	);
+}
+
 type UserProfileHoverCardProps = {
 	user: User;
 	children: ReactNode;
@@ -31,6 +62,7 @@ type UserProfileHoverCardProps = {
 
 function UserProfileHoverCard({ user, children }: UserProfileHoverCardProps) {
 	const profileQuery = useUserProfile({ username: user.username });
+	const profileUser = profileQuery.data?.user ?? user;
 
 	return (
 		<HoverCard openDelay={300} closeDelay={120}>
@@ -41,16 +73,17 @@ function UserProfileHoverCard({ user, children }: UserProfileHoverCardProps) {
 				sideOffset={8}
 				className="w-[min(20rem,calc(100vw-2rem))] p-4"
 			>
-				{
-					profileQuery.isLoading ? (
-						<div className="flex items-center justify-center py-8 text-muted-foreground">
-							<RiLoader4Line className="size-5 animate-spin" />
-						</div>
-					) : profileQuery.isError ? (
-						<ExceptionBlock title="Erreur de chargement" description="" />
-					) : null
-					// <UserProfilePreview user={profileUser} />
-				}
+				{profileQuery.isLoading ? (
+					<UserProfilePreviewLoader />
+				) : true ? (
+					<ExceptionBlock
+						title="Unable to load profile"
+						onRefresh={profileQuery.refetch}
+						borderless
+					/>
+				) : (
+					<UserProfilePreview user={profileUser} />
+				)}
 			</HoverCardContent>
 		</HoverCard>
 	);
@@ -154,4 +187,5 @@ function UserProfilePreview({ user }: UserProfilePreviewProps) {
 	);
 }
 
-export { UserProfileHoverCard };
+export { UserProfileHoverCard, UserProfilePreviewLoader };
+export type { UserProfileHoverCardProps, UserProfilePreviewLoaderProps };

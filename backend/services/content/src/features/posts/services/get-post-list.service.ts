@@ -99,27 +99,6 @@ const getPostList = async ({
 				},
 				orderBy: { position: "asc" },
 			},
-			comments: {
-				where: {
-					parentId: null,
-					...(hiddenUserIds.length > 0
-						? { authorId: { notIn: hiddenUserIds } }
-						: {}),
-				},
-				take: 2,
-				orderBy: { createdAt: "desc" },
-				select: {
-					id: true,
-					postId: true,
-					authorId: true,
-					parentId: true,
-					content: true,
-					likesCount: true,
-					repliesCount: true,
-					createdAt: true,
-					updatedAt: true,
-				},
-			},
 		},
 	});
 
@@ -131,14 +110,7 @@ const getPostList = async ({
 			? { id: lastItem.id, createdAt: lastItem.createdAt.toISOString() }
 			: null;
 	const postIds = items.map((post) => post.id);
-	const authorIds = Array.from(
-		new Set([
-			...items.map((post) => post.authorId),
-			...items.flatMap((post) =>
-				post.comments.map((comment) => comment.authorId),
-			),
-		]),
-	);
+	const authorIds = Array.from(new Set(items.map((post) => post.authorId)));
 
 	const [authorsMap, likedPostIds, bookmarkedPostIds] = await Promise.all([
 		userServiceClient.fetchAuthorsBatch(authorIds, authenticatedUserId),
@@ -170,10 +142,6 @@ const getPostList = async ({
 			isLikedByAuthenticatedUser: likedPostIds.has(post.id),
 			isBookmarkedByAuthenticatedUser: bookmarkedPostIds.has(post.id),
 			author: authorsMap.get(post.authorId) ?? null,
-			comments: post.comments.map((comment) => ({
-				...comment,
-				author: authorsMap.get(comment.authorId) ?? null,
-			})),
 		})),
 		pagination: { nextCursor, hasNextPage, limit },
 	};

@@ -13,8 +13,8 @@ import {
 import { cn } from "@/core/lib/utils.ts";
 
 type ExceptionBlockProps = {
-	title: React.ReactNode;
-	description: React.ReactNode;
+	title?: React.ReactNode;
+	description?: React.ReactNode;
 	onRefresh?: () => void;
 	borderless?: boolean;
 	className?: string;
@@ -30,7 +30,7 @@ function ExceptionBlock({
 	return (
 		<Empty
 			className={cn(
-				"min-h-56 bg-background",
+				" bg-background",
 				borderless ? "border-0" : "border border-border",
 				className,
 				borderless && "border-0",

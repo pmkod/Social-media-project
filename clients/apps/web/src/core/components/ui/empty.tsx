@@ -21,7 +21,7 @@ function EmptyHeader({ className, ...props }: React.ComponentProps<"div">) {
 		<div
 			data-slot="empty-header"
 			className={cn(
-				"flex max-w-sm flex-col items-center gap-2 text-center",
+				"flex max-w-sm flex-col items-center gap-1 text-center",
 				className,
 			)}
 			{...props}

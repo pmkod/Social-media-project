@@ -5,7 +5,7 @@ export type Comment = {
 	postId: string;
 	authorId?: string;
 	parentId?: string | null;
-	author?: User | null;
+	author: User;
 	content: string;
 	createdAt: string;
 	updatedAt?: string;

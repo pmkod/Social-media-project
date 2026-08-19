@@ -200,12 +200,6 @@ export function PostItem({ post }: PostItemProps) {
 	const unlikePost = useUnlikePost();
 	const addBookmark = useAddBookmark();
 	const removeBookmark = useRemoveBookmark();
-	const authorName =
-		post.author?.displayName ||
-		post.author?.fullName ||
-		post.author?.username ||
-		"Author";
-
 	const handleLike = (e: React.MouseEvent) => {
 		e.stopPropagation();
 		if (isLiked) {
@@ -237,10 +231,10 @@ export function PostItem({ post }: PostItemProps) {
 						src={
 							post.author?.avatarUrl ||
 							`https://ui-avatars.com/api/?name=${encodeURIComponent(
-								authorName,
+								post.author.fullName,
 							)}&background=random`
 						}
-						alt={authorName}
+						alt={post.author.fullName}
 						className="size-12 rounded-full object-cover ring-1 ring-border"
 					/>
 				</UserProfileHoverCard>
@@ -251,14 +245,14 @@ export function PostItem({ post }: PostItemProps) {
 					<div className="flex items-center justify-between gap-2">
 						<div className="flex min-w-0 flex-wrap items-center gap-1.5 text-lg">
 							<UserProfileHoverCard user={post.author}>
-								<span className="flex min-w-0 items-center gap-1.5 hover:underline">
+								<div className="flex min-w-0 items-center gap-1.5 cursor-pointer">
 									<span className="truncate text-base font-semibold text-foreground">
-										{authorName}
+										{post.author.fullName}
 									</span>
 									<span className="truncate text-sm text-muted-foreground">
 										@{post.author?.username}
 									</span>
-								</span>
+								</div>
 							</UserProfileHoverCard>
 							<span className="text-sm text-muted-foreground">·</span>
 							<Link

@@ -37,11 +37,6 @@ export function CommentItem({
 		? (repliesQuery.data?.pages.flatMap((page) => page.data) ?? [])
 		: [];
 	const repliesCount = comment.repliesCount ?? 0;
-	const authorName =
-		comment.author?.displayName ||
-		comment.author?.fullName ||
-		comment.author?.username ||
-		"Author";
 
 	const toggleLike = () => {
 		if (likeComment.isPending || unlikeComment.isPending) return;
@@ -64,10 +59,10 @@ export function CommentItem({
 					src={
 						comment.author?.avatarUrl ||
 						`https://ui-avatars.com/api/?name=${encodeURIComponent(
-							authorName,
+							comment.author.fullName,
 						)}&background=random`
 					}
-					alt={authorName}
+					alt={comment.author.fullName}
 					className={cn(
 						"rounded-full object-cover shrink-0 ring-1 ring-border",
 						isReply ? "size-8" : "size-10",
@@ -77,14 +72,14 @@ export function CommentItem({
 			<div className="flex-1 min-w-0">
 				<div className="flex items-baseline gap-1.5 flex-wrap">
 					<UserProfileHoverCard user={comment.author}>
-						<span className="flex min-w-0 items-baseline gap-1.5 hover:underline">
+						<div className="flex min-w-0 items-baseline gap-1 cursor-pointer">
 							<span className="truncate text-sm font-semibold text-foreground">
-								{authorName}
+								{comment.author.fullName}
 							</span>
 							<span className="truncate text-xs text-muted-foreground">
-								@{comment.author?.username}
+								@{comment.author.username}
 							</span>
-						</span>
+						</div>
 					</UserProfileHoverCard>
 					<span className="text-xs text-muted-foreground">·</span>
 					<span className="text-xs text-muted-foreground">
