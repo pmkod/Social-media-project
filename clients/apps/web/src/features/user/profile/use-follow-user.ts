@@ -4,7 +4,7 @@ import { postListQueryKeys } from "@/features/post/common/post-list.query-keys.t
 import type { User } from "../common/user.ts";
 import { authenticatedUserQueryKey } from "../get-authenticated-user/authenticated-user.query-key.ts";
 import { userConnectionsQueryKeys } from "./user-connections.query-keys.ts";
-import { userProfileQueryKeys } from "./user-profile.query-keys.ts";
+import { userDetailsQueryKeys } from "./user-details-query-keys.ts";
 
 type FollowResponse = {
 	success: boolean;
@@ -14,7 +14,7 @@ type FollowResponse = {
 
 const useFollowUser = (username: string) => {
 	const queryClient = useQueryClient();
-	const queryKey = userProfileQueryKeys.byUsername(username);
+	const queryKey = userDetailsQueryKeys.byUsername(username);
 
 	return useMutation({
 		mutationFn: (userId: string) =>

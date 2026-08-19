@@ -21,7 +21,7 @@ const FollowSuggestionItem = z.object({
 });
 
 const FollowSuggestionsResponseBody = z.object({
-	suggestions: z.array(FollowSuggestionItem),
+	users: z.array(FollowSuggestionItem),
 });
 
 const routeDef = createRoute({
@@ -94,7 +94,7 @@ const getFollowSuggestionsRoute = defineOpenAPIRoute<
 			},
 		});
 
-		const suggestions = candidates.map((user) => {
+		const users = candidates.map((user) => {
 			const name = user.fullName || user.displayName || user.username;
 			const handle = `@${user.username}`;
 			return {
@@ -113,7 +113,7 @@ const getFollowSuggestionsRoute = defineOpenAPIRoute<
 			};
 		});
 
-		return c.json({ suggestions });
+		return c.json({ users });
 	},
 });
 

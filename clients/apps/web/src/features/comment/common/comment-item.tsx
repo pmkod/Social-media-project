@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Button } from "@/core/components/ui/button.tsx";
 import { cn } from "@/core/lib/utils.ts";
 import { formatCommentCreationDate } from "@/features/post/common/post.utils.ts";
-import { UserProfileLink } from "@/features/user/common/user-profile-link.tsx";
+import { UserProfileHoverCard } from "@/features/user/profile/user-profile-hover-card.tsx";
 import { CreateCommentForm } from "../create-comment/create-comment-form.tsx";
 import { useCommentReplies } from "../get-comments/use-comment-replies.ts";
 import { useLikeComment } from "../like-comment/use-like-comment.ts";
@@ -54,7 +54,7 @@ export function CommentItem({
 				isReply && "border-b-0 py-3 pr-0",
 			)}
 		>
-			<UserProfileLink
+			<UserProfileHoverCard
 				username={comment.author?.handle}
 				className="h-fit shrink-0 rounded-full"
 			>
@@ -71,10 +71,10 @@ export function CommentItem({
 						isReply ? "size-8" : "size-10",
 					)}
 				/>
-			</UserProfileLink>
+			</UserProfileHoverCard>
 			<div className="flex-1 min-w-0">
 				<div className="flex items-baseline gap-1.5 flex-wrap">
-					<UserProfileLink
+					<UserProfileHoverCard
 						username={comment.author?.handle}
 						className="flex min-w-0 items-baseline gap-1.5 hover:underline"
 					>
@@ -84,7 +84,7 @@ export function CommentItem({
 						<span className="truncate text-xs text-muted-foreground">
 							@{comment.author?.handle}
 						</span>
-					</UserProfileLink>
+					</UserProfileHoverCard>
 					<span className="text-xs text-muted-foreground">·</span>
 					<span className="text-xs text-muted-foreground">
 						{formatCommentCreationDate(comment.createdAt)}

@@ -14,11 +14,11 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { cn } from "@/core/lib/utils.ts";
 import { useAddBookmark } from "@/features/bookmark/use-add-bookmark.ts";
 import { useRemoveBookmark } from "@/features/bookmark/use-remove-bookmark.ts";
-import { UserProfileLink } from "@/features/user/common/user-profile-link.tsx";
+import { CommentItem } from "@/features/comment";
+import { UserProfileHoverCard } from "@/features/user/profile/user-profile-hover-card.tsx";
 import { useLikePost } from "../like-post/use-like-post.ts";
 import { buildImageUrl, buildVideoUrl } from "../post-media.functions.ts";
 import { useUnlikePost } from "../unlike-post/use-unlike-post.ts";
-import { CommentItem } from "@/features/comment";
 import type { Post, PostMediaItem } from "./post.ts";
 import { formatPostCreationDate } from "./post.utils.ts";
 
@@ -227,7 +227,7 @@ export function PostItem({ post }: PostItemProps) {
 		<article className="border-x border-t last:border-b first:rounded-t-xl last:rounded-b-xl border-border p-4 hover:bg-muted/30 transition-colors">
 			<div className="flex gap-3">
 				{/* Avatar */}
-				<UserProfileLink
+				<UserProfileHoverCard
 					username={post.author?.handle}
 					className="h-fit shrink-0 rounded-full"
 					onClick={(event) => event.stopPropagation()}
@@ -242,14 +242,14 @@ export function PostItem({ post }: PostItemProps) {
 						alt={post.author?.name || "Auteur"}
 						className="size-12 rounded-full object-cover ring-1 ring-border"
 					/>
-				</UserProfileLink>
+				</UserProfileHoverCard>
 
 				{/* Content Container */}
 				<div className="flex-1 min-w-0">
 					{/* Header */}
 					<div className="flex items-center justify-between gap-2">
 						<div className="flex min-w-0 flex-wrap items-center gap-1.5 text-lg">
-							<UserProfileLink
+							<UserProfileHoverCard
 								username={post.author?.handle}
 								className="flex min-w-0 items-center gap-1.5 hover:underline"
 								onClick={(event) => event.stopPropagation()}
@@ -260,7 +260,7 @@ export function PostItem({ post }: PostItemProps) {
 								<span className="truncate text-sm text-muted-foreground">
 									@{post.author?.handle}
 								</span>
-							</UserProfileLink>
+							</UserProfileHoverCard>
 							<span className="text-sm text-muted-foreground">·</span>
 							<Link
 								to="/posts/$postId"

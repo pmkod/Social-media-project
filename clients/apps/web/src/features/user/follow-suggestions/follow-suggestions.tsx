@@ -1,6 +1,6 @@
 import { RiLoader4Line, RiUserAddLine } from "@remixicon/react";
-import { Link } from "@tanstack/react-router";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Link } from "@tanstack/react-router";
 import { Button } from "@/core/components/ui/button.tsx";
 import {
 	Card,
@@ -9,23 +9,27 @@ import {
 	CardTitle,
 } from "@/core/components/ui/card.tsx";
 import { httpClient } from "@/core/http-clients/http-client.ts";
-import { authenticatedUserQueryKey } from "@/features/user/get-authenticated-user/authenticated-user.query-key.ts";
 import { postListQueryKeys } from "@/features/post/common/post-list.query-keys.ts";
+import { userListQueryKeys } from "@/features/user/common/user-list.query-keys.ts";
+import { authenticatedUserQueryKey } from "@/features/user/get-authenticated-user/authenticated-user.query-key.ts";
 import { userConnectionsQueryKeys } from "@/features/user/profile/user-connections.query-keys.ts";
-import { followSuggestionsQueryKey } from "./follow-suggestions.query-key.ts";
 import { useFollowSuggestions } from "./use-follow-suggestions.ts";
 
 function FollowSuggestions() {
-	const { suggestions, isLoading, isError } = useFollowSuggestions(6);
+	const { data, isLoading, isError } = useFollowSuggestions();
 	const queryClient = useQueryClient();
 
 	const followMutation = useMutation({
 		mutationFn: (userId: string) =>
 			httpClient.post(`users/${userId}/followers`).json(),
 		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: followSuggestionsQueryKey });
+			// queryClient.invalidateQueries({
+			// 	queryKey: userListQueryKeys.followSuggestions(),
+			// });
 			queryClient.invalidateQueries({ queryKey: authenticatedUserQueryKey });
-			queryClient.invalidateQueries({ queryKey: userConnectionsQueryKeys.root });
+			queryClient.invalidateQueries({
+				queryKey: userConnectionsQueryKeys.root,
+			});
 			queryClient.invalidateQueries({
 				queryKey: postListQueryKeys.feedFollowing(),
 			});
@@ -47,18 +51,14 @@ function FollowSuggestions() {
 						<div className="flex items-center justify-center py-8">
 							<RiLoader4Line className="size-6 animate-spin text-sky-500" />
 						</div>
-					) : suggestions.length === 0 ? (
+					) : data?.users.length === 0 ? (
 						<div className="py-6 px-6 text-center text-sm text-muted-foreground">
 							Aucune suggestion pour le moment
 						</div>
 					) : (
 						<div className="pb-4">
-							{suggestions.map((suggestion) => {
-								const displayName =
-									suggestion.name ||
-									suggestion.fullName ||
-									suggestion.displayName ||
-									suggestion.username;
+							{data?.users.map((suggestion) => {
+								const displayName = suggestion.fullName || suggestion.username;
 								const avatar =
 									suggestion.avatarUrl ||
 									`https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=random`;
