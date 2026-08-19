@@ -4,8 +4,8 @@ import { Button } from "@/core/components/ui/button.tsx";
 import { cn } from "@/core/lib/utils.ts";
 import { formatCommentCreationDate } from "@/features/post/common/post.utils.ts";
 import { UserProfileHoverCard } from "@/features/user/profile/user-profile-hover-card.tsx";
-import { CreateCommentForm } from "../create-comment/create-comment-form.tsx";
 import { useCommentReplies } from "../comments/use-comment-replies.ts";
+import { CreateCommentForm } from "../create-comment/create-comment-form.tsx";
 import { useLikeComment } from "../like-comment/use-like-comment.ts";
 import { useUnlikeComment } from "../unlike-comment/use-unlike-comment.ts";
 import type { Comment } from "./comment.ts";
@@ -27,10 +27,10 @@ export function CommentItem({
 	const likeComment = useLikeComment();
 	const unlikeComment = useUnlikeComment();
 	const rootCommentId = comment.parentId ?? comment.id;
-	const repliesQuery = useCommentReplies(
-		rootCommentId,
-		!compact && !isReply && areRepliesExpanded,
-	);
+	const repliesQuery = useCommentReplies({
+		commentId: rootCommentId,
+		enabled: !compact && !isReply && areRepliesExpanded,
+	});
 
 	const isLiked = comment.isLikedByAuthenticatedUser ?? false;
 	const replies = areRepliesExpanded
@@ -54,10 +54,7 @@ export function CommentItem({
 				isReply && "border-b-0 py-3 pr-0",
 			)}
 		>
-			<UserProfileHoverCard
-				user={comment.author}
-				className="h-fit shrink-0 rounded-full"
-			>
+			<UserProfileHoverCard user={comment.author}>
 				<img
 					src={
 						comment.author?.avatar ||
@@ -74,15 +71,14 @@ export function CommentItem({
 			</UserProfileHoverCard>
 			<div className="flex-1 min-w-0">
 				<div className="flex items-baseline gap-1.5 flex-wrap">
-					<UserProfileHoverCard
-						user={comment.author}
-						className="flex min-w-0 items-baseline gap-1.5 hover:underline"
-					>
-						<span className="truncate text-sm font-semibold text-foreground">
-							{comment.author?.name}
-						</span>
-						<span className="truncate text-xs text-muted-foreground">
-							@{comment.author?.handle}
+					<UserProfileHoverCard user={comment.author}>
+						<span className="flex min-w-0 items-baseline gap-1.5 hover:underline">
+							<span className="truncate text-sm font-semibold text-foreground">
+								{comment.author?.name}
+							</span>
+							<span className="truncate text-xs text-muted-foreground">
+								@{comment.author?.handle}
+							</span>
 						</span>
 					</UserProfileHoverCard>
 					<span className="text-xs text-muted-foreground">·</span>

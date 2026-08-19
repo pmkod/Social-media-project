@@ -19,7 +19,12 @@ type ProfilePostsResponse = {
 	};
 };
 
-const useUserProfilePosts = (userId: string, type: ProfilePostListType) =>
+type UseUserProfilePostsParams = {
+	userId: string;
+	type: ProfilePostListType;
+};
+
+const useUserProfilePosts = ({ userId, type }: UseUserProfilePostsParams) =>
 	useInfiniteQuery({
 		queryKey:
 			type === "posts"

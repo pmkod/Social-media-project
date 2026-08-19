@@ -5,7 +5,13 @@ import type { BookmarkCollection } from "./common/bookmark-collection.ts";
 
 type CollectionsResponse = { collections: BookmarkCollection[] };
 
-const useBookmarkCollections = (userId?: string) =>
+type UseBookmarkCollectionsParams = {
+	userId?: string;
+};
+
+const useBookmarkCollections = ({
+	userId,
+}: UseBookmarkCollectionsParams = {}) =>
 	useQuery({
 		queryKey: userId
 			? bookmarkCollectionQueryKeys.user(userId)

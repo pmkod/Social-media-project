@@ -13,10 +13,15 @@ type BookmarksResponse = {
 	};
 };
 
-const useBookmarks = (
-	collectionId?: string,
-	{ enabled = true }: { enabled?: boolean } = {},
-) =>
+type UseBookmarksParams = {
+	collectionId?: string;
+	enabled?: boolean;
+};
+
+const useBookmarks = ({
+	collectionId,
+	enabled = true,
+}: UseBookmarksParams = {}) =>
 	useInfiniteQuery({
 		queryKey: collectionId
 			? postListQueryKeys.collectionPosts(collectionId)

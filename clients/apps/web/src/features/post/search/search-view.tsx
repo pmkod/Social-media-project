@@ -29,7 +29,7 @@ export function SearchView() {
 		isLoading,
 		isError,
 		refetch,
-	} = useSearchPosts(debouncedSearch);
+	} = useSearchPosts({ query: debouncedSearch });
 
 	useEffect(() => {
 		const target = observerTargetRef.current;

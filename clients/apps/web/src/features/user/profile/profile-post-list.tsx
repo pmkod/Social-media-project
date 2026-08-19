@@ -15,7 +15,7 @@ type ProfilePostListProps = {
 
 export function ProfilePostList({ userId, type }: ProfilePostListProps) {
 	const observerTargetRef = useRef<HTMLDivElement>(null);
-	const query = useUserProfilePosts(userId, type);
+	const query = useUserProfilePosts({ userId, type });
 
 	useEffect(() => {
 		const target = observerTargetRef.current;

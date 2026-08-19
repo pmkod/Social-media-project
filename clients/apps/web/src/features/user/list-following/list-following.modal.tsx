@@ -10,7 +10,7 @@ type ListFollowingModalProps = {
 const ListFollowingModal = create(
 	({ userId, username }: ListFollowingModalProps) => {
 		const modal = useModal();
-		const query = useListFollowing(userId);
+		const query = useListFollowing({ userId });
 
 		return (
 			<UserListModal

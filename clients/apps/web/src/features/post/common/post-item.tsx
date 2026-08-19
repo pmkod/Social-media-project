@@ -227,11 +227,7 @@ export function PostItem({ post }: PostItemProps) {
 		<article className="border-x border-t last:border-b first:rounded-t-xl last:rounded-b-xl border-border p-4 hover:bg-muted/30 transition-colors">
 			<div className="flex gap-3">
 				{/* Avatar */}
-				<UserProfileHoverCard
-					user={post.author}
-					className="h-fit shrink-0 rounded-full"
-					onClick={(event) => event.stopPropagation()}
-				>
+				<UserProfileHoverCard user={post.author}>
 					<img
 						src={
 							post.author?.avatar ||
@@ -249,16 +245,14 @@ export function PostItem({ post }: PostItemProps) {
 					{/* Header */}
 					<div className="flex items-center justify-between gap-2">
 						<div className="flex min-w-0 flex-wrap items-center gap-1.5 text-lg">
-							<UserProfileHoverCard
-								user={post.author}
-								className="flex min-w-0 items-center gap-1.5 hover:underline"
-								onClick={(event) => event.stopPropagation()}
-							>
-								<span className="truncate text-base font-semibold text-foreground">
-									{post.author?.name}
-								</span>
-								<span className="truncate text-sm text-muted-foreground">
-									@{post.author?.handle}
+							<UserProfileHoverCard user={post.author}>
+								<span className="flex min-w-0 items-center gap-1.5 hover:underline">
+									<span className="truncate text-base font-semibold text-foreground">
+										{post.author?.name}
+									</span>
+									<span className="truncate text-sm text-muted-foreground">
+										@{post.author?.handle}
+									</span>
 								</span>
 							</UserProfileHoverCard>
 							<span className="text-sm text-muted-foreground">·</span>

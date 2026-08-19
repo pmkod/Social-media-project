@@ -4,7 +4,7 @@ import {
 	RiLoader4Line,
 	RiMapPin2Line,
 } from "@remixicon/react";
-import type { MouseEventHandler, ReactNode } from "react";
+import type { ReactNode } from "react";
 import {
 	HoverCard,
 	HoverCardContent,
@@ -13,7 +13,6 @@ import {
 import { FollowButton } from "@/features/user/common/follow-button.tsx";
 import { useUserProfile } from "@/features/user/user-profile/use-user-profile.ts";
 import type { User } from "../common/user.ts";
-import { UserProfileLink } from "../common/user-profile-link.tsx";
 
 const numberFormatter = new Intl.NumberFormat("en-US", {
 	notation: "compact",
@@ -25,37 +24,18 @@ const joinedDateFormatter = new Intl.DateTimeFormat("en-US", {
 });
 
 type UserProfileHoverCardProps = {
-	user?: { username: string } | { handle: string } | null;
+	user?: { username?: string | null; handle?: string | null } | null;
 	children: ReactNode;
-	className?: string;
-	onClick?: MouseEventHandler<HTMLAnchorElement>;
 };
 
-function UserProfileHoverCard({
-	user,
-	children,
-	className,
-	onClick,
-}: UserProfileHoverCardProps) {
-	const profileUsername = user
-		? "username" in user
-			? user.username
-			: user.handle
-		: "";
-	const profileQuery = useUserProfile(profileUsername);
+function UserProfileHoverCard({ user, children }: UserProfileHoverCardProps) {
+	const profileUsername = user?.username ?? user?.handle ?? "";
+	const profileQuery = useUserProfile({ username: profileUsername });
 	const profileUser = profileQuery.data?.user;
 
 	return (
 		<HoverCard openDelay={300} closeDelay={120}>
-			<HoverCardTrigger asChild>
-				<UserProfileLink
-					username={profileUsername}
-					className={className}
-					onClick={onClick}
-				>
-					{children}
-				</UserProfileLink>
-			</HoverCardTrigger>
+			<HoverCardTrigger asChild>{children}</HoverCardTrigger>
 
 			{profileUsername ? (
 				<HoverCardContent
@@ -96,13 +76,13 @@ function UserProfilePreview({ user }: UserProfilePreviewProps) {
 	return (
 		<div>
 			<div className="flex items-start justify-between gap-3">
-				<UserProfileLink username={user.username} className="shrink-0">
+				<div className="shrink-0">
 					<img
 						src={avatar}
 						alt={displayName}
 						className="size-16 rounded-full border-2 border-background object-cover shadow-sm ring-1 ring-border"
 					/>
-				</UserProfileLink>
+				</div>
 
 				{user.isOwnProfile ? (
 					<span className="rounded-full border border-border px-3 py-1.5 text-xs font-semibold text-muted-foreground">
@@ -115,15 +95,12 @@ function UserProfilePreview({ user }: UserProfilePreviewProps) {
 			</div>
 
 			<div className="mt-3">
-				<UserProfileLink
-					username={user.username}
-					className="block min-w-0 hover:underline"
-				>
+				<div className="block min-w-0 hover:underline">
 					<p className="truncate font-bold text-foreground">{displayName}</p>
 					<p className="truncate text-sm text-muted-foreground">
 						@{user.username}
 					</p>
-				</UserProfileLink>
+				</div>
 			</div>
 
 			{!user.isBlockedByAuthenticatedUser &&

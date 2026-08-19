@@ -39,7 +39,7 @@ type ProfileViewProps = {
 };
 
 export function ProfileView({ username }: ProfileViewProps) {
-	const profileQuery = useUserProfile(username);
+	const profileQuery = useUserProfile({ username });
 
 	if (profileQuery.isLoading) {
 		return (

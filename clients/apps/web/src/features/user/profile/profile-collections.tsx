@@ -17,8 +17,9 @@ import { PostItem } from "@/features/post/common/post-item.tsx";
 export function ProfileCollections({ userId }: { userId: string }) {
 	const [selectedCollectionId, setSelectedCollectionId] = useState<string>();
 	const observerTargetRef = useRef<HTMLDivElement>(null);
-	const query = useBookmarkCollections(userId);
-	const postsQuery = useBookmarks(selectedCollectionId, {
+	const query = useBookmarkCollections({ userId });
+	const postsQuery = useBookmarks({
+		collectionId: selectedCollectionId,
 		enabled: Boolean(selectedCollectionId),
 	});
 	const selectedCollection = query.data?.collections.find(

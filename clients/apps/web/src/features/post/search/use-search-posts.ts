@@ -1,7 +1,7 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { httpClient } from "@/core/http-clients/http-client.ts";
-import { postListQueryKeys } from "../common/post-list.query-keys.ts";
 import type { Post } from "../common/post.ts";
+import { postListQueryKeys } from "../common/post-list.query-keys.ts";
 
 type SearchCursor = {
 	id: string;
@@ -35,7 +35,11 @@ const fetchSearchPostsPage = async ({
 		.json<SearchPostsResponse>();
 };
 
-const useSearchPosts = (query: string) =>
+type UseSearchPostsParams = {
+	query: string;
+};
+
+const useSearchPosts = ({ query }: UseSearchPostsParams) =>
 	useInfiniteQuery({
 		queryKey: postListQueryKeys.search(query),
 		queryFn: ({ pageParam }) => fetchSearchPostsPage({ query, pageParam }),

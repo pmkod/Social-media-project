@@ -13,7 +13,11 @@ type ListFollowingResponse = {
 	};
 };
 
-const useListFollowing = (userId: string) =>
+type UseListFollowingParams = {
+	userId: string;
+};
+
+const useListFollowing = ({ userId }: UseListFollowingParams) =>
 	useInfiniteQuery({
 		queryKey: userListQueryKeys.following(userId),
 		queryFn: ({ pageParam }) => {

@@ -17,7 +17,15 @@ const fetchCommentRepliesPage = async ({
 		.json<CommentsResponse>();
 };
 
-const useCommentReplies = (commentId: string, enabled = true) => {
+type UseCommentRepliesParams = {
+	commentId: string;
+	enabled?: boolean;
+};
+
+const useCommentReplies = ({
+	commentId,
+	enabled = true,
+}: UseCommentRepliesParams) => {
 	return useInfiniteQuery({
 		queryKey: commentListQueryKeys.replies(commentId),
 		queryFn: ({ pageParam }) =>

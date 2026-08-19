@@ -69,7 +69,7 @@ export function BookmarkList() {
 	const [isPublic, setIsPublic] = useState(false);
 	const observerTargetRef = useRef<HTMLDivElement>(null);
 	const collectionsQuery = useBookmarkCollections();
-	const bookmarksQuery = useBookmarks(selectedCollectionId);
+	const bookmarksQuery = useBookmarks({ collectionId: selectedCollectionId });
 	const createCollection = useCreateBookmarkCollection();
 	const deleteCollection = useDeleteBookmarkCollection();
 	const removeFromCollection = useRemovePostFromCollection();

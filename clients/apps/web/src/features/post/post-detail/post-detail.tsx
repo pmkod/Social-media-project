@@ -24,14 +24,14 @@ type PostDetailProps = {
 };
 
 export function PostDetail({ postId, autoFocusComment }: PostDetailProps) {
-	const { data: post, isLoading, isError } = usePost(postId);
+	const { data: post, isLoading, isError } = usePost({ postId });
 	const {
 		data: commentsData,
 		fetchNextPage,
 		hasNextPage,
 		isFetchingNextPage,
 		isLoading: isCommentsLoading,
-	} = useComments(postId, Boolean(post));
+	} = useComments({ postId, enabled: Boolean(post) });
 
 	if (isLoading) {
 		return <PostItemLoader hasMedia={true} />;
