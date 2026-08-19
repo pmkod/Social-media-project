@@ -22,17 +22,20 @@ const useUnfollowUser = () => {
 		mutationFn: ({ userId }: UnfollowUserInput) =>
 			httpClient.delete(`users/${userId}/follow`).json<UnfollowResponse>(),
 		onSuccess: ({ unfollowedUser }) => {
-			queryClient.setQueriesData<User>(
+			queryClient.setQueriesData<{ user: User }>(
 				{ queryKey: userDetailsQueryKeys.root },
-				(cachedUser) =>
-					cachedUser?.id === unfollowedUser.id
+				(queryData) =>
+					queryData !== undefined && queryData.user.id === unfollowedUser.id
 						? {
-								...cachedUser,
-								isFollowedByAuthenticatedUser:
-									unfollowedUser.isFollowedByAuthenticatedUser,
-								followersCount: unfollowedUser.followersCount,
+								...queryData,
+								user: {
+									...queryData.user,
+									isFollowedByAuthenticatedUser:
+										unfollowedUser.isFollowedByAuthenticatedUser,
+									followersCount: unfollowedUser.followersCount,
+								},
 							}
-						: cachedUser,
+						: queryData,
 			);
 
 			queryClient.setQueriesData<{ users: User[] }>(

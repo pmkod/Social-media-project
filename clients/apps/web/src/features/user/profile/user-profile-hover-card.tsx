@@ -43,7 +43,7 @@ function UserProfileHoverCard({
 			: user.handle
 		: "";
 	const profileQuery = useUserProfile(profileUsername);
-	const profileUser = profileQuery.data;
+	const profileUser = profileQuery.data?.user;
 
 	return (
 		<HoverCard openDelay={300} closeDelay={120}>
