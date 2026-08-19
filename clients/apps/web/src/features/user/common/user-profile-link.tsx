@@ -3,7 +3,7 @@ import type { MouseEventHandler, ReactNode } from "react";
 import type { User } from "./user.ts";
 
 type UserProfileLinkProps = {
-	user?: Pick<User, "username"> | null;
+	user: Pick<User, "username">;
 	children: ReactNode;
 	className?: string;
 	onClick?: MouseEventHandler<HTMLAnchorElement>;
@@ -15,8 +15,6 @@ function UserProfileLink({
 	className,
 	onClick,
 }: UserProfileLinkProps) {
-	if (!user?.username) return <span className={className}>{children}</span>;
-
 	return (
 		<Link
 			to="/$username"
@@ -30,5 +28,3 @@ function UserProfileLink({
 }
 
 export { UserProfileLink };
-export type { UserProfileLinkProps };
-

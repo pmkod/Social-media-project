@@ -1,4 +1,3 @@
-import type { Comment } from "@/features/comment";
 import type { User } from "@/features/user/common/user";
 
 export type PostFileItem = {
@@ -31,7 +30,6 @@ export type Post = {
 	commentsCount?: number;
 	isLikedByAuthenticatedUser?: boolean;
 	isBookmarkedByAuthenticatedUser?: boolean;
-	comments?: Comment[];
 	createdAt: string;
 	updatedAt?: string;
 };

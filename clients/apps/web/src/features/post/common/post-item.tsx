@@ -233,25 +233,24 @@ export function PostItem({ post }: PostItemProps) {
 			// onClick={(e) => e.stopPropagation()}
 			className="block border-x border-t last:border-b first:rounded-t-xl last:rounded-b-xl border-border p-4 hover:bg-muted/30 transition-colors cursor-pointer"
 		>
-			<div className="flex gap-3">
+			<div className="flex items-start gap-3">
 				{/* Avatar */}
 				<UserProfileHoverCard user={post.author}>
-					{/* <UserProfileLink
+					<UserProfileLink
 						user={post.author}
 						onClick={(e) => e.stopPropagation()}
-						className="block"
-					> */}
-					<img
-						src={
-							post.author?.avatarUrl ||
-							`https://ui-avatars.com/api/?name=${encodeURIComponent(
-								post.author.fullName,
-							)}&background=random`
-						}
-						alt={post.author.fullName}
-						className="size-12 rounded-full object-cover ring-1 ring-border"
-					/>
-					{/* </UserProfileLink> */}
+					>
+						<img
+							src={
+								post.author?.avatarUrl ||
+								`https://ui-avatars.com/api/?name=${encodeURIComponent(
+									post.author.fullName,
+								)}&background=random`
+							}
+							alt={post.author.fullName}
+							className="size-12 rounded-full object-cover ring-1 ring-border"
+						/>
+					</UserProfileLink>
 				</UserProfileHoverCard>
 
 				{/* Content Container */}
@@ -351,15 +350,6 @@ export function PostItem({ post }: PostItemProps) {
 							</div>
 						</button>
 					</div>
-
-					{/* Recent Comments */}
-					{(post.comments ?? []).length > 0 ? (
-						<div className="mt-2 -ml-1 border-l-2 border-border pl-3 space-y-1">
-							{(post.comments ?? []).map((comment) => (
-								<CommentItem key={comment.id} comment={comment} compact />
-							))}
-						</div>
-					) : null}
 				</div>
 			</div>
 		</Link>
