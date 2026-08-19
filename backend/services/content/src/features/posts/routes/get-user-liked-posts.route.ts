@@ -1,5 +1,6 @@
 import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
+import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { PostsRoutesTag } from "../posts.constants";
 import { getPostList } from "../services/get-post-list.service";
 
@@ -21,7 +22,10 @@ const routeDef = createRoute({
 	},
 });
 
-const getUserLikedPostsRoute = defineOpenAPIRoute({
+const getUserLikedPostsRoute = defineOpenAPIRoute<
+	typeof routeDef,
+	HonoAuthenticatedEnv
+>({
 	route: routeDef,
 	handler: async (c) => {
 		const { userId } = c.req.valid("param");
@@ -30,13 +34,14 @@ const getUserLikedPostsRoute = defineOpenAPIRoute({
 			Math.max(Number.parseInt(query.limit, 10) || 10, 1),
 			50,
 		);
+		const authenticatedUser = c.get("authenticatedUser");
 		return c.json(
 			await getPostList({
 				where: { postLikes: { some: { authorId: userId } } },
 				cursorId: query.cursorId,
 				cursorCreatedAt: query.cursorCreatedAt,
 				limit,
-				authenticatedUserId: c.req.header("X-Authenticated-User-Id"),
+				authenticatedUserId: authenticatedUser?.id,
 				visibilityOwnerId: userId,
 			}),
 		);

@@ -1,6 +1,7 @@
 import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { userServiceClient } from "@/core/services/user-service.client";
+import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { PostsRoutesTag } from "../posts.constants";
 import { getPostList } from "../services/get-post-list.service";
 
@@ -25,7 +26,10 @@ const routeDef = createRoute({
 	},
 });
 
-const getFeedFollowingRoute = defineOpenAPIRoute({
+const getFeedFollowingRoute = defineOpenAPIRoute<
+	typeof routeDef,
+	HonoAuthenticatedEnv
+>({
 	route: routeDef,
 	handler: async (c) => {
 		const query = c.req.valid("query");
@@ -33,7 +37,8 @@ const getFeedFollowingRoute = defineOpenAPIRoute({
 			Math.max(Number.parseInt(query.limit, 10) || 10, 1),
 			50,
 		);
-		const authenticatedUserId = c.req.header("X-Authenticated-User-Id");
+		const authenticatedUser = c.get("authenticatedUser");
+		const authenticatedUserId = authenticatedUser?.id;
 		const followingIds = authenticatedUserId
 			? await userServiceClient.fetchFollowingIds(authenticatedUserId)
 			: [];

@@ -20,11 +20,11 @@ import {
 	TabsList,
 	TabsTrigger,
 } from "@/core/components/ui/tabs.tsx";
-import { UserActionsDropdown } from "@/features/user/block-user/user-actions-dropdown.tsx";
 import { FollowButton } from "@/features/user/common/follow-button.tsx";
 import { ListFollowersModal } from "@/features/user/list-followers/list-followers.modal.tsx";
 import { ListFollowingModal } from "@/features/user/list-following/list-following.modal.tsx";
 import { useUserProfile } from "@/features/user/user-profile/use-user-profile.ts";
+import { UserProfileActionsDropdown } from "@/features/user/user-profile/user-profile-actions-dropdown.tsx";
 import { ProfileCollections } from "./profile-collections.tsx";
 import { ProfilePostList } from "./profile-post-list.tsx";
 
@@ -112,18 +112,15 @@ export function ProfileView({ username }: ProfileViewProps) {
 						/>
 
 						<div className="flex items-center gap-2 pt-3">
-							<UserActionsDropdown
+							<UserProfileActionsDropdown
 								user={user}
-								resource={{ type: "profile" }}
 								variant="outline"
 								size="lg"
 							/>
 							{user.isOwnProfile ? (
-								<span className="inline-flex h-9 items-center rounded-full border border-border px-5 text-sm font-bold text-foreground">
-									Your profile
-								</span>
+								<Button variant="outline">Edit profile</Button>
 							) : !hasBlockRelationship ? (
-								<FollowButton user={user} size="lg" />
+								<FollowButton user={user} />
 							) : null}
 						</div>
 					</div>

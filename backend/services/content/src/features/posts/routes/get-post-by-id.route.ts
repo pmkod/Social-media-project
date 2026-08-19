@@ -2,6 +2,7 @@ import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
 import { userServiceClient } from "@/core/services/user-service.client";
+import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { PostsRoutesTag } from "../posts.constants";
 
 const routeDef = createRoute({
@@ -22,7 +23,10 @@ const routeDef = createRoute({
 	},
 });
 
-const getPostByIdRoute = defineOpenAPIRoute({
+const getPostByIdRoute = defineOpenAPIRoute<
+	typeof routeDef,
+	HonoAuthenticatedEnv
+>({
 	route: routeDef,
 	handler: async (c) => {
 		const { id } = c.req.valid("param");
@@ -72,7 +76,8 @@ const getPostByIdRoute = defineOpenAPIRoute({
 			return c.json({ message: "Post not found" }, HttpStatus.NOT_FOUND.code);
 		}
 
-		const authenticatedUserId = c.req.header("X-Authenticated-User-Id");
+		const authenticatedUser = c.get("authenticatedUser");
+		const authenticatedUserId = authenticatedUser?.id;
 		if (
 			authenticatedUserId &&
 			(await userServiceClient.hasBlockRelationship(

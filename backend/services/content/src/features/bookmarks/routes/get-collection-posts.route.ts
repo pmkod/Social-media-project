@@ -1,6 +1,7 @@
 import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
+import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { getPostList } from "@/features/posts/services/get-post-list.service";
 import { BookmarksRoutesTag } from "../bookmarks.constants";
 
@@ -22,12 +23,16 @@ const routeDef = createRoute({
 	},
 });
 
-const getCollectionPostsRoute = defineOpenAPIRoute({
+const getCollectionPostsRoute = defineOpenAPIRoute<
+	typeof routeDef,
+	HonoAuthenticatedEnv
+>({
 	route: routeDef,
 	handler: async (c) => {
 		const { collectionId } = c.req.valid("param");
 		const query = c.req.valid("query");
-		const authenticatedUserId = c.req.header("X-Authenticated-User-Id");
+		const authenticatedUser = c.get("authenticatedUser");
+		const authenticatedUserId = authenticatedUser?.id;
 		const collection = await prisma.bookmarkCollection.findFirst({
 			where: {
 				id: collectionId,

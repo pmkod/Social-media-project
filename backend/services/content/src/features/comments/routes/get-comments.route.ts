@@ -2,6 +2,7 @@ import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
 import { userServiceClient } from "@/core/services/user-service.client";
+import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { CommentsRoutesTag } from "../comments.constants";
 
 const routeDef = createRoute({
@@ -25,7 +26,10 @@ const routeDef = createRoute({
 	},
 });
 
-const getCommentsRoute = defineOpenAPIRoute({
+const getCommentsRoute = defineOpenAPIRoute<
+	typeof routeDef,
+	HonoAuthenticatedEnv
+>({
 	route: routeDef,
 	handler: async (c) => {
 		const { postId } = c.req.valid("param");
@@ -33,7 +37,8 @@ const getCommentsRoute = defineOpenAPIRoute({
 		const page = Number.parseInt(query.page, 10) || 1;
 		const limit = Number.parseInt(query.limit, 10) || 20;
 		const skip = (page - 1) * limit;
-		const authenticatedUserId = c.req.header("X-Authenticated-User-Id");
+		const authenticatedUser = c.get("authenticatedUser");
+		const authenticatedUserId = authenticatedUser?.id;
 		const post = await prisma.post.findUnique({
 			where: { id: postId },
 			select: { authorId: true },

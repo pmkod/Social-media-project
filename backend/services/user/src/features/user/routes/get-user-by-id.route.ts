@@ -1,7 +1,8 @@
 import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
-import { UserRoutesTag } from "../user.constants";
+import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { getPublicUserProfile } from "../services/get-public-user-profile.service";
+import { UserRoutesTag } from "../user.constants";
 
 const routeDef = createRoute({
 	method: "get",
@@ -20,14 +21,18 @@ const routeDef = createRoute({
 	},
 });
 
-const getUserByIdRoute = defineOpenAPIRoute({
+const getUserByIdRoute = defineOpenAPIRoute<
+	typeof routeDef,
+	HonoAuthenticatedEnv
+>({
 	route: routeDef,
 	handler: async (c) => {
 		const { userId } = c.req.valid("param");
+		const authenticatedUser = c.get("authenticatedUser");
 
 		const user = await getPublicUserProfile(
 			{ id: userId },
-			c.req.header("X-Authenticated-User-Id"),
+			authenticatedUser?.id,
 		);
 
 		if (!user) {

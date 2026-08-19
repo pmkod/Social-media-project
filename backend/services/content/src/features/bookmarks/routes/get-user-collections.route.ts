@@ -1,6 +1,7 @@
 import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { userServiceClient } from "@/core/services/user-service.client";
+import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { BookmarksRoutesTag } from "../bookmarks.constants";
 import { getBookmarkCollections } from "../services/get-bookmark-collections.service";
 
@@ -15,11 +16,15 @@ const routeDef = createRoute({
 	},
 });
 
-const getUserCollectionsRoute = defineOpenAPIRoute({
+const getUserCollectionsRoute = defineOpenAPIRoute<
+	typeof routeDef,
+	HonoAuthenticatedEnv
+>({
 	route: routeDef,
 	handler: async (c) => {
 		const { userId } = c.req.valid("param");
-		const authenticatedUserId = c.req.header("X-Authenticated-User-Id");
+		const authenticatedUser = c.get("authenticatedUser");
+		const authenticatedUserId = authenticatedUser?.id;
 		if (authenticatedUserId && authenticatedUserId !== userId) {
 			const relationships =
 				await userServiceClient.fetchBlockRelationshipIds(authenticatedUserId);

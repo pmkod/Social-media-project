@@ -2,6 +2,7 @@ import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
 import { userServiceClient } from "@/core/services/user-service.client";
+import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { CommentsRoutesTag } from "../comments.constants";
 
 const routeDef = createRoute({
@@ -21,7 +22,10 @@ const routeDef = createRoute({
 	},
 });
 
-const getCommentRepliesRoute = defineOpenAPIRoute({
+const getCommentRepliesRoute = defineOpenAPIRoute<
+	typeof routeDef,
+	HonoAuthenticatedEnv
+>({
 	route: routeDef,
 	handler: async (c) => {
 		const { commentId } = c.req.valid("param");
@@ -61,7 +65,8 @@ const getCommentRepliesRoute = defineOpenAPIRoute({
 			prisma.comment.count({ where: { parentId } }),
 		]);
 
-		const authenticatedUserId = c.req.header("X-Authenticated-User-Id");
+		const authenticatedUser = c.get("authenticatedUser");
+		const authenticatedUserId = authenticatedUser?.id;
 		const [authorsMap, likedCommentIds] = await Promise.all([
 			userServiceClient.fetchAuthorsBatch(
 				replies.map((reply) => reply.authorId),

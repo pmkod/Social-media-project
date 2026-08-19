@@ -12,28 +12,22 @@ import {
 	DropdownMenuTrigger,
 } from "@/core/components/ui/dropdown-menu.tsx";
 import { IconButton } from "@/core/components/ui/icon-button.tsx";
-import { useOpenUserBlockAlertDialog } from "./use-open-user-block-alert-dialog.ts";
+import { useOpenUserBlockAlertDialog } from "@/features/user/block-user/use-open-user-block-alert-dialog.ts";
 
-type UserActionsDropdownProps = {
+type PostActionsDropdownProps = {
+	postId: string;
 	user: {
 		id?: string;
 		username: string;
 		isOwnProfile?: boolean;
 		isBlockedByAuthenticatedUser?: boolean;
 	};
-	resource: { type: "profile" } | { type: "post"; postId: string };
 	size?: "xs" | "sm" | "md" | "lg";
 	variant?: "default" | "outline" | "secondary" | "ghost";
 };
 
-const getShareUrl = (
-	resource: UserActionsDropdownProps["resource"],
-	username: string,
-) => {
-	const path =
-		resource.type === "profile"
-			? `/@${encodeURIComponent(username)}`
-			: `/posts/${encodeURIComponent(resource.postId)}`;
+const getPostShareUrl = (postId: string) => {
+	const path = `/posts/${encodeURIComponent(postId)}`;
 	return typeof window === "undefined"
 		? path
 		: new URL(path, window.location.origin).toString();
@@ -54,12 +48,12 @@ const copyToClipboard = async (value: string) => {
 	textarea.remove();
 };
 
-function UserActionsDropdown({
+function PostActionsDropdown({
+	postId,
 	user,
-	resource,
 	size = "md",
 	variant = "ghost",
-}: UserActionsDropdownProps) {
+}: PostActionsDropdownProps) {
 	const userBlockDialog = useOpenUserBlockAlertDialog();
 	const canManageBlock = Boolean(user.id && !user.isOwnProfile);
 	const isBlocked = user.isBlockedByAuthenticatedUser ?? false;
@@ -72,9 +66,7 @@ function UserActionsDropdown({
 					variant={variant}
 					size={size}
 					onClick={(event) => event.stopPropagation()}
-					aria-label={
-						resource.type === "profile" ? "Profile options" : "Post options"
-					}
+					aria-label="Post options"
 				>
 					<RiMoreLine />
 				</IconButton>
@@ -85,11 +77,11 @@ function UserActionsDropdown({
 			>
 				<DropdownMenuItem
 					onSelect={() => {
-						void copyToClipboard(getShareUrl(resource, user.username));
+						void copyToClipboard(getPostShareUrl(postId));
 					}}
 				>
 					<RiFileCopyLine />
-					Copy {resource.type} link
+					Copy post link
 				</DropdownMenuItem>
 				{canManageBlock ? (
 					<>
@@ -115,4 +107,4 @@ function UserActionsDropdown({
 	);
 }
 
-export { UserActionsDropdown };
+export { PostActionsDropdown };

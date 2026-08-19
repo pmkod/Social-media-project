@@ -3,11 +3,13 @@ import { Scalar } from "@scalar/hono-api-reference";
 import { Configurations } from "./core/configurations";
 import { Environments } from "./core/constants/environment.constants";
 import { exceptionHandler } from "./core/exceptions/exception.handler";
+import { setAuthenticatedUser } from "./features/authentication/middlewares/set-authenticated-user.middleware";
 import { authenticationRoutes } from "./features/authentication/routes";
 import { userRoutes } from "./features/user/routes";
 
 const app = new OpenAPIHono();
 
+app.use("*", setAuthenticatedUser);
 app.openapiRoutes(authenticationRoutes);
 app.openapiRoutes(userRoutes);
 

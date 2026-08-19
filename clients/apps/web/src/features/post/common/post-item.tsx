@@ -14,13 +14,13 @@ import { cn } from "@/core/lib/utils.ts";
 import { useAddBookmark } from "@/features/bookmark/use-add-bookmark.ts";
 import { useRemoveBookmark } from "@/features/bookmark/use-remove-bookmark.ts";
 import { CommentItem } from "@/features/comment";
-import { UserActionsDropdown } from "@/features/user/block-user/user-actions-dropdown.tsx";
 import { UserProfileHoverCard } from "@/features/user/profile/user-profile-hover-card.tsx";
 import { useLikePost } from "../like-post/use-like-post.ts";
 import { buildImageUrl, buildVideoUrl } from "../post-media.functions.ts";
 import { useUnlikePost } from "../unlike-post/use-unlike-post.ts";
 import type { Post, PostMediaItem } from "./post.ts";
 import { formatPostCreationDate } from "./post.utils.ts";
+import { PostActionsDropdown } from "./post-actions-dropdown.tsx";
 
 type PostItemProps = { post: Post };
 
@@ -264,7 +264,7 @@ export function PostItem({ post }: PostItemProps) {
 								{formatPostCreationDate(post.createdAt)}
 							</Link>
 						</div>
-						<UserActionsDropdown
+						<PostActionsDropdown
 							user={{
 								id: post.author?.id,
 								username: post.author?.handle ?? "user",
@@ -272,7 +272,7 @@ export function PostItem({ post }: PostItemProps) {
 								isBlockedByAuthenticatedUser:
 									post.author?.isBlockedByAuthenticatedUser,
 							}}
-							resource={{ type: "post", postId: post.id }}
+							postId={post.id}
 							size="sm"
 						/>
 					</div>

@@ -2,6 +2,7 @@ import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
 import { userServiceClient } from "@/core/services/user-service.client";
+import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { PostsRoutesTag } from "../posts.constants";
 
 const routeDef = createRoute({
@@ -21,11 +22,15 @@ const routeDef = createRoute({
 	},
 });
 
-const getPostLikesRoute = defineOpenAPIRoute({
+const getPostLikesRoute = defineOpenAPIRoute<
+	typeof routeDef,
+	HonoAuthenticatedEnv
+>({
 	route: routeDef,
 	handler: async (c) => {
 		const { postId } = c.req.valid("param");
-		const authenticatedUserId = c.req.header("X-Authenticated-User-Id");
+		const authenticatedUser = c.get("authenticatedUser");
+		const authenticatedUserId = authenticatedUser?.id;
 		const post = await prisma.post.findUnique({
 			where: { id: postId },
 			select: { authorId: true },

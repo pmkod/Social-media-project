@@ -1,19 +1,17 @@
 import type { Context, Next } from "hono";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 
-const AuthenticatedUserIdHeader = "X-Authenticated-User-Id";
-
 const requireUserAuthentication = async (
 	c: Context<HonoAuthenticatedEnv>,
 	next: Next,
 ) => {
-	const authenticatedUserId = c.req.header(AuthenticatedUserIdHeader);
+	const authenticatedUser = c.get("authenticatedUser");
 
-	if (!authenticatedUserId) {
+	if (!authenticatedUser) {
 		return c.json({ message: "Unauthorized" }, 401);
 	}
 
-	c.set("authenticatedUserId", authenticatedUserId);
+	c.set("authenticatedUserId", authenticatedUser.id);
 	return await next();
 };
 

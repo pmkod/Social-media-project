@@ -1,7 +1,26 @@
 import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
+import { prisma } from "@/core/databases";
+import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
+import type { Prisma } from "@/generated/prisma/client";
+import { getBlockRelationships } from "../services/get-block-relationships.service";
 import { UserRoutesTag } from "../user.constants";
-import { getPublicUserProfile } from "../services/get-public-user-profile.service";
+
+const publicUserProfileSelect = {
+	id: true,
+	username: true,
+	fullName: true,
+	displayName: true,
+	bio: true,
+	avatarUrl: true,
+	coverUrl: true,
+	location: true,
+	website: true,
+	postCount: true,
+	followersCount: true,
+	followingCount: true,
+	createdAt: true,
+} satisfies Prisma.UserSelect;
 
 const routeDef = createRoute({
 	method: "get",
@@ -15,20 +34,65 @@ const routeDef = createRoute({
 	},
 });
 
-const getUserByUsernameRoute = defineOpenAPIRoute({
+const getUserByUsernameRoute = defineOpenAPIRoute<
+	typeof routeDef,
+	HonoAuthenticatedEnv
+>({
 	route: routeDef,
 	handler: async (c) => {
 		const { username } = c.req.valid("param");
-		const user = await getPublicUserProfile(
-			{ username },
-			c.req.header("X-Authenticated-User-Id"),
-		);
+		const authenticatedUser = c.get("authenticatedUser");
+		const authenticatedUserId = authenticatedUser?.id;
+		const user = await prisma.user.findFirst({
+			where: { username, active: true },
+			select: publicUserProfileSelect,
+		});
 
 		if (!user) {
 			return c.json({ message: "User not found" }, HttpStatus.NOT_FOUND.code);
 		}
 
-		return c.json({ user });
+		const isOwnProfile = authenticatedUserId === user.id;
+		const [follow, blockRelationships] = await Promise.all([
+			authenticatedUserId && !isOwnProfile
+				? prisma.follow.findUnique({
+						where: {
+							followerId_followingId: {
+								followerId: authenticatedUserId,
+								followingId: user.id,
+							},
+						},
+						select: { id: true },
+					})
+				: null,
+			getBlockRelationships(authenticatedUserId, [user.id]),
+		]);
+		const isBlockedByAuthenticatedUser =
+			blockRelationships.blockedByAuthenticatedUserIds.has(user.id);
+		const hasBlockedAuthenticatedInUser =
+			blockRelationships.hasBlockedAuthenticatedUserIds.has(user.id);
+		const visibleUser = hasBlockedAuthenticatedInUser
+			? {
+					...user,
+					bio: null,
+					location: null,
+					website: null,
+					createdAt: null,
+				}
+			: user;
+
+		return c.json({
+			user: {
+				...visibleUser,
+				isOwnProfile,
+				isFollowedByAuthenticatedUser:
+					!isBlockedByAuthenticatedUser &&
+					!hasBlockedAuthenticatedInUser &&
+					Boolean(follow),
+				isBlockedByAuthenticatedUser,
+				hasBlockedAuthenticatedInUser,
+			},
+		});
 	},
 });
 

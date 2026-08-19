@@ -1,6 +1,7 @@
 import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
+import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { getBlockRelationships } from "../services/get-block-relationships.service";
 import { UserRoutesTag } from "../user.constants";
 
@@ -35,7 +36,10 @@ const routeDef = createRoute({
 	},
 });
 
-const getUsersBatchRoute = defineOpenAPIRoute({
+const getUsersBatchRoute = defineOpenAPIRoute<
+	typeof routeDef,
+	HonoAuthenticatedEnv
+>({
 	route: routeDef,
 	handler: async (c) => {
 		const { userIds } = c.req.valid("json");
@@ -62,7 +66,8 @@ const getUsersBatchRoute = defineOpenAPIRoute({
 				createdAt: true,
 			},
 		});
-		const authenticatedUserId = c.req.header("X-Authenticated-User-Id");
+		const authenticatedUser = c.get("authenticatedUser");
+		const authenticatedUserId = authenticatedUser?.id;
 		const blockRelationships = await getBlockRelationships(
 			authenticatedUserId,
 			users.map((user) => user.id),
