@@ -48,7 +48,7 @@ export function CommentItem({
 	return (
 		<article
 			className={cn(
-				"flex gap-3",
+				"flex items-start gap-3",
 				compact
 					? "px-2 py-2"
 					: "px-4 py-4 border-b border-border last:border-b-0",
