@@ -1,11 +1,17 @@
 import {
-	RiArrowLeftLine,
 	RiCalendar2Line,
 	RiLinkM,
 	RiLoader4Line,
 	RiMapPin2Line,
 } from "@remixicon/react";
 import { Link } from "@tanstack/react-router";
+import {
+	AppHeader,
+	AppHeaderGoBackButton,
+	AppHeaderLeftPart,
+	AppHeaderSubtitle,
+	AppHeaderTitle,
+} from "@/core/components/ui/app-header.tsx";
 import { Button } from "@/core/components/ui/button.tsx";
 import NiceModal from "@/core/components/ui/nice-modal.tsx";
 import {
@@ -73,21 +79,17 @@ export function ProfileView({ username }: ProfileViewProps) {
 
 	return (
 		<div className="mx-auto">
-			<header className="sticky top-0 z-20 flex h-14 items-center gap-4 border-b border-border bg-background/90 px-4 backdrop-blur-xl">
-				<Link
-					to="/home"
-					aria-label="Retour"
-					className="rounded-full p-2 text-muted-foreground transition hover:bg-accent hover:text-foreground"
-				>
-					<RiArrowLeftLine className="size-5" />
-				</Link>
-				<div className="min-w-0">
-					<h1 className="truncate font-bold text-foreground">{displayName}</h1>
-					<p className="text-xs text-muted-foreground">
-						{numberFormatter.format(user.postCount ?? 0)} publications
-					</p>
-				</div>
-			</header>
+			<AppHeader bordered>
+				<AppHeaderLeftPart>
+					<AppHeaderGoBackButton to="/home" />
+					<div className="min-w-0">
+						<AppHeaderTitle>{displayName}</AppHeaderTitle>
+						<AppHeaderSubtitle>
+							{numberFormatter.format(user.postCount ?? 0)} publications
+						</AppHeaderSubtitle>
+					</div>
+				</AppHeaderLeftPart>
+			</AppHeader>
 
 			<section>
 				<div className="h-48 overflow-hidden bg-gradient-to-br from-slate-700 via-slate-500 to-sky-300 sm:h-56">
