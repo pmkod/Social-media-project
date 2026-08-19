@@ -37,6 +37,7 @@ const getUserLikedPostsRoute = defineOpenAPIRoute({
 				cursorCreatedAt: query.cursorCreatedAt,
 				limit,
 				authenticatedUserId: c.req.header("X-Authenticated-User-Id"),
+				visibilityOwnerId: userId,
 			}),
 		);
 	},

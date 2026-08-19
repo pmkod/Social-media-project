@@ -20,6 +20,7 @@ import {
 	TabsList,
 	TabsTrigger,
 } from "@/core/components/ui/tabs.tsx";
+import { UserActionsDropdown } from "@/features/user/block-user/user-actions-dropdown.tsx";
 import { FollowButton } from "@/features/user/common/follow-button.tsx";
 import { ListFollowersModal } from "@/features/user/list-followers/list-followers.modal.tsx";
 import { ListFollowingModal } from "@/features/user/list-following/list-following.modal.tsx";
@@ -72,6 +73,8 @@ export function ProfileView({ username }: ProfileViewProps) {
 	const joinedDate = user.createdAt
 		? joinedDateFormatter.format(new Date(user.createdAt))
 		: null;
+	const hasBlockRelationship =
+		user.isBlockedByAuthenticatedUser || user.hasBlockedAuthenticatedInUser;
 
 	return (
 		<div className="mx-auto">
@@ -108,14 +111,20 @@ export function ProfileView({ username }: ProfileViewProps) {
 							className="-mt-16 size-32 rounded-full border-4 border-background bg-background object-cover shadow-sm sm:size-36"
 						/>
 
-						<div className="pt-3">
+						<div className="flex items-center gap-2 pt-3">
+							<UserActionsDropdown
+								user={user}
+								resource={{ type: "profile" }}
+								variant="outline"
+								size="lg"
+							/>
 							{user.isOwnProfile ? (
 								<span className="inline-flex h-9 items-center rounded-full border border-border px-5 text-sm font-bold text-foreground">
 									Your profile
 								</span>
-							) : (
+							) : !hasBlockRelationship ? (
 								<FollowButton user={user} size="lg" />
-							)}
+							) : null}
 						</div>
 					</div>
 
@@ -126,37 +135,39 @@ export function ProfileView({ username }: ProfileViewProps) {
 						<p className="text-muted-foreground">@{user.username}</p>
 					</div>
 
-					{user.bio ? (
+					{!hasBlockRelationship && user.bio ? (
 						<p className="mt-4 whitespace-pre-line text-[15px] leading-relaxed text-foreground">
 							{user.bio}
 						</p>
 					) : null}
 
-					<div className="mt-4 flex flex-wrap gap-x-4 gap-y-2 text-sm text-muted-foreground">
-						{user.location ? (
-							<span className="flex items-center gap-1.5">
-								<RiMapPin2Line className="size-4" />
-								{user.location}
-							</span>
-						) : null}
-						{user.website ? (
-							<a
-								href={user.website}
-								target="_blank"
-								rel="noreferrer"
-								className="flex items-center gap-1.5 text-sky-500 hover:underline"
-							>
-								<RiLinkM className="size-4" />
-								{user.website.replace(/^https?:\/\//, "")}
-							</a>
-						) : null}
-						{joinedDate ? (
-							<span className="flex items-center gap-1.5">
-								<RiCalendar2Line className="size-4" />
-								Joined {joinedDate}
-							</span>
-						) : null}
-					</div>
+					{!hasBlockRelationship ? (
+						<div className="mt-4 flex flex-wrap gap-x-4 gap-y-2 text-sm text-muted-foreground">
+							{user.location ? (
+								<span className="flex items-center gap-1.5">
+									<RiMapPin2Line className="size-4" />
+									{user.location}
+								</span>
+							) : null}
+							{user.website ? (
+								<a
+									href={user.website}
+									target="_blank"
+									rel="noreferrer"
+									className="flex items-center gap-1.5 text-sky-500 hover:underline"
+								>
+									<RiLinkM className="size-4" />
+									{user.website.replace(/^https?:\/\//, "")}
+								</a>
+							) : null}
+							{joinedDate ? (
+								<span className="flex items-center gap-1.5">
+									<RiCalendar2Line className="size-4" />
+									Joined {joinedDate}
+								</span>
+							) : null}
+						</div>
+					) : null}
 
 					<div className="mt-4 flex flex-wrap gap-5 text-sm text-muted-foreground">
 						<span>
@@ -167,13 +178,14 @@ export function ProfileView({ username }: ProfileViewProps) {
 						</span>
 						<button
 							type="button"
+							disabled={Boolean(hasBlockRelationship)}
 							onClick={() =>
 								NiceModal.show(ListFollowersModal, {
 									userId: user.id,
 									username: user.username,
 								})
 							}
-							className="rounded-sm text-left transition hover:text-foreground hover:underline"
+							className="rounded-sm text-left transition enabled:hover:text-foreground enabled:hover:underline"
 						>
 							<strong className="text-foreground">
 								{numberFormatter.format(user.followersCount ?? 0)}
@@ -182,13 +194,14 @@ export function ProfileView({ username }: ProfileViewProps) {
 						</button>
 						<button
 							type="button"
+							disabled={Boolean(hasBlockRelationship)}
 							onClick={() =>
 								NiceModal.show(ListFollowingModal, {
 									userId: user.id,
 									username: user.username,
 								})
 							}
-							className="rounded-sm text-left transition hover:text-foreground hover:underline"
+							className="rounded-sm text-left transition enabled:hover:text-foreground enabled:hover:underline"
 						>
 							<strong className="text-foreground">
 								{numberFormatter.format(user.followingCount ?? 0)}
@@ -199,22 +212,24 @@ export function ProfileView({ username }: ProfileViewProps) {
 				</div>
 			</section>
 
-			<Tabs defaultValue="posts">
-				<TabsList>
-					<TabsTrigger value="posts">Posts</TabsTrigger>
-					<TabsTrigger value="likes">Likes</TabsTrigger>
-					<TabsTrigger value="collections">Collections</TabsTrigger>
-				</TabsList>
-				<TabsContent value="posts">
-					<ProfilePostList userId={user.id} type="posts" />
-				</TabsContent>
-				<TabsContent value="likes">
-					<ProfilePostList userId={user.id} type="likes" />
-				</TabsContent>
-				<TabsContent value="collections">
-					<ProfileCollections userId={user.id} />
-				</TabsContent>
-			</Tabs>
+			{!hasBlockRelationship ? (
+				<Tabs defaultValue="posts">
+					<TabsList>
+						<TabsTrigger value="posts">Posts</TabsTrigger>
+						<TabsTrigger value="likes">Likes</TabsTrigger>
+						<TabsTrigger value="collections">Collections</TabsTrigger>
+					</TabsList>
+					<TabsContent value="posts">
+						<ProfilePostList userId={user.id} type="posts" />
+					</TabsContent>
+					<TabsContent value="likes">
+						<ProfilePostList userId={user.id} type="likes" />
+					</TabsContent>
+					<TabsContent value="collections">
+						<ProfileCollections userId={user.id} />
+					</TabsContent>
+				</Tabs>
+			) : null}
 		</div>
 	);
 }

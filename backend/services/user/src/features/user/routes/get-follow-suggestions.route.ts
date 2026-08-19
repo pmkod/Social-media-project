@@ -70,9 +70,27 @@ const getFollowSuggestionsRoute = defineOpenAPIRoute<
 			select: { followingId: true },
 		});
 		const followingIds = following.map((f) => f.followingId);
+		const blocks = await prisma.block.findMany({
+			where: {
+				OR: [
+					{ blockerId: authenticatedUser.id },
+					{ blockedId: authenticatedUser.id },
+				],
+			},
+			select: { blockerId: true, blockedId: true },
+		});
+		const blockRelationshipIds = blocks.map((block) =>
+			block.blockerId === authenticatedUser.id
+				? block.blockedId
+				: block.blockerId,
+		);
 
 		// Exclude authenticated user and already followed users
-		const excludedIds = [authenticatedUser.id, ...followingIds];
+		const excludedIds = [
+			authenticatedUser.id,
+			...followingIds,
+			...blockRelationshipIds,
+		];
 
 		const candidates = await prisma.user.findMany({
 			where: {

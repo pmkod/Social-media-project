@@ -108,9 +108,10 @@ function UserProfilePreview({ user }: UserProfilePreviewProps) {
 					<span className="rounded-full border border-border px-3 py-1.5 text-xs font-semibold text-muted-foreground">
 						Your profile
 					</span>
-				) : (
+				) : !user.isBlockedByAuthenticatedUser &&
+					!user.hasBlockedAuthenticatedInUser ? (
 					<FollowButton user={user} className="rounded-full px-4 font-bold" />
-				)}
+				) : null}
 			</div>
 
 			<div className="mt-3">
@@ -125,37 +126,42 @@ function UserProfilePreview({ user }: UserProfilePreviewProps) {
 				</UserProfileLink>
 			</div>
 
-			{user.bio ? (
+			{!user.isBlockedByAuthenticatedUser &&
+			!user.hasBlockedAuthenticatedInUser &&
+			user.bio ? (
 				<p className="mt-3 whitespace-pre-line text-sm leading-relaxed text-foreground">
 					{user.bio}
 				</p>
 			) : null}
 
-			<div className="mt-3 flex flex-wrap gap-x-3 gap-y-1.5 text-xs text-muted-foreground">
-				{user.location ? (
-					<span className="flex items-center gap-1">
-						<RiMapPin2Line className="size-3.5" />
-						{user.location}
-					</span>
-				) : null}
-				{user.website ? (
-					<a
-						href={user.website}
-						target="_blank"
-						rel="noreferrer"
-						className="flex items-center gap-1 text-sky-500 hover:underline"
-					>
-						<RiLinkM className="size-3.5" />
-						{user.website.replace(/^https?:\/\//, "")}
-					</a>
-				) : null}
-				{joinedDate ? (
-					<span className="flex items-center gap-1">
-						<RiCalendar2Line className="size-3.5" />
-						Joined {joinedDate}
-					</span>
-				) : null}
-			</div>
+			{!user.isBlockedByAuthenticatedUser &&
+			!user.hasBlockedAuthenticatedInUser ? (
+				<div className="mt-3 flex flex-wrap gap-x-3 gap-y-1.5 text-xs text-muted-foreground">
+					{user.location ? (
+						<span className="flex items-center gap-1">
+							<RiMapPin2Line className="size-3.5" />
+							{user.location}
+						</span>
+					) : null}
+					{user.website ? (
+						<a
+							href={user.website}
+							target="_blank"
+							rel="noreferrer"
+							className="flex items-center gap-1 text-sky-500 hover:underline"
+						>
+							<RiLinkM className="size-3.5" />
+							{user.website.replace(/^https?:\/\//, "")}
+						</a>
+					) : null}
+					{joinedDate ? (
+						<span className="flex items-center gap-1">
+							<RiCalendar2Line className="size-3.5" />
+							Joined {joinedDate}
+						</span>
+					) : null}
+				</div>
+			) : null}
 
 			<div className="mt-3 flex gap-4 text-sm text-muted-foreground">
 				<span>

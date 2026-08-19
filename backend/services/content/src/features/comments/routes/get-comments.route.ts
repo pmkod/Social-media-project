@@ -33,10 +33,42 @@ const getCommentsRoute = defineOpenAPIRoute({
 		const page = Number.parseInt(query.page, 10) || 1;
 		const limit = Number.parseInt(query.limit, 10) || 20;
 		const skip = (page - 1) * limit;
+		const authenticatedUserId = c.req.header("X-Authenticated-User-Id");
+		const post = await prisma.post.findUnique({
+			where: { id: postId },
+			select: { authorId: true },
+		});
+		if (
+			!post ||
+			(authenticatedUserId &&
+				(await userServiceClient.hasBlockRelationship(
+					authenticatedUserId,
+					post.authorId,
+				)))
+		) {
+			return c.json({
+				data: [],
+				pagination: { total: 0, page, limit, totalPages: 0 },
+			});
+		}
+		const blockRelationships = authenticatedUserId
+			? await userServiceClient.fetchBlockRelationshipIds(authenticatedUserId)
+			: { blockedUserIds: [], blockedByUserIds: [] };
+		const hiddenUserIds = [
+			...blockRelationships.blockedUserIds,
+			...blockRelationships.blockedByUserIds,
+		];
+		const commentsWhere = {
+			postId,
+			parentId: null,
+			...(hiddenUserIds.length > 0
+				? { authorId: { notIn: hiddenUserIds } }
+				: {}),
+		};
 
 		const [comments, total] = await Promise.all([
 			prisma.comment.findMany({
-				where: { postId, parentId: null },
+				where: commentsWhere,
 				orderBy: { createdAt: "desc" },
 				skip,
 				take: limit,
@@ -51,6 +83,10 @@ const getCommentsRoute = defineOpenAPIRoute({
 					createdAt: true,
 					updatedAt: true,
 					replies: {
+						where:
+							hiddenUserIds.length > 0
+								? { authorId: { notIn: hiddenUserIds } }
+								: undefined,
 						take: 2,
 						orderBy: { createdAt: "asc" },
 						select: {
@@ -67,10 +103,9 @@ const getCommentsRoute = defineOpenAPIRoute({
 					},
 				},
 			}),
-			prisma.comment.count({ where: { postId, parentId: null } }),
+			prisma.comment.count({ where: commentsWhere }),
 		]);
 
-		const authenticatedUserId = c.req.header("X-Authenticated-User-Id");
 		const allComments = comments.flatMap((comment) => [
 			comment,
 			...comment.replies,
@@ -79,7 +114,7 @@ const getCommentsRoute = defineOpenAPIRoute({
 			new Set(allComments.map((comment) => comment.authorId).filter(Boolean)),
 		);
 		const [authorsMap, likedCommentIds] = await Promise.all([
-			userServiceClient.fetchAuthorsBatch(authorIds),
+			userServiceClient.fetchAuthorsBatch(authorIds, authenticatedUserId),
 			(async () => {
 				if (!authenticatedUserId || allComments.length === 0) {
 					return new Set<string>();

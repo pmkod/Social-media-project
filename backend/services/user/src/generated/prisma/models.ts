@@ -10,6 +10,7 @@
  */
 export type * from './models/User.ts'
 export type * from './models/Follow.ts'
+export type * from './models/Block.ts'
 export type * from './models/RefreshToken.ts'
 export type * from './models/UserVerification.ts'
 export type * from './commonInputTypes.ts'

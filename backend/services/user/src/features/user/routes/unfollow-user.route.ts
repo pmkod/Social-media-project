@@ -29,7 +29,7 @@ const unfollowUserRoute = defineOpenAPIRoute<
 
 		const targetUser = await prisma.user.findUnique({
 			where: { id: userId },
-			select: { id: true },
+			select: { id: true, followersCount: true },
 		});
 
 		if (!targetUser) {
@@ -47,23 +47,25 @@ const unfollowUserRoute = defineOpenAPIRoute<
 		});
 
 		if (existingFollow) {
-			await prisma.follow.delete({
-				where: {
-					followerId_followingId: {
-						followerId: authenticatedUser.id,
-						followingId: userId,
+			targetUser.followersCount = await prisma.$transaction(async (tx) => {
+				await tx.follow.delete({
+					where: {
+						followerId_followingId: {
+							followerId: authenticatedUser.id,
+							followingId: userId,
+						},
 					},
-				},
-			});
-			await prisma.user.update({
-				where: { id: authenticatedUser.id },
-				data: { followingCount: { decrement: 1 } },
-			});
-
-			await prisma.user.update({
-				where: { id: userId },
-				data: { followersCount: { decrement: 1 } },
-				select: { followersCount: true },
+				});
+				await tx.user.update({
+					where: { id: authenticatedUser.id },
+					data: { followingCount: { decrement: 1 } },
+				});
+				const updatedTargetUser = await tx.user.update({
+					where: { id: userId },
+					data: { followersCount: { decrement: 1 } },
+					select: { followersCount: true },
+				});
+				return updatedTargetUser.followersCount;
 			});
 		}
 
@@ -73,6 +75,7 @@ const unfollowUserRoute = defineOpenAPIRoute<
 				unfollowedUser: {
 					id: targetUser.id,
 					isFollowedByAuthenticatedUser: false,
+					followersCount: targetUser.followersCount,
 				},
 			},
 			HttpStatus.OK.code,

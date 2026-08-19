@@ -5,6 +5,9 @@ export type AuthorDto = {
 	name: string;
 	handle: string;
 	avatar: string;
+	isOwnProfile: boolean;
+	isBlockedByAuthenticatedUser: boolean;
+	hasBlockedAuthenticatedInUser: boolean;
 };
 
 export type UserProfileDto = {
@@ -14,6 +17,14 @@ export type UserProfileDto = {
 	displayName?: string | null;
 	avatarUrl?: string | null;
 	bio?: string | null;
+	isOwnProfile?: boolean;
+	isBlockedByAuthenticatedUser?: boolean;
+	hasBlockedAuthenticatedInUser?: boolean;
+};
+
+export type BlockRelationshipIdsDto = {
+	blockedUserIds: string[];
+	blockedByUserIds: string[];
 };
 
 export class UserServiceClient {
@@ -26,7 +37,10 @@ export class UserServiceClient {
 		);
 	}
 
-	async fetchAuthorsBatch(userIds: string[]): Promise<Map<string, AuthorDto>> {
+	async fetchAuthorsBatch(
+		userIds: string[],
+		authenticatedUserId?: string,
+	): Promise<Map<string, AuthorDto>> {
 		const uniqueIds = Array.from(
 			new Set(
 				userIds.filter((id): id is string =>
@@ -45,6 +59,9 @@ export class UserServiceClient {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
+					...(authenticatedUserId
+						? { "X-Authenticated-User-Id": authenticatedUserId }
+						: {}),
 				},
 				body: JSON.stringify({ userIds: uniqueIds }),
 			});
@@ -63,6 +80,11 @@ export class UserServiceClient {
 					name: user.displayName || user.fullName || user.username,
 					handle: user.username,
 					avatar: user.avatarUrl || "",
+					isOwnProfile: user.isOwnProfile ?? false,
+					isBlockedByAuthenticatedUser:
+						user.isBlockedByAuthenticatedUser ?? false,
+					hasBlockedAuthenticatedInUser:
+						user.hasBlockedAuthenticatedInUser ?? false,
 				};
 				authorsMap.set(user.id, author);
 			}
@@ -74,6 +96,39 @@ export class UserServiceClient {
 		}
 
 		return authorsMap;
+	}
+
+	async fetchBlockRelationshipIds(
+		userId: string,
+	): Promise<BlockRelationshipIdsDto> {
+		try {
+			const response = await fetch(
+				`${this.baseUrl}/internal/users/${encodeURIComponent(userId)}/block-relationship-ids`,
+			);
+			if (!response.ok) {
+				return { blockedUserIds: [], blockedByUserIds: [] };
+			}
+			const data = (await response.json()) as BlockRelationshipIdsDto;
+			return {
+				blockedUserIds: data.blockedUserIds ?? [],
+				blockedByUserIds: data.blockedByUserIds ?? [],
+			};
+		} catch (error) {
+			console.error(
+				"[UserServiceClient] Failed to fetch block relationship IDs:",
+				error,
+			);
+			return { blockedUserIds: [], blockedByUserIds: [] };
+		}
+	}
+
+	async hasBlockRelationship(userId: string, otherUserId: string) {
+		if (userId === otherUserId) return false;
+		const relationships = await this.fetchBlockRelationshipIds(userId);
+		return (
+			relationships.blockedUserIds.includes(otherUserId) ||
+			relationships.blockedByUserIds.includes(otherUserId)
+		);
 	}
 
 	async fetchFollowingIds(userId: string): Promise<string[]> {

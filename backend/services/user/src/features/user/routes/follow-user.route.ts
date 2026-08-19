@@ -41,6 +41,21 @@ const followUserRoute = defineOpenAPIRoute<
 		if (targetUser === null) {
 			return c.json({ message: "User not found" }, HttpStatus.NOT_FOUND.code);
 		}
+		const block = await prisma.block.findFirst({
+			where: {
+				OR: [
+					{ blockerId: authenticatedUser.id, blockedId: userId },
+					{ blockerId: userId, blockedId: authenticatedUser.id },
+				],
+			},
+			select: { id: true },
+		});
+		if (block) {
+			return c.json(
+				{ message: "You cannot follow a user involved in a block" },
+				HttpStatus.BAD_REQUEST.code,
+			);
+		}
 
 		const existingFollow = await prisma.follow.findUnique({
 			where: {
@@ -52,23 +67,25 @@ const followUserRoute = defineOpenAPIRoute<
 			select: { id: true },
 		});
 
-		if (!existingFollow) {
-			await prisma.follow.create({
-				data: { followerId: authenticatedUser.id, followingId: userId },
-			});
-
-			const [, updatedTargetUser] = await Promise.all([
-				prisma.user.update({
-					where: { id: authenticatedUser.id },
-					data: { followingCount: { increment: 1 } },
-				}),
-				prisma.user.update({
+		const updatedTargetUser = existingFollow
+			? await prisma.user.findUniqueOrThrow({
 					where: { id: userId },
-					data: { followersCount: { increment: 1 } },
 					select: { followersCount: true },
-				}),
-			]);
-		}
+				})
+			: await prisma.$transaction(async (tx) => {
+					await tx.follow.create({
+						data: { followerId: authenticatedUser.id, followingId: userId },
+					});
+					await tx.user.update({
+						where: { id: authenticatedUser.id },
+						data: { followingCount: { increment: 1 } },
+					});
+					return tx.user.update({
+						where: { id: userId },
+						data: { followersCount: { increment: 1 } },
+						select: { followersCount: true },
+					});
+				});
 
 		return c.json(
 			{
@@ -76,6 +93,7 @@ const followUserRoute = defineOpenAPIRoute<
 				followedUser: {
 					id: targetUser.id,
 					isFollowedByAuthenticatedUser: true,
+					followersCount: updatedTargetUser.followersCount,
 				},
 			},
 			HttpStatus.OK.code,

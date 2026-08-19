@@ -13,6 +13,7 @@ type GetPostListInput = {
 	cursorCreatedAt?: string;
 	limit: number;
 	authenticatedUserId?: string;
+	visibilityOwnerId?: string;
 };
 
 const getPostList = async ({
@@ -21,7 +22,23 @@ const getPostList = async ({
 	cursorCreatedAt,
 	limit,
 	authenticatedUserId,
+	visibilityOwnerId,
 }: GetPostListInput) => {
+	const blockRelationships = authenticatedUserId
+		? await userServiceClient.fetchBlockRelationshipIds(authenticatedUserId)
+		: { blockedUserIds: [], blockedByUserIds: [] };
+	const hiddenUserIds = Array.from(
+		new Set([
+			...blockRelationships.blockedUserIds,
+			...blockRelationships.blockedByUserIds,
+		]),
+	);
+	if (visibilityOwnerId && hiddenUserIds.includes(visibilityOwnerId)) {
+		return {
+			posts: [],
+			pagination: { nextCursor: null, hasNextPage: false, limit },
+		};
+	}
 	const cursorDate = cursorCreatedAt ? new Date(cursorCreatedAt) : null;
 	const hasValidCursor =
 		cursorDate !== null && !Number.isNaN(cursorDate.getTime()) && cursorId;
@@ -34,7 +51,11 @@ const getPostList = async ({
 			}
 		: undefined;
 
-	const filters = [where, cursorCondition].filter(
+	const blockCondition: Prisma.PostWhereInput | undefined =
+		hiddenUserIds.length > 0
+			? { authorId: { notIn: hiddenUserIds } }
+			: undefined;
+	const filters = [where, cursorCondition, blockCondition].filter(
 		(filter): filter is Prisma.PostWhereInput => Boolean(filter),
 	);
 
@@ -79,7 +100,12 @@ const getPostList = async ({
 				orderBy: { position: "asc" },
 			},
 			comments: {
-				where: { parentId: null },
+				where: {
+					parentId: null,
+					...(hiddenUserIds.length > 0
+						? { authorId: { notIn: hiddenUserIds } }
+						: {}),
+				},
 				take: 2,
 				orderBy: { createdAt: "desc" },
 				select: {
@@ -115,7 +141,7 @@ const getPostList = async ({
 	);
 
 	const [authorsMap, likedPostIds, bookmarkedPostIds] = await Promise.all([
-		userServiceClient.fetchAuthorsBatch(authorIds),
+		userServiceClient.fetchAuthorsBatch(authorIds, authenticatedUserId),
 		(async () => {
 			if (!authenticatedUserId || postIds.length === 0) {
 				return new Set<string>();

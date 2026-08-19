@@ -5,6 +5,8 @@ type UseAuthenticatedUserQueryData = {
 	fullName: User["fullName"];
 	username: User["username"];
 	avatarUrl?: User["avatarUrl"];
+	followersCount?: User["followersCount"];
+	followingCount?: User["followingCount"];
 };
 
 export type { UseAuthenticatedUserQueryData };

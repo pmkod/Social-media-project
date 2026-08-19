@@ -53,6 +53,7 @@ export const AnyNull = runtime.AnyNull
 export const ModelName = {
   User: 'User',
   Follow: 'Follow',
+  Block: 'Block',
   RefreshToken: 'RefreshToken',
   UserVerification: 'UserVerification'
 } as const
@@ -105,6 +106,16 @@ export const FollowScalarFieldEnum = {
 } as const
 
 export type FollowScalarFieldEnum = (typeof FollowScalarFieldEnum)[keyof typeof FollowScalarFieldEnum]
+
+
+export const BlockScalarFieldEnum = {
+  id: 'id',
+  blockerId: 'blockerId',
+  blockedId: 'blockedId',
+  createdAt: 'createdAt'
+} as const
+
+export type BlockScalarFieldEnum = (typeof BlockScalarFieldEnum)[keyof typeof BlockScalarFieldEnum]
 
 
 export const RefreshTokenScalarFieldEnum = {

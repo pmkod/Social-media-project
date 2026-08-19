@@ -2,6 +2,7 @@ import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
 import type { Prisma } from "@/generated/prisma/client";
+import { getBlockRelationships } from "../services/get-block-relationships.service";
 import { getFollowedUserIds } from "../services/get-followed-user-ids.service";
 import { UserRoutesTag } from "../user.constants";
 
@@ -53,6 +54,20 @@ const getUserFollowingRoute = defineOpenAPIRoute({
 		if (!userExists) {
 			return c.json({ message: "User not found" }, HttpStatus.NOT_FOUND.code);
 		}
+		const authenticatedUserId = c.req.header("X-Authenticated-User-Id");
+		const profileBlockRelationships = await getBlockRelationships(
+			authenticatedUserId,
+			[userId],
+		);
+		if (
+			profileBlockRelationships.blockedByAuthenticatedUserIds.has(userId) ||
+			profileBlockRelationships.hasBlockedAuthenticatedUserIds.has(userId)
+		) {
+			return c.json({
+				users: [],
+				pagination: { nextCursor: null, hasNextPage: false, limit },
+			});
+		}
 
 		const cursorDate = query.cursorCreatedAt
 			? new Date(query.cursorCreatedAt)
@@ -91,11 +106,11 @@ const getUserFollowingRoute = defineOpenAPIRoute({
 		const hasNextPage = connections.length > limit;
 		const items = hasNextPage ? connections.slice(0, limit) : connections;
 		const lastItem = items.at(-1);
-		const authenticatedUserId = c.req.header("X-Authenticated-User-Id");
-		const followedUserIds = await getFollowedUserIds(
-			authenticatedUserId,
-			items.map((connection) => connection.following.id),
-		);
+		const listedUserIds = items.map((connection) => connection.following.id);
+		const [followedUserIds, blockRelationships] = await Promise.all([
+			getFollowedUserIds(authenticatedUserId, listedUserIds),
+			getBlockRelationships(authenticatedUserId, listedUserIds),
+		]);
 
 		return c.json({
 			users: items.map((connection) => ({
@@ -104,6 +119,14 @@ const getUserFollowingRoute = defineOpenAPIRoute({
 				isFollowedByAuthenticatedUser: followedUserIds.has(
 					connection.following.id,
 				),
+				isBlockedByAuthenticatedUser:
+					blockRelationships.blockedByAuthenticatedUserIds.has(
+						connection.following.id,
+					),
+				hasBlockedAuthenticatedInUser:
+					blockRelationships.hasBlockedAuthenticatedUserIds.has(
+						connection.following.id,
+					),
 			})),
 			pagination: {
 				nextCursor:

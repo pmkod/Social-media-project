@@ -52,10 +52,18 @@ const createCommentRoute = defineOpenAPIRoute<
 
 		const post = await prisma.post.findUnique({
 			where: { id: postId },
-			select: { id: true },
+			select: { id: true, authorId: true },
 		});
 
 		if (!post) {
+			return c.json({ error: "Post not found" }, HttpStatus.NOT_FOUND.code);
+		}
+		if (
+			await userServiceClient.hasBlockRelationship(
+				authenticatedUserId,
+				post.authorId,
+			)
+		) {
 			return c.json({ error: "Post not found" }, HttpStatus.NOT_FOUND.code);
 		}
 
@@ -96,9 +104,10 @@ const createCommentRoute = defineOpenAPIRoute<
 			},
 		});
 
-		const authorsMap = await userServiceClient.fetchAuthorsBatch([
+		const authorsMap = await userServiceClient.fetchAuthorsBatch(
+			[authenticatedUserId],
 			authenticatedUserId,
-		]);
+		);
 		const author = authorsMap.get(authenticatedUserId) ?? null;
 
 		return c.json(

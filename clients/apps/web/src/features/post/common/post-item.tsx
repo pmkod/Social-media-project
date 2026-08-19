@@ -7,7 +7,6 @@ import {
 	RiChat3Line,
 	RiHeartFill,
 	RiHeartLine,
-	RiMoreLine,
 } from "@remixicon/react";
 import { Link } from "@tanstack/react-router";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -15,6 +14,7 @@ import { cn } from "@/core/lib/utils.ts";
 import { useAddBookmark } from "@/features/bookmark/use-add-bookmark.ts";
 import { useRemoveBookmark } from "@/features/bookmark/use-remove-bookmark.ts";
 import { CommentItem } from "@/features/comment";
+import { UserActionsDropdown } from "@/features/user/block-user/user-actions-dropdown.tsx";
 import { UserProfileHoverCard } from "@/features/user/profile/user-profile-hover-card.tsx";
 import { useLikePost } from "../like-post/use-like-post.ts";
 import { buildImageUrl, buildVideoUrl } from "../post-media.functions.ts";
@@ -270,14 +270,17 @@ export function PostItem({ post }: PostItemProps) {
 								{formatPostCreationDate(post.createdAt)}
 							</Link>
 						</div>
-						<button
-							type="button"
-							aria-label="Options"
-							onClick={(e) => e.stopPropagation()}
-							className="text-muted-foreground hover:text-foreground p-1 rounded-full hover:bg-accent transition-colors"
-						>
-							<RiMoreLine className="h-4 w-4" />
-						</button>
+						<UserActionsDropdown
+							user={{
+								id: post.author?.id,
+								username: post.author?.handle ?? "user",
+								isOwnProfile: post.author?.isOwnProfile,
+								isBlockedByAuthenticatedUser:
+									post.author?.isBlockedByAuthenticatedUser,
+							}}
+							resource={{ type: "post", postId: post.id }}
+							size="sm"
+						/>
 					</div>
 
 					{/* Post Content */}

@@ -1,5 +1,6 @@
 import { prisma } from "@/core/databases";
 import type { Prisma } from "@/generated/prisma/client";
+import { getBlockRelationships } from "./get-block-relationships.service";
 
 const publicUserProfileSelect = {
 	id: true,
@@ -29,9 +30,9 @@ const getPublicUserProfile = async (
 	if (!user) return null;
 
 	const isOwnProfile = authenticatedUserId === user.id;
-	const follow =
+	const [follow, blockRelationships] = await Promise.all([
 		authenticatedUserId && !isOwnProfile
-			? await prisma.follow.findUnique({
+			? prisma.follow.findUnique({
 					where: {
 						followerId_followingId: {
 							followerId: authenticatedUserId,
@@ -40,12 +41,32 @@ const getPublicUserProfile = async (
 					},
 					select: { id: true },
 				})
-			: null;
+			: null,
+		getBlockRelationships(authenticatedUserId, [user.id]),
+	]);
+	const isBlockedByAuthenticatedUser =
+		blockRelationships.blockedByAuthenticatedUserIds.has(user.id);
+	const hasBlockedAuthenticatedInUser =
+		blockRelationships.hasBlockedAuthenticatedUserIds.has(user.id);
+	const visibleUser = hasBlockedAuthenticatedInUser
+		? {
+				...user,
+				bio: null,
+				location: null,
+				website: null,
+				createdAt: null,
+			}
+		: user;
 
 	return {
-		...user,
+		...visibleUser,
 		isOwnProfile,
-		isFollowedByAuthenticatedUser: Boolean(follow),
+		isFollowedByAuthenticatedUser:
+			!isBlockedByAuthenticatedUser &&
+			!hasBlockedAuthenticatedInUser &&
+			Boolean(follow),
+		isBlockedByAuthenticatedUser,
+		hasBlockedAuthenticatedInUser,
 	};
 };
 

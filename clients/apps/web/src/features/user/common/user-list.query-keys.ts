@@ -8,6 +8,7 @@ const userListQueryKeys = {
 		[...userListRootQueryKey, "followers", userId] as const,
 	following: (userId: string) =>
 		[...userListRootQueryKey, "following", userId] as const,
+	blocked: () => [...userListRootQueryKey, "blocked"] as const,
 };
 
 export { userListQueryKeys, userListRootQueryKey };

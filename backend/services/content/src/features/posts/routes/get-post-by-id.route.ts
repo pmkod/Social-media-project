@@ -18,6 +18,7 @@ const routeDef = createRoute({
 		[HttpStatus.OK.code]: {
 			description: "Post details with medias and author",
 		},
+		[HttpStatus.NOT_FOUND.code]: { description: "Post not found" },
 	},
 });
 
@@ -68,10 +69,19 @@ const getPostByIdRoute = defineOpenAPIRoute({
 		});
 
 		if (!post) {
-			throw new Error("Post not found");
+			return c.json({ message: "Post not found" }, HttpStatus.NOT_FOUND.code);
 		}
 
 		const authenticatedUserId = c.req.header("X-Authenticated-User-Id");
+		if (
+			authenticatedUserId &&
+			(await userServiceClient.hasBlockRelationship(
+				authenticatedUserId,
+				post.authorId,
+			))
+		) {
+			return c.json({ message: "Post not found" }, HttpStatus.NOT_FOUND.code);
+		}
 		const [like, bookmark, authorsMap] = await Promise.all([
 			authenticatedUserId
 				? prisma.postLike.findUnique({
@@ -95,7 +105,7 @@ const getPostByIdRoute = defineOpenAPIRoute({
 						select: { id: true },
 					})
 				: null,
-			userServiceClient.fetchAuthorsBatch([post.authorId]),
+			userServiceClient.fetchAuthorsBatch([post.authorId], authenticatedUserId),
 		]);
 		const author = authorsMap.get(post.authorId) ?? null;
 

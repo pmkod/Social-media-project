@@ -1,6 +1,7 @@
 import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
+import { userServiceClient } from "@/core/services/user-service.client";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { requireUserAuthentication } from "@/features/authentication/middlewares/require-user-authentication.middleware";
 import { PostsRoutesTag } from "../posts.constants";
@@ -36,11 +37,22 @@ const likePostRoute = defineOpenAPIRoute<typeof routeDef, HonoAuthenticatedEnv>(
 
 			const post = await prisma.post.findUnique({
 				where: { id: postId },
-				select: { id: true },
+				select: { id: true, authorId: true },
 			});
 
 			if (!post) {
 				throw new Error("Post not found");
+			}
+			if (
+				await userServiceClient.hasBlockRelationship(
+					authenticatedUserId,
+					post.authorId,
+				)
+			) {
+				return c.json(
+					{ success: false, message: "Post not found", likesCount: 0 },
+					HttpStatus.NOT_FOUND.code,
+				);
 			}
 
 			const existingLike = await prisma.postLike.findUnique({

@@ -1,6 +1,7 @@
 import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
+import { userServiceClient } from "@/core/services/user-service.client";
 import { PostsRoutesTag } from "../posts.constants";
 
 const routeDef = createRoute({
@@ -24,6 +25,21 @@ const getPostLikesRoute = defineOpenAPIRoute({
 	route: routeDef,
 	handler: async (c) => {
 		const { postId } = c.req.valid("param");
+		const authenticatedUserId = c.req.header("X-Authenticated-User-Id");
+		const post = await prisma.post.findUnique({
+			where: { id: postId },
+			select: { authorId: true },
+		});
+		if (
+			!post ||
+			(authenticatedUserId &&
+				(await userServiceClient.hasBlockRelationship(
+					authenticatedUserId,
+					post.authorId,
+				)))
+		) {
+			return c.json({ count: 0, likes: [] });
+		}
 
 		const [likes, count] = await Promise.all([
 			prisma.postLike.findMany({

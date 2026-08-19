@@ -10,7 +10,10 @@ import {
 
 type FollowResponse = {
 	message: string;
-	followedUser: Pick<User, "id" | "isFollowedByAuthenticatedUser">;
+	followedUser: Pick<
+		User,
+		"id" | "isFollowedByAuthenticatedUser" | "followersCount"
+	>;
 };
 
 type FollowUserInput = {
@@ -34,9 +37,7 @@ const useFollowUser = () => {
 									...queryData.user,
 									isFollowedByAuthenticatedUser:
 										followedUser.isFollowedByAuthenticatedUser,
-									followersCount: queryData.user.followersCount
-										? queryData.user.followersCount + 1
-										: 0,
+									followersCount: followedUser.followersCount,
 								},
 							}
 						: queryData,
@@ -51,9 +52,7 @@ const useFollowUser = () => {
 									...cachedUser,
 									isFollowedByAuthenticatedUser:
 										followedUser.isFollowedByAuthenticatedUser,
-									followersCount: cachedUser.followersCount
-										? cachedUser.followersCount + 1
-										: 0,
+									followersCount: followedUser.followersCount,
 								}
 							: cachedUser,
 					),

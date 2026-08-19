@@ -30,6 +30,8 @@ model User {
   userVerifications UserVerification[]
   followers         Follow[]           @relation("UserFollowers")
   following         Follow[]           @relation("UserFollowing")
+  blockedUsers      Block[]            @relation("UserBlocks")
+  blockedByUsers    Block[]            @relation("UserBlockedBy")
 
   @@map("user")
 }
@@ -46,6 +48,20 @@ model Follow {
   @@index([followerId, createdAt])
   @@index([followingId, createdAt])
   @@map("follow")
+}
+
+model Block {
+  id        String   @id @default(cuid())
+  blockerId String   @map("blocker_id")
+  blockedId String   @map("blocked_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  blocker   User     @relation("UserBlocks", fields: [blockerId], references: [id], onDelete: Cascade)
+  blocked   User     @relation("UserBlockedBy", fields: [blockedId], references: [id], onDelete: Cascade)
+
+  @@unique([blockerId, blockedId])
+  @@index([blockerId, createdAt])
+  @@index([blockedId, createdAt])
+  @@map("block")
 }
 
 model RefreshToken {

@@ -6,17 +6,27 @@ import { useUnfollowUser } from "../unfollow-user/use-unfollow-user.ts";
 import type { User } from "./user.ts";
 
 type FollowButtonProps = {
-	user: Pick<User, "id" | "isFollowedByAuthenticatedUser">;
+	user: Pick<
+		User,
+		| "id"
+		| "isFollowedByAuthenticatedUser"
+		| "isBlockedByAuthenticatedUser"
+		| "hasBlockedAuthenticatedInUser"
+	>;
 	size?: ComponentProps<typeof Button>["size"];
+	className?: string;
 };
 
-function FollowButton({ user, size = "sm" }: FollowButtonProps) {
+function FollowButton({ user, size = "sm", className }: FollowButtonProps) {
 	const [isHovered, setIsHovered] = useState(false);
 	const followUser = useFollowUser();
 	const unfollowUser = useUnfollowUser();
 	const isMutationPending = followUser.isPending || unfollowUser.isPending;
 	const showUnfollow =
 		user.isFollowedByAuthenticatedUser && isHovered && !isMutationPending;
+	if (user.isBlockedByAuthenticatedUser || user.hasBlockedAuthenticatedInUser) {
+		return null;
+	}
 
 	const handleClick = () => {
 		if (isMutationPending) return;
@@ -35,6 +45,7 @@ function FollowButton({ user, size = "sm" }: FollowButtonProps) {
 			size={size}
 			variant={user.isFollowedByAuthenticatedUser ? "outline" : "default"}
 			colorScheme={showUnfollow ? "destructive" : "primary"}
+			className={className}
 			disabled={isMutationPending}
 			onMouseEnter={() => setIsHovered(true)}
 			onMouseLeave={() => setIsHovered(false)}

@@ -17,6 +17,7 @@ const sendTo = async (params: SendToParams) => {
 	const headers = new Headers(params.c.req.header());
 	headers.delete("host");
 	headers.delete("Authorization");
+	headers.delete("X-Authenticated-User-Id");
 
 	if (params.authenticatedUser) {
 		headers.set("X-Authenticated-User-Id", params.authenticatedUser.id);

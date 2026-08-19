@@ -1,5 +1,6 @@
 import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
+import { userServiceClient } from "@/core/services/user-service.client";
 import { BookmarksRoutesTag } from "../bookmarks.constants";
 import { getBookmarkCollections } from "../services/get-bookmark-collections.service";
 
@@ -19,6 +20,16 @@ const getUserCollectionsRoute = defineOpenAPIRoute({
 	handler: async (c) => {
 		const { userId } = c.req.valid("param");
 		const authenticatedUserId = c.req.header("X-Authenticated-User-Id");
+		if (authenticatedUserId && authenticatedUserId !== userId) {
+			const relationships =
+				await userServiceClient.fetchBlockRelationshipIds(authenticatedUserId);
+			if (
+				relationships.blockedUserIds.includes(userId) ||
+				relationships.blockedByUserIds.includes(userId)
+			) {
+				return c.json({ collections: [] });
+			}
+		}
 		return c.json({
 			collections: await getBookmarkCollections({
 				ownerId: userId,

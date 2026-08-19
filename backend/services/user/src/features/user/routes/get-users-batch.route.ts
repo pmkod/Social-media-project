@@ -1,6 +1,7 @@
 import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
+import { getBlockRelationships } from "../services/get-block-relationships.service";
 import { UserRoutesTag } from "../user.constants";
 
 const GetUsersBatchRequestBody = z.object({
@@ -61,8 +62,22 @@ const getUsersBatchRoute = defineOpenAPIRoute({
 				createdAt: true,
 			},
 		});
+		const authenticatedUserId = c.req.header("X-Authenticated-User-Id");
+		const blockRelationships = await getBlockRelationships(
+			authenticatedUserId,
+			users.map((user) => user.id),
+		);
 
-		return c.json(users);
+		return c.json(
+			users.map((user) => ({
+				...user,
+				isOwnProfile: user.id === authenticatedUserId,
+				isBlockedByAuthenticatedUser:
+					blockRelationships.blockedByAuthenticatedUserIds.has(user.id),
+				hasBlockedAuthenticatedInUser:
+					blockRelationships.hasBlockedAuthenticatedUserIds.has(user.id),
+			})),
+		);
 	},
 });
 

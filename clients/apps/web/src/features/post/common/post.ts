@@ -1,10 +1,13 @@
 import type { Comment } from "@/features/comment";
 
 export type PostAuthor = {
-	id?: string;
+	id: string;
 	name: string;
 	handle: string;
 	avatar: string;
+	isOwnProfile?: boolean;
+	isBlockedByAuthenticatedUser?: boolean;
+	hasBlockedAuthenticatedInUser?: boolean;
 };
 
 export type PostFileItem = {
