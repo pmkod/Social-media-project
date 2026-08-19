@@ -1,16 +1,17 @@
 import { RiLoader4Line } from "@remixicon/react";
-import { type ComponentProps, useEffect, useState } from "react";
+import type { ComponentProps } from "react";
 import { Button } from "@/core/components/ui/button.tsx";
 import { useFollowUser } from "../follow-user/use-follow-user.ts";
 import { useUnfollowUser } from "../unfollow-user/use-unfollow-user.ts";
 import type { User } from "./user.ts";
 
 type FollowButtonProps = {
-	user: Pick<User, "id" | "username" | "isFollowedByAuthenticatedUser">;
+	user: Pick<User, "id" | "isFollowedByAuthenticatedUser">;
 	size?: ComponentProps<typeof Button>["size"];
+	className?: string;
 };
 
-function FollowButton({ user, size = "sm" }: FollowButtonProps) {
+function FollowButton({ user, size = "sm", className }: FollowButtonProps) {
 	const followUser = useFollowUser();
 	const unfollowUser = useUnfollowUser();
 	const isMutationPending = followUser.isPending || unfollowUser.isPending;
@@ -19,7 +20,7 @@ function FollowButton({ user, size = "sm" }: FollowButtonProps) {
 		if (isMutationPending) return;
 
 		if (user.isFollowedByAuthenticatedUser) {
-			unfollowUser.mutate({ userId: user.id, username: user.username });
+			unfollowUser.mutate({ userId: user.id });
 			return;
 		}
 
@@ -30,6 +31,7 @@ function FollowButton({ user, size = "sm" }: FollowButtonProps) {
 		<Button
 			type="button"
 			size={size}
+			className={className}
 			variant={user.isFollowedByAuthenticatedUser ? "outline" : "default"}
 			disabled={isMutationPending}
 			onClick={(event) => {

@@ -5,7 +5,7 @@ import { cn } from "@/core/lib/utils.ts";
 import { formatCommentCreationDate } from "@/features/post/common/post.utils.ts";
 import { UserProfileHoverCard } from "@/features/user/profile/user-profile-hover-card.tsx";
 import { CreateCommentForm } from "../create-comment/create-comment-form.tsx";
-import { useCommentReplies } from "../get-comments/use-comment-replies.ts";
+import { useCommentReplies } from "../comments/use-comment-replies.ts";
 import { useLikeComment } from "../like-comment/use-like-comment.ts";
 import { useUnlikeComment } from "../unlike-comment/use-unlike-comment.ts";
 import type { Comment } from "./comment.ts";

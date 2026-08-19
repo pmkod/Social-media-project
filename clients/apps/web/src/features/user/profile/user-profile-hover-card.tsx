@@ -11,7 +11,7 @@ import {
 	HoverCardTrigger,
 } from "@/core/components/ui/hover-card.tsx";
 import { FollowButton } from "@/features/user/common/follow-button.tsx";
-import { useUserProfile } from "@/features/user/get-user-profile/use-user-profile.ts";
+import { useUserProfile } from "@/features/user/user-profile/use-user-profile.ts";
 import type { User } from "../common/user.ts";
 import { UserProfileLink } from "../common/user-profile-link.tsx";
 

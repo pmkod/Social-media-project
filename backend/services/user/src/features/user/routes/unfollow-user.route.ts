@@ -27,36 +27,56 @@ const unfollowUserRoute = defineOpenAPIRoute<
 		if (!authenticatedUser) throw new Error("Unauthorized");
 		const { id: userId } = c.req.valid("param");
 
-		const result = await prisma.$transaction(async (tx) => {
-			const deleted = await tx.follow.deleteMany({
-				where: { followerId: authenticatedUser.id, followingId: userId },
-			});
-			if (deleted.count > 0) {
-				await Promise.all([
-					tx.user.update({
-						where: { id: authenticatedUser.id },
-						data: { followingCount: { decrement: 1 } },
-					}),
-					tx.user.update({
-						where: { id: userId },
-						data: { followersCount: { decrement: 1 } },
-					}),
-				]);
-			}
-
-			return tx.user.findUnique({
-				where: { id: userId },
-				select: { followersCount: true },
-			});
+		const targetUser = await prisma.user.findUnique({
+			where: { id: userId },
+			select: { id: true },
 		});
 
-		if (!result) {
+		if (!targetUser) {
 			return c.json({ message: "User not found" }, HttpStatus.NOT_FOUND.code);
 		}
 
-		return c.json({
-			message: "Success",
+		const existingFollow = await prisma.follow.findUnique({
+			where: {
+				followerId_followingId: {
+					followerId: authenticatedUser.id,
+					followingId: userId,
+				},
+			},
+			select: { id: true },
 		});
+
+		if (existingFollow) {
+			await prisma.follow.delete({
+				where: {
+					followerId_followingId: {
+						followerId: authenticatedUser.id,
+						followingId: userId,
+					},
+				},
+			});
+			await prisma.user.update({
+				where: { id: authenticatedUser.id },
+				data: { followingCount: { decrement: 1 } },
+			});
+
+			await prisma.user.update({
+				where: { id: userId },
+				data: { followersCount: { decrement: 1 } },
+				select: { followersCount: true },
+			});
+		}
+
+		return c.json(
+			{
+				message: "Success",
+				unfollowedUser: {
+					id: targetUser.id,
+					isFollowedByAuthenticatedUser: false,
+				},
+			},
+			HttpStatus.OK.code,
+		);
 	},
 });
 

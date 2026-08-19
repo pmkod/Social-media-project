@@ -3,7 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { Logo } from "@/core/components/partials/logo";
 import { Button } from "@/core/components/ui/button.tsx";
 import { NAV_ITEMS } from "@/core/constants/navigation.constants";
-import { useAuthenticatedUser } from "@/features/user/get-authenticated-user/use-authenticated-user.ts";
+import { useAuthenticatedUser } from "@/features/user/authenticated-user/use-authenticated-user.ts";
 
 export function Sidebar() {
 	const { data: user } = useAuthenticatedUser();

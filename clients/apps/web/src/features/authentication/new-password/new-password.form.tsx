@@ -13,7 +13,7 @@ import {
 } from "@/core/components/ui/field.tsx";
 import { PasswordInput } from "@/core/components/ui/password-input.tsx";
 import { UserValidationSchema } from "@/features/user/common/user.validation-schemas.ts";
-import { authenticatedUserQueryKey } from "@/features/user/get-authenticated-user/authenticated-user.query-key.ts";
+import { authenticatedUserQueryKey } from "@/features/user/authenticated-user/authenticated-user.query-key.ts";
 import { useNewPassword } from "./use-new-password";
 
 const newPasswordSchema = z

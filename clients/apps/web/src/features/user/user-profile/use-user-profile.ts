@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { httpClient } from "@/core/http-clients/http-client.ts";
-import type { User } from "@/features/user/common/user.ts";
 import { userDetailsQueryKeys } from "./user-details-query-keys.ts";
+import type { UserProfileResponse } from "./user-profile-response.ts";
 
 const useUserProfile = (username: string) =>
 	useQuery({
@@ -9,7 +9,7 @@ const useUserProfile = (username: string) =>
 		queryFn: () =>
 			httpClient
 				.get(`users/by-username/${encodeURIComponent(username)}`)
-				.json<User>(),
+				.json<UserProfileResponse>(),
 		enabled: Boolean(username),
 		retry: false,
 	});

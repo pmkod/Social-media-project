@@ -3,7 +3,7 @@ import { RiSendPlane2Line } from "@remixicon/react";
 import { useForm, useSelector } from "@tanstack/react-form";
 import { z } from "zod";
 import { Button } from "@/core/components/ui/button.tsx";
-import { useAuthenticatedUser } from "@/features/user/get-authenticated-user/use-authenticated-user.ts";
+import { useAuthenticatedUser } from "@/features/user/authenticated-user/use-authenticated-user.ts";
 import type { Comment } from "../common/comment.ts";
 import { useCreateComment } from "./use-create-comment.ts";
 import { useCreateCommentReply } from "./use-create-comment-reply.ts";

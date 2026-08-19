@@ -28,7 +28,7 @@ const getUserByUsernameRoute = defineOpenAPIRoute({
 			return c.json({ message: "User not found" }, HttpStatus.NOT_FOUND.code);
 		}
 
-		return c.json(user);
+		return c.json({ user });
 	},
 });
 

@@ -21,8 +21,8 @@ import {
 	TabsTrigger,
 } from "@/core/components/ui/tabs.tsx";
 import { FollowButton } from "@/features/user/common/follow-button.tsx";
-import { UserConnectionsModal } from "@/features/user/get-user-connections/user-connections.modal.tsx";
-import { useUserProfile } from "@/features/user/get-user-profile/use-user-profile.ts";
+import { UserConnectionsModal } from "@/features/user/user-connections/user-connections.modal.tsx";
+import { useUserProfile } from "@/features/user/user-profile/use-user-profile.ts";
 import { ProfileCollections } from "./profile-collections.tsx";
 import { ProfilePostList } from "./profile-post-list.tsx";
 
@@ -47,7 +47,7 @@ export function ProfileView({ username }: ProfileViewProps) {
 		);
 	}
 
-	const user = profileQuery.data;
+	const user = profileQuery.data?.user;
 	if (profileQuery.isError || !user) {
 		return (
 			<div className="mx-auto min-h-screen max-w-2xl border-x border-border p-12 text-center">
