@@ -1,25 +1,26 @@
 import { Link } from "@tanstack/react-router";
 import type { MouseEventHandler, ReactNode } from "react";
+import type { User } from "./user.ts";
 
 type UserProfileLinkProps = {
-	username?: string | null;
+	user?: Pick<User, "username"> | null;
 	children: ReactNode;
 	className?: string;
 	onClick?: MouseEventHandler<HTMLAnchorElement>;
 };
 
 function UserProfileLink({
-	username,
+	user,
 	children,
 	className,
 	onClick,
 }: UserProfileLinkProps) {
-	if (!username) return <span className={className}>{children}</span>;
+	if (!user?.username) return <span className={className}>{children}</span>;
 
 	return (
 		<Link
 			to="/$username"
-			params={{ username: `@${username}` }}
+			params={{ username: `@${user.username}` }}
 			className={className}
 			onClick={onClick}
 		>
@@ -29,3 +30,5 @@ function UserProfileLink({
 }
 
 export { UserProfileLink };
+export type { UserProfileLinkProps };
+

@@ -237,7 +237,7 @@ export function PostItem({ post }: PostItemProps) {
 				{/* Avatar */}
 				<UserProfileHoverCard user={post.author}>
 					{/* <UserProfileLink
-						username={post.author.username}
+						user={post.author}
 						onClick={(e) => e.stopPropagation()}
 						className="block"
 					> */}
@@ -261,7 +261,7 @@ export function PostItem({ post }: PostItemProps) {
 						<div className="flex min-w-0 flex-wrap items-center gap-1.5 text-lg">
 							<UserProfileHoverCard user={post.author}>
 								<UserProfileLink
-									username={post.author.username}
+									user={post.author}
 									onClick={(e) => e.stopPropagation()}
 									className="flex min-w-0 items-center gap-1.5 cursor-pointer"
 								>
