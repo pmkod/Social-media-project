@@ -1,8 +1,9 @@
 import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
+import { prisma } from "@/core/databases";
+import { userServiceClient } from "@/core/services/user-service.client";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { requireUserAuthentication } from "@/features/authentication/middlewares/require-user-authentication.middleware";
-import { getPostList } from "@/features/posts/services/get-post-list.service";
 import { BookmarksRoutesTag } from "../bookmarks.constants";
 
 const routeDef = createRoute({
@@ -36,15 +37,113 @@ const getBookmarksRoute = defineOpenAPIRoute<
 			Math.max(Number.parseInt(query.limit, 10) || 10, 1),
 			50,
 		);
-		return c.json(
-			await getPostList({
-				where: { bookmarks: { some: { ownerId } } },
-				cursorId: query.cursorId,
-				cursorCreatedAt: query.cursorCreatedAt,
-				limit,
-				authenticatedUserId: ownerId,
-			}),
+
+		const blockRelationships =
+			await userServiceClient.fetchBlockRelationshipIds(ownerId);
+		const hiddenUserIds = Array.from(
+			new Set([
+				...blockRelationships.blockedUserIds,
+				...blockRelationships.blockedByUserIds,
+			]),
 		);
+
+		const cursorDate = query.cursorCreatedAt
+			? new Date(query.cursorCreatedAt)
+			: null;
+		const hasValidCursor =
+			cursorDate !== null &&
+			!Number.isNaN(cursorDate.getTime()) &&
+			query.cursorId;
+		const cursorCondition = hasValidCursor
+			? {
+					OR: [
+						{ createdAt: { lt: cursorDate } },
+						{ createdAt: cursorDate, id: { lt: query.cursorId } },
+					],
+				}
+			: undefined;
+
+		const posts = await prisma.post.findMany({
+			where: {
+				bookmarks: { some: { ownerId } },
+				...(hiddenUserIds.length > 0
+					? { authorId: { notIn: hiddenUserIds } }
+					: {}),
+				...(cursorCondition ? cursorCondition : {}),
+			},
+			orderBy: [{ createdAt: "desc" }, { id: "desc" }],
+			take: limit + 1,
+			select: {
+				id: true,
+				authorId: true,
+				text: true,
+				likesCount: true,
+				commentsCount: true,
+				createdAt: true,
+				updatedAt: true,
+				medias: {
+					select: {
+						id: true,
+						postId: true,
+						position: true,
+						mediaType: true,
+						createdAt: true,
+						lowQualityFileId: true,
+						lowQualityFile: {
+							select: {
+								id: true,
+								mimeType: true,
+								filename: true,
+								createdAt: true,
+							},
+						},
+						highQualityFileId: true,
+						highQualityFile: {
+							select: {
+								id: true,
+								mimeType: true,
+								filename: true,
+								createdAt: true,
+							},
+						},
+					},
+					orderBy: { position: "asc" },
+				},
+			},
+		});
+
+		const hasNextPage = posts.length > limit;
+		const items = hasNextPage ? posts.slice(0, limit) : posts;
+		const lastItem = items.at(-1);
+		const nextCursor =
+			hasNextPage && lastItem
+				? { id: lastItem.id, createdAt: lastItem.createdAt.toISOString() }
+				: null;
+
+		const postIds = items.map((post) => post.id);
+		const authorIds = Array.from(new Set(items.map((post) => post.authorId)));
+
+		const [authorsMap, likedPostIds] = await Promise.all([
+			userServiceClient.fetchAuthorsBatch(authorIds, ownerId),
+			postIds.length > 0
+				? prisma.postLike
+						.findMany({
+							where: { authorId: ownerId, postId: { in: postIds } },
+							select: { postId: true },
+						})
+						.then((likes) => new Set(likes.map((like) => like.postId)))
+				: Promise.resolve(new Set<string>()),
+		]);
+
+		return c.json({
+			posts: items.map((post) => ({
+				...post,
+				isLikedByAuthenticatedUser: likedPostIds.has(post.id),
+				isBookmarkedByAuthenticatedUser: true,
+				author: authorsMap.get(post.authorId) ?? null,
+			})),
+			pagination: { nextCursor, hasNextPage, limit },
+		});
 	},
 });
 

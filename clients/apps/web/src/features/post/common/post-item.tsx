@@ -8,7 +8,7 @@ import {
 	RiHeartFill,
 	RiHeartLine,
 } from "@remixicon/react";
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { cn } from "@/core/lib/utils.ts";
 import { useAddBookmark } from "@/features/bookmark/use-add-bookmark.ts";
@@ -21,6 +21,7 @@ import { useUnlikePost } from "../unlike-post/use-unlike-post.ts";
 import type { Post, PostMediaItem } from "./post.ts";
 import { formatPostCreationDate } from "./post.utils.ts";
 import { PostActionsDropdown } from "./post-actions-dropdown.tsx";
+import { UserProfileLink } from "@/features/user/common/user-profile-link.tsx";
 
 type PostItemProps = { post: Post };
 
@@ -193,6 +194,8 @@ function PostMediaSlider({ media }: { media: RenderMediaItem[] }) {
 }
 
 export function PostItem({ post }: PostItemProps) {
+	const navigate = useNavigate();
+
 	const isLiked = post.isLikedByAuthenticatedUser ?? false;
 	const likesCount = post.likesCount ?? 0;
 	const isBookmarked = post.isBookmarkedByAuthenticatedUser ?? false;
@@ -223,10 +226,21 @@ export function PostItem({ post }: PostItemProps) {
 	const commentsCount = post.commentsCount ?? 0;
 
 	return (
-		<article className="border-x border-t last:border-b first:rounded-t-xl last:rounded-b-xl border-border p-4 hover:bg-muted/30 transition-colors">
+		<Link
+			to="/posts/$postId"
+			params={{ postId: post.id }}
+			// search={{ focusComment: true }}
+			// onClick={(e) => e.stopPropagation()}
+			className="block border-x border-t last:border-b first:rounded-t-xl last:rounded-b-xl border-border p-4 hover:bg-muted/30 transition-colors cursor-pointer"
+		>
 			<div className="flex gap-3">
 				{/* Avatar */}
 				<UserProfileHoverCard user={post.author}>
+					{/* <UserProfileLink
+						username={post.author.username}
+						onClick={(e) => e.stopPropagation()}
+						className="block"
+					> */}
 					<img
 						src={
 							post.author?.avatarUrl ||
@@ -237,6 +251,7 @@ export function PostItem({ post }: PostItemProps) {
 						alt={post.author.fullName}
 						className="size-12 rounded-full object-cover ring-1 ring-border"
 					/>
+					{/* </UserProfileLink> */}
 				</UserProfileHoverCard>
 
 				{/* Content Container */}
@@ -245,23 +260,23 @@ export function PostItem({ post }: PostItemProps) {
 					<div className="flex items-center justify-between gap-2">
 						<div className="flex min-w-0 flex-wrap items-center gap-1.5 text-lg">
 							<UserProfileHoverCard user={post.author}>
-								<div className="flex min-w-0 items-center gap-1.5 cursor-pointer">
+								<UserProfileLink
+									username={post.author.username}
+									onClick={(e) => e.stopPropagation()}
+									className="flex min-w-0 items-center gap-1.5 cursor-pointer"
+								>
 									<span className="truncate text-base font-semibold text-foreground">
 										{post.author.fullName}
 									</span>
 									<span className="truncate text-sm text-muted-foreground">
 										@{post.author?.username}
 									</span>
-								</div>
+								</UserProfileLink>
 							</UserProfileHoverCard>
 							<span className="text-sm text-muted-foreground">·</span>
-							<Link
-								to="/posts/$postId"
-								params={{ postId: post.id }}
-								className="text-sm font-normal text-muted-foreground hover:underline"
-							>
+							<span className="text-sm font-normal text-muted-foreground hover:underline">
 								{formatPostCreationDate(post.createdAt)}
-							</Link>
+							</span>
 						</div>
 						<PostActionsDropdown
 							user={{
@@ -277,15 +292,11 @@ export function PostItem({ post }: PostItemProps) {
 					</div>
 
 					{/* Post Content */}
-					<Link
-						to="/posts/$postId"
-						params={{ postId: post.id }}
-						className="block mt-0.5"
-					>
+					<div className="mt-0.5">
 						<p className="text-sm text-foreground whitespace-pre-line leading-relaxed">
 							{post.text || post.content}
 						</p>
-					</Link>
+					</div>
 
 					{/* Media Grid */}
 					{mediaList.length > 0 ? <PostMediaGrid media={mediaList} /> : null}
@@ -351,6 +362,6 @@ export function PostItem({ post }: PostItemProps) {
 					) : null}
 				</div>
 			</div>
-		</article>
+		</Link>
 	);
 }

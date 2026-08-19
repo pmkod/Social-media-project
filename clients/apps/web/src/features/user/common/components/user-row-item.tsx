@@ -1,7 +1,6 @@
 import { cn } from "@/core/lib/utils.ts";
 import { FollowButton } from "../follow-button.tsx";
 import type { User } from "../user.ts";
-import { UserProfileLink } from "../user-profile-link.tsx";
 import { UserProfileHoverCard } from "../../profile/user-profile-hover-card.tsx";
 import { useNavigate } from "@tanstack/react-router";
 
