@@ -12,6 +12,7 @@ import { EmptyBlock } from "@/core/components/ui/empty-block.tsx";
 import { ExceptionBlock } from "@/core/components/ui/exception-block.tsx";
 import type { NiceModalHandler } from "@/core/components/ui/nice-modal.tsx";
 import { cn } from "@/core/lib/utils.ts";
+import { FollowButton } from "./follow-button.tsx";
 import type { User } from "./user.ts";
 
 type UserListModalQuery = {
@@ -84,15 +85,15 @@ const UserListModal = ({
 						</div>
 					) : query.isError ? (
 						<ExceptionBlock
-							title="Impossible de charger cette liste"
-							description="Une erreur s'est produite pendant le chargement de la liste."
+							title="Unable to load this list"
+							description="An error occurred while loading this list."
 							onRefresh={() => void query.refetch()}
 							borderless
 						/>
 					) : users.length === 0 ? (
 						<EmptyBlock
 							title={emptyTitle}
-							description="Cette liste apparaîtra ici dès qu'elle contiendra des utilisateurs."
+							description="This list will appear here once it contains users."
 							borderless
 						/>
 					) : (
@@ -105,32 +106,37 @@ const UserListModal = ({
 									`https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=random`;
 
 								return (
-									<Link
+									<div
 										key={user.id}
-										to="/$username"
-										params={{ username: `@${user.username}` }}
-										onClick={() => modal.remove()}
 										className="flex items-center gap-3 px-5 py-3 transition hover:bg-muted/60"
 									>
-										<img
-											src={avatar}
-											alt={displayName}
-											className="size-11 shrink-0 rounded-full object-cover ring-1 ring-border"
-										/>
-										<div className="min-w-0 flex-1">
-											<p className="truncate text-sm font-semibold text-foreground">
-												{displayName}
-											</p>
-											<p className="truncate text-xs text-muted-foreground">
-												@{user.username}
-											</p>
-											{user.bio ? (
-												<p className="mt-1 line-clamp-1 text-xs text-foreground/80">
-													{user.bio}
+										<Link
+											to="/$username"
+											params={{ username: `@${user.username}` }}
+											onClick={() => modal.remove()}
+											className="flex min-w-0 flex-1 items-center gap-3"
+										>
+											<img
+												src={avatar}
+												alt={displayName}
+												className="size-11 shrink-0 rounded-full object-cover ring-1 ring-border"
+											/>
+											<div className="min-w-0 flex-1">
+												<p className="truncate text-sm font-semibold text-foreground">
+													{displayName}
 												</p>
-											) : null}
-										</div>
-									</Link>
+												<p className="truncate text-xs text-muted-foreground">
+													@{user.username}
+												</p>
+												{user.bio ? (
+													<p className="mt-1 line-clamp-1 text-xs text-foreground/80">
+														{user.bio}
+													</p>
+												) : null}
+											</div>
+										</Link>
+										{user.isOwnProfile ? null : <FollowButton user={user} />}
+									</div>
 								);
 							})}
 

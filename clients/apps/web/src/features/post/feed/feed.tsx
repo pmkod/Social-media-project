@@ -49,14 +49,14 @@ export function Feed() {
 				<PostListLoader />
 			) : isError ? (
 				<ExceptionBlock
-					title="Impossible de charger le fil"
-					description="Une erreur s'est produite lors du chargement des publications."
+					title="Unable to load feed"
+					description="An error occurred while loading posts."
 					onRefresh={() => void refetch()}
 				/>
 			) : allPosts.length === 0 ? (
 				<EmptyBlock
-					title="Aucune publication pour le moment"
-					description="Suivez des utilisateurs pour retrouver leurs publications dans votre fil."
+					title="No posts yet"
+					description="Follow users to see their posts in your feed."
 				/>
 			) : (
 				/* Feed Posts */

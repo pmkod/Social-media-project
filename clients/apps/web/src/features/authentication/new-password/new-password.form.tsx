@@ -19,12 +19,10 @@ import { useNewPassword } from "./use-new-password";
 const newPasswordSchema = z
 	.object({
 		password: UserValidationSchema.shape.password,
-		confirmPassword: z
-			.string()
-			.min(1, "Veuillez confirmer votre mot de passe."),
+		confirmPassword: z.string().min(1, "Please confirm your password."),
 	})
 	.refine((data) => data.password === data.confirmPassword, {
-		message: "Les mots de passe ne correspondent pas.",
+		message: "Passwords do not match.",
 		path: ["confirmPassword"],
 	});
 
@@ -64,11 +62,9 @@ function NewPasswordForm({ onSuccess }: NewPasswordFormProps) {
 	return (
 		<div className="flex flex-col gap-6">
 			<div className="flex flex-col gap-1">
-				<h2 className="text-2xl font-semibold tracking-tight">
-					Nouveau mot de passe
-				</h2>
+				<h2 className="text-2xl font-semibold tracking-tight">New password</h2>
 				<p className="text-sm text-muted-foreground">
-					Choisissez un nouveau mot de passe sécurisé.
+					Choose a new secure password.
 				</p>
 			</div>
 
@@ -90,9 +86,7 @@ function NewPasswordForm({ onSuccess }: NewPasswordFormProps) {
 					<form.Field name="password">
 						{(field) => (
 							<Field data-invalid={!field.state.meta.isValid}>
-								<FieldLabel htmlFor={field.name}>
-									Nouveau mot de passe
-								</FieldLabel>
+								<FieldLabel htmlFor={field.name}>New password</FieldLabel>
 								<PasswordInput
 									id={field.name}
 									size="lg"
@@ -103,7 +97,7 @@ function NewPasswordForm({ onSuccess }: NewPasswordFormProps) {
 									autoComplete="new-password"
 									aria-invalid={!field.state.meta.isValid}
 								/>
-								<FieldDescription>Minimum 8 caractères</FieldDescription>
+								<FieldDescription>Minimum 8 characters</FieldDescription>
 								<FieldError errors={field.state.meta.errors} />
 							</Field>
 						)}
@@ -112,9 +106,7 @@ function NewPasswordForm({ onSuccess }: NewPasswordFormProps) {
 					<form.Field name="confirmPassword">
 						{(field) => (
 							<Field data-invalid={!field.state.meta.isValid}>
-								<FieldLabel htmlFor={field.name}>
-									Confirmer le mot de passe
-								</FieldLabel>
+								<FieldLabel htmlFor={field.name}>Confirm password</FieldLabel>
 								<PasswordInput
 									id={field.name}
 									size="lg"
@@ -134,9 +126,7 @@ function NewPasswordForm({ onSuccess }: NewPasswordFormProps) {
 				<form.Subscribe selector={(state) => state.isSubmitting}>
 					{(isSubmitting) => (
 						<Button type="submit" size="lg" fullWidth disabled={isSubmitting}>
-							{isSubmitting
-								? "Enregistrement..."
-								: "Enregistrer le mot de passe"}
+							{isSubmitting ? "Saving..." : "Save password"}
 						</Button>
 					)}
 				</form.Subscribe>

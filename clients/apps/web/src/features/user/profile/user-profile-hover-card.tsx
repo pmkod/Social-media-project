@@ -15,11 +15,11 @@ import { useUserProfile } from "@/features/user/user-profile/use-user-profile.ts
 import type { User } from "../common/user.ts";
 import { UserProfileLink } from "../common/user-profile-link.tsx";
 
-const numberFormatter = new Intl.NumberFormat("fr-FR", {
+const numberFormatter = new Intl.NumberFormat("en-US", {
 	notation: "compact",
 	maximumFractionDigits: 1,
 });
-const joinedDateFormatter = new Intl.DateTimeFormat("fr-FR", {
+const joinedDateFormatter = new Intl.DateTimeFormat("en-US", {
 	month: "long",
 	year: "numeric",
 });
@@ -69,7 +69,7 @@ function UserProfileHoverCard({
 						</div>
 					) : profileQuery.isError || !profileUser ? (
 						<p className="py-3 text-sm text-muted-foreground">
-							Profil indisponible.
+							Profile unavailable.
 						</p>
 					) : (
 						<UserProfilePreview user={profileUser} />
@@ -106,7 +106,7 @@ function UserProfilePreview({ user }: UserProfilePreviewProps) {
 
 				{user.isOwnProfile ? (
 					<span className="rounded-full border border-border px-3 py-1.5 text-xs font-semibold text-muted-foreground">
-						Votre profil
+						Your profile
 					</span>
 				) : (
 					<FollowButton user={user} className="rounded-full px-4 font-bold" />
@@ -152,7 +152,7 @@ function UserProfilePreview({ user }: UserProfilePreviewProps) {
 				{joinedDate ? (
 					<span className="flex items-center gap-1">
 						<RiCalendar2Line className="size-3.5" />
-						Inscrit en {joinedDate}
+						Joined {joinedDate}
 					</span>
 				) : null}
 			</div>
@@ -162,13 +162,13 @@ function UserProfilePreview({ user }: UserProfilePreviewProps) {
 					<strong className="text-foreground">
 						{numberFormatter.format(user.followingCount ?? 0)}
 					</strong>{" "}
-					Abonnements
+					Following
 				</span>
 				<span>
 					<strong className="text-foreground">
 						{numberFormatter.format(user.followersCount ?? 0)}
 					</strong>{" "}
-					Abonnés
+					Followers
 				</span>
 			</div>
 		</div>

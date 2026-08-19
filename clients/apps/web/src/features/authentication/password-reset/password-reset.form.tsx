@@ -51,10 +51,10 @@ function PasswordResetForm({ onSuccess }: PasswordResetFormProps) {
 		<div className="flex flex-col gap-6">
 			<div className="flex flex-col gap-1">
 				<h2 className="text-2xl font-semibold tracking-tight">
-					Mot de passe oublié
+					Forgot password
 				</h2>
 				<p className="text-sm text-muted-foreground">
-					Saisissez votre email pour recevoir un lien de réinitialisation.
+					Enter your email to receive a reset link.
 				</p>
 			</div>
 
@@ -89,7 +89,7 @@ function PasswordResetForm({ onSuccess }: PasswordResetFormProps) {
 									aria-invalid={!field.state.meta.isValid}
 								/>
 								<FieldDescription>
-									Nous vous enverrons un lien de réinitialisation.
+									We will send you a reset link.
 								</FieldDescription>
 								<FieldError errors={field.state.meta.errors} />
 							</Field>
@@ -100,19 +100,19 @@ function PasswordResetForm({ onSuccess }: PasswordResetFormProps) {
 				<form.Subscribe selector={(state) => state.isSubmitting}>
 					{(isSubmitting) => (
 						<Button type="submit" size="lg" fullWidth disabled={isSubmitting}>
-							{isSubmitting ? "Envoi..." : "Envoyer le lien"}
+							{isSubmitting ? "Sending..." : "Send link"}
 						</Button>
 					)}
 				</form.Subscribe>
 			</form>
 
 			<p className="text-center text-sm text-muted-foreground">
-				Retour à la{" "}
+				Back to{" "}
 				<Link
 					to="/"
 					className="text-foreground underline underline-offset-3 hover:text-foreground/80"
 				>
-					connexion
+					log in
 				</Link>
 			</p>
 		</div>

@@ -65,7 +65,7 @@ export function CommentItem({
 							comment.author?.name || "U",
 						)}&background=random`
 					}
-					alt={comment.author?.name || "Auteur"}
+					alt={comment.author?.name || "Author"}
 					className={cn(
 						"rounded-full object-cover shrink-0 ring-1 ring-border",
 						isReply ? "size-8" : "size-10",
@@ -100,7 +100,7 @@ export function CommentItem({
 						type="button"
 						onClick={toggleLike}
 						disabled={likeComment.isPending || unlikeComment.isPending}
-						aria-label={isLiked ? "Retirer le like" : "Liker le commentaire"}
+						aria-label={isLiked ? "Unlike comment" : "Like comment"}
 						className={cn(
 							"flex items-center gap-1.5 transition-colors p-1.5 rounded-full hover:bg-accent disabled:opacity-60",
 							isLiked ? "text-rose-500" : "hover:text-rose-500",
@@ -121,7 +121,7 @@ export function CommentItem({
 							className="flex items-center gap-1.5 p-1.5 rounded-full hover:bg-accent hover:text-sky-500 transition-colors"
 						>
 							<RiChat3Line className="size-4" />
-							<span>Répondre</span>
+							<span>Reply</span>
 						</button>
 					) : null}
 				</div>
@@ -147,8 +147,8 @@ export function CommentItem({
 							className="text-xs font-semibold text-sky-500 hover:text-sky-600"
 						>
 							{areRepliesExpanded
-								? "Masquer les réponses"
-								: `Voir ${repliesCount} réponse${repliesCount > 1 ? "s" : ""}`}
+								? "Hide replies"
+								: `View ${repliesCount} repl${repliesCount > 1 ? "ies" : "y"}`}
 						</button>
 					</div>
 				) : null}
@@ -170,7 +170,7 @@ export function CommentItem({
 								onClick={() => repliesQuery.fetchNextPage()}
 								disabled={repliesQuery.isFetchingNextPage}
 							>
-								Voir plus de réponses
+								View more replies
 							</Button>
 						) : null}
 					</div>

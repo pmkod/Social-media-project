@@ -27,8 +27,8 @@ import { useUserProfile } from "@/features/user/user-profile/use-user-profile.ts
 import { ProfileCollections } from "./profile-collections.tsx";
 import { ProfilePostList } from "./profile-post-list.tsx";
 
-const numberFormatter = new Intl.NumberFormat("fr-FR", { notation: "compact" });
-const joinedDateFormatter = new Intl.DateTimeFormat("fr-FR", {
+const numberFormatter = new Intl.NumberFormat("en-US", { notation: "compact" });
+const joinedDateFormatter = new Intl.DateTimeFormat("en-US", {
 	month: "long",
 	year: "numeric",
 });
@@ -53,13 +53,13 @@ export function ProfileView({ username }: ProfileViewProps) {
 		return (
 			<div className="mx-auto min-h-screen max-w-2xl border-x border-border p-12 text-center">
 				<h1 className="text-xl font-bold text-foreground">
-					Ce compte n’existe pas
+					This account doesn't exist
 				</h1>
 				<p className="mt-2 text-sm text-muted-foreground">
-					Vérifiez le nom d’utilisateur puis réessayez.
+					Check the username and try again.
 				</p>
 				<Button asChild variant="outline" className="mt-5">
-					<Link to="/search">Retour à la recherche</Link>
+					<Link to="/search">Back to search</Link>
 				</Button>
 			</div>
 		);
@@ -81,7 +81,7 @@ export function ProfileView({ username }: ProfileViewProps) {
 					<div className="min-w-0">
 						<AppHeaderTitle>{displayName}</AppHeaderTitle>
 						<AppHeaderSubtitle>
-							{numberFormatter.format(user.postCount ?? 0)} publications
+							{numberFormatter.format(user.postCount ?? 0)} posts
 						</AppHeaderSubtitle>
 					</div>
 				</AppHeaderLeftPart>
@@ -92,7 +92,7 @@ export function ProfileView({ username }: ProfileViewProps) {
 					{user.coverUrl ? (
 						<img
 							src={user.coverUrl}
-							alt={`Couverture de ${displayName}`}
+							alt={`${displayName}'s cover`}
 							className="h-full w-full object-cover"
 						/>
 					) : (
@@ -111,14 +111,10 @@ export function ProfileView({ username }: ProfileViewProps) {
 						<div className="pt-3">
 							{user.isOwnProfile ? (
 								<span className="inline-flex h-9 items-center rounded-full border border-border px-5 text-sm font-bold text-foreground">
-									Votre profil
+									Your profile
 								</span>
 							) : (
-								<FollowButton
-									user={user}
-									className="rounded-full px-6 font-bold"
-									size="default"
-								/>
+								<FollowButton user={user} size="lg" />
 							)}
 						</div>
 					</div>
@@ -157,7 +153,7 @@ export function ProfileView({ username }: ProfileViewProps) {
 						{joinedDate ? (
 							<span className="flex items-center gap-1.5">
 								<RiCalendar2Line className="size-4" />
-								Inscrit en {joinedDate}
+								Joined {joinedDate}
 							</span>
 						) : null}
 					</div>

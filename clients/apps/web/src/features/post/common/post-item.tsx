@@ -71,7 +71,7 @@ export function MediaElement({
 			/>
 		);
 	}
-	return <img src={item.url} alt="Média du post" className={className} />;
+	return <img src={item.url} alt="Post media" className={className} />;
 }
 
 export function PostMediaGrid({ media }: { media: RenderMediaItem[] }) {
@@ -169,7 +169,7 @@ function PostMediaSlider({ media }: { media: RenderMediaItem[] }) {
 						scrollBy(-1);
 					}}
 					className="absolute left-2 top-1/2 -translate-y-1/2 p-1.5 rounded-full bg-black/50 text-white hover:bg-black/70 transition-colors z-10"
-					aria-label="Média précédent"
+					aria-label="Previous media"
 				>
 					<RiArrowLeftSLine className="h-4 w-4" />
 				</button>
@@ -183,7 +183,7 @@ function PostMediaSlider({ media }: { media: RenderMediaItem[] }) {
 						scrollBy(1);
 					}}
 					className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded-full bg-black/50 text-white hover:bg-black/70 transition-colors z-10"
-					aria-label="Média suivant"
+					aria-label="Next media"
 				>
 					<RiArrowRightSLine className="h-4 w-4" />
 				</button>
@@ -239,7 +239,7 @@ export function PostItem({ post }: PostItemProps) {
 								post.author?.name || "U",
 							)}&background=random`
 						}
-						alt={post.author?.name || "Auteur"}
+						alt={post.author?.name || "Author"}
 						className="size-12 rounded-full object-cover ring-1 ring-border"
 					/>
 				</UserProfileHoverCard>
@@ -319,7 +319,7 @@ export function PostItem({ post }: PostItemProps) {
 							search={{ focusComment: true }}
 							onClick={(e) => e.stopPropagation()}
 							className="flex items-center gap-1.5 transition-colors group -ml-2 p-2 rounded-full hover:bg-accent hover:text-sky-500"
-							aria-label="Commenter la publication"
+							aria-label="Comment on post"
 						>
 							<RiChat3Line className="size-6" />
 							<span className="text-base font-light">{commentsCount}</span>
@@ -330,9 +330,7 @@ export function PostItem({ post }: PostItemProps) {
 							type="button"
 							onClick={handleBookmark}
 							disabled={addBookmark.isPending || removeBookmark.isPending}
-							aria-label={
-								isBookmarked ? "Retirer des bookmarks" : "Ajouter aux bookmarks"
-							}
+							aria-label={isBookmarked ? "Remove bookmark" : "Add bookmark"}
 							className={`flex items-center gap-1.5 transition-colors group disabled:opacity-60 ${
 								isBookmarked ? "text-amber-500" : "hover:text-amber-500"
 							}`}

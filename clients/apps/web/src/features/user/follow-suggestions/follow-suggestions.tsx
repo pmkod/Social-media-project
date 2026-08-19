@@ -16,22 +16,22 @@ function FollowSuggestions() {
 		<aside className="hidden lg:block w-100 pt-4 pr-4 h-screen sticky top-0 overflow-y-auto">
 			<Card>
 				<CardHeader>
-					<CardTitle>À suivre</CardTitle>
+					<CardTitle>Who to follow</CardTitle>
 				</CardHeader>
 				<CardContent paddingZero>
 					{isLoading ? (
 						<UserRowItemListLoader className="pb-4" />
 					) : isError ? (
 						<ExceptionBlock
-							title="Impossible de charger les suggestions"
-							description="Une erreur s'est produite lors du chargement des profils à suivre."
+							title="Unable to load suggestions"
+							description="An error occurred while loading profiles to follow."
 							onRefresh={() => void refetch()}
 							borderless
 							className="min-h-48"
 						/>
 					) : data?.users.length === 0 ? (
 						<div className="py-6 px-6 text-center text-sm text-muted-foreground">
-							Aucune suggestion pour le moment
+							No suggestions right now
 						</div>
 					) : (
 						<div className="pb-4">

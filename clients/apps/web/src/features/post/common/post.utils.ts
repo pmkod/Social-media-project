@@ -1,7 +1,7 @@
 /**
  * Formats a post creation date for display in the UI (feeds, cards, lists).
- * Returns relative time for recent posts ("À l'instant", "5 min", "2 h", "3 j")
- * or clean localized date for older posts ("16 août", "16 août 2025").
+ * Returns relative time for recent posts ("Just now", "5 min", "2 hr", "3 d")
+ * or a clean localized date for older posts ("Aug 16", "Aug 16, 2025").
  */
 export function formatPostCreationDate(
 	dateInput: string | Date | number | null | undefined,
@@ -22,7 +22,7 @@ export function formatPostCreationDate(
 
 	// Handling future dates or barely created items
 	if (diffInSeconds < 60) {
-		return "À l'instant";
+		return "Just now";
 	}
 
 	const diffInMinutes = Math.floor(diffInSeconds / 60);
@@ -32,17 +32,17 @@ export function formatPostCreationDate(
 
 	const diffInHours = Math.floor(diffInMinutes / 60);
 	if (diffInHours < 24) {
-		return `${diffInHours} h`;
+		return `${diffInHours} hr`;
 	}
 
 	const diffInDays = Math.floor(diffInHours / 24);
 	if (diffInDays < 7) {
-		return `${diffInDays} j`;
+		return `${diffInDays} d`;
 	}
 
 	// For older posts
 	const isCurrentYear = date.getFullYear() === now.getFullYear();
-	return date.toLocaleDateString("fr-FR", {
+	return date.toLocaleDateString("en-US", {
 		day: "numeric",
 		month: "short",
 		year: isCurrentYear ? undefined : "numeric",
@@ -75,16 +75,16 @@ export function formatPostFullDate(
 		return typeof dateInput === "string" ? dateInput : "";
 	}
 
-	const timeStr = date.toLocaleTimeString("fr-FR", {
+	const timeStr = date.toLocaleTimeString("en-US", {
 		hour: "2-digit",
 		minute: "2-digit",
 	});
 
-	const dateStr = date.toLocaleDateString("fr-FR", {
+	const dateStr = date.toLocaleDateString("en-US", {
 		day: "numeric",
 		month: "long",
 		year: "numeric",
 	});
 
-	return `${dateStr} à ${timeStr}`;
+	return `${dateStr} at ${timeStr}`;
 }

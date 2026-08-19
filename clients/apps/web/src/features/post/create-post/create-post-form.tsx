@@ -25,7 +25,7 @@ const createPostSchema = z
 		medias: z.array(z.custom<File>((val) => val instanceof File)),
 	})
 	.refine((data) => data.text.trim().length > 0 || data.medias.length > 0, {
-		message: "Le post doit contenir du texte ou au moins un fichier média",
+		message: "A post must contain text or at least one media file",
 	});
 
 function CreatePostForm() {
@@ -127,7 +127,7 @@ function CreatePostForm() {
 			<div className="flex gap-3">
 				<img
 					src={CURRENT_USER_AVATAR}
-					alt="Votre avatar"
+					alt="Your avatar"
 					className="h-10 w-10 rounded-full object-cover shrink-0 ring-1 ring-border"
 				/>
 
@@ -138,7 +138,7 @@ function CreatePostForm() {
 								value={field.state.value}
 								onChange={(e) => field.handleChange(e.target.value)}
 								onBlur={field.handleBlur}
-								placeholder="Quoi de neuf ?"
+								placeholder="What's happening?"
 								rows={3}
 								disabled={isPending}
 								className="min-h-0 w-full resize-none font-normal placeholder:font-normal border-0 bg-transparent px-0 py-0 text-xl text-foreground placeholder:text-muted-foreground focus-visible:ring-0 ring-0 outline-none disabled:opacity-60"
@@ -159,7 +159,7 @@ function CreatePostForm() {
 										type="button"
 										onClick={() => handleOpenPreviewModal(index)}
 										className="h-full w-full text-left border-0 p-0 cursor-pointer block relative"
-										aria-label={`Aperçu média ${index + 1}`}
+										aria-label={`Media preview ${index + 1}`}
 									>
 										{item.type === "video" ? (
 											<div className="relative h-full w-full">
@@ -173,13 +173,13 @@ function CreatePostForm() {
 												/>
 												<div className="absolute bottom-2 left-2 flex items-center gap-1 rounded-full bg-black/60 px-2 py-0.5 text-xs text-white">
 													<RiPlayFill className="h-3 w-3 fill-current" />
-													<span>Vidéo</span>
+													<span>Video</span>
 												</div>
 											</div>
 										) : (
 											<img
 												src={item.url}
-												alt={`Aperçu ${index + 1}`}
+												alt={`Preview ${index + 1}`}
 												className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-200"
 											/>
 										)}
@@ -189,7 +189,7 @@ function CreatePostForm() {
 										onClick={() => handleRemoveFile(index)}
 										disabled={isPending}
 										className="absolute top-1.5 right-1.5 p-1 rounded-full bg-black/70 text-white hover:bg-black transition-colors disabled:opacity-50 z-10 cursor-pointer flex items-center justify-center"
-										aria-label="Retirer le média"
+										aria-label="Remove media"
 									>
 										<RiCloseLine className="h-3.5 w-3.5" />
 									</button>
@@ -209,7 +209,7 @@ function CreatePostForm() {
 						disabled={isPending || isMaxMediaReached}
 					>
 						<RiImageLine className="h-4 w-4" />
-						Médias
+						Media
 					</Button>
 					{(medias || []).length > 0 ? (
 						<span className="text-xs text-muted-foreground font-medium">
@@ -220,7 +220,7 @@ function CreatePostForm() {
 
 				<Button type="submit" disabled={!hasContent || isPending}>
 					<RiSendPlane2Line className="h-4 w-4" />
-					<span>{isPending ? "Publication..." : "Publier"}</span>
+					<span>{isPending ? "Posting..." : "Post"}</span>
 				</Button>
 			</div>
 		</form>

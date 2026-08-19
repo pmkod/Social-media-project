@@ -10,7 +10,7 @@ import { useCreateCommentReply } from "./use-create-comment-reply.ts";
 
 const createCommentSchema = z.object({
 	content: z.string().refine((value) => value.trim().length > 0, {
-		message: "Le commentaire doit contenir du texte",
+		message: "Comment cannot be empty",
 	}),
 });
 
@@ -95,7 +95,7 @@ function CreateCommentForm({
 							authenticatedUser?.fullName || authenticatedUser?.username || "U",
 						)}&background=random`
 					}
-					alt="Votre avatar"
+					alt="Your avatar"
 					className="h-10 w-10 rounded-full object-cover shrink-0 ring-1 ring-border"
 				/>
 
@@ -109,8 +109,8 @@ function CreateCommentForm({
 								onBlur={field.handleBlur}
 								placeholder={
 									parentComment
-										? `Répondre à @${parentComment.author?.handle ?? "utilisateur"}...`
-										: "Poster votre commentaire..."
+										? `Reply to @${parentComment.author?.handle ?? "user"}...`
+										: "Post your comment..."
 								}
 								disabled={isPending}
 								autoFocus={autoFocus || false}
@@ -121,7 +121,7 @@ function CreateCommentForm({
 				</div>
 				<Button type="submit" disabled={!hasContent || isPending}>
 					<RiSendPlane2Line className="h-4 w-4" />
-					Commenter
+					Comment
 				</Button>
 			</div>
 

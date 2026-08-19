@@ -27,7 +27,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 				content: "width=device-width, initial-scale=1",
 			},
 			{
-				title: "TanStack Start Starter",
+				title: "Goodspace",
 			},
 		],
 		links: [
@@ -44,7 +44,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 	const { queryClient } = Route.useRouteContext();
 
 	return (
-		<html lang="fr" suppressHydrationWarning>
+		<html lang="en" suppressHydrationWarning>
 			<head>
 				<HeadContent />
 				<script

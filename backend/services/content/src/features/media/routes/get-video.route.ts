@@ -35,7 +35,7 @@ const getVideoRoute = defineOpenAPIRoute({
 		const exists = await s3File.exists();
 		if (!exists) {
 			return c.json(
-				{ error: "Vidéo non trouvée" },
+				{ error: "Video not found" },
 				HttpStatus.NOT_FOUND.code,
 			);
 		}

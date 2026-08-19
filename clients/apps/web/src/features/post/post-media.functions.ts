@@ -1,8 +1,8 @@
 import { ApiConfig } from "@/core/configs/api.config";
 
 /**
- * Construit l'URL complète pour la route de téléchargement/streaming d'une image.
- * @param fileName Le nom du fichier image (ex: "upload_high_12345.webp") ou son chemin/URL
+ * Builds the full URL for the image download/streaming route.
+ * @param fileName The image file name (e.g. "upload_high_12345.webp") or its path/URL
  * @returns L'URL de la route /images/$fileName
  */
 export function buildImageUrl(fileName?: string | null): string {
@@ -20,8 +20,8 @@ export function buildImageUrl(fileName?: string | null): string {
 }
 
 /**
- * Construit l'URL complète pour la route de streaming d'une vidéo.
- * @param fileName Le nom du fichier vidéo (ex: "upload_high_12345.mp4") ou son chemin/URL
+ * Builds the full URL for the video streaming route.
+ * @param fileName The video file name (e.g. "upload_high_12345.mp4") or its path/URL
  * @returns L'URL de la route /videos/$fileName
  */
 export function buildVideoUrl(fileName?: string | null): string {
@@ -39,7 +39,7 @@ export function buildVideoUrl(fileName?: string | null): string {
 }
 
 /**
- * Aliases de rétrocompatibilité
+ * Backward-compatible aliases
  */
 export const buildPostImageUrl = buildImageUrl;
 export const buildPostVideoUrl = buildVideoUrl;

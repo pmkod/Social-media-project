@@ -68,7 +68,7 @@ function AppHeaderGoBackButton({
 	icon,
 	children,
 	className,
-	"aria-label": ariaLabel = "Retour",
+	"aria-label": ariaLabel = "Back",
 	onClick,
 	...props
 }: AppHeaderGoBackButtonProps) {

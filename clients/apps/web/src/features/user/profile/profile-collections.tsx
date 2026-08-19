@@ -61,8 +61,8 @@ export function ProfileCollections({ userId }: { userId: string }) {
 	if (query.isError) {
 		return (
 			<ExceptionBlock
-				title="Impossible de charger les collections"
-				description="Une erreur s'est produite pendant le chargement des collections."
+				title="Unable to load collections"
+				description="An error occurred while loading collections."
 				onRefresh={() => void query.refetch()}
 				borderless
 			/>
@@ -79,7 +79,7 @@ export function ProfileCollections({ userId }: { userId: string }) {
 						variant="ghost"
 						size="icon"
 						onClick={() => setSelectedCollectionId(undefined)}
-						aria-label="Retour aux collections"
+						aria-label="Back to collections"
 					>
 						<RiArrowLeftLine className="size-5" />
 					</Button>
@@ -88,7 +88,7 @@ export function ProfileCollections({ userId }: { userId: string }) {
 							{selectedCollection.name}
 						</h3>
 						<p className="text-xs text-muted-foreground">
-							{selectedCollection.bookmarksCount} publication
+							{selectedCollection.bookmarksCount} post
 							{selectedCollection.bookmarksCount > 1 ? "s" : ""}
 						</p>
 					</div>
@@ -98,15 +98,15 @@ export function ProfileCollections({ userId }: { userId: string }) {
 					<PostListLoader />
 				) : postsQuery.isError ? (
 					<ExceptionBlock
-						title="Impossible de charger cette collection"
-						description="Une erreur s'est produite pendant le chargement des publications."
+						title="Unable to load this collection"
+						description="An error occurred while loading posts."
 						onRefresh={() => void postsQuery.refetch()}
 						borderless
 					/>
 				) : posts.length === 0 ? (
 					<EmptyBlock
-						title="Cette collection est vide"
-						description="Les publications ajoutées à cette collection apparaîtront ici."
+						title="This collection is empty"
+						description="Posts added to this collection will appear here."
 						borderless
 					/>
 				) : (
@@ -126,8 +126,8 @@ export function ProfileCollections({ userId }: { userId: string }) {
 	if (collections.length === 0) {
 		return (
 			<EmptyBlock
-				title="Aucune collection visible"
-				description="Les collections publiques de cet utilisateur apparaîtront ici."
+				title="No public collections"
+				description="This user's public collections will appear here."
 				borderless
 			/>
 		);
@@ -155,7 +155,7 @@ export function ProfileCollections({ userId }: { userId: string }) {
 							{collection.name}
 						</h3>
 						<p className="text-xs text-muted-foreground">
-							{collection.bookmarksCount} publication
+							{collection.bookmarksCount} post
 							{collection.bookmarksCount > 1 ? "s" : ""}
 						</p>
 					</div>

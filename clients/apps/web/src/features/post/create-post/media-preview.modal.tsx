@@ -57,7 +57,7 @@ const MediaPreviewModal = create(
 					type="button"
 					onClick={() => modal.remove()}
 					className="absolute top-4 right-4 z-50 p-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors cursor-pointer"
-					aria-label="Fermer la prévisualisation"
+					aria-label="Close preview"
 				>
 					<RiCloseLine className="h-6 w-6" />
 				</button>
@@ -68,7 +68,7 @@ const MediaPreviewModal = create(
 						type="button"
 						onClick={handlePrev}
 						className="absolute left-4 top-1/2 -translate-y-1/2 z-50 p-3 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors cursor-pointer"
-						aria-label="Média précédent"
+						aria-label="Previous media"
 					>
 						<RiArrowLeftSLine className="h-6 w-6" />
 					</button>
@@ -87,7 +87,7 @@ const MediaPreviewModal = create(
 					) : (
 						<img
 							src={currentMedia.url}
-							alt={currentMedia.name || `Aperçu ${currentIndex + 1}`}
+							alt={currentMedia.name || `Preview ${currentIndex + 1}`}
 							className="max-h-[80vh] max-w-full rounded-lg object-contain shadow-2xl"
 						/>
 					)}
@@ -106,7 +106,7 @@ const MediaPreviewModal = create(
 						type="button"
 						onClick={handleNext}
 						className="absolute right-4 top-1/2 -translate-y-1/2 z-50 p-3 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors cursor-pointer"
-						aria-label="Média suivant"
+						aria-label="Next media"
 					>
 						<RiArrowRightSLine className="h-6 w-6" />
 					</button>

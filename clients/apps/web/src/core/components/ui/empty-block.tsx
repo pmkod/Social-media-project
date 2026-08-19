@@ -48,7 +48,7 @@ function EmptyBlock({
 						onClick={() => void onRefresh()}
 					>
 						<RefreshCcwIcon />
-						Actualiser
+						Refresh
 					</Button>
 				</EmptyContent>
 			) : null}

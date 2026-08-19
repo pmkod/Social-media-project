@@ -44,7 +44,7 @@ export function Sidebar() {
 				{/* User Profile / Logout Section at Bottom */}
 				<div className="px-2 pb-3">
 					<Button size="lg" fullWidth type="button" onClick={() => {}}>
-						Publier
+						Post
 					</Button>
 				</div>
 				<div className="border-t border-border pt-4 px-2">
@@ -58,7 +58,7 @@ export function Sidebar() {
 								>
 									<img
 										src={avatar}
-										alt={`Profil de ${user.fullName}`}
+										alt={`Profile avatar of ${user.fullName}`}
 										className="h-9 w-9 rounded-full object-cover shrink-0"
 									/>
 									<div className="min-w-0">
@@ -74,15 +74,15 @@ export function Sidebar() {
 								<div className="flex min-w-0 items-center gap-3">
 									<img
 										src={avatar}
-										alt="Avatar par défaut"
+										alt="Default avatar"
 										className="h-9 w-9 rounded-full object-cover shrink-0"
 									/>
 									<div className="min-w-0">
 										<div className="text-xs font-semibold truncate text-foreground">
-											Votre profil
+											Your profile
 										</div>
 										<div className="text-[11px] text-muted-foreground truncate">
-											Connectez-vous
+											Log in
 										</div>
 									</div>
 								</div>
@@ -91,7 +91,7 @@ export function Sidebar() {
 						<Link
 							to="/"
 							className="text-muted-foreground hover:text-rose-500 p-1.5 rounded-full hover:bg-rose-500/10 transition-colors"
-							title="Se déconnecter"
+							title="Log out"
 						>
 							<RiLogoutBoxLine className="h-4 w-4" />
 						</Link>

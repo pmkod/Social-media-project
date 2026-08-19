@@ -38,7 +38,7 @@ function CollectionOrganizer({
 			<select
 				value={collectionId}
 				onChange={(event) => setCollectionId(event.target.value)}
-				aria-label="Choisir une collection"
+				aria-label="Choose a collection"
 				className="h-8 min-w-0 flex-1 rounded-lg border border-border bg-background px-2 text-xs text-foreground outline-none focus:border-sky-500"
 			>
 				{collections.map((collection) => (
@@ -55,7 +55,7 @@ function CollectionOrganizer({
 				onClick={() => addPost.mutate({ collectionId, postId })}
 			>
 				<RiAddLine className="size-4" />
-				Ajouter
+				Add
 			</Button>
 		</div>
 	);
@@ -134,7 +134,7 @@ export function BookmarkList() {
 							Bookmarks
 						</h1>
 						<p className="mt-1 text-xs text-muted-foreground">
-							Retrouvez et organisez vos publications enregistrées.
+							Find and organize your saved posts.
 						</p>
 					</div>
 					<Button
@@ -155,14 +155,14 @@ export function BookmarkList() {
 						<input
 							value={name}
 							onChange={(event) => setName(event.target.value)}
-							placeholder="Nom de la collection"
+							placeholder="Collection name"
 							maxLength={60}
 							className="h-10 w-full rounded-lg border border-border bg-background px-3 text-sm outline-none focus:border-sky-500"
 						/>
 						<textarea
 							value={description}
 							onChange={(event) => setDescription(event.target.value)}
-							placeholder="Description (facultative)"
+							placeholder="Description (optional)"
 							maxLength={280}
 							rows={2}
 							className="w-full resize-none rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-sky-500"
@@ -174,10 +174,10 @@ export function BookmarkList() {
 									checked={isPublic}
 									onChange={(event) => setIsPublic(event.target.checked)}
 								/>
-								Collection visible sur mon profil
+								Show collection on my profile
 							</label>
 							<Button type="submit" size="sm" disabled={!name.trim()}>
-								Créer
+								Create
 							</Button>
 						</div>
 					</form>
@@ -200,7 +200,7 @@ export function BookmarkList() {
 					>
 						<RiBookmarkLine className="mb-3 size-5 text-amber-500" />
 						<span className="block text-sm font-semibold text-foreground">
-							Tous
+							All
 						</span>
 					</button>
 
@@ -230,7 +230,7 @@ export function BookmarkList() {
 									{collection.name}
 								</span>
 								<span className="text-xs text-muted-foreground">
-									{collection.bookmarksCount} publication
+									{collection.bookmarksCount} post
 									{collection.bookmarksCount > 1 ? "s" : ""}
 								</span>
 							</button>
@@ -241,7 +241,7 @@ export function BookmarkList() {
 
 			<div className="flex items-center justify-between border-b border-border px-4 py-3">
 				<h2 className="font-semibold text-foreground">
-					{selectedCollection?.name ?? "Tous les bookmarks"}
+					{selectedCollection?.name ?? "All bookmarks"}
 				</h2>
 				{selectedCollection ? (
 					<Button
@@ -251,7 +251,7 @@ export function BookmarkList() {
 						className="text-rose-500 hover:text-rose-600"
 						disabled={deleteCollection.isPending}
 						onClick={() => {
-							if (window.confirm("Supprimer cette collection ?")) {
+							if (window.confirm("Delete this collection?")) {
 								deleteCollection.mutate(selectedCollection.id, {
 									onSuccess: () => setSelectedCollectionId(undefined),
 								});
@@ -259,7 +259,7 @@ export function BookmarkList() {
 						}}
 					>
 						<RiDeleteBinLine className="size-4" />
-						Supprimer
+						Delete
 					</Button>
 				) : null}
 			</div>
@@ -268,14 +268,14 @@ export function BookmarkList() {
 				<PostListLoader />
 			) : bookmarksQuery.isError ? (
 				<ExceptionBlock
-					title="Impossible de charger vos bookmarks"
-					description="Une erreur s'est produite pendant le chargement de vos publications enregistrées."
+					title="Unable to load your bookmarks"
+					description="An error occurred while loading your saved posts."
 					onRefresh={() => void bookmarksQuery.refetch()}
 				/>
 			) : posts.length === 0 ? (
 				<EmptyBlock
-					title="Aucune publication enregistrée"
-					description="Utilisez l’icône bookmark sous une publication pour la retrouver ici."
+					title="No saved posts"
+					description="Use the bookmark icon below a post to find it here."
 				/>
 			) : (
 				<div>
@@ -296,7 +296,7 @@ export function BookmarkList() {
 											})
 										}
 									>
-										Retirer de la collection
+										Remove from collection
 									</Button>
 								</div>
 							) : (

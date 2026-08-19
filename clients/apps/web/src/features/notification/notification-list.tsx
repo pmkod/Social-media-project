@@ -29,8 +29,8 @@ const FAKE_NOTIFICATIONS: NotificationItem[] = [
 			avatar:
 				"https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80",
 		},
-		time: "il y a 10 min",
-		contentSnippet: "Ravi de lancer notre nouvelle interface sur Graphy !...",
+		time: "10 min ago",
+		contentSnippet: "Excited to launch our new interface on Graphy!...",
 	},
 	{
 		id: "notif-2",
@@ -41,8 +41,8 @@ const FAKE_NOTIFICATIONS: NotificationItem[] = [
 			avatar:
 				"https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80",
 		},
-		time: "il y a 1h",
-		contentSnippet: "TypeScript 5.5 apporte tellement d'améliorations...",
+		time: "1h ago",
+		contentSnippet: "TypeScript 5.5 brings so many improvements...",
 	},
 	{
 		id: "notif-3",
@@ -53,7 +53,7 @@ const FAKE_NOTIFICATIONS: NotificationItem[] = [
 			avatar:
 				"https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=150&auto=format&fit=crop&q=80",
 		},
-		time: "il y a 3h",
+		time: "3h ago",
 	},
 	{
 		id: "notif-4",
@@ -64,8 +64,8 @@ const FAKE_NOTIFICATIONS: NotificationItem[] = [
 			avatar:
 				"https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80",
 		},
-		time: "il y a 5h",
-		contentSnippet: "Super travail ! Totalement d'accord avec cette approche.",
+		time: "5h ago",
+		contentSnippet: "Great work! I completely agree with this approach.",
 	},
 ];
 
@@ -92,7 +92,7 @@ export function NotificationList() {
 								: "border-transparent text-muted-foreground hover:text-foreground"
 						}`}
 					>
-						Toutes
+						All
 					</button>
 					<button
 						type="button"
@@ -144,10 +144,10 @@ export function NotificationList() {
 										{notif.user.name}
 									</span>{" "}
 									<span className="text-muted-foreground">
-										{notif.type === "like" && "a aimé votre publication"}
-										{notif.type === "repost" && "a repartagé votre publication"}
-										{notif.type === "comment" && "a commenté votre publication"}
-										{notif.type === "follow" && "a commencé à vous suivre"}
+										{notif.type === "like" && "liked your post"}
+										{notif.type === "repost" && "reposted your post"}
+										{notif.type === "comment" && "commented on your post"}
+										{notif.type === "follow" && "started following you"}
 									</span>
 								</div>
 							</div>

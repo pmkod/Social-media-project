@@ -20,9 +20,9 @@ import type { UserVerificationGoalType } from "./user-verification-goal.type";
 const verificationSchema = z.object({
 	code: z
 		.string()
-		.length(6, "Le code doit contenir exactement 6 chiffres.")
+		.length(6, "The code must contain exactly 6 digits.")
 		.refine((val) => val.split("").every((c) => c >= "0" && c <= "9"), {
-			message: "Le code doit contenir uniquement des chiffres.",
+			message: "The code must contain digits only.",
 		}),
 });
 
@@ -71,9 +71,9 @@ function UserVerificationForm({ onSuccess, goal }: UserVerificationFormProps) {
 	return (
 		<div className="flex flex-col gap-6">
 			<div className="flex flex-col gap-1">
-				<h2 className="text-2xl font-semibold tracking-tight">Vérification</h2>
+				<h2 className="text-2xl font-semibold tracking-tight">Verification</h2>
 				<p className="text-sm text-muted-foreground">
-					Entrez le code à 6 chiffres envoyé à votre adresse email.
+					Enter the 6-digit code sent to your email address.
 				</p>
 			</div>
 
@@ -95,9 +95,7 @@ function UserVerificationForm({ onSuccess, goal }: UserVerificationFormProps) {
 					<form.Field name="code">
 						{(field) => (
 							<Field data-invalid={!field.state.meta.isValid}>
-								<FieldLabel htmlFor={field.name}>
-									Code de vérification
-								</FieldLabel>
+								<FieldLabel htmlFor={field.name}>Verification code</FieldLabel>
 								<Input
 									id={field.name}
 									size="lg"
@@ -118,21 +116,21 @@ function UserVerificationForm({ onSuccess, goal }: UserVerificationFormProps) {
 				<form.Subscribe selector={(state) => state.isSubmitting}>
 					{(isSubmitting) => (
 						<Button type="submit" size="lg" fullWidth disabled={isSubmitting}>
-							{isSubmitting ? "Vérification..." : "Vérifier"}
+							{isSubmitting ? "Verifying..." : "Verify"}
 						</Button>
 					)}
 				</form.Subscribe>
 			</form>
 
 			<p className="flex items-center justify-center gap-2 text-center text-sm text-muted-foreground">
-				Vous n'avez pas reçu de code ?{" "}
+				Didn't receive a code?{" "}
 				<button
 					type="button"
 					onClick={resendCode}
 					disabled={resend.isPending}
 					className="inline-flex cursor-pointer items-center gap-1.5 text-foreground underline underline-offset-3 hover:text-foreground/80 disabled:pointer-events-none disabled:opacity-50"
 				>
-					Renvoyer
+					Resend
 					{resend.isPending ? (
 						<RiLoader4Line className="size-3.5 animate-spin" />
 					) : null}

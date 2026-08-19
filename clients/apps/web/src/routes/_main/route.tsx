@@ -20,7 +20,7 @@ function MainLayoutComponent() {
 					<Link
 						to="/"
 						className="text-slate-500 hover:text-rose-500 p-2 rounded-full"
-						title="Se déconnecter"
+						title="Log out"
 					>
 						<RiLogoutBoxLine className="h-5 w-5" />
 					</Link>

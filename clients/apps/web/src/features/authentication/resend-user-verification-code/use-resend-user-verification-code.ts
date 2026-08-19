@@ -7,7 +7,7 @@ const useResendUserVerificationCode = () => {
 		mutationFn: () => {
 			const data = getUserVerificationDataFromLocalStorage();
 			if (!data?.userVerification) {
-				throw new Error("Données de vérification introuvables");
+				throw new Error("Verification data not found");
 			}
 			return baseHttpClient.post(
 				"authentication/resend-user-verification-code",

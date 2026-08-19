@@ -41,14 +41,14 @@ export function PostDetail({ postId, autoFocusComment }: PostDetailProps) {
 		return (
 			<div className="p-8 text-center space-y-4">
 				<p className="text-rose-500 text-sm">
-					Publication introuvable ou erreur de chargement.
+					Post not found or failed to load.
 				</p>
 				<Link
 					to="/home"
 					className="inline-flex items-center gap-2 text-sky-500 hover:underline text-sm font-medium"
 				>
 					<RiArrowLeftLine className="h-4 w-4" />
-					<span>Retour au flux</span>
+					<span>Back to feed</span>
 				</Link>
 			</div>
 		);
@@ -82,8 +82,8 @@ export function PostDetail({ postId, autoFocusComment }: PostDetailProps) {
 				) : allComments.length === 0 ? (
 					<EmptyBlock
 						borderless
-						title="Aucun commentaire pour le moment"
-						description="Soyez le premier à partager votre avis sur cette publication."
+						title="No comments yet"
+						description="Be the first to share your thoughts on this post."
 					/>
 				) : (
 					<div>
@@ -104,9 +104,7 @@ export function PostDetail({ postId, autoFocusComment }: PostDetailProps) {
 										<RiLoader4Line className="h-4 w-4 animate-spin" />
 									) : null}
 									<span>
-										{isFetchingNextPage
-											? "Chargement..."
-											: "Voir plus de commentaires"}
+										{isFetchingNextPage ? "Loading..." : "View more comments"}
 									</span>
 								</Button>
 							</div>

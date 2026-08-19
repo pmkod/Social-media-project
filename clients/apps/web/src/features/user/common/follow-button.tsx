@@ -8,10 +8,9 @@ import type { User } from "./user.ts";
 type FollowButtonProps = {
 	user: Pick<User, "id" | "isFollowedByAuthenticatedUser">;
 	size?: ComponentProps<typeof Button>["size"];
-	className?: string;
 };
 
-function FollowButton({ user, size = "sm", className }: FollowButtonProps) {
+function FollowButton({ user, size = "sm" }: FollowButtonProps) {
 	const [isHovered, setIsHovered] = useState(false);
 	const followUser = useFollowUser();
 	const unfollowUser = useUnfollowUser();
@@ -34,7 +33,6 @@ function FollowButton({ user, size = "sm", className }: FollowButtonProps) {
 		<Button
 			type="button"
 			size={size}
-			className={className}
 			variant={user.isFollowedByAuthenticatedUser ? "outline" : "default"}
 			colorScheme={showUnfollow ? "destructive" : "primary"}
 			disabled={isMutationPending}
@@ -50,9 +48,9 @@ function FollowButton({ user, size = "sm", className }: FollowButtonProps) {
 			) : showUnfollow ? (
 				"Unfollow"
 			) : user.isFollowedByAuthenticatedUser ? (
-				"Suivi"
+				"Following"
 			) : (
-				"Suivre"
+				"Follow"
 			)}
 		</Button>
 	);

@@ -30,7 +30,7 @@ const FAKE_CONVERSATIONS: Conversation[] = [
 				"https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80",
 			online: true,
 		},
-		lastMessage: "On se fait une visio demain pour valider la maquette ?",
+		lastMessage: "Can we do a video call tomorrow to review the mockup?",
 		time: "14:23",
 		unreadCount: 2,
 	},
@@ -43,8 +43,8 @@ const FAKE_CONVERSATIONS: Conversation[] = [
 				"https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80",
 			online: false,
 		},
-		lastMessage: "Super, merci pour le lien de la documentation !",
-		time: "Hier",
+		lastMessage: "Great, thanks for the documentation link!",
+		time: "Yesterday",
 	},
 	{
 		id: "conv-3",
@@ -55,8 +55,8 @@ const FAKE_CONVERSATIONS: Conversation[] = [
 				"https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80",
 			online: true,
 		},
-		lastMessage: "J'ai soumis la pull request sur le repo.",
-		time: "Mar",
+		lastMessage: "I submitted the pull request to the repo.",
+		time: "Tue",
 	},
 ];
 
@@ -67,19 +67,19 @@ export function DiscussionList() {
 	const [activeMessages, setActiveMessages] = useState([
 		{
 			id: 1,
-			text: "Salut ! As-tu pu jeter un œil au composant ?",
+			text: "Hi! Did you get a chance to look at the component?",
 			sender: "them",
 			time: "14:20",
 		},
 		{
 			id: 2,
-			text: "Oui tout à fait, le design est top !",
+			text: "Yes, absolutely, the design looks great!",
 			sender: "me",
 			time: "14:21",
 		},
 		{
 			id: 3,
-			text: "On se fait une visio demain pour valider la maquette ?",
+			text: "Can we do a video call tomorrow to review the mockup?",
 			sender: "them",
 			time: "14:23",
 		},
@@ -120,7 +120,7 @@ export function DiscussionList() {
 						<RiSearchLine className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
 						<input
 							type="text"
-							placeholder="Rechercher une discussion..."
+							placeholder="Search conversations..."
 							className="w-full pl-9 pr-4 py-2 bg-muted rounded-xl text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-sky-500"
 						/>
 					</div>
@@ -215,7 +215,9 @@ export function DiscussionList() {
 								<p>{msg.text}</p>
 								<div
 									className={`text-[9px] mt-1 text-right flex items-center justify-end gap-1 ${
-										msg.sender === "me" ? "text-sky-100" : "text-muted-foreground"
+										msg.sender === "me"
+											? "text-sky-100"
+											: "text-muted-foreground"
 									}`}
 								>
 									<span>{msg.time}</span>
@@ -237,7 +239,7 @@ export function DiscussionList() {
 						type="text"
 						value={messageText}
 						onChange={(e) => setMessageText(e.target.value)}
-						placeholder="Écrire un message..."
+						placeholder="Write a message..."
 						className="flex-1 px-4 py-2 bg-muted rounded-full text-xs text-foreground placeholder:text-muted-foreground focus:outline-none"
 					/>
 					<button

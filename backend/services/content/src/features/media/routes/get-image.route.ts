@@ -32,7 +32,7 @@ const getImageRoute = defineOpenAPIRoute({
 		const exists = await s3File.exists();
 		if (!exists) {
 			return c.json(
-				{ error: "Image non trouvée" },
+				{ error: "Image not found" },
 				HttpStatus.NOT_FOUND.code,
 			);
 		}

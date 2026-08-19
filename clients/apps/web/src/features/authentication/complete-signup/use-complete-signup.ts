@@ -13,7 +13,7 @@ const useCompleteSignup = () => {
 		mutationFn: async (body: CompleteSignupRequestBody) => {
 			const data = getUserVerificationDataFromLocalStorage();
 			if (!data?.userVerification) {
-				throw new Error("Données de vérification introuvables");
+				throw new Error("Verification data not found");
 			}
 			const { accessToken, refreshToken } = await baseHttpClient
 				.post("authentication/complete-signup", {

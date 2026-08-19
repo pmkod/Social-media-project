@@ -48,10 +48,10 @@ function CompleteSignupForm({ onSuccess }: CompleteSignupFormProps) {
 		<div className="flex flex-col gap-4">
 			<div className="flex flex-col gap-1">
 				<h2 className="text-2xl font-semibold tracking-tight">
-					Choisissez un nom d'utilisateur
+					Choose a username
 				</h2>
 				<p className="text-sm text-muted-foreground">
-					Ce nom sera visible par les autres utilisateurs.
+					This name will be visible to other users.
 				</p>
 			</div>
 
@@ -73,9 +73,7 @@ function CompleteSignupForm({ onSuccess }: CompleteSignupFormProps) {
 					<form.Field name="username">
 						{(field) => (
 							<Field data-invalid={!field.state.meta.isValid}>
-								<FieldLabel htmlFor={field.name}>
-									Nom d'utilisateur
-								</FieldLabel>
+								<FieldLabel htmlFor={field.name}>Username</FieldLabel>
 								<Input
 									id={field.name}
 									size="lg"
@@ -96,7 +94,7 @@ function CompleteSignupForm({ onSuccess }: CompleteSignupFormProps) {
 				<form.Subscribe selector={(state) => state.isSubmitting}>
 					{(isSubmitting) => (
 						<Button type="submit" size="lg" fullWidth disabled={isSubmitting}>
-							{isSubmitting ? "Finalisation..." : "Terminer l'inscription"}
+							{isSubmitting ? "Finishing..." : "Complete sign-up"}
 						</Button>
 					)}
 				</form.Subscribe>

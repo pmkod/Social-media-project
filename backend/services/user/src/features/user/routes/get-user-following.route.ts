@@ -2,6 +2,7 @@ import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
 import type { Prisma } from "@/generated/prisma/client";
+import { getFollowedUserIds } from "../services/get-followed-user-ids.service";
 import { UserRoutesTag } from "../user.constants";
 
 const connectionUserSelect = {
@@ -90,9 +91,20 @@ const getUserFollowingRoute = defineOpenAPIRoute({
 		const hasNextPage = connections.length > limit;
 		const items = hasNextPage ? connections.slice(0, limit) : connections;
 		const lastItem = items.at(-1);
+		const authenticatedUserId = c.req.header("X-Authenticated-User-Id");
+		const followedUserIds = await getFollowedUserIds(
+			authenticatedUserId,
+			items.map((connection) => connection.following.id),
+		);
 
 		return c.json({
-			users: items.map((connection) => connection.following),
+			users: items.map((connection) => ({
+				...connection.following,
+				isOwnProfile: connection.following.id === authenticatedUserId,
+				isFollowedByAuthenticatedUser: followedUserIds.has(
+					connection.following.id,
+				),
+			})),
 			pagination: {
 				nextCursor:
 					hasNextPage && lastItem

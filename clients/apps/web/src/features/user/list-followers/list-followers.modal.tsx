@@ -18,7 +18,7 @@ const ListFollowersModal = create(
 				query={query}
 				username={username}
 				title="Followers"
-				emptyTitle="Aucun follower"
+				emptyTitle="No followers"
 			/>
 		);
 	},

@@ -48,7 +48,7 @@ function ExceptionBlock({
 						onClick={() => void onRefresh()}
 					>
 						<RefreshCcwIcon />
-						Actualiser
+						Refresh
 					</Button>
 				</EmptyContent>
 			) : null}

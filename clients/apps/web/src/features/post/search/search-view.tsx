@@ -52,15 +52,15 @@ export function SearchView() {
 	return (
 		<div className="min-h-screen border-x border-border">
 			<header className="sticky top-0 z-20 border-b border-border bg-background/90 p-4 backdrop-blur-xl">
-				<h1 className="mb-3 text-xl font-bold text-foreground">Recherche</h1>
+				<h1 className="mb-3 text-xl font-bold text-foreground">Search</h1>
 				<label className="relative block">
 					<RiSearchLine className="pointer-events-none absolute left-4 top-1/2 size-5 -translate-y-1/2 text-muted-foreground" />
 					<input
 						type="search"
 						value={search}
 						onChange={(event) => setSearch(event.target.value)}
-						placeholder="Rechercher des publications"
-						aria-label="Rechercher des publications"
+						placeholder="Search posts"
+						aria-label="Search posts"
 						className="h-12 w-full rounded-full border border-transparent bg-muted pl-12 pr-5 text-sm text-foreground outline-none transition focus:border-sky-500 focus:bg-background focus:ring-2 focus:ring-sky-500/20"
 					/>
 				</label>
@@ -69,8 +69,8 @@ export function SearchView() {
 			<div className="border-b border-border px-4 py-3">
 				<h2 className="text-sm font-semibold text-foreground">
 					{debouncedSearch
-						? `Résultats pour « ${debouncedSearch} »`
-						: "Publications récentes"}
+						? `Results for “${debouncedSearch}”`
+						: "Recent posts"}
 				</h2>
 			</div>
 
@@ -78,15 +78,12 @@ export function SearchView() {
 				<PostListLoader />
 			) : isError ? (
 				<ExceptionBlock
-					title="Impossible de charger les résultats"
-					description="Une erreur s'est produite pendant la recherche."
+					title="Unable to load results"
+					description="An error occurred while searching."
 					onRefresh={() => void refetch()}
 				/>
 			) : posts.length === 0 ? (
-				<EmptyBlock
-					title="Aucun résultat"
-					description="Essayez avec d’autres mots-clés."
-				/>
+				<EmptyBlock title="No results" description="Try different keywords." />
 			) : (
 				<div>
 					{posts.map((post) => (
@@ -98,7 +95,7 @@ export function SearchView() {
 						) : (
 							<div className="flex items-center justify-center gap-2 py-8 text-xs text-muted-foreground">
 								<RiLoader4Line className="hidden size-4 animate-spin" />
-								Vous avez vu toutes les publications.
+								You've seen all posts.
 							</div>
 						)}
 					</div>

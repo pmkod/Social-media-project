@@ -20,12 +20,12 @@ const CommentModal = create(({ postId }: CommentModalProps) => {
 			/>
 			<div className="relative w-full max-w-lg rounded-2xl bg-background border border-border shadow-xl animate-in zoom-in-95 duration-200">
 				<div className="flex items-center justify-between px-4 py-3 border-b border-border">
-					<h2 className="text-base font-bold text-foreground">Répondre</h2>
+					<h2 className="text-base font-bold text-foreground">Reply</h2>
 					<button
 						type="button"
 						onClick={() => modal.remove()}
 						className="p-1.5 rounded-full hover:bg-accent text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
-						aria-label="Fermer"
+						aria-label="Close"
 					>
 						<RiCloseLine className="h-5 w-5" />
 					</button>

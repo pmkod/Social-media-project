@@ -61,10 +61,10 @@ function SignupForm({ onSuccess }: SignupFormProps) {
 		<div className="flex flex-col gap-4">
 			<div className="flex flex-col gap-1">
 				<h2 className="text-2xl font-semibold tracking-tight">
-					Créer un compte
+					Create an account
 				</h2>
 				<p className="text-sm text-muted-foreground">
-					Rejoignez-nous en quelques secondes.
+					Join us in just a few seconds.
 				</p>
 			</div>
 
@@ -86,12 +86,12 @@ function SignupForm({ onSuccess }: SignupFormProps) {
 					<form.Field name="fullName">
 						{(field) => (
 							<Field data-invalid={!field.state.meta.isValid}>
-								<FieldLabel htmlFor={field.name}>Nom complet</FieldLabel>
+								<FieldLabel htmlFor={field.name}>Full name</FieldLabel>
 								<Input
 									id={field.name}
 									size="lg"
 									type="text"
-									placeholder="Jean Dupont"
+									placeholder="John Doe"
 									value={field.state.value}
 									onBlur={field.handleBlur}
 									onChange={(e) => field.handleChange(e.target.value)}
@@ -126,7 +126,7 @@ function SignupForm({ onSuccess }: SignupFormProps) {
 					<form.Field name="password">
 						{(field) => (
 							<Field data-invalid={!field.state.meta.isValid}>
-								<FieldLabel htmlFor={field.name}>Mot de passe</FieldLabel>
+								<FieldLabel htmlFor={field.name}>Password</FieldLabel>
 								<PasswordInput
 									id={field.name}
 									size="lg"
@@ -146,19 +146,19 @@ function SignupForm({ onSuccess }: SignupFormProps) {
 				<form.Subscribe selector={(state) => state.isSubmitting}>
 					{(isSubmitting) => (
 						<Button type="submit" size="lg" fullWidth disabled={isSubmitting}>
-							{isSubmitting ? "Création..." : "Créer un compte"}
+							{isSubmitting ? "Creating..." : "Create an account"}
 						</Button>
 					)}
 				</form.Subscribe>
 			</form>
 
 			<p className="text-center text-sm text-muted-foreground">
-				Déjà un compte ?{" "}
+				Already have an account?{" "}
 				<Link
 					to="/"
 					className="text-foreground underline underline-offset-3 hover:text-foreground/80"
 				>
-					Se connecter
+					Log in
 				</Link>
 			</p>
 		</div>

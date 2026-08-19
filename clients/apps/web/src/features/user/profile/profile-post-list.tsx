@@ -40,8 +40,8 @@ export function ProfilePostList({ userId, type }: ProfilePostListProps) {
 	if (query.isError) {
 		return (
 			<ExceptionBlock
-				title="Impossible de charger les publications"
-				description="Une erreur s'est produite pendant le chargement de cette liste."
+				title="Unable to load posts"
+				description="An error occurred while loading this list."
 				onRefresh={() => void query.refetch()}
 				borderless
 			/>
@@ -52,15 +52,11 @@ export function ProfilePostList({ userId, type }: ProfilePostListProps) {
 	if (posts.length === 0) {
 		return (
 			<EmptyBlock
-				title={
-					type === "posts"
-						? "Aucune publication pour le moment"
-						: "Aucune publication aimée"
-				}
+				title={type === "posts" ? "No posts yet" : "No liked posts"}
 				description={
 					type === "posts"
-						? "Les publications de cet utilisateur apparaîtront ici."
-						: "Les publications aimées apparaîtront ici."
+						? "Posts by this user will appear here."
+						: "Liked posts will appear here."
 				}
 				borderless
 			/>

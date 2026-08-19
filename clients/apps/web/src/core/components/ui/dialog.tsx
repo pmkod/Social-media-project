@@ -65,7 +65,7 @@ function DialogContent({
 							className="absolute top-3 right-3 rounded-full"
 						>
 							<RiCloseLine className="size-5" />
-							<span className="sr-only">Fermer</span>
+							<span className="sr-only">Close</span>
 						</Button>
 					</DialogPrimitive.Close>
 				) : null}

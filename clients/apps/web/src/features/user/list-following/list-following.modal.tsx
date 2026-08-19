@@ -18,7 +18,7 @@ const ListFollowingModal = create(
 				query={query}
 				username={username}
 				title="Following"
-				emptyTitle="Aucun abonnement"
+				emptyTitle="No following users"
 			/>
 		);
 	},
