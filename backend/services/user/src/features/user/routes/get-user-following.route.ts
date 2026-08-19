@@ -1,7 +1,20 @@
 import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
-import { getUserConnections } from "../services/get-user-connections.service";
+import { prisma } from "@/core/databases";
+import type { Prisma } from "@/generated/prisma/client";
 import { UserRoutesTag } from "../user.constants";
+
+const connectionUserSelect = {
+	id: true,
+	username: true,
+	fullName: true,
+	displayName: true,
+	bio: true,
+	avatarUrl: true,
+	followersCount: true,
+	followingCount: true,
+	createdAt: true,
+} satisfies Prisma.UserSelect;
 
 const routeDef = createRoute({
 	method: "get",
@@ -27,19 +40,71 @@ const getUserFollowingRoute = defineOpenAPIRoute({
 	handler: async (c) => {
 		const { userId } = c.req.valid("param");
 		const query = c.req.valid("query");
-		const result = await getUserConnections({
-			userId,
-			type: "following",
-			cursorId: query.cursorId,
-			cursorCreatedAt: query.cursorCreatedAt,
-			limit: Math.min(Math.max(Number.parseInt(query.limit, 10) || 20, 1), 50),
+		const limit = Math.min(
+			Math.max(Number.parseInt(query.limit, 10) || 20, 1),
+			50,
+		);
+		const userExists = await prisma.user.findFirst({
+			where: { id: userId, active: true },
+			select: { id: true },
 		});
 
-		if (!result) {
+		if (!userExists) {
 			return c.json({ message: "User not found" }, HttpStatus.NOT_FOUND.code);
 		}
 
-		return c.json(result);
+		const cursorDate = query.cursorCreatedAt
+			? new Date(query.cursorCreatedAt)
+			: null;
+		const hasValidCursor =
+			cursorDate !== null &&
+			!Number.isNaN(cursorDate.getTime()) &&
+			query.cursorId;
+		const cursorCondition: Prisma.FollowWhereInput | undefined = hasValidCursor
+			? {
+					OR: [
+						{ createdAt: { lt: cursorDate } },
+						{
+							createdAt: cursorDate,
+							id: { lt: query.cursorId },
+						},
+					],
+				}
+			: undefined;
+
+		const connections = await prisma.follow.findMany({
+			where: {
+				followerId: userId,
+				following: { active: true },
+				...cursorCondition,
+			},
+			orderBy: [{ createdAt: "desc" }, { id: "desc" }],
+			take: limit + 1,
+			select: {
+				id: true,
+				createdAt: true,
+				following: { select: connectionUserSelect },
+			},
+		});
+
+		const hasNextPage = connections.length > limit;
+		const items = hasNextPage ? connections.slice(0, limit) : connections;
+		const lastItem = items.at(-1);
+
+		return c.json({
+			users: items.map((connection) => connection.following),
+			pagination: {
+				nextCursor:
+					hasNextPage && lastItem
+						? {
+								id: lastItem.id,
+								createdAt: lastItem.createdAt.toISOString(),
+							}
+						: null,
+				hasNextPage,
+				limit,
+			},
+		});
 	},
 });
 

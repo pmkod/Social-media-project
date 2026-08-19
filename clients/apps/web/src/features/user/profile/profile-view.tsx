@@ -21,7 +21,8 @@ import {
 	TabsTrigger,
 } from "@/core/components/ui/tabs.tsx";
 import { FollowButton } from "@/features/user/common/follow-button.tsx";
-import { UserConnectionsModal } from "@/features/user/user-connections/user-connections.modal.tsx";
+import { ListFollowersModal } from "@/features/user/list-followers/list-followers.modal.tsx";
+import { ListFollowingModal } from "@/features/user/list-following/list-following.modal.tsx";
 import { useUserProfile } from "@/features/user/user-profile/use-user-profile.ts";
 import { ProfileCollections } from "./profile-collections.tsx";
 import { ProfilePostList } from "./profile-post-list.tsx";
@@ -171,10 +172,9 @@ export function ProfileView({ username }: ProfileViewProps) {
 						<button
 							type="button"
 							onClick={() =>
-								NiceModal.show(UserConnectionsModal, {
+								NiceModal.show(ListFollowersModal, {
 									userId: user.id,
 									username: user.username,
-									type: "followers",
 								})
 							}
 							className="rounded-sm text-left transition hover:text-foreground hover:underline"
@@ -187,10 +187,9 @@ export function ProfileView({ username }: ProfileViewProps) {
 						<button
 							type="button"
 							onClick={() =>
-								NiceModal.show(UserConnectionsModal, {
+								NiceModal.show(ListFollowingModal, {
 									userId: user.id,
 									username: user.username,
-									type: "following",
 								})
 							}
 							className="rounded-sm text-left transition hover:text-foreground hover:underline"

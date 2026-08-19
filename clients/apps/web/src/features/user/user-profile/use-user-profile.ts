@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { httpClient } from "@/core/http-clients/http-client.ts";
-import { userDetailsQueryKeys } from "./user-details-query-keys.ts";
+import { userDetailsQueryKeys } from "../common/user-details-query-keys.ts";
 import type { UserProfileResponse } from "./user-profile-response.ts";
 
 const useUserProfile = (username: string) =>
