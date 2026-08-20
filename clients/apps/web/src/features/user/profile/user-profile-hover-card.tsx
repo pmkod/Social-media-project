@@ -101,11 +101,7 @@ function UserProfilePreview({ user }: UserProfilePreviewProps) {
 					/>
 				</div>
 
-				{isOwnProfile ? (
-					<span className="rounded-full border border-border px-3 py-1.5 text-xs font-semibold text-muted-foreground">
-						Your profile
-					</span>
-				) : !user.isBlockedByAuthenticatedUser &&
+				{isOwnProfile ? null : !user.isBlockedByAuthenticatedUser &&
 					!user.hasBlockedAuthenticatedInUser ? (
 					<FollowButton user={user} />
 				) : null}

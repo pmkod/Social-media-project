@@ -104,6 +104,14 @@ function UserProfileActionsDropdown({
 						</DropdownMenuItem>
 					</>
 				) : null}
+				<DropdownMenuItem>
+					<RiFileCopyLine />
+					Block
+				</DropdownMenuItem>
+				<DropdownMenuItem>
+					<RiFileCopyLine />
+					Report
+				</DropdownMenuItem>
 			</DropdownMenuContent>
 		</DropdownMenu>
 	);

@@ -20,10 +20,10 @@ const iconButtonVariants = cva(
 				destructive: "",
 			},
 			size: {
-				xs: "size-7 [&_svg]:size-3.5",
-				sm: "size-8 [&_svg]:size-4",
-				md: "size-9 [&_svg]:size-5",
-				lg: "size-10 [&_svg]:size-5",
+				xs: "size-7 [&_svg]:size-3.5 rounded",
+				sm: "size-8 [&_svg]:size-4 rounded",
+				md: "size-9 [&_svg]:size-5 rounded",
+				lg: "size-10 [&_svg]:size-5 rounded",
 			},
 		},
 		compoundVariants: [

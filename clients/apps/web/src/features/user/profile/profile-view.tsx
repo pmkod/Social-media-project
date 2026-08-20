@@ -80,14 +80,11 @@ export function ProfileView({ username }: ProfileViewProps) {
 					<AppHeaderGoBackButton to="/home" />
 					<div className="min-w-0">
 						<AppHeaderTitle>{user.fullName}</AppHeaderTitle>
-						<AppHeaderSubtitle>
-							{numberFormatter.format(user.postCount ?? 0)} posts
-						</AppHeaderSubtitle>
 					</div>
 				</AppHeaderLeftPart>
 			</AppHeader>
 
-			<section>
+			<section className="border-x rounded-t-xl overflow-hidden">
 				<div className="h-48 overflow-hidden bg-gradient-to-br from-slate-700 via-slate-500 to-sky-300 sm:h-56">
 					{user.coverUrl ? (
 						<img
@@ -100,7 +97,7 @@ export function ProfileView({ username }: ProfileViewProps) {
 					)}
 				</div>
 
-				<div className="px-4 pb-5">
+				<div className="px-8 pb-5">
 					<div className="flex items-start justify-between">
 						<UserAvatar
 							user={user}
@@ -109,11 +106,7 @@ export function ProfileView({ username }: ProfileViewProps) {
 						/>
 
 						<div className="flex items-center gap-2 pt-3">
-							<UserProfileActionsDropdown
-								user={user}
-								variant="outline"
-								size="lg"
-							/>
+							<UserProfileActionsDropdown user={user} variant="outline" />
 							{isOwnProfile ? (
 								<Button variant="outline">Edit profile</Button>
 							) : !hasBlockRelationship ? (
