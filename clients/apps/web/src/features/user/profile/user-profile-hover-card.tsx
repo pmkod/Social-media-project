@@ -165,12 +165,6 @@ function UserProfilePreview({ user }: UserProfilePreviewProps) {
 							{user.website.replace(/^https?:\/\//, "")}
 						</a>
 					) : null}
-					{joinedDate ? (
-						<span className="flex items-center gap-1">
-							<RiCalendar2Line className="size-3.5" />
-							Joined {joinedDate}
-						</span>
-					) : null}
 				</div>
 			) : null}
 

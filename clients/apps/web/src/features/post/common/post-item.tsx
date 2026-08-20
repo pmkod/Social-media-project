@@ -204,6 +204,7 @@ export function PostItem({ post }: PostItemProps) {
 	const addBookmark = useAddBookmark();
 	const removeBookmark = useRemoveBookmark();
 	const handleLike = (e: React.MouseEvent) => {
+		e.preventDefault();
 		e.stopPropagation();
 		if (isLiked) {
 			unlikePost.mutate(post.id);
@@ -213,6 +214,7 @@ export function PostItem({ post }: PostItemProps) {
 	};
 
 	const handleBookmark = (e: React.MouseEvent) => {
+		e.preventDefault();
 		e.stopPropagation();
 		if (addBookmark.isPending || removeBookmark.isPending) return;
 		if (isBookmarked) removeBookmark.mutate(post.id);
