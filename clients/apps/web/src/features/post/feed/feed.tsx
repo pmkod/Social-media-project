@@ -16,6 +16,7 @@ export function Feed() {
 		isLoading,
 		isError,
 		refetch,
+		isRefetching,
 	} = useFollowingFeed();
 
 	useEffect(() => {
@@ -52,6 +53,7 @@ export function Feed() {
 					title="Unable to load feed"
 					description="An error occurred while loading posts."
 					onRefresh={() => void refetch()}
+					isRefetching={isRefetching}
 				/>
 			) : allPosts.length === 0 ? (
 				<EmptyBlock

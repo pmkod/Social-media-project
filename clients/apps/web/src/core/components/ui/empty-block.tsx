@@ -1,4 +1,4 @@
-import { InboxIcon, RefreshCcwIcon } from "lucide-react";
+import { RefreshCcwIcon } from "lucide-react";
 import type * as React from "react";
 
 import { Button } from "@/core/components/ui/button.tsx";
@@ -7,7 +7,6 @@ import {
 	EmptyContent,
 	EmptyDescription,
 	EmptyHeader,
-	EmptyMedia,
 	EmptyTitle,
 } from "@/core/components/ui/empty.tsx";
 import { cn } from "@/core/lib/utils.ts";
@@ -16,6 +15,7 @@ type EmptyBlockProps = {
 	title: React.ReactNode;
 	description: React.ReactNode;
 	onRefresh?: () => void;
+	isRefetching?: boolean;
 	borderless?: boolean;
 	className?: string;
 };
@@ -24,6 +24,7 @@ function EmptyBlock({
 	title,
 	description,
 	onRefresh,
+	isRefetching = false,
 	borderless = false,
 	className,
 }: EmptyBlockProps) {
@@ -45,9 +46,10 @@ function EmptyBlock({
 					<Button
 						type="button"
 						variant="outline"
+						isLoading={isRefetching}
 						onClick={() => void onRefresh()}
 					>
-						<RefreshCcwIcon />
+						{!isRefetching ? <RefreshCcwIcon /> : null}
 						Refresh
 					</Button>
 				</EmptyContent>

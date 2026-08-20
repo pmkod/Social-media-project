@@ -1,3 +1,4 @@
+import { RiLoader4Line } from "@remixicon/react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { Slot } from "radix-ui";
 import type * as React from "react";
@@ -127,6 +128,12 @@ const buttonVariants = cva(
 	},
 );
 
+type ButtonProps = React.ComponentProps<"button"> &
+	VariantProps<typeof buttonVariants> & {
+		asChild?: boolean;
+		isLoading?: boolean;
+	};
+
 function Button({
 	className,
 	variant = "default",
@@ -134,11 +141,11 @@ function Button({
 	size = "default",
 	fullWidth = false,
 	asChild = false,
+	isLoading = false,
+	disabled,
+	children,
 	...props
-}: React.ComponentProps<"button"> &
-	VariantProps<typeof buttonVariants> & {
-		asChild?: boolean;
-	}) {
+}: ButtonProps) {
 	const Comp = asChild ? Slot.Root : "button";
 
 	return (
@@ -147,12 +154,26 @@ function Button({
 			data-variant={variant}
 			data-color-scheme={colorScheme}
 			data-size={size}
+			disabled={disabled || isLoading}
+			aria-busy={isLoading}
 			className={cn(
 				buttonVariants({ variant, colorScheme, size, fullWidth, className }),
 			)}
 			{...props}
-		/>
+		>
+			{asChild ? (
+				children
+			) : (
+				<>
+					{isLoading ? (
+						<RiLoader4Line className="animate-spin shrink-0" />
+					) : null}
+					{children}
+				</>
+			)}
+		</Comp>
 	);
 }
 
 export { Button, buttonVariants };
+export type { ButtonProps };

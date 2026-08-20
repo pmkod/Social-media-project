@@ -43,6 +43,7 @@ export function ProfilePostList({ userId, type }: ProfilePostListProps) {
 				title="Unable to load posts"
 				description="An error occurred while loading this list."
 				onRefresh={() => void query.refetch()}
+				isRefetching={query.isRefetching}
 				borderless
 			/>
 		);

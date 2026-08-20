@@ -102,6 +102,7 @@ export function ProfileCollections({ userId }: { userId: string }) {
 						title="Unable to load this collection"
 						description="An error occurred while loading posts."
 						onRefresh={() => void postsQuery.refetch()}
+						isRefetching={postsQuery.isRefetching}
 						borderless
 					/>
 				) : posts.length === 0 ? (

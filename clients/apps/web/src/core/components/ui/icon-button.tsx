@@ -1,3 +1,4 @@
+import { RiLoader4Line } from "@remixicon/react";
 import { cva, type VariantProps } from "class-variance-authority";
 import type * as React from "react";
 import { cn } from "@/core/lib/utils.ts";
@@ -56,22 +57,39 @@ const iconButtonVariants = cva(
 	},
 );
 
+type IconButtonProps = React.ComponentProps<"button"> &
+	VariantProps<typeof iconButtonVariants> & {
+		isLoading?: boolean;
+	};
+
 function IconButton({
 	className,
 	variant = "default",
 	colorScheme = "primary",
 	size = "md",
+	isLoading = false,
+	disabled,
+	children,
 	...props
-}: React.ComponentProps<"button"> & VariantProps<typeof iconButtonVariants>) {
+}: IconButtonProps) {
 	return (
 		<button
 			data-slot="icon-button"
+			disabled={disabled || isLoading}
+			aria-busy={isLoading}
 			className={cn(
 				iconButtonVariants({ variant, colorScheme, size, className }),
 			)}
 			{...props}
-		/>
+		>
+			{isLoading ? (
+				<RiLoader4Line className="animate-spin shrink-0" />
+			) : (
+				children
+			)}
+		</button>
 	);
 }
 
 export { IconButton, iconButtonVariants };
+export type { IconButtonProps };

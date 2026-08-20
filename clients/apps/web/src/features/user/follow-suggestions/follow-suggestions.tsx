@@ -4,6 +4,7 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/core/components/ui/card.tsx";
+import { EmptyBlock } from "@/core/components/ui/empty-block.tsx";
 import { ExceptionBlock } from "@/core/components/ui/exception-block.tsx";
 import { UserRowItem } from "@/features/user/common/components/user-row-item.tsx";
 import { UserRowItemListLoader } from "@/features/user/common/components/user-row-item-list-loader.tsx";
@@ -27,13 +28,19 @@ function FollowSuggestions() {
 							title="Unable to load suggestions"
 							description="An error occurred while loading profiles to follow."
 							onRefresh={() => refetch()}
+							isRefetching={isRefetching}
 							borderless
 							className="h-96"
 						/>
 					) : data?.users.length === 0 ? (
-						<div className="py-6 px-6 text-center text-sm text-muted-foreground">
-							No suggestions right now
-						</div>
+						<EmptyBlock
+							title="No suggestions"
+							description="No suggestions right now"
+							onRefresh={() => refetch()}
+							isRefetching={isRefetching}
+							borderless
+							className="h§-96"
+						/>
 					) : (
 						<div className="pb-4">
 							{data?.users.map((user) => (

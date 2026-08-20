@@ -271,6 +271,7 @@ export function BookmarkList() {
 					title="Unable to load your bookmarks"
 					description="An error occurred while loading your saved posts."
 					onRefresh={() => void bookmarksQuery.refetch()}
+					isRefetching={bookmarksQuery.isRefetching}
 				/>
 			) : posts.length === 0 ? (
 				<EmptyBlock

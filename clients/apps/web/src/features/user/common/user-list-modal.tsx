@@ -20,6 +20,7 @@ type UserListModalQuery = {
 	data: { pages: Array<{ users: User[] }> } | undefined;
 	isLoading: boolean;
 	isError: boolean;
+	isRefetching?: boolean;
 	hasNextPage: boolean | undefined;
 	isFetchingNextPage: boolean;
 	fetchNextPage: () => Promise<unknown>;
@@ -90,6 +91,7 @@ const UserListModal = ({
 							title="Unable to load this list"
 							description="An error occurred while loading this list."
 							onRefresh={() => void query.refetch()}
+							isRefetching={query.isRefetching}
 							borderless
 						/>
 					) : users.length === 0 ? (

@@ -29,6 +29,7 @@ export function SearchView() {
 		isLoading,
 		isError,
 		refetch,
+		isRefetching,
 	} = useSearchPosts({ query: debouncedSearch });
 
 	useEffect(() => {
@@ -50,7 +51,7 @@ export function SearchView() {
 	const posts = data?.pages.flatMap((page) => page.posts) ?? [];
 
 	return (
-		<div className="min-h-screen border-x border-border">
+		<div className="min-h-screen divide-y divide-border">
 			<header className="sticky top-0 z-20 border-b border-border bg-background/90 p-4 backdrop-blur-xl">
 				<h1 className="mb-3 text-xl font-bold text-foreground">Search</h1>
 				<label className="relative block">
@@ -81,6 +82,7 @@ export function SearchView() {
 					title="Unable to load results"
 					description="An error occurred while searching."
 					onRefresh={() => void refetch()}
+					isRefetching={isRefetching}
 				/>
 			) : posts.length === 0 ? (
 				<EmptyBlock title="No results" description="Try different keywords." />
