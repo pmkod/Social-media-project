@@ -15,10 +15,11 @@ import {
 	TabsList,
 	TabsTrigger,
 } from "@/core/components/ui/tabs.tsx";
+import { useAuthenticatedUser } from "@/features/user/authenticated-user/use-authenticated-user.ts";
+import { UserAvatar } from "@/features/user/common/components/user-avatar.tsx";
 import { FollowButton } from "@/features/user/common/follow-button.tsx";
 import { ListFollowersModal } from "@/features/user/list-followers/list-followers.modal.tsx";
 import { ListFollowingModal } from "@/features/user/list-following/list-following.modal.tsx";
-import { useAuthenticatedUser } from "@/features/user/authenticated-user/use-authenticated-user.ts";
 import { useUserProfile } from "@/features/user/user-profile/use-user-profile.ts";
 import { UserProfileActionsDropdown } from "@/features/user/user-profile/user-profile-actions-dropdown.tsx";
 import { ProfileCollections } from "./profile-collections.tsx";
@@ -63,9 +64,6 @@ export function ProfileView({ username }: ProfileViewProps) {
 		);
 	}
 
-	const avatar =
-		user.avatarUrl ||
-		`https://ui-avatars.com/api/?name=${encodeURIComponent(user.fullName)}&background=random`;
 	const joinedDate = user.createdAt
 		? joinedDateFormatter.format(new Date(user.createdAt))
 		: null;
@@ -104,10 +102,10 @@ export function ProfileView({ username }: ProfileViewProps) {
 
 				<div className="px-4 pb-5">
 					<div className="flex items-start justify-between">
-						<img
-							src={avatar}
-							alt={user.fullName}
-							className="-mt-16 size-32 rounded-full border-4 border-background bg-background object-cover shadow-sm sm:size-36"
+						<UserAvatar
+							user={user}
+							size="4xl"
+							className="-mt-16 border-4 border-background bg-background shadow-sm"
 						/>
 
 						<div className="flex items-center gap-2 pt-3">

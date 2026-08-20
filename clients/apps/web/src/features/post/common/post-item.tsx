@@ -14,6 +14,8 @@ import { cn } from "@/core/lib/utils.ts";
 import { useAddBookmark } from "@/features/bookmark/use-add-bookmark.ts";
 import { useRemoveBookmark } from "@/features/bookmark/use-remove-bookmark.ts";
 import { CommentItem } from "@/features/comment";
+import { UserAvatar } from "@/features/user/common/components/user-avatar.tsx";
+import { UserProfileLink } from "@/features/user/common/user-profile-link.tsx";
 import { UserProfileHoverCard } from "@/features/user/profile/user-profile-hover-card.tsx";
 import { useLikePost } from "../like-post/use-like-post.ts";
 import { buildImageUrl, buildVideoUrl } from "../post-media.functions.ts";
@@ -21,7 +23,6 @@ import { useUnlikePost } from "../unlike-post/use-unlike-post.ts";
 import type { Post, PostMediaItem } from "./post.ts";
 import { formatPostCreationDate } from "./post.utils.ts";
 import { PostActionsDropdown } from "./post-actions-dropdown.tsx";
-import { UserProfileLink } from "@/features/user/common/user-profile-link.tsx";
 
 type PostItemProps = { post: Post };
 
@@ -242,15 +243,10 @@ export function PostItem({ post }: PostItemProps) {
 						user={post.author}
 						onClick={(e) => e.stopPropagation()}
 					>
-						<img
-							src={
-								post.author?.avatarUrl ||
-								`https://ui-avatars.com/api/?name=${encodeURIComponent(
-									post.author.fullName,
-								)}&background=random`
-							}
-							alt={post.author.fullName}
-							className="size-12 rounded-full object-cover ring-1 ring-border"
+						<UserAvatar
+							user={post.author}
+							size="lg"
+							className="ring-1 ring-border"
 						/>
 					</UserProfileLink>
 				</UserProfileHoverCard>
@@ -302,35 +298,37 @@ export function PostItem({ post }: PostItemProps) {
 					{mediaList.length > 0 ? <PostMediaGrid media={mediaList} /> : null}
 
 					{/* Action Buttons */}
-					<div className="mt-1 flex items-center gap-x-4 text-muted-foreground text-xs max-w-md">
-						{/* Like */}
-						<button
-							type="button"
-							onClick={handleLike}
-							className={`flex items-center gap-1.5 transition-colors group -ml-2 p-2 rounded-full hover:bg-accent ${
-								isLiked ? "text-rose-500" : "hover:text-rose-500"
-							}`}
-						>
-							{isLiked ? (
-								<RiHeartFill className="size-6 text-rose-500" />
-							) : (
-								<RiHeartLine className="size-6" />
-							)}
-							<span className="text-base font-light">{likesCount}</span>
-						</button>
+					<div className="mt-1 flex items-center justify-between text-muted-foreground text-xs">
+						<div className="flex items-center gap-x-4">
+							{/* Like */}
+							<button
+								type="button"
+								onClick={handleLike}
+								className={`flex items-center gap-1.5 transition-colors group -ml-2 p-2 rounded-full hover:bg-accent ${
+									isLiked ? "text-rose-500" : "hover:text-rose-500"
+								}`}
+							>
+								{isLiked ? (
+									<RiHeartFill className="size-6 text-rose-500" />
+								) : (
+									<RiHeartLine className="size-6" />
+								)}
+								<span className="text-base font-light">{likesCount}</span>
+							</button>
 
-						{/* Comment */}
-						<Link
-							to="/posts/$postId"
-							params={{ postId: post.id }}
-							search={{ focusComment: true }}
-							onClick={(e) => e.stopPropagation()}
-							className="flex items-center gap-1.5 transition-colors group -ml-2 p-2 rounded-full hover:bg-accent hover:text-sky-500"
-							aria-label="Comment on post"
-						>
-							<RiChat3Line className="size-6" />
-							<span className="text-base font-light">{commentsCount}</span>
-						</Link>
+							{/* Comment */}
+							<Link
+								to="/posts/$postId"
+								params={{ postId: post.id }}
+								search={{ focusComment: true }}
+								onClick={(e) => e.stopPropagation()}
+								className="flex items-center gap-1.5 transition-colors group -ml-2 p-2 rounded-full hover:bg-accent hover:text-sky-500"
+								aria-label="Comment on post"
+							>
+								<RiChat3Line className="size-6" />
+								<span className="text-base font-light">{commentsCount}</span>
+							</Link>
+						</div>
 
 						{/* Bookmark */}
 						<button
@@ -338,17 +336,15 @@ export function PostItem({ post }: PostItemProps) {
 							onClick={handleBookmark}
 							disabled={addBookmark.isPending || removeBookmark.isPending}
 							aria-label={isBookmarked ? "Remove bookmark" : "Add bookmark"}
-							className={`flex items-center gap-1.5 transition-colors group disabled:opacity-60 ${
+							className={`flex items-center gap-1.5 transition-colors group -mr-2 p-2 rounded-full hover:bg-accent disabled:opacity-60 ${
 								isBookmarked ? "text-amber-500" : "hover:text-amber-500"
 							}`}
 						>
-							<div className="p-1.5 rounded-full group-hover:bg-amber-500/10">
-								{isBookmarked ? (
-									<RiBookmarkFill className="h-4 w-4 text-amber-500" />
-								) : (
-									<RiBookmarkLine className="h-4 w-4" />
-								)}
-							</div>
+							{isBookmarked ? (
+								<RiBookmarkFill className="size-6 text-amber-500" />
+							) : (
+								<RiBookmarkLine className="size-6" />
+							)}
 						</button>
 					</div>
 				</div>

@@ -13,6 +13,7 @@ import { ExceptionBlock } from "@/core/components/ui/exception-block.tsx";
 import type { NiceModalHandler } from "@/core/components/ui/nice-modal.tsx";
 import { cn } from "@/core/lib/utils.ts";
 import { useAuthenticatedUser } from "@/features/user/authenticated-user/use-authenticated-user.ts";
+import { UserAvatar } from "./components/user-avatar.tsx";
 import { FollowButton } from "./follow-button.tsx";
 import type { User } from "./user.ts";
 
@@ -103,10 +104,6 @@ const UserListModal = ({
 					) : (
 						<div className="divide-y divide-border">
 							{users.map((user) => {
-								const avatar =
-									user.avatarUrl ||
-									`https://ui-avatars.com/api/?name=${encodeURIComponent(user.fullName)}&background=random`;
-
 								return (
 									<div
 										key={user.id}
@@ -118,10 +115,10 @@ const UserListModal = ({
 											onClick={() => modal.remove()}
 											className="flex min-w-0 flex-1 items-center gap-3"
 										>
-											<img
-												src={avatar}
-												alt={user.fullName}
-												className="size-11 shrink-0 rounded-full object-cover ring-1 ring-border"
+											<UserAvatar
+												user={user}
+												size="lg"
+												className="ring-1 ring-border"
 											/>
 											<div className="min-w-0 flex-1">
 												<p className="truncate text-sm font-semibold text-foreground">
@@ -137,11 +134,9 @@ const UserListModal = ({
 												) : null}
 											</div>
 										</Link>
-										{Boolean(
-											authenticatedUser?.id &&
-												user.id &&
-												authenticatedUser.id === user.id,
-										) ? null : (
+										{authenticatedUser?.id &&
+										user.id &&
+										authenticatedUser.id === user.id ? null : (
 											<FollowButton user={user} />
 										)}
 									</div>

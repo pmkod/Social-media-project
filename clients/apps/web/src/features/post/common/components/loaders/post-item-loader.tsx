@@ -48,9 +48,11 @@ function PostItemLoader({
 					)}
 
 					{/* Action Buttons Skeleton */}
-					<div className="mt-3 mb-4 flex items-center gap-x-8 text-muted-foreground">
-						<Skeleton className="size-5 rounded-full" />
-						<Skeleton className="size-5 rounded-full" />
+					<div className="mt-3 mb-4 flex items-center justify-between text-muted-foreground">
+						<div className="flex items-center gap-x-8">
+							<Skeleton className="size-5 rounded-full" />
+							<Skeleton className="size-5 rounded-full" />
+						</div>
 						<Skeleton className="size-5 rounded-full" />
 					</div>
 				</div>

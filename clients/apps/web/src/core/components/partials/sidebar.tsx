@@ -4,13 +4,10 @@ import { Logo } from "@/core/components/partials/logo";
 import { Button } from "@/core/components/ui/button.tsx";
 import { NAV_ITEMS } from "@/core/constants/navigation.constants";
 import { useAuthenticatedUser } from "@/features/user/authenticated-user/use-authenticated-user.ts";
+import { UserAvatar } from "@/features/user/common/components/user-avatar.tsx";
 
 export function Sidebar() {
 	const { data: user } = useAuthenticatedUser();
-
-	const avatar =
-		user?.avatarUrl ||
-		"https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80";
 
 	return (
 		<aside className="hidden md:flex flex-col justify-between w-64 lg:w-72 p-4 h-screen sticky top-0 shrink-0">
@@ -56,11 +53,7 @@ export function Sidebar() {
 									params={{ username: `@${user.username}` }}
 									className="flex min-w-0 items-center gap-3"
 								>
-									<img
-										src={avatar}
-										alt={`Profile avatar of ${user.fullName}`}
-										className="h-9 w-9 rounded-full object-cover shrink-0"
-									/>
+									<UserAvatar user={user} size="default" className="shrink-0" />
 									<div className="min-w-0">
 										<div className="text-xs font-semibold truncate text-foreground">
 											{user.fullName}
@@ -72,11 +65,7 @@ export function Sidebar() {
 								</Link>
 							) : (
 								<div className="flex min-w-0 items-center gap-3">
-									<img
-										src={avatar}
-										alt="Default avatar"
-										className="h-9 w-9 rounded-full object-cover shrink-0"
-									/>
+									<UserAvatar size="default" className="shrink-0" />
 									<div className="min-w-0">
 										<div className="text-xs font-semibold truncate text-foreground">
 											Your profile

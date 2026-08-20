@@ -1,19 +1,15 @@
 import { cn } from "@/core/lib/utils.ts";
+import { UserProfileHoverCard } from "../../profile/user-profile-hover-card.tsx";
 import { FollowButton } from "../follow-button.tsx";
 import type { User } from "../user.ts";
-import { UserProfileHoverCard } from "../../profile/user-profile-hover-card.tsx";
-import { useNavigate } from "@tanstack/react-router";
 import { UserProfileLink } from "../user-profile-link.tsx";
+import { UserAvatar } from "./user-avatar.tsx";
 
 type UserRowItemProps = {
 	user: User;
 };
 
 function UserRowItem({ user }: UserRowItemProps) {
-	const avatar =
-		user.avatarUrl ||
-		`https://ui-avatars.com/api/?name=${encodeURIComponent(user.fullName)}&background=random`;
-
 	return (
 		<UserProfileLink
 			type="button"
@@ -25,13 +21,7 @@ function UserRowItem({ user }: UserRowItemProps) {
 		>
 			<div className="flex items-center justify-start gap-2.5">
 				<UserProfileHoverCard user={user}>
-					{/* <UserProfileLink user={user} onClick={(e) => e.stopPropagation()}> */}
-					<img
-						src={avatar}
-						alt={user.fullName}
-						className="size-10 shrink-0 rounded-full object-cover ring-1 ring-border"
-					/>
-					{/* </UserProfileLink> */}
+					<UserAvatar user={user} size="md" className="ring-1 ring-border" />
 				</UserProfileHoverCard>
 
 				<div

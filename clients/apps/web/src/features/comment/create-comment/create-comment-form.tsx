@@ -1,9 +1,10 @@
-import { useEffect, useRef } from "react";
 import { RiSendPlane2Line } from "@remixicon/react";
 import { useForm, useSelector } from "@tanstack/react-form";
+import { useEffect, useRef } from "react";
 import { z } from "zod";
 import { Button } from "@/core/components/ui/button.tsx";
 import { useAuthenticatedUser } from "@/features/user/authenticated-user/use-authenticated-user.ts";
+import { UserAvatar } from "@/features/user/common/components/user-avatar.tsx";
 import type { Comment } from "../common/comment.ts";
 import { useCreateComment } from "./use-create-comment.ts";
 import { useCreateCommentReply } from "./use-create-comment-reply.ts";
@@ -88,15 +89,10 @@ function CreateCommentForm({
 			}}
 		>
 			<div className="flex gap-3">
-				<img
-					src={
-						authenticatedUser?.avatarUrl ||
-						`https://ui-avatars.com/api/?name=${encodeURIComponent(
-							authenticatedUser?.fullName || authenticatedUser?.username || "U",
-						)}&background=random`
-					}
-					alt="Your avatar"
-					className="h-10 w-10 rounded-full object-cover shrink-0 ring-1 ring-border"
+				<UserAvatar
+					user={authenticatedUser}
+					size="md"
+					className="ring-1 ring-border"
 				/>
 
 				<div className="flex-1 min-w-0 space-y-3">

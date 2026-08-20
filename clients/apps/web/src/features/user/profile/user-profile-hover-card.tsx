@@ -7,8 +7,9 @@ import {
 } from "@/core/components/ui/hover-card.tsx";
 import { Skeleton } from "@/core/components/ui/skeleton.tsx";
 import { cn } from "@/core/lib/utils.ts";
-import { FollowButton } from "@/features/user/common/follow-button.tsx";
 import { useAuthenticatedUser } from "@/features/user/authenticated-user/use-authenticated-user.ts";
+import { UserAvatar } from "@/features/user/common/components/user-avatar.tsx";
+import { FollowButton } from "@/features/user/common/follow-button.tsx";
 import { useUserProfile } from "@/features/user/user-profile/use-user-profile.ts";
 import type { User } from "../common/user.ts";
 
@@ -88,18 +89,15 @@ function UserProfilePreview({ user }: UserProfilePreviewProps) {
 	const isOwnProfile = Boolean(
 		authenticatedUser?.id && user.id && authenticatedUser.id === user.id,
 	);
-	const avatar =
-		user.avatarUrl ||
-		`https://ui-avatars.com/api/?name=${encodeURIComponent(user.fullName)}&background=random`;
 
 	return (
 		<div>
 			<div className="flex items-start justify-between gap-3">
 				<div className="shrink-0">
-					<img
-						src={avatar}
-						alt={user.fullName}
-						className="size-16 rounded-full border-2 border-background object-cover shadow-sm ring-1 ring-border"
+					<UserAvatar
+						user={user}
+						size="xl"
+						className="border-2 border-background shadow-sm ring-1 ring-border"
 					/>
 				</div>
 

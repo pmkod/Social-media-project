@@ -3,6 +3,8 @@ import { useState } from "react";
 import { Button } from "@/core/components/ui/button.tsx";
 import { cn } from "@/core/lib/utils.ts";
 import { formatCommentCreationDate } from "@/features/post/common/post.utils.ts";
+import { UserAvatar } from "@/features/user/common/components/user-avatar.tsx";
+import { UserProfileLink } from "@/features/user/common/user-profile-link.tsx";
 import { UserProfileHoverCard } from "@/features/user/profile/user-profile-hover-card.tsx";
 import { useCommentReplies } from "../comments/use-comment-replies.ts";
 import { CreateCommentForm } from "../create-comment/create-comment-form.tsx";
@@ -10,7 +12,6 @@ import { useLikeComment } from "../like-comment/use-like-comment.ts";
 import { useUnlikeComment } from "../unlike-comment/use-unlike-comment.ts";
 import type { Comment } from "./comment.ts";
 import { CommentItemLoader } from "./components/loaders/comment-item-loader.tsx";
-import { UserProfileLink } from "@/features/user/common/user-profile-link.tsx";
 
 type CommentItemProps = {
 	comment: Comment;
@@ -60,18 +61,10 @@ export function CommentItem({
 					user={comment.author}
 					onClick={(e) => e.stopPropagation()}
 				>
-					<img
-						src={
-							comment.author?.avatarUrl ||
-							`https://ui-avatars.com/api/?name=${encodeURIComponent(
-								comment.author.fullName,
-							)}&background=random`
-						}
-						alt={comment.author.fullName}
-						className={cn(
-							"rounded-full object-cover shrink-0 ring-1 ring-border",
-							isReply ? "size-8" : "size-10",
-						)}
+					<UserAvatar
+						user={comment.author}
+						size={isReply ? "sm" : "md"}
+						className="ring-1 ring-border"
 					/>
 				</UserProfileLink>
 			</UserProfileHoverCard>
