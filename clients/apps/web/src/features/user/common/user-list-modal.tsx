@@ -101,11 +101,9 @@ const UserListModal = ({
 					) : (
 						<div className="divide-y divide-border">
 							{users.map((user) => {
-								const displayName =
-									user.displayName || user.fullName || user.username;
 								const avatar =
 									user.avatarUrl ||
-									`https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=random`;
+									`https://ui-avatars.com/api/?name=${encodeURIComponent(user.fullName)}&background=random`;
 
 								return (
 									<div
@@ -120,12 +118,12 @@ const UserListModal = ({
 										>
 											<img
 												src={avatar}
-												alt={displayName}
+												alt={user.fullName}
 												className="size-11 shrink-0 rounded-full object-cover ring-1 ring-border"
 											/>
 											<div className="min-w-0 flex-1">
 												<p className="truncate text-sm font-semibold text-foreground">
-													{displayName}
+													{user.fullName}
 												</p>
 												<p className="truncate text-xs text-muted-foreground">
 													@{user.username}

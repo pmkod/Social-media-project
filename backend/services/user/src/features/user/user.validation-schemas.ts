@@ -2,12 +2,9 @@ import { z } from "@hono/zod-openapi";
 
 const UpdateProfileValidationSchema = z.object({
 	fullName: z.string().min(1).optional(),
-	displayName: z.string().min(1).optional(),
 	bio: z.string().optional(),
 	avatarUrl: z.string().url().optional().or(z.literal("")),
 	coverUrl: z.string().url().optional().or(z.literal("")),
-	location: z.string().optional(),
-	website: z.string().url().optional().or(z.literal("")),
 });
 
 const UserProfileResponseBody = z.object({
@@ -15,12 +12,9 @@ const UserProfileResponseBody = z.object({
 	email: z.string(),
 	username: z.string(),
 	fullName: z.string().nullable(),
-	displayName: z.string().nullable(),
 	bio: z.string().nullable(),
 	avatarUrl: z.string().nullable(),
 	coverUrl: z.string().nullable(),
-	location: z.string().nullable(),
-	website: z.string().nullable(),
 	postCount: z.number(),
 	followersCount: z.number(),
 	followingCount: z.number(),

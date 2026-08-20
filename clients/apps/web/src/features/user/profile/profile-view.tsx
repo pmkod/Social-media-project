@@ -1,9 +1,4 @@
-import {
-	RiCalendar2Line,
-	RiLinkM,
-	RiLoader4Line,
-	RiMapPin2Line,
-} from "@remixicon/react";
+import { RiCalendar2Line, RiLoader4Line } from "@remixicon/react";
 import { Link } from "@tanstack/react-router";
 import {
 	AppHeader,
@@ -68,10 +63,9 @@ export function ProfileView({ username }: ProfileViewProps) {
 		);
 	}
 
-	const displayName = user.displayName || user.fullName || user.username;
 	const avatar =
 		user.avatarUrl ||
-		`https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=random`;
+		`https://ui-avatars.com/api/?name=${encodeURIComponent(user.fullName)}&background=random`;
 	const joinedDate = user.createdAt
 		? joinedDateFormatter.format(new Date(user.createdAt))
 		: null;
@@ -87,7 +81,7 @@ export function ProfileView({ username }: ProfileViewProps) {
 				<AppHeaderLeftPart>
 					<AppHeaderGoBackButton to="/home" />
 					<div className="min-w-0">
-						<AppHeaderTitle>{displayName}</AppHeaderTitle>
+						<AppHeaderTitle>{user.fullName}</AppHeaderTitle>
 						<AppHeaderSubtitle>
 							{numberFormatter.format(user.postCount ?? 0)} posts
 						</AppHeaderSubtitle>
@@ -100,7 +94,7 @@ export function ProfileView({ username }: ProfileViewProps) {
 					{user.coverUrl ? (
 						<img
 							src={user.coverUrl}
-							alt={`${displayName}'s cover`}
+							alt={`${user.fullName}'s cover`}
 							className="h-full w-full object-cover"
 						/>
 					) : (
@@ -112,7 +106,7 @@ export function ProfileView({ username }: ProfileViewProps) {
 					<div className="flex items-start justify-between">
 						<img
 							src={avatar}
-							alt={displayName}
+							alt={user.fullName}
 							className="-mt-16 size-32 rounded-full border-4 border-background bg-background object-cover shadow-sm sm:size-36"
 						/>
 
@@ -132,7 +126,7 @@ export function ProfileView({ username }: ProfileViewProps) {
 
 					<div className="mt-3">
 						<h2 className="text-2xl font-bold tracking-tight text-foreground">
-							{displayName}
+							{user.fullName}
 						</h2>
 						<p className="text-muted-foreground">@{user.username}</p>
 					</div>
@@ -143,31 +137,12 @@ export function ProfileView({ username }: ProfileViewProps) {
 						</p>
 					) : null}
 
-					{!hasBlockRelationship ? (
+					{!hasBlockRelationship && joinedDate ? (
 						<div className="mt-4 flex flex-wrap gap-x-4 gap-y-2 text-sm text-muted-foreground">
-							{user.location ? (
-								<span className="flex items-center gap-1.5">
-									<RiMapPin2Line className="size-4" />
-									{user.location}
-								</span>
-							) : null}
-							{user.website ? (
-								<a
-									href={user.website}
-									target="_blank"
-									rel="noreferrer"
-									className="flex items-center gap-1.5 text-sky-500 hover:underline"
-								>
-									<RiLinkM className="size-4" />
-									{user.website.replace(/^https?:\/\//, "")}
-								</a>
-							) : null}
-							{joinedDate ? (
-								<span className="flex items-center gap-1.5">
-									<RiCalendar2Line className="size-4" />
-									Joined {joinedDate}
-								</span>
-							) : null}
+							<span className="flex items-center gap-1.5">
+								<RiCalendar2Line className="size-4" />
+								Joined {joinedDate}
+							</span>
 						</div>
 					) : null}
 

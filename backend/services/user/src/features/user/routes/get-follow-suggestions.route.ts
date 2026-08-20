@@ -11,7 +11,6 @@ const FollowSuggestionItem = z.object({
 	name: z.string(),
 	handle: z.string(),
 	fullName: z.string().nullable(),
-	displayName: z.string().nullable(),
 	avatarUrl: z.string().nullable(),
 	bio: z.string().nullable(),
 	followersCount: z.number(),
@@ -103,7 +102,6 @@ const getFollowSuggestionsRoute = defineOpenAPIRoute<
 				id: true,
 				username: true,
 				fullName: true,
-				displayName: true,
 				avatarUrl: true,
 				bio: true,
 				followersCount: true,
@@ -113,7 +111,7 @@ const getFollowSuggestionsRoute = defineOpenAPIRoute<
 		});
 
 		const users = candidates.map((user) => {
-			const name = user.fullName || user.displayName || user.username;
+			const name = user.fullName || user.username;
 			const handle = `@${user.username}`;
 			return {
 				id: user.id,
@@ -121,7 +119,6 @@ const getFollowSuggestionsRoute = defineOpenAPIRoute<
 				name,
 				handle,
 				fullName: user.fullName,
-				displayName: user.displayName,
 				avatarUrl: user.avatarUrl,
 				bio: user.bio,
 				followersCount: user.followersCount,

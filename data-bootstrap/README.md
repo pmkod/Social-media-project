@@ -11,7 +11,7 @@ Les données sont créées :
 
 Les avatars et médias des posts sont générés sous forme de SVG. Par défaut ils sont encodés en **data URI inline** dans la base. Il est possible de les écrire sur disque en définissant `MEDIA_OUTPUT_DIR`.
 
-> Les utilisateurs factices sont créés directement en base et enrichis avec les champs de profil (`displayName`, `bio`, `avatarUrl`, `location`, `website`) — ils ne passent pas par le flux d'inscription.
+> Les utilisateurs factices sont créés directement en base et enrichis avec les champs de profil (`bio`, `avatarUrl`) — ils ne passent pas par le flux d'inscription.
 
 ## Données
 

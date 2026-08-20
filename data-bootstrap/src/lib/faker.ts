@@ -1,6 +1,5 @@
 import {
   bioTemplates,
-  cities,
   commentContents,
   deterministicInt,
   firstNames,
@@ -28,20 +27,14 @@ const generateUserData = (index: number) => {
   const password = `SeedPassword${index}!${1000 + (index % 9000)}`;
 
   const bio = index % 3 === 0 ? pickByIndex(bioTemplates, index) : null;
-  const location = index % 2 === 0 ? pickByIndex(cities, index) : null;
-  const website = index % 4 === 0 ? `https://${username}.example.local` : null;
-  const displayName = index % 5 === 0 ? fullName : null;
 
   return {
     email,
     username,
     password,
     fullName,
-    displayName,
     bio,
     avatarUrl: null as string | null,
-    location,
-    website,
     emailVerified: true,
     active: true,
   };
@@ -84,11 +77,8 @@ const predefinedUserData = () => ({
   username: "pmkd",
   password: "pierremariekod@gmail.com",
   fullName: "Kouassi Kodossou",
-  displayName: "Kouassi Kodossou",
   bio: null as string | null,
   avatarUrl: null as string | null,
-  location: null as string | null,
-  website: null as string | null,
   emailVerified: true,
   active: true,
 });

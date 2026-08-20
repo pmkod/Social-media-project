@@ -11,7 +11,6 @@ const connectionUserSelect = {
 	id: true,
 	username: true,
 	fullName: true,
-	displayName: true,
 	bio: true,
 	avatarUrl: true,
 	followersCount: true,

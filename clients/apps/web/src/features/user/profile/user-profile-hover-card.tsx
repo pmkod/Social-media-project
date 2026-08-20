@@ -1,4 +1,3 @@
-import { RiCalendar2Line, RiLinkM, RiMapPin2Line } from "@remixicon/react";
 import type { ReactNode } from "react";
 import { ExceptionBlock } from "@/core/components/ui/exception-block.tsx";
 import {
@@ -16,10 +15,6 @@ import type { User } from "../common/user.ts";
 const numberFormatter = new Intl.NumberFormat("en-US", {
 	notation: "compact",
 	maximumFractionDigits: 1,
-});
-const joinedDateFormatter = new Intl.DateTimeFormat("en-US", {
-	month: "long",
-	year: "numeric",
 });
 
 type UserProfilePreviewLoaderProps = {
@@ -45,12 +40,6 @@ function UserProfilePreviewLoader({
 			<div className="space-y-1.5">
 				<Skeleton className="h-3.5 w-full rounded" />
 				<Skeleton className="h-3.5 w-4/5 rounded" />
-			</div>
-
-			{/* Meta details (location, website, joined date) */}
-			<div className="flex flex-wrap gap-x-3 gap-y-1.5">
-				<Skeleton className="h-3.5 w-14 rounded" />
-				<Skeleton className="h-3.5 w-16 rounded" />
 			</div>
 		</div>
 	);
@@ -99,13 +88,9 @@ function UserProfilePreview({ user }: UserProfilePreviewProps) {
 	const isOwnProfile = Boolean(
 		authenticatedUser?.id && user.id && authenticatedUser.id === user.id,
 	);
-	const displayName = user.displayName || user.fullName || user.username;
 	const avatar =
 		user.avatarUrl ||
-		`https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=random`;
-	const joinedDate = user.createdAt
-		? joinedDateFormatter.format(new Date(user.createdAt))
-		: null;
+		`https://ui-avatars.com/api/?name=${encodeURIComponent(user.fullName)}&background=random`;
 
 	return (
 		<div>
@@ -143,29 +128,6 @@ function UserProfilePreview({ user }: UserProfilePreviewProps) {
 				<p className="mt-3 whitespace-pre-line text-sm leading-relaxed text-foreground">
 					{user.bio}
 				</p>
-			) : null}
-
-			{!user.isBlockedByAuthenticatedUser &&
-			!user.hasBlockedAuthenticatedInUser ? (
-				<div className="mt-3 flex flex-wrap gap-x-3 gap-y-1.5 text-xs text-muted-foreground">
-					{user.location ? (
-						<span className="flex items-center gap-1">
-							<RiMapPin2Line className="size-3.5" />
-							{user.location}
-						</span>
-					) : null}
-					{user.website ? (
-						<a
-							href={user.website}
-							target="_blank"
-							rel="noreferrer"
-							className="flex items-center gap-1 text-sky-500 hover:underline"
-						>
-							<RiLinkM className="size-3.5" />
-							{user.website.replace(/^https?:\/\//, "")}
-						</a>
-					) : null}
-				</div>
 			) : null}
 
 			<div className="mt-3 flex gap-4 text-sm text-muted-foreground">

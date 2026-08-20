@@ -4,12 +4,9 @@ export type UserProfileDto = {
 	id: string;
 	username: string;
 	fullName?: string | null;
-	displayName?: string | null;
 	bio?: string | null;
 	avatarUrl?: string | null;
 	coverUrl?: string | null;
-	location?: string | null;
-	website?: string | null;
 	postCount?: number;
 	followersCount?: number;
 	followingCount?: number;

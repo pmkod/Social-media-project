@@ -32,12 +32,9 @@ const getUserByUsernameRoute = defineOpenAPIRoute<
 				id: true,
 				username: true,
 				fullName: true,
-				displayName: true,
 				bio: true,
 				avatarUrl: true,
 				coverUrl: true,
-				location: true,
-				website: true,
 				postCount: true,
 				followersCount: true,
 				followingCount: true,
@@ -76,8 +73,6 @@ const getUserByUsernameRoute = defineOpenAPIRoute<
 			? {
 					...user,
 					bio: null,
-					location: null,
-					website: null,
 					createdAt: null,
 				}
 			: user;
