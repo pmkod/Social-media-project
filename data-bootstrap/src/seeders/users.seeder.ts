@@ -1,5 +1,4 @@
 import { generateUserData, predefinedUserData } from "../lib/faker";
-import { generateAvatar } from "../lib/files";
 import { getUserPrisma } from "../lib/database";
 import { logger } from "../lib/logger";
 import { Config } from "../config";
@@ -23,7 +22,6 @@ const createUser = async (
   userData: ReturnType<typeof generateUserData>,
   label: string,
 ): Promise<SeededUser> => {
-  const avatarUrl = await generateAvatar(userData.email);
   const { password, ...rest } = userData;
   const hashedPassword = await hashPassword(password);
 
@@ -31,7 +29,6 @@ const createUser = async (
     data: {
       ...rest,
       password: hashedPassword,
-      avatarUrl,
     },
     select: {
       id: true,

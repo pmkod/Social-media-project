@@ -4,7 +4,6 @@ import {
 	AppHeader,
 	AppHeaderGoBackButton,
 	AppHeaderLeftPart,
-	AppHeaderSubtitle,
 	AppHeaderTitle,
 } from "@/core/components/ui/app-header.tsx";
 import { Button } from "@/core/components/ui/button.tsx";
@@ -22,6 +21,7 @@ import { ListFollowersModal } from "@/features/user/list-followers/list-follower
 import { ListFollowingModal } from "@/features/user/list-following/list-following.modal.tsx";
 import { useUserProfile } from "@/features/user/user-profile/use-user-profile.ts";
 import { UserProfileActionsDropdown } from "@/features/user/user-profile/user-profile-actions-dropdown.tsx";
+import { EditProfileModal } from "./edit-profile.modal.tsx";
 import { ProfileCollections } from "./profile-collections.tsx";
 import { ProfilePostList } from "./profile-post-list.tsx";
 
@@ -86,9 +86,9 @@ export function ProfileView({ username }: ProfileViewProps) {
 
 			<section className="border-x rounded-t-xl overflow-hidden">
 				<div className="h-48 overflow-hidden bg-gradient-to-br from-slate-700 via-slate-500 to-sky-300 sm:h-56">
-					{user.coverUrl ? (
+					{(user.lowQualityCoverPictureUrl ?? user.coverPictureUrl) ? (
 						<img
-							src={user.coverUrl}
+							src={user.lowQualityCoverPictureUrl ?? user.coverPictureUrl ?? ""}
 							alt={`${user.fullName}'s cover`}
 							className="h-full w-full object-cover"
 						/>
@@ -108,7 +108,14 @@ export function ProfileView({ username }: ProfileViewProps) {
 						<div className="flex items-center gap-2 pt-3">
 							<UserProfileActionsDropdown user={user} variant="outline" />
 							{isOwnProfile ? (
-								<Button variant="outline">Edit profile</Button>
+								<Button
+									variant="outline"
+									onClick={() =>
+										void NiceModal.show(EditProfileModal, { user })
+									}
+								>
+									Edit profile
+								</Button>
 							) : !hasBlockRelationship ? (
 								<FollowButton user={user} />
 							) : null}

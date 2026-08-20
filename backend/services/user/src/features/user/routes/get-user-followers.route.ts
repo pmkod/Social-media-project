@@ -5,6 +5,10 @@ import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import type { Prisma } from "@/generated/prisma/client";
 import { getBlockRelationships } from "../services/get-block-relationships.service";
 import { getFollowedUserIds } from "../services/get-followed-user-ids.service";
+import {
+	profileMediaSelect,
+	serializeProfileMedia,
+} from "../services/profile-media.service";
 import { UserRoutesTag } from "../user.constants";
 
 const connectionUserSelect = {
@@ -12,7 +16,7 @@ const connectionUserSelect = {
 	username: true,
 	fullName: true,
 	bio: true,
-	avatarUrl: true,
+	...profileMediaSelect,
 	followersCount: true,
 	followingCount: true,
 	createdAt: true,
@@ -118,7 +122,7 @@ const getUserFollowersRoute = defineOpenAPIRoute<
 
 		return c.json({
 			users: items.map((connection) => ({
-				...connection.follower,
+				...serializeProfileMedia(connection.follower),
 				isFollowedByAuthenticatedUser: followedUserIds.has(
 					connection.follower.id,
 				),

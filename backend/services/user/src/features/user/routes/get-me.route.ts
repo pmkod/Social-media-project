@@ -3,6 +3,10 @@ import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { requireUserAuthentication } from "@/features/authentication/middlewares/require-user-authentication.middleware";
+import {
+	profileMediaSelect,
+	serializeProfileMedia,
+} from "../services/profile-media.service";
 import { UserRoutesTag } from "../user.constants";
 
 const routeDef = createRoute({
@@ -34,8 +38,7 @@ const getMeRoute = defineOpenAPIRoute<typeof routeDef, HonoAuthenticatedEnv>({
 				username: true,
 				fullName: true,
 				bio: true,
-				avatarUrl: true,
-				coverUrl: true,
+				...profileMediaSelect,
 				postCount: true,
 				followersCount: true,
 				followingCount: true,
@@ -48,7 +51,7 @@ const getMeRoute = defineOpenAPIRoute<typeof routeDef, HonoAuthenticatedEnv>({
 		}
 
 		return c.json({
-			...user,
+			...serializeProfileMedia(user),
 			isFollowedByAuthenticatedUser: false,
 			isBlockedByAuthenticatedUser: false,
 			hasBlockedAuthenticatedInUser: false,

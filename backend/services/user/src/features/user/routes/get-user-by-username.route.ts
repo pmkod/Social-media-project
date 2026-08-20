@@ -1,8 +1,7 @@
 import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
-import { prisma } from "@/core/databases";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
-import { getBlockRelationships } from "../services/get-block-relationships.service";
+import { getPublicUserProfile } from "../services/get-public-user-profile.service";
 import { UserRoutesTag } from "../user.constants";
 
 const routeDef = createRoute({
@@ -25,69 +24,16 @@ const getUserByUsernameRoute = defineOpenAPIRoute<
 	handler: async (c) => {
 		const { username } = c.req.valid("param");
 		const authenticatedUser = c.get("authenticatedUser");
-		const authenticatedUserId = authenticatedUser?.id;
-		const user = await prisma.user.findFirst({
-			where: { username, active: true },
-			select: {
-				id: true,
-				username: true,
-				fullName: true,
-				bio: true,
-				avatarUrl: true,
-				coverUrl: true,
-				postCount: true,
-				followersCount: true,
-				followingCount: true,
-				createdAt: true,
-			},
-		});
+		const user = await getPublicUserProfile(
+			{ username },
+			authenticatedUser?.id,
+		);
 
 		if (!user) {
-			throw Error("User not found");
+			return c.json({ message: "User not found" }, HttpStatus.NOT_FOUND.code);
 		}
 
-		const isOwnProfile = authenticatedUserId === user.id;
-
-		const [follow, blockRelationships] = await Promise.all([
-			authenticatedUserId && !isOwnProfile
-				? prisma.follow.findUnique({
-						where: {
-							followerId_followingId: {
-								followerId: authenticatedUserId,
-								followingId: user.id,
-							},
-						},
-						select: { id: true },
-					})
-				: null,
-			getBlockRelationships(authenticatedUserId, [user.id]),
-		]);
-
-		const isBlockedByAuthenticatedUser =
-			blockRelationships.blockedByAuthenticatedUserIds.has(user.id);
-
-		const hasBlockedAuthenticatedInUser =
-			blockRelationships.hasBlockedAuthenticatedUserIds.has(user.id);
-
-		const visibleUser = hasBlockedAuthenticatedInUser
-			? {
-					...user,
-					bio: null,
-					createdAt: null,
-				}
-			: user;
-
-		return c.json({
-			user: {
-				...visibleUser,
-				isFollowedByAuthenticatedUser:
-					!isBlockedByAuthenticatedUser &&
-					!hasBlockedAuthenticatedInUser &&
-					Boolean(follow),
-				isBlockedByAuthenticatedUser,
-				hasBlockedAuthenticatedInUser,
-			},
-		});
+		return c.json({ user });
 	},
 });
 

@@ -5,8 +5,10 @@ export type UserProfileDto = {
 	username: string;
 	fullName?: string | null;
 	bio?: string | null;
-	avatarUrl?: string | null;
-	coverUrl?: string | null;
+	profilePictureUrl?: string | null;
+	lowQualityProfilePictureUrl?: string | null;
+	coverPictureUrl?: string | null;
+	lowQualityCoverPictureUrl?: string | null;
 	postCount?: number;
 	followersCount?: number;
 	followingCount?: number;

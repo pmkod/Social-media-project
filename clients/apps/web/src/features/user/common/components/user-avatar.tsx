@@ -11,13 +11,12 @@ import type { User } from "../user.ts";
 
 export type UserAvatarSize = NonNullable<AvatarProps["size"]>;
 
-export type UserAvatarUser =
-	| Pick<User, "fullName">
-	| (Partial<User> & {
-			fullName?: string | null;
-			username?: string | null;
-			avatarUrl?: string | null;
-	  });
+export type UserAvatarUser = Partial<User> & {
+	fullName?: string | null;
+	username?: string | null;
+	profilePictureUrl?: string | null;
+	lowQualityProfilePictureUrl?: string | null;
+};
 
 export type UserAvatarProps = Omit<AvatarProps, "children"> & {
 	user?: UserAvatarUser | null;
@@ -45,14 +44,15 @@ function UserAvatar({
 	fallback,
 	...props
 }: UserAvatarProps) {
-	const avatarUrl = user?.avatarUrl;
+	const profilePictureUrl =
+		user?.lowQualityProfilePictureUrl ?? user?.profilePictureUrl;
 	const fullName = user?.fullName;
 	const initials = getInitials(fullName);
 
 	return (
 		<Avatar size={size} className={cn("shrink-0", className)} {...props}>
-			{avatarUrl ? (
-				<AvatarImage src={avatarUrl} alt={fullName || "User avatar"} />
+			{profilePictureUrl ? (
+				<AvatarImage src={profilePictureUrl} alt={fullName || "User avatar"} />
 			) : null}
 			<AvatarFallback>
 				{fallback ??

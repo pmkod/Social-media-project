@@ -4,6 +4,10 @@ import { prisma } from "@/core/databases";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { requireUserAuthentication } from "@/features/authentication/middlewares/require-user-authentication.middleware";
 import type { Prisma } from "@/generated/prisma/client";
+import {
+	profileMediaSelect,
+	serializeProfileMedia,
+} from "../services/profile-media.service";
 import { UserRoutesTag } from "../user.constants";
 
 const routeDef = createRoute({
@@ -70,7 +74,7 @@ const getBlockedUsersRoute = defineOpenAPIRoute<
 						username: true,
 						fullName: true,
 						bio: true,
-						avatarUrl: true,
+						...profileMediaSelect,
 						followersCount: true,
 						followingCount: true,
 						createdAt: true,
@@ -95,7 +99,7 @@ const getBlockedUsersRoute = defineOpenAPIRoute<
 
 		return c.json({
 			users: items.map((item) => ({
-				...item.blocked,
+				...serializeProfileMedia(item.blocked),
 				isFollowedByAuthenticatedUser: false,
 				isBlockedByAuthenticatedUser: true,
 				hasBlockedAuthenticatedInUser: reciprocalBlockerIds.has(

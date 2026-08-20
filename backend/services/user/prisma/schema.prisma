@@ -8,29 +8,48 @@ datasource db {
 }
 
 model User {
-  id                String             @id @default(cuid())
-  email             String             @unique
-  username          String             @unique
-  password          String
-  fullName          String?            @map("full_name")
-  bio               String?
-  avatarUrl         String?            @map("avatar_url")
-  coverUrl          String?            @map("cover_url")
-  postCount         Int                @default(0) @map("post_count")
-  followersCount    Int                @default(0) @map("followers_count")
-  followingCount    Int                @default(0) @map("following_count")
-  emailVerified     Boolean            @default(false) @map("email_verified")
-  active            Boolean            @default(true)
-  createdAt         DateTime           @default(now()) @map("created_at")
-  updatedAt         DateTime           @updatedAt @map("updated_at")
-  refreshTokens     RefreshToken[]
-  userVerifications UserVerification[]
-  followers         Follow[]           @relation("UserFollowers")
-  following         Follow[]           @relation("UserFollowing")
-  blockedUsers      Block[]            @relation("UserBlocks")
-  blockedByUsers    Block[]            @relation("UserBlockedBy")
+  id                              String             @id @default(cuid())
+  email                           String             @unique
+  username                        String             @unique
+  password                        String
+  fullName                        String?            @map("full_name")
+  bio                             String?
+  lowQualityProfilePictureFileId  String?            @unique @map("low_quality_profile_picture_file_id")
+  lowQualityProfilePictureFile    File?              @relation("UserLowQualityProfilePicture", fields: [lowQualityProfilePictureFileId], references: [id], onDelete: SetNull)
+  bestQualityProfilePictureFileId String?            @unique @map("best_quality_profile_picture_file_id")
+  bestQualityProfilePictureFile   File?              @relation("UserBestQualityProfilePicture", fields: [bestQualityProfilePictureFileId], references: [id], onDelete: SetNull)
+  lowQualityCoverPictureFileId    String?            @unique @map("low_quality_cover_picture_file_id")
+  lowQualityCoverPictureFile      File?              @relation("UserLowQualityCoverPicture", fields: [lowQualityCoverPictureFileId], references: [id], onDelete: SetNull)
+  bestQualityCoverPictureFileId   String?            @unique @map("best_quality_cover_picture_file_id")
+  bestQualityCoverPictureFile     File?              @relation("UserBestQualityCoverPicture", fields: [bestQualityCoverPictureFileId], references: [id], onDelete: SetNull)
+  postCount                       Int                @default(0) @map("post_count")
+  followersCount                  Int                @default(0) @map("followers_count")
+  followingCount                  Int                @default(0) @map("following_count")
+  emailVerified                   Boolean            @default(false) @map("email_verified")
+  active                          Boolean            @default(true)
+  createdAt                       DateTime           @default(now()) @map("created_at")
+  updatedAt                       DateTime           @updatedAt @map("updated_at")
+  refreshTokens                   RefreshToken[]
+  userVerifications               UserVerification[]
+  followers                       Follow[]           @relation("UserFollowers")
+  following                       Follow[]           @relation("UserFollowing")
+  blockedUsers                    Block[]            @relation("UserBlocks")
+  blockedByUsers                  Block[]            @relation("UserBlockedBy")
 
   @@map("user")
+}
+
+model File {
+  id                            String   @id @default(uuid())
+  mimeType                      String?  @map("mime_type") @db.VarChar(50)
+  filename                      String   @db.VarChar(255)
+  createdAt                     DateTime @default(now()) @map("created_at")
+  lowQualityProfilePictureUser  User?    @relation("UserLowQualityProfilePicture")
+  bestQualityProfilePictureUser User?    @relation("UserBestQualityProfilePicture")
+  lowQualityCoverPictureUser    User?    @relation("UserLowQualityCoverPicture")
+  bestQualityCoverPictureUser   User?    @relation("UserBestQualityCoverPicture")
+
+  @@map("file")
 }
 
 model Follow {

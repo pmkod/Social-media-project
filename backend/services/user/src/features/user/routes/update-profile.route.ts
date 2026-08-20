@@ -1,8 +1,14 @@
 import { createRoute, defineOpenAPIRoute } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
+import { deleteFile, setFile } from "@/core/services/storage.service";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { requireUserAuthentication } from "@/features/authentication/middlewares/require-user-authentication.middleware";
+import {
+	profileMediaSelect,
+	serializeProfileMedia,
+} from "../services/profile-media.service";
+import { compressProfileMediaFile } from "../services/profile-media-compression.service";
 import { UserRoutesTag } from "../user.constants";
 import { UpdateProfileValidationSchema } from "../user.validation-schemas";
 
@@ -15,7 +21,7 @@ const routeDef = createRoute({
 	request: {
 		body: {
 			content: {
-				"application/json": {
+				"multipart/form-data": {
 					schema: UpdateProfileValidationSchema,
 				},
 			},
@@ -25,8 +31,34 @@ const routeDef = createRoute({
 		[HttpStatus.OK.code]: {
 			description: "Success",
 		},
+		[HttpStatus.CONFLICT.code]: {
+			description: "Username already exists",
+		},
 	},
 });
+
+const getFileExtension = (file: File) => {
+	if (file.type === "image/webp") return "webp";
+	return file.name.split(".").pop()?.toLowerCase() || "bin";
+};
+
+const removeStoredFiles = async (
+	fileNames: Array<string | null | undefined>,
+) => {
+	await Promise.all(
+		Array.from(
+			new Set(
+				fileNames.filter((fileName): fileName is string => Boolean(fileName)),
+			),
+		).map(async (fileName) => {
+			try {
+				await deleteFile({ fileName });
+			} catch (error) {
+				console.warn("Failed to remove previous profile image:", error);
+			}
+		}),
+	);
+};
 
 const updateProfileRoute = defineOpenAPIRoute<
 	typeof routeDef,
@@ -39,19 +71,178 @@ const updateProfileRoute = defineOpenAPIRoute<
 			throw new Error("Unauthorized");
 		}
 
-		const body = c.req.valid("json");
+		const { username, fullName, bio, profilePicture, coverPicture } =
+			c.req.valid("form");
+		const normalizedUsername = username.trim();
+
+		const [existingUsernameUser, previousUser] = await Promise.all([
+			prisma.user.findFirst({
+				where: {
+					username: normalizedUsername,
+					NOT: { id: authenticatedUser.id },
+				},
+				select: { id: true },
+			}),
+			prisma.user.findUniqueOrThrow({
+				where: { id: authenticatedUser.id },
+				select: {
+					lowQualityProfilePictureFile: {
+						select: { id: true, filename: true },
+					},
+					bestQualityProfilePictureFile: {
+						select: { id: true, filename: true },
+					},
+					lowQualityCoverPictureFile: {
+						select: { id: true, filename: true },
+					},
+					bestQualityCoverPictureFile: {
+						select: { id: true, filename: true },
+					},
+				},
+			}),
+		]);
+
+		if (existingUsernameUser) {
+			return c.json(
+				{ message: "This username is already taken" },
+				HttpStatus.CONFLICT.code,
+			);
+		}
+
+		const timestamp = Date.now();
+		let profilePictureFiles: {
+			lowQualityFile: { id: string; filename: string };
+			bestQualityFile: { id: string; filename: string };
+		} | null = null;
+		let coverPictureFiles: {
+			lowQualityFile: { id: string; filename: string };
+			bestQualityFile: { id: string; filename: string };
+		} | null = null;
+
+		if (profilePicture instanceof File) {
+			const lowQualityProfilePictureFile = await compressProfileMediaFile({
+				file: profilePicture,
+				quality: 40,
+			});
+			const bestQualityProfilePictureFile = await compressProfileMediaFile({
+				file: profilePicture,
+				quality: 90,
+			});
+			const lowQualityProfilePictureFileName = `profile_${authenticatedUser.id}_low_${timestamp}.${getFileExtension(lowQualityProfilePictureFile)}`;
+			const bestQualityProfilePictureFileName = `profile_${authenticatedUser.id}_best_${timestamp}.${getFileExtension(bestQualityProfilePictureFile)}`;
+
+			await Promise.all([
+				setFile({
+					file: lowQualityProfilePictureFile,
+					filename: lowQualityProfilePictureFileName,
+				}),
+				setFile({
+					file: bestQualityProfilePictureFile,
+					filename: bestQualityProfilePictureFileName,
+				}),
+			]);
+			const [lowQualityFile, bestQualityFile] = await Promise.all([
+				prisma.file.create({
+					data: {
+						filename: lowQualityProfilePictureFileName,
+						mimeType: lowQualityProfilePictureFile.type,
+					},
+					select: { id: true, filename: true },
+				}),
+				prisma.file.create({
+					data: {
+						filename: bestQualityProfilePictureFileName,
+						mimeType: bestQualityProfilePictureFile.type,
+					},
+					select: { id: true, filename: true },
+				}),
+			]);
+
+			profilePictureFiles = {
+				lowQualityFile,
+				bestQualityFile,
+			};
+		}
+
+		if (coverPicture instanceof File) {
+			const lowQualityCoverPictureFile = await compressProfileMediaFile({
+				file: coverPicture,
+				quality: 40,
+			});
+			const bestQualityCoverPictureFile = await compressProfileMediaFile({
+				file: coverPicture,
+				quality: 90,
+			});
+			const lowQualityCoverPictureFileName = `cover_${authenticatedUser.id}_low_${timestamp}.${getFileExtension(lowQualityCoverPictureFile)}`;
+			const bestQualityCoverPictureFileName = `cover_${authenticatedUser.id}_best_${timestamp}.${getFileExtension(bestQualityCoverPictureFile)}`;
+
+			await Promise.all([
+				setFile({
+					file: lowQualityCoverPictureFile,
+					filename: lowQualityCoverPictureFileName,
+				}),
+				setFile({
+					file: bestQualityCoverPictureFile,
+					filename: bestQualityCoverPictureFileName,
+				}),
+			]);
+			const [lowQualityFile, bestQualityFile] = await Promise.all([
+				prisma.file.create({
+					data: {
+						filename: lowQualityCoverPictureFileName,
+						mimeType: lowQualityCoverPictureFile.type,
+					},
+					select: { id: true, filename: true },
+				}),
+				prisma.file.create({
+					data: {
+						filename: bestQualityCoverPictureFileName,
+						mimeType: bestQualityCoverPictureFile.type,
+					},
+					select: { id: true, filename: true },
+				}),
+			]);
+
+			coverPictureFiles = {
+				lowQualityFile,
+				bestQualityFile,
+			};
+		}
 
 		const updatedUser = await prisma.user.update({
 			where: { id: authenticatedUser.id },
-			data: body,
+			data: {
+				username: normalizedUsername,
+				fullName: fullName.trim(),
+				bio: bio?.trim() || null,
+				...(profilePictureFiles
+					? {
+							lowQualityProfilePictureFile: {
+								connect: { id: profilePictureFiles.lowQualityFile.id },
+							},
+							bestQualityProfilePictureFile: {
+								connect: { id: profilePictureFiles.bestQualityFile.id },
+							},
+						}
+					: {}),
+				...(coverPictureFiles
+					? {
+							lowQualityCoverPictureFile: {
+								connect: { id: coverPictureFiles.lowQualityFile.id },
+							},
+							bestQualityCoverPictureFile: {
+								connect: { id: coverPictureFiles.bestQualityFile.id },
+							},
+						}
+					: {}),
+			},
 			select: {
 				id: true,
 				email: true,
 				username: true,
 				fullName: true,
 				bio: true,
-				avatarUrl: true,
-				coverUrl: true,
+				...profileMediaSelect,
 				postCount: true,
 				followersCount: true,
 				followingCount: true,
@@ -60,7 +251,37 @@ const updateProfileRoute = defineOpenAPIRoute<
 			},
 		});
 
-		return c.json(updatedUser);
+		const previousFileNames = [
+			profilePictureFiles
+				? previousUser.lowQualityProfilePictureFile?.filename
+				: null,
+			profilePictureFiles
+				? previousUser.bestQualityProfilePictureFile?.filename
+				: null,
+			coverPictureFiles
+				? previousUser.lowQualityCoverPictureFile?.filename
+				: null,
+			coverPictureFiles
+				? previousUser.bestQualityCoverPictureFile?.filename
+				: null,
+		];
+		await removeStoredFiles(previousFileNames);
+
+		const previousFileIds = [
+			profilePictureFiles
+				? previousUser.lowQualityProfilePictureFile?.id
+				: null,
+			profilePictureFiles
+				? previousUser.bestQualityProfilePictureFile?.id
+				: null,
+			coverPictureFiles ? previousUser.lowQualityCoverPictureFile?.id : null,
+			coverPictureFiles ? previousUser.bestQualityCoverPictureFile?.id : null,
+		].filter((id): id is string => Boolean(id));
+		if (previousFileIds.length > 0) {
+			await prisma.file.deleteMany({ where: { id: { in: previousFileIds } } });
+		}
+
+		return c.json(serializeProfileMedia(updatedUser));
 	},
 });
 

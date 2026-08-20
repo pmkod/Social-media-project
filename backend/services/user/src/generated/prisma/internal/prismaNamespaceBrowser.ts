@@ -52,6 +52,7 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   User: 'User',
+  File: 'File',
   Follow: 'Follow',
   Block: 'Block',
   RefreshToken: 'RefreshToken',
@@ -81,8 +82,10 @@ export const UserScalarFieldEnum = {
   password: 'password',
   fullName: 'fullName',
   bio: 'bio',
-  avatarUrl: 'avatarUrl',
-  coverUrl: 'coverUrl',
+  lowQualityProfilePictureFileId: 'lowQualityProfilePictureFileId',
+  bestQualityProfilePictureFileId: 'bestQualityProfilePictureFileId',
+  lowQualityCoverPictureFileId: 'lowQualityCoverPictureFileId',
+  bestQualityCoverPictureFileId: 'bestQualityCoverPictureFileId',
   postCount: 'postCount',
   followersCount: 'followersCount',
   followingCount: 'followingCount',
@@ -93,6 +96,16 @@ export const UserScalarFieldEnum = {
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+export const FileScalarFieldEnum = {
+  id: 'id',
+  mimeType: 'mimeType',
+  filename: 'filename',
+  createdAt: 'createdAt'
+} as const
+
+export type FileScalarFieldEnum = (typeof FileScalarFieldEnum)[keyof typeof FileScalarFieldEnum]
 
 
 export const FollowScalarFieldEnum = {

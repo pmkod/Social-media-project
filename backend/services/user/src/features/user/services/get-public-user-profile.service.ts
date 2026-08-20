@@ -1,14 +1,17 @@
 import { prisma } from "@/core/databases";
 import type { Prisma } from "@/generated/prisma/client";
 import { getBlockRelationships } from "./get-block-relationships.service";
+import {
+	profileMediaSelect,
+	serializeProfileMedia,
+} from "./profile-media.service";
 
 const publicUserProfileSelect = {
 	id: true,
 	username: true,
 	fullName: true,
 	bio: true,
-	avatarUrl: true,
-	coverUrl: true,
+	...profileMediaSelect,
 	postCount: true,
 	followersCount: true,
 	followingCount: true,
@@ -54,7 +57,7 @@ const getPublicUserProfile = async (
 		: user;
 
 	return {
-		...visibleUser,
+		...serializeProfileMedia(visibleUser),
 		isFollowedByAuthenticatedUser:
 			!isBlockedByAuthenticatedUser &&
 			!hasBlockedAuthenticatedInUser &&

@@ -3,6 +3,10 @@ import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { requireUserAuthentication } from "@/features/authentication/middlewares/require-user-authentication.middleware";
+import {
+	profileMediaSelect,
+	serializeProfileMedia,
+} from "../services/profile-media.service";
 import { UserRoutesTag } from "../user.constants";
 
 const FollowSuggestionItem = z.object({
@@ -11,7 +15,7 @@ const FollowSuggestionItem = z.object({
 	name: z.string(),
 	handle: z.string(),
 	fullName: z.string().nullable(),
-	avatarUrl: z.string().nullable(),
+	profilePictureUrl: z.string().nullable(),
 	bio: z.string().nullable(),
 	followersCount: z.number(),
 	followingCount: z.number(),
@@ -102,7 +106,7 @@ const getFollowSuggestionsRoute = defineOpenAPIRoute<
 				id: true,
 				username: true,
 				fullName: true,
-				avatarUrl: true,
+				...profileMediaSelect,
 				bio: true,
 				followersCount: true,
 				followingCount: true,
@@ -114,12 +118,12 @@ const getFollowSuggestionsRoute = defineOpenAPIRoute<
 			const name = user.fullName || user.username;
 			const handle = `@${user.username}`;
 			return {
+				...serializeProfileMedia(user),
 				id: user.id,
 				username: user.username,
 				name,
 				handle,
 				fullName: user.fullName,
-				avatarUrl: user.avatarUrl,
 				bio: user.bio,
 				followersCount: user.followersCount,
 				followingCount: user.followingCount,
