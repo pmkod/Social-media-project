@@ -1,6 +1,8 @@
 import {
 	RiBookmarkLine,
 	RiChat3Line,
+	RiHome5Line,
+	RiHome9Line,
 	RiHomeLine,
 	RiNotification3Line,
 	RiSearchLine,
@@ -13,7 +15,7 @@ export type NavItem = {
 };
 
 export const NAV_ITEMS: NavItem[] = [
-	{ label: "Home", to: "/home", icon: RiHomeLine },
+	{ label: "Home", to: "/home", icon: RiHome5Line },
 	{ label: "Search", to: "/search", icon: RiSearchLine },
 	{ label: "Notifications", to: "/notifications", icon: RiNotification3Line },
 	{ label: "Discussions", to: "/discussions", icon: RiChat3Line },

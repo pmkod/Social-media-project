@@ -28,13 +28,13 @@ export function Sidebar() {
 							<Link
 								key={item.to}
 								to={item.to}
-								className="flex items-center gap-3.5 px-4 py-2 rounded-md text-muted-foreground hover:bg-accent hover:text-accent-foreground font-normal text-lg transition-colors"
+								className="flex items-center gap-4 px-4 py-2 rounded-md text-muted-foreground hover:bg-accent font-normal transition-colors"
 								activeProps={{
-									className: "bg-accent text-accent-foreground font-medium",
+									className: "text-primary font-medium",
 								}}
 							>
-								<IconComponent className="size-7 shrink-0" />
-								<span>{item.label}</span>
+								<IconComponent className="size-6.5 shrink-0" />
+								<span className="text-lg">{item.label}</span>
 							</Link>
 						);
 					})}

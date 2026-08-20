@@ -10,7 +10,8 @@ import { UserRowItemListLoader } from "@/features/user/common/components/user-ro
 import { useFollowSuggestions } from "./use-follow-suggestions.ts";
 
 function FollowSuggestions() {
-	const { data, isLoading, isError, refetch } = useFollowSuggestions();
+	const { data, isLoading, isError, refetch, isRefetching } =
+		useFollowSuggestions();
 
 	return (
 		<aside className="hidden 2xl:block w-100 pt-4 pr-4 h-screen sticky top-0 overflow-y-auto">
@@ -25,9 +26,9 @@ function FollowSuggestions() {
 						<ExceptionBlock
 							title="Unable to load suggestions"
 							description="An error occurred while loading profiles to follow."
-							onRefresh={() => void refetch()}
+							onRefresh={() => refetch()}
 							borderless
-							className="min-h-48"
+							className="h-96"
 						/>
 					) : data?.users.length === 0 ? (
 						<div className="py-6 px-6 text-center text-sm text-muted-foreground">
