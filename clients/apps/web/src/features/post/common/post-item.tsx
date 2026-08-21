@@ -16,7 +16,7 @@ import { useRemoveBookmark } from "@/features/bookmark/use-remove-bookmark.ts";
 import { CommentItem } from "@/features/comment";
 import { UserAvatar } from "@/features/user/common/components/user-avatar.tsx";
 import { UserProfileLink } from "@/features/user/common/user-profile-link.tsx";
-import { UserProfileHoverCard } from "@/features/user/profile/user-profile-hover-card.tsx";
+import { UserProfileHoverCard } from "@/features/user/get-profile/user-profile-hover-card.tsx";
 import { useLikePost } from "../like-post/use-like-post.ts";
 import { buildImageUrl, buildVideoUrl } from "../post-media.functions.ts";
 import { useUnlikePost } from "../unlike-post/use-unlike-post.ts";

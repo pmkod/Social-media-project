@@ -74,7 +74,7 @@ function DialogContent({
 			<DialogOverlay />
 			<DialogPrimitive.Content
 				data-slot="dialog-content"
-				className={cn(dialogContentVariants({ size }), className)}
+				className={cn(dialogContentVariants({ size }), "gap-0 p-0", className)}
 				{...props}
 			>
 				{children}

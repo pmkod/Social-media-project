@@ -1,5 +1,5 @@
 import { cn } from "@/core/lib/utils.ts";
-import { UserProfileHoverCard } from "../../profile/user-profile-hover-card.tsx";
+import { UserProfileHoverCard } from "../../get-profile/user-profile-hover-card.tsx";
 import { FollowButton } from "../follow-button.tsx";
 import type { User } from "../user.ts";
 import { UserProfileLink } from "../user-profile-link.tsx";

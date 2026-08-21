@@ -49,7 +49,8 @@ const useUpdateProfile = () => {
 						: currentUser,
 			);
 			void queryClient.invalidateQueries({
-				queryKey: userDetailsQueryKeys.root,
+				queryKey: userDetailsQueryKeys.byUsername(updatedUser.username),
+				exact: true,
 			});
 		},
 	});
