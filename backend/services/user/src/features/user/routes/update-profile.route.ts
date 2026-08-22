@@ -4,10 +4,6 @@ import { prisma } from "@/core/databases";
 import { deleteFile, setFile } from "@/core/services/storage.service";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { requireUserAuthentication } from "@/features/authentication/middlewares/require-user-authentication.middleware";
-import {
-	profileMediaSelect,
-	serializeProfileMedia,
-} from "../services/profile-media.service";
 import { compressProfileMediaFile } from "../services/profile-media-compression.service";
 import { UserRoutesTag } from "../user.constants";
 import { UpdateProfileValidationSchema } from "../user.validation-schemas";
@@ -261,7 +257,10 @@ const updateProfileRoute = defineOpenAPIRoute<
 				username: true,
 				fullName: true,
 				bio: true,
-				...profileMediaSelect,
+				lowQualityProfilePictureFile: { select: { id: true, filename: true } },
+				bestQualityProfilePictureFile: { select: { id: true, filename: true } },
+				lowQualityCoverPictureFile: { select: { id: true, filename: true } },
+				bestQualityCoverPictureFile: { select: { id: true, filename: true } },
 				postCount: true,
 				followersCount: true,
 				followingCount: true,
@@ -304,7 +303,7 @@ const updateProfileRoute = defineOpenAPIRoute<
 			await prisma.file.deleteMany({ where: { id: { in: previousFileIds } } });
 		}
 
-		return c.json(serializeProfileMedia(updatedUser));
+		return c.json({ user: updatedUser });
 	},
 });
 

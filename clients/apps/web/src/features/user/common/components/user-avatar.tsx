@@ -36,8 +36,8 @@ function UserAvatar({
 	...props
 }: UserAvatarProps) {
 	const lowQualityProfilePictureFileUrl = buildImageUrl(
-		user?.lowQualityProfilePictureFile?.name ??
-			user?.bestQualityProfilePictureFile?.name,
+		user?.lowQualityProfilePictureFile?.filename ??
+			user?.bestQualityProfilePictureFile?.filename,
 	);
 	const fullName = user?.fullName;
 	const initials = getInitials(fullName);

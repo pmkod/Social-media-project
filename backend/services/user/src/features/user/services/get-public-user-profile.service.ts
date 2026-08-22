@@ -1,22 +1,8 @@
 import { prisma } from "@/core/databases";
 import type { Prisma } from "@/generated/prisma/client";
 import { getBlockRelationships } from "./get-block-relationships.service";
-import {
-	profileMediaSelect,
-	serializeProfileMedia,
-} from "./profile-media.service";
 
-const publicUserProfileSelect = {
-	id: true,
-	username: true,
-	fullName: true,
-	bio: true,
-	...profileMediaSelect,
-	postCount: true,
-	followersCount: true,
-	followingCount: true,
-	createdAt: true,
-} satisfies Prisma.UserSelect;
+const publicUserProfileSelect = {} satisfies Prisma.UserSelect;
 
 const getPublicUserProfile = async (
 	where: Prisma.UserWhereInput,
@@ -24,7 +10,20 @@ const getPublicUserProfile = async (
 ) => {
 	const user = await prisma.user.findFirst({
 		where: { ...where, active: true },
-		select: publicUserProfileSelect,
+		select: {
+			id: true,
+			username: true,
+			fullName: true,
+			bio: true,
+			lowQualityProfilePictureFile: { select: { id: true, filename: true } },
+			bestQualityProfilePictureFile: { select: { id: true, filename: true } },
+			lowQualityCoverPictureFile: { select: { id: true, filename: true } },
+			bestQualityCoverPictureFile: { select: { id: true, filename: true } },
+			postCount: true,
+			followersCount: true,
+			followingCount: true,
+			createdAt: true,
+		},
 	});
 
 	if (!user) return null;
@@ -57,7 +56,7 @@ const getPublicUserProfile = async (
 		: user;
 
 	return {
-		...serializeProfileMedia(visibleUser),
+		...visibleUser,
 		isFollowedByAuthenticatedUser:
 			!isBlockedByAuthenticatedUser &&
 			!hasBlockedAuthenticatedInUser &&

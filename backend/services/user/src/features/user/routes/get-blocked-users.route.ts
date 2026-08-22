@@ -4,10 +4,6 @@ import { prisma } from "@/core/databases";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { requireUserAuthentication } from "@/features/authentication/middlewares/require-user-authentication.middleware";
 import type { Prisma } from "@/generated/prisma/client";
-import {
-	profileMediaSelect,
-	serializeProfileMedia,
-} from "../services/profile-media.service";
 import { UserRoutesTag } from "../user.constants";
 
 const routeDef = createRoute({
@@ -74,7 +70,18 @@ const getBlockedUsersRoute = defineOpenAPIRoute<
 						username: true,
 						fullName: true,
 						bio: true,
-						...profileMediaSelect,
+						lowQualityProfilePictureFile: {
+							select: { id: true, filename: true },
+						},
+						bestQualityProfilePictureFile: {
+							select: { id: true, filename: true },
+						},
+						lowQualityCoverPictureFile: {
+							select: { id: true, filename: true },
+						},
+						bestQualityCoverPictureFile: {
+							select: { id: true, filename: true },
+						},
 						followersCount: true,
 						followingCount: true,
 						createdAt: true,
@@ -86,25 +93,12 @@ const getBlockedUsersRoute = defineOpenAPIRoute<
 		const hasNextPage = blocks.length > limit;
 		const items = hasNextPage ? blocks.slice(0, limit) : blocks;
 		const lastItem = items.at(-1);
-		const reciprocalBlocks = await prisma.block.findMany({
-			where: {
-				blockerId: { in: items.map((item) => item.blocked.id) },
-				blockedId: authenticatedUser.id,
-			},
-			select: { blockerId: true },
-		});
-		const reciprocalBlockerIds = new Set(
-			reciprocalBlocks.map((block) => block.blockerId),
-		);
 
 		return c.json({
 			users: items.map((item) => ({
-				...serializeProfileMedia(item.blocked),
+				...item.blocked,
 				isFollowedByAuthenticatedUser: false,
 				isBlockedByAuthenticatedUser: true,
-				hasBlockedAuthenticatedInUser: reciprocalBlockerIds.has(
-					item.blocked.id,
-				),
 			})),
 			pagination: {
 				nextCursor:

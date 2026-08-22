@@ -15,7 +15,7 @@ type UpdateProfileInput = {
 	removeCoverPicture?: boolean;
 };
 
-const updateProfile = async (input: UpdateProfileInput): Promise<User> => {
+const updateProfile = async (input: UpdateProfileInput) => {
 	const formData = new FormData();
 	formData.append("username", input.username);
 	formData.append("fullName", input.fullName);
@@ -33,7 +33,7 @@ const updateProfile = async (input: UpdateProfileInput): Promise<User> => {
 		formData.append("removeCoverPicture", "true");
 	}
 
-	return httpClient.put("users/me", { body: formData }).json<User>();
+	return httpClient.put("users/me", { body: formData }).json<{ user: User }>();
 };
 
 const useUpdateProfile = () => {
@@ -41,7 +41,7 @@ const useUpdateProfile = () => {
 
 	return useMutation({
 		mutationFn: updateProfile,
-		onSuccess: (updatedUser) => {
+		onSuccess: ({ user: updatedUser }) => {
 			queryClient.setQueryData<UseAuthenticatedUserQueryData>(
 				authenticatedUserQueryKey,
 				(currentData) =>

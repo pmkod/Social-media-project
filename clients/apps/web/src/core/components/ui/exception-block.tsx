@@ -3,12 +3,12 @@ import type * as React from "react";
 
 import { Button } from "@/core/components/ui/button.tsx";
 import {
-	Empty,
-	EmptyContent,
-	EmptyDescription,
-	EmptyHeader,
-	EmptyTitle,
-} from "@/core/components/ui/empty.tsx";
+	Exception,
+	ExceptionContent,
+	ExceptionDescription,
+	ExceptionHeader,
+	ExceptionTitle,
+} from "@/core/components/ui/exception.tsx";
 import { cn } from "@/core/lib/utils.ts";
 
 type ExceptionBlockProps = {
@@ -29,7 +29,7 @@ function ExceptionBlock({
 	className,
 }: ExceptionBlockProps) {
 	return (
-		<Empty
+		<Exception
 			className={cn(
 				" bg-background",
 				borderless ? "border-0" : "border border-border",
@@ -37,12 +37,12 @@ function ExceptionBlock({
 				borderless && "border-0",
 			)}
 		>
-			<EmptyHeader>
-				<EmptyTitle>{title}</EmptyTitle>
-				<EmptyDescription>{description}</EmptyDescription>
-			</EmptyHeader>
+			<ExceptionHeader>
+				<ExceptionTitle>{title}</ExceptionTitle>
+				<ExceptionDescription>{description}</ExceptionDescription>
+			</ExceptionHeader>
 			{onRefresh ? (
-				<EmptyContent>
+				<ExceptionContent>
 					<Button
 						type="button"
 						variant="outline"
@@ -52,9 +52,9 @@ function ExceptionBlock({
 						{!isRefetching ? <RefreshCcwIcon /> : null}
 						Refresh
 					</Button>
-				</EmptyContent>
+				</ExceptionContent>
 			) : null}
-		</Empty>
+		</Exception>
 	);
 }
 

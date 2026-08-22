@@ -196,13 +196,13 @@ const EditProfileModal = create(({ user }: EditProfileModalProps) => {
 	);
 	const profilePictureFallbackUrl =
 		buildImageUrl(
-			user.bestQualityProfilePictureFile?.name ??
-				user.lowQualityProfilePictureFile?.name,
+			user.bestQualityProfilePictureFile?.filename ??
+				user.lowQualityProfilePictureFile?.filename,
 		) || null;
 	const coverPictureFallbackUrl =
 		buildImageUrl(
-			user.bestQualityCoverPictureFile?.name ??
-				user.lowQualityCoverPictureFile?.name,
+			user.bestQualityCoverPictureFile?.filename ??
+				user.lowQualityCoverPictureFile?.filename,
 		) || null;
 	const profilePreviewUrl = useFilePreview(
 		profilePicture,

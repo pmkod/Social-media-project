@@ -3,10 +3,6 @@ import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { getBlockRelationships } from "../services/get-block-relationships.service";
-import {
-	profileMediaSelect,
-	serializeProfileMedia,
-} from "../services/profile-media.service";
 import { UserRoutesTag } from "../user.constants";
 
 const GetUsersBatchRequestBody = z.object({
@@ -63,7 +59,10 @@ const getUsersBatchRoute = defineOpenAPIRoute<
 				username: true,
 				fullName: true,
 				bio: true,
-				...profileMediaSelect,
+				lowQualityProfilePictureFile: { select: { id: true, filename: true } },
+				bestQualityProfilePictureFile: { select: { id: true, filename: true } },
+				lowQualityCoverPictureFile: { select: { id: true, filename: true } },
+				bestQualityCoverPictureFile: { select: { id: true, filename: true } },
 				postCount: true,
 				followersCount: true,
 				followingCount: true,
@@ -79,7 +78,7 @@ const getUsersBatchRoute = defineOpenAPIRoute<
 
 		return c.json(
 			users.map((user) => ({
-				...serializeProfileMedia(user),
+				...user,
 				isBlockedByAuthenticatedUser:
 					blockRelationships.blockedByAuthenticatedUserIds.has(user.id),
 				hasBlockedAuthenticatedInUser:
