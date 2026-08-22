@@ -23,7 +23,10 @@ import type { Post, PostMediaItem } from "./post.ts";
 import { formatPostCreationDate } from "./post.utils.ts";
 import { PostActionsDropdown } from "./post-actions-dropdown.tsx";
 
-type PostItemProps = { post: Post };
+type PostItemProps = {
+	post: Post;
+	roundedTopOnFirstItem?: boolean;
+};
 
 export type RenderMediaItem = {
 	url: string;
@@ -193,7 +196,10 @@ function PostMediaSlider({ media }: { media: RenderMediaItem[] }) {
 	);
 }
 
-export function PostItem({ post }: PostItemProps) {
+export function PostItem({
+	post,
+	roundedTopOnFirstItem = true,
+}: PostItemProps) {
 	const isLiked = post.isLikedByAuthenticatedUser ?? false;
 	const likesCount = post.likesCount ?? 0;
 	const isBookmarked = post.isBookmarkedByAuthenticatedUser ?? false;
@@ -231,7 +237,10 @@ export function PostItem({ post }: PostItemProps) {
 			params={{ postId: post.id }}
 			// search={{ focusComment: true }}
 			// onClick={(e) => e.stopPropagation()}
-			className="block border-x border-t last:border-b first:rounded-t-xl last:rounded-b-xl border-border p-4 hover:bg-muted/30 transition-colors cursor-pointer"
+			className={cn(
+				"block border-x border-t last:border-b last:rounded-b-xl border-border p-4 hover:bg-muted/30 transition-colors cursor-pointer",
+				roundedTopOnFirstItem ? "first:rounded-t-xl" : "",
+			)}
 		>
 			<div className="flex items-start gap-3">
 				{/* Avatar */}

@@ -36,7 +36,7 @@ function UserProfileTabTrigger({
 		<TabsPrimitive.Trigger
 			data-slot="tabs-trigger"
 			className={cn(
-				"relative flex-1 px-3 py-2 flex items-center justify-center gap-x-1.5 cursor-pointer text-lg font-normal text-muted-foreground transition hover:bg-muted/40 hover:text-foreground focus-visible:outline-none focus-visible:ring-sky-500 data-[state=active]:text-foreground data-[state=active]:after:absolute data-[state=active]:after:inset-x-0 data-[state=active]:after:bottom-0 data-[state=active]:after:h-0.5 data-[state=active]:after:bg-foreground",
+				"relative flex-1 px-3 py-3 flex items-center justify-center gap-x-1.5 cursor-pointer text-base font-normal text-muted-foreground transition hover:bg-muted/40 hover:text-foreground focus-visible:outline-none focus-visible:ring-sky-500 data-[state=active]:text-foreground data-[state=active]:after:absolute data-[state=active]:after:inset-x-0 data-[state=active]:after:bottom-0 data-[state=active]:after:h-0.5 data-[state=active]:after:bg-foreground",
 				className,
 			)}
 			{...props}

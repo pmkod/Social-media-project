@@ -44,6 +44,7 @@ type ProfileViewProps = {
 export function ProfileView({ username }: ProfileViewProps) {
 	const profileQuery = useUserProfile({ username });
 	const { data: authenticatedUser } = useAuthenticatedUser();
+	const user = profileQuery.data?.user;
 
 	if (profileQuery.isLoading) {
 		return (
@@ -53,7 +54,6 @@ export function ProfileView({ username }: ProfileViewProps) {
 		);
 	}
 
-	const user = profileQuery.data?.user;
 	if (profileQuery.isError || !user) {
 		return (
 			<div className="mx-auto min-h-screen max-w-2xl border-x border-border p-12 text-center">
@@ -73,11 +73,9 @@ export function ProfileView({ username }: ProfileViewProps) {
 	const joinedDate = user.createdAt
 		? joinedDateFormatter.format(new Date(user.createdAt))
 		: null;
-	const hasBlockRelationship =
-		user.isBlockedByAuthenticatedUser || user.hasBlockedAuthenticatedInUser;
-	const isOwnProfile = Boolean(
-		authenticatedUser?.id && user && authenticatedUser.id === user.id,
-	);
+
+	const isOwnProfile = authenticatedUser?.id === user.id;
+
 	const coverPictureSrc =
 		buildImageUrl(
 			user.lowQualityCoverPictureFile?.name ??
@@ -86,12 +84,10 @@ export function ProfileView({ username }: ProfileViewProps) {
 
 	return (
 		<div className="mx-auto">
-			<AppHeader bordered>
+			<AppHeader>
 				<AppHeaderLeftPart>
 					<AppHeaderGoBackButton to="/home" />
-					<div className="min-w-0">
-						<AppHeaderTitle>{user.fullName}</AppHeaderTitle>
-					</div>
+					<AppHeaderTitle>{user.fullName}</AppHeaderTitle>
 				</AppHeaderLeftPart>
 			</AppHeader>
 
@@ -106,7 +102,7 @@ export function ProfileView({ username }: ProfileViewProps) {
 					) : null}
 				</div>
 
-				<div className="px-8 pb-5">
+				<div className="px-8 pb-3">
 					<div className="flex items-start justify-between">
 						<div className="-mt-20 border-4 border-background rounded-full">
 							<UserAvatar user={user} size="4xl" />
@@ -123,7 +119,8 @@ export function ProfileView({ username }: ProfileViewProps) {
 								>
 									Edit profile
 								</Button>
-							) : !hasBlockRelationship ? (
+							) : !user.hasBlockedAuthenticatedInUser &&
+								!user.isBlockedByAuthenticatedUser ? (
 								<FollowButton user={user} />
 							) : null}
 						</div>
@@ -136,57 +133,55 @@ export function ProfileView({ username }: ProfileViewProps) {
 						<p className="text-muted-foreground">@{user.username}</p>
 					</div>
 
-					{!hasBlockRelationship && user.bio ? (
+					{user.bio ? (
 						<p className="mt-4 whitespace-pre-line text-[15px] leading-relaxed text-foreground">
 							{user.bio}
 						</p>
 					) : null}
 
-					{!hasBlockRelationship && joinedDate ? (
-						<div className="mt-4 flex flex-wrap gap-x-4 gap-y-2 text-sm text-muted-foreground">
-							<span className="flex items-center gap-1.5">
-								<RiCalendar2Line className="size-4" />
-								Joined {joinedDate}
-							</span>
-						</div>
-					) : null}
+					{user.hasBlockedAuthenticatedInUser ? null : (
+						<>
+							{joinedDate ? (
+								<div className="mt-4 flex flex-wrap gap-x-4 gap-y-2 text-sm text-muted-foreground">
+									<span className="flex items-center gap-1.5">
+										<RiCalendar2Line className="size-4" />
+										Joined {joinedDate}
+									</span>
+								</div>
+							) : null}
 
-					<div className="mt-4 flex flex-wrap gap-5 text-base text-muted-foreground">
-						<UserProfileStatItem
-							value={numberFormatter.format(user.postCount ?? 0)}
-							label="Posts"
-						/>
-						<UserProfileStatItem
-							value={numberFormatter.format(user.followersCount ?? 0)}
-							label="Followers"
-							onClick={
-								hasBlockRelationship
-									? undefined
-									: () =>
-											NiceModal.show(ListFollowersModal, {
-												userId: user.id,
-												username: user.username,
-											})
-							}
-						/>
-						<UserProfileStatItem
-							value={numberFormatter.format(user.followingCount ?? 0)}
-							label="Following"
-							onClick={
-								hasBlockRelationship
-									? undefined
-									: () =>
-											NiceModal.show(ListFollowingModal, {
-												userId: user.id,
-												username: user.username,
-											})
-							}
-						/>
-					</div>
+							<div className="mt-4 flex flex-wrap gap-5 text-base text-muted-foreground">
+								<UserProfileStatItem
+									value={numberFormatter.format(user.postCount ?? 0)}
+									label="Posts"
+								/>
+								<UserProfileStatItem
+									value={numberFormatter.format(user.followersCount ?? 0)}
+									label="Followers"
+									onClick={() =>
+										NiceModal.show(ListFollowersModal, {
+											userId: user.id,
+											username: user.username,
+										})
+									}
+								/>
+								<UserProfileStatItem
+									value={numberFormatter.format(user.followingCount ?? 0)}
+									label="Following"
+									onClick={() =>
+										NiceModal.show(ListFollowingModal, {
+											userId: user.id,
+											username: user.username,
+										})
+									}
+								/>
+							</div>
+						</>
+					)}
 				</div>
 			</section>
 
-			{!hasBlockRelationship ? (
+			{user.hasBlockedAuthenticatedInUser ? null : (
 				<UserProfileTab defaultValue="posts">
 					<UserProfileTabList>
 						<UserProfileTabTrigger value="posts">
@@ -205,7 +200,7 @@ export function ProfileView({ username }: ProfileViewProps) {
 						<ProfilePostList userId={user.id} type="likes" />
 					</UserProfileTabContent>
 				</UserProfileTab>
-			) : null}
+			)}
 		</div>
 	);
 }

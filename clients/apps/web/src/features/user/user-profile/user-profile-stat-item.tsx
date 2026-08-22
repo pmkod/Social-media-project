@@ -35,4 +35,3 @@ function UserProfileStatItem({
 }
 
 export { UserProfileStatItem };
-export type { UserProfileStatItemProps };

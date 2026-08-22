@@ -66,9 +66,12 @@ export function ProfilePostList({ userId, type }: ProfilePostListProps) {
 
 	return (
 		<div>
-			<div></div>
-			{posts.map((post) => (
-				<PostItem key={post.id} post={post} />
+			{posts.map((post, index) => (
+				<PostItem
+					roundedTopOnFirstItem={index === 0 ? false : undefined}
+					key={post.id}
+					post={post}
+				/>
 			))}
 			<div ref={observerTargetRef}>
 				{query.hasNextPage ? <PostListLoader count={2} /> : null}

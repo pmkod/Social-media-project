@@ -76,7 +76,7 @@ function AppHeaderGoBackButton({
 		<RiArrowLeftLine className="size-5" />
 	);
 	const baseClassName = cn(
-		"inline-flex size-9 shrink-0 items-center justify-center -ml-3 rounded-full text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 cursor-pointer",
+		"inline-flex size-9 shrink-0 items-center justify-center -ml-5 rounded-full text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 cursor-pointer",
 		className,
 	);
 
