@@ -123,6 +123,7 @@ function PostDetailPage() {
 						description="The post could not be found or failed to load."
 						onRefresh={() => void refetch()}
 						isRefetching={isRefetching}
+						className="h-120"
 					/>
 				) : null}
 			</div>
