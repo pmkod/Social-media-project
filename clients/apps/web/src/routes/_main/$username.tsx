@@ -33,65 +33,65 @@ function ProfilePage() {
 
 	const profileQuery = useUserProfile({ username });
 
-	const user = profileQuery.data?.user;
-
-	if (profileQuery.isLoading) {
-		return (
-			<div className="mx-auto flex min-h-screen max-w-2xl items-center justify-center border-x border-border">
-				<RiLoader4Line className="size-8 animate-spin text-sky-500" />
-			</div>
-		);
-	}
-
-	if (profileQuery.isError || !user) {
-		return (
-			<div className="mx-auto min-h-screen max-w-2xl border-x border-border p-12 text-center">
-				<h1 className="text-xl font-bold text-foreground">
-					This account doesn't exist
-				</h1>
-				<p className="mt-2 text-sm text-muted-foreground">
-					Check the username and try again.
-				</p>
-				<Button asChild variant="outline" className="mt-5">
-					<Link to="/search">Back to search</Link>
-				</Button>
-			</div>
-		);
-	}
-
 	return (
 		<MainContainer>
 			<AppHeader>
 				<AppHeaderLeftPart>
 					<AppHeaderGoBackButton to="/home" />
 					<AppHeaderTitle>
-						{profileQuery.isLoading ? "-" : user.fullName}
+						{profileQuery.data ? profileQuery.data.user.fullName : "-"}
 					</AppHeaderTitle>
 				</AppHeaderLeftPart>
 			</AppHeader>
 
-			<UserProfileView user={user} />
+			{profileQuery.isLoading ? (
+				<div className="mx-auto flex min-h-screen max-w-2xl items-center justify-center border-x border-border">
+					<RiLoader4Line className="size-8 animate-spin text-sky-500" />
+				</div>
+			) : profileQuery.isSuccess ? (
+				<UserProfileView user={profileQuery.data.user} />
+			) : profileQuery.isError ? (
+				<div className="mx-auto min-h-screen max-w-2xl border-x border-border p-12 text-center">
+					<h1 className="text-xl font-bold text-foreground">
+						This account doesn't exist
+					</h1>
+					<p className="mt-2 text-sm text-muted-foreground">
+						Check the username and try again.
+					</p>
+					<Button asChild variant="outline" className="mt-5">
+						<Link to="/search">Back to search</Link>
+					</Button>
+				</div>
+			) : null}
 
-			{user.hasBlockedAuthenticatedInUser ? null : (
-				<UserProfileTab defaultValue="posts">
-					<UserProfileTabList>
-						<UserProfileTabTrigger value="posts">
-							<RiMenu5Line className="size-5" />
-							Posts
-						</UserProfileTabTrigger>
-						<UserProfileTabTrigger value="likes">
-							<RiHeartLine className="size-5" />
-							Likes
-						</UserProfileTabTrigger>
-					</UserProfileTabList>
-					<UserProfileTabContent value="posts">
-						<ProfilePostList userId={user.id} type="posts" />
-					</UserProfileTabContent>
-					<UserProfileTabContent value="likes">
-						<ProfilePostList userId={user.id} type="likes" />
-					</UserProfileTabContent>
-				</UserProfileTab>
-			)}
+			{profileQuery.data?.user ? (
+				profileQuery.data?.user.hasBlockedAuthenticatedInUser ? null : (
+					<UserProfileTab defaultValue="posts">
+						<UserProfileTabList>
+							<UserProfileTabTrigger value="posts">
+								<RiMenu5Line className="size-5" />
+								Posts
+							</UserProfileTabTrigger>
+							<UserProfileTabTrigger value="likes">
+								<RiHeartLine className="size-5" />
+								Likes
+							</UserProfileTabTrigger>
+						</UserProfileTabList>
+						<UserProfileTabContent value="posts">
+							<ProfilePostList
+								userId={profileQuery.data?.user.id}
+								type="posts"
+							/>
+						</UserProfileTabContent>
+						<UserProfileTabContent value="likes">
+							<ProfilePostList
+								userId={profileQuery.data?.user.id}
+								type="likes"
+							/>
+						</UserProfileTabContent>
+					</UserProfileTab>
+				)
+			) : null}
 		</MainContainer>
 	);
 }

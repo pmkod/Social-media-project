@@ -5,17 +5,20 @@ type PostItemLoaderProps = {
 	className?: string;
 	hasMedia?: boolean;
 	contentLines?: number;
+	roundedTopOnFirstItem?: boolean;
 };
 
 function PostItemLoader({
 	className,
 	hasMedia = false,
 	contentLines = 1,
+	roundedTopOnFirstItem = true,
 }: PostItemLoaderProps) {
 	return (
 		<article
 			className={cn(
-				"border-x border-t last:border-b first:rounded-t-xl last:rounded-b-xl border-border p-4",
+				"border-x border-t last:border-b last:rounded-b-xl border-border p-4",
+				roundedTopOnFirstItem ? "first:rounded-t-xl" : "",
 				className,
 			)}
 		>

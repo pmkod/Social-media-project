@@ -4,9 +4,14 @@ import { PostItemLoader } from "./post-item-loader.tsx";
 type PostListLoaderProps = {
 	count?: number;
 	className?: string;
+	roundedTopOnFirstItem?: boolean;
 };
 
-function PostListLoader({ count = 5, className }: PostListLoaderProps) {
+function PostListLoader({
+	count = 5,
+	className,
+	roundedTopOnFirstItem = true,
+}: PostListLoaderProps) {
 	return (
 		<div className={cn("divide-y divide-border", className)}>
 			{Array.from({ length: count }).map((_, index) => (
@@ -15,6 +20,7 @@ function PostListLoader({ count = 5, className }: PostListLoaderProps) {
 					key={index}
 					hasMedia={index === 0}
 					contentLines={index === 0 ? 1 : (index % 2) + 1}
+					roundedTopOnFirstItem={roundedTopOnFirstItem}
 				/>
 			))}
 		</div>

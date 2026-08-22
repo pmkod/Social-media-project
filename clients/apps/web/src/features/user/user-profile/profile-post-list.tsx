@@ -36,7 +36,7 @@ export function ProfilePostList({ userId, type }: ProfilePostListProps) {
 		return () => observer.disconnect();
 	}, [query.fetchNextPage, query.hasNextPage, query.isFetchingNextPage]);
 
-	if (query.isLoading) return <PostListLoader />;
+	if (true) return <PostListLoader roundedTopOnFirstItem={false} />;
 	if (query.isError) {
 		return (
 			<ExceptionBlock
