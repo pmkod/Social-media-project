@@ -44,18 +44,21 @@ const useUpdateProfile = () => {
 		onSuccess: (updatedUser) => {
 			queryClient.setQueryData<UseAuthenticatedUserQueryData>(
 				authenticatedUserQueryKey,
-				(currentUser) =>
-					currentUser
+				(currentData) =>
+					currentData
 						? {
-								...currentUser,
-								username: updatedUser.username,
-								fullName: updatedUser.fullName,
-								lowQualityProfilePictureFile:
-									updatedUser.lowQualityProfilePictureFile,
-								bestQualityProfilePictureFile:
-									updatedUser.bestQualityProfilePictureFile,
+								...currentData,
+								user: {
+									...currentData.user,
+									username: updatedUser.username,
+									fullName: updatedUser.fullName,
+									lowQualityProfilePictureFile:
+										updatedUser.lowQualityProfilePictureFile,
+									bestQualityProfilePictureFile:
+										updatedUser.bestQualityProfilePictureFile,
+								},
 							}
-						: currentUser,
+						: currentData,
 			);
 			void queryClient.invalidateQueries({
 				queryKey: userDetailsQueryKeys.byUsername(updatedUser.username),

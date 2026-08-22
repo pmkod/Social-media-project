@@ -34,15 +34,11 @@ const getMeRoute = defineOpenAPIRoute<typeof routeDef, HonoAuthenticatedEnv>({
 			where: { id: authenticatedUser.id },
 			select: {
 				id: true,
-				email: true,
 				username: true,
 				fullName: true,
-				bio: true,
-				...profileMediaSelect,
-				postCount: true,
-				followersCount: true,
-				followingCount: true,
 				createdAt: true,
+				lowQualityProfilePictureFile: { select: { id: true, filename: true } },
+				bestQualityProfilePictureFile: { select: { id: true, filename: true } },
 			},
 		});
 
@@ -50,12 +46,12 @@ const getMeRoute = defineOpenAPIRoute<typeof routeDef, HonoAuthenticatedEnv>({
 			throw new Error("User not found");
 		}
 
-		return c.json({
-			...serializeProfileMedia(user),
-			isFollowedByAuthenticatedUser: false,
-			isBlockedByAuthenticatedUser: false,
-			hasBlockedAuthenticatedInUser: false,
-		});
+		return c.json(
+			{
+				user,
+			},
+			HttpStatus.OK.code,
+		);
 	},
 });
 

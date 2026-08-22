@@ -37,7 +37,7 @@ function SidebarLink({ to, icon: Icon, label, params }: SidebarLinkProps) {
 }
 
 export function Sidebar() {
-	const { data: user } = useAuthenticatedUser();
+	const { data } = useAuthenticatedUser();
 
 	return (
 		<aside className="hidden md:flex flex-col justify-between w-64 lg:w-72 p-4 h-screen sticky top-0 shrink-0">
@@ -66,10 +66,10 @@ export function Sidebar() {
 						icon={RiBookmarkLine}
 						label="Bookmarks"
 					/>
-					{user ? (
+					{data ? (
 						<SidebarLink
 							to="/$username"
-							params={{ username: `@${user.username}` }}
+							params={{ username: `@${data.user.username}` }}
 							icon={RiUserLine}
 							label="Profile"
 						/>

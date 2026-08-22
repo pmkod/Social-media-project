@@ -19,7 +19,7 @@ type User = {
 
 type UserProfileMediaFile = {
 	id: string;
-	name: string;
+	filename: string;
 };
 
 export type { User };

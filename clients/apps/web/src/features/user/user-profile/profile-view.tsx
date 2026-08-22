@@ -24,7 +24,9 @@ type UserProfileViewProps = {
 };
 
 function UserProfileView({ user }: UserProfileViewProps) {
-	const { data: authenticatedUser } = useAuthenticatedUser();
+	const { data } = useAuthenticatedUser();
+	const authenticatedUser = data?.user;
+
 	const joinedDate = user.createdAt
 		? joinedDateFormatter.format(new Date(user.createdAt))
 		: null;
@@ -33,8 +35,8 @@ function UserProfileView({ user }: UserProfileViewProps) {
 
 	const coverPictureSrc =
 		buildImageUrl(
-			user.lowQualityCoverPictureFile?.name ??
-				user.bestQualityCoverPictureFile?.name,
+			user.lowQualityCoverPictureFile?.filename ??
+				user.bestQualityCoverPictureFile?.filename,
 		) || null;
 	return (
 		<section className="border-x rounded-t-xl overflow-hidden">

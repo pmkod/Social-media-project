@@ -30,7 +30,9 @@ function CreateCommentForm({
 }: CreateCommentFormProps) {
 	const createComment = useCreateComment();
 	const createReply = useCreateCommentReply();
-	const { data: authenticatedUser } = useAuthenticatedUser();
+	const { data } = useAuthenticatedUser();
+	const authenticatedUser = data?.user;
+
 	const isPending = createComment.isPending || createReply.isPending;
 	const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -105,7 +107,6 @@ function CreateCommentForm({
 										: "Post your comment..."
 								}
 								disabled={isPending}
-								autoFocus={autoFocus || false}
 								className="min-h-0 w-full resize-none rounded-lg py-2 font-normal placeholder:font-normal bg-transparent text-base text-foreground placeholder:text-muted-foreground focus-visible:ring-0 ring-0 outline-none disabled:opacity-60"
 							/>
 						)}

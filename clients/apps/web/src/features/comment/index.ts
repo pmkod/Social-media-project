@@ -9,5 +9,6 @@ export * from "./create-comment/use-create-comment.ts";
 export * from "./create-comment/use-create-comment-reply.ts";
 export * from "./comments/use-comments.ts";
 export * from "./comments/use-comment-replies.ts";
+export * from "./create-form/create-comment-form-loader.tsx";
 export * from "./like-comment/use-like-comment.ts";
 export * from "./unlike-comment/use-unlike-comment.ts";

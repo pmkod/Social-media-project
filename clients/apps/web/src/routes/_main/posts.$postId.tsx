@@ -1,5 +1,4 @@
-import { RiArrowLeftLine } from "@remixicon/react";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { z } from "zod";
 import {
@@ -9,12 +8,14 @@ import {
 	AppHeaderTitle,
 } from "@/core/components/ui/app-header";
 import { EmptyBlock } from "@/core/components/ui/empty-block.tsx";
+import { ExceptionBlock } from "@/core/components/ui/exception-block.tsx";
 import { MainContainer } from "@/core/components/ui/main-container.tsx";
 import { useIntersectionObserver } from "@/core/hooks/use-intersection-observer.ts";
 import {
 	CommentItem,
 	CommentListLoader,
 	CreateCommentForm,
+	CreateCommentFormLoader,
 	useComments,
 } from "@/features/comment";
 import { PostItemLoader } from "@/features/post/common/components/loaders/post-item-loader.tsx";
@@ -33,7 +34,14 @@ export const Route = createFileRoute("/_main/posts/$postId")({
 function PostDetailPage() {
 	const { postId } = Route.useParams();
 	const { focusComment } = Route.useSearch();
-	const { data: post, isLoading, isSuccess, isError } = usePost({ postId });
+	const {
+		data: post,
+		isLoading,
+		isSuccess,
+		isError,
+		refetch,
+		isRefetching,
+	} = usePost({ postId });
 	const {
 		data: commentsData,
 		fetchNextPage,
@@ -67,6 +75,9 @@ function PostDetailPage() {
 				{isLoading ? (
 					<div>
 						<PostItemLoader hasMedia={true} />
+						<div className="px-4 py-3 border-x border-y">
+							<CreateCommentFormLoader />
+						</div>
 						<div className="border-x border-b rounded-b-xl overflow-hidden">
 							<CommentListLoader count={3} />
 						</div>
@@ -106,20 +117,14 @@ function PostDetailPage() {
 							)}
 						</section>
 					</>
-				) : (
-					<div className="p-8 text-center space-y-4">
-						<p className="text-rose-500 text-sm">
-							Post not found or failed to load.
-						</p>
-						<Link
-							to="/home"
-							className="inline-flex items-center gap-2 text-sky-500 hover:underline text-sm font-medium"
-						>
-							<RiArrowLeftLine className="h-4 w-4" />
-							<span>Back to feed</span>
-						</Link>
-					</div>
-				)}
+				) : isError ? (
+					<ExceptionBlock
+						title="Unable to load post"
+						description="The post could not be found or failed to load."
+						onRefresh={() => void refetch()}
+						isRefetching={isRefetching}
+					/>
+				) : null}
 			</div>
 		</MainContainer>
 	);

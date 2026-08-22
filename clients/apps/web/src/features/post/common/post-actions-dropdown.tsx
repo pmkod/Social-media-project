@@ -55,7 +55,9 @@ function PostActionsDropdown({
 	variant = "ghost",
 }: PostActionsDropdownProps) {
 	const userBlockDialog = useOpenUserBlockAlertDialog();
-	const { data: authenticatedUser } = useAuthenticatedUser();
+	const { data } = useAuthenticatedUser();
+	const authenticatedUser = data?.user;
+
 	const isOwnProfile = Boolean(
 		authenticatedUser?.id && user.id && authenticatedUser.id === user.id,
 	);
