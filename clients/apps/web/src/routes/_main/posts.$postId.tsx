@@ -34,21 +34,16 @@ export const Route = createFileRoute("/_main/posts/$postId")({
 function PostDetailPage() {
 	const { postId } = Route.useParams();
 	const { focusComment } = Route.useSearch();
-	const {
-		data: post,
-		isLoading,
-		isSuccess,
-		isError,
-		refetch,
-		isRefetching,
-	} = usePost({ postId });
+	const { data, isLoading, isSuccess, isError, refetch, isRefetching } =
+		usePost({ postId });
+	// const post = data?.post;
 	const {
 		data: commentsData,
 		fetchNextPage,
 		hasNextPage,
 		isFetching,
 		isLoading: isCommentsLoading,
-	} = useComments({ postId, enabled: post !== undefined });
+	} = useComments({ postId, enabled: data?.post !== undefined });
 	const {
 		ref: commentsObserverTargetRef,
 		isIntersecting: isCommentsTargetIntersecting,
@@ -85,10 +80,13 @@ function PostDetailPage() {
 				) : isSuccess ? (
 					<>
 						<div>
-							<PostItem post={post} />
+							<PostItem post={data.post} />
 							<div className="px-4 py-3 border-x border-y">
 								{/* Add Comment Form */}
-								<CreateCommentForm postId={post.id} autoFocus={focusComment} />
+								<CreateCommentForm
+									postId={data.post.id}
+									autoFocus={focusComment}
+								/>
 							</div>
 						</div>
 

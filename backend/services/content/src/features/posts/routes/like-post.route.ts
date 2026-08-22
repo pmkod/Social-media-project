@@ -5,6 +5,7 @@ import { userServiceClient } from "@/core/services/user-service.client";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { requireUserAuthentication } from "@/features/authentication/middlewares/require-user-authentication.middleware";
 import { PostsRoutesTag } from "../posts.constants";
+import { Post } from "@/generated/prisma/client";
 
 const routeDef = createRoute({
 	method: "post",
@@ -37,56 +38,35 @@ const likePostRoute = defineOpenAPIRoute<typeof routeDef, HonoAuthenticatedEnv>(
 
 			const post = await prisma.post.findUnique({
 				where: { id: postId },
-				select: { id: true, authorId: true },
+				select: { id: true, authorId: true, likesCount: true },
 			});
 
 			if (!post) {
 				throw new Error("Post not found");
 			}
-			if (
-				await userServiceClient.hasBlockRelationship(
-					authenticatedUserId,
-					post.authorId,
-				)
-			) {
-				return c.json(
-					{ success: false, message: "Post not found", likesCount: 0 },
-					HttpStatus.NOT_FOUND.code,
-				);
-			}
 
-			const existingLike = await prisma.postLike.findUnique({
-				where: {
-					postId_authorId: {
+			let postToSend: Pick<Post, "id" | "likesCount"> | undefined = {
+				id: post.id,
+				likesCount: post.likesCount,
+			};
+
+			try {
+				await prisma.postLike.create({
+					data: {
 						postId,
 						authorId: authenticatedUserId,
 					},
-				},
-				select: { id: true },
-			});
+				});
 
-			if (!existingLike) {
-				await prisma.$transaction([
-					prisma.postLike.create({
-						data: {
-							postId,
-							authorId: authenticatedUserId,
-						},
-					}),
-					prisma.post.update({
-						where: { id: postId },
-						data: { likesCount: { increment: 1 } },
-					}),
-				]);
-			}
-
-			const { likesCount } = await prisma.post.findUniqueOrThrow({
-				where: { id: postId },
-				select: { likesCount: true },
-			});
+				postToSend = await prisma.post.update({
+					where: { id: postId },
+					data: { likesCount: { increment: 1 } },
+					select: { id: true, likesCount: true },
+				});
+			} catch (error) {}
 
 			return c.json(
-				{ success: true, message: "Post liked", likesCount },
+				{ success: true, message: "Post liked", post: postToSend },
 				HttpStatus.CREATED.code,
 			);
 		},

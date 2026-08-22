@@ -115,10 +115,12 @@ const getPostByIdRoute = defineOpenAPIRoute<
 		const author = authorsMap.get(post.authorId) ?? null;
 
 		return c.json({
-			...post,
-			isLikedByAuthenticatedUser: Boolean(like),
-			isBookmarkedByAuthenticatedUser: Boolean(bookmark),
-			author,
+			post: {
+				...post,
+				isLikedByAuthenticatedUser: Boolean(like),
+				isBookmarkedByAuthenticatedUser: Boolean(bookmark),
+				author,
+			},
 		});
 	},
 });

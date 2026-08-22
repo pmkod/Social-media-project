@@ -1,6 +1,4 @@
-import { postsQueryKey } from "../posts.query-key";
-
-const postDetailsRootQueryKey = [...postsQueryKey.root];
+const postDetailsRootQueryKey = ["post-details"];
 
 const postDetailsQueryKey = {
 	root: postDetailsRootQueryKey,
