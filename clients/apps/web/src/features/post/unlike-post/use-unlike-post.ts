@@ -14,19 +14,14 @@ export type UnlikePostResponse = {
 	post: Post;
 };
 
-export const unlikePostApi = async (
-	postId: string,
-): Promise<UnlikePostResponse> => {
-	return await httpClient
-		.delete(`posts/${postId}/likes`)
-		.json<UnlikePostResponse>();
-};
-
 export const useUnlikePost = () => {
 	const queryClient = useQueryClient();
 
 	return useMutation({
-		mutationFn: (postId: string) => unlikePostApi(postId),
+		mutationFn: async (postId: string) =>
+			await httpClient
+				.delete(`posts/${postId}/likes`)
+				.json<UnlikePostResponse>(),
 		onSuccess: (data, postId) => {
 			queryClient.setQueriesData<InfiniteData<{ posts: Post[] }>>(
 				{ queryKey: postListQueryKeys.root, exact: false },
