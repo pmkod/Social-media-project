@@ -3,32 +3,20 @@ import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { requireUserAuthentication } from "@/features/authentication/middlewares/require-user-authentication.middleware";
-import {
-	profileMediaSelect,
-	serializeProfileMedia,
-} from "../services/profile-media.service";
 import { UserRoutesTag } from "../user.constants";
 import { ProfileMediaFileResponseBody } from "../user.validation-schemas";
 
-const FollowSuggestionItem = z.object({
-	id: z.string(),
-	username: z.string(),
-	name: z.string(),
-	handle: z.string(),
-	fullName: z.string().nullable(),
-	lowQualityProfilePictureFile: ProfileMediaFileResponseBody,
-	bestQualityProfilePictureFile: ProfileMediaFileResponseBody,
-	lowQualityCoverPictureFile: ProfileMediaFileResponseBody,
-	bestQualityCoverPictureFile: ProfileMediaFileResponseBody,
-	bio: z.string().nullable(),
-	followersCount: z.number(),
-	followingCount: z.number(),
-	postCount: z.number(),
-	isFollowedByAuthenticatedUser: z.boolean(),
-});
-
 const FollowSuggestionsResponseBody = z.object({
-	users: z.array(FollowSuggestionItem),
+	users: z.array(
+		z.object({
+			id: z.string(),
+			username: z.string(),
+			fullName: z.string().nullable(),
+			lowQualityProfilePictureFile: ProfileMediaFileResponseBody,
+			bestQualityProfilePictureFile: ProfileMediaFileResponseBody,
+			isFollowedByAuthenticatedUser: z.boolean(),
+		}),
+	),
 });
 
 const routeDef = createRoute({
@@ -110,33 +98,17 @@ const getFollowSuggestionsRoute = defineOpenAPIRoute<
 				id: true,
 				username: true,
 				fullName: true,
-				...profileMediaSelect,
-				bio: true,
-				followersCount: true,
-				followingCount: true,
-				postCount: true,
+				lowQualityProfilePictureFile: { select: { id: true, filename: true } },
+				bestQualityProfilePictureFile: { select: { id: true, filename: true } },
 			},
 		});
 
-		const users = candidates.map((user) => {
-			const name = user.fullName || user.username;
-			const handle = `@${user.username}`;
-			return {
-				...serializeProfileMedia(user),
-				id: user.id,
-				username: user.username,
-				name,
-				handle,
-				fullName: user.fullName,
-				bio: user.bio,
-				followersCount: user.followersCount,
-				followingCount: user.followingCount,
-				postCount: user.postCount,
-				isFollowedByAuthenticatedUser: followingIds.includes(user.id),
-			};
-		});
+		const users = candidates.map((user) => ({
+			...user,
+			isFollowedByAuthenticatedUser: false,
+		}));
 
-		return c.json({ users });
+		return c.json({ users }, HttpStatus.OK.code);
 	},
 });
 

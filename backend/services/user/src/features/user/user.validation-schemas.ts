@@ -21,7 +21,7 @@ const UpdateProfileValidationSchema = z.object({
 const ProfileMediaFileResponseBody = z
 	.object({
 		id: z.string(),
-		name: z.string(),
+		filename: z.string(),
 	})
 	.nullable();
 
