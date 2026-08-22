@@ -27,7 +27,7 @@ export function Sidebar() {
 								to={item.to}
 								className="flex items-center gap-4 px-4 py-2 rounded-md text-muted-foreground hover:bg-accent font-normal transition-colors"
 								activeProps={{
-									className: "text-primary font-medium",
+									className: "text-primary font-semibold",
 								}}
 							>
 								<IconComponent className="size-6.5 shrink-0" />
