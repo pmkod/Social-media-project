@@ -30,7 +30,7 @@ export const fetchCommentsPage = async ({
 }): Promise<CommentsInfiniteResult> => {
 	const searchParams = new URLSearchParams({
 		page: pageParam.toString(),
-		limit: "10",
+		limit: "16",
 	});
 
 	const res = await httpClient

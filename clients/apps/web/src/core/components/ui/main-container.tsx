@@ -5,7 +5,7 @@ function MainContainer({ className, ...props }: React.ComponentProps<"div">) {
 	return (
 		<div
 			data-slot="main-container"
-			className={cn("mx-auto max-w-3xl", className)}
+			className={cn("mx-auto max-w-3xl pb-10", className)}
 			{...props}
 		/>
 	);
