@@ -21,7 +21,7 @@ const useListFollowing = ({ userId }: UseListFollowingParams) =>
 	useInfiniteQuery({
 		queryKey: userListQueryKeys.following(userId),
 		queryFn: ({ pageParam }) => {
-			const searchParams = new URLSearchParams({ limit: "20" });
+			const searchParams = new URLSearchParams({ limit: "16" });
 			if (pageParam) {
 				searchParams.set("cursorId", pageParam.id);
 				searchParams.set("cursorCreatedAt", pageParam.createdAt);

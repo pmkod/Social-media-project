@@ -80,15 +80,13 @@ function DialogContent({
 				{children}
 				{showCloseButton ? (
 					<DialogPrimitive.Close asChild>
-						<Button
+						<button
 							type="button"
-							variant="ghost"
-							size="icon-sm"
-							className="absolute top-3 right-3 rounded-full"
+							className="absolute top-2 right-3 rounded-full cursor-pointer p-2 transition-colors hover:bg-gray-100"
 						>
-							<RiCloseLine className="size-5" />
+							<RiCloseLine className="size-7" />
 							<span className="sr-only">Close</span>
-						</Button>
+						</button>
 					</DialogPrimitive.Close>
 				) : null}
 			</DialogPrimitive.Content>

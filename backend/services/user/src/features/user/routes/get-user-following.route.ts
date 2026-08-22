@@ -15,7 +15,7 @@ const routeDef = createRoute({
 		query: z.object({
 			cursorId: z.string().optional(),
 			cursorCreatedAt: z.string().optional(),
-			limit: z.string().optional().default("20"),
+			limit: z.coerce.number().positive().optional().default(20),
 		}),
 	},
 	responses: {
@@ -32,17 +32,16 @@ const getUserFollowingRoute = defineOpenAPIRoute<
 	handler: async (c) => {
 		const { userId } = c.req.valid("param");
 		const query = c.req.valid("query");
-		const limit = Math.min(
-			Math.max(Number.parseInt(query.limit, 10) || 20, 1),
-			50,
-		);
+
+		const limit = query.limit;
+
 		const userExists = await prisma.user.findFirst({
 			where: { id: userId, active: true },
 			select: { id: true },
 		});
 
 		if (!userExists) {
-			return c.json({ message: "User not found" }, HttpStatus.NOT_FOUND.code);
+			throw Error("User not found");
 		}
 
 		const authenticatedUser = c.get("authenticatedUser");
@@ -113,7 +112,6 @@ const getUserFollowingRoute = defineOpenAPIRoute<
 			idsOfUsersAuthenticatedUserFollow.push(
 				...follows.map((follow) => follow.followingId),
 			);
-			console.log(idsOfUsersAuthenticatedUserFollow);
 		}
 
 		const usersToSend = items.map((connection) => ({

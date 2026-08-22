@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useState } from "react";
 import {
 	Dialog,
 	DialogBody,
@@ -9,6 +9,7 @@ import {
 import { EmptyBlock } from "@/core/components/ui/empty-block.tsx";
 import { ExceptionBlock } from "@/core/components/ui/exception-block.tsx";
 import { create, useModal } from "@/core/components/ui/nice-modal.tsx";
+import { useIntersectionObserver } from "@/core/hooks/use-intersection-observer.ts";
 import { UserRowItem } from "@/features/user/common/components/user-row-item.tsx";
 import { UserRowItemListLoader } from "@/features/user/common/components/user-row-item-list-loader.tsx";
 import { useListFollowing } from "./use-list-following.ts";
@@ -20,31 +21,37 @@ type ListFollowingModalProps = {
 const ListFollowingModal = create(({ userId }: ListFollowingModalProps) => {
 	const modal = useModal();
 	const query = useListFollowing({ userId });
-	const scrollContainerRef = useRef<HTMLDivElement>(null);
-	const observerTargetRef = useRef<HTMLDivElement>(null);
-	const { fetchNextPage, hasNextPage, isFetchingNextPage } = query;
+	const [scrollContainer, setScrollContainer] = useState<HTMLDivElement | null>(
+		null,
+	);
+	const { fetchNextPage, hasNextPage, isFetching } = query;
+
 	const users = query.data?.pages.flatMap((page) => page.users) ?? [];
+
+	const { ref: observerTargetRef, isIntersecting: isTargetIntersecting } =
+		useIntersectionObserver({
+			root: scrollContainer,
+			rootMargin: "100px",
+		});
 
 	const handleOpenChange = (open: boolean) => {
 		if (!open) modal.remove();
 	};
 
-	useEffect(() => {
-		const root = scrollContainerRef.current;
-		const target = observerTargetRef.current;
-		if (!root || !target || !modal.visible) return;
+	const handleRefetch = () => query.refetch();
 
-		const observer = new IntersectionObserver(
-			([entry]) => {
-				if (entry.isIntersecting && hasNextPage && !isFetchingNextPage) {
-					fetchNextPage();
-				}
-			},
-			{ root, rootMargin: "160px" },
-		);
-		observer.observe(target);
-		return () => observer.disconnect();
-	}, [modal.visible, fetchNextPage, hasNextPage, isFetchingNextPage]);
+	useEffect(() => {
+		if (!modal.visible || !isTargetIntersecting || !hasNextPage || isFetching)
+			return;
+
+		fetchNextPage();
+	}, [
+		modal.visible,
+		isTargetIntersecting,
+		hasNextPage,
+		isFetching,
+		fetchNextPage,
+	]);
 
 	return (
 		<Dialog open={modal.visible} onOpenChange={handleOpenChange}>
@@ -52,43 +59,38 @@ const ListFollowingModal = create(({ userId }: ListFollowingModalProps) => {
 				<DialogHeader>
 					<DialogTitle>Following</DialogTitle>
 				</DialogHeader>
-				<DialogBody ref={scrollContainerRef}>
-					{query.isLoading ? (
-						<UserRowItemListLoader />
-					) : query.isError ? (
-						<ExceptionBlock
-							title="Unable to load following"
-							description="An error occurred while loading the following list."
-							onRefresh={() => void query.refetch()}
-							isRefetching={query.isRefetching}
-							borderless
-						/>
-					) : users.length === 0 ? (
-						<EmptyBlock
-							title="No following users"
-							description="Following users will appear here once this profile follows them."
-							borderless
-						/>
-					) : (
-						<div className="divide-y divide-border">
-							{users.map((user) => (
-								<UserRowItem
-									key={user.id}
-									user={user}
-									onClick={() => modal.remove()}
-								/>
-							))}
+				<DialogBody ref={setScrollContainer}>
+					<div className="h-150">
+						{query.isLoading ? (
+							<UserRowItemListLoader />
+						) : query.isError ? (
+							<ExceptionBlock
+								title="Unable to load following"
+								description="An error occurred while loading the following list."
+								onRefresh={handleRefetch}
+								isRefetching={query.isRefetching}
+								borderless
+							/>
+						) : users.length === 0 ? (
+							<EmptyBlock
+								title="No following users"
+								description="Following users will appear here once this profile follows them."
+								borderless
+							/>
+						) : (
+							<div className="divide-y divide-border">
+								{users.map((user) => (
+									<UserRowItem key={user.id} user={user} />
+								))}
 
-							<div
-								ref={observerTargetRef}
-								className={query.isFetchingNextPage ? "h-16" : "h-1"}
-							>
-								{query.isFetchingNextPage ? (
-									<UserRowItemListLoader count={1} />
+								{query.hasNextPage ? (
+									<div ref={observerTargetRef}>
+										<UserRowItemListLoader count={3} />
+									</div>
 								) : null}
 							</div>
-						</div>
-					)}
+						)}
+					</div>
 				</DialogBody>
 			</DialogContent>
 		</Dialog>
