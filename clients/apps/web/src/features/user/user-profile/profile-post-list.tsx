@@ -66,6 +66,7 @@ export function ProfilePostList({ userId, type }: ProfilePostListProps) {
 
 	return (
 		<div>
+			<div></div>
 			{posts.map((post) => (
 				<PostItem key={post.id} post={post} />
 			))}

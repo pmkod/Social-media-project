@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { MainContainer } from "@/core/components/ui/main-container";
-import { ProfileView } from "@/features/user/get-profile/profile-view.tsx";
+import { ProfileView } from "@/features/user/user-profile/profile-view.tsx";
 
 export const Route = createFileRoute("/_main/$username")({
 	component: ProfilePage,

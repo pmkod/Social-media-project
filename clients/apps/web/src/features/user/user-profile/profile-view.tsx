@@ -1,4 +1,9 @@
-import { RiCalendar2Line, RiLoader4Line } from "@remixicon/react";
+import {
+	RiCalendar2Line,
+	RiHeartLine,
+	RiLoader4Line,
+	RiMenu5Line,
+} from "@remixicon/react";
 import { Link } from "@tanstack/react-router";
 import {
 	AppHeader,
@@ -8,12 +13,6 @@ import {
 } from "@/core/components/ui/app-header.tsx";
 import { Button } from "@/core/components/ui/button.tsx";
 import NiceModal from "@/core/components/ui/nice-modal.tsx";
-import {
-	Tabs,
-	TabsContent,
-	TabsList,
-	TabsTrigger,
-} from "@/core/components/ui/tabs.tsx";
 import { buildImageUrl } from "@/features/post/post-media.functions.ts";
 import { useAuthenticatedUser } from "@/features/user/authenticated-user/use-authenticated-user.ts";
 import { UserAvatar } from "@/features/user/common/components/user-avatar.tsx";
@@ -23,8 +22,14 @@ import { ListFollowersModal } from "@/features/user/list-followers/list-follower
 import { ListFollowingModal } from "@/features/user/list-following/list-following.modal.tsx";
 import { useUserProfile } from "@/features/user/user-profile/use-user-profile.ts";
 import { UserProfileActionsDropdown } from "@/features/user/user-profile/user-profile-actions-dropdown.tsx";
-import { ProfileCollections } from "./profile-collections.tsx";
 import { ProfilePostList } from "./profile-post-list.tsx";
+import { UserProfileStatItem } from "./user-profile-stat-item.tsx";
+import {
+	UserProfileTab,
+	UserProfileTabContent,
+	UserProfileTabList,
+	UserProfileTabTrigger,
+} from "./user-profile-tab.tsx";
 
 const numberFormatter = new Intl.NumberFormat("en-US", { notation: "compact" });
 const joinedDateFormatter = new Intl.DateTimeFormat("en-US", {
@@ -90,8 +95,8 @@ export function ProfileView({ username }: ProfileViewProps) {
 				</AppHeaderLeftPart>
 			</AppHeader>
 
-			<section className="border-x rounded-t-xl overflow-hidden pb-6">
-				<div className="h-48 overflow-hidden bg-gradient-to-br from-gray-700 via-sone-500 to-gray-300 sm:h-56">
+			<section className="border-x rounded-t-xl overflow-hidden">
+				<div className="h-48 sm:h-56">
 					{coverPictureSrc ? (
 						<img
 							src={coverPictureSrc}
@@ -147,65 +152,59 @@ export function ProfileView({ username }: ProfileViewProps) {
 					) : null}
 
 					<div className="mt-4 flex flex-wrap gap-5 text-base text-muted-foreground">
-						<span>
-							<strong className="text-foreground">
-								{numberFormatter.format(user.postCount ?? 0)}
-							</strong>{" "}
-							Posts
-						</span>
-						<button
-							type="button"
-							disabled={Boolean(hasBlockRelationship)}
-							onClick={() =>
-								NiceModal.show(ListFollowersModal, {
-									userId: user.id,
-									username: user.username,
-								})
+						<UserProfileStatItem
+							value={numberFormatter.format(user.postCount ?? 0)}
+							label="Posts"
+						/>
+						<UserProfileStatItem
+							value={numberFormatter.format(user.followersCount ?? 0)}
+							label="Followers"
+							onClick={
+								hasBlockRelationship
+									? undefined
+									: () =>
+											NiceModal.show(ListFollowersModal, {
+												userId: user.id,
+												username: user.username,
+											})
 							}
-							className="rounded-sm text-left transition enabled:hover:text-foreground enabled:hover:underline"
-						>
-							<strong className="text-foreground">
-								{numberFormatter.format(user.followersCount ?? 0)}
-							</strong>{" "}
-							Followers
-						</button>
-						<button
-							type="button"
-							disabled={Boolean(hasBlockRelationship)}
-							onClick={() =>
-								NiceModal.show(ListFollowingModal, {
-									userId: user.id,
-									username: user.username,
-								})
+						/>
+						<UserProfileStatItem
+							value={numberFormatter.format(user.followingCount ?? 0)}
+							label="Following"
+							onClick={
+								hasBlockRelationship
+									? undefined
+									: () =>
+											NiceModal.show(ListFollowingModal, {
+												userId: user.id,
+												username: user.username,
+											})
 							}
-							className="rounded-sm text-left transition enabled:hover:text-foreground enabled:hover:underline"
-						>
-							<strong className="text-foreground">
-								{numberFormatter.format(user.followingCount ?? 0)}
-							</strong>{" "}
-							Following
-						</button>
+						/>
 					</div>
 				</div>
 			</section>
 
 			{!hasBlockRelationship ? (
-				<Tabs defaultValue="posts">
-					<TabsList>
-						<TabsTrigger value="posts">Posts</TabsTrigger>
-						<TabsTrigger value="likes">Likes</TabsTrigger>
-						<TabsTrigger value="collections">Collections</TabsTrigger>
-					</TabsList>
-					<TabsContent value="posts">
+				<UserProfileTab defaultValue="posts">
+					<UserProfileTabList>
+						<UserProfileTabTrigger value="posts">
+							<RiMenu5Line className="size-5" />
+							Posts
+						</UserProfileTabTrigger>
+						<UserProfileTabTrigger value="likes">
+							<RiHeartLine className="size-5" />
+							Likes
+						</UserProfileTabTrigger>
+					</UserProfileTabList>
+					<UserProfileTabContent value="posts">
 						<ProfilePostList userId={user.id} type="posts" />
-					</TabsContent>
-					<TabsContent value="likes">
+					</UserProfileTabContent>
+					<UserProfileTabContent value="likes">
 						<ProfilePostList userId={user.id} type="likes" />
-					</TabsContent>
-					<TabsContent value="collections">
-						<ProfileCollections userId={user.id} />
-					</TabsContent>
-				</Tabs>
+					</UserProfileTabContent>
+				</UserProfileTab>
 			) : null}
 		</div>
 	);
