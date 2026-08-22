@@ -105,7 +105,6 @@ function UserProfileView({ user }: UserProfileViewProps) {
 								onClick={() =>
 									NiceModal.show(ListFollowersModal, {
 										userId: user.id,
-										username: user.username,
 									})
 								}
 							/>
@@ -115,7 +114,6 @@ function UserProfileView({ user }: UserProfileViewProps) {
 								onClick={() =>
 									NiceModal.show(ListFollowingModal, {
 										userId: user.id,
-										username: user.username,
 									})
 								}
 							/>

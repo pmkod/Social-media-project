@@ -227,7 +227,7 @@ const EditProfileModal = create(({ user }: EditProfileModalProps) => {
 			}}
 		>
 			<DialogContent size="xl">
-				<DialogHeader className="shrink-0 border-b border-border px-5 py-4 pr-14">
+				<DialogHeader>
 					<DialogTitle>Edit profile</DialogTitle>
 					<DialogDescription />
 				</DialogHeader>

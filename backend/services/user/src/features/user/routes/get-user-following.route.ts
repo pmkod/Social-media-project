@@ -3,24 +3,7 @@ import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import type { Prisma } from "@/generated/prisma/client";
-import { getBlockRelationships } from "../services/get-block-relationships.service";
-import { getFollowedUserIds } from "../services/get-followed-user-ids.service";
-import {
-	profileMediaSelect,
-	serializeProfileMedia,
-} from "../services/profile-media.service";
 import { UserRoutesTag } from "../user.constants";
-
-const connectionUserSelect = {
-	id: true,
-	username: true,
-	fullName: true,
-	bio: true,
-	...profileMediaSelect,
-	followersCount: true,
-	followingCount: true,
-	createdAt: true,
-} satisfies Prisma.UserSelect;
 
 const routeDef = createRoute({
 	method: "get",
@@ -61,21 +44,9 @@ const getUserFollowingRoute = defineOpenAPIRoute<
 		if (!userExists) {
 			return c.json({ message: "User not found" }, HttpStatus.NOT_FOUND.code);
 		}
+
 		const authenticatedUser = c.get("authenticatedUser");
 		const authenticatedUserId = authenticatedUser?.id;
-		const profileBlockRelationships = await getBlockRelationships(
-			authenticatedUserId,
-			[userId],
-		);
-		if (
-			profileBlockRelationships.blockedByAuthenticatedUserIds.has(userId) ||
-			profileBlockRelationships.hasBlockedAuthenticatedUserIds.has(userId)
-		) {
-			return c.json({
-				users: [],
-				pagination: { nextCursor: null, hasNextPage: false, limit },
-			});
-		}
 
 		const cursorDate = query.cursorCreatedAt
 			? new Date(query.cursorCreatedAt)
@@ -84,6 +55,7 @@ const getUserFollowingRoute = defineOpenAPIRoute<
 			cursorDate !== null &&
 			!Number.isNaN(cursorDate.getTime()) &&
 			query.cursorId;
+
 		const cursorCondition: Prisma.FollowWhereInput | undefined = hasValidCursor
 			? {
 					OR: [
@@ -99,7 +71,6 @@ const getUserFollowingRoute = defineOpenAPIRoute<
 		const connections = await prisma.follow.findMany({
 			where: {
 				followerId: userId,
-				following: { active: true },
 				...cursorCondition,
 			},
 			orderBy: [{ createdAt: "desc" }, { id: "desc" }],
@@ -107,7 +78,20 @@ const getUserFollowingRoute = defineOpenAPIRoute<
 			select: {
 				id: true,
 				createdAt: true,
-				following: { select: connectionUserSelect },
+				following: {
+					select: {
+						id: true,
+						username: true,
+						fullName: true,
+						lowQualityProfilePictureFile: {
+							select: { id: true, filename: true },
+						},
+						bestQualityProfilePictureFile: {
+							select: { id: true, filename: true },
+						},
+						createdAt: true,
+					},
+				},
 			},
 		});
 
@@ -115,26 +99,33 @@ const getUserFollowingRoute = defineOpenAPIRoute<
 		const items = hasNextPage ? connections.slice(0, limit) : connections;
 		const lastItem = items.at(-1);
 		const listedUserIds = items.map((connection) => connection.following.id);
-		const [followedUserIds, blockRelationships] = await Promise.all([
-			getFollowedUserIds(authenticatedUserId, listedUserIds),
-			getBlockRelationships(authenticatedUserId, listedUserIds),
-		]);
+
+		const idsOfUsersAuthenticatedUserFollow: string[] = [];
+
+		if (listedUserIds.length > 0) {
+			const follows = await prisma.follow.findMany({
+				where: {
+					followerId: authenticatedUserId,
+					followingId: { in: listedUserIds },
+				},
+				select: { followingId: true },
+			});
+			idsOfUsersAuthenticatedUserFollow.push(
+				...follows.map((follow) => follow.followingId),
+			);
+			console.log(idsOfUsersAuthenticatedUserFollow);
+		}
+
+		const usersToSend = items.map((connection) => ({
+			...connection.following,
+			isFollowedByAuthenticatedUser:
+				idsOfUsersAuthenticatedUserFollow.length > 0
+					? idsOfUsersAuthenticatedUserFollow.includes(connection.following.id)
+					: false,
+		}));
 
 		return c.json({
-			users: items.map((connection) => ({
-				...serializeProfileMedia(connection.following),
-				isFollowedByAuthenticatedUser: followedUserIds.has(
-					connection.following.id,
-				),
-				isBlockedByAuthenticatedUser:
-					blockRelationships.blockedByAuthenticatedUserIds.has(
-						connection.following.id,
-					),
-				hasBlockedAuthenticatedInUser:
-					blockRelationships.hasBlockedAuthenticatedUserIds.has(
-						connection.following.id,
-					),
-			})),
+			users: usersToSend,
 			pagination: {
 				nextCursor:
 					hasNextPage && lastItem

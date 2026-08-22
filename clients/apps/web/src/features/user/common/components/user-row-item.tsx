@@ -1,3 +1,4 @@
+import type { MouseEventHandler } from "react";
 import { cn } from "@/core/lib/utils.ts";
 import { UserProfileHoverCard } from "../../user-profile/user-profile-hover-card.tsx";
 import { FollowButton } from "../follow-button.tsx";
@@ -7,9 +8,10 @@ import { UserAvatar } from "./user-avatar.tsx";
 
 type UserRowItemProps = {
 	user: User;
+	onClick?: MouseEventHandler<HTMLAnchorElement>;
 };
 
-function UserRowItem({ user }: UserRowItemProps) {
+function UserRowItem({ user, onClick }: UserRowItemProps) {
 	return (
 		<UserProfileLink
 			type="button"
@@ -17,7 +19,10 @@ function UserRowItem({ user }: UserRowItemProps) {
 				"flex items-center w-full justify-between gap-3 px-6 py-3 transition-colors hover:bg-gray-100/80 cursor-pointer",
 			)}
 			user={user}
-			onClick={(e) => e.stopPropagation()}
+			onClick={(e) => {
+				e.stopPropagation();
+				onClick?.(e);
+			}}
 		>
 			<div className="flex items-center justify-start gap-2.5">
 				<UserProfileHoverCard user={user}>
