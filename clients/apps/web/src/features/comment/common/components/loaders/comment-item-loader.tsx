@@ -18,17 +18,16 @@ function CommentItemLoader({
 		<article
 			className={cn(
 				"flex gap-3",
-				compact ? "px-2 py-2" : "px-4 py-4 border-b border-border",
+				compact
+					? "px-2 py-2"
+					: "px-4 py-4 border-b border-border last:border-b-0",
 				isReply && "border-b-0 py-3 pr-0",
 				className,
 			)}
 		>
 			{/* Avatar Skeleton */}
 			<Skeleton
-				className={cn(
-					"rounded-full shrink-0",
-					isReply ? "size-8" : "size-10",
-				)}
+				className={cn("rounded-full shrink-0", isReply ? "size-8" : "size-10")}
 			/>
 
 			{/* Content Container */}
