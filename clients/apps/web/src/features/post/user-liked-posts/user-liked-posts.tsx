@@ -2,22 +2,18 @@ import { useEffect } from "react";
 import { EmptyBlock } from "@/core/components/ui/empty-block.tsx";
 import { ExceptionBlock } from "@/core/components/ui/exception-block.tsx";
 import { useIntersectionObserver } from "@/core/hooks/use-intersection-observer.ts";
-import { PostListLoader } from "@/features/post/common/components/loaders";
-import { PostItem } from "@/features/post/common/post-item.tsx";
-import {
-	type ProfilePostListType,
-	useUserProfilePosts,
-} from "@/features/user/user-profile-posts/use-user-profile-posts.ts";
+import { PostListLoader } from "../common/components/loaders";
+import { PostItem } from "../common/post-item.tsx";
+import { useUserLikedPosts } from "./use-user-liked-posts.ts";
 
-type ProfilePostListProps = {
+type UserLikedPostsProps = {
 	userId?: string;
-	type: ProfilePostListType;
 };
 
-export function ProfilePostList({ userId, type }: ProfilePostListProps) {
+export function UserLikedPosts({ userId }: UserLikedPostsProps) {
 	const userIdToSend = userId || "";
 
-	const query = useUserProfilePosts({ userId: userIdToSend, type });
+	const query = useUserLikedPosts({ userId: userIdToSend });
 	const { ref: observerTargetRef, isIntersecting: isTargetIntersecting } =
 		useIntersectionObserver({ rootMargin: "100px" });
 
@@ -37,7 +33,7 @@ export function ProfilePostList({ userId, type }: ProfilePostListProps) {
 	if (query.isError) {
 		return (
 			<ExceptionBlock
-				title="Unable to load posts"
+				title="Unable to load liked posts"
 				description="An error occurred while loading this list."
 				onRefresh={() => void query.refetch()}
 				isRefetching={query.isRefetching}
@@ -50,12 +46,8 @@ export function ProfilePostList({ userId, type }: ProfilePostListProps) {
 	if (posts.length === 0) {
 		return (
 			<EmptyBlock
-				title={type === "posts" ? "No posts yet" : "No liked posts"}
-				description={
-					type === "posts"
-						? "Posts by this user will appear here."
-						: "Liked posts will appear here."
-				}
+				title="No liked posts"
+				description="Liked posts will appear here."
 				borderless
 			/>
 		);

@@ -8,7 +8,8 @@ import {
 } from "@/core/components/ui/app-header.tsx";
 import { ExceptionBlock } from "@/core/components/ui/exception-block";
 import { MainContainer } from "@/core/components/ui/main-container";
-import { ProfilePostList } from "@/features/user/user-profile/profile-post-list";
+import { UserLikedPosts } from "@/features/post/user-liked-posts/user-liked-posts";
+import { UserPosts } from "@/features/post/user-posts/user-posts";
 import { UserProfileView } from "@/features/user/user-profile/profile-view";
 import { useUserProfile } from "@/features/user/user-profile/use-user-profile.ts";
 import {
@@ -77,10 +78,10 @@ function ProfilePage() {
 					) : null}
 
 					<UserProfileTabContent value="posts">
-						<ProfilePostList userId={profileQuery.data?.user.id} type="posts" />
+						<UserPosts userId={profileQuery.data?.user.id} />
 					</UserProfileTabContent>
 					<UserProfileTabContent value="likes">
-						<ProfilePostList userId={profileQuery.data?.user.id} type="likes" />
+						<UserLikedPosts userId={profileQuery.data?.user.id} />
 					</UserProfileTabContent>
 				</UserProfileTab>
 			)}
