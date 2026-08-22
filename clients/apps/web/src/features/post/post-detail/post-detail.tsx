@@ -1,13 +1,14 @@
-import { RiArrowLeftLine, RiLoader4Line } from "@remixicon/react";
+import { RiArrowLeftLine } from "@remixicon/react";
 import { Link } from "@tanstack/react-router";
+import { useEffect } from "react";
 import {
 	AppHeader,
 	AppHeaderGoBackButton,
 	AppHeaderLeftPart,
 	AppHeaderTitle,
 } from "@/core/components/ui/app-header.tsx";
-import { Button } from "@/core/components/ui/button.tsx";
 import { EmptyBlock } from "@/core/components/ui/empty-block.tsx";
+import { useIntersectionObserver } from "@/core/hooks/use-intersection-observer.ts";
 import {
 	CommentItem,
 	CommentListLoader,
@@ -29,9 +30,19 @@ export function PostDetail({ postId, autoFocusComment }: PostDetailProps) {
 		data: commentsData,
 		fetchNextPage,
 		hasNextPage,
-		isFetchingNextPage,
+		isFetching,
 		isLoading: isCommentsLoading,
 	} = useComments({ postId, enabled: Boolean(post) });
+	const {
+		ref: commentsObserverTargetRef,
+		isIntersecting: isCommentsTargetIntersecting,
+	} = useIntersectionObserver({ rootMargin: "100px" });
+
+	useEffect(() => {
+		if (!isCommentsTargetIntersecting || !hasNextPage || isFetching) return;
+
+		fetchNextPage();
+	}, [isCommentsTargetIntersecting, hasNextPage, isFetching, fetchNextPage]);
 
 	if (isLoading) {
 		return <PostItemLoader hasMedia={true} />;
@@ -53,8 +64,6 @@ export function PostDetail({ postId, autoFocusComment }: PostDetailProps) {
 			</div>
 		);
 	}
-
-	const commentsCount = post.commentsCount ?? 0;
 
 	const allComments = commentsData?.pages.flatMap((page) => page.data) ?? [];
 
@@ -92,21 +101,8 @@ export function PostDetail({ postId, autoFocusComment }: PostDetailProps) {
 						))}
 
 						{hasNextPage ? (
-							<div className="p-4 flex justify-center">
-								<Button
-									type="button"
-									variant="outline"
-									size="sm"
-									onClick={() => fetchNextPage()}
-									disabled={isFetchingNextPage}
-								>
-									{isFetchingNextPage ? (
-										<RiLoader4Line className="h-4 w-4 animate-spin" />
-									) : null}
-									<span>
-										{isFetchingNextPage ? "Loading..." : "View more comments"}
-									</span>
-								</Button>
+							<div ref={commentsObserverTargetRef} className="p-4">
+								<CommentListLoader count={2} />
 							</div>
 						) : null}
 					</div>

@@ -1,43 +1,30 @@
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { EmptyBlock } from "@/core/components/ui/empty-block.tsx";
 import { ExceptionBlock } from "@/core/components/ui/exception-block.tsx";
+import { useIntersectionObserver } from "@/core/hooks/use-intersection-observer.ts";
 import { PostListLoader } from "../common/components/loaders";
 import { PostItem } from "../common/post-item";
 import { useFollowingFeed } from "./use-following-feed";
 
 export function Feed() {
-	const observerTargetRef = useRef<HTMLDivElement>(null);
-
 	const {
 		data,
 		fetchNextPage,
 		hasNextPage,
-		isFetchingNextPage,
+		isFetching,
 		isLoading,
 		isError,
 		refetch,
 		isRefetching,
 	} = useFollowingFeed();
+	const { ref: observerTargetRef, isIntersecting: isTargetIntersecting } =
+		useIntersectionObserver({ rootMargin: "100px" });
 
 	useEffect(() => {
-		const target = observerTargetRef.current;
-		if (!target) return;
+		if (!isTargetIntersecting || !hasNextPage || isFetching) return;
 
-		const observer = new IntersectionObserver(
-			(entries) => {
-				if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
-					fetchNextPage();
-				}
-			},
-			{ threshold: 0.1 },
-		);
-
-		observer.observe(target);
-
-		return () => {
-			observer.disconnect();
-		};
-	}, [hasNextPage, isFetchingNextPage, fetchNextPage]);
+		fetchNextPage();
+	}, [isTargetIntersecting, hasNextPage, isFetching, fetchNextPage]);
 
 	const allPosts = data?.pages.flatMap((page) => page.posts) ?? [];
 
@@ -67,9 +54,11 @@ export function Feed() {
 						<PostItem key={post.id} post={post} />
 					))}
 
-					<div ref={observerTargetRef}>
-						<PostListLoader count={2} />
-					</div>
+					{hasNextPage ? (
+						<div ref={observerTargetRef}>
+							<PostListLoader count={2} />
+						</div>
+					) : null}
 				</div>
 			)}
 		</div>

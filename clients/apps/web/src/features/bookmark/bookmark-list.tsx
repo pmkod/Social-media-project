@@ -7,10 +7,11 @@ import {
 	RiLoader4Line,
 	RiLockLine,
 } from "@remixicon/react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/core/components/ui/button.tsx";
 import { EmptyBlock } from "@/core/components/ui/empty-block.tsx";
 import { ExceptionBlock } from "@/core/components/ui/exception-block.tsx";
+import { useIntersectionObserver } from "@/core/hooks/use-intersection-observer.ts";
 import { PostListLoader } from "@/features/post/common/components/loaders";
 import { PostItem } from "@/features/post/common/post-item.tsx";
 import type { BookmarkCollection } from "./common/bookmark-collection.ts";
@@ -67,7 +68,6 @@ export function BookmarkList() {
 	const [name, setName] = useState("");
 	const [description, setDescription] = useState("");
 	const [isPublic, setIsPublic] = useState(false);
-	const observerTargetRef = useRef<HTMLDivElement>(null);
 	const collectionsQuery = useBookmarkCollections();
 	const bookmarksQuery = useBookmarks({ collectionId: selectedCollectionId });
 	const createCollection = useCreateBookmarkCollection();
@@ -79,28 +79,23 @@ export function BookmarkList() {
 		(collection) => collection.id === selectedCollectionId,
 	);
 	const posts = bookmarksQuery.data?.pages.flatMap((page) => page.posts) ?? [];
+	const { ref: observerTargetRef, isIntersecting: isTargetIntersecting } =
+		useIntersectionObserver({ rootMargin: "100px" });
 
 	useEffect(() => {
-		const target = observerTargetRef.current;
-		if (!target) return;
-		const observer = new IntersectionObserver(
-			([entry]) => {
-				if (
-					entry.isIntersecting &&
-					bookmarksQuery.hasNextPage &&
-					!bookmarksQuery.isFetchingNextPage
-				) {
-					bookmarksQuery.fetchNextPage();
-				}
-			},
-			{ rootMargin: "300px" },
-		);
-		observer.observe(target);
-		return () => observer.disconnect();
+		if (
+			!isTargetIntersecting ||
+			!bookmarksQuery.hasNextPage ||
+			bookmarksQuery.isFetching
+		)
+			return;
+
+		bookmarksQuery.fetchNextPage();
 	}, [
+		isTargetIntersecting,
 		bookmarksQuery.fetchNextPage,
 		bookmarksQuery.hasNextPage,
-		bookmarksQuery.isFetchingNextPage,
+		bookmarksQuery.isFetching,
 	]);
 
 	const handleCreateCollection = (event: React.FormEvent) => {

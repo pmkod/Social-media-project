@@ -1,6 +1,7 @@
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { EmptyBlock } from "@/core/components/ui/empty-block.tsx";
 import { ExceptionBlock } from "@/core/components/ui/exception-block.tsx";
+import { useIntersectionObserver } from "@/core/hooks/use-intersection-observer.ts";
 import { PostListLoader } from "@/features/post/common/components/loaders";
 import { PostItem } from "@/features/post/common/post-item.tsx";
 import {
@@ -16,27 +17,20 @@ type ProfilePostListProps = {
 export function ProfilePostList({ userId, type }: ProfilePostListProps) {
 	const userIdToSend = userId || "";
 
-	const observerTargetRef = useRef<HTMLDivElement>(null);
 	const query = useUserProfilePosts({ userId: userIdToSend, type });
+	const { ref: observerTargetRef, isIntersecting: isTargetIntersecting } =
+		useIntersectionObserver({ rootMargin: "100px" });
 
 	useEffect(() => {
-		const target = observerTargetRef.current;
-		if (!target) return;
-		const observer = new IntersectionObserver(
-			([entry]) => {
-				if (
-					entry.isIntersecting &&
-					query.hasNextPage &&
-					!query.isFetchingNextPage
-				) {
-					query.fetchNextPage();
-				}
-			},
-			{ rootMargin: "300px" },
-		);
-		observer.observe(target);
-		return () => observer.disconnect();
-	}, [query.fetchNextPage, query.hasNextPage, query.isFetchingNextPage]);
+		if (!isTargetIntersecting || !query.hasNextPage || query.isFetching) return;
+
+		query.fetchNextPage();
+	}, [
+		isTargetIntersecting,
+		query.fetchNextPage,
+		query.hasNextPage,
+		query.isFetching,
+	]);
 
 	if (query.isLoading || query.isPending)
 		return <PostListLoader roundedTopOnFirstItem={false} />;

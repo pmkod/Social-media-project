@@ -1,6 +1,6 @@
 import { RiChat3Line, RiHeartFill, RiHeartLine } from "@remixicon/react";
-import { useState } from "react";
-import { Button } from "@/core/components/ui/button.tsx";
+import { useEffect, useState } from "react";
+import { useIntersectionObserver } from "@/core/hooks/use-intersection-observer.ts";
 import { cn } from "@/core/lib/utils.ts";
 import { formatCommentCreationDate } from "@/features/post/common/post.utils.ts";
 import { UserAvatar } from "@/features/user/common/components/user-avatar.tsx";
@@ -33,6 +33,28 @@ export function CommentItem({
 		commentId: rootCommentId,
 		enabled: !compact && !isReply && areRepliesExpanded,
 	});
+	const {
+		ref: repliesObserverTargetRef,
+		isIntersecting: isRepliesTargetIntersecting,
+	} = useIntersectionObserver({ rootMargin: "100px" });
+
+	useEffect(() => {
+		if (
+			!areRepliesExpanded ||
+			!isRepliesTargetIntersecting ||
+			!repliesQuery.hasNextPage ||
+			repliesQuery.isFetching
+		)
+			return;
+
+		repliesQuery.fetchNextPage();
+	}, [
+		areRepliesExpanded,
+		isRepliesTargetIntersecting,
+		repliesQuery.hasNextPage,
+		repliesQuery.isFetching,
+		repliesQuery.fetchNextPage,
+	]);
 
 	const isLiked = comment.isLikedByAuthenticatedUser ?? false;
 	const replies = areRepliesExpanded
@@ -158,15 +180,9 @@ export function CommentItem({
 							<CommentItem key={reply.id} comment={reply} isReply />
 						))}
 						{areRepliesExpanded && repliesQuery.hasNextPage ? (
-							<Button
-								type="button"
-								variant="ghost"
-								size="sm"
-								onClick={() => repliesQuery.fetchNextPage()}
-								disabled={repliesQuery.isFetchingNextPage}
-							>
-								View more replies
-							</Button>
+							<div ref={repliesObserverTargetRef}>
+								<CommentItemLoader isReply contentLines={1} />
+							</div>
 						) : null}
 					</div>
 				) : null}

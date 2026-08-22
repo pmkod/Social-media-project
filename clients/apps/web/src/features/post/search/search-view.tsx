@@ -1,7 +1,8 @@
 import { RiLoader4Line, RiSearchLine } from "@remixicon/react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { EmptyBlock } from "@/core/components/ui/empty-block.tsx";
 import { ExceptionBlock } from "@/core/components/ui/exception-block.tsx";
+import { useIntersectionObserver } from "@/core/hooks/use-intersection-observer.ts";
 import { PostListLoader } from "../common/components/loaders";
 import { PostItem } from "../common/post-item.tsx";
 import { useSearchPosts } from "./use-search-posts.ts";
@@ -20,33 +21,24 @@ const useDebouncedValue = (value: string, delay: number) => {
 export function SearchView() {
 	const [search, setSearch] = useState("");
 	const debouncedSearch = useDebouncedValue(search.trim(), 350);
-	const observerTargetRef = useRef<HTMLDivElement>(null);
 	const {
 		data,
 		fetchNextPage,
 		hasNextPage,
-		isFetchingNextPage,
+		isFetching,
 		isLoading,
 		isError,
 		refetch,
 		isRefetching,
 	} = useSearchPosts({ query: debouncedSearch });
+	const { ref: observerTargetRef, isIntersecting: isTargetIntersecting } =
+		useIntersectionObserver({ rootMargin: "100px" });
 
 	useEffect(() => {
-		const target = observerTargetRef.current;
-		if (!target) return;
+		if (!isTargetIntersecting || !hasNextPage || isFetching) return;
 
-		const observer = new IntersectionObserver(
-			([entry]) => {
-				if (entry.isIntersecting && hasNextPage && !isFetchingNextPage) {
-					fetchNextPage();
-				}
-			},
-			{ rootMargin: "300px" },
-		);
-		observer.observe(target);
-		return () => observer.disconnect();
-	}, [fetchNextPage, hasNextPage, isFetchingNextPage]);
+		fetchNextPage();
+	}, [isTargetIntersecting, hasNextPage, isFetching, fetchNextPage]);
 
 	const posts = data?.pages.flatMap((page) => page.posts) ?? [];
 
@@ -93,7 +85,7 @@ export function SearchView() {
 					))}
 					<div ref={observerTargetRef} className="min-h-1">
 						{hasNextPage ? (
-							<PostListLoader count={isFetchingNextPage ? 2 : 1} />
+							<PostListLoader count={2} />
 						) : (
 							<div className="flex items-center justify-center gap-2 py-8 text-xs text-muted-foreground">
 								<RiLoader4Line className="hidden size-4 animate-spin" />
