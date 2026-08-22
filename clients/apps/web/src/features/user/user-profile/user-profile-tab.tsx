@@ -1,5 +1,6 @@
 import { Tabs as TabsPrimitive } from "radix-ui";
 import type * as React from "react";
+import { Skeleton } from "@/core/components/ui/skeleton.tsx";
 import { cn } from "@/core/lib/utils.ts";
 
 function UserProfileTab({
@@ -25,6 +26,24 @@ function UserProfileTabList({
 			className={cn("flex w-full border-border border-x text-xl", className)}
 			{...props}
 		/>
+	);
+}
+
+function UserProfileTabListLoader() {
+	return (
+		<div
+			className="flex w-full border-border border-x text-xl"
+			aria-busy="true"
+		>
+			<div className="relative flex flex-1 items-center justify-center gap-x-1.5 px-3 py-3">
+				<Skeleton className="size-5" />
+				<Skeleton className="h-5 w-14" />
+			</div>
+			<div className="relative flex flex-1 items-center justify-center gap-x-1.5 px-3 py-3">
+				<Skeleton className="size-5" />
+				<Skeleton className="h-5 w-12" />
+			</div>
+		</div>
 	);
 }
 
@@ -61,5 +80,6 @@ export {
 	UserProfileTab,
 	UserProfileTabContent,
 	UserProfileTabList,
+	UserProfileTabListLoader,
 	UserProfileTabTrigger,
 };

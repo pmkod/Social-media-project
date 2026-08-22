@@ -9,13 +9,15 @@ import {
 } from "@/features/user/user-profile-posts/use-user-profile-posts.ts";
 
 type ProfilePostListProps = {
-	userId: string;
+	userId?: string;
 	type: ProfilePostListType;
 };
 
 export function ProfilePostList({ userId, type }: ProfilePostListProps) {
+	const userIdToSend = userId || "";
+
 	const observerTargetRef = useRef<HTMLDivElement>(null);
-	const query = useUserProfilePosts({ userId, type });
+	const query = useUserProfilePosts({ userId: userIdToSend, type });
 
 	useEffect(() => {
 		const target = observerTargetRef.current;
@@ -36,7 +38,8 @@ export function ProfilePostList({ userId, type }: ProfilePostListProps) {
 		return () => observer.disconnect();
 	}, [query.fetchNextPage, query.hasNextPage, query.isFetchingNextPage]);
 
-	if (true) return <PostListLoader roundedTopOnFirstItem={false} />;
+	if (query.isLoading || query.isPending)
+		return <PostListLoader roundedTopOnFirstItem={false} />;
 	if (query.isError) {
 		return (
 			<ExceptionBlock
