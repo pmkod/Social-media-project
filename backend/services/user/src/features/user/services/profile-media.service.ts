@@ -1,11 +1,10 @@
-import { getPublicFileUrl } from "@/core/services/storage.service";
 import type { Prisma } from "@/generated/prisma/client";
 
 const profileMediaSelect = {
-	lowQualityProfilePictureFile: { select: { filename: true } },
-	bestQualityProfilePictureFile: { select: { filename: true } },
-	lowQualityCoverPictureFile: { select: { filename: true } },
-	bestQualityCoverPictureFile: { select: { filename: true } },
+	lowQualityProfilePictureFile: { select: { id: true, filename: true } },
+	bestQualityProfilePictureFile: { select: { id: true, filename: true } },
+	lowQualityCoverPictureFile: { select: { id: true, filename: true } },
+	bestQualityCoverPictureFile: { select: { id: true, filename: true } },
 } satisfies Prisma.UserSelect;
 
 type UserWithProfileMedia = Prisma.UserGetPayload<{
@@ -23,17 +22,29 @@ const serializeProfileMedia = <T extends UserWithProfileMedia>(user: T) => {
 
 	return {
 		...userWithoutFiles,
-		profilePictureUrl: bestQualityProfilePictureFile
-			? getPublicFileUrl(bestQualityProfilePictureFile.filename)
+		lowQualityProfilePictureFile: lowQualityProfilePictureFile
+			? {
+					id: lowQualityProfilePictureFile.id,
+					name: lowQualityProfilePictureFile.filename,
+				}
 			: null,
-		lowQualityProfilePictureUrl: lowQualityProfilePictureFile
-			? getPublicFileUrl(lowQualityProfilePictureFile.filename)
+		bestQualityProfilePictureFile: bestQualityProfilePictureFile
+			? {
+					id: bestQualityProfilePictureFile.id,
+					name: bestQualityProfilePictureFile.filename,
+				}
 			: null,
-		coverPictureUrl: bestQualityCoverPictureFile
-			? getPublicFileUrl(bestQualityCoverPictureFile.filename)
+		lowQualityCoverPictureFile: lowQualityCoverPictureFile
+			? {
+					id: lowQualityCoverPictureFile.id,
+					name: lowQualityCoverPictureFile.filename,
+				}
 			: null,
-		lowQualityCoverPictureUrl: lowQualityCoverPictureFile
-			? getPublicFileUrl(lowQualityCoverPictureFile.filename)
+		bestQualityCoverPictureFile: bestQualityCoverPictureFile
+			? {
+					id: bestQualityCoverPictureFile.id,
+					name: bestQualityCoverPictureFile.filename,
+				}
 			: null,
 	};
 };

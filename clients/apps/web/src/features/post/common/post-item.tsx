@@ -13,7 +13,6 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { cn } from "@/core/lib/utils.ts";
 import { useAddBookmark } from "@/features/bookmark/use-add-bookmark.ts";
 import { useRemoveBookmark } from "@/features/bookmark/use-remove-bookmark.ts";
-import { CommentItem } from "@/features/comment";
 import { UserAvatar } from "@/features/user/common/components/user-avatar.tsx";
 import { UserProfileLink } from "@/features/user/common/user-profile-link.tsx";
 import { UserProfileHoverCard } from "@/features/user/get-profile/user-profile-hover-card.tsx";
@@ -243,11 +242,7 @@ export function PostItem({ post }: PostItemProps) {
 						user={post.author}
 						onClick={(e) => e.stopPropagation()}
 					>
-						<UserAvatar
-							user={post.author}
-							size="lg"
-							className="ring-1 ring-border"
-						/>
+						<UserAvatar user={post.author} size="lg" />
 					</UserProfileLink>
 				</UserProfileHoverCard>
 

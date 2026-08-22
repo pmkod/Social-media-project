@@ -1,14 +1,19 @@
 import { Configurations } from "../configurations";
 
+type UserProfileFileDto = {
+	id: string;
+	name: string;
+};
+
 export type UserProfileDto = {
 	id: string;
 	username: string;
 	fullName?: string | null;
 	bio?: string | null;
-	profilePictureUrl?: string | null;
-	lowQualityProfilePictureUrl?: string | null;
-	coverPictureUrl?: string | null;
-	lowQualityCoverPictureUrl?: string | null;
+	lowQualityProfilePictureFile?: UserProfileFileDto | null;
+	bestQualityProfilePictureFile?: UserProfileFileDto | null;
+	lowQualityCoverPictureFile?: UserProfileFileDto | null;
+	bestQualityCoverPictureFile?: UserProfileFileDto | null;
 	postCount?: number;
 	followersCount?: number;
 	followingCount?: number;

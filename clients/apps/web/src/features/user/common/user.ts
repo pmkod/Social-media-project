@@ -4,10 +4,10 @@ type User = {
 	username: string;
 	email?: string;
 	bio?: string | null;
-	profilePictureUrl?: string | null;
-	lowQualityProfilePictureUrl?: string | null;
-	coverPictureUrl?: string | null;
-	lowQualityCoverPictureUrl?: string | null;
+	lowQualityProfilePictureFile?: UserProfileMediaFile | null;
+	bestQualityProfilePictureFile?: UserProfileMediaFile | null;
+	lowQualityCoverPictureFile?: UserProfileMediaFile | null;
+	bestQualityCoverPictureFile?: UserProfileMediaFile | null;
 	postCount?: number;
 	followersCount?: number;
 	followingCount?: number;
@@ -15,6 +15,11 @@ type User = {
 	isFollowedByAuthenticatedUser?: boolean;
 	isBlockedByAuthenticatedUser?: boolean;
 	hasBlockedAuthenticatedInUser?: boolean;
+};
+
+type UserProfileMediaFile = {
+	id: string;
+	name: string;
 };
 
 export type { User };

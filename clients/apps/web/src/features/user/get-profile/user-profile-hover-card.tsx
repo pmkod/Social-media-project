@@ -94,11 +94,7 @@ function UserProfilePreview({ user }: UserProfilePreviewProps) {
 		<div>
 			<div className="flex items-start justify-between gap-3">
 				<div className="shrink-0">
-					<UserAvatar
-						user={user}
-						size="xl"
-						className="border-2 border-background shadow-sm ring-1 ring-border"
-					/>
+					<UserAvatar user={user} size="xl" />
 				</div>
 
 				{isOwnProfile ? null : !user.isBlockedByAuthenticatedUser &&

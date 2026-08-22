@@ -1,9 +1,14 @@
-import { RiImageAddLine, RiUser3Line } from "@remixicon/react";
+import {
+	RiDeleteBinLine,
+	RiEdit2Line,
+	RiImageAddLine,
+	RiUser3Line,
+} from "@remixicon/react";
 import { useForm, useSelector } from "@tanstack/react-form";
 import { useNavigate } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { type ReactNode, useEffect, useState } from "react";
 import { z } from "zod";
-import { Button } from "@/core/components/ui/button.tsx";
+import { Button, type ButtonProps } from "@/core/components/ui/button.tsx";
 import {
 	Dialog,
 	DialogBody,
@@ -22,6 +27,8 @@ import {
 import { Input } from "@/core/components/ui/input.tsx";
 import { create, useModal } from "@/core/components/ui/nice-modal.tsx";
 import { Textarea } from "@/core/components/ui/textarea.tsx";
+import { cn } from "@/core/lib/utils.ts";
+import { buildImageUrl } from "@/features/post/post-media.functions.ts";
 import type { User } from "@/features/user/common/user.ts";
 import { useUpdateProfile } from "./use-update-profile.ts";
 
@@ -58,6 +65,8 @@ const editProfileSchema = z.object({
 	bio: z.string().max(280, "Bio cannot contain more than 280 characters."),
 	profilePicture: profilePictureSchema,
 	coverPicture: coverPictureSchema,
+	removeProfilePicture: z.boolean(),
+	removeCoverPicture: z.boolean(),
 });
 
 const useFilePreview = (file: File | undefined, fallback: string | null) => {
@@ -83,11 +92,42 @@ type EditProfileFormValues = {
 	bio: string;
 	profilePicture: File | undefined;
 	coverPicture: File | undefined;
+	removeProfilePicture: boolean;
+	removeCoverPicture: boolean;
 };
 
 type EditProfileModalProps = {
 	user: User;
 };
+
+type PhotoActionButtonProps = Omit<ButtonProps, "children"> & {
+	children: ReactNode;
+	label: string;
+};
+
+const PhotoActionButton = ({
+	children,
+	className,
+	label,
+	...props
+}: PhotoActionButtonProps) => (
+	<Button
+		type="button"
+		variant="secondary"
+		colorScheme="white"
+		size="icon-sm"
+		className={cn(
+			"border border-white/20 bg-black/55 shadow-md backdrop-blur-sm hover:bg-black/75",
+			className,
+		)}
+		aria-label={label}
+		title={label}
+		{...props}
+	>
+		{children}
+		<span className="sr-only">{label}</span>
+	</Button>
+);
 
 const EditProfileModal = create(({ user }: EditProfileModalProps) => {
 	const modal = useModal();
@@ -102,6 +142,8 @@ const EditProfileModal = create(({ user }: EditProfileModalProps) => {
 			bio: user.bio ?? "",
 			profilePicture: undefined as File | undefined,
 			coverPicture: undefined as File | undefined,
+			removeProfilePicture: false as boolean,
+			removeCoverPicture: false as boolean,
 		} satisfies EditProfileFormValues,
 		validators: {
 			onSubmit: editProfileSchema,
@@ -117,6 +159,8 @@ const EditProfileModal = create(({ user }: EditProfileModalProps) => {
 					bio: value.bio,
 					profilePicture: value.profilePicture,
 					coverPicture: value.coverPicture,
+					removeProfilePicture: value.removeProfilePicture,
+					removeCoverPicture: value.removeCoverPicture,
 				});
 
 				modal.remove();
@@ -142,13 +186,31 @@ const EditProfileModal = create(({ user }: EditProfileModalProps) => {
 		form.store,
 		(state) => state.values.coverPicture,
 	);
+	const removeProfilePicture = useSelector(
+		form.store,
+		(state) => state.values.removeProfilePicture,
+	);
+	const removeCoverPicture = useSelector(
+		form.store,
+		(state) => state.values.removeCoverPicture,
+	);
+	const profilePictureFallbackUrl =
+		buildImageUrl(
+			user.bestQualityProfilePictureFile?.name ??
+				user.lowQualityProfilePictureFile?.name,
+		) || null;
+	const coverPictureFallbackUrl =
+		buildImageUrl(
+			user.bestQualityCoverPictureFile?.name ??
+				user.lowQualityCoverPictureFile?.name,
+		) || null;
 	const profilePreviewUrl = useFilePreview(
 		profilePicture,
-		user.profilePictureUrl ?? user.lowQualityProfilePictureUrl ?? null,
+		removeProfilePicture ? null : profilePictureFallbackUrl,
 	);
 	const coverPreviewUrl = useFilePreview(
 		coverPicture,
-		user.coverPictureUrl ?? user.lowQualityCoverPictureUrl ?? null,
+		removeCoverPicture ? null : coverPictureFallbackUrl,
 	);
 
 	const close = () => {
@@ -181,12 +243,17 @@ const EditProfileModal = create(({ user }: EditProfileModalProps) => {
 				>
 					<DialogBody className="space-y-5 px-5 py-5">
 						<FieldGroup className="gap-5">
-							<form.Field name="coverPicture">
-								{(field) => (
-									<Field data-invalid={!field.state.meta.isValid}>
-										<FieldLabel htmlFor={field.name}>Cover photo</FieldLabel>
-										<div className="space-y-2">
-											<div className="h-32 overflow-hidden rounded-xl border border-border bg-muted">
+							<div className="relative">
+								<form.Field name="coverPicture">
+									{(field) => (
+										<Field
+											className="gap-0"
+											data-invalid={!field.state.meta.isValid}
+										>
+											<FieldLabel className="sr-only" htmlFor={field.name}>
+												Cover photo
+											</FieldLabel>
+											<div className="relative aspect-[2.8] overflow-hidden rounded-xl border border-border bg-muted">
 												{coverPreviewUrl ? (
 													<img
 														src={coverPreviewUrl}
@@ -194,61 +261,108 @@ const EditProfileModal = create(({ user }: EditProfileModalProps) => {
 														className="size-full object-cover"
 													/>
 												) : (
-													<div className="flex size-full items-center justify-center text-sm text-muted-foreground">
-														No cover photo
+													<div className="flex size-full items-center justify-center bg-muted text-sm text-muted-foreground">
+														<RiImageAddLine className="size-8" />
 													</div>
 												)}
+												<div className="absolute inset-0 flex items-center justify-center gap-2">
+													<PhotoActionButton
+														label="Modifier la photo de couverture"
+														disabled={updateProfileMutation.isPending}
+														onClick={() =>
+															document.getElementById(field.name)?.click()
+														}
+													>
+														<RiEdit2Line />
+													</PhotoActionButton>
+													<PhotoActionButton
+														label="Supprimer la photo de couverture"
+														disabled={
+															!coverPreviewUrl ||
+															updateProfileMutation.isPending
+														}
+														onClick={() => {
+															form.setFieldValue("coverPicture", undefined);
+															form.setFieldValue(
+																"removeCoverPicture",
+																Boolean(
+																	user.bestQualityCoverPictureFile ??
+																		user.lowQualityCoverPictureFile,
+																),
+															);
+														}}
+													>
+														<RiDeleteBinLine />
+													</PhotoActionButton>
+												</div>
 											</div>
-											<label
-												htmlFor={field.name}
-												className="inline-flex cursor-pointer items-center gap-1.5 text-xs font-medium text-primary hover:underline"
-											>
-												<RiImageAddLine className="size-4" />
-												Choose cover photo
-											</label>
 											<input
 												id={field.name}
 												type="file"
 												accept={ACCEPTED_IMAGE_TYPES.join(",")}
 												className="sr-only"
 												disabled={updateProfileMutation.isPending}
-												onChange={(event) =>
-													field.handleChange(event.target.files?.[0])
-												}
+												onChange={(event) => {
+													field.handleChange(event.target.files?.[0]);
+													form.setFieldValue("removeCoverPicture", false);
+												}}
 											/>
-										</div>
-										<FieldError errors={field.state.meta.errors} />
-									</Field>
-								)}
-							</form.Field>
+											<FieldError errors={field.state.meta.errors} />
+										</Field>
+									)}
+								</form.Field>
 
-							<form.Field name="profilePicture">
-								{(field) => (
-									<Field data-invalid={!field.state.meta.isValid}>
-										<FieldLabel htmlFor={field.name}>Profile photo</FieldLabel>
-										<div className="flex items-center gap-4">
-											<div className="relative flex size-24 shrink-0 items-center justify-center overflow-hidden rounded-full border border-border bg-muted">
-												{profilePreviewUrl ? (
-													<img
-														src={profilePreviewUrl}
-														alt="Profile preview"
-														className="size-full object-cover"
-													/>
-												) : (
-													<RiUser3Line className="size-8 text-muted-foreground" />
-												)}
-											</div>
-											<div>
-												<label
-													htmlFor={field.name}
-													className="inline-flex cursor-pointer items-center gap-1.5 text-xs font-medium text-primary hover:underline"
-												>
-													<RiImageAddLine className="size-4" />
-													Choose profile photo
-												</label>
-												<p className="mt-1 text-xs text-muted-foreground">
-													JPEG, PNG, WebP or GIF, up to 10 MB.
-												</p>
+								<form.Field name="profilePicture">
+									{(field) => (
+										<Field
+											className="-mt-12 gap-1 px-5"
+											data-invalid={!field.state.meta.isValid}
+										>
+											<FieldLabel className="sr-only" htmlFor={field.name}>
+												Profile photo
+											</FieldLabel>
+											<div className="relative size-24 shrink-0 sm:size-28">
+												<div className="flex size-full items-center justify-center overflow-hidden rounded-full border-4 border-background bg-muted shadow-lg">
+													{profilePreviewUrl ? (
+														<img
+															src={profilePreviewUrl}
+															alt="Profile preview"
+															className="size-full object-cover"
+														/>
+													) : (
+														<RiUser3Line className="size-8 text-muted-foreground" />
+													)}
+												</div>
+												<div className="absolute inset-0 flex items-center justify-center gap-1">
+													<PhotoActionButton
+														label="Modifier la photo de profil"
+														disabled={updateProfileMutation.isPending}
+														onClick={() =>
+															document.getElementById(field.name)?.click()
+														}
+													>
+														<RiEdit2Line />
+													</PhotoActionButton>
+													<PhotoActionButton
+														label="Supprimer la photo de profil"
+														disabled={
+															!profilePreviewUrl ||
+															updateProfileMutation.isPending
+														}
+														onClick={() => {
+															form.setFieldValue("profilePicture", undefined);
+															form.setFieldValue(
+																"removeProfilePicture",
+																Boolean(
+																	user.bestQualityProfilePictureFile ??
+																		user.lowQualityProfilePictureFile,
+																),
+															);
+														}}
+													>
+														<RiDeleteBinLine />
+													</PhotoActionButton>
+												</div>
 											</div>
 											<input
 												id={field.name}
@@ -256,15 +370,16 @@ const EditProfileModal = create(({ user }: EditProfileModalProps) => {
 												accept={ACCEPTED_IMAGE_TYPES.join(",")}
 												className="sr-only"
 												disabled={updateProfileMutation.isPending}
-												onChange={(event) =>
-													field.handleChange(event.target.files?.[0])
-												}
+												onChange={(event) => {
+													field.handleChange(event.target.files?.[0]);
+													form.setFieldValue("removeProfilePicture", false);
+												}}
 											/>
-										</div>
-										<FieldError errors={field.state.meta.errors} />
-									</Field>
-								)}
-							</form.Field>
+											<FieldError errors={field.state.meta.errors} />
+										</Field>
+									)}
+								</form.Field>
+							</div>
 
 							<form.Field name="username">
 								{(field) => (

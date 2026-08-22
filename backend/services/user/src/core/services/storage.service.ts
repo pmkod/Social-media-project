@@ -27,13 +27,6 @@ const setFile = async ({
 	return `${publicUrl}/${filename}`;
 };
 
-const getPublicFileUrl = (filename: string) => {
-	const publicUrl =
-		Configurations.storage.s3.publicUrl ||
-		`${Configurations.storage.s3.endpoint}/${Configurations.storage.s3.bucket}`;
-	return `${publicUrl}/${filename}`;
-};
-
 type DeleteFileParams = {
 	fileName: string;
 	bucket?: string;
@@ -44,4 +37,4 @@ const deleteFile = async ({ fileName, bucket }: DeleteFileParams) => {
 	await s3Client.delete(fileName, { bucket: targetBucket });
 };
 
-export { setFile, deleteFile, getPublicFileUrl };
+export { setFile, deleteFile };

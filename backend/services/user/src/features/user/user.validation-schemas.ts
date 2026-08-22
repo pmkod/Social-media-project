@@ -14,7 +14,16 @@ const UpdateProfileValidationSchema = z.object({
 		.mime(["image/jpeg", "image/png", "image/webp", "image/gif"])
 		.max(15_000_000)
 		.optional(),
+	removeProfilePicture: z.enum(["true", "false"]).optional(),
+	removeCoverPicture: z.enum(["true", "false"]).optional(),
 });
+
+const ProfileMediaFileResponseBody = z
+	.object({
+		id: z.string(),
+		name: z.string(),
+	})
+	.nullable();
 
 const UserProfileResponseBody = z.object({
 	id: z.string(),
@@ -22,14 +31,18 @@ const UserProfileResponseBody = z.object({
 	username: z.string(),
 	fullName: z.string().nullable(),
 	bio: z.string().nullable(),
-	profilePictureUrl: z.string().nullable(),
-	lowQualityProfilePictureUrl: z.string().nullable(),
-	coverPictureUrl: z.string().nullable(),
-	lowQualityCoverPictureUrl: z.string().nullable(),
+	lowQualityProfilePictureFile: ProfileMediaFileResponseBody,
+	bestQualityProfilePictureFile: ProfileMediaFileResponseBody,
+	lowQualityCoverPictureFile: ProfileMediaFileResponseBody,
+	bestQualityCoverPictureFile: ProfileMediaFileResponseBody,
 	postCount: z.number(),
 	followersCount: z.number(),
 	followingCount: z.number(),
 	createdAt: z.date(),
 });
 
-export { UpdateProfileValidationSchema, UserProfileResponseBody };
+export {
+	ProfileMediaFileResponseBody,
+	UpdateProfileValidationSchema,
+	UserProfileResponseBody,
+};

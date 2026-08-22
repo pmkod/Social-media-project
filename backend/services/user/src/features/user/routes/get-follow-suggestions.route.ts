@@ -8,6 +8,7 @@ import {
 	serializeProfileMedia,
 } from "../services/profile-media.service";
 import { UserRoutesTag } from "../user.constants";
+import { ProfileMediaFileResponseBody } from "../user.validation-schemas";
 
 const FollowSuggestionItem = z.object({
 	id: z.string(),
@@ -15,7 +16,10 @@ const FollowSuggestionItem = z.object({
 	name: z.string(),
 	handle: z.string(),
 	fullName: z.string().nullable(),
-	profilePictureUrl: z.string().nullable(),
+	lowQualityProfilePictureFile: ProfileMediaFileResponseBody,
+	bestQualityProfilePictureFile: ProfileMediaFileResponseBody,
+	lowQualityCoverPictureFile: ProfileMediaFileResponseBody,
+	bestQualityCoverPictureFile: ProfileMediaFileResponseBody,
 	bio: z.string().nullable(),
 	followersCount: z.number(),
 	followingCount: z.number(),

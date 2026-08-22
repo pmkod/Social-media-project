@@ -4,8 +4,8 @@ type UseAuthenticatedUserQueryData = {
 	id: User["id"];
 	fullName: User["fullName"];
 	username: User["username"];
-	profilePictureUrl?: User["profilePictureUrl"];
-	lowQualityProfilePictureUrl?: User["lowQualityProfilePictureUrl"];
+	lowQualityProfilePictureFile?: User["lowQualityProfilePictureFile"];
+	bestQualityProfilePictureFile?: User["bestQualityProfilePictureFile"];
 	followersCount?: User["followersCount"];
 	followingCount?: User["followingCount"];
 };

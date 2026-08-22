@@ -11,6 +11,8 @@ type UpdateProfileInput = {
 	bio: string;
 	profilePicture?: File;
 	coverPicture?: File;
+	removeProfilePicture?: boolean;
+	removeCoverPicture?: boolean;
 };
 
 const updateProfile = async (input: UpdateProfileInput): Promise<User> => {
@@ -23,6 +25,12 @@ const updateProfile = async (input: UpdateProfileInput): Promise<User> => {
 	}
 	if (input.coverPicture) {
 		formData.append("coverPicture", input.coverPicture);
+	}
+	if (input.removeProfilePicture) {
+		formData.append("removeProfilePicture", "true");
+	}
+	if (input.removeCoverPicture) {
+		formData.append("removeCoverPicture", "true");
 	}
 
 	return httpClient.put("users/me", { body: formData }).json<User>();
@@ -42,9 +50,10 @@ const useUpdateProfile = () => {
 								...currentUser,
 								username: updatedUser.username,
 								fullName: updatedUser.fullName,
-								profilePictureUrl: updatedUser.profilePictureUrl,
-								lowQualityProfilePictureUrl:
-									updatedUser.lowQualityProfilePictureUrl,
+								lowQualityProfilePictureFile:
+									updatedUser.lowQualityProfilePictureFile,
+								bestQualityProfilePictureFile:
+									updatedUser.bestQualityProfilePictureFile,
 							}
 						: currentUser,
 			);

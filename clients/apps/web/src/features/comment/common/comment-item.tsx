@@ -61,11 +61,7 @@ export function CommentItem({
 					user={comment.author}
 					onClick={(e) => e.stopPropagation()}
 				>
-					<UserAvatar
-						user={comment.author}
-						size={isReply ? "sm" : "md"}
-						className="ring-1 ring-border"
-					/>
+					<UserAvatar user={comment.author} size={isReply ? "sm" : "md"} />
 				</UserProfileLink>
 			</UserProfileHoverCard>
 			<div className="flex-1 min-w-0">

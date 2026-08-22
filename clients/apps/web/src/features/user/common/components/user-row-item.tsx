@@ -21,7 +21,7 @@ function UserRowItem({ user }: UserRowItemProps) {
 		>
 			<div className="flex items-center justify-start gap-2.5">
 				<UserProfileHoverCard user={user}>
-					<UserAvatar user={user} size="md" className="ring-1 ring-border" />
+					<UserAvatar user={user} size="md" />
 				</UserProfileHoverCard>
 
 				<div

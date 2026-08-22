@@ -14,6 +14,7 @@ import {
 	TabsList,
 	TabsTrigger,
 } from "@/core/components/ui/tabs.tsx";
+import { buildImageUrl } from "@/features/post/post-media.functions.ts";
 import { useAuthenticatedUser } from "@/features/user/authenticated-user/use-authenticated-user.ts";
 import { UserAvatar } from "@/features/user/common/components/user-avatar.tsx";
 import { FollowButton } from "@/features/user/common/follow-button.tsx";
@@ -72,6 +73,11 @@ export function ProfileView({ username }: ProfileViewProps) {
 	const isOwnProfile = Boolean(
 		authenticatedUser?.id && user && authenticatedUser.id === user.id,
 	);
+	const coverPictureSrc =
+		buildImageUrl(
+			user.lowQualityCoverPictureFile?.name ??
+				user.bestQualityCoverPictureFile?.name,
+		) || null;
 
 	return (
 		<div className="mx-auto">
@@ -84,26 +90,22 @@ export function ProfileView({ username }: ProfileViewProps) {
 				</AppHeaderLeftPart>
 			</AppHeader>
 
-			<section className="border-x rounded-t-xl overflow-hidden">
-				<div className="h-48 overflow-hidden bg-gradient-to-br from-slate-700 via-slate-500 to-sky-300 sm:h-56">
-					{(user.lowQualityCoverPictureUrl ?? user.coverPictureUrl) ? (
+			<section className="border-x rounded-t-xl overflow-hidden pb-6">
+				<div className="h-48 overflow-hidden bg-gradient-to-br from-gray-700 via-sone-500 to-gray-300 sm:h-56">
+					{coverPictureSrc ? (
 						<img
-							src={user.lowQualityCoverPictureUrl ?? user.coverPictureUrl ?? ""}
+							src={coverPictureSrc}
 							alt={`${user.fullName}'s cover`}
 							className="h-full w-full object-cover"
 						/>
-					) : (
-						<div className="h-full w-full bg-[radial-gradient(circle_at_75%_20%,rgba(255,255,255,0.32),transparent_32%),linear-gradient(135deg,transparent_35%,rgba(255,255,255,0.12)_35%,rgba(255,255,255,0.12)_52%,transparent_52%)]" />
-					)}
+					) : null}
 				</div>
 
 				<div className="px-8 pb-5">
 					<div className="flex items-start justify-between">
-						<UserAvatar
-							user={user}
-							size="4xl"
-							className="-mt-16 border-4 border-background bg-background shadow-sm"
-						/>
+						<div className="-mt-20 border-4 border-background rounded-full">
+							<UserAvatar user={user} size="4xl" />
+						</div>
 
 						<div className="flex items-center gap-2 pt-3">
 							<UserProfileActionsDropdown user={user} variant="outline" />
@@ -144,7 +146,7 @@ export function ProfileView({ username }: ProfileViewProps) {
 						</div>
 					) : null}
 
-					<div className="mt-4 flex flex-wrap gap-5 text-sm text-muted-foreground">
+					<div className="mt-4 flex flex-wrap gap-5 text-base text-muted-foreground">
 						<span>
 							<strong className="text-foreground">
 								{numberFormatter.format(user.postCount ?? 0)}

@@ -71,9 +71,18 @@ const updateProfileRoute = defineOpenAPIRoute<
 			throw new Error("Unauthorized");
 		}
 
-		const { username, fullName, bio, profilePicture, coverPicture } =
-			c.req.valid("form");
+		const {
+			username,
+			fullName,
+			bio,
+			profilePicture,
+			coverPicture,
+			removeProfilePicture,
+			removeCoverPicture,
+		} = c.req.valid("form");
 		const normalizedUsername = username.trim();
+		const shouldRemoveProfilePicture = removeProfilePicture === "true";
+		const shouldRemoveCoverPicture = removeCoverPicture === "true";
 
 		const [existingUsernameUser, previousUser] = await Promise.all([
 			prisma.user.findFirst({
@@ -224,7 +233,12 @@ const updateProfileRoute = defineOpenAPIRoute<
 								connect: { id: profilePictureFiles.bestQualityFile.id },
 							},
 						}
-					: {}),
+					: shouldRemoveProfilePicture
+						? {
+								lowQualityProfilePictureFile: { disconnect: true },
+								bestQualityProfilePictureFile: { disconnect: true },
+							}
+						: {}),
 				...(coverPictureFiles
 					? {
 							lowQualityCoverPictureFile: {
@@ -234,7 +248,12 @@ const updateProfileRoute = defineOpenAPIRoute<
 								connect: { id: coverPictureFiles.bestQualityFile.id },
 							},
 						}
-					: {}),
+					: shouldRemoveCoverPicture
+						? {
+								lowQualityCoverPictureFile: { disconnect: true },
+								bestQualityCoverPictureFile: { disconnect: true },
+							}
+						: {}),
 			},
 			select: {
 				id: true,
@@ -252,30 +271,34 @@ const updateProfileRoute = defineOpenAPIRoute<
 		});
 
 		const previousFileNames = [
-			profilePictureFiles
+			profilePictureFiles || shouldRemoveProfilePicture
 				? previousUser.lowQualityProfilePictureFile?.filename
 				: null,
-			profilePictureFiles
+			profilePictureFiles || shouldRemoveProfilePicture
 				? previousUser.bestQualityProfilePictureFile?.filename
 				: null,
-			coverPictureFiles
+			coverPictureFiles || shouldRemoveCoverPicture
 				? previousUser.lowQualityCoverPictureFile?.filename
 				: null,
-			coverPictureFiles
+			coverPictureFiles || shouldRemoveCoverPicture
 				? previousUser.bestQualityCoverPictureFile?.filename
 				: null,
 		];
 		await removeStoredFiles(previousFileNames);
 
 		const previousFileIds = [
-			profilePictureFiles
+			profilePictureFiles || shouldRemoveProfilePicture
 				? previousUser.lowQualityProfilePictureFile?.id
 				: null,
-			profilePictureFiles
+			profilePictureFiles || shouldRemoveProfilePicture
 				? previousUser.bestQualityProfilePictureFile?.id
 				: null,
-			coverPictureFiles ? previousUser.lowQualityCoverPictureFile?.id : null,
-			coverPictureFiles ? previousUser.bestQualityCoverPictureFile?.id : null,
+			coverPictureFiles || shouldRemoveCoverPicture
+				? previousUser.lowQualityCoverPictureFile?.id
+				: null,
+			coverPictureFiles || shouldRemoveCoverPicture
+				? previousUser.bestQualityCoverPictureFile?.id
+				: null,
 		].filter((id): id is string => Boolean(id));
 		if (previousFileIds.length > 0) {
 			await prisma.file.deleteMany({ where: { id: { in: previousFileIds } } });

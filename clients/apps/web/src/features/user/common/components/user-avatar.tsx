@@ -7,21 +7,8 @@ import {
 	type AvatarProps,
 } from "@/core/components/ui/avatar.tsx";
 import { cn } from "@/core/lib/utils.ts";
+import { buildImageUrl } from "@/features/post/post-media.functions.ts";
 import type { User } from "../user.ts";
-
-export type UserAvatarSize = NonNullable<AvatarProps["size"]>;
-
-export type UserAvatarUser = Partial<User> & {
-	fullName?: string | null;
-	username?: string | null;
-	profilePictureUrl?: string | null;
-	lowQualityProfilePictureUrl?: string | null;
-};
-
-export type UserAvatarProps = Omit<AvatarProps, "children"> & {
-	user?: UserAvatarUser | null;
-	fallback?: React.ReactNode;
-};
 
 function getInitials(name?: string | null): string {
 	if (!name) return "";
@@ -37,26 +24,34 @@ function getInitials(name?: string | null): string {
 	return "";
 }
 
+export type UserAvatarProps = Omit<AvatarProps, "children"> & {
+	user?: User;
+	fallback?: React.ReactNode;
+};
+
 function UserAvatar({
 	user,
 	size = "default",
 	className,
-	fallback,
 	...props
 }: UserAvatarProps) {
-	const profilePictureUrl =
-		user?.lowQualityProfilePictureUrl ?? user?.profilePictureUrl;
+	const lowQualityProfilePictureFileUrl = buildImageUrl(
+		user?.lowQualityProfilePictureFile?.name ??
+			user?.bestQualityProfilePictureFile?.name,
+	);
 	const fullName = user?.fullName;
 	const initials = getInitials(fullName);
 
 	return (
 		<Avatar size={size} className={cn("shrink-0", className)} {...props}>
-			{profilePictureUrl ? (
-				<AvatarImage src={profilePictureUrl} alt={fullName || "User avatar"} />
+			{lowQualityProfilePictureFileUrl ? (
+				<AvatarImage
+					src={lowQualityProfilePictureFileUrl}
+					alt={fullName || "User avatar"}
+				/>
 			) : null}
 			<AvatarFallback>
-				{fallback ??
-					(initials || <RiUserLine className="size-1/2 opacity-70" />)}
+				{initials || <RiUserLine className="size-1/2 opacity-70" />}
 			</AvatarFallback>
 		</Avatar>
 	);

@@ -89,11 +89,7 @@ function CreateCommentForm({
 			}}
 		>
 			<div className="flex gap-3">
-				<UserAvatar
-					user={authenticatedUser}
-					size="md"
-					className="ring-1 ring-border"
-				/>
+				<UserAvatar user={authenticatedUser} size="md" />
 
 				<div className="flex-1 min-w-0 space-y-3">
 					<form.Field name="content">

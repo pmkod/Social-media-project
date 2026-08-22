@@ -53,7 +53,7 @@ export function Sidebar() {
 									params={{ username: `@${user.username}` }}
 									className="flex min-w-0 items-center gap-3"
 								>
-									<UserAvatar user={user} size="default" className="shrink-0" />
+									<UserAvatar user={user} size="default" />
 									<div className="min-w-0">
 										<div className="text-xs font-semibold truncate text-foreground">
 											{user.fullName}
@@ -65,7 +65,7 @@ export function Sidebar() {
 								</Link>
 							) : (
 								<div className="flex min-w-0 items-center gap-3">
-									<UserAvatar size="default" className="shrink-0" />
+									<UserAvatar size="default" />
 									<div className="min-w-0">
 										<div className="text-xs font-semibold truncate text-foreground">
 											Your profile
