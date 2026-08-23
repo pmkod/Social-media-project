@@ -13,7 +13,6 @@ function BookmarkButton({ postId, isBookmarked }: BookmarkButtonProps) {
 		event.preventDefault();
 
 		void NiceModal.show(BookmarkCollectionPickerModal, {
-			isBookmarked,
 			postId,
 		});
 	};

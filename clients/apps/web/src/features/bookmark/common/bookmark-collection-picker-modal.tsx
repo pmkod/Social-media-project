@@ -30,17 +30,15 @@ import type { BookmarkCollection } from "./bookmark-collection.ts";
 import { BookmarkCollectionModal } from "./bookmark-collection-modal.tsx";
 
 type BookmarkCollectionPickerModalProps = {
-	isBookmarked: boolean;
 	postId: string;
 };
 
 const BookmarkCollectionPickerModal =
 	create<BookmarkCollectionPickerModalProps>((props) => {
-		const { isBookmarked: initialIsBookmarked, postId } = props;
+		const { postId } = props;
 		const modal = useModal();
 		const addBookmark = useAddBookmark();
 		const removeBookmark = useRemoveBookmark();
-		const [isBookmarked, setIsBookmarked] = useState(initialIsBookmarked);
 		const [search, setSearch] = useState("");
 		const [debouncedSearch] = useDebounceValue(search, 500);
 		const [scrollContainer, setScrollContainer] =
@@ -96,17 +94,15 @@ const BookmarkCollectionPickerModal =
 
 			try {
 				if (collection.isPostInCollection) {
-					const response = await removeBookmark.mutateAsync({
+					await removeBookmark.mutateAsync({
 						postId,
 						bookmarkCollectionId: collection.id,
 					});
-					setIsBookmarked(response.post.isBookmarkedByAuthenticatedUser);
 				} else {
-					const response = await addBookmark.mutateAsync({
+					await addBookmark.mutateAsync({
 						postId,
 						bookmarkCollectionId: collection.id,
 					});
-					setIsBookmarked(response.post.isBookmarkedByAuthenticatedUser);
 				}
 			} catch {}
 		};
@@ -147,25 +143,6 @@ const BookmarkCollectionPickerModal =
 								>
 									<RiAddLine className="size-6" />
 								</IconButton>
-							</div>
-							<div className="flex min-h-16 items-center justify-between gap-3 border-b border-border px-6">
-								<span className="min-w-0">
-									<span className="block truncate text-base font-semibold">
-										{isBookmarked
-											? "Saved in a collection"
-											: "Choose a collection to save"}
-									</span>
-									<span className="block truncate text-sm font-normal text-muted-foreground">
-										{isBookmarked
-											? "Select a saved collection to remove this post from it."
-											: "Bookmarks must belong to a collection."}
-									</span>
-								</span>
-								{isBookmarked ? (
-									<RiBookmarkFill className="size-5 shrink-0 text-amber-500" />
-								) : (
-									<RiBookmarkLine className="size-5 shrink-0 text-muted-foreground" />
-								)}
 							</div>
 							{collectionsQuery.isLoading ? (
 								<div className="space-y-1">
