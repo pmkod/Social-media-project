@@ -23,7 +23,9 @@ const useRemovePostFromCollection = () => {
 				queryKey: bookmarkCollectionsQueryKeys.root,
 			});
 			queryClient.invalidateQueries({
-				queryKey: postListQueryKeys.collectionPosts(collectionId),
+				queryKey: postListQueryKeys.bookmarks({
+					bookmarkCollectionId: collectionId,
+				}),
 			});
 		},
 		onError: () => {

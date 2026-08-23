@@ -1,4 +1,7 @@
 const postListRootQueryKey = ["post-list"] as const;
+type BookmarksQueryParams = {
+	bookmarkCollectionId?: string;
+};
 
 const postListQueryKeys = {
 	root: postListRootQueryKey,
@@ -10,9 +13,11 @@ const postListQueryKeys = {
 		[...postListRootQueryKey, "user", userId] as const,
 	userLikes: (userId: string) =>
 		[...postListRootQueryKey, "user-likes", userId] as const,
-	bookmarks: () => [...postListRootQueryKey, "bookmarks"] as const,
-	collectionPosts: (collectionId: string) =>
-		[...postListRootQueryKey, "collection", collectionId] as const,
+	bookmarks: ({ bookmarkCollectionId }: BookmarksQueryParams) =>
+		bookmarkCollectionId
+			? [...postListRootQueryKey, "bookmarks", { bookmarkCollectionId }]
+			: [...postListRootQueryKey, "bookmarks"],
 };
 
 export { postListQueryKeys };
+export type { BookmarksQueryParams };

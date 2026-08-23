@@ -62,7 +62,7 @@ const useRemoveBookmark = () => {
 			);
 
 			queryClient.invalidateQueries({
-				queryKey: postListQueryKeys.bookmarks(),
+				queryKey: postListQueryKeys.bookmarks({}),
 			});
 			queryClient.invalidateQueries({
 				queryKey: postListQueryKeys.root,

@@ -26,7 +26,9 @@ export const Route = createFileRoute("/_main/bookmarks")({
 
 function BookmarksPage() {
 	const { bookmarkCollectionId: selectedCollectionId } = Route.useSearch();
-	const bookmarksQuery = useBookmarks({ collectionId: selectedCollectionId });
+	const bookmarksQuery = useBookmarks({
+		bookmarkCollectionId: selectedCollectionId,
+	});
 
 	const posts = bookmarksQuery.data?.pages.flatMap((page) => page.posts) ?? [];
 	const { ref: observerTargetRef, isIntersecting: isTargetIntersecting } =

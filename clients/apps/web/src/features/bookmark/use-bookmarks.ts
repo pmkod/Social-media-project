@@ -14,18 +14,16 @@ type BookmarksResponse = {
 };
 
 type UseBookmarksParams = {
-	collectionId?: string;
+	bookmarkCollectionId?: string;
 	enabled?: boolean;
 };
 
 const useBookmarks = ({
-	collectionId,
+	bookmarkCollectionId,
 	enabled = true,
 }: UseBookmarksParams = {}) =>
 	useInfiniteQuery({
-		queryKey: collectionId
-			? postListQueryKeys.collectionPosts(collectionId)
-			: postListQueryKeys.bookmarks(),
+		queryKey: postListQueryKeys.bookmarks({ bookmarkCollectionId }),
 		queryFn: async ({ pageParam }) => {
 			const searchParams = new URLSearchParams({ limit: "10" });
 			if (pageParam) {
@@ -33,9 +31,14 @@ const useBookmarks = ({
 				searchParams.set("cursorCreatedAt", pageParam.createdAt);
 			}
 			return httpClient
-				.get(collectionId ? `collections/${collectionId}/posts` : "bookmarks", {
-					searchParams,
-				})
+				.get(
+					bookmarkCollectionId
+						? `collections/${bookmarkCollectionId}/posts`
+						: "bookmarks",
+					{
+						searchParams,
+					},
+				)
 				.json<BookmarksResponse>();
 		},
 		initialPageParam: null as BookmarksCursor | null,

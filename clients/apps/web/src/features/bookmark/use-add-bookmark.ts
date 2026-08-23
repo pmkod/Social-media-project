@@ -69,11 +69,13 @@ const useAddBookmark = () => {
 			);
 
 			queryClient.invalidateQueries({
-				queryKey: postListQueryKeys.bookmarks(),
+				queryKey: postListQueryKeys.bookmarks({}),
 			});
 			if (collectionId) {
 				queryClient.invalidateQueries({
-					queryKey: postListQueryKeys.collectionPosts(collectionId),
+					queryKey: postListQueryKeys.bookmarks({
+						bookmarkCollectionId: collectionId,
+					}),
 				});
 				queryClient.invalidateQueries({
 					queryKey: bookmarkCollectionsQueryKeys.root,
