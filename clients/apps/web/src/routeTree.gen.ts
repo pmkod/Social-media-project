@@ -13,6 +13,7 @@ import { Route as BaseRouteRouteImport } from './routes/_base/route'
 import { Route as MainRouteRouteImport } from './routes/_main/route'
 import { Route as BaseAuthenticationRouteRouteImport } from './routes/_base/_authentication/route'
 import { Route as MainUsernameRouteImport } from './routes/_main/$username'
+import { Route as MainBookmarkCollectionsRouteImport } from './routes/_main/bookmark-collections'
 import { Route as MainBookmarksRouteImport } from './routes/_main/bookmarks'
 import { Route as MainDiscussionsRouteImport } from './routes/_main/discussions'
 import { Route as MainHomeRouteImport } from './routes/_main/home'
@@ -41,6 +42,11 @@ const BaseAuthenticationRouteRoute = BaseAuthenticationRouteRouteImport.update({
 const MainUsernameRoute = MainUsernameRouteImport.update({
   id: '/$username',
   path: '/$username',
+  getParentRoute: () => MainRouteRoute,
+} as any)
+const MainBookmarkCollectionsRoute = MainBookmarkCollectionsRouteImport.update({
+  id: '/bookmark-collections',
+  path: '/bookmark-collections',
   getParentRoute: () => MainRouteRoute,
 } as any)
 const MainBookmarksRoute = MainBookmarksRouteImport.update({
@@ -112,6 +118,7 @@ const MainPostsPostIdRoute = MainPostsPostIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof BaseAuthenticationIndexRoute
   '/$username': typeof MainUsernameRoute
+  '/bookmark-collections': typeof MainBookmarkCollectionsRoute
   '/bookmarks': typeof MainBookmarksRoute
   '/discussions': typeof MainDiscussionsRoute
   '/home': typeof MainHomeRoute
@@ -127,6 +134,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof BaseAuthenticationIndexRoute
   '/$username': typeof MainUsernameRoute
+  '/bookmark-collections': typeof MainBookmarkCollectionsRoute
   '/bookmarks': typeof MainBookmarksRoute
   '/discussions': typeof MainDiscussionsRoute
   '/home': typeof MainHomeRoute
@@ -145,6 +153,7 @@ export interface FileRoutesById {
   '/_main': typeof MainRouteRouteWithChildren
   '/_base/_authentication': typeof BaseAuthenticationRouteRouteWithChildren
   '/_main/$username': typeof MainUsernameRoute
+  '/_main/bookmark-collections': typeof MainBookmarkCollectionsRoute
   '/_main/bookmarks': typeof MainBookmarksRoute
   '/_main/discussions': typeof MainDiscussionsRoute
   '/_main/home': typeof MainHomeRoute
@@ -163,6 +172,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/$username'
+    | '/bookmark-collections'
     | '/bookmarks'
     | '/discussions'
     | '/home'
@@ -178,6 +188,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/$username'
+    | '/bookmark-collections'
     | '/bookmarks'
     | '/discussions'
     | '/home'
@@ -195,6 +206,7 @@ export interface FileRouteTypes {
     | '/_main'
     | '/_base/_authentication'
     | '/_main/$username'
+    | '/_main/bookmark-collections'
     | '/_main/bookmarks'
     | '/_main/discussions'
     | '/_main/home'
@@ -242,6 +254,13 @@ declare module '@tanstack/react-router' {
       path: '/$username'
       fullPath: '/$username'
       preLoaderRoute: typeof MainUsernameRouteImport
+      parentRoute: typeof MainRouteRoute
+    }
+    '/_main/bookmark-collections': {
+      id: '/_main/bookmark-collections'
+      path: '/bookmark-collections'
+      fullPath: '/bookmark-collections'
+      preLoaderRoute: typeof MainBookmarkCollectionsRouteImport
       parentRoute: typeof MainRouteRoute
     }
     '/_main/bookmarks': {
@@ -371,6 +390,7 @@ const BaseRouteRouteWithChildren = BaseRouteRoute._addFileChildren(
 
 interface MainRouteRouteChildren {
   MainUsernameRoute: typeof MainUsernameRoute
+  MainBookmarkCollectionsRoute: typeof MainBookmarkCollectionsRoute
   MainBookmarksRoute: typeof MainBookmarksRoute
   MainDiscussionsRoute: typeof MainDiscussionsRoute
   MainHomeRoute: typeof MainHomeRoute
@@ -381,6 +401,7 @@ interface MainRouteRouteChildren {
 
 const MainRouteRouteChildren: MainRouteRouteChildren = {
   MainUsernameRoute: MainUsernameRoute,
+  MainBookmarkCollectionsRoute: MainBookmarkCollectionsRoute,
   MainBookmarksRoute: MainBookmarksRoute,
   MainDiscussionsRoute: MainDiscussionsRoute,
   MainHomeRoute: MainHomeRoute,

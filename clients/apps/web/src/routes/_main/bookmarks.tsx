@@ -1,6 +1,7 @@
-import { RiAddLine } from "@remixicon/react";
-import { createFileRoute } from "@tanstack/react-router";
+import { RiAddLine, RiArrowRightSLine } from "@remixicon/react";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { z } from "zod";
 import {
 	AppHeader,
 	AppHeaderLeftPart,
@@ -15,8 +16,8 @@ import NiceModal from "@/core/components/ui/nice-modal.tsx";
 import { useAlertDialog } from "@/core/hooks/use-alert-dialog.tsx";
 import { useIntersectionObserver } from "@/core/hooks/use-intersection-observer.ts";
 import type { BookmarkCollection } from "@/features/bookmark/common/bookmark-collection.ts";
-import { BookmarkCollectionChip } from "@/features/bookmark/common/bookmark-collection-chip.tsx";
-import { BookmarkCollectionChipLoader } from "@/features/bookmark/common/bookmark-collection-chip-loader.tsx";
+import { BookmarkCollectionItem } from "@/features/bookmark/common/bookmark-collection-item.tsx";
+import { BookmarkCollectionItemLoader } from "@/features/bookmark/common/bookmark-collection-item-loader.tsx";
 import { BookmarkCollectionModal } from "@/features/bookmark/common/bookmark-collection-modal.tsx";
 import { useDeleteBookmarkCollection } from "@/features/bookmark/delete-bookmark-collection/use-delete-bookmark-collection.ts";
 import { useAddPostToCollection } from "@/features/bookmark/use-add-post-to-collection.ts";
@@ -26,7 +27,14 @@ import { useRemovePostFromCollection } from "@/features/bookmark/use-remove-post
 import { PostListLoader } from "@/features/post/common/components/loaders";
 import { PostItem } from "@/features/post/common/post-item.tsx";
 
+const bookmarksSearchParams = z.object({
+	bookmarkCollectionId: z.string().optional(),
+});
+
+const BOOKMARK_COLLECTION_PREVIEW_LIMIT = 6;
+
 export const Route = createFileRoute("/_main/bookmarks")({
+	validateSearch: bookmarksSearchParams,
 	component: BookmarksPage,
 });
 
@@ -71,8 +79,11 @@ function CollectionOrganizer({
 }
 
 function BookmarksPage() {
-	const [selectedCollectionId, setSelectedCollectionId] = useState<string>();
-	const collectionsQuery = useBookmarkCollections();
+	const { bookmarkCollectionId: selectedCollectionId } = Route.useSearch();
+	const navigate = Route.useNavigate();
+	const collectionsQuery = useBookmarkCollections({
+		limit: BOOKMARK_COLLECTION_PREVIEW_LIMIT,
+	});
 	const bookmarksQuery = useBookmarks({ collectionId: selectedCollectionId });
 	const deleteCollection = useDeleteBookmarkCollection();
 	const removeFromCollection = useRemovePostFromCollection();
@@ -81,32 +92,9 @@ function BookmarksPage() {
 	const collections =
 		collectionsQuery.data?.pages.flatMap((page) => page.bookmarksCollections) ??
 		[];
-	const selectedCollection = collections.find(
-		(collection) => collection.id === selectedCollectionId,
-	);
 	const posts = bookmarksQuery.data?.pages.flatMap((page) => page.posts) ?? [];
-	const {
-		ref: collectionObserverTargetRef,
-		isIntersecting: isCollectionTargetIntersecting,
-	} = useIntersectionObserver({ rootMargin: "100px" });
 	const { ref: observerTargetRef, isIntersecting: isTargetIntersecting } =
 		useIntersectionObserver({ rootMargin: "100px" });
-
-	useEffect(() => {
-		if (
-			!isCollectionTargetIntersecting ||
-			!collectionsQuery.hasNextPage ||
-			collectionsQuery.isFetching
-		)
-			return;
-
-		collectionsQuery.fetchNextPage();
-	}, [
-		isCollectionTargetIntersecting,
-		collectionsQuery.fetchNextPage,
-		collectionsQuery.hasNextPage,
-		collectionsQuery.isFetching,
-	]);
 
 	useEffect(() => {
 		if (
@@ -134,6 +122,13 @@ function BookmarksPage() {
 		await NiceModal.show(BookmarkCollectionModal, { collection });
 	};
 
+	const handleSelectCollection = async (collectionId?: string) => {
+		await navigate({
+			to: "/bookmarks",
+			search: { bookmarkCollectionId: collectionId },
+		});
+	};
+
 	const handleDeleteCollection = (collection: BookmarkCollection) => {
 		alertDialog.show({
 			title: `Delete "${collection.name}"?`,
@@ -143,12 +138,11 @@ function BookmarksPage() {
 			confirm: {
 				text: "Delete collection",
 				colorScheme: "destructive",
-				handler: () => {
-					deleteCollection.mutateAsync(collection.id).then(() => {
-						if (selectedCollectionId === collection.id) {
-							setSelectedCollectionId(undefined);
-						}
-					});
+				handler: async () => {
+					await deleteCollection.mutateAsync(collection.id);
+					if (selectedCollectionId === collection.id) {
+						await handleSelectCollection();
+					}
 				},
 			},
 		});
@@ -172,45 +166,43 @@ function BookmarksPage() {
 				</AppHeaderRightPart>
 			</AppHeader>
 
-			<section className="">
-				<div className="flex gap-2 overflow-x-auto pt-2 pb-5">
-					<BookmarkCollectionChip
-						name="All"
+			<section className="pt-2 pb-4">
+				<div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+					<BookmarkCollectionItem
+						name="All bookmarks"
 						isSelected={!selectedCollectionId}
-						onClick={() => setSelectedCollectionId(undefined)}
+						onClick={() => void handleSelectCollection(undefined)}
 					/>
-
 					{collectionsQuery.isLoading ? (
 						<>
-							<BookmarkCollectionChipLoader />
-							<BookmarkCollectionChipLoader />
-							<BookmarkCollectionChipLoader />
-							<BookmarkCollectionChipLoader />
+							<BookmarkCollectionItemLoader />
+							<BookmarkCollectionItemLoader />
+							<BookmarkCollectionItemLoader />
+							<BookmarkCollectionItemLoader />
+							<BookmarkCollectionItemLoader />
+							<BookmarkCollectionItemLoader />
 						</>
 					) : (
-						<>
-							{collections.map((collection) => (
-								<BookmarkCollectionChip
-									key={collection.id}
-									name={collection.name}
-									isSelected={selectedCollectionId === collection.id}
-									onClick={() => setSelectedCollectionId(collection.id)}
-									onEdit={() => void handleOpenEditCollectionModal(collection)}
-									onDelete={() => handleDeleteCollection(collection)}
-								/>
-							))}
-							{collectionsQuery.hasNextPage ? (
-								<div
-									ref={collectionObserverTargetRef}
-									className="h-9 w-px shrink-0"
-									aria-hidden="true"
-								/>
-							) : null}
-							{collectionsQuery.isFetchingNextPage ? (
-								<BookmarkCollectionChipLoader />
-							) : null}
-						</>
+						collections.map((collection) => (
+							<BookmarkCollectionItem
+								key={collection.id}
+								name={collection.name}
+								isSelected={selectedCollectionId === collection.id}
+								onClick={() => void handleSelectCollection(collection.id)}
+								onEdit={() => void handleOpenEditCollectionModal(collection)}
+								onDelete={() => handleDeleteCollection(collection)}
+							/>
+						))
 					)}
+				</div>
+
+				<div className="mt-2 flex justify-end">
+					<Button asChild variant="ghost" size="sm">
+						<Link to="/bookmark-collections">
+							See all collections
+							<RiArrowRightSLine className="size-4" />
+						</Link>
+					</Button>
 				</div>
 			</section>
 
@@ -233,7 +225,7 @@ function BookmarksPage() {
 					{posts.map((post) => (
 						<div key={post.id}>
 							<PostItem post={post} />
-							{selectedCollection ? (
+							{selectedCollectionId ? (
 								<div className="flex justify-end border-x border-t border-border px-4 py-2 last:border-b">
 									<Button
 										type="button"
@@ -242,7 +234,7 @@ function BookmarksPage() {
 										disabled={removeFromCollection.isPending}
 										onClick={() =>
 											removeFromCollection.mutate({
-												collectionId: selectedCollection.id,
+												collectionId: selectedCollectionId,
 												postId: post.id,
 											})
 										}

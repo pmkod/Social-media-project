@@ -1,4 +1,3 @@
-import { RiEdit2Line, RiFolderAddLine } from "@remixicon/react";
 import {
 	Dialog,
 	DialogContent,
