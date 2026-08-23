@@ -1,5 +1,4 @@
 import type { QueryClient } from "@tanstack/react-query";
-import { bookmarkCollectionQueryKeys } from "@/features/bookmark/common/bookmark-collection.query-keys.ts";
 import type { Post } from "@/features/post/common/post.ts";
 import { postListQueryKeys } from "@/features/post/common/post-list.query-keys.ts";
 import { authenticatedUserQueryKey } from "@/features/user/authenticated-user/authenticated-user.query-key.ts";
@@ -75,9 +74,6 @@ const removeAuthorPostsFromCache = (
 	});
 	queryClient.removeQueries({
 		queryKey: postListQueryKeys.userLikes(authorId),
-	});
-	queryClient.removeQueries({
-		queryKey: bookmarkCollectionQueryKeys.user(authorId),
 	});
 };
 

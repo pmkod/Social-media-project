@@ -3,13 +3,15 @@ import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
 import { userServiceClient } from "@/core/services/user-service.client";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
+import { requireUserAuthentication } from "@/features/authentication/middlewares/require-user-authentication.middleware";
 import { BookmarksRoutesTag } from "../bookmarks.constants";
 
 const routeDef = createRoute({
 	method: "get",
 	path: "/collections/{collectionId}/posts",
-	summary: "Get posts in a visible bookmark collection",
+	summary: "Get posts in the authenticated user's bookmark collection",
 	tags: [BookmarksRoutesTag],
+	middleware: [requireUserAuthentication],
 	request: {
 		params: z.object({ collectionId: z.string() }),
 		query: z.object({
@@ -31,16 +33,12 @@ const getCollectionPostsRoute = defineOpenAPIRoute<
 	handler: async (c) => {
 		const { collectionId } = c.req.valid("param");
 		const query = c.req.valid("query");
-		const authenticatedUser = c.get("authenticatedUser");
-		const authenticatedUserId = authenticatedUser?.id;
+		const authenticatedUserId = c.get("authenticatedUserId");
 
 		const collection = await prisma.bookmarkCollection.findFirst({
 			where: {
 				id: collectionId,
-				OR: [
-					{ isPublic: true },
-					...(authenticatedUserId ? [{ ownerId: authenticatedUserId }] : []),
-				],
+				ownerId: authenticatedUserId,
 			},
 			select: { id: true, ownerId: true },
 		});

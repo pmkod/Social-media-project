@@ -164,7 +164,6 @@ export const BookmarkCollectionScalarFieldEnum = {
   ownerId: 'ownerId',
   name: 'name',
   description: 'description',
-  isPublic: 'isPublic',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

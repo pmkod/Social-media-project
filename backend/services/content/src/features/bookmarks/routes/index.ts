@@ -5,7 +5,6 @@ import { deleteCollectionRoute } from "./delete-collection.route";
 import { getBookmarksRoute } from "./get-bookmarks.route";
 import { getCollectionPostsRoute } from "./get-collection-posts.route";
 import { getMyCollectionsRoute } from "./get-my-collections.route";
-import { getUserCollectionsRoute } from "./get-user-collections.route";
 import { removeBookmarkRoute } from "./remove-bookmark.route";
 import { removePostFromCollectionRoute } from "./remove-post-from-collection.route";
 
@@ -15,7 +14,6 @@ const bookmarksRoutes = [
 	getBookmarksRoute,
 	createCollectionRoute,
 	getMyCollectionsRoute,
-	getUserCollectionsRoute,
 	getCollectionPostsRoute,
 	addPostToCollectionRoute,
 	removePostFromCollectionRoute,

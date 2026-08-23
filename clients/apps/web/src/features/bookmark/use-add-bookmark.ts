@@ -7,7 +7,7 @@ import {
 	updateBookmarkInQueryData,
 	updatePostBookmarkState,
 } from "./common/bookmark.cache-utils.ts";
-import { bookmarkCollectionQueryKeys } from "./common/bookmark-collection.query-keys.ts";
+import { bookmarkCollectionsQueryKeys } from "./common/bookmark-collections.query-keys.ts";
 
 type AddBookmarkInput = {
 	postId: string;
@@ -59,7 +59,7 @@ const useAddBookmark = () => {
 					queryKey: postListQueryKeys.collectionPosts(input.collectionId),
 				});
 				queryClient.invalidateQueries({
-					queryKey: bookmarkCollectionQueryKeys.root,
+					queryKey: bookmarkCollectionsQueryKeys.root,
 				});
 			}
 		},

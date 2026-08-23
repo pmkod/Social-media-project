@@ -1,9 +1,9 @@
-import { createRoute, defineOpenAPIRoute } from "@hono/zod-openapi";
+import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
+import { prisma } from "@/core/databases";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { requireUserAuthentication } from "@/features/authentication/middlewares/require-user-authentication.middleware";
 import { BookmarksRoutesTag } from "../bookmarks.constants";
-import { getBookmarkCollections } from "../services/get-bookmark-collections.service";
 
 const routeDef = createRoute({
 	method: "get",
@@ -11,6 +11,13 @@ const routeDef = createRoute({
 	summary: "Get the authenticated user's bookmark collections",
 	tags: [BookmarksRoutesTag],
 	middleware: [requireUserAuthentication],
+	request: {
+		query: z.object({
+			cursorId: z.string().optional(),
+			cursorCreatedAt: z.string().optional(),
+			limit: z.string().optional().default("10"),
+		}),
+	},
 	responses: {
 		[HttpStatus.OK.code]: { description: "Bookmark collections" },
 	},
@@ -22,13 +29,61 @@ const getMyCollectionsRoute = defineOpenAPIRoute<
 >({
 	route: routeDef,
 	handler: async (c) => {
-		const ownerId = c.get("authenticatedUserId");
-		if (!ownerId) throw new Error("Unauthorized");
+		const authenticatedUser = c.get("authenticatedUser");
+		if (!authenticatedUser?.id) throw new Error("Unauthorized");
+		const query = c.req.valid("query");
+		const limit = Math.min(
+			Math.max(Number.parseInt(query.limit, 10) || 10, 1),
+			50,
+		);
+
+		const cursorDate = query.cursorCreatedAt
+			? new Date(query.cursorCreatedAt)
+			: null;
+		const hasValidCursor =
+			cursorDate !== null &&
+			!Number.isNaN(cursorDate.getTime()) &&
+			query.cursorId;
+		const cursorCondition = hasValidCursor
+			? {
+					OR: [
+						{ createdAt: { lt: cursorDate } },
+						{ createdAt: cursorDate, id: { lt: query.cursorId } },
+					],
+				}
+			: undefined;
+
+		const collections = await prisma.bookmarkCollection.findMany({
+			where: {
+				ownerId: authenticatedUser.id,
+				...(cursorCondition ? cursorCondition : {}),
+			},
+			orderBy: [{ createdAt: "desc" }, { id: "desc" }],
+			take: limit + 1,
+			select: {
+				id: true,
+				ownerId: true,
+				name: true,
+				description: true,
+				createdAt: true,
+				updatedAt: true,
+				_count: { select: { items: true } },
+			},
+		});
+		const hasNextPage = collections.length > limit;
+		const items = hasNextPage ? collections.slice(0, limit) : collections;
+		const lastItem = items.at(-1);
+		const nextCursor =
+			hasNextPage && lastItem
+				? { id: lastItem.id, createdAt: lastItem.createdAt.toISOString() }
+				: null;
+
 		return c.json({
-			collections: await getBookmarkCollections({
-				ownerId,
-				includePrivate: true,
-			}),
+			bookmarksCollections: items.map(({ _count, ...collection }) => ({
+				...collection,
+				bookmarksCount: _count.items,
+			})),
+			pagination: { nextCursor, hasNextPage, limit },
 		});
 	},
 });
