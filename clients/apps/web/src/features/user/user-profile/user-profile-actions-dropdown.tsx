@@ -1,7 +1,6 @@
 import {
 	RiFileCopyLine,
 	RiFlag2Line,
-	RiForbid2Line,
 	RiMoreLine,
 	RiUserAddLine,
 	RiUserForbidLine,
@@ -15,6 +14,7 @@ import {
 import { IconButton } from "@/core/components/ui/icon-button.tsx";
 import { useAuthenticatedUser } from "@/features/user/authenticated-user/use-authenticated-user.ts";
 import { useOpenUserBlockAlertDialog } from "@/features/user/block-user/use-open-user-block-alert-dialog.ts";
+import { useOpenUserUnblockAlertDialog } from "@/features/user/block-user/use-open-user-unblock-alert-dialog.ts";
 
 type UserProfileActionsDropdownProps = {
 	user: {
@@ -54,6 +54,7 @@ function UserProfileActionsDropdown({
 	variant = "ghost",
 }: UserProfileActionsDropdownProps) {
 	const userBlockDialog = useOpenUserBlockAlertDialog();
+	const userUnblockDialog = useOpenUserUnblockAlertDialog();
 	const { data } = useAuthenticatedUser();
 	const authenticatedUser = data?.user;
 	const isOwnProfile = Boolean(
@@ -61,6 +62,7 @@ function UserProfileActionsDropdown({
 	);
 	const canManageBlock = Boolean(user.id && !isOwnProfile);
 	const isBlocked = user.isBlockedByAuthenticatedUser ?? false;
+	const userBlockAction = isBlocked ? userUnblockDialog : userBlockDialog;
 
 	return (
 		<DropdownMenu>
@@ -91,12 +93,11 @@ function UserProfileActionsDropdown({
 					user.isBlockedByAuthenticatedUser ? (
 						<DropdownMenuItem
 							variant={isBlocked ? "default" : "destructive"}
-							disabled={userBlockDialog.isPending}
+							disabled={userBlockAction.isPending}
 							onSelect={() =>
-								userBlockDialog.open({
-									userId: user.id as string,
+								userBlockAction.open({
+									userId: user.id,
 									username: user.username,
-									isBlockedByAuthenticatedUser: isBlocked,
 								})
 							}
 						>
@@ -106,12 +107,11 @@ function UserProfileActionsDropdown({
 					) : (
 						<DropdownMenuItem
 							variant={isBlocked ? "default" : "destructive"}
-							disabled={userBlockDialog.isPending}
+							disabled={userBlockAction.isPending}
 							onSelect={() =>
-								userBlockDialog.open({
-									userId: user.id as string,
+								userBlockAction.open({
+									userId: user.id,
 									username: user.username,
-									isBlockedByAuthenticatedUser: isBlocked,
 								})
 							}
 						>
