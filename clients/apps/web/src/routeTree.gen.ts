@@ -12,20 +12,21 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as BaseRouteRouteImport } from './routes/_base/route'
 import { Route as MainRouteRouteImport } from './routes/_main/route'
 import { Route as BaseAuthenticationRouteRouteImport } from './routes/_base/_authentication/route'
-import { Route as MainUsernameRouteImport } from './routes/_main/$username'
-import { Route as MainBookmarkCollectionsRouteImport } from './routes/_main/bookmark-collections'
-import { Route as MainBookmarksRouteImport } from './routes/_main/bookmarks'
+import { Route as MainWithRightAsideRouteRouteImport } from './routes/_main/_with-right-aside/route'
 import { Route as MainDiscussionsRouteImport } from './routes/_main/discussions'
-import { Route as MainHomeRouteImport } from './routes/_main/home'
-import { Route as MainNotificationsRouteImport } from './routes/_main/notifications'
-import { Route as MainSearchRouteImport } from './routes/_main/search'
 import { Route as BaseAuthenticationIndexRouteImport } from './routes/_base/_authentication/index'
 import { Route as BaseAuthenticationCompleteSignupRouteImport } from './routes/_base/_authentication/complete-signup'
 import { Route as BaseAuthenticationNewPasswordRouteImport } from './routes/_base/_authentication/new-password'
 import { Route as BaseAuthenticationPasswordResetRouteImport } from './routes/_base/_authentication/password-reset'
 import { Route as BaseAuthenticationSignupRouteImport } from './routes/_base/_authentication/signup'
 import { Route as BaseAuthenticationUserVerificationRouteImport } from './routes/_base/_authentication/user-verification'
-import { Route as MainPostsPostIdRouteImport } from './routes/_main/posts.$postId'
+import { Route as MainWithRightAsideUsernameRouteImport } from './routes/_main/_with-right-aside/$username'
+import { Route as MainWithRightAsideBookmarkCollectionsRouteImport } from './routes/_main/_with-right-aside/bookmark-collections'
+import { Route as MainWithRightAsideBookmarksRouteImport } from './routes/_main/_with-right-aside/bookmarks'
+import { Route as MainWithRightAsideHomeRouteImport } from './routes/_main/_with-right-aside/home'
+import { Route as MainWithRightAsideNotificationsRouteImport } from './routes/_main/_with-right-aside/notifications'
+import { Route as MainWithRightAsideSearchRouteImport } from './routes/_main/_with-right-aside/search'
+import { Route as MainWithRightAsidePostsPostIdRouteImport } from './routes/_main/_with-right-aside/posts.$postId'
 
 const BaseRouteRoute = BaseRouteRouteImport.update({
   id: '/_base',
@@ -39,39 +40,13 @@ const BaseAuthenticationRouteRoute = BaseAuthenticationRouteRouteImport.update({
   id: '/_authentication',
   getParentRoute: () => BaseRouteRoute,
 } as any)
-const MainUsernameRoute = MainUsernameRouteImport.update({
-  id: '/$username',
-  path: '/$username',
-  getParentRoute: () => MainRouteRoute,
-} as any)
-const MainBookmarkCollectionsRoute = MainBookmarkCollectionsRouteImport.update({
-  id: '/bookmark-collections',
-  path: '/bookmark-collections',
-  getParentRoute: () => MainRouteRoute,
-} as any)
-const MainBookmarksRoute = MainBookmarksRouteImport.update({
-  id: '/bookmarks',
-  path: '/bookmarks',
+const MainWithRightAsideRouteRoute = MainWithRightAsideRouteRouteImport.update({
+  id: '/_with-right-aside',
   getParentRoute: () => MainRouteRoute,
 } as any)
 const MainDiscussionsRoute = MainDiscussionsRouteImport.update({
   id: '/discussions',
   path: '/discussions',
-  getParentRoute: () => MainRouteRoute,
-} as any)
-const MainHomeRoute = MainHomeRouteImport.update({
-  id: '/home',
-  path: '/home',
-  getParentRoute: () => MainRouteRoute,
-} as any)
-const MainNotificationsRoute = MainNotificationsRouteImport.update({
-  id: '/notifications',
-  path: '/notifications',
-  getParentRoute: () => MainRouteRoute,
-} as any)
-const MainSearchRoute = MainSearchRouteImport.update({
-  id: '/search',
-  path: '/search',
   getParentRoute: () => MainRouteRoute,
 } as any)
 const BaseAuthenticationIndexRoute = BaseAuthenticationIndexRouteImport.update({
@@ -109,116 +84,154 @@ const BaseAuthenticationUserVerificationRoute =
     path: '/user-verification',
     getParentRoute: () => BaseAuthenticationRouteRoute,
   } as any)
-const MainPostsPostIdRoute = MainPostsPostIdRouteImport.update({
-  id: '/posts/$postId',
-  path: '/posts/$postId',
-  getParentRoute: () => MainRouteRoute,
+const MainWithRightAsideUsernameRoute =
+  MainWithRightAsideUsernameRouteImport.update({
+    id: '/$username',
+    path: '/$username',
+    getParentRoute: () => MainWithRightAsideRouteRoute,
+  } as any)
+const MainWithRightAsideBookmarkCollectionsRoute =
+  MainWithRightAsideBookmarkCollectionsRouteImport.update({
+    id: '/bookmark-collections',
+    path: '/bookmark-collections',
+    getParentRoute: () => MainWithRightAsideRouteRoute,
+  } as any)
+const MainWithRightAsideBookmarksRoute =
+  MainWithRightAsideBookmarksRouteImport.update({
+    id: '/bookmarks',
+    path: '/bookmarks',
+    getParentRoute: () => MainWithRightAsideRouteRoute,
+  } as any)
+const MainWithRightAsideHomeRoute = MainWithRightAsideHomeRouteImport.update({
+  id: '/home',
+  path: '/home',
+  getParentRoute: () => MainWithRightAsideRouteRoute,
 } as any)
+const MainWithRightAsideNotificationsRoute =
+  MainWithRightAsideNotificationsRouteImport.update({
+    id: '/notifications',
+    path: '/notifications',
+    getParentRoute: () => MainWithRightAsideRouteRoute,
+  } as any)
+const MainWithRightAsideSearchRoute =
+  MainWithRightAsideSearchRouteImport.update({
+    id: '/search',
+    path: '/search',
+    getParentRoute: () => MainWithRightAsideRouteRoute,
+  } as any)
+const MainWithRightAsidePostsPostIdRoute =
+  MainWithRightAsidePostsPostIdRouteImport.update({
+    id: '/posts/$postId',
+    path: '/posts/$postId',
+    getParentRoute: () => MainWithRightAsideRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof BaseAuthenticationIndexRoute
-  '/$username': typeof MainUsernameRoute
-  '/bookmark-collections': typeof MainBookmarkCollectionsRoute
-  '/bookmarks': typeof MainBookmarksRoute
   '/discussions': typeof MainDiscussionsRoute
-  '/home': typeof MainHomeRoute
-  '/notifications': typeof MainNotificationsRoute
-  '/search': typeof MainSearchRoute
   '/complete-signup': typeof BaseAuthenticationCompleteSignupRoute
   '/new-password': typeof BaseAuthenticationNewPasswordRoute
   '/password-reset': typeof BaseAuthenticationPasswordResetRoute
   '/signup': typeof BaseAuthenticationSignupRoute
   '/user-verification': typeof BaseAuthenticationUserVerificationRoute
-  '/posts/$postId': typeof MainPostsPostIdRoute
+  '/$username': typeof MainWithRightAsideUsernameRoute
+  '/bookmark-collections': typeof MainWithRightAsideBookmarkCollectionsRoute
+  '/bookmarks': typeof MainWithRightAsideBookmarksRoute
+  '/home': typeof MainWithRightAsideHomeRoute
+  '/notifications': typeof MainWithRightAsideNotificationsRoute
+  '/search': typeof MainWithRightAsideSearchRoute
+  '/posts/$postId': typeof MainWithRightAsidePostsPostIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof BaseAuthenticationIndexRoute
-  '/$username': typeof MainUsernameRoute
-  '/bookmark-collections': typeof MainBookmarkCollectionsRoute
-  '/bookmarks': typeof MainBookmarksRoute
   '/discussions': typeof MainDiscussionsRoute
-  '/home': typeof MainHomeRoute
-  '/notifications': typeof MainNotificationsRoute
-  '/search': typeof MainSearchRoute
   '/complete-signup': typeof BaseAuthenticationCompleteSignupRoute
   '/new-password': typeof BaseAuthenticationNewPasswordRoute
   '/password-reset': typeof BaseAuthenticationPasswordResetRoute
   '/signup': typeof BaseAuthenticationSignupRoute
   '/user-verification': typeof BaseAuthenticationUserVerificationRoute
-  '/posts/$postId': typeof MainPostsPostIdRoute
+  '/$username': typeof MainWithRightAsideUsernameRoute
+  '/bookmark-collections': typeof MainWithRightAsideBookmarkCollectionsRoute
+  '/bookmarks': typeof MainWithRightAsideBookmarksRoute
+  '/home': typeof MainWithRightAsideHomeRoute
+  '/notifications': typeof MainWithRightAsideNotificationsRoute
+  '/search': typeof MainWithRightAsideSearchRoute
+  '/posts/$postId': typeof MainWithRightAsidePostsPostIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_base': typeof BaseRouteRouteWithChildren
   '/_main': typeof MainRouteRouteWithChildren
   '/_base/_authentication': typeof BaseAuthenticationRouteRouteWithChildren
-  '/_main/$username': typeof MainUsernameRoute
-  '/_main/bookmark-collections': typeof MainBookmarkCollectionsRoute
-  '/_main/bookmarks': typeof MainBookmarksRoute
+  '/_main/_with-right-aside': typeof MainWithRightAsideRouteRouteWithChildren
   '/_main/discussions': typeof MainDiscussionsRoute
-  '/_main/home': typeof MainHomeRoute
-  '/_main/notifications': typeof MainNotificationsRoute
-  '/_main/search': typeof MainSearchRoute
   '/_base/_authentication/complete-signup': typeof BaseAuthenticationCompleteSignupRoute
   '/_base/_authentication/new-password': typeof BaseAuthenticationNewPasswordRoute
   '/_base/_authentication/password-reset': typeof BaseAuthenticationPasswordResetRoute
   '/_base/_authentication/signup': typeof BaseAuthenticationSignupRoute
   '/_base/_authentication/user-verification': typeof BaseAuthenticationUserVerificationRoute
-  '/_main/posts/$postId': typeof MainPostsPostIdRoute
+  '/_main/_with-right-aside/$username': typeof MainWithRightAsideUsernameRoute
+  '/_main/_with-right-aside/bookmark-collections': typeof MainWithRightAsideBookmarkCollectionsRoute
+  '/_main/_with-right-aside/bookmarks': typeof MainWithRightAsideBookmarksRoute
+  '/_main/_with-right-aside/home': typeof MainWithRightAsideHomeRoute
+  '/_main/_with-right-aside/notifications': typeof MainWithRightAsideNotificationsRoute
+  '/_main/_with-right-aside/search': typeof MainWithRightAsideSearchRoute
   '/_base/_authentication/': typeof BaseAuthenticationIndexRoute
+  '/_main/_with-right-aside/posts/$postId': typeof MainWithRightAsidePostsPostIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/$username'
-    | '/bookmark-collections'
-    | '/bookmarks'
     | '/discussions'
-    | '/home'
-    | '/notifications'
-    | '/search'
     | '/complete-signup'
     | '/new-password'
     | '/password-reset'
     | '/signup'
     | '/user-verification'
+    | '/$username'
+    | '/bookmark-collections'
+    | '/bookmarks'
+    | '/home'
+    | '/notifications'
+    | '/search'
     | '/posts/$postId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/$username'
-    | '/bookmark-collections'
-    | '/bookmarks'
     | '/discussions'
-    | '/home'
-    | '/notifications'
-    | '/search'
     | '/complete-signup'
     | '/new-password'
     | '/password-reset'
     | '/signup'
     | '/user-verification'
+    | '/$username'
+    | '/bookmark-collections'
+    | '/bookmarks'
+    | '/home'
+    | '/notifications'
+    | '/search'
     | '/posts/$postId'
   id:
     | '__root__'
     | '/_base'
     | '/_main'
     | '/_base/_authentication'
-    | '/_main/$username'
-    | '/_main/bookmark-collections'
-    | '/_main/bookmarks'
+    | '/_main/_with-right-aside'
     | '/_main/discussions'
-    | '/_main/home'
-    | '/_main/notifications'
-    | '/_main/search'
     | '/_base/_authentication/complete-signup'
     | '/_base/_authentication/new-password'
     | '/_base/_authentication/password-reset'
     | '/_base/_authentication/signup'
     | '/_base/_authentication/user-verification'
-    | '/_main/posts/$postId'
+    | '/_main/_with-right-aside/$username'
+    | '/_main/_with-right-aside/bookmark-collections'
+    | '/_main/_with-right-aside/bookmarks'
+    | '/_main/_with-right-aside/home'
+    | '/_main/_with-right-aside/notifications'
+    | '/_main/_with-right-aside/search'
     | '/_base/_authentication/'
+    | '/_main/_with-right-aside/posts/$postId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -249,25 +262,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BaseAuthenticationRouteRouteImport
       parentRoute: typeof BaseRouteRoute
     }
-    '/_main/$username': {
-      id: '/_main/$username'
-      path: '/$username'
-      fullPath: '/$username'
-      preLoaderRoute: typeof MainUsernameRouteImport
-      parentRoute: typeof MainRouteRoute
-    }
-    '/_main/bookmark-collections': {
-      id: '/_main/bookmark-collections'
-      path: '/bookmark-collections'
-      fullPath: '/bookmark-collections'
-      preLoaderRoute: typeof MainBookmarkCollectionsRouteImport
-      parentRoute: typeof MainRouteRoute
-    }
-    '/_main/bookmarks': {
-      id: '/_main/bookmarks'
-      path: '/bookmarks'
-      fullPath: '/bookmarks'
-      preLoaderRoute: typeof MainBookmarksRouteImport
+    '/_main/_with-right-aside': {
+      id: '/_main/_with-right-aside'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof MainWithRightAsideRouteRouteImport
       parentRoute: typeof MainRouteRoute
     }
     '/_main/discussions': {
@@ -275,27 +274,6 @@ declare module '@tanstack/react-router' {
       path: '/discussions'
       fullPath: '/discussions'
       preLoaderRoute: typeof MainDiscussionsRouteImport
-      parentRoute: typeof MainRouteRoute
-    }
-    '/_main/home': {
-      id: '/_main/home'
-      path: '/home'
-      fullPath: '/home'
-      preLoaderRoute: typeof MainHomeRouteImport
-      parentRoute: typeof MainRouteRoute
-    }
-    '/_main/notifications': {
-      id: '/_main/notifications'
-      path: '/notifications'
-      fullPath: '/notifications'
-      preLoaderRoute: typeof MainNotificationsRouteImport
-      parentRoute: typeof MainRouteRoute
-    }
-    '/_main/search': {
-      id: '/_main/search'
-      path: '/search'
-      fullPath: '/search'
-      preLoaderRoute: typeof MainSearchRouteImport
       parentRoute: typeof MainRouteRoute
     }
     '/_base/_authentication/': {
@@ -340,12 +318,54 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BaseAuthenticationUserVerificationRouteImport
       parentRoute: typeof BaseAuthenticationRouteRoute
     }
-    '/_main/posts/$postId': {
-      id: '/_main/posts/$postId'
+    '/_main/_with-right-aside/$username': {
+      id: '/_main/_with-right-aside/$username'
+      path: '/$username'
+      fullPath: '/$username'
+      preLoaderRoute: typeof MainWithRightAsideUsernameRouteImport
+      parentRoute: typeof MainWithRightAsideRouteRoute
+    }
+    '/_main/_with-right-aside/bookmark-collections': {
+      id: '/_main/_with-right-aside/bookmark-collections'
+      path: '/bookmark-collections'
+      fullPath: '/bookmark-collections'
+      preLoaderRoute: typeof MainWithRightAsideBookmarkCollectionsRouteImport
+      parentRoute: typeof MainWithRightAsideRouteRoute
+    }
+    '/_main/_with-right-aside/bookmarks': {
+      id: '/_main/_with-right-aside/bookmarks'
+      path: '/bookmarks'
+      fullPath: '/bookmarks'
+      preLoaderRoute: typeof MainWithRightAsideBookmarksRouteImport
+      parentRoute: typeof MainWithRightAsideRouteRoute
+    }
+    '/_main/_with-right-aside/home': {
+      id: '/_main/_with-right-aside/home'
+      path: '/home'
+      fullPath: '/home'
+      preLoaderRoute: typeof MainWithRightAsideHomeRouteImport
+      parentRoute: typeof MainWithRightAsideRouteRoute
+    }
+    '/_main/_with-right-aside/notifications': {
+      id: '/_main/_with-right-aside/notifications'
+      path: '/notifications'
+      fullPath: '/notifications'
+      preLoaderRoute: typeof MainWithRightAsideNotificationsRouteImport
+      parentRoute: typeof MainWithRightAsideRouteRoute
+    }
+    '/_main/_with-right-aside/search': {
+      id: '/_main/_with-right-aside/search'
+      path: '/search'
+      fullPath: '/search'
+      preLoaderRoute: typeof MainWithRightAsideSearchRouteImport
+      parentRoute: typeof MainWithRightAsideRouteRoute
+    }
+    '/_main/_with-right-aside/posts/$postId': {
+      id: '/_main/_with-right-aside/posts/$postId'
       path: '/posts/$postId'
       fullPath: '/posts/$postId'
-      preLoaderRoute: typeof MainPostsPostIdRouteImport
-      parentRoute: typeof MainRouteRoute
+      preLoaderRoute: typeof MainWithRightAsidePostsPostIdRouteImport
+      parentRoute: typeof MainWithRightAsideRouteRoute
     }
   }
 }
@@ -388,26 +408,41 @@ const BaseRouteRouteWithChildren = BaseRouteRoute._addFileChildren(
   BaseRouteRouteChildren,
 )
 
+interface MainWithRightAsideRouteRouteChildren {
+  MainWithRightAsideUsernameRoute: typeof MainWithRightAsideUsernameRoute
+  MainWithRightAsideBookmarkCollectionsRoute: typeof MainWithRightAsideBookmarkCollectionsRoute
+  MainWithRightAsideBookmarksRoute: typeof MainWithRightAsideBookmarksRoute
+  MainWithRightAsideHomeRoute: typeof MainWithRightAsideHomeRoute
+  MainWithRightAsideNotificationsRoute: typeof MainWithRightAsideNotificationsRoute
+  MainWithRightAsideSearchRoute: typeof MainWithRightAsideSearchRoute
+  MainWithRightAsidePostsPostIdRoute: typeof MainWithRightAsidePostsPostIdRoute
+}
+
+const MainWithRightAsideRouteRouteChildren: MainWithRightAsideRouteRouteChildren =
+  {
+    MainWithRightAsideUsernameRoute: MainWithRightAsideUsernameRoute,
+    MainWithRightAsideBookmarkCollectionsRoute:
+      MainWithRightAsideBookmarkCollectionsRoute,
+    MainWithRightAsideBookmarksRoute: MainWithRightAsideBookmarksRoute,
+    MainWithRightAsideHomeRoute: MainWithRightAsideHomeRoute,
+    MainWithRightAsideNotificationsRoute: MainWithRightAsideNotificationsRoute,
+    MainWithRightAsideSearchRoute: MainWithRightAsideSearchRoute,
+    MainWithRightAsidePostsPostIdRoute: MainWithRightAsidePostsPostIdRoute,
+  }
+
+const MainWithRightAsideRouteRouteWithChildren =
+  MainWithRightAsideRouteRoute._addFileChildren(
+    MainWithRightAsideRouteRouteChildren,
+  )
+
 interface MainRouteRouteChildren {
-  MainUsernameRoute: typeof MainUsernameRoute
-  MainBookmarkCollectionsRoute: typeof MainBookmarkCollectionsRoute
-  MainBookmarksRoute: typeof MainBookmarksRoute
+  MainWithRightAsideRouteRoute: typeof MainWithRightAsideRouteRouteWithChildren
   MainDiscussionsRoute: typeof MainDiscussionsRoute
-  MainHomeRoute: typeof MainHomeRoute
-  MainNotificationsRoute: typeof MainNotificationsRoute
-  MainSearchRoute: typeof MainSearchRoute
-  MainPostsPostIdRoute: typeof MainPostsPostIdRoute
 }
 
 const MainRouteRouteChildren: MainRouteRouteChildren = {
-  MainUsernameRoute: MainUsernameRoute,
-  MainBookmarkCollectionsRoute: MainBookmarkCollectionsRoute,
-  MainBookmarksRoute: MainBookmarksRoute,
+  MainWithRightAsideRouteRoute: MainWithRightAsideRouteRouteWithChildren,
   MainDiscussionsRoute: MainDiscussionsRoute,
-  MainHomeRoute: MainHomeRoute,
-  MainNotificationsRoute: MainNotificationsRoute,
-  MainSearchRoute: MainSearchRoute,
-  MainPostsPostIdRoute: MainPostsPostIdRoute,
 }
 
 const MainRouteRouteWithChildren = MainRouteRoute._addFileChildren(

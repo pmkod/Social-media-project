@@ -6,5 +6,9 @@ export const Route = createFileRoute("/_main/discussions")({
 });
 
 function DiscussionsPage() {
-	return <DiscussionList />;
+	return (
+		<main className="flex-1 min-w-0 border-border bg-background text-foreground min-h-screen">
+			<DiscussionList />
+		</main>
+	);
 }

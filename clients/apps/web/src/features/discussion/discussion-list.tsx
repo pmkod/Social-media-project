@@ -134,7 +134,7 @@ export function DiscussionList() {
 							onClick={() => setActiveConvId(conv.id)}
 							className={`w-full p-3.5 flex items-center gap-3 text-left transition-colors ${
 								activeConvId === conv.id
-									? "bg-sky-50 dark:bg-sky-950/30 border-l-4 border-sky-500"
+									? "bg-sky-50 dark:bg-sky-950/30"
 									: "hover:bg-accent hover:text-accent-foreground"
 							}`}
 						>

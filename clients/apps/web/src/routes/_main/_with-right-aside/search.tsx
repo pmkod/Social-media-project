@@ -20,7 +20,7 @@ const useDebouncedValue = (value: string, delay: number) => {
 	return debouncedValue;
 };
 
-export const Route = createFileRoute("/_main/search")({
+export const Route = createFileRoute("/_main/_with-right-aside/search")({
 	component: SearchPage,
 });
 

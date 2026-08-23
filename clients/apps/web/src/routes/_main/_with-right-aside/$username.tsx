@@ -10,7 +10,6 @@ import { ExceptionBlock } from "@/core/components/ui/exception-block";
 import { MainContainer } from "@/core/components/ui/main-container";
 import { UserLikedPosts } from "@/features/post/user-liked-posts/user-liked-posts";
 import { UserPosts } from "@/features/post/user-posts/user-posts";
-import { UserProfileView } from "@/features/user/user-profile/user-profile-view";
 import { useUserProfile } from "@/features/user/user-profile/use-user-profile.ts";
 import {
 	UserProfileTab,
@@ -19,9 +18,10 @@ import {
 	UserProfileTabListLoader,
 	UserProfileTabTrigger,
 } from "@/features/user/user-profile/user-profile-tab";
+import { UserProfileView } from "@/features/user/user-profile/user-profile-view";
 import { UserProfileViewLoader } from "@/features/user/user-profile/user-profile-view-loader.tsx";
 
-export const Route = createFileRoute("/_main/$username")({
+export const Route = createFileRoute("/_main/_with-right-aside/$username")({
 	component: ProfilePage,
 });
 

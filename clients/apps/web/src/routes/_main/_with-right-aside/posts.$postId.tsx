@@ -26,7 +26,7 @@ const postDetailSearchParams = z.object({
 	focusComment: z.boolean().optional(),
 });
 
-export const Route = createFileRoute("/_main/posts/$postId")({
+export const Route = createFileRoute("/_main/_with-right-aside/posts/$postId")({
 	validateSearch: postDetailSearchParams,
 	component: PostDetailPage,
 });

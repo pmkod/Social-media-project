@@ -19,7 +19,7 @@ const bookmarksSearchParams = z.object({
 	bookmarkCollectionId: z.string().optional(),
 });
 
-export const Route = createFileRoute("/_main/bookmarks")({
+export const Route = createFileRoute("/_main/_with-right-aside/bookmarks")({
 	validateSearch: bookmarksSearchParams,
 	component: BookmarksPage,
 });

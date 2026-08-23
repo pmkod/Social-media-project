@@ -8,7 +8,7 @@ import { MainContainer } from "@/core/components/ui/main-container.tsx";
 import { CreatePostForm } from "@/features/post/create-post/create-post-form.tsx";
 import { Feed } from "@/features/post/feed/feed.tsx";
 
-export const Route = createFileRoute("/_main/home")({
+export const Route = createFileRoute("/_main/_with-right-aside/home")({
 	component: HomePage,
 });
 

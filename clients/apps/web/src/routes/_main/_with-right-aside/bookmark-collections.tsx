@@ -23,7 +23,9 @@ import { BookmarkCollectionModal } from "@/features/bookmark/common/bookmark-col
 import { useDeleteBookmarkCollection } from "@/features/bookmark/delete-bookmark-collection/use-delete-bookmark-collection.ts";
 import { useBookmarkCollections } from "@/features/bookmark/use-bookmark-collections.ts";
 
-export const Route = createFileRoute("/_main/bookmark-collections")({
+export const Route = createFileRoute(
+	"/_main/_with-right-aside/bookmark-collections",
+)({
 	component: BookmarkCollectionsPage,
 });
 
