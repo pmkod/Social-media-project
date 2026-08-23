@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { httpClient } from "@/core/http-clients/http-client.ts";
-import type { BookmarkCollection } from "../common/bookmark-collection.ts";
+import type { BookmarkCollectionResponse } from "../common/bookmark-collection.ts";
 import type { BookmarkCollectionModalFormValues } from "../common/bookmark-collection-modal-form.tsx";
 import { bookmarkCollectionsQueryKeys } from "../common/bookmark-collections.query-keys.ts";
 
@@ -15,7 +15,7 @@ const useEditBookmarkCollection = () => {
 		mutationFn: ({ collectionId, ...input }: EditBookmarkCollectionInput) =>
 			httpClient
 				.put(`collections/${collectionId}`, { json: input })
-				.json<BookmarkCollection>(),
+				.json<BookmarkCollectionResponse>(),
 		onSuccess: () => {
 			queryClient.invalidateQueries({
 				queryKey: bookmarkCollectionsQueryKeys.root,

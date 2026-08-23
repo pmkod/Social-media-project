@@ -62,7 +62,7 @@ export function Sidebar() {
 						label="Discussions"
 					/>
 					<SidebarLink
-						to="/bookmarks"
+						to="/bookmark-collections"
 						icon={RiBookmarkLine}
 						label="Bookmarks"
 					/>

@@ -7,7 +7,10 @@ import {
 import { create, useModal } from "@/core/components/ui/nice-modal.tsx";
 import { useCreateBookmarkCollection } from "../create-bookmark-collection/use-create-bookmark-collection.ts";
 import { useEditBookmarkCollection } from "../edit-bookmark-collection/use-edit-bookmark-collection.ts";
-import type { BookmarkCollection } from "./bookmark-collection.ts";
+import type {
+	BookmarkCollection,
+	BookmarkCollectionResponse,
+} from "./bookmark-collection.ts";
 import { BookmarkCollectionModalForm } from "./bookmark-collection-modal-form.tsx";
 
 type BookmarkCollectionModalProps = {
@@ -27,8 +30,10 @@ const BookmarkCollectionModal = create<BookmarkCollectionModalProps>(
 			modal.remove();
 		};
 
-		const handleSuccess = (updatedCollection: BookmarkCollection) => {
-			modal.resolve(updatedCollection);
+		const handleSuccess = ({
+			bookmarkCollection,
+		}: BookmarkCollectionResponse) => {
+			modal.resolve(bookmarkCollection);
 			modal.remove();
 		};
 

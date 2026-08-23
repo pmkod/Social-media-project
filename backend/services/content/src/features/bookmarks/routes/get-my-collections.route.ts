@@ -16,6 +16,7 @@ const routeDef = createRoute({
 			cursorId: z.string().optional(),
 			cursorCreatedAt: z.string().optional(),
 			limit: z.string().optional().default("10"),
+			q: z.string().optional(),
 		}),
 	},
 	responses: {
@@ -32,6 +33,7 @@ const getMyCollectionsRoute = defineOpenAPIRoute<
 		const authenticatedUser = c.get("authenticatedUser");
 		if (!authenticatedUser?.id) throw new Error("Unauthorized");
 		const query = c.req.valid("query");
+		const searchQuery = query.q?.trim();
 		const limit = Math.min(
 			Math.max(Number.parseInt(query.limit, 10) || 10, 1),
 			50,
@@ -56,6 +58,11 @@ const getMyCollectionsRoute = defineOpenAPIRoute<
 		const collections = await prisma.bookmarkCollection.findMany({
 			where: {
 				ownerId: authenticatedUser.id,
+				...(searchQuery
+					? {
+							name: { contains: searchQuery, mode: "insensitive" as const },
+						}
+					: {}),
 				...(cursorCondition ? cursorCondition : {}),
 			},
 			orderBy: [{ createdAt: "desc" }, { id: "desc" }],

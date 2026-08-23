@@ -62,7 +62,9 @@ const editCollectionRoute = defineOpenAPIRoute<
 		});
 
 		const { _count, ...result } = updatedCollection;
-		return c.json({ ...result, bookmarksCount: _count.items });
+		return c.json({
+			bookmarkCollection: { ...result, bookmarksCount: _count.items },
+		});
 	},
 });
 

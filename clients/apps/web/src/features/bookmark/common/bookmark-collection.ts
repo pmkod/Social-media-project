@@ -7,3 +7,21 @@ export type BookmarkCollection = {
 	createdAt: string;
 	updatedAt: string;
 };
+
+export type BookmarkCollectionsCursor = {
+	id: string;
+	createdAt: string;
+};
+
+export type BookmarkCollectionsResponse = {
+	bookmarksCollections: BookmarkCollection[];
+	pagination: {
+		nextCursor: BookmarkCollectionsCursor | null;
+		hasNextPage: boolean;
+		limit: number;
+	};
+};
+
+export type BookmarkCollectionResponse = {
+	bookmarkCollection: BookmarkCollection;
+};

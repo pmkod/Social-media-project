@@ -37,7 +37,9 @@ const createCollectionRoute = defineOpenAPIRoute<
 			data: { ...body, ownerId },
 		});
 		return c.json(
-			{ ...collection, bookmarksCount: 0 },
+			{
+				bookmarkCollection: { ...collection, bookmarksCount: 0 },
+			},
 			HttpStatus.CREATED.code,
 		);
 	},

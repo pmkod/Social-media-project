@@ -16,7 +16,7 @@ function AppHeader({
 		<header
 			data-slot="app-header"
 			className={cn(
-				"z-20 flex h-14 items-center justify-between gap-4 px-4 bg-background/80 backdrop-blur-md",
+				"z-20 flex h-16 items-center justify-between gap-4 px-4 bg-background/80 backdrop-blur-md",
 				sticky && "sticky top-0",
 				bordered && "border-b border-border",
 				className,

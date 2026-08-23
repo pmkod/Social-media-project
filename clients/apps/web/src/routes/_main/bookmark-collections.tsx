@@ -1,9 +1,8 @@
-import { RiAddLine } from "@remixicon/react";
+import { RiAddLine, RiSearchLine } from "@remixicon/react";
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
 	AppHeader,
-	AppHeaderGoBackButton,
 	AppHeaderLeftPart,
 	AppHeaderRightPart,
 	AppHeaderTitle,
@@ -14,6 +13,7 @@ import { ExceptionBlock } from "@/core/components/ui/exception-block.tsx";
 import { MainContainer } from "@/core/components/ui/main-container.tsx";
 import NiceModal from "@/core/components/ui/nice-modal.tsx";
 import { useAlertDialog } from "@/core/hooks/use-alert-dialog.tsx";
+import { useDebounceValue } from "@/core/hooks/use-debounce-value.ts";
 import { useIntersectionObserver } from "@/core/hooks/use-intersection-observer.ts";
 import type { BookmarkCollection } from "@/features/bookmark/common/bookmark-collection.ts";
 import { BookmarkCollectionItem } from "@/features/bookmark/common/bookmark-collection-item.tsx";
@@ -29,9 +29,12 @@ export const Route = createFileRoute("/_main/bookmark-collections")({
 });
 
 function BookmarkCollectionsPage() {
+	const [search, setSearch] = useState("");
+	const [debouncedSearch] = useDebounceValue(search, 350);
 	const navigate = Route.useNavigate();
 	const collectionsQuery = useBookmarkCollections({
 		limit: BOOKMARK_COLLECTIONS_PAGE_LIMIT,
+		q: debouncedSearch,
 	});
 	const deleteCollection = useDeleteBookmarkCollection();
 	const alertDialog = useAlertDialog();
@@ -88,7 +91,6 @@ function BookmarkCollectionsPage() {
 		<MainContainer>
 			<AppHeader>
 				<AppHeaderLeftPart>
-					<AppHeaderGoBackButton to="/bookmarks" />
 					<AppHeaderTitle>Bookmark collections</AppHeaderTitle>
 				</AppHeaderLeftPart>
 				<AppHeaderRightPart>
@@ -103,61 +105,90 @@ function BookmarkCollectionsPage() {
 				</AppHeaderRightPart>
 			</AppHeader>
 
-			<section className="px-4 py-4">
-				{collectionsQuery.isLoading ? (
-					<div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-						<BookmarkCollectionItemLoader />
-						<BookmarkCollectionItemLoader />
-						<BookmarkCollectionItemLoader />
-						<BookmarkCollectionItemLoader />
-						<BookmarkCollectionItemLoader />
-						<BookmarkCollectionItemLoader />
-					</div>
-				) : collectionsQuery.isError ? (
+			<section className="pb-4">
+				<div className="mb-4">
+					<input
+						type="search"
+						value={search}
+						onChange={(event) => setSearch(event.target.value)}
+						placeholder="Search collections"
+						aria-label="Search bookmark collections"
+						className="h-11 w-full rounded-lg bg-muted px-4 text-sm text-foreground outline-none transition focus:ring-2 focus:ring-sky-500"
+					/>
+				</div>
+
+				<div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+					<BookmarkCollectionItem
+						name="All bookmarks"
+						isSelected={false}
+						onClick={() =>
+							void navigate({
+								to: "/bookmarks",
+								search: {},
+							})
+						}
+					/>
+
+					{collectionsQuery.isLoading ? (
+						<>
+							<BookmarkCollectionItemLoader />
+							<BookmarkCollectionItemLoader />
+							<BookmarkCollectionItemLoader />
+							<BookmarkCollectionItemLoader />
+							<BookmarkCollectionItemLoader />
+						</>
+					) : (
+						collections.map((collection) => (
+							<BookmarkCollectionItem
+								key={collection.id}
+								name={collection.name}
+								isSelected={false}
+								onClick={() =>
+									void navigate({
+										to: "/bookmarks",
+										search: { bookmarkCollectionId: collection.id },
+									})
+								}
+								onEdit={() => void handleOpenEditCollectionModal(collection)}
+								onDelete={() => handleDeleteCollection(collection)}
+							/>
+						))
+					)}
+				</div>
+
+				{collectionsQuery.isError ? (
 					<ExceptionBlock
+						className="mt-4"
 						title="Unable to load your collections"
 						description="An error occurred while loading your bookmark collections."
 						onRefresh={() => void collectionsQuery.refetch()}
 						isRefetching={collectionsQuery.isRefetching}
 					/>
-				) : collections.length === 0 ? (
+				) : !collectionsQuery.isLoading && collections.length === 0 ? (
 					<EmptyBlock
-						title="No bookmark collections"
-						description="Create a collection to organize your saved posts."
+						className="mt-4"
+						title={
+							debouncedSearch
+								? "No bookmark collections found"
+								: "No bookmark collections"
+						}
+						description={
+							debouncedSearch
+								? "Try a different search."
+								: "Create a collection to organize your saved posts."
+						}
 					/>
-				) : (
-					<>
-						<div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-							{collections.map((collection) => (
-								<BookmarkCollectionItem
-									key={collection.id}
-									name={collection.name}
-									isSelected={false}
-									onClick={() =>
-										void navigate({
-											to: "/bookmarks",
-											search: { bookmarkCollectionId: collection.id },
-										})
-									}
-									onEdit={() => void handleOpenEditCollectionModal(collection)}
-									onDelete={() => handleDeleteCollection(collection)}
-								/>
-							))}
-						</div>
+				) : null}
 
-						{collectionsQuery.hasNextPage ? (
-							<div ref={observerTargetRef} className="mt-3 min-h-1">
-								{collectionsQuery.isFetchingNextPage ? (
-									<div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-										<BookmarkCollectionItemLoader />
-										<BookmarkCollectionItemLoader />
-										<BookmarkCollectionItemLoader />
-									</div>
-								) : null}
-							</div>
-						) : null}
-					</>
-				)}
+				{collectionsQuery.hasNextPage ? (
+					<div ref={observerTargetRef} className="mt-3 min-h-1">
+						<div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+							<BookmarkCollectionItemLoader />
+							<BookmarkCollectionItemLoader />
+							<BookmarkCollectionItemLoader />
+						</div>
+					</div>
+				) : null}
 			</section>
 		</MainContainer>
 	);

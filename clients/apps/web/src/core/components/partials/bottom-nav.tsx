@@ -39,7 +39,7 @@ export function BottomNav() {
 				<RiChat3Line className="h-6 w-6" />
 			</Link>
 			<Link
-				to="/bookmarks"
+				to="/bookmark-collections"
 				className="p-2.5 text-muted-foreground hover:text-sky-500 transition-colors"
 				activeProps={{ className: "text-sky-500" }}
 			>

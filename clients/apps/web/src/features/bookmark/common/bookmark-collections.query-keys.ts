@@ -1,9 +1,15 @@
 const bookmarkCollectionsRootQueryKey = ["bookmark-collections"] as const;
 
+type BookmarkCollectionsQueryParams = {
+	limit: number;
+	q: string;
+};
+
 const bookmarkCollectionsQueryKeys = {
 	root: bookmarkCollectionsRootQueryKey,
-	mine: (limit = 10) =>
-		[...bookmarkCollectionsRootQueryKey, "me", { limit }] as const,
+	mine: (params: BookmarkCollectionsQueryParams) =>
+		[...bookmarkCollectionsRootQueryKey, "me", params] as const,
 };
 
 export { bookmarkCollectionsQueryKeys };
+export type { BookmarkCollectionsQueryParams };
