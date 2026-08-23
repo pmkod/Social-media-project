@@ -15,7 +15,7 @@ export type BookmarkCollectionsCursor = {
 };
 
 export type BookmarkCollectionsResponse = {
-	bookmarksCollections: BookmarkCollection[];
+	bookmarkCollections: BookmarkCollection[];
 	pagination: {
 		nextCursor: BookmarkCollectionsCursor | null;
 		hasNextPage: boolean;

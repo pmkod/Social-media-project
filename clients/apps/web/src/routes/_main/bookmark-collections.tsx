@@ -57,7 +57,7 @@ function BookmarkCollectionsPage() {
 	]);
 
 	const collections =
-		collectionsQuery.data?.pages.flatMap((page) => page.bookmarksCollections) ??
+		collectionsQuery.data?.pages.flatMap((page) => page.bookmarkCollections) ??
 		[];
 
 	const handleOpenCreateCollectionModal = async () => {

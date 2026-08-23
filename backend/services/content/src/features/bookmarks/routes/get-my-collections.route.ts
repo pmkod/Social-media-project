@@ -105,7 +105,7 @@ const getMyCollectionsRoute = defineOpenAPIRoute<
 				: new Set<string>();
 
 		return c.json({
-			bookmarksCollections: items.map(({ _count, ...collection }) => ({
+			bookmarkCollections: items.map(({ _count, ...collection }) => ({
 				...collection,
 				bookmarksCount: _count.items,
 				isPostInCollection: selectedCollectionIds.has(collection.id),

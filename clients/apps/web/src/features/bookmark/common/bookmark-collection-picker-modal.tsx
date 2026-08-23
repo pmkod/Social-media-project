@@ -25,7 +25,6 @@ import { useIntersectionObserver } from "@/core/hooks/use-intersection-observer.
 import { useAddBookmark } from "../use-add-bookmark.ts";
 import { useBookmarkCollections } from "../use-bookmark-collections.ts";
 import { useRemoveBookmark } from "../use-remove-bookmark.ts";
-import { useRemovePostFromCollection } from "../use-remove-post-from-collection.ts";
 import { BOOKMARK_COLLECTIONS_PAGE_LIMIT } from "./bookmark-collection.constants.ts";
 import type { BookmarkCollection } from "./bookmark-collection.ts";
 import { BookmarkCollectionModal } from "./bookmark-collection-modal.tsx";
@@ -41,7 +40,6 @@ const BookmarkCollectionPickerModal =
 		const modal = useModal();
 		const addBookmark = useAddBookmark();
 		const removeBookmark = useRemoveBookmark();
-		const removePostFromCollection = useRemovePostFromCollection();
 		const [isBookmarked, setIsBookmarked] = useState(initialIsBookmarked);
 		const [search, setSearch] = useState("");
 		const [debouncedSearch] = useDebounceValue(search, 500);
@@ -61,7 +59,7 @@ const BookmarkCollectionPickerModal =
 
 		const collections =
 			collectionsQuery.data?.pages.flatMap(
-				(page) => page.bookmarksCollections,
+				(page) => page.bookmarkCollections,
 			) ?? [];
 		const { fetchNextPage, hasNextPage, isFetchingNextPage } = collectionsQuery;
 
@@ -88,12 +86,12 @@ const BookmarkCollectionPickerModal =
 			modal.remove();
 		};
 
-		const isMutationPending =
-			addBookmark.isPending ||
-			removeBookmark.isPending ||
-			removePostFromCollection.isPending;
-		const pendingCollectionId = removePostFromCollection.isPending
-			? removePostFromCollection.variables?.collectionId
+		const isMutationPending = addBookmark.isPending || removeBookmark.isPending;
+		const isGlobalRemovePending =
+			removeBookmark.isPending &&
+			removeBookmark.variables?.bookmarkCollectionId === undefined;
+		const pendingCollectionId = removeBookmark.isPending
+			? removeBookmark.variables?.bookmarkCollectionId
 			: addBookmark.variables?.collectionId;
 
 		const handleToggleBookmark = async () => {
@@ -101,9 +99,8 @@ const BookmarkCollectionPickerModal =
 
 			try {
 				if (isBookmarked) {
-					await removeBookmark.mutateAsync(postId);
+					await removeBookmark.mutateAsync({ postId });
 					setIsBookmarked(false);
-					await collectionsQuery.refetch();
 				} else {
 					await addBookmark.mutateAsync({ postId });
 					setIsBookmarked(true);
@@ -116,9 +113,9 @@ const BookmarkCollectionPickerModal =
 
 			try {
 				if (collection.isPostInCollection) {
-					await removePostFromCollection.mutateAsync({
+					await removeBookmark.mutateAsync({
 						postId,
-						collectionId: collection.id,
+						bookmarkCollectionId: collection.id,
 					});
 				} else {
 					await addBookmark.mutateAsync({
@@ -127,7 +124,6 @@ const BookmarkCollectionPickerModal =
 					});
 					setIsBookmarked(true);
 				}
-				await collectionsQuery.refetch();
 			} catch {}
 		};
 
@@ -192,7 +188,7 @@ const BookmarkCollectionPickerModal =
 											: "Save this post without choosing a collection."}
 									</span>
 								</span>
-								{removeBookmark.isPending ? (
+								{isGlobalRemovePending ? (
 									<RiLoader4Line className="size-5 shrink-0 animate-spin text-muted-foreground" />
 								) : isBookmarked ? (
 									<RiBookmarkFill className="size-5 shrink-0 text-amber-500" />

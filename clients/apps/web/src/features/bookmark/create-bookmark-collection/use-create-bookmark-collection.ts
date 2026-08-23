@@ -50,9 +50,9 @@ const useCreateBookmarkCollection = () => {
 							index === 0
 								? {
 										...page,
-										bookmarksCollections: [
+										bookmarkCollections: [
 											bookmarkCollection,
-											...page.bookmarksCollections,
+											...page.bookmarkCollections,
 										],
 									}
 								: page,

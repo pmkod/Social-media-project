@@ -8,6 +8,7 @@ import { httpClient } from "@/core/http-clients/http-client.ts";
 import type { Post } from "@/features/post/common/post.ts";
 import { postListQueryKeys } from "@/features/post/common/post-list.query-keys.ts";
 import { postDetailsQueryKey } from "@/features/post/post-detail/post-detail.query-key.ts";
+import type { BookmarkCollection } from "./common/bookmark-collection.ts";
 import { bookmarkCollectionsQueryKeys } from "./common/bookmark-collections.query-keys.ts";
 
 type RemoveBookmarkResponse = {
@@ -17,16 +18,29 @@ type RemoveBookmarkResponse = {
 	};
 };
 
+type RemoveBookmarkInput = {
+	postId: string;
+	bookmarkCollectionId?: string;
+};
+
 const useRemoveBookmark = () => {
 	const queryClient = useQueryClient();
 
 	return useMutation({
-		mutationFn: (postId: string) =>
+		mutationFn: ({ postId, bookmarkCollectionId }: RemoveBookmarkInput) =>
 			httpClient
-				.delete(`posts/${postId}/bookmarks`)
+				.delete(`posts/${postId}/bookmarks`, {
+					searchParams: bookmarkCollectionId
+						? { bookmarkCollectionId }
+						: undefined,
+				})
 				.json<RemoveBookmarkResponse>(),
-		onSuccess: (data, postId) => {
-			toast.success("Post removed from bookmarks");
+		onSuccess: (data, { postId, bookmarkCollectionId }) => {
+			toast.success(
+				bookmarkCollectionId
+					? "Post removed from collection"
+					: "Post removed from bookmarks",
+			);
 			const isBookmarked = data.post.isBookmarkedByAuthenticatedUser;
 
 			queryClient.setQueriesData<InfiniteData<{ posts: Post[] }>>(
@@ -61,19 +75,47 @@ const useRemoveBookmark = () => {
 						: oldData,
 			);
 
-			queryClient.invalidateQueries({
-				queryKey: postListQueryKeys.bookmarks({}),
-			});
-			queryClient.invalidateQueries({
-				queryKey: postListQueryKeys.root,
-				predicate: (query) => query.queryKey.includes("collection"),
-			});
-			queryClient.invalidateQueries({
-				queryKey: bookmarkCollectionsQueryKeys.root,
-			});
+			if (bookmarkCollectionId) {
+				queryClient.setQueriesData<
+					InfiniteData<{ bookmarkCollections: BookmarkCollection[] }>
+				>({ queryKey: bookmarkCollectionsQueryKeys.root }, (oldData) => {
+					if (!oldData) return undefined;
+					return {
+						...oldData,
+						pages: oldData.pages.map((page) => ({
+							...page,
+							bookmarkCollections: page.bookmarkCollections.map(
+								(bookmarkCollection) =>
+									bookmarkCollection.id === bookmarkCollectionId
+										? {
+												...bookmarkCollection,
+												isPostInCollection: false,
+											}
+										: bookmarkCollection,
+							),
+						})),
+					};
+				});
+				queryClient.invalidateQueries({
+					queryKey: postListQueryKeys.bookmarks({
+						bookmarkCollectionId,
+					}),
+				});
+			} else {
+				queryClient.invalidateQueries({
+					queryKey: postListQueryKeys.bookmarks({}),
+				});
+				queryClient.invalidateQueries({
+					queryKey: bookmarkCollectionsQueryKeys.root,
+				});
+			}
 		},
-		onError: () => {
-			toast.error("Unable to remove post from bookmarks");
+		onError: (_error, { bookmarkCollectionId }) => {
+			toast.error(
+				bookmarkCollectionId
+					? "Unable to remove post from collection"
+					: "Unable to remove post from bookmarks",
+			);
 		},
 	});
 };
