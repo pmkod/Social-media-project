@@ -3,6 +3,7 @@ import {
 	useMutation,
 	useQueryClient,
 } from "@tanstack/react-query";
+import { toast } from "sonner";
 import { httpClient } from "@/core/http-clients/http-client.ts";
 import type { Post } from "@/features/post/common/post.ts";
 import { postListQueryKeys } from "@/features/post/common/post-list.query-keys.ts";
@@ -32,6 +33,7 @@ const useAddBookmark = () => {
 				})
 				.json<AddBookmarkResponse>(),
 		onSuccess: (data, { postId, collectionId }) => {
+			toast.success("Post added to bookmarks");
 			const isBookmarked = data.post.isBookmarkedByAuthenticatedUser;
 
 			queryClient.setQueriesData<InfiniteData<{ posts: Post[] }>>(
@@ -77,6 +79,9 @@ const useAddBookmark = () => {
 					queryKey: bookmarkCollectionsQueryKeys.root,
 				});
 			}
+		},
+		onError: () => {
+			toast.error("Unable to add post to bookmarks");
 		},
 	});
 };

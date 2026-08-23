@@ -3,6 +3,7 @@ import {
 	useMutation,
 	useQueryClient,
 } from "@tanstack/react-query";
+import { toast } from "sonner";
 import { httpClient } from "@/core/http-clients/http-client.ts";
 import type { Post } from "@/features/post/common/post.ts";
 import { postListQueryKeys } from "@/features/post/common/post-list.query-keys.ts";
@@ -25,6 +26,7 @@ const useRemoveBookmark = () => {
 				.delete(`posts/${postId}/bookmarks`)
 				.json<RemoveBookmarkResponse>(),
 		onSuccess: (data, postId) => {
+			toast.success("Post removed from bookmarks");
 			const isBookmarked = data.post.isBookmarkedByAuthenticatedUser;
 
 			queryClient.setQueriesData<InfiniteData<{ posts: Post[] }>>(
@@ -69,6 +71,9 @@ const useRemoveBookmark = () => {
 			queryClient.invalidateQueries({
 				queryKey: bookmarkCollectionsQueryKeys.root,
 			});
+		},
+		onError: () => {
+			toast.error("Unable to remove post from bookmarks");
 		},
 	});
 };

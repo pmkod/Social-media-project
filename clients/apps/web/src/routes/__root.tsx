@@ -9,6 +9,7 @@ import {
 } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import NiceModal from "@/core/components/ui/nice-modal.tsx";
+import { Toaster } from "@/core/components/ui/sonner.tsx";
 import TanStackQueryDevtools from "../core/integrations/tanstack-query/devtools";
 import appCss from "../styles.css?url";
 
@@ -57,6 +58,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 				<QueryClientProvider client={queryClient}>
 					<NiceModal.Provider>{children}</NiceModal.Provider>
 				</QueryClientProvider>
+				<Toaster />
 				<TanStackDevtools
 					config={{
 						position: "bottom-right",

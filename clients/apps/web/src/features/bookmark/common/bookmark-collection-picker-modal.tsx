@@ -5,7 +5,6 @@ import {
 	RiLoader4Line,
 } from "@remixicon/react";
 import { useEffect, useState } from "react";
-import { Alert, AlertDescription } from "@/core/components/ui/alert.tsx";
 import {
 	Dialog,
 	DialogBody,
@@ -146,17 +145,6 @@ const BookmarkCollectionPickerModal =
 									<RiAddLine className="size-6" />
 								</IconButton>
 							</div>
-							{addBookmark.isError || removePostFromCollection.isError ? (
-								<div className="px-6">
-									<Alert colorScheme="destructive">
-										<AlertDescription>
-											{removePostFromCollection.isError
-												? "Unable to remove this post from the collection. Please try again."
-												: "Unable to add this post to the collection. Please try again."}
-										</AlertDescription>
-									</Alert>
-								</div>
-							) : null}
 							{collectionsQuery.isLoading ? (
 								<div className="space-y-1">
 									{[1, 2, 3, 4].map((loaderId) => (
