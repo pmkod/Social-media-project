@@ -57,7 +57,7 @@ const addBookmarkRoute = defineOpenAPIRoute<
 			);
 		}
 
-		const bookmark = await prisma.$transaction(async (tx) => {
+		await prisma.$transaction(async (tx) => {
 			const savedBookmark = await tx.bookmark.upsert({
 				where: { postId_ownerId: { postId, ownerId } },
 				create: { postId, ownerId },
@@ -80,12 +80,16 @@ const addBookmarkRoute = defineOpenAPIRoute<
 					update: {},
 				});
 			}
-
-			return savedBookmark;
 		});
 
 		return c.json(
-			{ success: true, isBookmarkedByAuthenticatedUser: true, bookmark },
+			{
+				success: true,
+				post: {
+					id: post.id,
+					isBookmarkedByAuthenticatedUser: true,
+				},
+			},
 			HttpStatus.CREATED.code,
 		);
 	},

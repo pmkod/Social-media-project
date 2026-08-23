@@ -6,7 +6,6 @@ import {
 } from "@remixicon/react";
 import { useEffect, useState } from "react";
 import { Alert, AlertDescription } from "@/core/components/ui/alert.tsx";
-import { Button } from "@/core/components/ui/button.tsx";
 import {
 	Dialog,
 	DialogBody,
@@ -16,10 +15,13 @@ import {
 } from "@/core/components/ui/dialog.tsx";
 import { EmptyBlock } from "@/core/components/ui/empty-block.tsx";
 import { ExceptionBlock } from "@/core/components/ui/exception-block.tsx";
+import { IconButton } from "@/core/components/ui/icon-button.tsx";
 import NiceModal, {
 	create,
 	useModal,
 } from "@/core/components/ui/nice-modal.tsx";
+import { Skeleton } from "@/core/components/ui/skeleton.tsx";
+import { useDebounceValue } from "@/core/hooks/use-debounce-value.ts";
 import { useIntersectionObserver } from "@/core/hooks/use-intersection-observer.ts";
 import { useAddBookmark } from "../use-add-bookmark.ts";
 import { useBookmarkCollections } from "../use-bookmark-collections.ts";
@@ -27,8 +29,6 @@ import { useRemovePostFromCollection } from "../use-remove-post-from-collection.
 import { BOOKMARK_COLLECTIONS_PAGE_LIMIT } from "./bookmark-collection.constants.ts";
 import type { BookmarkCollection } from "./bookmark-collection.ts";
 import { BookmarkCollectionModal } from "./bookmark-collection-modal.tsx";
-import { Skeleton } from "@/core/components/ui/skeleton.tsx";
-import { IconButton } from "@/core/components/ui/icon-button.tsx";
 
 type BookmarkCollectionPickerModalProps = {
 	postId: string;
@@ -39,11 +39,14 @@ const BookmarkCollectionPickerModal =
 		const modal = useModal();
 		const addBookmark = useAddBookmark();
 		const removePostFromCollection = useRemovePostFromCollection();
+		const [search, setSearch] = useState("");
+		const [debouncedSearch] = useDebounceValue(search, 500);
 		const [scrollContainer, setScrollContainer] =
 			useState<HTMLDivElement | null>(null);
 		const collectionsQuery = useBookmarkCollections({
 			limit: BOOKMARK_COLLECTIONS_PAGE_LIMIT,
 			postId,
+			q: debouncedSearch,
 			enabled: modal.visible,
 		});
 		const { ref: observerTargetRef, isIntersecting: isTargetIntersecting } =
@@ -83,6 +86,9 @@ const BookmarkCollectionPickerModal =
 
 		const isMutationPending =
 			addBookmark.isPending || removePostFromCollection.isPending;
+		const pendingCollectionId = addBookmark.isPending
+			? addBookmark.variables?.collectionId
+			: removePostFromCollection.variables?.collectionId;
 
 		const handleToggleCollection = async (collection: BookmarkCollection) => {
 			if (isMutationPending) return;
@@ -123,7 +129,15 @@ const BookmarkCollectionPickerModal =
 
 					<DialogBody ref={setScrollContainer}>
 						<div className="relative">
-							<div className="flex justify-end py-3 px-6 sticky top-0 bg-white">
+							<div className="sticky top-0 flex items-center gap-3 bg-white px-6 py-3">
+								<input
+									type="search"
+									value={search}
+									onChange={(event) => setSearch(event.target.value)}
+									placeholder="Search collections"
+									aria-label="Search bookmark collections"
+									className="h-8 min-w-0 flex-1 rounded bg-muted px-4 text-sm text-foreground outline-none transition focus:border focus:border-foreground"
+								/>
 								<IconButton
 									type="button"
 									size="sm"
@@ -168,15 +182,23 @@ const BookmarkCollectionPickerModal =
 								<EmptyBlock
 									borderless
 									className="px-6 py-8"
-									title="No collections yet"
-									description="Create a collection to organize your saved posts."
+									title={
+										debouncedSearch
+											? "No bookmark collections found"
+											: "No collections yet"
+									}
+									description={
+										debouncedSearch
+											? "Try a different search."
+											: "Create a collection to organize your saved posts."
+									}
 								/>
 							) : (
 								<div>
 									{collections.map((collection) => {
 										const isLoading =
 											isMutationPending &&
-											addBookmark.variables?.collectionId === collection.id;
+											pendingCollectionId === collection.id;
 										return (
 											<button
 												key={collection.id}

@@ -29,7 +29,10 @@ const removeBookmarkRoute = defineOpenAPIRoute<
 		await prisma.bookmark.deleteMany({ where: { postId, ownerId } });
 		return c.json({
 			success: true,
-			isBookmarkedByAuthenticatedUser: false,
+			post: {
+				id: postId,
+				isBookmarkedByAuthenticatedUser: false,
+			},
 		});
 	},
 });

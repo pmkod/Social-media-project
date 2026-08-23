@@ -9,29 +9,22 @@ import { postListQueryKeys } from "@/features/post/common/post-list.query-keys.t
 import { postDetailsQueryKey } from "@/features/post/post-detail/post-detail.query-key.ts";
 import { bookmarkCollectionsQueryKeys } from "./common/bookmark-collections.query-keys.ts";
 
-type AddBookmarkInput = {
-	postId: string;
-	collectionId?: string;
-};
-
-type AddBookmarkResponse = {
+type RemoveBookmarkResponse = {
 	success: boolean;
 	post: Pick<Post, "id"> & {
 		isBookmarkedByAuthenticatedUser: boolean;
 	};
 };
 
-const useAddBookmark = () => {
+const useRemoveBookmark = () => {
 	const queryClient = useQueryClient();
 
 	return useMutation({
-		mutationFn: ({ postId, collectionId }: AddBookmarkInput) =>
+		mutationFn: (postId: string) =>
 			httpClient
-				.post(`posts/${postId}/bookmarks`, {
-					json: collectionId ? { collectionId } : {},
-				})
-				.json<AddBookmarkResponse>(),
-		onSuccess: (data, { postId, collectionId }) => {
+				.delete(`posts/${postId}/bookmarks`)
+				.json<RemoveBookmarkResponse>(),
+		onSuccess: (data, postId) => {
 			const isBookmarked = data.post.isBookmarkedByAuthenticatedUser;
 
 			queryClient.setQueriesData<InfiniteData<{ posts: Post[] }>>(
@@ -69,16 +62,15 @@ const useAddBookmark = () => {
 			queryClient.invalidateQueries({
 				queryKey: postListQueryKeys.bookmarks(),
 			});
-			if (collectionId) {
-				queryClient.invalidateQueries({
-					queryKey: postListQueryKeys.collectionPosts(collectionId),
-				});
-				queryClient.invalidateQueries({
-					queryKey: bookmarkCollectionsQueryKeys.root,
-				});
-			}
+			queryClient.invalidateQueries({
+				queryKey: postListQueryKeys.root,
+				predicate: (query) => query.queryKey.includes("collection"),
+			});
+			queryClient.invalidateQueries({
+				queryKey: bookmarkCollectionsQueryKeys.root,
+			});
 		},
 	});
 };
 
-export { useAddBookmark };
+export { useRemoveBookmark };
