@@ -20,7 +20,7 @@ type RemoveBookmarkResponse = {
 
 type RemoveBookmarkInput = {
 	postId: string;
-	bookmarkCollectionId?: string;
+	bookmarkCollectionId: string;
 };
 
 const useRemoveBookmark = () => {
@@ -30,17 +30,11 @@ const useRemoveBookmark = () => {
 		mutationFn: ({ postId, bookmarkCollectionId }: RemoveBookmarkInput) =>
 			httpClient
 				.delete(`posts/${postId}/bookmarks`, {
-					searchParams: bookmarkCollectionId
-						? { bookmarkCollectionId }
-						: undefined,
+					searchParams: { bookmarkCollectionId },
 				})
 				.json<RemoveBookmarkResponse>(),
 		onSuccess: (data, { postId, bookmarkCollectionId }) => {
-			toast.success(
-				bookmarkCollectionId
-					? "Post removed from collection"
-					: "Post removed from bookmarks",
-			);
+			toast.success("Post removed from collection");
 			const isBookmarked = data.post.isBookmarkedByAuthenticatedUser;
 
 			queryClient.setQueriesData<InfiniteData<{ posts: Post[] }>>(
@@ -75,47 +69,38 @@ const useRemoveBookmark = () => {
 						: oldData,
 			);
 
-			if (bookmarkCollectionId) {
-				queryClient.setQueriesData<
-					InfiniteData<{ bookmarkCollections: BookmarkCollection[] }>
-				>({ queryKey: bookmarkCollectionsQueryKeys.root }, (oldData) => {
-					if (!oldData) return undefined;
-					return {
-						...oldData,
-						pages: oldData.pages.map((page) => ({
-							...page,
-							bookmarkCollections: page.bookmarkCollections.map(
-								(bookmarkCollection) =>
-									bookmarkCollection.id === bookmarkCollectionId
-										? {
-												...bookmarkCollection,
-												isPostInCollection: false,
-											}
-										: bookmarkCollection,
-							),
-						})),
-					};
-				});
-				queryClient.invalidateQueries({
-					queryKey: postListQueryKeys.bookmarks({
-						bookmarkCollectionId,
-					}),
-				});
-			} else {
-				queryClient.invalidateQueries({
-					queryKey: postListQueryKeys.bookmarks({}),
-				});
-				queryClient.invalidateQueries({
-					queryKey: bookmarkCollectionsQueryKeys.root,
-				});
-			}
+			queryClient.setQueriesData<
+				InfiniteData<{ bookmarkCollections: BookmarkCollection[] }>
+			>({ queryKey: bookmarkCollectionsQueryKeys.root }, (oldData) => {
+				if (!oldData) return undefined;
+				return {
+					...oldData,
+					pages: oldData.pages.map((page) => ({
+						...page,
+						bookmarkCollections: page.bookmarkCollections.map(
+							(bookmarkCollection) =>
+								bookmarkCollection.id === bookmarkCollectionId
+									? {
+											...bookmarkCollection,
+											isPostInCollection: false,
+										}
+									: bookmarkCollection,
+						),
+					})),
+				};
+			});
+			queryClient.invalidateQueries({
+				queryKey: bookmarkCollectionsQueryKeys.root,
+			});
+			queryClient.invalidateQueries({
+				queryKey: postListQueryKeys.bookmarks({ bookmarkCollectionId }),
+			});
+			queryClient.invalidateQueries({
+				queryKey: postListQueryKeys.bookmarks({}),
+			});
 		},
-		onError: (_error, { bookmarkCollectionId }) => {
-			toast.error(
-				bookmarkCollectionId
-					? "Unable to remove post from collection"
-					: "Unable to remove post from bookmarks",
-			);
+		onError: () => {
+			toast.error("Unable to remove post from collection");
 		},
 	});
 };

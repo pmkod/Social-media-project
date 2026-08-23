@@ -74,7 +74,7 @@ function BookmarkCollectionsPage() {
 		alertDialog.show({
 			title: `Delete "${collection.name}"?`,
 			description:
-				"This collection will be deleted, but the posts will remain in your bookmarks.",
+				"This collection will be deleted. Posts in other collections will remain saved.",
 			cancel: { text: "Cancel" },
 			confirm: {
 				text: "Delete collection",

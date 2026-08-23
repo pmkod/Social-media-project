@@ -90,7 +90,7 @@ const getBookmarksRoute = defineOpenAPIRoute<
 									some: { collectionId: query.bookmarkCollectionId },
 								},
 							}
-						: { ownerId },
+						: { ownerId, collectionItems: { some: {} } },
 				},
 				...(hiddenUserIds.length > 0
 					? { authorId: { notIn: hiddenUserIds } }

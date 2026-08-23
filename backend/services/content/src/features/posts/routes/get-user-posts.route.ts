@@ -148,6 +148,7 @@ const getUserPostsRoute = defineOpenAPIRoute<
 							where: {
 								ownerId: authenticatedUserId,
 								postId: { in: postIds },
+								collectionItems: { some: {} },
 							},
 							select: { postId: true },
 						})

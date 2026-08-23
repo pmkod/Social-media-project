@@ -13,7 +13,7 @@ import { bookmarkCollectionsQueryKeys } from "./common/bookmark-collections.quer
 
 type AddBookmarkInput = {
 	postId: string;
-	collectionId?: string;
+	bookmarkCollectionId: string;
 };
 
 type AddBookmarkResponse = {
@@ -27,14 +27,14 @@ const useAddBookmark = () => {
 	const queryClient = useQueryClient();
 
 	return useMutation({
-		mutationFn: ({ postId, collectionId }: AddBookmarkInput) =>
+		mutationFn: ({ postId, bookmarkCollectionId }: AddBookmarkInput) =>
 			httpClient
 				.post(`posts/${postId}/bookmarks`, {
-					json: collectionId ? { collectionId } : {},
+					json: { bookmarkCollectionId },
 				})
 				.json<AddBookmarkResponse>(),
 		onSuccess: (data, variables) => {
-			toast.success("Post added to bookmarks");
+			toast.success("Post added to collection");
 			const isBookmarked = data.post.isBookmarkedByAuthenticatedUser;
 
 			queryClient.setQueriesData<InfiniteData<{ posts: Post[] }>>(
@@ -83,7 +83,7 @@ const useAddBookmark = () => {
 							...page,
 							bookmarkCollections: page.bookmarkCollections.map(
 								(bookmarkCollection) =>
-									bookmarkCollection.id === variables.collectionId
+									bookmarkCollection.id === variables.bookmarkCollectionId
 										? {
 												...bookmarkCollection,
 												isPostInCollection: true,
@@ -94,9 +94,20 @@ const useAddBookmark = () => {
 					};
 				},
 			);
+			queryClient.invalidateQueries({
+				queryKey: bookmarkCollectionsQueryKeys.root,
+			});
+			queryClient.invalidateQueries({
+				queryKey: postListQueryKeys.bookmarks({
+					bookmarkCollectionId: variables.bookmarkCollectionId,
+				}),
+			});
+			queryClient.invalidateQueries({
+				queryKey: postListQueryKeys.bookmarks({}),
+			});
 		},
 		onError: () => {
-			toast.error("Unable to add post to bookmarks");
+			toast.error("Unable to add post to collection");
 		},
 	});
 };

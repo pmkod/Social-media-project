@@ -87,42 +87,26 @@ const BookmarkCollectionPickerModal =
 		};
 
 		const isMutationPending = addBookmark.isPending || removeBookmark.isPending;
-		const isGlobalRemovePending =
-			removeBookmark.isPending &&
-			removeBookmark.variables?.bookmarkCollectionId === undefined;
 		const pendingCollectionId = removeBookmark.isPending
 			? removeBookmark.variables?.bookmarkCollectionId
-			: addBookmark.variables?.collectionId;
-
-		const handleToggleBookmark = async () => {
-			if (isMutationPending) return;
-
-			try {
-				if (isBookmarked) {
-					await removeBookmark.mutateAsync({ postId });
-					setIsBookmarked(false);
-				} else {
-					await addBookmark.mutateAsync({ postId });
-					setIsBookmarked(true);
-				}
-			} catch {}
-		};
+			: addBookmark.variables?.bookmarkCollectionId;
 
 		const handleToggleCollection = async (collection: BookmarkCollection) => {
 			if (isMutationPending) return;
 
 			try {
 				if (collection.isPostInCollection) {
-					await removeBookmark.mutateAsync({
+					const response = await removeBookmark.mutateAsync({
 						postId,
 						bookmarkCollectionId: collection.id,
 					});
+					setIsBookmarked(response.post.isBookmarkedByAuthenticatedUser);
 				} else {
-					await addBookmark.mutateAsync({
+					const response = await addBookmark.mutateAsync({
 						postId,
-						collectionId: collection.id,
+						bookmarkCollectionId: collection.id,
 					});
-					setIsBookmarked(true);
+					setIsBookmarked(response.post.isBookmarkedByAuthenticatedUser);
 				}
 			} catch {}
 		};
@@ -164,38 +148,25 @@ const BookmarkCollectionPickerModal =
 									<RiAddLine className="size-6" />
 								</IconButton>
 							</div>
-							<button
-								type="button"
-								onClick={() => void handleToggleBookmark()}
-								disabled={isMutationPending}
-								className="group flex min-h-16 w-full cursor-pointer items-center justify-between gap-3 border-b border-border px-6 text-left transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-default disabled:opacity-60"
-								aria-label={
-									isBookmarked
-										? "Remove from bookmarks"
-										: "Save without a collection"
-								}
-								aria-pressed={isBookmarked}
-							>
+							<div className="flex min-h-16 items-center justify-between gap-3 border-b border-border px-6">
 								<span className="min-w-0">
 									<span className="block truncate text-base font-semibold">
 										{isBookmarked
-											? "Saved to bookmarks"
-											: "Save without a collection"}
+											? "Saved in a collection"
+											: "Choose a collection to save"}
 									</span>
 									<span className="block truncate text-sm font-normal text-muted-foreground">
 										{isBookmarked
-											? "Remove this post from bookmarks and all collections."
-											: "Save this post without choosing a collection."}
+											? "Select a saved collection to remove this post from it."
+											: "Bookmarks must belong to a collection."}
 									</span>
 								</span>
-								{isGlobalRemovePending ? (
-									<RiLoader4Line className="size-5 shrink-0 animate-spin text-muted-foreground" />
-								) : isBookmarked ? (
+								{isBookmarked ? (
 									<RiBookmarkFill className="size-5 shrink-0 text-amber-500" />
 								) : (
-									<RiBookmarkLine className="size-5 shrink-0 text-muted-foreground transition-colors group-hover:text-amber-500" />
+									<RiBookmarkLine className="size-5 shrink-0 text-muted-foreground" />
 								)}
-							</button>
+							</div>
 							{collectionsQuery.isLoading ? (
 								<div className="space-y-1">
 									{[1, 2, 3, 4].map((loaderId) => (

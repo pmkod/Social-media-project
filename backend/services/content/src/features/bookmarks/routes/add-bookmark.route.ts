@@ -8,7 +8,7 @@ import { BookmarksRoutesTag } from "../bookmarks.constants";
 const routeDef = createRoute({
 	method: "post",
 	path: "/posts/{postId}/bookmarks",
-	summary: "Bookmark a post, optionally in a collection",
+	summary: "Bookmark a post in a collection",
 	tags: [BookmarksRoutesTag],
 	middleware: [requireUserAuthentication],
 	request: {
@@ -16,14 +16,14 @@ const routeDef = createRoute({
 		body: {
 			content: {
 				"application/json": {
-					schema: z.object({ collectionId: z.string().optional() }),
+					schema: z.object({ bookmarkCollectionId: z.string().min(1) }),
 				},
 			},
-			required: false,
+			required: true,
 		},
 	},
 	responses: {
-		[HttpStatus.CREATED.code]: { description: "Post bookmarked" },
+		[HttpStatus.CREATED.code]: { description: "Post added to collection" },
 	},
 });
 
@@ -36,21 +36,19 @@ const addBookmarkRoute = defineOpenAPIRoute<
 		const ownerId = c.get("authenticatedUserId");
 		if (!ownerId) throw new Error("Unauthorized");
 		const { postId } = c.req.valid("param");
-		const body = c.req.valid("json");
+		const { bookmarkCollectionId } = c.req.valid("json");
 
 		const [post, collection] = await Promise.all([
 			prisma.post.findUnique({ where: { id: postId }, select: { id: true } }),
-			body?.collectionId
-				? prisma.bookmarkCollection.findFirst({
-						where: { id: body.collectionId, ownerId },
-						select: { id: true },
-					})
-				: null,
+			prisma.bookmarkCollection.findFirst({
+				where: { id: bookmarkCollectionId, ownerId },
+				select: { id: true },
+			}),
 		]);
 		if (!post) {
 			return c.json({ message: "Post not found" }, HttpStatus.NOT_FOUND.code);
 		}
-		if (body?.collectionId && !collection) {
+		if (!collection) {
 			return c.json(
 				{ message: "Collection not found" },
 				HttpStatus.NOT_FOUND.code,
@@ -65,21 +63,19 @@ const addBookmarkRoute = defineOpenAPIRoute<
 				select: { id: true, postId: true, ownerId: true, createdAt: true },
 			});
 
-			if (collection) {
-				await tx.bookmarkCollectionItem.upsert({
-					where: {
-						collectionId_bookmarkId: {
-							collectionId: collection.id,
-							bookmarkId: savedBookmark.id,
-						},
-					},
-					create: {
-						collectionId: collection.id,
+			await tx.bookmarkCollectionItem.upsert({
+				where: {
+					collectionId_bookmarkId: {
+						collectionId: bookmarkCollectionId,
 						bookmarkId: savedBookmark.id,
 					},
-					update: {},
-				});
-			}
+				},
+				create: {
+					collectionId: bookmarkCollectionId,
+					bookmarkId: savedBookmark.id,
+				},
+				update: {},
+			});
 		});
 
 		return c.json(

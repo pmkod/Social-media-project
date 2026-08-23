@@ -107,7 +107,10 @@ const getPostByIdRoute = defineOpenAPIRoute<
 								ownerId: authenticatedUserId,
 							},
 						},
-						select: { id: true },
+						select: {
+							id: true,
+							collectionItems: { select: { id: true } },
+						},
 					})
 				: null,
 			userServiceClient.fetchAuthorsBatch([post.authorId], authenticatedUserId),
@@ -118,7 +121,9 @@ const getPostByIdRoute = defineOpenAPIRoute<
 			post: {
 				...post,
 				isLikedByAuthenticatedUser: Boolean(like),
-				isBookmarkedByAuthenticatedUser: Boolean(bookmark),
+				isBookmarkedByAuthenticatedUser: Boolean(
+					bookmark?.collectionItems.length,
+				),
 				author,
 			},
 		});

@@ -8,15 +8,15 @@ import { BookmarksRoutesTag } from "../bookmarks.constants";
 const routeDef = createRoute({
 	method: "delete",
 	path: "/posts/{postId}/bookmarks",
-	summary: "Remove a post bookmark or its membership in a specific collection",
+	summary: "Remove a post from a bookmark collection",
 	tags: [BookmarksRoutesTag],
 	middleware: [requireUserAuthentication],
 	request: {
 		params: z.object({ postId: z.string() }),
-		query: z.object({ bookmarkCollectionId: z.string().optional() }),
+		query: z.object({ bookmarkCollectionId: z.string().min(1) }),
 	},
 	responses: {
-		[HttpStatus.OK.code]: { description: "Bookmark removed" },
+		[HttpStatus.OK.code]: { description: "Post removed from collection" },
 	},
 });
 
@@ -31,46 +31,47 @@ const removeBookmarkRoute = defineOpenAPIRoute<
 		const { postId } = c.req.valid("param");
 		const { bookmarkCollectionId } = c.req.valid("query");
 
-		if (bookmarkCollectionId) {
-			const collection = await prisma.bookmarkCollection.findFirst({
-				where: { id: bookmarkCollectionId, ownerId },
-				select: { id: true },
-			});
-			if (!collection) {
-				return c.json(
-					{ message: "Collection not found" },
-					HttpStatus.NOT_FOUND.code,
-				);
-			}
+		const collection = await prisma.bookmarkCollection.findFirst({
+			where: { id: bookmarkCollectionId, ownerId },
+			select: { id: true },
+		});
+		if (!collection) {
+			return c.json(
+				{ message: "Collection not found" },
+				HttpStatus.NOT_FOUND.code,
+			);
+		}
 
-			const bookmark = await prisma.bookmark.findUnique({
+		const isBookmarked = await prisma.$transaction(async (tx) => {
+			const bookmark = await tx.bookmark.findUnique({
 				where: { postId_ownerId: { postId, ownerId } },
 				select: { id: true },
 			});
-			if (bookmark) {
-				await prisma.bookmarkCollectionItem.deleteMany({
-					where: {
-						collectionId: bookmarkCollectionId,
-						bookmarkId: bookmark.id,
-					},
-				});
-			}
+			if (!bookmark) return false;
 
-			return c.json({
-				success: true,
-				post: {
-					id: postId,
-					isBookmarkedByAuthenticatedUser: Boolean(bookmark),
+			await tx.bookmarkCollectionItem.deleteMany({
+				where: {
+					collectionId: bookmarkCollectionId,
+					bookmarkId: bookmark.id,
 				},
 			});
-		}
 
-		await prisma.bookmark.deleteMany({ where: { postId, ownerId } });
+			const remainingCollectionItems = await tx.bookmarkCollectionItem.count({
+				where: { bookmarkId: bookmark.id },
+			});
+			if (remainingCollectionItems === 0) {
+				await tx.bookmark.delete({ where: { id: bookmark.id } });
+				return false;
+			}
+
+			return true;
+		});
+
 		return c.json({
 			success: true,
 			post: {
 				id: postId,
-				isBookmarkedByAuthenticatedUser: false,
+				isBookmarkedByAuthenticatedUser: isBookmarked,
 			},
 		});
 	},
