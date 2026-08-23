@@ -219,36 +219,12 @@ function BookmarksPage() {
 				<EmptyBlock
 					title="No saved posts"
 					description="Use the bookmark icon below a post to find it here."
+					className="h-96"
 				/>
 			) : (
 				<div>
 					{posts.map((post) => (
-						<div key={post.id}>
-							<PostItem post={post} />
-							{selectedCollectionId ? (
-								<div className="flex justify-end border-x border-t border-border px-4 py-2 last:border-b">
-									<Button
-										type="button"
-										size="sm"
-										variant="ghost"
-										disabled={removeFromCollection.isPending}
-										onClick={() =>
-											removeFromCollection.mutate({
-												collectionId: selectedCollectionId,
-												postId: post.id,
-											})
-										}
-									>
-										Remove from collection
-									</Button>
-								</div>
-							) : (
-								<CollectionOrganizer
-									postId={post.id}
-									collections={collections}
-								/>
-							)}
-						</div>
+						<PostItem key={post.id} post={post} />
 					))}
 					{bookmarksQuery.hasNextPage ? (
 						<div ref={observerTargetRef}>
