@@ -1,6 +1,10 @@
-import { useAlertDialog } from "@/core/hooks/use-alert-dialog.tsx";
+import NiceModal from "@/core/components/ui/nice-modal.tsx";
 import { useBlockUser } from "./use-block-user.ts";
 import { useUnblockUser } from "./use-unblock-user.ts";
+import {
+	BlockUserAlertDialog,
+	UnblockUserAlertDialog,
+} from "./user-block-alert-dialogs.tsx";
 
 type OpenUserBlockAlertDialogParams = {
 	userId: string;
@@ -9,7 +13,6 @@ type OpenUserBlockAlertDialogParams = {
 };
 
 const useOpenUserBlockAlertDialog = () => {
-	const alertDialog = useAlertDialog();
 	const blockUser = useBlockUser();
 	const unblockUser = useUnblockUser();
 
@@ -19,29 +22,16 @@ const useOpenUserBlockAlertDialog = () => {
 		isBlockedByAuthenticatedUser,
 	}: OpenUserBlockAlertDialogParams) => {
 		if (isBlockedByAuthenticatedUser) {
-			alertDialog.show({
-				title: `Unblock @${username}?`,
-				description:
-					"They will be able to view and interact with your content again. Previous follows will not be restored.",
-				cancel: { text: "Cancel" },
-				confirm: {
-					text: "Unblock",
-					handler: () => unblockUser.mutateAsync(userId).then(() => undefined),
-				},
+			void NiceModal.show(UnblockUserAlertDialog, {
+				username,
+				onConfirm: () => unblockUser.mutateAsync(userId).then(() => undefined),
 			});
 			return;
 		}
 
-		alertDialog.show({
-			title: `Block @${username}?`,
-			description:
-				"You will no longer see each other's content. If either of you follows the other, those follows will be removed.",
-			cancel: { text: "Cancel" },
-			confirm: {
-				text: "Block",
-				colorScheme: "destructive",
-				handler: () => blockUser.mutateAsync(userId).then(() => undefined),
-			},
+		void NiceModal.show(BlockUserAlertDialog, {
+			username,
+			onConfirm: () => blockUser.mutateAsync(userId).then(() => undefined),
 		});
 	};
 
