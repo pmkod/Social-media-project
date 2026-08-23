@@ -1,0 +1,19 @@
+# dependencies
+node_modules
+
+# output and caches
+out
+dist
+coverage
+*.tsbuildinfo
+
+# environment files
+.env
+.env.development.local
+.env.test.local
+.env.production.local
+.env.local
+
+# editor and OS files
+.idea
+.DS_Store

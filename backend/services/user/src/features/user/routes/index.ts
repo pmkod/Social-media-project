@@ -1,4 +1,5 @@
 import { blockUserRoute } from "./block-user.route";
+import { checkUserExistsRoute } from "./check-user-exists.route";
 import { followUserRoute } from "./follow-user.route";
 import { getBlockRelationshipIdsRoute } from "./get-block-relationship-ids.route";
 import { getBlockedUsersRoute } from "./get-blocked-users.route";
@@ -32,6 +33,7 @@ const userRoutes = [
 	updatePostCountRoute,
 	getFollowingIdsRoute,
 	getBlockRelationshipIdsRoute,
+	checkUserExistsRoute,
 ];
 
 export { userRoutes };

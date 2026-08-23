@@ -15,6 +15,7 @@ Ce backend suit une architecture microservices identique à celle du projet Ecom
 - **API Gateway** (`backend/gateway` - Port `8000`) : Routage des requêtes publiques, validation des JWT et proxying.
 - **User Service** (`backend/services/user` - Port `8001`) : Authentification et profil utilisateur.
 - **Content Service** (`backend/services/content` - Port `8002`) : Publications (posts), commentaires, likes de posts et likes de commentaires.
+- **Report Service** (`backend/services/report` - Port `8003`) : Signalements des posts, commentaires et utilisateurs, ainsi que leurs raisons.
 
 ## Démarrage rapide
 
@@ -23,6 +24,7 @@ Ce backend suit une architecture microservices identique à celle du projet Ecom
 ```sql
 CREATE DATABASE social_media_project_user;
 CREATE DATABASE social_media_project_content;
+CREATE DATABASE social_media_report;
 ```
 
 2. **Copier les fichiers d'environnement** :
@@ -31,6 +33,7 @@ CREATE DATABASE social_media_project_content;
 cp backend/gateway/.env.example backend/gateway/.env
 cp backend/services/user/.env.example backend/services/user/.env
 cp backend/services/content/.env.example backend/services/content/.env
+cp backend/services/report/.env.example backend/services/report/.env
 ```
 
 3. **Appliquer les schémas Prisma** :
@@ -41,6 +44,9 @@ bunx prisma db push
 
 cd backend/services/content
 bunx prisma db push
+
+cd backend/services/report
+bunx prisma migrate dev
 ```
 
 4. **Démarrer les services avec le script unifié** :
@@ -56,6 +62,7 @@ Chaque service propose une interface interactive de documentation :
 
 - **User Service** : `http://localhost:8001/scalar`
 - **Content Service** : `http://localhost:8002/scalar`
+- **Report Service** : `http://localhost:8003/scalar`
 - **API Gateway (Public)** : `http://localhost:8000`
 
 ## Points de terminaison principaux (via la Gateway)
@@ -89,3 +96,6 @@ Chaque service propose une interface interactive de documentation :
 | `POST /comments/{commentId}/likes` | content | Oui |
 | `DELETE /comments/{commentId}/likes` | content | Oui |
 | `GET /comments/{commentId}/likes` | content | Non |
+| `GET /report-reasons` | report | Non |
+| `POST /reports` | report | Oui |
+| `GET /reports/my` | report | Oui |

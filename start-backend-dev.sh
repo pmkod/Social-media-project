@@ -58,6 +58,7 @@ run_service() {
 # Lancement des microservices et de l'API Gateway depuis la racine du projet
 run_service "USER-SERVICE   " "backend/services/user" "$CYAN" 8001
 run_service "CONTENT-SERVICE" "backend/services/content" "$GREEN" 8002
+run_service "REPORT-SERVICE " "backend/services/report" "$YELLOW" 8003
 run_service "API-GATEWAY    " "backend/api-gateway" "$MAGENTA" 8000
 
 echo -e "\n${GREEN}✔ Tous les services ont été démarrés !${RESET}"

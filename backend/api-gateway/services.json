@@ -8,5 +8,7 @@
 	{ "path": "/collections", "target": "http://localhost:8002" },
 	{ "path": "/media", "target": "http://localhost:8002" },
 	{ "path": "/images", "target": "http://localhost:8002" },
-	{ "path": "/videos", "target": "http://localhost:8002" }
+	{ "path": "/videos", "target": "http://localhost:8002" },
+	{ "path": "/reports", "target": "http://localhost:8003" },
+	{ "path": "/report-reasons", "target": "http://localhost:8003" }
 ]

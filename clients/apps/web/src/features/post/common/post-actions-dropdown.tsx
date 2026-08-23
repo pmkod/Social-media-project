@@ -1,5 +1,6 @@
 import {
 	RiFileCopyLine,
+	RiFlag2Line,
 	RiMoreLine,
 	RiUserAddLine,
 	RiUserForbidLine,
@@ -12,6 +13,8 @@ import {
 	DropdownMenuTrigger,
 } from "@/core/components/ui/dropdown-menu.tsx";
 import { IconButton } from "@/core/components/ui/icon-button.tsx";
+import NiceModal from "@/core/components/ui/nice-modal.tsx";
+import { ReportPostModal } from "@/features/report/report-post.modal.tsx";
 import { useAuthenticatedUser } from "@/features/user/authenticated-user/use-authenticated-user.ts";
 import { useOpenUserBlockAlertDialog } from "@/features/user/block-user/use-open-user-block-alert-dialog.ts";
 import { useOpenUserUnblockAlertDialog } from "@/features/user/block-user/use-open-user-unblock-alert-dialog.ts";
@@ -64,6 +67,9 @@ function PostActionsDropdown({
 		authenticatedUser?.id && user.id && authenticatedUser.id === user.id,
 	);
 	const canManageBlock = Boolean(user.id && !isOwnProfile);
+	const canReport = Boolean(
+		authenticatedUser?.id && (!user.id || authenticatedUser.id !== user.id),
+	);
 	const isBlocked = user.isBlockedByAuthenticatedUser ?? false;
 	const userBlockAction = isBlocked ? userUnblockDialog : userBlockDialog;
 
@@ -92,6 +98,20 @@ function PostActionsDropdown({
 					<RiFileCopyLine />
 					Copy post link
 				</DropdownMenuItem>
+				{canReport ? (
+					<>
+						<DropdownMenuSeparator />
+						<DropdownMenuItem
+							variant="destructive"
+							onSelect={() => {
+								void NiceModal.show(ReportPostModal, { postId });
+							}}
+						>
+							<RiFlag2Line />
+							Report post
+						</DropdownMenuItem>
+					</>
+				) : null}
 				{canManageBlock ? (
 					<>
 						<DropdownMenuSeparator />
