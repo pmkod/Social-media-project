@@ -9,12 +9,14 @@ import { bookmarkCollectionsQueryKeys } from "./common/bookmark-collections.quer
 type UseBookmarkCollectionsParams = {
 	limit?: number;
 	q?: string;
+	postId?: string;
 	enabled?: boolean;
 };
 
 const useBookmarkCollections = ({
 	limit = 10,
 	q = "",
+	postId,
 	enabled = true,
 }: UseBookmarkCollectionsParams = {}) => {
 	const normalizedQuery = q.trim();
@@ -23,11 +25,13 @@ const useBookmarkCollections = ({
 		queryKey: bookmarkCollectionsQueryKeys.mine({
 			limit,
 			q: normalizedQuery,
+			postId,
 		}),
 		enabled,
 		queryFn: ({ pageParam }) => {
 			const searchParams = new URLSearchParams({ limit: String(limit) });
 			if (normalizedQuery) searchParams.set("q", normalizedQuery);
+			if (postId) searchParams.set("postId", postId);
 			if (pageParam) {
 				searchParams.set("cursorId", pageParam.id);
 				searchParams.set("cursorCreatedAt", pageParam.createdAt);

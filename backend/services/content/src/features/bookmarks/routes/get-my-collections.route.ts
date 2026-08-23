@@ -13,6 +13,7 @@ const routeDef = createRoute({
 	middleware: [requireUserAuthentication],
 	request: {
 		query: z.object({
+			postId: z.string().optional(),
 			cursorId: z.string().optional(),
 			cursorCreatedAt: z.string().optional(),
 			limit: z.string().optional().default("10"),
@@ -84,11 +85,30 @@ const getMyCollectionsRoute = defineOpenAPIRoute<
 			hasNextPage && lastItem
 				? { id: lastItem.id, createdAt: lastItem.createdAt.toISOString() }
 				: null;
+		const collectionIds = items.map((collection) => collection.id);
+		const selectedCollectionIds =
+			query.postId && collectionIds.length > 0
+				? new Set(
+						(
+							await prisma.bookmarkCollectionItem.findMany({
+								where: {
+									collectionId: { in: collectionIds },
+									bookmark: {
+										postId: query.postId,
+										ownerId: authenticatedUser.id,
+									},
+								},
+								select: { collectionId: true },
+							})
+						).map((item) => item.collectionId),
+					)
+				: new Set<string>();
 
 		return c.json({
 			bookmarksCollections: items.map(({ _count, ...collection }) => ({
 				...collection,
 				bookmarksCount: _count.items,
+				isPostInCollection: selectedCollectionIds.has(collection.id),
 			})),
 			pagination: { nextCursor, hasNextPage, limit },
 		});

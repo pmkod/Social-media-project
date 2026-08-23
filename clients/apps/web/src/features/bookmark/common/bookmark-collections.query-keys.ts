@@ -3,6 +3,7 @@ const bookmarkCollectionsRootQueryKey = ["bookmark-collections"] as const;
 type BookmarkCollectionsQueryParams = {
 	limit: number;
 	q: string;
+	postId?: string;
 };
 
 const bookmarkCollectionsQueryKeys = {

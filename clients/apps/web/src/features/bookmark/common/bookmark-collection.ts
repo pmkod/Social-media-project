@@ -4,6 +4,7 @@ export type BookmarkCollection = {
 	name: string;
 	description?: string | null;
 	bookmarksCount: number;
+	isPostInCollection?: boolean;
 	createdAt: string;
 	updatedAt: string;
 };
