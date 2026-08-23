@@ -94,17 +94,6 @@ const useAddBookmark = () => {
 					};
 				},
 			);
-			queryClient.invalidateQueries({
-				queryKey: bookmarkCollectionsQueryKeys.root,
-			});
-			queryClient.invalidateQueries({
-				queryKey: postListQueryKeys.bookmarks({
-					bookmarkCollectionId: variables.bookmarkCollectionId,
-				}),
-			});
-			queryClient.invalidateQueries({
-				queryKey: postListQueryKeys.bookmarks({}),
-			});
 		},
 		onError: () => {
 			toast.error("Unable to add post to collection");

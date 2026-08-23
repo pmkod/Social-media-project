@@ -28,6 +28,7 @@ import { useRemoveBookmark } from "../use-remove-bookmark.ts";
 import { BOOKMARK_COLLECTIONS_PAGE_LIMIT } from "./bookmark-collection.constants.ts";
 import type { BookmarkCollection } from "./bookmark-collection.ts";
 import { BookmarkCollectionModal } from "./bookmark-collection-modal.tsx";
+import { Button } from "@/core/components/ui/button.tsx";
 
 type BookmarkCollectionPickerModalProps = {
 	postId: string;
@@ -126,23 +127,24 @@ const BookmarkCollectionPickerModal =
 					</DialogHeader>
 
 					<DialogBody ref={setScrollContainer}>
-						<div className="relative">
-							<div className="sticky top-0 flex items-center gap-3 bg-white px-6 py-3">
+						<div className="relative min-h-120">
+							<div className="sticky top-0 flex items-center gap-3 bg-white px-6 py-3 border-b">
 								<input
 									type="search"
 									value={search}
 									onChange={(event) => setSearch(event.target.value)}
 									placeholder="Search collections"
 									aria-label="Search bookmark collections"
-									className="h-8 min-w-0 flex-1 rounded bg-muted px-4 text-sm text-foreground outline-none transition focus:border focus:border-foreground"
+									className="h-8 min-w-0 flex-1 rounded bg-muted px-3 text-sm text-foreground outline-none transition focus:border focus:border-foreground"
 								/>
-								<IconButton
+								<Button
 									type="button"
 									size="sm"
 									onClick={handleCreateCollection}
 								>
 									<RiAddLine className="size-6" />
-								</IconButton>
+									New collection
+								</Button>
 							</div>
 							{collectionsQuery.isLoading ? (
 								<div className="space-y-1">

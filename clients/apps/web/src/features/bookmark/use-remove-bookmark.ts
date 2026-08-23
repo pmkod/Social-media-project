@@ -89,15 +89,6 @@ const useRemoveBookmark = () => {
 					})),
 				};
 			});
-			queryClient.invalidateQueries({
-				queryKey: bookmarkCollectionsQueryKeys.root,
-			});
-			queryClient.invalidateQueries({
-				queryKey: postListQueryKeys.bookmarks({ bookmarkCollectionId }),
-			});
-			queryClient.invalidateQueries({
-				queryKey: postListQueryKeys.bookmarks({}),
-			});
 		},
 		onError: () => {
 			toast.error("Unable to remove post from collection");
