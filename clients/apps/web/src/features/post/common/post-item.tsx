@@ -306,7 +306,7 @@ export function PostItem({
 							<button
 								type="button"
 								onClick={handleLike}
-								className={`flex items-center gap-1.5 transition-colors group -ml-2 p-2 rounded-full hover:bg-accent ${
+								className={`cursor-pointer flex items-center gap-1.5 transition-colors group -ml-2 p-2 rounded-full hover:bg-accent ${
 									isLiked ? "text-rose-500" : "hover:text-rose-500"
 								}`}
 							>
@@ -338,7 +338,7 @@ export function PostItem({
 							onClick={handleBookmark}
 							disabled={addBookmark.isPending || removeBookmark.isPending}
 							aria-label={isBookmarked ? "Remove bookmark" : "Add bookmark"}
-							className={`flex items-center gap-1.5 transition-colors group -mr-2 p-2 rounded-full hover:bg-accent disabled:opacity-60 ${
+							className={`cursor-pointer flex items-center gap-1.5 transition-colors group -mr-2 p-2 rounded-full hover:bg-accent disabled:opacity-60 ${
 								isBookmarked ? "text-amber-500" : "hover:text-amber-500"
 							}`}
 						>
