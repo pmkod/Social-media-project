@@ -1,5 +1,6 @@
 import { RiAddLine, RiBookmarkLine, RiLoader4Line } from "@remixicon/react";
 import { useEffect, useState } from "react";
+import { Button } from "@/core/components/ui/button.tsx";
 import {
 	Dialog,
 	DialogBody,
@@ -7,6 +8,8 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from "@/core/components/ui/dialog.tsx";
+import { EmptyBlock } from "@/core/components/ui/empty-block.tsx";
+import { ExceptionBlock } from "@/core/components/ui/exception-block.tsx";
 import NiceModal, {
 	create,
 	useModal,
@@ -17,7 +20,6 @@ import { useBookmarkCollections } from "../use-bookmark-collections.ts";
 import { BOOKMARK_COLLECTIONS_PAGE_LIMIT } from "./bookmark-collection.constants.ts";
 import type { BookmarkCollection } from "./bookmark-collection.ts";
 import { BookmarkCollectionModal } from "./bookmark-collection-modal.tsx";
-import { Button } from "@/core/components/ui/button.tsx";
 
 type BookmarkCollectionPickerModalProps = {
 	postId: string;
@@ -119,22 +121,21 @@ const BookmarkCollectionPickerModal =
 								))}
 							</div>
 						) : collectionsQuery.isError ? (
-							<div className="px-2 py-8 text-center">
-								<p className="text-sm text-muted-foreground">
-									Unable to load your collections.
-								</p>
-								<button
-									type="button"
-									onClick={() => void collectionsQuery.refetch()}
-									className="mt-3 cursor-pointer text-sm font-semibold text-foreground underline underline-offset-4"
-								>
-									Try again
-								</button>
-							</div>
+							<ExceptionBlock
+								borderless
+								className="px-6 py-8"
+								title="Unable to load collections"
+								description="Something went wrong while loading your bookmark collections."
+								onRefresh={() => void collectionsQuery.refetch()}
+								isRefetching={collectionsQuery.isRefetching}
+							/>
 						) : collections.length === 0 ? (
-							<p className="px-2 py-8 text-center text-sm text-muted-foreground">
-								No collections yet. Create one with +.
-							</p>
+							<EmptyBlock
+								borderless
+								className="px-6 py-8"
+								title="No collections yet"
+								description="Create a collection to organize your saved posts."
+							/>
 						) : (
 							<div>
 								{collections.map((collection) => (
