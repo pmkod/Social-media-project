@@ -27,6 +27,8 @@ import { useRemovePostFromCollection } from "../use-remove-post-from-collection.
 import { BOOKMARK_COLLECTIONS_PAGE_LIMIT } from "./bookmark-collection.constants.ts";
 import type { BookmarkCollection } from "./bookmark-collection.ts";
 import { BookmarkCollectionModal } from "./bookmark-collection-modal.tsx";
+import { Skeleton } from "@/core/components/ui/skeleton.tsx";
+import { IconButton } from "@/core/components/ui/icon-button.tsx";
 
 type BookmarkCollectionPickerModalProps = {
 	postId: string;
@@ -81,9 +83,6 @@ const BookmarkCollectionPickerModal =
 
 		const isMutationPending =
 			addBookmark.isPending || removePostFromCollection.isPending;
-		const pendingCollectionId = addBookmark.isPending
-			? addBookmark.variables?.collectionId
-			: removePostFromCollection.variables?.collectionId;
 
 		const handleToggleCollection = async (collection: BookmarkCollection) => {
 			if (isMutationPending) return;
@@ -125,14 +124,13 @@ const BookmarkCollectionPickerModal =
 					<DialogBody ref={setScrollContainer}>
 						<div className="relative">
 							<div className="flex justify-end py-3 px-6 sticky top-0 bg-white">
-								<Button
+								<IconButton
 									type="button"
 									size="sm"
 									onClick={handleCreateCollection}
 								>
-									New collection
 									<RiAddLine className="size-6" />
-								</Button>
+								</IconButton>
 							</div>
 							{addBookmark.isError || removePostFromCollection.isError ? (
 								<div className="px-6">
@@ -149,9 +147,12 @@ const BookmarkCollectionPickerModal =
 								<div className="space-y-1">
 									{[1, 2, 3, 4].map((loaderId) => (
 										<div
+											className="flex justify-between items-center h-14 px-7"
 											key={`collection-loader-${loaderId}`}
-											className="h-14 animate-pulse rounded-xl bg-muted"
-										/>
+										>
+											<Skeleton className="h-4 w-32" />
+											<Skeleton className="size-6" />
+										</div>
 									))}
 								</div>
 							) : collectionsQuery.isError ? (
@@ -172,29 +173,33 @@ const BookmarkCollectionPickerModal =
 								/>
 							) : (
 								<div>
-									{collections.map((collection) => (
-										<button
-											key={collection.id}
-											type="button"
-											onClick={() => void handleToggleCollection(collection)}
-											disabled={isMutationPending}
-											className="group flex min-h-14 w-full cursor-pointer items-center justify-between gap-3 px-6 text-left transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-default disabled:opacity-60"
-											aria-label={`${collection.isPostInCollection ? "Remove from" : "Save to"} ${collection.name}`}
-											aria-pressed={collection.isPostInCollection}
-										>
-											<span className="min-w-0 truncate text-base font-semibold">
-												{collection.name}
-											</span>
-											{isMutationPending &&
-											pendingCollectionId === collection.id ? (
-												<RiLoader4Line className="size-5 shrink-0 animate-spin text-muted-foreground" />
-											) : collection.isPostInCollection ? (
-												<RiBookmarkFill className="size-5 shrink-0 text-amber-500" />
-											) : (
-												<RiBookmarkLine className="size-5 shrink-0 text-muted-foreground transition-colors group-hover:text-amber-500" />
-											)}
-										</button>
-									))}
+									{collections.map((collection) => {
+										const isLoading =
+											isMutationPending &&
+											addBookmark.variables?.collectionId === collection.id;
+										return (
+											<button
+												key={collection.id}
+												type="button"
+												onClick={() => void handleToggleCollection(collection)}
+												disabled={isLoading}
+												className="group flex min-h-14 w-full cursor-pointer items-center justify-between gap-3 px-6 text-left transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-default disabled:opacity-60"
+												aria-label={`${collection.isPostInCollection ? "Remove from" : "Save to"} ${collection.name}`}
+												aria-pressed={collection.isPostInCollection}
+											>
+												<span className="min-w-0 truncate text-base font-semibold">
+													{collection.name}
+												</span>
+												{isLoading ? (
+													<RiLoader4Line className="size-5 shrink-0 animate-spin text-muted-foreground" />
+												) : collection.isPostInCollection ? (
+													<RiBookmarkFill className="size-5 shrink-0 text-amber-500" />
+												) : (
+													<RiBookmarkLine className="size-5 shrink-0 text-muted-foreground transition-colors group-hover:text-amber-500" />
+												)}
+											</button>
+										);
+									})}
 								</div>
 							)}
 
