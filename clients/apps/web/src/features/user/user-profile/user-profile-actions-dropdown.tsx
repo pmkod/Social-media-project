@@ -1,5 +1,7 @@
 import {
 	RiFileCopyLine,
+	RiFlag2Line,
+	RiForbid2Line,
 	RiMoreLine,
 	RiUserAddLine,
 	RiUserForbidLine,
@@ -8,7 +10,6 @@ import {
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
-	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/core/components/ui/dropdown-menu.tsx";
 import { IconButton } from "@/core/components/ui/icon-button.tsx";
@@ -17,7 +18,7 @@ import { useOpenUserBlockAlertDialog } from "@/features/user/block-user/use-open
 
 type UserProfileActionsDropdownProps = {
 	user: {
-		id?: string;
+		id: string;
 		username: string;
 		isBlockedByAuthenticatedUser?: boolean;
 	};
@@ -49,7 +50,7 @@ const copyToClipboard = async (value: string) => {
 
 function UserProfileActionsDropdown({
 	user,
-	size = "md",
+	size = "lg",
 	variant = "ghost",
 }: UserProfileActionsDropdownProps) {
 	const userBlockDialog = useOpenUserBlockAlertDialog();
@@ -87,8 +88,7 @@ function UserProfileActionsDropdown({
 					Copy profile link
 				</DropdownMenuItem>
 				{canManageBlock ? (
-					<>
-						<DropdownMenuSeparator />
+					user.isBlockedByAuthenticatedUser ? (
 						<DropdownMenuItem
 							variant={isBlocked ? "default" : "destructive"}
 							disabled={userBlockDialog.isPending}
@@ -100,17 +100,28 @@ function UserProfileActionsDropdown({
 								})
 							}
 						>
-							{isBlocked ? <RiUserAddLine /> : <RiUserForbidLine />}
-							{isBlocked ? "Unblock" : "Block"} user @{user.username}
+							<RiUserAddLine />
+							Unblock user @{user.username}
 						</DropdownMenuItem>
-					</>
+					) : (
+						<DropdownMenuItem
+							variant={isBlocked ? "default" : "destructive"}
+							disabled={userBlockDialog.isPending}
+							onSelect={() =>
+								userBlockDialog.open({
+									userId: user.id as string,
+									username: user.username,
+									isBlockedByAuthenticatedUser: isBlocked,
+								})
+							}
+						>
+							<RiUserForbidLine />
+							Block
+						</DropdownMenuItem>
+					)
 				) : null}
 				<DropdownMenuItem>
-					<RiFileCopyLine />
-					Block
-				</DropdownMenuItem>
-				<DropdownMenuItem>
-					<RiFileCopyLine />
+					<RiFlag2Line />
 					Report
 				</DropdownMenuItem>
 			</DropdownMenuContent>

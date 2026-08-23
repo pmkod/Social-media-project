@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { httpClient } from "@/core/http-clients/http-client.ts";
 import type { BookmarkCollectionResponse } from "../common/bookmark-collection.ts";
-import type { BookmarkCollectionModalFormValues } from "../common/bookmark-collection-modal-form.tsx";
+import type { BookmarkCollectionModalFormValues } from "../common/bookmark-collection-modal.tsx";
 import { bookmarkCollectionsQueryKeys } from "../common/bookmark-collections.query-keys.ts";
 
 type EditBookmarkCollectionInput = BookmarkCollectionModalFormValues & {

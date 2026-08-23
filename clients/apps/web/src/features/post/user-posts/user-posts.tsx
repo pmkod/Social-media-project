@@ -45,11 +45,13 @@ export function UserPosts({ userId }: UserPostsProps) {
 	const posts = query.data?.pages.flatMap((page) => page.posts) ?? [];
 	if (posts.length === 0) {
 		return (
-			<EmptyBlock
-				title="No posts yet"
-				description="Posts by this user will appear here."
-				borderless
-			/>
+			<div className="rounded-b-xl border-b border-x overflow-hidden">
+				<EmptyBlock
+					title="No posts yet"
+					description="Posts by this user will appear here."
+					borderless
+				/>
+			</div>
 		);
 	}
 

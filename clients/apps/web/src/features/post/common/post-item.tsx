@@ -2,8 +2,6 @@ import {
 	RiAddLine,
 	RiArrowLeftSLine,
 	RiArrowRightSLine,
-	RiBookmarkFill,
-	RiBookmarkLine,
 	RiChat3Line,
 	RiHeartFill,
 	RiHeartLine,
@@ -11,8 +9,7 @@ import {
 import { Link } from "@tanstack/react-router";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { cn } from "@/core/lib/utils.ts";
-import { useAddBookmark } from "@/features/bookmark/use-add-bookmark.ts";
-import { useRemoveBookmark } from "@/features/bookmark/use-remove-bookmark.ts";
+import { BookmarkCollectionPopover } from "@/features/bookmark/common/bookmark-collection-popover.tsx";
 import { UserAvatar } from "@/features/user/common/components/user-avatar.tsx";
 import { UserProfileLink } from "@/features/user/common/user-profile-link.tsx";
 import { UserProfileHoverCard } from "@/features/user/user-profile/user-profile-hover-card.tsx";
@@ -205,8 +202,6 @@ export function PostItem({
 	const isBookmarked = post.isBookmarkedByAuthenticatedUser ?? false;
 	const likePost = useLikePost();
 	const unlikePost = useUnlikePost();
-	const addBookmark = useAddBookmark();
-	const removeBookmark = useRemoveBookmark();
 	const handleLike = (e: React.MouseEvent) => {
 		e.preventDefault();
 		e.stopPropagation();
@@ -215,14 +210,6 @@ export function PostItem({
 		} else {
 			likePost.mutate(post.id);
 		}
-	};
-
-	const handleBookmark = (e: React.MouseEvent) => {
-		e.preventDefault();
-		e.stopPropagation();
-		if (addBookmark.isPending || removeBookmark.isPending) return;
-		if (isBookmarked) removeBookmark.mutate(post.id);
-		else addBookmark.mutate({ postId: post.id });
 	};
 
 	const mediaList: RenderMediaItem[] = (post.medias ?? [])
@@ -333,21 +320,10 @@ export function PostItem({
 						</div>
 
 						{/* Bookmark */}
-						<button
-							type="button"
-							onClick={handleBookmark}
-							disabled={addBookmark.isPending || removeBookmark.isPending}
-							aria-label={isBookmarked ? "Remove bookmark" : "Add bookmark"}
-							className={`cursor-pointer flex items-center gap-1.5 transition-colors group -mr-2 p-2 rounded-full hover:bg-accent disabled:opacity-60 ${
-								isBookmarked ? "text-amber-500" : "hover:text-amber-500"
-							}`}
-						>
-							{isBookmarked ? (
-								<RiBookmarkFill className="size-6 text-amber-500" />
-							) : (
-								<RiBookmarkLine className="size-6" />
-							)}
-						</button>
+						<BookmarkCollectionPopover
+							postId={post.id}
+							isBookmarked={isBookmarked}
+						/>
 					</div>
 				</div>
 			</div>

@@ -1,4 +1,4 @@
-import { RiAddLine, RiSearchLine } from "@remixicon/react";
+import { RiAddLine } from "@remixicon/react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import {
@@ -15,14 +15,13 @@ import NiceModal from "@/core/components/ui/nice-modal.tsx";
 import { useAlertDialog } from "@/core/hooks/use-alert-dialog.tsx";
 import { useDebounceValue } from "@/core/hooks/use-debounce-value.ts";
 import { useIntersectionObserver } from "@/core/hooks/use-intersection-observer.ts";
+import { BOOKMARK_COLLECTIONS_PAGE_LIMIT } from "@/features/bookmark/common/bookmark-collection.constants.ts";
 import type { BookmarkCollection } from "@/features/bookmark/common/bookmark-collection.ts";
 import { BookmarkCollectionItem } from "@/features/bookmark/common/bookmark-collection-item.tsx";
 import { BookmarkCollectionItemLoader } from "@/features/bookmark/common/bookmark-collection-item-loader.tsx";
 import { BookmarkCollectionModal } from "@/features/bookmark/common/bookmark-collection-modal.tsx";
 import { useDeleteBookmarkCollection } from "@/features/bookmark/delete-bookmark-collection/use-delete-bookmark-collection.ts";
 import { useBookmarkCollections } from "@/features/bookmark/use-bookmark-collections.ts";
-
-const BOOKMARK_COLLECTIONS_PAGE_LIMIT = 12;
 
 export const Route = createFileRoute("/_main/bookmark-collections")({
 	component: BookmarkCollectionsPage,

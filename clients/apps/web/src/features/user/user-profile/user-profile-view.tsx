@@ -67,7 +67,7 @@ function UserProfileView({ user }: UserProfileViewProps) {
 							</Button>
 						) : !user.hasBlockedAuthenticatedInUser &&
 							!user.isBlockedByAuthenticatedUser ? (
-							<FollowButton user={user} />
+							<FollowButton user={user} size={"lg"} />
 						) : null}
 					</div>
 				</div>

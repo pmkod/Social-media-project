@@ -9,11 +9,13 @@ import { bookmarkCollectionsQueryKeys } from "./common/bookmark-collections.quer
 type UseBookmarkCollectionsParams = {
 	limit?: number;
 	q?: string;
+	enabled?: boolean;
 };
 
 const useBookmarkCollections = ({
 	limit = 10,
 	q = "",
+	enabled = true,
 }: UseBookmarkCollectionsParams = {}) => {
 	const normalizedQuery = q.trim();
 
@@ -22,6 +24,7 @@ const useBookmarkCollections = ({
 			limit,
 			q: normalizedQuery,
 		}),
+		enabled,
 		queryFn: ({ pageParam }) => {
 			const searchParams = new URLSearchParams({ limit: String(limit) });
 			if (normalizedQuery) searchParams.set("q", normalizedQuery);

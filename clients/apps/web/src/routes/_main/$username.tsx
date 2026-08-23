@@ -10,7 +10,7 @@ import { ExceptionBlock } from "@/core/components/ui/exception-block";
 import { MainContainer } from "@/core/components/ui/main-container";
 import { UserLikedPosts } from "@/features/post/user-liked-posts/user-liked-posts";
 import { UserPosts } from "@/features/post/user-posts/user-posts";
-import { UserProfileView } from "@/features/user/user-profile/profile-view";
+import { UserProfileView } from "@/features/user/user-profile/user-profile-view";
 import { useUserProfile } from "@/features/user/user-profile/use-user-profile.ts";
 import {
 	UserProfileTab,

@@ -45,11 +45,13 @@ export function UserLikedPosts({ userId }: UserLikedPostsProps) {
 	const posts = query.data?.pages.flatMap((page) => page.posts) ?? [];
 	if (posts.length === 0) {
 		return (
-			<EmptyBlock
-				title="No liked posts"
-				description="Liked posts will appear here."
-				borderless
-			/>
+			<div className="rounded-b-xl border-b border-x overflow-hidden">
+				<EmptyBlock
+					title="No liked posts"
+					description="Liked posts will appear here."
+					borderless
+				/>
+			</div>
 		);
 	}
 
