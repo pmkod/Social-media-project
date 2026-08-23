@@ -9,7 +9,7 @@ import {
 import { Link } from "@tanstack/react-router";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { cn } from "@/core/lib/utils.ts";
-import { BookmarkCollectionPopover } from "@/features/bookmark/common/bookmark-collection-popover.tsx";
+import { BookmarkButton } from "@/features/bookmark/common/bookmark-button.tsx";
 import { UserAvatar } from "@/features/user/common/components/user-avatar.tsx";
 import { UserProfileLink } from "@/features/user/common/user-profile-link.tsx";
 import { UserProfileHoverCard } from "@/features/user/user-profile/user-profile-hover-card.tsx";
@@ -320,10 +320,7 @@ export function PostItem({
 						</div>
 
 						{/* Bookmark */}
-						<BookmarkCollectionPopover
-							postId={post.id}
-							isBookmarked={isBookmarked}
-						/>
+						<BookmarkButton postId={post.id} isBookmarked={isBookmarked} />
 					</div>
 				</div>
 			</div>
