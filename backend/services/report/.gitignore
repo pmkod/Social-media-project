@@ -9,6 +9,7 @@ coverage
 
 # environment files
 .env
+.env.example
 .env.development.local
 .env.test.local
 .env.production.local

@@ -29,7 +29,7 @@ export const Route = createFileRoute("/_main/bookmark-collections")({
 
 function BookmarkCollectionsPage() {
 	const [search, setSearch] = useState("");
-	const [debouncedSearch] = useDebounceValue(search, 350);
+	const [debouncedSearch] = useDebounceValue(search, 500);
 	const navigate = Route.useNavigate();
 	const collectionsQuery = useBookmarkCollections({
 		limit: BOOKMARK_COLLECTIONS_PAGE_LIMIT,
@@ -112,7 +112,7 @@ function BookmarkCollectionsPage() {
 						onChange={(event) => setSearch(event.target.value)}
 						placeholder="Search collections"
 						aria-label="Search bookmark collections"
-						className="h-11 w-full rounded-lg bg-muted px-4 text-sm text-foreground outline-none transition focus:ring-2 focus:ring-sky-500"
+						className="h-11 w-full rounded bg-muted px-4 text-sm text-foreground outline-none transition focus:border focus:border-foreground"
 					/>
 				</div>
 
