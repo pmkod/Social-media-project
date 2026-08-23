@@ -1,6 +1,5 @@
-import { RiSearchLine } from "@remixicon/react";
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { EmptyBlock } from "@/core/components/ui/empty-block.tsx";
 import { ExceptionBlock } from "@/core/components/ui/exception-block.tsx";
 import { MainContainer } from "@/core/components/ui/main-container.tsx";
@@ -8,25 +7,13 @@ import { useIntersectionObserver } from "@/core/hooks/use-intersection-observer.
 import { PostListLoader } from "@/features/post/common/components/loaders";
 import { PostItem } from "@/features/post/common/post-item.tsx";
 import { useSearchPosts } from "@/features/post/search/use-search-posts.ts";
-
-const useDebouncedValue = (value: string, delay: number) => {
-	const [debouncedValue, setDebouncedValue] = useState(value);
-
-	useEffect(() => {
-		const timeoutId = window.setTimeout(() => setDebouncedValue(value), delay);
-		return () => window.clearTimeout(timeoutId);
-	}, [delay, value]);
-
-	return debouncedValue;
-};
+import { SearchBar } from "@/features/search/search-bar";
 
 export const Route = createFileRoute("/_main/_with-right-aside/search")({
 	component: SearchPage,
 });
 
 function SearchPage() {
-	const [search, setSearch] = useState("");
-	const debouncedSearch = useDebouncedValue(search.trim(), 350);
 	const {
 		data,
 		fetchNextPage,
@@ -36,7 +23,7 @@ function SearchPage() {
 		isError,
 		refetch,
 		isRefetching,
-	} = useSearchPosts({ query: debouncedSearch });
+	} = useSearchPosts({ query: "" });
 	const { ref: observerTargetRef, isIntersecting: isTargetIntersecting } =
 		useIntersectionObserver({ rootMargin: "100px" });
 
@@ -51,17 +38,7 @@ function SearchPage() {
 	return (
 		<MainContainer>
 			<div className="py-5">
-				<div className="relative block">
-					<RiSearchLine className="pointer-events-none absolute left-4 top-1/2 size-5 -translate-y-1/2 text-muted-foreground" />
-					<input
-						type="search"
-						value={search}
-						onChange={(event) => setSearch(event.target.value)}
-						placeholder="Search posts"
-						aria-label="Search posts"
-						className="h-12 w-full rounded-full border border-transparent bg-muted pl-12 pr-5 text-sm text-foreground outline-none transition focus:border-foreground"
-					/>
-				</div>
+				<SearchBar />
 			</div>
 
 			{isLoading ? (
