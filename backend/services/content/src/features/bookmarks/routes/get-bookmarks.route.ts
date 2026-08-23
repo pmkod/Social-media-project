@@ -9,11 +9,13 @@ import { BookmarksRoutesTag } from "../bookmarks.constants";
 const routeDef = createRoute({
 	method: "get",
 	path: "/bookmarks",
-	summary: "Get the authenticated user's bookmarked posts",
+	summary:
+		"Get the authenticated user's bookmarked posts, optionally filtered by collection",
 	tags: [BookmarksRoutesTag],
 	middleware: [requireUserAuthentication],
 	request: {
 		query: z.object({
+			bookmarkCollectionId: z.string().optional(),
 			cursorId: z.string().optional(),
 			cursorCreatedAt: z.string().optional(),
 			limit: z.string().optional().default("10"),
@@ -33,6 +35,21 @@ const getBookmarksRoute = defineOpenAPIRoute<
 		const ownerId = c.get("authenticatedUserId");
 		if (!ownerId) throw new Error("Unauthorized");
 		const query = c.req.valid("query");
+		if (query.bookmarkCollectionId) {
+			const collection = await prisma.bookmarkCollection.findFirst({
+				where: {
+					id: query.bookmarkCollectionId,
+					ownerId,
+				},
+				select: { id: true },
+			});
+			if (!collection) {
+				return c.json(
+					{ message: "Collection not found" },
+					HttpStatus.NOT_FOUND.code,
+				);
+			}
+		}
 		const limit = Math.min(
 			Math.max(Number.parseInt(query.limit, 10) || 10, 1),
 			50,
@@ -65,7 +82,16 @@ const getBookmarksRoute = defineOpenAPIRoute<
 
 		const posts = await prisma.post.findMany({
 			where: {
-				bookmarks: { some: { ownerId } },
+				bookmarks: {
+					some: query.bookmarkCollectionId
+						? {
+								ownerId,
+								collectionItems: {
+									some: { collectionId: query.bookmarkCollectionId },
+								},
+							}
+						: { ownerId },
+				},
 				...(hiddenUserIds.length > 0
 					? { authorId: { notIn: hiddenUserIds } }
 					: {}),

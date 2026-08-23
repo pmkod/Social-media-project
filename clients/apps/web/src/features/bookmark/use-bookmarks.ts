@@ -30,15 +30,11 @@ const useBookmarks = ({
 				searchParams.set("cursorId", pageParam.id);
 				searchParams.set("cursorCreatedAt", pageParam.createdAt);
 			}
+			if (bookmarkCollectionId) {
+				searchParams.set("bookmarkCollectionId", bookmarkCollectionId);
+			}
 			return httpClient
-				.get(
-					bookmarkCollectionId
-						? `collections/${bookmarkCollectionId}/posts`
-						: "bookmarks",
-					{
-						searchParams,
-					},
-				)
+				.get("bookmarks", { searchParams })
 				.json<BookmarksResponse>();
 		},
 		initialPageParam: null as BookmarksCursor | null,
