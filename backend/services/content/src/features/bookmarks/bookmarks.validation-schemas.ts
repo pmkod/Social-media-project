@@ -5,4 +5,6 @@ const CreateBookmarkCollectionSchema = z.object({
 	description: z.string().trim().max(280).optional(),
 });
 
-export { CreateBookmarkCollectionSchema };
+const UpdateBookmarkCollectionSchema = CreateBookmarkCollectionSchema;
+
+export { CreateBookmarkCollectionSchema, UpdateBookmarkCollectionSchema };

@@ -4,20 +4,28 @@ import { prisma } from "@/core/databases";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { requireUserAuthentication } from "@/features/authentication/middlewares/require-user-authentication.middleware";
 import { BookmarksRoutesTag } from "../bookmarks.constants";
+import { UpdateBookmarkCollectionSchema } from "../bookmarks.validation-schemas";
 
 const routeDef = createRoute({
-	method: "delete",
+	method: "put",
 	path: "/collections/{collectionId}",
-	summary: "Delete a bookmark collection without deleting its bookmarks",
+	summary: "Edit a bookmark collection",
 	tags: [BookmarksRoutesTag],
 	middleware: [requireUserAuthentication],
-	request: { params: z.object({ collectionId: z.string() }) },
+	request: {
+		params: z.object({ collectionId: z.string() }),
+		body: {
+			content: {
+				"application/json": { schema: UpdateBookmarkCollectionSchema },
+			},
+		},
+	},
 	responses: {
-		[HttpStatus.OK.code]: { description: "Collection deleted" },
+		[HttpStatus.OK.code]: { description: "Bookmark collection updated" },
 	},
 });
 
-const deleteCollectionRoute = defineOpenAPIRoute<
+const editCollectionRoute = defineOpenAPIRoute<
 	typeof routeDef,
 	HonoAuthenticatedEnv
 >({
@@ -25,7 +33,9 @@ const deleteCollectionRoute = defineOpenAPIRoute<
 	handler: async (c) => {
 		const ownerId = c.get("authenticatedUserId");
 		if (!ownerId) throw new Error("Unauthorized");
+
 		const { collectionId } = c.req.valid("param");
+		const body = c.req.valid("json");
 		const collection = await prisma.bookmarkCollection.findFirst({
 			where: { id: collectionId, ownerId },
 			select: { id: true },
@@ -37,12 +47,23 @@ const deleteCollectionRoute = defineOpenAPIRoute<
 			);
 		}
 
-		await prisma.bookmarkCollection.delete({
+		const updatedCollection = await prisma.bookmarkCollection.update({
 			where: { id: collection.id },
+			data: body,
+			select: {
+				id: true,
+				ownerId: true,
+				name: true,
+				description: true,
+				createdAt: true,
+				updatedAt: true,
+				_count: { select: { items: true } },
+			},
 		});
 
-		return c.json({ success: true });
+		const { _count, ...result } = updatedCollection;
+		return c.json({ ...result, bookmarksCount: _count.items });
 	},
 });
 
-export { deleteCollectionRoute };
+export { editCollectionRoute };

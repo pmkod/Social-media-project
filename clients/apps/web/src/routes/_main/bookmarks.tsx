@@ -1,4 +1,4 @@
-import { RiAddLine, RiDeleteBinLine } from "@remixicon/react";
+import { RiAddLine } from "@remixicon/react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import {
@@ -12,15 +12,16 @@ import { EmptyBlock } from "@/core/components/ui/empty-block.tsx";
 import { ExceptionBlock } from "@/core/components/ui/exception-block.tsx";
 import { MainContainer } from "@/core/components/ui/main-container.tsx";
 import NiceModal from "@/core/components/ui/nice-modal.tsx";
+import { useAlertDialog } from "@/core/hooks/use-alert-dialog.tsx";
 import { useIntersectionObserver } from "@/core/hooks/use-intersection-observer.ts";
 import type { BookmarkCollection } from "@/features/bookmark/common/bookmark-collection.ts";
 import { BookmarkCollectionChip } from "@/features/bookmark/common/bookmark-collection-chip.tsx";
 import { BookmarkCollectionChipLoader } from "@/features/bookmark/common/bookmark-collection-chip-loader.tsx";
-import { CreateBookmarkCollectionModal } from "@/features/bookmark/create-bookmark-collection/create-bookmark-collection.modal.tsx";
+import { BookmarkCollectionModal } from "@/features/bookmark/common/bookmark-collection-modal.tsx";
+import { useDeleteBookmarkCollection } from "@/features/bookmark/delete-bookmark-collection/use-delete-bookmark-collection.ts";
 import { useAddPostToCollection } from "@/features/bookmark/use-add-post-to-collection.ts";
 import { useBookmarkCollections } from "@/features/bookmark/use-bookmark-collections.ts";
 import { useBookmarks } from "@/features/bookmark/use-bookmarks.ts";
-import { useDeleteBookmarkCollection } from "@/features/bookmark/use-delete-bookmark-collection.ts";
 import { useRemovePostFromCollection } from "@/features/bookmark/use-remove-post-from-collection.ts";
 import { PostListLoader } from "@/features/post/common/components/loaders";
 import { PostItem } from "@/features/post/common/post-item.tsx";
@@ -75,6 +76,7 @@ function BookmarksPage() {
 	const bookmarksQuery = useBookmarks({ collectionId: selectedCollectionId });
 	const deleteCollection = useDeleteBookmarkCollection();
 	const removeFromCollection = useRemovePostFromCollection();
+	const alertDialog = useAlertDialog();
 
 	const collections =
 		collectionsQuery.data?.pages.flatMap((page) => page.bookmarksCollections) ??
@@ -123,10 +125,33 @@ function BookmarksPage() {
 	]);
 
 	const handleOpenCreateCollectionModal = async () => {
-		const collection = (await NiceModal.show(CreateBookmarkCollectionModal)) as
-			| BookmarkCollection
-			| undefined;
-		if (collection) setSelectedCollectionId(collection.id);
+		await NiceModal.show(BookmarkCollectionModal);
+	};
+
+	const handleOpenEditCollectionModal = async (
+		collection: BookmarkCollection,
+	) => {
+		await NiceModal.show(BookmarkCollectionModal, { collection });
+	};
+
+	const handleDeleteCollection = (collection: BookmarkCollection) => {
+		alertDialog.show({
+			title: `Delete "${collection.name}"?`,
+			description:
+				"This collection will be deleted, but the posts will remain in your bookmarks.",
+			cancel: { text: "Cancel" },
+			confirm: {
+				text: "Delete collection",
+				colorScheme: "destructive",
+				handler: () => {
+					deleteCollection.mutateAsync(collection.id).then(() => {
+						if (selectedCollectionId === collection.id) {
+							setSelectedCollectionId(undefined);
+						}
+					});
+				},
+			},
+		});
 	};
 
 	return (
@@ -148,7 +173,7 @@ function BookmarksPage() {
 			</AppHeader>
 
 			<section className="">
-				<div className="flex gap-2 overflow-x-auto pb-1">
+				<div className="flex gap-2 overflow-x-auto pt-2 pb-5">
 					<BookmarkCollectionChip
 						name="All"
 						isSelected={!selectedCollectionId}
@@ -170,6 +195,8 @@ function BookmarksPage() {
 									name={collection.name}
 									isSelected={selectedCollectionId === collection.id}
 									onClick={() => setSelectedCollectionId(collection.id)}
+									onEdit={() => void handleOpenEditCollectionModal(collection)}
+									onDelete={() => handleDeleteCollection(collection)}
 								/>
 							))}
 							{collectionsQuery.hasNextPage ? (
@@ -186,28 +213,6 @@ function BookmarksPage() {
 					)}
 				</div>
 			</section>
-
-			<div className="flex items-center justify-between border-b border-border px-4 py-3">
-				{selectedCollection ? (
-					<Button
-						type="button"
-						variant="ghost"
-						size="sm"
-						className="text-rose-500 hover:text-rose-600"
-						disabled={deleteCollection.isPending}
-						onClick={() => {
-							if (window.confirm("Delete this collection?")) {
-								deleteCollection.mutate(selectedCollection.id, {
-									onSuccess: () => setSelectedCollectionId(undefined),
-								});
-							}
-						}}
-					>
-						<RiDeleteBinLine className="size-4" />
-						Delete
-					</Button>
-				) : null}
-			</div>
 
 			{bookmarksQuery.isLoading ? (
 				<PostListLoader />
