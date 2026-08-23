@@ -24,20 +24,25 @@ import { useDebounceValue } from "@/core/hooks/use-debounce-value.ts";
 import { useIntersectionObserver } from "@/core/hooks/use-intersection-observer.ts";
 import { useAddBookmark } from "../use-add-bookmark.ts";
 import { useBookmarkCollections } from "../use-bookmark-collections.ts";
+import { useRemoveBookmark } from "../use-remove-bookmark.ts";
 import { useRemovePostFromCollection } from "../use-remove-post-from-collection.ts";
 import { BOOKMARK_COLLECTIONS_PAGE_LIMIT } from "./bookmark-collection.constants.ts";
 import type { BookmarkCollection } from "./bookmark-collection.ts";
 import { BookmarkCollectionModal } from "./bookmark-collection-modal.tsx";
 
 type BookmarkCollectionPickerModalProps = {
+	isBookmarked: boolean;
 	postId: string;
 };
 
 const BookmarkCollectionPickerModal =
-	create<BookmarkCollectionPickerModalProps>(({ postId }) => {
+	create<BookmarkCollectionPickerModalProps>((props) => {
+		const { isBookmarked: initialIsBookmarked, postId } = props;
 		const modal = useModal();
 		const addBookmark = useAddBookmark();
+		const removeBookmark = useRemoveBookmark();
 		const removePostFromCollection = useRemovePostFromCollection();
+		const [isBookmarked, setIsBookmarked] = useState(initialIsBookmarked);
 		const [search, setSearch] = useState("");
 		const [debouncedSearch] = useDebounceValue(search, 500);
 		const [scrollContainer, setScrollContainer] =
@@ -84,10 +89,27 @@ const BookmarkCollectionPickerModal =
 		};
 
 		const isMutationPending =
-			addBookmark.isPending || removePostFromCollection.isPending;
-		const pendingCollectionId = addBookmark.isPending
-			? addBookmark.variables?.collectionId
-			: removePostFromCollection.variables?.collectionId;
+			addBookmark.isPending ||
+			removeBookmark.isPending ||
+			removePostFromCollection.isPending;
+		const pendingCollectionId = removePostFromCollection.isPending
+			? removePostFromCollection.variables?.collectionId
+			: addBookmark.variables?.collectionId;
+
+		const handleToggleBookmark = async () => {
+			if (isMutationPending) return;
+
+			try {
+				if (isBookmarked) {
+					await removeBookmark.mutateAsync(postId);
+					setIsBookmarked(false);
+					await collectionsQuery.refetch();
+				} else {
+					await addBookmark.mutateAsync({ postId });
+					setIsBookmarked(true);
+				}
+			} catch {}
+		};
 
 		const handleToggleCollection = async (collection: BookmarkCollection) => {
 			if (isMutationPending) return;
@@ -103,6 +125,7 @@ const BookmarkCollectionPickerModal =
 						postId,
 						collectionId: collection.id,
 					});
+					setIsBookmarked(true);
 				}
 				await collectionsQuery.refetch();
 			} catch {}
@@ -145,6 +168,38 @@ const BookmarkCollectionPickerModal =
 									<RiAddLine className="size-6" />
 								</IconButton>
 							</div>
+							<button
+								type="button"
+								onClick={() => void handleToggleBookmark()}
+								disabled={isMutationPending}
+								className="group flex min-h-16 w-full cursor-pointer items-center justify-between gap-3 border-b border-border px-6 text-left transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-default disabled:opacity-60"
+								aria-label={
+									isBookmarked
+										? "Remove from bookmarks"
+										: "Save without a collection"
+								}
+								aria-pressed={isBookmarked}
+							>
+								<span className="min-w-0">
+									<span className="block truncate text-base font-semibold">
+										{isBookmarked
+											? "Saved to bookmarks"
+											: "Save without a collection"}
+									</span>
+									<span className="block truncate text-sm font-normal text-muted-foreground">
+										{isBookmarked
+											? "Remove this post from bookmarks and all collections."
+											: "Save this post without choosing a collection."}
+									</span>
+								</span>
+								{removeBookmark.isPending ? (
+									<RiLoader4Line className="size-5 shrink-0 animate-spin text-muted-foreground" />
+								) : isBookmarked ? (
+									<RiBookmarkFill className="size-5 shrink-0 text-amber-500" />
+								) : (
+									<RiBookmarkLine className="size-5 shrink-0 text-muted-foreground transition-colors group-hover:text-amber-500" />
+								)}
+							</button>
 							{collectionsQuery.isLoading ? (
 								<div className="space-y-1">
 									{[1, 2, 3, 4].map((loaderId) => (

@@ -12,7 +12,10 @@ function BookmarkButton({ postId, isBookmarked }: BookmarkButtonProps) {
 		event.stopPropagation();
 		event.preventDefault();
 
-		void NiceModal.show(BookmarkCollectionPickerModal, { postId });
+		void NiceModal.show(BookmarkCollectionPickerModal, {
+			isBookmarked,
+			postId,
+		});
 	};
 
 	return (
