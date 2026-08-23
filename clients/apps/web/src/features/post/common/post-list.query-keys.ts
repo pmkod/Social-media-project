@@ -15,4 +15,4 @@ const postListQueryKeys = {
 		[...postListRootQueryKey, "collection", collectionId] as const,
 };
 
-export { postListQueryKeys, postListRootQueryKey };
+export { postListQueryKeys };

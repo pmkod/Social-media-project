@@ -27,4 +27,3 @@ function CommentListLoader({
 }
 
 export { CommentListLoader };
-export type { CommentListLoaderProps };

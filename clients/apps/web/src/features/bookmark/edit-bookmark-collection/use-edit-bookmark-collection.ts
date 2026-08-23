@@ -25,4 +25,3 @@ const useEditBookmarkCollection = () => {
 };
 
 export { useEditBookmarkCollection };
-export type { EditBookmarkCollectionInput };

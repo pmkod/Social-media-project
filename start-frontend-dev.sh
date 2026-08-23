@@ -4,7 +4,6 @@
 CYAN='\033[1;36m'
 GREEN='\033[1;32m'
 YELLOW='\033[1;33m'
-MAGENTA='\033[1;35m'
 BLUE='\033[1;34m'
 GRAY='\033[0;90m'
 RESET='\033[0m'
@@ -14,7 +13,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$SCRIPT_DIR" || exit 1
 
 echo -e "${BLUE}====================================================${RESET}"
-echo -e "${BLUE}      Démarrage des applications frontend           ${RESET}"
+echo -e "${BLUE}      Démarrage de l'application frontend           ${RESET}"
 echo -e "${BLUE}====================================================${RESET}\n"
 
 # Tableau pour suivre les PIDs des processus enfants
@@ -56,9 +55,8 @@ run_app() {
 
 # Lancement des applications frontend depuis la racine du projet
 run_app "WEB-APP   " "clients/apps/web" "$CYAN" 3000
-run_app "ADMIN-APP " "clients/apps/admin" "$MAGENTA" 3001
 
-echo -e "\n${GREEN}✔ Toutes les applications frontend ont été démarrées !${RESET}"
+echo -e "\n${GREEN}✔ L'application frontend a été démarrée !${RESET}"
 echo -e "${GRAY}Appuyez sur Ctrl+C pour tout arrêter.${RESET}\n"
 
 # Attente des processus d'arrière-plan

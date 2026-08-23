@@ -91,5 +91,4 @@ function useAlertDialog() {
 	return { show };
 }
 
-export { BaseAlertDialog, useAlertDialog };
-export type { BaseAlertDialogProps };
+export { useAlertDialog };

@@ -3,7 +3,6 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { Dialog as DialogPrimitive } from "radix-ui";
 import type * as React from "react";
 import { cn } from "@/core/lib/utils.ts";
-import { Button } from "./button.tsx";
 
 const dialogContentVariants = cva(
 	"fixed top-1/2 left-1/2 z-50 flex max-h-[min(calc(100dvh-2rem),48rem)] min-h-0 w-full max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 flex-col gap-4 overflow-hidden rounded-2xl border border-border bg-background p-4 shadow-2xl duration-200 outline-none data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95",
@@ -35,12 +34,6 @@ function DialogPortal(
 	props: React.ComponentProps<typeof DialogPrimitive.Portal>,
 ) {
 	return <DialogPrimitive.Portal data-slot="dialog-portal" {...props} />;
-}
-
-function DialogClose(
-	props: React.ComponentProps<typeof DialogPrimitive.Close>,
-) {
-	return <DialogPrimitive.Close data-slot="dialog-close" {...props} />;
 }
 
 function DialogOverlay({
@@ -162,14 +155,9 @@ function DialogDescription({
 export {
 	Dialog,
 	DialogBody,
-	DialogClose,
 	DialogContent,
 	DialogDescription,
 	DialogFooter,
 	DialogHeader,
-	DialogOverlay,
-	DialogPortal,
 	DialogTitle,
 };
-
-export type { DialogSize };

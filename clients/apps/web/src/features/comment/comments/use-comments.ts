@@ -18,10 +18,7 @@ export type CommentsInfiniteResult = {
 	pagination: CommentsResponse["pagination"];
 };
 
-export type GetCommentsResponse = CommentsResponse;
-export type GetCommentsInfiniteResult = CommentsInfiniteResult;
-
-export const fetchCommentsPage = async ({
+const fetchCommentsPage = async ({
 	postId,
 	pageParam = 1,
 }: {

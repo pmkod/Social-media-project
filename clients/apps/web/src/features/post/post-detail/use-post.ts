@@ -15,5 +15,3 @@ export const usePost = ({ postId }: UsePostParams) => {
 		enabled: Boolean(postId),
 	});
 };
-
-export const usePostById = usePost;

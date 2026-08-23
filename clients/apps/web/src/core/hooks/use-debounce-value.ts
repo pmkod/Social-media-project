@@ -160,4 +160,3 @@ function useDebounceValue<T>(
 }
 
 export { useDebounceValue };
-export type { DebouncedState, UseDebounceValueOptions };

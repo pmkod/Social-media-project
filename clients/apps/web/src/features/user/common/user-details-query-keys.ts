@@ -6,4 +6,4 @@ const userDetailsQueryKeys = {
 		[...userDetailsRootQueryKey, username.toLowerCase()] as const,
 };
 
-export { userDetailsQueryKeys, userDetailsRootQueryKey };
+export { userDetailsQueryKeys };

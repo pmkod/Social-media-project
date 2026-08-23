@@ -10,7 +10,7 @@ import React, {
 	type JSX,
 } from "react";
 
-export type NiceModalState = {
+type NiceModalState = {
 	id: string;
 	args?: Record<string, unknown>;
 	visible?: boolean;
@@ -18,11 +18,11 @@ export type NiceModalState = {
 	keepMounted?: boolean;
 };
 
-export type NiceModalStore = {
+type NiceModalStore = {
 	[key: string]: NiceModalState;
 };
 
-export type NiceModalAction = {
+type NiceModalAction = {
 	type: string;
 	payload: {
 		modalId: string;
@@ -87,8 +87,7 @@ export type NiceModalHocProps = {
 };
 const symModalId = Symbol("NiceModalId");
 const initialState: NiceModalStore = {};
-export const NiceModalContext =
-	React.createContext<NiceModalStore>(initialState);
+const NiceModalContext = React.createContext<NiceModalStore>(initialState);
 const NiceModalIdContext = React.createContext<string | null>(null);
 const MODAL_REGISTRY: {
 	[id: string]: {
@@ -107,7 +106,7 @@ let dispatch: React.Dispatch<NiceModalAction> = () => {
 const getUid = () => `_nice_modal_${uidSeed++}`;
 
 // Modal reducer used in useReducer hook.
-export const reducer = (
+const reducer = (
 	state: NiceModalStore = initialState,
 	action: NiceModalAction,
 ): NiceModalStore => {
@@ -228,23 +227,20 @@ type NiceModalArgs<T> = T extends
 	? React.ComponentProps<T>
 	: Record<string, unknown>;
 
-export function show<
+function show<
 	T extends any,
 	C extends any,
 	P extends Partial<NiceModalArgs<React.FC<C>>>,
 >(modal: React.FC<C>, args?: P): Promise<T>;
 
-export function show<T extends any>(
+function show<T extends any>(
 	modal: string,
 	args?: Record<string, unknown>,
 ): Promise<T>;
-export function show<T extends any, P extends any>(
-	modal: string,
-	args: P,
-): Promise<T>;
+function show<T extends any, P extends any>(modal: string, args: P): Promise<T>;
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export function show(
+function show(
 	modal: React.FC<any> | string,
 	args?: NiceModalArgs<React.FC<any>> | Record<string, unknown>,
 ) {
@@ -272,9 +268,9 @@ export function show(
 	return modalCallbacks[modalId].promise;
 }
 
-export function hide<T>(modal: string | React.FC<any>): Promise<T>;
+function hide<T>(modal: string | React.FC<any>): Promise<T>;
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export function hide(modal: string | React.FC<any>) {
+function hide(modal: string | React.FC<any>) {
 	const modalId = getModalId(modal);
 	dispatch(hideModal(modalId));
 	// Should also delete the callback for modal.resolve #35
@@ -297,7 +293,7 @@ export function hide(modal: string | React.FC<any>) {
 	return hideModalCallbacks[modalId].promise;
 }
 
-export const remove = (modal: string | React.FC<any>): void => {
+const remove = (modal: string | React.FC<any>): void => {
 	const modalId = getModalId(modal);
 	dispatch(removeModal(modalId));
 	delete modalCallbacks[modalId];
@@ -450,7 +446,7 @@ export const create = <P extends {}>(
 };
 
 // All registered modals will be rendered in modal placeholder
-export const register = <T extends React.FC<any>>(
+const register = <T extends React.FC<any>>(
 	id: string,
 	comp: T,
 	props?: Partial<NiceModalArgs<T>>,
@@ -466,7 +462,7 @@ export const register = <T extends React.FC<any>>(
  * Unregister a modal.
  * @param id - The id of the modal.
  */
-export const unregister = (id: string): void => {
+const unregister = (id: string): void => {
 	delete MODAL_REGISTRY[id];
 };
 
@@ -512,7 +508,7 @@ const InnerContextProvider = ({ children }: PropsWithChildren) => {
 	);
 };
 
-export const Provider = ({
+const Provider = ({
 	children,
 	dispatch: givenDispatch,
 	modals: givenModals,
@@ -539,7 +535,7 @@ export const Provider = ({
  * @param component - The modal Component.
  * @returns
  */
-export const ModalDef = ({
+const ModalDef = ({
 	id,
 	component,
 }: {
@@ -566,7 +562,7 @@ export const ModalDef = ({
  * @param handler - The handler object to control the modal.
  * @returns
  */
-export const ModalHolder = ({
+const ModalHolder = ({
 	modal,
 	handler = {},
 	...restProps
@@ -593,16 +589,7 @@ export const ModalHolder = ({
 	return <ModalComp id={mid} {...restProps} />;
 };
 
-export function createModalHandler<T extends React.ComponentType<any>>(): {
-	show: (
-		args?: Omit<React.ComponentProps<T>, keyof NiceModalHocProps>,
-	) => Promise<unknown>;
-	hide: () => void;
-} {
-	return Object.create(null);
-}
-
-export const antdModal = (
+const antdModal = (
 	modal: NiceModalHandler,
 ): {
 	visible: boolean;
@@ -621,23 +608,7 @@ export const antdModal = (
 		},
 	};
 };
-export const antdModalV5 = (
-	modal: NiceModalHandler,
-): {
-	open: boolean;
-	onCancel: () => void;
-	onOk: () => void;
-	afterClose: () => void;
-} => {
-	const { onOk, onCancel, afterClose } = antdModal(modal);
-	return {
-		open: modal.visible,
-		onOk,
-		onCancel,
-		afterClose,
-	};
-};
-export const antdDrawer = (
+const antdDrawer = (
 	modal: NiceModalHandler,
 ): {
 	visible: boolean;
@@ -655,21 +626,7 @@ export const antdDrawer = (
 		},
 	};
 };
-export const antdDrawerV5 = (
-	modal: NiceModalHandler,
-): {
-	open: boolean;
-	onClose: () => void;
-	afterOpenChange: (visible: boolean) => void;
-} => {
-	const { onClose, afterVisibleChange: afterOpenChange } = antdDrawer(modal);
-	return {
-		open: modal.visible,
-		onClose,
-		afterOpenChange,
-	};
-};
-export const muiDialog = (
+const muiDialog = (
 	modal: NiceModalHandler,
 ): { open: boolean; onClose: () => void; onExited: () => void } => {
 	return {
@@ -682,25 +639,7 @@ export const muiDialog = (
 	};
 };
 
-export const muiDialogV5 = (
-	modal: NiceModalHandler,
-): {
-	open: boolean;
-	onClose: () => void;
-	TransitionProps: { onExited: () => void };
-} => {
-	return {
-		open: modal.visible,
-		onClose: () => modal.hide(),
-		TransitionProps: {
-			onExited: () => {
-				modal.resolveHide();
-				!modal.keepMounted && modal.remove();
-			},
-		},
-	};
-};
-export const bootstrapDialog = (
+const bootstrapDialog = (
 	modal: NiceModalHandler,
 ): { show: boolean; onHide: () => void; onExited: () => void } => {
 	return {

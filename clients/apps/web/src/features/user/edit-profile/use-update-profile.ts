@@ -69,4 +69,3 @@ const useUpdateProfile = () => {
 };
 
 export { useUpdateProfile };
-export type { UpdateProfileInput };

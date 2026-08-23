@@ -24,7 +24,7 @@ function getInitials(name?: string | null): string {
 	return "";
 }
 
-export type UserAvatarProps = Omit<AvatarProps, "children"> & {
+type UserAvatarProps = Omit<AvatarProps, "children"> & {
 	user?: User;
 	fallback?: React.ReactNode;
 };

@@ -11,7 +11,6 @@
 		"jsonwebtoken": "^9.0.3"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "2.3.14",
 		"@types/bun": "latest",
 		"@types/jsonwebtoken": "^9.0.10",
 		"typescript": "^5"

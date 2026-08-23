@@ -37,10 +37,3 @@ export function buildVideoUrl(fileName?: string | null): string {
 	const cleanFileName = fileName.startsWith("/") ? fileName.slice(1) : fileName;
 	return `${ApiConfig.baseUrl}/videos/${cleanFileName}`;
 }
-
-/**
- * Backward-compatible aliases
- */
-export const buildPostImageUrl = buildImageUrl;
-export const buildPostVideoUrl = buildVideoUrl;
-export const postVideoUrl = buildVideoUrl;

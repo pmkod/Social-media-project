@@ -3,7 +3,7 @@ import { httpClient } from "@/core/http-clients/http-client.ts";
 import type { Post } from "../common/post.ts";
 import { postListQueryKeys } from "../common/post-list.query-keys.ts";
 
-export type CreatePostInput = {
+type CreatePostInput = {
 	text: string;
 	medias?: File[];
 };

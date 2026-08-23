@@ -139,5 +139,4 @@ function UserProfilePreview({ user }: UserProfilePreviewProps) {
 	);
 }
 
-export { UserProfileHoverCard, UserProfilePreviewLoader };
-export type { UserProfileHoverCardProps, UserProfilePreviewLoaderProps };
+export { UserProfileHoverCard };

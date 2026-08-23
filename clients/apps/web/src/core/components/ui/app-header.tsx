@@ -127,21 +127,10 @@ function AppHeaderTitle({ className, ...props }: React.ComponentProps<"h1">) {
 	);
 }
 
-function AppHeaderSubtitle({ className, ...props }: React.ComponentProps<"p">) {
-	return (
-		<p
-			data-slot="app-header-subtitle"
-			className={cn("text-xs text-muted-foreground truncate", className)}
-			{...props}
-		/>
-	);
-}
-
 export {
 	AppHeader,
 	AppHeaderLeftPart,
 	AppHeaderRightPart,
 	AppHeaderGoBackButton,
 	AppHeaderTitle,
-	AppHeaderSubtitle,
 };

@@ -185,4 +185,3 @@ const BookmarkCollectionPickerModal =
 	});
 
 export { BookmarkCollectionPickerModal };
-export type { BookmarkCollectionPickerModalProps };

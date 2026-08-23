@@ -1,6 +1,6 @@
 import type { User } from "@/features/user/common/user";
 
-export type PostFileItem = {
+type PostFileItem = {
 	id?: string;
 	mimeType?: string | null;
 	filename: string;

@@ -17,4 +17,3 @@ function BookmarkCollectionItemLoader({
 }
 
 export { BookmarkCollectionItemLoader };
-export type { BookmarkCollectionItemLoaderProps };

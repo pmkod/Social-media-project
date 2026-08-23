@@ -24,4 +24,3 @@ const useOpenUserBlockAlertDialog = () => {
 };
 
 export { useOpenUserBlockAlertDialog };
-export type { OpenUserBlockAlertDialogParams };

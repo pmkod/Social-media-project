@@ -51,4 +51,3 @@ function BookmarkButton({ postId, isBookmarked }: BookmarkButtonProps) {
 }
 
 export { BookmarkButton };
-export type { BookmarkButtonProps };

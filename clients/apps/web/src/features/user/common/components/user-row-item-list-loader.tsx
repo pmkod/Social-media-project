@@ -23,4 +23,3 @@ function UserRowItemListLoader({
 }
 
 export { UserRowItemListLoader };
-export type { UserRowItemListLoaderProps };

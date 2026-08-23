@@ -1,0 +1,7 @@
+# Local and generated files
+.DS_Store
+*.tsbuildinfo
+
+# Prisma browser clients are not used by the server services
+/backend/services/*/src/generated/prisma/browser.ts
+/backend/services/*/src/generated/prisma/internal/prismaNamespaceBrowser.ts

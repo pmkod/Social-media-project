@@ -59,4 +59,3 @@ function EmptyBlock({
 }
 
 export { EmptyBlock };
-export type { EmptyBlockProps };

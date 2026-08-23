@@ -17,9 +17,7 @@ export type FollowingFeedResponse = {
 	};
 };
 
-export type GetFollowingFeedResponse = FollowingFeedResponse;
-
-export const fetchFollowingFeedPage = async ({
+const fetchFollowingFeedPage = async ({
 	pageParam,
 }: {
 	pageParam?: FeedCursor | null;

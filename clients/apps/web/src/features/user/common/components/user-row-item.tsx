@@ -14,7 +14,6 @@ type UserRowItemProps = {
 function UserRowItem({ user, onClick }: UserRowItemProps) {
 	return (
 		<UserProfileLink
-			type="button"
 			className={cn(
 				"flex items-center w-full justify-between gap-3 px-6 py-3 transition-colors hover:bg-gray-100/80 cursor-pointer",
 			)}
@@ -29,11 +28,7 @@ function UserRowItem({ user, onClick }: UserRowItemProps) {
 					<UserAvatar user={user} size="md" />
 				</UserProfileHoverCard>
 
-				<div
-					// user={user}
-					// onClick={(e) => e.stopPropagation()}
-					className="min-w-0 flex-1 flex flex-col items-start"
-				>
+				<div className="min-w-0 flex-1 flex flex-col items-start">
 					<UserProfileHoverCard user={user}>
 						<div className="truncate font-semibold text-sm text-foreground group-hover:underline">
 							{user.fullName}

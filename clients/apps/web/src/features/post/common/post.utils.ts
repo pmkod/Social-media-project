@@ -57,34 +57,3 @@ export function formatCommentCreationDate(
 ): string {
 	return formatPostCreationDate(dateInput);
 }
-
-/**
- * Formats a full date and time for detailed view headers / meta (e.g. Post detail).
- */
-export function formatPostFullDate(
-	dateInput: string | Date | number | null | undefined,
-): string {
-	if (!dateInput) return "";
-
-	const date =
-		typeof dateInput === "string" || typeof dateInput === "number"
-			? new Date(dateInput)
-			: dateInput;
-
-	if (Number.isNaN(date.getTime())) {
-		return typeof dateInput === "string" ? dateInput : "";
-	}
-
-	const timeStr = date.toLocaleTimeString("en-US", {
-		hour: "2-digit",
-		minute: "2-digit",
-	});
-
-	const dateStr = date.toLocaleDateString("en-US", {
-		day: "numeric",
-		month: "long",
-		year: "numeric",
-	});
-
-	return `${dateStr} at ${timeStr}`;
-}

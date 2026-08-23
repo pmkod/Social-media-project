@@ -320,4 +320,3 @@ const ReportPostModal = create<ReportPostModalProps>(({ postId }) => {
 });
 
 export { ReportPostModal };
-export type { ReportPostModalProps };

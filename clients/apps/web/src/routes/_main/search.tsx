@@ -1,11 +1,6 @@
-import { RiLoader4Line, RiSearchLine } from "@remixicon/react";
+import { RiSearchLine } from "@remixicon/react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import {
-	AppHeader,
-	AppHeaderLeftPart,
-	AppHeaderTitle,
-} from "@/core/components/ui/app-header.tsx";
 import { EmptyBlock } from "@/core/components/ui/empty-block.tsx";
 import { ExceptionBlock } from "@/core/components/ui/exception-block.tsx";
 import { MainContainer } from "@/core/components/ui/main-container.tsx";

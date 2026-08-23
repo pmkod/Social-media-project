@@ -126,4 +126,3 @@ function CreateCommentForm({
 }
 
 export { CreateCommentForm };
-export type { CreateCommentFormProps };

@@ -68,4 +68,3 @@ function CommentItemLoader({
 }
 
 export { CommentItemLoader };
-export type { CommentItemLoaderProps };

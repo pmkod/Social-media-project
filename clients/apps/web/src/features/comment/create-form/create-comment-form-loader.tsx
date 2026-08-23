@@ -28,4 +28,3 @@ function CreateCommentFormLoader({ className }: CreateCommentFormLoaderProps) {
 }
 
 export { CreateCommentFormLoader };
-export type { CreateCommentFormLoaderProps };

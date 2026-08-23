@@ -11,4 +11,4 @@ const userListQueryKeys = {
 	blocked: () => [...userListRootQueryKey, "blocked"] as const,
 };
 
-export { userListQueryKeys, userListRootQueryKey };
+export { userListQueryKeys };

@@ -49,9 +49,7 @@ const removeAuthorPostsFromCache = (
 	authorId: string,
 ) => {
 	const filterPosts = (posts: Post[] | undefined) =>
-		posts?.filter(
-			(post) => post.authorId !== authorId && post.author?.id !== authorId,
-		);
+		posts?.filter((post) => post.author?.id !== authorId);
 
 	queryClient.setQueriesData<PostListCache>(
 		{ queryKey: postListQueryKeys.root },

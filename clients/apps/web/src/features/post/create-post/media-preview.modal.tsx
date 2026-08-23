@@ -6,13 +6,13 @@ import {
 import { useCallback, useEffect, useState } from "react";
 import { create, useModal } from "@/core/components/ui/nice-modal.tsx";
 
-export type MediaItem = {
+type MediaItem = {
 	url: string;
 	type: "image" | "video";
 	name?: string;
 };
 
-export type MediaPreviewModalProps = {
+type MediaPreviewModalProps = {
 	items: MediaItem[];
 	initialIndex?: number;
 };

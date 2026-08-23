@@ -74,4 +74,3 @@ function BookmarkCollectionItem({
 }
 
 export { BookmarkCollectionItem };
-export type { BookmarkCollectionItemProps };

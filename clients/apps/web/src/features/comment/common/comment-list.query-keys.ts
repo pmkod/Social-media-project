@@ -8,4 +8,4 @@ const commentListQueryKeys = {
 		[...commentListRootQueryKey, "comment", commentId, "replies"] as const,
 };
 
-export { commentListQueryKeys, commentListRootQueryKey };
+export { commentListQueryKeys };

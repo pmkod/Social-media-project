@@ -3,7 +3,6 @@ export * from "./common/comment-item.tsx";
 export * from "./common/comment-like.cache-utils.ts";
 export * from "./common/comment-list.query-keys.ts";
 export * from "./common/components/loaders/index.ts";
-export * from "./create-comment/comment-modal.tsx";
 export * from "./create-comment/create-comment-form.tsx";
 export * from "./create-comment/use-create-comment.ts";
 export * from "./create-comment/use-create-comment-reply.ts";

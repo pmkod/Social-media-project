@@ -4,7 +4,7 @@ import { postListQueryKeys } from "@/features/post/common/post-list.query-keys.t
 import { commentListQueryKeys } from "../common/comment-list.query-keys.ts";
 import type { Comment } from "../common/comment.ts";
 
-export type CreateCommentInput = {
+type CreateCommentInput = {
 	postId: string;
 	content: string;
 };

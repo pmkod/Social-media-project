@@ -31,11 +31,4 @@ type CreateReportResponse = {
 	report: Report;
 };
 
-export type {
-	CreateReportResponse,
-	Report,
-	ReportReason,
-	ReportReasonsResponse,
-	ReportStatus,
-	ReportTargetType,
-};
+export type { CreateReportResponse, ReportReasonsResponse, ReportTargetType };

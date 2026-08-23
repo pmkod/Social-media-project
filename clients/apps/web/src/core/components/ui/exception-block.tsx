@@ -59,4 +59,3 @@ function ExceptionBlock({
 }
 
 export { ExceptionBlock };
-export type { ExceptionBlockProps };

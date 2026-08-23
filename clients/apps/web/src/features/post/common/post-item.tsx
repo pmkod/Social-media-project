@@ -30,7 +30,7 @@ export type RenderMediaItem = {
 	isVideo: boolean;
 };
 
-export function isVideoMedia(m: PostMediaItem): boolean {
+function isVideoMedia(m: PostMediaItem): boolean {
 	if (m.mediaType?.toUpperCase() === "VIDEO") return true;
 	const file = m.lowQualityFile || m.highQualityFile;
 	const filename = file?.filename || file?.url;
@@ -45,7 +45,7 @@ export function isVideoMedia(m: PostMediaItem): boolean {
 	);
 }
 
-export function getMediaUrl(m: PostMediaItem): RenderMediaItem | null {
+function getMediaUrl(m: PostMediaItem): RenderMediaItem | null {
 	const file = m.lowQualityFile || m.highQualityFile;
 	const filename = file?.filename || file?.url;
 	if (!filename) return null;
@@ -54,7 +54,7 @@ export function getMediaUrl(m: PostMediaItem): RenderMediaItem | null {
 	return url ? { url, isVideo } : null;
 }
 
-export function MediaElement({
+function MediaElement({
 	item,
 	className,
 }: {
@@ -75,7 +75,7 @@ export function MediaElement({
 	return <img src={item.url} alt="Post media" className={className} />;
 }
 
-export function PostMediaGrid({ media }: { media: RenderMediaItem[] }) {
+function PostMediaGrid({ media }: { media: RenderMediaItem[] }) {
 	const count = media.length;
 	const base =
 		"mt-3 overflow-hidden rounded-2xl border border-border grid gap-1 bg-muted/40";

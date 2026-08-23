@@ -153,7 +153,7 @@ const EditProfileModal = create(({ user }: EditProfileModalProps) => {
 
 			setErrorMessage(null);
 			try {
-				const updatedUser = await updateProfileMutation.mutateAsync({
+				const { user: updatedUser } = await updateProfileMutation.mutateAsync({
 					username: value.username.trim(),
 					fullName: value.fullName.trim(),
 					bio: value.bio,

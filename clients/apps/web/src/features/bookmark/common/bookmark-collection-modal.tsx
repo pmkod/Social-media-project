@@ -208,4 +208,4 @@ const BookmarkCollectionModal = create<BookmarkCollectionModalProps>(
 );
 
 export { BookmarkCollectionModal };
-export type { BookmarkCollectionModalFormValues, BookmarkCollectionModalProps };
+export type { BookmarkCollectionModalFormValues };

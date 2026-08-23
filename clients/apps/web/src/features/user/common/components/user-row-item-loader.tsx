@@ -27,4 +27,3 @@ function UserRowItemLoader({ className }: UserRowItemLoaderProps) {
 }
 
 export { UserRowItemLoader };
-export type { UserRowItemLoaderProps };

@@ -27,4 +27,3 @@ const useCreateReport = () => {
 };
 
 export { useCreateReport };
-export type { CreateReportInput };

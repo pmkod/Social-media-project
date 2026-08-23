@@ -90,6 +90,3 @@ export function Sidebar() {
 		</aside>
 	);
 }
-
-export { SidebarLink };
-export type { SidebarLinkProps };

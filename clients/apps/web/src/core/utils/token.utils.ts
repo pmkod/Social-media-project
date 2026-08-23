@@ -46,7 +46,6 @@ export {
 	getAccessToken,
 	saveAccessToken,
 	getRefreshToken,
-	saveRefreshToken,
 	saveAccessAndRefreshToken,
 	deleteAccessAndRefreshToken,
 };

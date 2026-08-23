@@ -1,4 +1,3 @@
-import { cva, type VariantProps } from "class-variance-authority";
 import type * as React from "react";
 
 import { cn } from "@/core/lib/utils.ts";
@@ -24,36 +23,6 @@ function ExceptionHeader({ className, ...props }: React.ComponentProps<"div">) {
 				"flex max-w-sm flex-col items-center gap-1 text-center",
 				className,
 			)}
-			{...props}
-		/>
-	);
-}
-
-const exceptionMediaVariants = cva(
-	"mb-2 flex shrink-0 items-center justify-center [&_svg]:pointer-events-none [&_svg]:shrink-0",
-	{
-		variants: {
-			variant: {
-				default: "bg-transparent",
-				icon: "bg-muted text-foreground flex size-10 shrink-0 items-center justify-center rounded-lg [&_svg:not([class*='size-'])]:size-6",
-			},
-		},
-		defaultVariants: {
-			variant: "default",
-		},
-	},
-);
-
-function ExceptionMedia({
-	className,
-	variant = "default",
-	...props
-}: React.ComponentProps<"div"> & VariantProps<typeof exceptionMediaVariants>) {
-	return (
-		<div
-			data-slot="exception-media"
-			data-variant={variant}
-			className={cn(exceptionMediaVariants({ variant, className }))}
 			{...props}
 		/>
 	);
@@ -107,5 +76,4 @@ export {
 	ExceptionTitle,
 	ExceptionDescription,
 	ExceptionContent,
-	ExceptionMedia,
 };
