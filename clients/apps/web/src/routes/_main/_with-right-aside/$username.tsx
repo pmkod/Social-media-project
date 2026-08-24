@@ -54,42 +54,49 @@ function ProfilePage() {
 					description="Check the username and try again."
 				/>
 			) : null}
+			<div className="border-b rounded-b-xl overflow-hidden">
+				{profileQuery.data?.user.hasBlockedAuthenticatedInUser === true ? (
+					<div className="border-x">
+						<ExceptionBlock
+							title="You are blocked"
+							description="You can’t view this profile or interact with this user because they have blocked you."
+							borderless
+						/>
+					</div>
+				) : profileQuery.data?.user.isBlockedByAuthenticatedUser ? (
+					<div className="border-x">
+						<ExceptionBlock
+							title="You blocked this user"
+							description="You can’t view this profile or interact with this user"
+							borderless
+						/>
+					</div>
+				) : (
+					<UserProfileTab defaultValue="posts">
+						{profileQuery.isLoading ? (
+							<UserProfileTabListLoader />
+						) : profileQuery.isSuccess ? (
+							<UserProfileTabList>
+								<UserProfileTabTrigger value="posts">
+									<RiMenu5Line className="size-5" />
+									Posts
+								</UserProfileTabTrigger>
+								<UserProfileTabTrigger value="likes">
+									<RiHeartLine className="size-5" />
+									Likes
+								</UserProfileTabTrigger>
+							</UserProfileTabList>
+						) : null}
 
-			{profileQuery.data?.user.hasBlockedAuthenticatedInUser === true ? (
-				<ExceptionBlock
-					title="You are blocked"
-					description="You can’t view this profile or interact with this user because they have blocked you."
-				/>
-			) : profileQuery.data?.user.isBlockedByAuthenticatedUser ? (
-				<ExceptionBlock
-					title="You blocked this user"
-					description="You can’t view this profile or interact with this user"
-				/>
-			) : (
-				<UserProfileTab defaultValue="posts">
-					{profileQuery.isLoading ? (
-						<UserProfileTabListLoader />
-					) : profileQuery.isSuccess ? (
-						<UserProfileTabList>
-							<UserProfileTabTrigger value="posts">
-								<RiMenu5Line className="size-5" />
-								Posts
-							</UserProfileTabTrigger>
-							<UserProfileTabTrigger value="likes">
-								<RiHeartLine className="size-5" />
-								Likes
-							</UserProfileTabTrigger>
-						</UserProfileTabList>
-					) : null}
-
-					<UserProfileTabContent value="posts">
-						<UserPosts userId={profileQuery.data?.user.id} />
-					</UserProfileTabContent>
-					<UserProfileTabContent value="likes">
-						<UserLikedPosts userId={profileQuery.data?.user.id} />
-					</UserProfileTabContent>
-				</UserProfileTab>
-			)}
+						<UserProfileTabContent value="posts">
+							<UserPosts userId={profileQuery.data?.user.id} />
+						</UserProfileTabContent>
+						<UserProfileTabContent value="likes">
+							<UserLikedPosts userId={profileQuery.data?.user.id} />
+						</UserProfileTabContent>
+					</UserProfileTab>
+				)}
+			</div>
 		</MainContainer>
 	);
 }

@@ -40,7 +40,7 @@ function UserProfileView({ user }: UserProfileViewProps) {
 				user.bestQualityCoverPictureFile?.filename,
 		) || null;
 	return (
-		<section className="border-x rounded-t-xl overflow-hidden">
+		<section className="border-x border-t rounded-t-xl overflow-hidden">
 			<div className="h-48 sm:h-56">
 				{coverPictureSrc ? (
 					<img
