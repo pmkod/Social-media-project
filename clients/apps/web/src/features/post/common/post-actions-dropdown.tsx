@@ -107,23 +107,36 @@ function PostActionsDropdown({
 					</>
 				) : null}
 				{canManageBlock ? (
-					<>
-						<DropdownMenuSeparator />
-						<DropdownMenuItem
-							variant={isBlocked ? "default" : "destructive"}
-							onSelect={() =>
-								void NiceModal.show(
-									isBlocked ? UnblockUserAlertDialog : BlockUserAlertDialog,
-									{
+					isBlocked ? (
+						<>
+							<DropdownMenuSeparator />
+							<DropdownMenuItem
+								onSelect={() =>
+									NiceModal.show(UnblockUserAlertDialog, {
 										user,
-									},
-								)
-							}
-						>
-							{isBlocked ? <RiUserAddLine /> : <RiUserForbidLine />}
-							{isBlocked ? "Unblock" : "Block"} user @{user.username}
-						</DropdownMenuItem>
-					</>
+									})
+								}
+							>
+								<RiUserAddLine />
+								Unblock user @{user.username}
+							</DropdownMenuItem>
+						</>
+					) : (
+						<>
+							<DropdownMenuSeparator />
+							<DropdownMenuItem
+								variant="destructive"
+								onSelect={() =>
+									NiceModal.show(BlockUserAlertDialog, {
+										user,
+									})
+								}
+							>
+								<RiUserForbidLine />
+								Block user @{user.username}
+							</DropdownMenuItem>
+						</>
+					)
 				) : null}
 			</DropdownMenuContent>
 		</DropdownMenu>

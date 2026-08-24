@@ -48,8 +48,10 @@ const useBlockUser = () => {
 			);
 
 			queryClient.setQueriesData<InfiniteData<{ users: User[] }>>(
-				{ queryKey: userListQueryKeys.root },
+				{ queryKey: userListQueryKeys.root, exact: false },
 				(data) => {
+					console.log(data);
+
 					if (!data) return data;
 
 					return {
@@ -73,7 +75,7 @@ const useBlockUser = () => {
 			);
 
 			queryClient.setQueriesData<InfiniteData<{ posts: Post[] }>>(
-				{ queryKey: postListQueryKeys.root },
+				{ queryKey: postListQueryKeys.root, exact: false },
 				(data) => {
 					console.log(data);
 					console.log(userId);

@@ -85,9 +85,8 @@ function UserProfileActionsDropdown({
 					Copy profile link
 				</DropdownMenuItem>
 				{canManageBlock ? (
-					user.isBlockedByAuthenticatedUser ? (
+					isBlocked ? (
 						<DropdownMenuItem
-							variant={isBlocked ? "default" : "destructive"}
 							onSelect={() =>
 								void NiceModal.show(UnblockUserAlertDialog, {
 									user,
@@ -99,7 +98,7 @@ function UserProfileActionsDropdown({
 						</DropdownMenuItem>
 					) : (
 						<DropdownMenuItem
-							variant={isBlocked ? "default" : "destructive"}
+							variant="destructive"
 							onSelect={() =>
 								void NiceModal.show(BlockUserAlertDialog, {
 									user,
