@@ -12,7 +12,6 @@ import { EmptyBlock } from "@/core/components/ui/empty-block.tsx";
 import { ExceptionBlock } from "@/core/components/ui/exception-block.tsx";
 import { MainContainer } from "@/core/components/ui/main-container.tsx";
 import NiceModal from "@/core/components/ui/nice-modal.tsx";
-import { useAlertDialog } from "@/core/hooks/use-alert-dialog.tsx";
 import { useDebounceValue } from "@/core/hooks/use-debounce-value.ts";
 import { useIntersectionObserver } from "@/core/hooks/use-intersection-observer.ts";
 import { BOOKMARK_COLLECTIONS_PAGE_LIMIT } from "@/features/bookmark/common/bookmark-collection.constants.ts";
@@ -20,7 +19,7 @@ import type { BookmarkCollection } from "@/features/bookmark/common/bookmark-col
 import { BookmarkCollectionItem } from "@/features/bookmark/common/bookmark-collection-item.tsx";
 import { BookmarkCollectionItemLoader } from "@/features/bookmark/common/bookmark-collection-item-loader.tsx";
 import { BookmarkCollectionModal } from "@/features/bookmark/common/bookmark-collection-modal.tsx";
-import { useDeleteBookmarkCollection } from "@/features/bookmark/delete-bookmark-collection/use-delete-bookmark-collection.ts";
+import { DeleteBookmarkCollectionAlertDialog } from "@/features/bookmark/delete-bookmark-collection/delete-bookmark-collection-alert-dialog.tsx";
 import { useBookmarkCollections } from "@/features/bookmark/use-bookmark-collections.ts";
 
 export const Route = createFileRoute(
@@ -37,8 +36,6 @@ function BookmarkCollectionsPage() {
 		limit: BOOKMARK_COLLECTIONS_PAGE_LIMIT,
 		q: debouncedSearch,
 	});
-	const deleteCollection = useDeleteBookmarkCollection();
-	const alertDialog = useAlertDialog();
 	const { ref: observerTargetRef, isIntersecting: isTargetIntersecting } =
 		useIntersectionObserver({ rootMargin: "100px" });
 
@@ -73,18 +70,8 @@ function BookmarkCollectionsPage() {
 	};
 
 	const handleDeleteCollection = (collection: BookmarkCollection) => {
-		alertDialog.show({
-			title: `Delete "${collection.name}"?`,
-			description:
-				"This collection will be deleted. Posts in other collections will remain saved.",
-			cancel: { text: "Cancel" },
-			confirm: {
-				text: "Delete collection",
-				colorScheme: "destructive",
-				handler: async () => {
-					await deleteCollection.mutateAsync(collection.id);
-				},
-			},
+		void NiceModal.show(DeleteBookmarkCollectionAlertDialog, {
+			collection,
 		});
 	};
 
