@@ -266,10 +266,10 @@ export function PostItem({
 						</div>
 						<PostActionsDropdown
 							user={{
-								id: post.author?.id,
-								username: post.author?.username ?? "user",
+								id: post.author.id,
+								username: post.author.username,
 								isBlockedByAuthenticatedUser:
-									post.author?.isBlockedByAuthenticatedUser,
+									post.author.isBlockedByAuthenticatedUser,
 							}}
 							postId={post.id}
 							size="sm"

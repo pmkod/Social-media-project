@@ -59,7 +59,7 @@ const useBlockUser = () => {
 						pages: data.pages.map((page) => ({
 							...page,
 							users: page.users.map((user) =>
-								user.id === blockedUser.id
+								user.id === userId
 									? {
 											...user,
 											...blockedUser,
@@ -77,15 +77,16 @@ const useBlockUser = () => {
 			queryClient.setQueriesData<InfiniteData<{ posts: Post[] }>>(
 				{ queryKey: postListQueryKeys.root },
 				(data) => {
+					console.log(data);
+					console.log(userId);
+
 					if (!data) return data;
 
 					return {
 						...data,
 						pages: data.pages.map((page) => ({
 							...page,
-							posts: page.posts.filter(
-								(post) => post.author?.id !== blockedUser.id,
-							),
+							posts: page.posts.filter((post) => post.author.id !== userId),
 						})),
 					};
 				},
