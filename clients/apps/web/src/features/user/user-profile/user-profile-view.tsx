@@ -1,7 +1,9 @@
-import { buildImageUrl } from "@/features/post/post-media.functions";
-import type { User } from "../common/user";
+import { RiCalendar2Line } from "@remixicon/react";
+import { Button } from "@/core/components/ui/button";
 
 import NiceModal from "@/core/components/ui/nice-modal.tsx";
+import { buildImageUrl } from "@/features/post/post-media.functions";
+import { useOpenUserUnblockAlertDialog } from "@/features/user/block-user/use-open-user-unblock-alert-dialog.ts";
 import { UserAvatar } from "@/features/user/common/components/user-avatar.tsx";
 import { FollowButton } from "@/features/user/common/follow-button.tsx";
 import { EditProfileModal } from "@/features/user/edit-profile/edit-profile.modal.tsx";
@@ -9,9 +11,8 @@ import { ListFollowersModal } from "@/features/user/list-followers/list-follower
 import { ListFollowingModal } from "@/features/user/list-following/list-following.modal.tsx";
 import { UserProfileActionsDropdown } from "@/features/user/user-profile/user-profile-actions-dropdown.tsx";
 import { UserProfileStatItem } from "@/features/user/user-profile/user-profile-stat-item";
-import { RiCalendar2Line } from "@remixicon/react";
-import { Button } from "@/core/components/ui/button";
 import { useAuthenticatedUser } from "../authenticated-user/use-authenticated-user";
+import type { User } from "../common/user";
 
 const numberFormatter = new Intl.NumberFormat("en-US", { notation: "compact" });
 const joinedDateFormatter = new Intl.DateTimeFormat("en-US", {
@@ -25,6 +26,7 @@ type UserProfileViewProps = {
 
 function UserProfileView({ user }: UserProfileViewProps) {
 	const { data } = useAuthenticatedUser();
+	const userUnblockDialog = useOpenUserUnblockAlertDialog();
 	const authenticatedUser = data?.user;
 
 	const joinedDate = user.createdAt
@@ -58,6 +60,22 @@ function UserProfileView({ user }: UserProfileViewProps) {
 
 					<div className="flex items-center gap-2 pt-3">
 						<UserProfileActionsDropdown user={user} variant="outline" />
+						{user.isBlockedByAuthenticatedUser ? (
+							<Button
+								variant="outline"
+								colorScheme="destructive"
+								size="lg"
+								disabled={userUnblockDialog.isPending}
+								onClick={() =>
+									userUnblockDialog.open({
+										userId: user.id,
+										username: user.username,
+									})
+								}
+							>
+								Unblock
+							</Button>
+						) : null}
 						{isOwnProfile ? (
 							<Button
 								variant="outline"
