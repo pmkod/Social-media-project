@@ -12,9 +12,10 @@ import {
 	DropdownMenuTrigger,
 } from "@/core/components/ui/dropdown-menu.tsx";
 import { IconButton } from "@/core/components/ui/icon-button.tsx";
+import NiceModal from "@/core/components/ui/nice-modal.tsx";
 import { useAuthenticatedUser } from "@/features/user/authenticated-user/use-authenticated-user.ts";
-import { useOpenUserBlockAlertDialog } from "@/features/user/block-user/use-open-user-block-alert-dialog.ts";
-import { useOpenUserUnblockAlertDialog } from "@/features/user/unblock-user/use-open-user-unblock-alert-dialog.ts";
+import { BlockUserAlertDialog } from "@/features/user/block-user/block-user-alert-dialog.tsx";
+import { UnblockUserAlertDialog } from "@/features/user/unblock-user/unblock-user-alert-dialog.tsx";
 
 type UserProfileActionsDropdownProps = {
 	user: {
@@ -53,8 +54,6 @@ function UserProfileActionsDropdown({
 	size = "lg",
 	variant = "ghost",
 }: UserProfileActionsDropdownProps) {
-	const userBlockDialog = useOpenUserBlockAlertDialog();
-	const userUnblockDialog = useOpenUserUnblockAlertDialog();
 	const { data } = useAuthenticatedUser();
 	const authenticatedUser = data?.user;
 	const isOwnProfile = Boolean(
@@ -62,7 +61,6 @@ function UserProfileActionsDropdown({
 	);
 	const canManageBlock = Boolean(user.id && !isOwnProfile);
 	const isBlocked = user.isBlockedByAuthenticatedUser ?? false;
-	const userBlockAction = isBlocked ? userUnblockDialog : userBlockDialog;
 
 	return (
 		<DropdownMenu>
@@ -93,9 +91,8 @@ function UserProfileActionsDropdown({
 					user.isBlockedByAuthenticatedUser ? (
 						<DropdownMenuItem
 							variant={isBlocked ? "default" : "destructive"}
-							disabled={userBlockAction.isPending}
 							onSelect={() =>
-								userBlockAction.open({
+								void NiceModal.show(UnblockUserAlertDialog, {
 									userId: user.id,
 									username: user.username,
 								})
@@ -107,9 +104,8 @@ function UserProfileActionsDropdown({
 					) : (
 						<DropdownMenuItem
 							variant={isBlocked ? "default" : "destructive"}
-							disabled={userBlockAction.isPending}
 							onSelect={() =>
-								userBlockAction.open({
+								void NiceModal.show(BlockUserAlertDialog, {
 									userId: user.id,
 									username: user.username,
 								})

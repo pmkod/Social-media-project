@@ -16,8 +16,8 @@ import { IconButton } from "@/core/components/ui/icon-button.tsx";
 import NiceModal from "@/core/components/ui/nice-modal.tsx";
 import { ReportPostModal } from "@/features/report/report-post.modal.tsx";
 import { useAuthenticatedUser } from "@/features/user/authenticated-user/use-authenticated-user.ts";
-import { useOpenUserBlockAlertDialog } from "@/features/user/block-user/use-open-user-block-alert-dialog.ts";
-import { useOpenUserUnblockAlertDialog } from "@/features/user/unblock-user/use-open-user-unblock-alert-dialog.ts";
+import { BlockUserAlertDialog } from "@/features/user/block-user/block-user-alert-dialog.tsx";
+import { UnblockUserAlertDialog } from "@/features/user/unblock-user/unblock-user-alert-dialog.tsx";
 
 type PostActionsDropdownProps = {
 	postId: string;
@@ -58,8 +58,6 @@ function PostActionsDropdown({
 	size = "md",
 	variant = "ghost",
 }: PostActionsDropdownProps) {
-	const userBlockDialog = useOpenUserBlockAlertDialog();
-	const userUnblockDialog = useOpenUserUnblockAlertDialog();
 	const { data } = useAuthenticatedUser();
 	const authenticatedUser = data?.user;
 
@@ -71,7 +69,6 @@ function PostActionsDropdown({
 		authenticatedUser?.id && (!user.id || authenticatedUser.id !== user.id),
 	);
 	const isBlocked = user.isBlockedByAuthenticatedUser ?? false;
-	const userBlockAction = isBlocked ? userUnblockDialog : userBlockDialog;
 
 	return (
 		<DropdownMenu>
@@ -117,12 +114,14 @@ function PostActionsDropdown({
 						<DropdownMenuSeparator />
 						<DropdownMenuItem
 							variant={isBlocked ? "default" : "destructive"}
-							disabled={userBlockAction.isPending}
 							onSelect={() =>
-								userBlockAction.open({
-									userId: user.id as string,
-									username: user.username,
-								})
+								void NiceModal.show(
+									isBlocked ? UnblockUserAlertDialog : BlockUserAlertDialog,
+									{
+										userId: user.id as string,
+										username: user.username,
+									},
+								)
 							}
 						>
 							{isBlocked ? <RiUserAddLine /> : <RiUserForbidLine />}

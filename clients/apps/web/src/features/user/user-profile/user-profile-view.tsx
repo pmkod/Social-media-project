@@ -8,7 +8,7 @@ import { FollowButton } from "@/features/user/common/follow-button.tsx";
 import { EditProfileModal } from "@/features/user/edit-profile/edit-profile.modal.tsx";
 import { ListFollowersModal } from "@/features/user/list-followers/list-followers.modal.tsx";
 import { ListFollowingModal } from "@/features/user/list-following/list-following.modal.tsx";
-import { useOpenUserUnblockAlertDialog } from "@/features/user/unblock-user/use-open-user-unblock-alert-dialog.ts";
+import { UnblockUserAlertDialog } from "@/features/user/unblock-user/unblock-user-alert-dialog.tsx";
 import { UserProfileActionsDropdown } from "@/features/user/user-profile/user-profile-actions-dropdown.tsx";
 import { UserProfileStatItem } from "@/features/user/user-profile/user-profile-stat-item";
 import { useAuthenticatedUser } from "../authenticated-user/use-authenticated-user";
@@ -26,7 +26,6 @@ type UserProfileViewProps = {
 
 function UserProfileView({ user }: UserProfileViewProps) {
 	const { data } = useAuthenticatedUser();
-	const userUnblockDialog = useOpenUserUnblockAlertDialog();
 	const authenticatedUser = data?.user;
 
 	const joinedDate = user.createdAt
@@ -65,9 +64,8 @@ function UserProfileView({ user }: UserProfileViewProps) {
 								variant="outline"
 								colorScheme="destructive"
 								size="lg"
-								disabled={userUnblockDialog.isPending}
 								onClick={() =>
-									userUnblockDialog.open({
+									void NiceModal.show(UnblockUserAlertDialog, {
 										userId: user.id,
 										username: user.username,
 									})
