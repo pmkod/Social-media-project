@@ -82,7 +82,7 @@ const blockUserRoute = defineOpenAPIRoute<
 			(follow) => follow.followerId === userId,
 		);
 
-		const updatedAuthenticatedUser = await prisma.user.update({
+		await prisma.user.update({
 			where: { id: authenticatedUser.id },
 			data: {
 				followingCount: authenticatedUserWasFollowing
@@ -90,7 +90,6 @@ const blockUserRoute = defineOpenAPIRoute<
 					: undefined,
 				followersCount: targetUserWasFollowing ? { decrement: 1 } : undefined,
 			},
-			select: { id: true, followersCount: true, followingCount: true },
 		});
 
 		const updatedTargetUser = await prisma.user.update({
@@ -109,7 +108,6 @@ const blockUserRoute = defineOpenAPIRoute<
 		});
 
 		const result = {
-			updatedAuthenticatedUser,
 			updatedTargetUser,
 		};
 
@@ -120,7 +118,6 @@ const blockUserRoute = defineOpenAPIRoute<
 				isFollowedByAuthenticatedUser: false,
 				isBlockedByAuthenticatedUser: true,
 			},
-			authenticatedUser: result.updatedAuthenticatedUser,
 		});
 	},
 });

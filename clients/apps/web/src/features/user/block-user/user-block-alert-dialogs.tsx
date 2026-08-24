@@ -32,7 +32,11 @@ const UserBlockAlertDialogContent = ({
 	const handleConfirm = async () => {
 		setIsConfirming(true);
 		try {
-			await onConfirm();
+			if (onConfirm instanceof Promise) {
+				await onConfirm();
+			} else {
+				onConfirm();
+			}
 			modal.remove();
 		} catch {
 			// The mutation retains the error and the dialog stays open for a retry.

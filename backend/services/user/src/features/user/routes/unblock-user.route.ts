@@ -30,7 +30,6 @@ const unblockUserRoute = defineOpenAPIRoute<
 
 		const targetUser = await prisma.user.findUnique({
 			where: { id: userId },
-			select: { id: true },
 		});
 		if (!targetUser) {
 			throw Error("User not found");
@@ -42,7 +41,6 @@ const unblockUserRoute = defineOpenAPIRoute<
 
 		return c.json({
 			message: "Success",
-			unblockedUser: targetUser,
 		});
 	},
 });

@@ -13,7 +13,7 @@ const useOpenUserBlockAlertDialog = () => {
 	const open = ({ userId, username }: OpenUserBlockAlertDialogParams) => {
 		void NiceModal.show(BlockUserAlertDialog, {
 			username,
-			onConfirm: () => blockUser.mutateAsync(userId).then(() => undefined),
+			onConfirm: () => blockUser.mutate(userId),
 		});
 	};
 
