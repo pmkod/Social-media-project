@@ -16,7 +16,7 @@ function FollowSuggestions() {
 	const users = data?.pages.flatMap((page) => page.users) ?? [];
 
 	return (
-		<aside className="hidden 2xl:block w-100 pt-4 pr-4 h-screen sticky top-0 overflow-y-auto">
+		<aside className="hidden 2xl:block w-100 pt-4 h-screen sticky top-0 overflow-y-auto">
 			<Card>
 				<CardHeader>
 					<CardTitle>Who to follow</CardTitle>
