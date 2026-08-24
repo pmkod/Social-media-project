@@ -38,16 +38,14 @@ const getMyReportsRoute = defineOpenAPIRoute<
 		);
 		const offset = Math.max(Number.parseInt(query.offset, 10) || 0, 0);
 
-		const [reports, total] = await Promise.all([
-			prisma.report.findMany({
-				where: { reporterId },
-				orderBy: [{ createdAt: "desc" }, { id: "desc" }],
-				take: limit,
-				skip: offset,
-				include: { reason: true },
-			}),
-			prisma.report.count({ where: { reporterId } }),
-		]);
+		const reports = await prisma.report.findMany({
+			where: { reporterId },
+			orderBy: [{ createdAt: "desc" }, { id: "desc" }],
+			take: limit,
+			skip: offset,
+			include: { reason: true },
+		});
+		const total = await prisma.report.count({ where: { reporterId } });
 
 		return c.json({
 			reports,

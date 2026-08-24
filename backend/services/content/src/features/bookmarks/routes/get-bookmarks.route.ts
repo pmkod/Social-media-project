@@ -149,17 +149,18 @@ const getBookmarksRoute = defineOpenAPIRoute<
 		const postIds = items.map((post) => post.id);
 		const authorIds = Array.from(new Set(items.map((post) => post.authorId)));
 
-		const [authorsMap, likedPostIds] = await Promise.all([
-			userServiceClient.fetchAuthorsBatch(authorIds, ownerId),
+		const authorsMap = await userServiceClient.fetchAuthorsBatch(authorIds, ownerId);
+		const likedPostIds =
 			postIds.length > 0
-				? prisma.postLike
-						.findMany({
-							where: { authorId: ownerId, postId: { in: postIds } },
-							select: { postId: true },
-						})
-						.then((likes) => new Set(likes.map((like) => like.postId)))
-				: Promise.resolve(new Set<string>()),
-		]);
+				? new Set(
+						(
+							await prisma.postLike.findMany({
+								where: { authorId: ownerId, postId: { in: postIds } },
+								select: { postId: true },
+							})
+						).map((like) => like.postId),
+					)
+				: new Set<string>();
 
 		return c.json({
 			posts: items.map((post) => ({

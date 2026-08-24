@@ -30,33 +30,19 @@ const unblockUserRoute = defineOpenAPIRoute<
 
 		const targetUser = await prisma.user.findUnique({
 			where: { id: userId },
-			select: { id: true, followersCount: true, followingCount: true },
+			select: { id: true },
 		});
 		if (!targetUser) {
-			return c.json({ message: "User not found" }, HttpStatus.NOT_FOUND.code);
+			throw Error("User not found");
 		}
 
 		await prisma.block.deleteMany({
 			where: { blockerId: authenticatedUser.id, blockedId: userId },
 		});
-		const reciprocalBlock = await prisma.block.findUnique({
-			where: {
-				blockerId_blockedId: {
-					blockerId: userId,
-					blockedId: authenticatedUser.id,
-				},
-			},
-			select: { id: true },
-		});
 
 		return c.json({
 			message: "Success",
-			unblockedUser: {
-				...targetUser,
-				isFollowedByAuthenticatedUser: false,
-				isBlockedByAuthenticatedUser: false,
-				hasBlockedAuthenticatedInUser: Boolean(reciprocalBlock),
-			},
+			unblockedUser: targetUser,
 		});
 	},
 });

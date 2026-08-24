@@ -39,16 +39,14 @@ const getReportsRoute = defineOpenAPIRoute({
 			...(query.targetType ? { targetType: query.targetType } : {}),
 		};
 
-		const [reports, total] = await Promise.all([
-			prisma.report.findMany({
-				where,
-				orderBy: [{ createdAt: "desc" }, { id: "desc" }],
-				take: limit,
-				skip: offset,
-				include: { reason: true },
-			}),
-			prisma.report.count({ where }),
-		]);
+		const reports = await prisma.report.findMany({
+			where,
+			orderBy: [{ createdAt: "desc" }, { id: "desc" }],
+			take: limit,
+			skip: offset,
+			include: { reason: true },
+		});
+		const total = await prisma.report.count({ where });
 
 		return c.json({ reports, pagination: { limit, offset, total } });
 	},

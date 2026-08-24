@@ -44,46 +44,41 @@ const getCommentRepliesRoute = defineOpenAPIRoute<
 		}
 
 		const parentId = parent.parentId ?? parent.id;
-		const [replies, total] = await Promise.all([
-			prisma.comment.findMany({
-				where: { parentId },
-				orderBy: { createdAt: "asc" },
-				skip: (page - 1) * limit,
-				take: limit,
-				select: {
-					id: true,
-					postId: true,
-					authorId: true,
-					parentId: true,
-					content: true,
-					likesCount: true,
-					repliesCount: true,
-					createdAt: true,
-					updatedAt: true,
-				},
-			}),
-			prisma.comment.count({ where: { parentId } }),
-		]);
+		const replies = await prisma.comment.findMany({
+			where: { parentId },
+			orderBy: { createdAt: "asc" },
+			skip: (page - 1) * limit,
+			take: limit,
+			select: {
+				id: true,
+				postId: true,
+				authorId: true,
+				parentId: true,
+				content: true,
+				likesCount: true,
+				repliesCount: true,
+				createdAt: true,
+				updatedAt: true,
+			},
+		});
+		const total = await prisma.comment.count({ where: { parentId } });
 
 		const authenticatedUser = c.get("authenticatedUser");
 		const authenticatedUserId = authenticatedUser?.id;
-		const [authorsMap, likedCommentIds] = await Promise.all([
-			userServiceClient.fetchAuthorsBatch(
-				replies.map((reply) => reply.authorId),
-			),
-			(async () => {
-				if (!authenticatedUserId || replies.length === 0)
-					return new Set<string>();
-				const likes = await prisma.commentLike.findMany({
-					where: {
-						authorId: authenticatedUserId,
-						commentId: { in: replies.map((reply) => reply.id) },
-					},
-					select: { commentId: true },
-				});
-				return new Set(likes.map((like) => like.commentId));
-			})(),
-		]);
+		const authorsMap = await userServiceClient.fetchAuthorsBatch(
+			replies.map((reply) => reply.authorId),
+		);
+		const likedCommentIds = new Set<string>();
+		if (authenticatedUserId && replies.length > 0) {
+			const likes = await prisma.commentLike.findMany({
+				where: {
+					authorId: authenticatedUserId,
+					commentId: { in: replies.map((reply) => reply.id) },
+				},
+				select: { commentId: true },
+			});
+			for (const like of likes) likedCommentIds.add(like.commentId);
+		}
 
 		return c.json({
 			data: replies.map((reply) => ({

@@ -71,45 +71,43 @@ const getCommentsRoute = defineOpenAPIRoute<
 				: {}),
 		};
 
-		const [comments, total] = await Promise.all([
-			prisma.comment.findMany({
-				where: commentsWhere,
-				orderBy: { createdAt: "desc" },
-				skip,
-				take: limit,
-				select: {
-					id: true,
-					postId: true,
-					authorId: true,
-					parentId: true,
-					content: true,
-					likesCount: true,
-					repliesCount: true,
-					createdAt: true,
-					updatedAt: true,
-					replies: {
-						where:
-							hiddenUserIds.length > 0
-								? { authorId: { notIn: hiddenUserIds } }
-								: undefined,
-						take: 2,
-						orderBy: { createdAt: "asc" },
-						select: {
-							id: true,
-							postId: true,
-							authorId: true,
-							parentId: true,
-							content: true,
-							likesCount: true,
-							repliesCount: true,
-							createdAt: true,
-							updatedAt: true,
-						},
+		const comments = await prisma.comment.findMany({
+			where: commentsWhere,
+			orderBy: { createdAt: "desc" },
+			skip,
+			take: limit,
+			select: {
+				id: true,
+				postId: true,
+				authorId: true,
+				parentId: true,
+				content: true,
+				likesCount: true,
+				repliesCount: true,
+				createdAt: true,
+				updatedAt: true,
+				replies: {
+					where:
+						hiddenUserIds.length > 0
+							? { authorId: { notIn: hiddenUserIds } }
+							: undefined,
+					take: 2,
+					orderBy: { createdAt: "asc" },
+					select: {
+						id: true,
+						postId: true,
+						authorId: true,
+						parentId: true,
+						content: true,
+						likesCount: true,
+						repliesCount: true,
+						createdAt: true,
+						updatedAt: true,
 					},
 				},
-			}),
-			prisma.comment.count({ where: commentsWhere }),
-		]);
+			},
+		});
+		const total = await prisma.comment.count({ where: commentsWhere });
 
 		const allComments = comments.flatMap((comment) => [
 			comment,
@@ -118,22 +116,21 @@ const getCommentsRoute = defineOpenAPIRoute<
 		const authorIds = Array.from(
 			new Set(allComments.map((comment) => comment.authorId).filter(Boolean)),
 		);
-		const [authorsMap, likedCommentIds] = await Promise.all([
-			userServiceClient.fetchAuthorsBatch(authorIds, authenticatedUserId),
-			(async () => {
-				if (!authenticatedUserId || allComments.length === 0) {
-					return new Set<string>();
-				}
-				const likes = await prisma.commentLike.findMany({
-					where: {
-						authorId: authenticatedUserId,
-						commentId: { in: allComments.map((comment) => comment.id) },
-					},
-					select: { commentId: true },
-				});
-				return new Set(likes.map((like) => like.commentId));
-			})(),
-		]);
+		const authorsMap = await userServiceClient.fetchAuthorsBatch(
+			authorIds,
+			authenticatedUserId,
+		);
+		const likedCommentIds = new Set<string>();
+		if (authenticatedUserId && allComments.length > 0) {
+			const likes = await prisma.commentLike.findMany({
+				where: {
+					authorId: authenticatedUserId,
+					commentId: { in: allComments.map((comment) => comment.id) },
+				},
+				select: { commentId: true },
+			});
+			for (const like of likes) likedCommentIds.add(like.commentId);
+		}
 
 		const enrichedComments = comments.map((comment) => {
 			const { replies, ...commentData } = comment;

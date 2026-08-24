@@ -88,9 +88,7 @@ const blockUserRoute = defineOpenAPIRoute<
 				followingCount: authenticatedUserWasFollowing
 					? { decrement: 1 }
 					: undefined,
-				followersCount: targetUserWasFollowing
-					? { decrement: 1 }
-					: undefined,
+				followersCount: targetUserWasFollowing ? { decrement: 1 } : undefined,
 			},
 			select: { id: true, followersCount: true, followingCount: true },
 		});
@@ -101,9 +99,7 @@ const blockUserRoute = defineOpenAPIRoute<
 				followersCount: authenticatedUserWasFollowing
 					? { decrement: 1 }
 					: undefined,
-				followingCount: targetUserWasFollowing
-					? { decrement: 1 }
-					: undefined,
+				followingCount: targetUserWasFollowing ? { decrement: 1 } : undefined,
 			},
 			select: {
 				id: true,
@@ -112,20 +108,9 @@ const blockUserRoute = defineOpenAPIRoute<
 			},
 		});
 
-		const reciprocalBlock = await prisma.block.findUnique({
-			where: {
-				blockerId_blockedId: {
-					blockerId: userId,
-					blockedId: authenticatedUser.id,
-				},
-			},
-			select: { id: true },
-		});
-
 		const result = {
 			updatedAuthenticatedUser,
 			updatedTargetUser,
-			reciprocalBlock,
 		};
 
 		return c.json({
@@ -134,7 +119,6 @@ const blockUserRoute = defineOpenAPIRoute<
 				...result.updatedTargetUser,
 				isFollowedByAuthenticatedUser: false,
 				isBlockedByAuthenticatedUser: true,
-				hasBlockedAuthenticatedInUser: Boolean(result.reciprocalBlock),
 			},
 			authenticatedUser: result.updatedAuthenticatedUser,
 		});

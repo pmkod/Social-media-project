@@ -87,34 +87,35 @@ const getPostByIdRoute = defineOpenAPIRoute<
 		) {
 			return c.json({ message: "Post not found" }, HttpStatus.NOT_FOUND.code);
 		}
-		const [like, bookmark, authorsMap] = await Promise.all([
-			authenticatedUserId
-				? prisma.postLike.findUnique({
-						where: {
-							postId_authorId: {
-								postId: id,
-								authorId: authenticatedUserId,
-							},
+		const like = authenticatedUserId
+			? await prisma.postLike.findUnique({
+					where: {
+						postId_authorId: {
+							postId: id,
+							authorId: authenticatedUserId,
 						},
-						select: { id: true },
-					})
-				: null,
-			authenticatedUserId
-				? prisma.bookmark.findUnique({
-						where: {
-							postId_ownerId: {
-								postId: id,
-								ownerId: authenticatedUserId,
-							},
+					},
+					select: { id: true },
+				})
+			: null;
+		const bookmark = authenticatedUserId
+			? await prisma.bookmark.findUnique({
+					where: {
+						postId_ownerId: {
+							postId: id,
+							ownerId: authenticatedUserId,
 						},
-						select: {
-							id: true,
-							collectionItems: { select: { id: true } },
-						},
-					})
-				: null,
-			userServiceClient.fetchAuthorsBatch([post.authorId], authenticatedUserId),
-		]);
+					},
+					select: {
+						id: true,
+						collectionItems: { select: { id: true } },
+					},
+				})
+			: null;
+		const authorsMap = await userServiceClient.fetchAuthorsBatch(
+			[post.authorId],
+			authenticatedUserId,
+		);
 		const author = authorsMap.get(post.authorId) ?? null;
 
 		return c.json({

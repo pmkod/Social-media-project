@@ -72,16 +72,14 @@ const createCommentReplyRoute = defineOpenAPIRoute<
 				},
 			});
 
-			await Promise.all([
-				tx.comment.update({
-					where: { id: parentId },
-					data: { repliesCount: { increment: 1 } },
-				}),
-				tx.post.update({
-					where: { id: targetComment.postId },
-					data: { commentsCount: { increment: 1 } },
-				}),
-			]);
+			await tx.comment.update({
+				where: { id: parentId },
+				data: { repliesCount: { increment: 1 } },
+			});
+			await tx.post.update({
+				where: { id: targetComment.postId },
+				data: { commentsCount: { increment: 1 } },
+			});
 
 			return createdReply;
 		});

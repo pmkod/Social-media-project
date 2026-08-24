@@ -41,19 +41,18 @@ const getFileExtension = (file: File) => {
 const removeStoredFiles = async (
 	fileNames: Array<string | null | undefined>,
 ) => {
-	await Promise.all(
-		Array.from(
-			new Set(
-				fileNames.filter((fileName): fileName is string => Boolean(fileName)),
-			),
-		).map(async (fileName) => {
-			try {
-				await deleteFile({ fileName });
-			} catch (error) {
-				console.warn("Failed to remove previous profile image:", error);
-			}
-		}),
+	const uniqueFileNames = Array.from(
+		new Set(
+			fileNames.filter((fileName): fileName is string => Boolean(fileName)),
+		),
 	);
+	for (const fileName of uniqueFileNames) {
+		try {
+			await deleteFile({ fileName });
+		} catch (error) {
+			console.warn("Failed to remove previous profile image:", error);
+		}
+	}
 };
 
 const updateProfileRoute = defineOpenAPIRoute<
@@ -80,32 +79,30 @@ const updateProfileRoute = defineOpenAPIRoute<
 		const shouldRemoveProfilePicture = removeProfilePicture === "true";
 		const shouldRemoveCoverPicture = removeCoverPicture === "true";
 
-		const [existingUsernameUser, previousUser] = await Promise.all([
-			prisma.user.findFirst({
-				where: {
-					username: normalizedUsername,
-					NOT: { id: authenticatedUser.id },
+		const existingUsernameUser = await prisma.user.findFirst({
+			where: {
+				username: normalizedUsername,
+				NOT: { id: authenticatedUser.id },
+			},
+			select: { id: true },
+		});
+		const previousUser = await prisma.user.findUniqueOrThrow({
+			where: { id: authenticatedUser.id },
+			select: {
+				lowQualityProfilePictureFile: {
+					select: { id: true, filename: true },
 				},
-				select: { id: true },
-			}),
-			prisma.user.findUniqueOrThrow({
-				where: { id: authenticatedUser.id },
-				select: {
-					lowQualityProfilePictureFile: {
-						select: { id: true, filename: true },
-					},
-					bestQualityProfilePictureFile: {
-						select: { id: true, filename: true },
-					},
-					lowQualityCoverPictureFile: {
-						select: { id: true, filename: true },
-					},
-					bestQualityCoverPictureFile: {
-						select: { id: true, filename: true },
-					},
+				bestQualityProfilePictureFile: {
+					select: { id: true, filename: true },
 				},
-			}),
-		]);
+				lowQualityCoverPictureFile: {
+					select: { id: true, filename: true },
+				},
+				bestQualityCoverPictureFile: {
+					select: { id: true, filename: true },
+				},
+			},
+		});
 
 		if (existingUsernameUser) {
 			return c.json(
@@ -136,32 +133,28 @@ const updateProfileRoute = defineOpenAPIRoute<
 			const lowQualityProfilePictureFileName = `profile_${authenticatedUser.id}_low_${timestamp}.${getFileExtension(lowQualityProfilePictureFile)}`;
 			const bestQualityProfilePictureFileName = `profile_${authenticatedUser.id}_best_${timestamp}.${getFileExtension(bestQualityProfilePictureFile)}`;
 
-			await Promise.all([
-				setFile({
-					file: lowQualityProfilePictureFile,
+			await setFile({
+				file: lowQualityProfilePictureFile,
+				filename: lowQualityProfilePictureFileName,
+			});
+			await setFile({
+				file: bestQualityProfilePictureFile,
+				filename: bestQualityProfilePictureFileName,
+			});
+			const lowQualityFile = await prisma.file.create({
+				data: {
 					filename: lowQualityProfilePictureFileName,
-				}),
-				setFile({
-					file: bestQualityProfilePictureFile,
+					mimeType: lowQualityProfilePictureFile.type,
+				},
+				select: { id: true, filename: true },
+			});
+			const bestQualityFile = await prisma.file.create({
+				data: {
 					filename: bestQualityProfilePictureFileName,
-				}),
-			]);
-			const [lowQualityFile, bestQualityFile] = await Promise.all([
-				prisma.file.create({
-					data: {
-						filename: lowQualityProfilePictureFileName,
-						mimeType: lowQualityProfilePictureFile.type,
-					},
-					select: { id: true, filename: true },
-				}),
-				prisma.file.create({
-					data: {
-						filename: bestQualityProfilePictureFileName,
-						mimeType: bestQualityProfilePictureFile.type,
-					},
-					select: { id: true, filename: true },
-				}),
-			]);
+					mimeType: bestQualityProfilePictureFile.type,
+				},
+				select: { id: true, filename: true },
+			});
 
 			profilePictureFiles = {
 				lowQualityFile,
@@ -181,32 +174,28 @@ const updateProfileRoute = defineOpenAPIRoute<
 			const lowQualityCoverPictureFileName = `cover_${authenticatedUser.id}_low_${timestamp}.${getFileExtension(lowQualityCoverPictureFile)}`;
 			const bestQualityCoverPictureFileName = `cover_${authenticatedUser.id}_best_${timestamp}.${getFileExtension(bestQualityCoverPictureFile)}`;
 
-			await Promise.all([
-				setFile({
-					file: lowQualityCoverPictureFile,
+			await setFile({
+				file: lowQualityCoverPictureFile,
+				filename: lowQualityCoverPictureFileName,
+			});
+			await setFile({
+				file: bestQualityCoverPictureFile,
+				filename: bestQualityCoverPictureFileName,
+			});
+			const lowQualityFile = await prisma.file.create({
+				data: {
 					filename: lowQualityCoverPictureFileName,
-				}),
-				setFile({
-					file: bestQualityCoverPictureFile,
+					mimeType: lowQualityCoverPictureFile.type,
+				},
+				select: { id: true, filename: true },
+			});
+			const bestQualityFile = await prisma.file.create({
+				data: {
 					filename: bestQualityCoverPictureFileName,
-				}),
-			]);
-			const [lowQualityFile, bestQualityFile] = await Promise.all([
-				prisma.file.create({
-					data: {
-						filename: lowQualityCoverPictureFileName,
-						mimeType: lowQualityCoverPictureFile.type,
-					},
-					select: { id: true, filename: true },
-				}),
-				prisma.file.create({
-					data: {
-						filename: bestQualityCoverPictureFileName,
-						mimeType: bestQualityCoverPictureFile.type,
-					},
-					select: { id: true, filename: true },
-				}),
-			]);
+					mimeType: bestQualityCoverPictureFile.type,
+				},
+				select: { id: true, filename: true },
+			});
 
 			coverPictureFiles = {
 				lowQualityFile,

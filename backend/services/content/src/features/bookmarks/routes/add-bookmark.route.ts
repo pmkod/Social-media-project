@@ -38,13 +38,14 @@ const addBookmarkRoute = defineOpenAPIRoute<
 		const { postId } = c.req.valid("param");
 		const { bookmarkCollectionId } = c.req.valid("json");
 
-		const [post, collection] = await Promise.all([
-			prisma.post.findUnique({ where: { id: postId }, select: { id: true } }),
-			prisma.bookmarkCollection.findFirst({
-				where: { id: bookmarkCollectionId, ownerId },
-				select: { id: true },
-			}),
-		]);
+		const post = await prisma.post.findUnique({
+			where: { id: postId },
+			select: { id: true },
+		});
+		const collection = await prisma.bookmarkCollection.findFirst({
+			where: { id: bookmarkCollectionId, ownerId },
+			select: { id: true },
+		});
 		if (!post) {
 			return c.json({ message: "Post not found" }, HttpStatus.NOT_FOUND.code);
 		}

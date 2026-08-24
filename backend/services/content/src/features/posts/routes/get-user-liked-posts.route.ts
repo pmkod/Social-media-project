@@ -134,34 +134,41 @@ const getUserLikedPostsRoute = defineOpenAPIRoute<
 			authenticatedUserId && authenticatedUserId === userId,
 		);
 
-		const [authorsMap, likedPostIds, bookmarkedPostIds] = await Promise.all([
-			userServiceClient.fetchAuthorsBatch(authorIds, authenticatedUserId),
+		const authorsMap = await userServiceClient.fetchAuthorsBatch(
+			authorIds,
+			authenticatedUserId,
+		);
+		const likedPostIds =
 			authenticatedUserId && postIds.length > 0
 				? isSameUser
-					? Promise.resolve(new Set(postIds))
-					: prisma.postLike
-							.findMany({
+					? new Set(postIds)
+					: new Set(
+							(
+								await prisma.postLike.findMany({
+									where: {
+										authorId: authenticatedUserId,
+										postId: { in: postIds },
+									},
+									select: { postId: true },
+								})
+							).map((like) => like.postId),
+						)
+				: new Set<string>();
+		const bookmarkedPostIds =
+			authenticatedUserId && postIds.length > 0
+				? new Set(
+						(
+							await prisma.bookmark.findMany({
 								where: {
-									authorId: authenticatedUserId,
+									ownerId: authenticatedUserId,
 									postId: { in: postIds },
+									collectionItems: { some: {} },
 								},
 								select: { postId: true },
 							})
-							.then((likes) => new Set(likes.map((like) => like.postId)))
-				: Promise.resolve(new Set<string>()),
-			authenticatedUserId && postIds.length > 0
-				? prisma.bookmark
-						.findMany({
-							where: {
-								ownerId: authenticatedUserId,
-								postId: { in: postIds },
-								collectionItems: { some: {} },
-							},
-							select: { postId: true },
-						})
-						.then((bookmarks) => new Set(bookmarks.map((b) => b.postId)))
-				: Promise.resolve(new Set<string>()),
-		]);
+						).map((bookmark) => bookmark.postId),
+					)
+				: new Set<string>();
 
 		return c.json({
 			posts: items.map((post) => ({
