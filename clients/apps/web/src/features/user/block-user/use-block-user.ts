@@ -1,16 +1,14 @@
 import {
+	type InfiniteData,
 	useMutation,
 	useQueryClient,
-	type InfiniteData,
 } from "@tanstack/react-query";
 import { httpClient } from "@/core/http-clients/http-client.ts";
 import type { Post } from "@/features/post/common/post.ts";
 import { postListQueryKeys } from "@/features/post/common/post-list.query-keys.ts";
-import { authenticatedUserQueryKey } from "@/features/user/authenticated-user/authenticated-user.query-key.ts";
 import type { User } from "@/features/user/common/user.ts";
 import { userDetailsQueryKeys } from "@/features/user/common/user-details-query-keys.ts";
 import { userListQueryKeys } from "@/features/user/common/user-list.query-keys.ts";
-import type { UserListCache } from "@/features/user/common/user-list-cache.ts";
 
 type UserBlockState = Pick<
 	User,

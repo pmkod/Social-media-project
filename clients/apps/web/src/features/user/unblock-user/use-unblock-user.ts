@@ -1,7 +1,7 @@
 import {
+	type InfiniteData,
 	useMutation,
 	useQueryClient,
-	type InfiniteData,
 } from "@tanstack/react-query";
 import { httpClient } from "@/core/http-clients/http-client.ts";
 import type { User } from "@/features/user/common/user.ts";

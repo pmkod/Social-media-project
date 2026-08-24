@@ -17,7 +17,7 @@ import NiceModal from "@/core/components/ui/nice-modal.tsx";
 import { ReportPostModal } from "@/features/report/report-post.modal.tsx";
 import { useAuthenticatedUser } from "@/features/user/authenticated-user/use-authenticated-user.ts";
 import { useOpenUserBlockAlertDialog } from "@/features/user/block-user/use-open-user-block-alert-dialog.ts";
-import { useOpenUserUnblockAlertDialog } from "@/features/user/block-user/use-open-user-unblock-alert-dialog.ts";
+import { useOpenUserUnblockAlertDialog } from "@/features/user/unblock-user/use-open-user-unblock-alert-dialog.ts";
 
 type PostActionsDropdownProps = {
 	postId: string;

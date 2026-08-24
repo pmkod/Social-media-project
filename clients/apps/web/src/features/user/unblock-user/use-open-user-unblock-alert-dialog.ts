@@ -1,6 +1,6 @@
 import NiceModal from "@/core/components/ui/nice-modal.tsx";
+import { UnblockUserAlertDialog } from "./unblock-user-alert-dialog.tsx";
 import { useUnblockUser } from "./use-unblock-user.ts";
-import { UnblockUserAlertDialog } from "./user-block-alert-dialogs.tsx";
 
 type OpenUserUnblockAlertDialogParams = {
 	userId: string;
