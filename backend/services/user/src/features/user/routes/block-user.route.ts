@@ -24,23 +24,22 @@ const blockUserRoute = defineOpenAPIRoute<
 >({
 	route: routeDef,
 	handler: async (c) => {
-		const authenticatedUser = c.get("authenticatedUser");
-		if (!authenticatedUser) throw new Error("Unauthorized");
 		const { id: userId } = c.req.valid("param");
 
+		const authenticatedUser = c.get("authenticatedUser");
+		if (!authenticatedUser) throw new Error("Unauthorized");
+
 		if (userId === authenticatedUser.id) {
-			return c.json(
-				{ message: "You cannot block yourself" },
-				HttpStatus.BAD_REQUEST.code,
-			);
+			throw Error("You cannot block yourself");
 		}
 
 		const targetUser = await prisma.user.findFirst({
 			where: { id: userId, active: true },
 			select: { id: true },
 		});
+
 		if (!targetUser) {
-			return c.json({ message: "User not found" }, HttpStatus.NOT_FOUND.code);
+			throw Error("User not found");
 		}
 
 		const result = await prisma.$transaction(async (tx) => {

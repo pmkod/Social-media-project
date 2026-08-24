@@ -61,6 +61,7 @@ function UserProfileView({ user }: UserProfileViewProps) {
 						{isOwnProfile ? (
 							<Button
 								variant="outline"
+								size="lg"
 								onClick={() => void NiceModal.show(EditProfileModal, { user })}
 							>
 								Edit profile
