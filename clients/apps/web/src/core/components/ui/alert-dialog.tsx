@@ -2,7 +2,7 @@ import { AlertDialog as AlertDialogPrimitive } from "radix-ui";
 import * as React from "react";
 import { cn } from "@/core/lib/utils.ts";
 import { Button } from "./button.tsx";
-import { useModal } from "./nice-modal.tsx";
+import { create, useModal } from "./nice-modal.tsx";
 
 function AlertDialog(
 	props: React.ComponentProps<typeof AlertDialogPrimitive.Root>,
@@ -131,57 +131,55 @@ type BaseAlertDialogProps = {
 	onConfirm: () => void | Promise<void>;
 };
 
-const BaseAlertDialog = ({
-	title,
-	description,
-	confirmText,
-	confirmColorScheme,
-	onConfirm,
-}: BaseAlertDialogProps) => {
-	const modal = useModal();
-	const [isConfirming, setIsConfirming] = React.useState(false);
+const BaseAlertDialog = create<BaseAlertDialogProps>(
+	({ title, description, confirmText, confirmColorScheme, onConfirm }) => {
+		const modal = useModal();
+		const [isConfirming, setIsConfirming] = React.useState(false);
 
-	const handleConfirm = async () => {
-		setIsConfirming(true);
-		try {
-			await onConfirm();
-			modal.remove();
-		} catch {
-			// The mutation retains the error and the dialog stays open for a retry.
-		} finally {
-			setIsConfirming(false);
-		}
-	};
+		const handleConfirm = async () => {
+			setIsConfirming(true);
+			try {
+				await onConfirm();
+				modal.remove();
+			} catch {
+				// The mutation retains the error and the dialog stays open for a retry.
+			} finally {
+				setIsConfirming(false);
+			}
+		};
 
-	return (
-		<AlertDialog
-			open={modal.visible}
-			onOpenChange={(open) => {
-				if (!open && !isConfirming) modal.remove();
-			}}
-		>
-			<AlertDialogContent>
-				<AlertDialogHeader>
-					<AlertDialogTitle>{title}</AlertDialogTitle>
-					<AlertDialogDescription>{description}</AlertDialogDescription>
-				</AlertDialogHeader>
-				<AlertDialogFooter>
-					<AlertDialogCancel disabled={isConfirming}>Cancel</AlertDialogCancel>
-					<AlertDialogAction
-						colorScheme={confirmColorScheme}
-						disabled={isConfirming}
-						onClick={(event) => {
-							event.preventDefault();
-							void handleConfirm();
-						}}
-					>
-						{isConfirming ? "Please wait…" : confirmText}
-					</AlertDialogAction>
-				</AlertDialogFooter>
-			</AlertDialogContent>
-		</AlertDialog>
-	);
-};
+		return (
+			<AlertDialog
+				open={modal.visible}
+				onOpenChange={(open) => {
+					if (!open && !isConfirming) modal.remove();
+				}}
+			>
+				<AlertDialogContent>
+					<AlertDialogHeader>
+						<AlertDialogTitle>{title}</AlertDialogTitle>
+						<AlertDialogDescription>{description}</AlertDialogDescription>
+					</AlertDialogHeader>
+					<AlertDialogFooter>
+						<AlertDialogCancel disabled={isConfirming}>
+							Cancel
+						</AlertDialogCancel>
+						<AlertDialogAction
+							colorScheme={confirmColorScheme}
+							disabled={isConfirming}
+							onClick={(event) => {
+								event.preventDefault();
+								void handleConfirm();
+							}}
+						>
+							{isConfirming ? "Please wait…" : confirmText}
+						</AlertDialogAction>
+					</AlertDialogFooter>
+				</AlertDialogContent>
+			</AlertDialog>
+		);
+	},
+);
 
 export {
 	AlertDialog,

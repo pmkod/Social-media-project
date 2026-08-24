@@ -1,5 +1,5 @@
+import { BaseAlertDialog } from "@/core/components/ui/alert-dialog.tsx";
 import NiceModal from "@/core/components/ui/nice-modal.tsx";
-import { UnblockUserAlertDialog } from "./unblock-user-alert-dialog.tsx";
 import { useUnblockUser } from "./use-unblock-user.ts";
 
 type OpenUserUnblockAlertDialogParams = {
@@ -11,8 +11,11 @@ const useOpenUserUnblockAlertDialog = () => {
 	const unblockUser = useUnblockUser();
 
 	const open = ({ userId, username }: OpenUserUnblockAlertDialogParams) => {
-		void NiceModal.show(UnblockUserAlertDialog, {
-			username,
+		void NiceModal.show(BaseAlertDialog, {
+			title: `Unblock @${username}?`,
+			description:
+				"They will be able to view and interact with your content again. Previous follows will not be restored.",
+			confirmText: "Unblock",
 			onConfirm: () => unblockUser.mutateAsync(userId).then(() => undefined),
 		});
 	};
