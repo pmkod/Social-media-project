@@ -13,6 +13,7 @@ import { useFollowSuggestions } from "./use-follow-suggestions.ts";
 function FollowSuggestions() {
 	const { data, isLoading, isError, refetch, isRefetching } =
 		useFollowSuggestions();
+	const users = data?.pages.flatMap((page) => page.users) ?? [];
 
 	return (
 		<aside className="hidden 2xl:block w-100 pt-4 pr-4 h-screen sticky top-0 overflow-y-auto">
@@ -32,7 +33,7 @@ function FollowSuggestions() {
 							borderless
 							className="h-96"
 						/>
-					) : data?.users.length === 0 ? (
+					) : users.length === 0 ? (
 						<EmptyBlock
 							title="No suggestions"
 							description="No suggestions right now"
@@ -43,7 +44,7 @@ function FollowSuggestions() {
 						/>
 					) : (
 						<div className="pb-4">
-							{data?.users.map((user) => (
+							{users.map((user) => (
 								<UserRowItem key={user.id} user={user} />
 							))}
 						</div>

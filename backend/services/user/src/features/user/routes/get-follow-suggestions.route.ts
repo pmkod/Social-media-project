@@ -2,6 +2,7 @@ import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
+import type { Prisma } from "@/generated/prisma/client";
 import { requireUserAuthentication } from "@/features/authentication/middlewares/require-user-authentication.middleware";
 import { UserRoutesTag } from "../user.constants";
 import { ProfileMediaFileResponseBody } from "../user.validation-schemas";
@@ -17,6 +18,17 @@ const FollowSuggestionsResponseBody = z.object({
 			isFollowedByAuthenticatedUser: z.boolean(),
 		}),
 	),
+	pagination: z.object({
+		nextCursor: z
+			.object({
+				id: z.string(),
+				createdAt: z.string(),
+				followersCount: z.number(),
+			})
+			.nullable(),
+		hasNextPage: z.boolean(),
+		limit: z.number(),
+	}),
 });
 
 const routeDef = createRoute({
@@ -27,6 +39,9 @@ const routeDef = createRoute({
 	middleware: [requireUserAuthentication],
 	request: {
 		query: z.object({
+			cursorId: z.string().optional(),
+			cursorCreatedAt: z.string().optional(),
+			cursorFollowersCount: z.string().optional(),
 			limit: z.string().optional().default("10"),
 		}),
 	},
@@ -58,6 +73,34 @@ const getFollowSuggestionsRoute = defineOpenAPIRoute<
 			Math.max(Number.parseInt(query.limit, 10) || 10, 1),
 			50,
 		);
+		const cursorDate = query.cursorCreatedAt
+			? new Date(query.cursorCreatedAt)
+			: null;
+		const cursorFollowersCount = query.cursorFollowersCount
+			? Number.parseInt(query.cursorFollowersCount, 10)
+			: null;
+		const hasValidCursor =
+			cursorDate !== null &&
+			!Number.isNaN(cursorDate.getTime()) &&
+			cursorFollowersCount !== null &&
+			!Number.isNaN(cursorFollowersCount) &&
+			Boolean(query.cursorId);
+		const cursorCondition: Prisma.UserWhereInput | undefined = hasValidCursor
+			? {
+					OR: [
+						{ followersCount: { lt: cursorFollowersCount } },
+						{
+							followersCount: cursorFollowersCount,
+							createdAt: { lt: cursorDate },
+						},
+						{
+							followersCount: cursorFollowersCount,
+							createdAt: cursorDate,
+							id: { lt: query.cursorId },
+						},
+					],
+				}
+			: undefined;
 
 		// Find user IDs that the authenticated user is already following
 		const following = await prisma.follow.findMany({
@@ -91,24 +134,52 @@ const getFollowSuggestionsRoute = defineOpenAPIRoute<
 			where: {
 				id: { notIn: excludedIds },
 				active: true,
+				...cursorCondition,
 			},
-			orderBy: [{ followersCount: "desc" }, { createdAt: "desc" }],
-			take: limit,
+			orderBy: [
+				{ followersCount: "desc" },
+				{ createdAt: "desc" },
+				{ id: "desc" },
+			],
+			take: limit + 1,
 			select: {
 				id: true,
 				username: true,
 				fullName: true,
+				followersCount: true,
+				createdAt: true,
 				lowQualityProfilePictureFile: { select: { id: true, filename: true } },
 				bestQualityProfilePictureFile: { select: { id: true, filename: true } },
 			},
 		});
 
-		const users = candidates.map((user) => ({
+		const hasNextPage = candidates.length > limit;
+		const usersToSend = hasNextPage ? candidates.slice(0, limit) : candidates;
+		const lastUser = usersToSend.at(-1);
+
+		const users = usersToSend.map(({ followersCount, createdAt, ...user }) => ({
 			...user,
 			isFollowedByAuthenticatedUser: false,
 		}));
 
-		return c.json({ users }, HttpStatus.OK.code);
+		return c.json(
+			{
+				users,
+				pagination: {
+					nextCursor:
+						hasNextPage && lastUser
+							? {
+									id: lastUser.id,
+									createdAt: lastUser.createdAt.toISOString(),
+									followersCount: lastUser.followersCount,
+								}
+							: null,
+					hasNextPage,
+					limit,
+				},
+			},
+			HttpStatus.OK.code,
+		);
 	},
 });
 
