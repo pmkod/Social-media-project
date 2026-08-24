@@ -42,90 +42,91 @@ const blockUserRoute = defineOpenAPIRoute<
 			throw Error("User not found");
 		}
 
-		const result = await prisma.$transaction(async (tx) => {
-			await tx.block.upsert({
-				where: {
-					blockerId_blockedId: {
-						blockerId: authenticatedUser.id,
-						blockedId: userId,
-					},
+		await prisma.block.upsert({
+			where: {
+				blockerId_blockedId: {
+					blockerId: authenticatedUser.id,
+					blockedId: userId,
 				},
-				create: { blockerId: authenticatedUser.id, blockedId: userId },
-				update: {},
-			});
-
-			const follows = await tx.follow.findMany({
-				where: {
-					OR: [
-						{
-							followerId: authenticatedUser.id,
-							followingId: userId,
-						},
-						{
-							followerId: userId,
-							followingId: authenticatedUser.id,
-						},
-					],
-				},
-				select: { id: true, followerId: true },
-			});
-
-			if (follows.length > 0) {
-				await tx.follow.deleteMany({
-					where: { id: { in: follows.map((follow) => follow.id) } },
-				});
-			}
-
-			const authenticatedUserWasFollowing = follows.some(
-				(follow) => follow.followerId === authenticatedUser.id,
-			);
-			const targetUserWasFollowing = follows.some(
-				(follow) => follow.followerId === userId,
-			);
-
-			const [updatedAuthenticatedUser, updatedTargetUser, reciprocalBlock] =
-				await Promise.all([
-					tx.user.update({
-						where: { id: authenticatedUser.id },
-						data: {
-							followingCount: authenticatedUserWasFollowing
-								? { decrement: 1 }
-								: undefined,
-							followersCount: targetUserWasFollowing
-								? { decrement: 1 }
-								: undefined,
-						},
-						select: { id: true, followersCount: true, followingCount: true },
-					}),
-					tx.user.update({
-						where: { id: userId },
-						data: {
-							followersCount: authenticatedUserWasFollowing
-								? { decrement: 1 }
-								: undefined,
-							followingCount: targetUserWasFollowing
-								? { decrement: 1 }
-								: undefined,
-						},
-						select: {
-							id: true,
-							followersCount: true,
-							followingCount: true,
-						},
-					}),
-					tx.block.findUnique({
-						where: {
-							blockerId_blockedId: {
-								blockerId: userId,
-								blockedId: authenticatedUser.id,
-							},
-						},
-						select: { id: true },
-					}),
-				]);
-
-			return { updatedAuthenticatedUser, updatedTargetUser, reciprocalBlock };
+			},
+			create: { blockerId: authenticatedUser.id, blockedId: userId },
+			update: {},
 		});
+
+		const follows = await prisma.follow.findMany({
+			where: {
+				OR: [
+					{
+						followerId: authenticatedUser.id,
+						followingId: userId,
+					},
+					{
+						followerId: userId,
+						followingId: authenticatedUser.id,
+					},
+				],
+			},
+			select: { id: true, followerId: true },
+		});
+
+		if (follows.length > 0) {
+			await prisma.follow.deleteMany({
+				where: { id: { in: follows.map((follow) => follow.id) } },
+			});
+		}
+
+		const authenticatedUserWasFollowing = follows.some(
+			(follow) => follow.followerId === authenticatedUser.id,
+		);
+		const targetUserWasFollowing = follows.some(
+			(follow) => follow.followerId === userId,
+		);
+
+		const updatedAuthenticatedUser = await prisma.user.update({
+			where: { id: authenticatedUser.id },
+			data: {
+				followingCount: authenticatedUserWasFollowing
+					? { decrement: 1 }
+					: undefined,
+				followersCount: targetUserWasFollowing
+					? { decrement: 1 }
+					: undefined,
+			},
+			select: { id: true, followersCount: true, followingCount: true },
+		});
+
+		const updatedTargetUser = await prisma.user.update({
+			where: { id: userId },
+			data: {
+				followersCount: authenticatedUserWasFollowing
+					? { decrement: 1 }
+					: undefined,
+				followingCount: targetUserWasFollowing
+					? { decrement: 1 }
+					: undefined,
+			},
+			select: {
+				id: true,
+				followersCount: true,
+				followingCount: true,
+			},
+		});
+
+		const reciprocalBlock = await prisma.block.findUnique({
+			where: {
+				blockerId_blockedId: {
+					blockerId: userId,
+					blockedId: authenticatedUser.id,
+				},
+			},
+			select: { id: true },
+		});
+
+		const result = {
+			updatedAuthenticatedUser,
+			updatedTargetUser,
+			reciprocalBlock,
+		};
 
 		return c.json({
 			message: "Success",
