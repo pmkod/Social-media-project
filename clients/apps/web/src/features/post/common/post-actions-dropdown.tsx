@@ -17,15 +17,12 @@ import NiceModal from "@/core/components/ui/nice-modal.tsx";
 import { ReportPostModal } from "@/features/report/report-post.modal.tsx";
 import { useAuthenticatedUser } from "@/features/user/authenticated-user/use-authenticated-user.ts";
 import { BlockUserAlertDialog } from "@/features/user/block-user/block-user-alert-dialog.tsx";
+import type { User } from "@/features/user/common/user.ts";
 import { UnblockUserAlertDialog } from "@/features/user/unblock-user/unblock-user-alert-dialog.tsx";
 
 type PostActionsDropdownProps = {
 	postId: string;
-	user: {
-		id?: string;
-		username: string;
-		isBlockedByAuthenticatedUser?: boolean;
-	};
+	user: User;
 	size?: "xs" | "sm" | "md" | "lg";
 	variant?: "default" | "outline" | "secondary" | "ghost";
 };
@@ -118,8 +115,7 @@ function PostActionsDropdown({
 								void NiceModal.show(
 									isBlocked ? UnblockUserAlertDialog : BlockUserAlertDialog,
 									{
-										userId: user.id as string,
-										username: user.username,
+										user,
 									},
 								)
 							}

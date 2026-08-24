@@ -15,14 +15,11 @@ import { IconButton } from "@/core/components/ui/icon-button.tsx";
 import NiceModal from "@/core/components/ui/nice-modal.tsx";
 import { useAuthenticatedUser } from "@/features/user/authenticated-user/use-authenticated-user.ts";
 import { BlockUserAlertDialog } from "@/features/user/block-user/block-user-alert-dialog.tsx";
+import type { User } from "@/features/user/common/user.ts";
 import { UnblockUserAlertDialog } from "@/features/user/unblock-user/unblock-user-alert-dialog.tsx";
 
 type UserProfileActionsDropdownProps = {
-	user: {
-		id: string;
-		username: string;
-		isBlockedByAuthenticatedUser?: boolean;
-	};
+	user: User;
 	size?: "xs" | "sm" | "md" | "lg";
 	variant?: "default" | "outline" | "secondary" | "ghost";
 };
@@ -93,8 +90,7 @@ function UserProfileActionsDropdown({
 							variant={isBlocked ? "default" : "destructive"}
 							onSelect={() =>
 								void NiceModal.show(UnblockUserAlertDialog, {
-									userId: user.id,
-									username: user.username,
+									user,
 								})
 							}
 						>
@@ -106,8 +102,7 @@ function UserProfileActionsDropdown({
 							variant={isBlocked ? "default" : "destructive"}
 							onSelect={() =>
 								void NiceModal.show(BlockUserAlertDialog, {
-									userId: user.id,
-									username: user.username,
+									user,
 								})
 							}
 						>

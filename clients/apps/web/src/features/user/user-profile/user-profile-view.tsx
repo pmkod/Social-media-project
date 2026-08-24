@@ -66,8 +66,7 @@ function UserProfileView({ user }: UserProfileViewProps) {
 								size="lg"
 								onClick={() =>
 									void NiceModal.show(UnblockUserAlertDialog, {
-										userId: user.id,
-										username: user.username,
+										user,
 									})
 								}
 							>

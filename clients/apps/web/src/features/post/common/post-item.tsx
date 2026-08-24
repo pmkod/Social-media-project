@@ -265,12 +265,7 @@ export function PostItem({
 							</span>
 						</div>
 						<PostActionsDropdown
-							user={{
-								id: post.author.id,
-								username: post.author.username,
-								isBlockedByAuthenticatedUser:
-									post.author.isBlockedByAuthenticatedUser,
-							}}
+							user={post.author}
 							postId={post.id}
 							size="sm"
 						/>
