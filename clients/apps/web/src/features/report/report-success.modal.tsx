@@ -11,11 +11,7 @@ import {
 } from "@/core/components/ui/dialog.tsx";
 import { create, useModal } from "@/core/components/ui/nice-modal.tsx";
 
-type ReportSuccessModalProps = {
-	subject: string;
-};
-
-const ReportSuccessModal = create<ReportSuccessModalProps>(({ subject }) => {
+const ReportSuccessModal = create(() => {
 	const modal = useModal();
 
 	const close = () => {
@@ -34,8 +30,8 @@ const ReportSuccessModal = create<ReportSuccessModalProps>(({ subject }) => {
 				<DialogHeader>
 					<DialogTitle>Report submitted</DialogTitle>
 					<DialogDescription>
-						Thank you. We will review this {subject} and take action if it
-						violates our rules.
+						Thank you. We will make review and take action if it violates our
+						rules.
 					</DialogDescription>
 				</DialogHeader>
 				<DialogBody className="flex items-center gap-3 px-5 py-6">

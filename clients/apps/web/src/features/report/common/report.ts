@@ -1,12 +1,6 @@
-type ReportStatus = "pending" | "rejected" | "resolved";
+import type { ReportReason } from "@/features/report-reason/common/report-reason.ts";
 
-type ReportReason = {
-	id: string;
-	name: string;
-	description?: string | null;
-	createdAt: string;
-	active: boolean;
-};
+type ReportStatus = "pending" | "rejected" | "resolved";
 
 type Report = {
 	id: string;
@@ -22,23 +16,9 @@ type Report = {
 	reason?: ReportReason | null;
 };
 
-type ReportTargetInput =
-	| { postId: string; commentId?: never; userId?: never }
-	| { postId?: never; commentId: string; userId?: never }
-	| { postId?: never; commentId?: never; userId: string };
-
-type ReportReasonsResponse = {
-	reportReasons: ReportReason[];
-};
-
 type CreateReportResponse = {
 	message: string;
 	report: Report;
 };
 
-export type {
-	CreateReportResponse,
-	ReportReason,
-	ReportReasonsResponse,
-	ReportTargetInput,
-};
+export type { CreateReportResponse };

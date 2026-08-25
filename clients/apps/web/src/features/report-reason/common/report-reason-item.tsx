@@ -1,6 +1,6 @@
 import { RiArrowRightSLine, RiCheckLine } from "@remixicon/react";
 import { cn } from "@/core/lib/utils.ts";
-import type { ReportReason } from "./report.ts";
+import type { ReportReason } from "./report-reason.ts";
 
 type ReportReasonItemProps = {
 	reason: Pick<ReportReason, "id" | "name" | "description">;

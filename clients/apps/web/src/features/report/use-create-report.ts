@@ -1,15 +1,14 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { httpClient } from "@/core/http-clients/http-client.ts";
 import { reportQueryKeys } from "./common/report.query-keys.ts";
-import type {
-	CreateReportResponse,
-	ReportTargetInput,
-} from "./common/report.ts";
+import type { CreateReportResponse } from "./common/report.ts";
 
-type CreateReportInput = ReportTargetInput & {
+type CreateReportInput = {
 	reasonId?: string;
 	reasonText?: string;
-	description?: string;
+	postId?: string;
+	commentId?: string;
+	userId?: string;
 };
 
 const useCreateReport = () => {
