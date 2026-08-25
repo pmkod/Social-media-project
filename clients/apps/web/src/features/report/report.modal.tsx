@@ -1,6 +1,5 @@
 import { useForm, useSelector } from "@tanstack/react-form";
-import { CheckCircle2Icon } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { z } from "zod";
 import { Button } from "@/core/components/ui/button.tsx";
 import {
@@ -20,11 +19,15 @@ import {
 	FieldError,
 	FieldLabel,
 } from "@/core/components/ui/field.tsx";
-import { create, useModal } from "@/core/components/ui/nice-modal.tsx";
+import NiceModal, {
+	create,
+	useModal,
+} from "@/core/components/ui/nice-modal.tsx";
 import { Textarea } from "@/core/components/ui/textarea.tsx";
 import type { ReportReason, ReportTargetInput } from "./common/report.ts";
 import { ReportReasonItem } from "./common/report-reason-item.tsx";
 import { ReportReasonItemLoader } from "./common/report-reason-item-loader.tsx";
+import { ReportSuccessModal } from "./report-success.modal.tsx";
 import { useCreateReport } from "./use-create-report.ts";
 import { useReportReasons } from "./use-report-reasons.ts";
 
@@ -67,7 +70,6 @@ const ReportModal = create<ReportModalProps>((target) => {
 	const modal = useModal();
 	const reportReasonsQuery = useReportReasons();
 	const createReport = useCreateReport();
-	const [isSubmitted, setIsSubmitted] = useState(false);
 	const subject = getReportSubject(target);
 
 	const form = useForm({
@@ -91,7 +93,9 @@ const ReportModal = create<ReportModalProps>((target) => {
 							? value.reasonText.trim()
 							: undefined,
 				});
-				setIsSubmitted(true);
+				modal.resolve();
+				modal.remove();
+				void NiceModal.show(ReportSuccessModal, { subject });
 			} catch {
 				// Keep the mutation error visible so the user can retry.
 			}
@@ -128,38 +132,6 @@ const ReportModal = create<ReportModalProps>((target) => {
 		modal.resolve();
 		modal.remove();
 	};
-
-	if (isSubmitted) {
-		return (
-			<Dialog
-				open={modal.visible}
-				onOpenChange={(open) => {
-					if (!open) close();
-				}}
-			>
-				<DialogContent size="md">
-					<DialogHeader>
-						<DialogTitle>Report submitted</DialogTitle>
-						<DialogDescription>
-							Thank you. We will review this {subject} and take action if it
-							violates our rules.
-						</DialogDescription>
-					</DialogHeader>
-					<DialogBody className="flex items-center gap-3 px-5 py-6">
-						<CheckCircle2Icon className="size-8 shrink-0 text-emerald-500" />
-						<p className="text-sm text-muted-foreground">
-							Your report has been recorded and will be reviewed.
-						</p>
-					</DialogBody>
-					<DialogFooter>
-						<Button type="button" onClick={close}>
-							Done
-						</Button>
-					</DialogFooter>
-				</DialogContent>
-			</Dialog>
-		);
-	}
 
 	return (
 		<Dialog
