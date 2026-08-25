@@ -116,7 +116,7 @@ function UserProfileActionsDropdown({
 					<DropdownMenuItem
 						variant="destructive"
 						onSelect={() => {
-							void NiceModal.show(ReportModal, { userId: user.id });
+							void NiceModal.show(ReportModal, { user });
 						}}
 					>
 						<RiFlag2Line />

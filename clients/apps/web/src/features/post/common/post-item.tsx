@@ -264,11 +264,7 @@ export function PostItem({
 								{formatPostCreationDate(post.createdAt)}
 							</span>
 						</div>
-						<PostActionsDropdown
-							user={post.author}
-							postId={post.id}
-							size="sm"
-						/>
+						<PostActionsDropdown user={post.author} post={post} size="sm" />
 					</div>
 
 					{/* Post Content */}

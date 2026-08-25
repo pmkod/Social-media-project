@@ -18,16 +18,17 @@ import { useAuthenticatedUser } from "@/features/user/authenticated-user/use-aut
 import { BlockUserAlertDialog } from "@/features/user/block-user/block-user-alert-dialog.tsx";
 import type { User } from "@/features/user/common/user.ts";
 import { UnblockUserAlertDialog } from "@/features/user/unblock-user/unblock-user-alert-dialog.tsx";
+import type { Comment } from "./comment";
 
 type CommentActionsDropdownProps = {
-	commentId: string;
+	comment: Comment;
 	user: User;
 	size?: "xs" | "sm" | "md" | "lg";
 	variant?: "default" | "outline" | "secondary" | "ghost";
 };
 
 function CommentActionsDropdown({
-	commentId,
+	comment,
 	user,
 	size = "xs",
 	variant = "ghost",
@@ -64,7 +65,7 @@ function CommentActionsDropdown({
 					<DropdownMenuItem
 						variant="destructive"
 						onSelect={() => {
-							void NiceModal.show(ReportModal, { commentId });
+							void NiceModal.show(ReportModal, { comment });
 						}}
 					>
 						<RiFlag2Line />

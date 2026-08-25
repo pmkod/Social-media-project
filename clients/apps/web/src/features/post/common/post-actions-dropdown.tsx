@@ -19,9 +19,10 @@ import { useAuthenticatedUser } from "@/features/user/authenticated-user/use-aut
 import { BlockUserAlertDialog } from "@/features/user/block-user/block-user-alert-dialog.tsx";
 import type { User } from "@/features/user/common/user.ts";
 import { UnblockUserAlertDialog } from "@/features/user/unblock-user/unblock-user-alert-dialog.tsx";
+import type { Post } from "./post";
 
 type PostActionsDropdownProps = {
-	postId: string;
+	post: Post;
 	user: User;
 	size?: "xs" | "sm" | "md" | "lg";
 	variant?: "default" | "outline" | "secondary" | "ghost";
@@ -50,7 +51,7 @@ const copyToClipboard = async (value: string) => {
 };
 
 function PostActionsDropdown({
-	postId,
+	post,
 	user,
 	size = "md",
 	variant = "ghost",
@@ -86,7 +87,7 @@ function PostActionsDropdown({
 			>
 				<DropdownMenuItem
 					onSelect={() => {
-						void copyToClipboard(getPostShareUrl(postId));
+						void copyToClipboard(getPostShareUrl(post.id));
 					}}
 				>
 					<RiFileCopyLine />
@@ -98,7 +99,7 @@ function PostActionsDropdown({
 						<DropdownMenuItem
 							variant="destructive"
 							onSelect={() => {
-								void NiceModal.show(ReportModal, { postId });
+								void NiceModal.show(ReportModal, { post });
 							}}
 						>
 							<RiFlag2Line />

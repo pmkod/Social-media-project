@@ -109,10 +109,7 @@ export function CommentItem({
 							{formatCommentCreationDate(comment.createdAt)}
 						</span>
 					</div>
-					<CommentActionsDropdown
-						commentId={comment.id}
-						user={comment.author}
-					/>
+					<CommentActionsDropdown comment={comment} user={comment.author} />
 				</div>
 
 				<p className="mt-1 text-sm text-foreground whitespace-pre-line leading-relaxed">
