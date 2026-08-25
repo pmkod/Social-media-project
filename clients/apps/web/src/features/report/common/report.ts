@@ -1,5 +1,4 @@
 type ReportStatus = "pending" | "rejected" | "resolved";
-type ReportTargetType = "post" | "comment" | "user";
 
 type ReportReason = {
 	id: string;
@@ -12,15 +11,21 @@ type ReportReason = {
 type Report = {
 	id: string;
 	reporterId: string;
-	reasonId: string;
+	reasonId?: string | null;
 	reasonText?: string | null;
 	description?: string | null;
-	targetType: ReportTargetType;
-	targetId: string;
+	postId?: string | null;
+	commentId?: string | null;
+	userId?: string | null;
 	status: ReportStatus;
 	createdAt: string;
-	reason: ReportReason;
+	reason?: ReportReason | null;
 };
+
+type ReportTargetInput =
+	| { postId: string; commentId?: never; userId?: never }
+	| { postId?: never; commentId: string; userId?: never }
+	| { postId?: never; commentId?: never; userId: string };
 
 type ReportReasonsResponse = {
 	reportReasons: ReportReason[];
@@ -31,4 +36,9 @@ type CreateReportResponse = {
 	report: Report;
 };
 
-export type { CreateReportResponse, ReportReasonsResponse, ReportTargetType };
+export type {
+	CreateReportResponse,
+	ReportReason,
+	ReportReasonsResponse,
+	ReportTargetInput,
+};

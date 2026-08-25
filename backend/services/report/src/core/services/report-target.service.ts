@@ -1,22 +1,43 @@
 import { Configurations } from "@/core/configurations";
-import type { ReportTargetTypeValue } from "@/features/reports/reports.validation-schemas";
 
-const getTargetUrl = (targetType: ReportTargetTypeValue, targetId: string) => {
-	const encodedTargetId = encodeURIComponent(targetId);
-
-	if (targetType === "user") {
-		return `${Configurations.server.userServiceUrl}/internal/users/${encodedTargetId}/exists`;
-	}
-
-	return `${Configurations.server.contentServiceUrl}/internal/${targetType}s/${encodedTargetId}/exists`;
+type ReportTargetInput = {
+	postId?: string;
+	commentId?: string;
+	userId?: string;
 };
 
-const reportTargetExists = async (
-	targetType: ReportTargetTypeValue,
-	targetId: string,
-) => {
+type ReportTarget =
+	| { field: "postId"; id: string; resource: "posts" }
+	| { field: "commentId"; id: string; resource: "comments" }
+	| { field: "userId"; id: string; resource: "users" };
+
+const resolveReportTarget = (input: ReportTargetInput): ReportTarget => {
+	if (input.postId) {
+		return { field: "postId", id: input.postId, resource: "posts" };
+	}
+	if (input.commentId) {
+		return { field: "commentId", id: input.commentId, resource: "comments" };
+	}
+	if (input.userId) {
+		return { field: "userId", id: input.userId, resource: "users" };
+	}
+
+	throw new Error("A report target is required");
+};
+
+const getTargetUrl = (target: ReportTarget) => {
+	const encodedId = encodeURIComponent(target.id);
+
+	if (target.field === "userId") {
+		return `${Configurations.server.userServiceUrl}/internal/users/${encodedId}/exists`;
+	}
+
+	return `${Configurations.server.contentServiceUrl}/internal/${target.resource}/${encodedId}/exists`;
+};
+
+const reportTargetExists = async (target: ReportTarget) => {
 	try {
-		const response = await fetch(getTargetUrl(targetType, targetId), {
+		const response = await fetch(getTargetUrl(target), {
 			signal: AbortSignal.timeout(5_000),
 		});
 		if (response.status === 404) return false;
@@ -30,4 +51,15 @@ const reportTargetExists = async (
 	}
 };
 
-export { reportTargetExists };
+const getReportTargetFields = (target: ReportTarget) => {
+	switch (target.field) {
+		case "postId":
+			return { postId: target.id };
+		case "commentId":
+			return { commentId: target.id };
+		case "userId":
+			return { userId: target.id };
+	}
+};
+
+export { getReportTargetFields, reportTargetExists, resolveReportTarget };

@@ -3,15 +3,13 @@ import { httpClient } from "@/core/http-clients/http-client.ts";
 import { reportQueryKeys } from "./common/report.query-keys.ts";
 import type {
 	CreateReportResponse,
-	ReportTargetType,
+	ReportTargetInput,
 } from "./common/report.ts";
 
-type CreateReportInput = {
-	reasonId: string;
+type CreateReportInput = ReportTargetInput & {
+	reasonId?: string;
 	reasonText?: string;
 	description?: string;
-	targetType: ReportTargetType;
-	targetId: string;
 };
 
 const useCreateReport = () => {

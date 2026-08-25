@@ -288,9 +288,9 @@ export type ReportReasonUncheckedUpdateManyInput = {
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
-export type ReportReasonScalarRelationFilter = {
-  is?: Prisma.ReportReasonWhereInput
-  isNot?: Prisma.ReportReasonWhereInput
+export type ReportReasonNullableScalarRelationFilter = {
+  is?: Prisma.ReportReasonWhereInput | null
+  isNot?: Prisma.ReportReasonWhereInput | null
 }
 
 export type ReportReasonCountOrderByAggregateInput = {
@@ -323,10 +323,12 @@ export type ReportReasonCreateNestedOneWithoutReportsInput = {
   connect?: Prisma.ReportReasonWhereUniqueInput
 }
 
-export type ReportReasonUpdateOneRequiredWithoutReportsNestedInput = {
+export type ReportReasonUpdateOneWithoutReportsNestedInput = {
   create?: Prisma.XOR<Prisma.ReportReasonCreateWithoutReportsInput, Prisma.ReportReasonUncheckedCreateWithoutReportsInput>
   connectOrCreate?: Prisma.ReportReasonCreateOrConnectWithoutReportsInput
   upsert?: Prisma.ReportReasonUpsertWithoutReportsInput
+  disconnect?: Prisma.ReportReasonWhereInput | boolean
+  delete?: Prisma.ReportReasonWhereInput | boolean
   connect?: Prisma.ReportReasonWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.ReportReasonUpdateToOneWithWhereWithoutReportsInput, Prisma.ReportReasonUpdateWithoutReportsInput>, Prisma.ReportReasonUncheckedUpdateWithoutReportsInput>
 }

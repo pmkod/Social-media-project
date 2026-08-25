@@ -11,6 +11,7 @@ import { CreateCommentForm } from "../create-comment/create-comment-form.tsx";
 import { useLikeComment } from "../like-comment/use-like-comment.ts";
 import { useUnlikeComment } from "../unlike-comment/use-unlike-comment.ts";
 import type { Comment } from "./comment.ts";
+import { CommentActionsDropdown } from "./comment-actions-dropdown.tsx";
 import { CommentItemLoader } from "./components/loaders/comment-item-loader.tsx";
 
 type CommentItemProps = {
@@ -87,25 +88,31 @@ export function CommentItem({
 				</UserProfileLink>
 			</UserProfileHoverCard>
 			<div className="flex-1 min-w-0">
-				<div className="flex items-baseline gap-1.5 flex-wrap">
-					<UserProfileHoverCard user={comment.author}>
-						<UserProfileLink
-							user={comment.author}
-							onClick={(e) => e.stopPropagation()}
-							className="flex min-w-0 items-baseline gap-1 cursor-pointer"
-						>
-							<span className="truncate text-sm font-semibold text-foreground">
-								{comment.author.fullName}
-							</span>
-							<span className="truncate text-xs text-muted-foreground">
-								@{comment.author.username}
-							</span>
-						</UserProfileLink>
-					</UserProfileHoverCard>
-					<span className="text-xs text-muted-foreground">·</span>
-					<span className="text-xs text-muted-foreground">
-						{formatCommentCreationDate(comment.createdAt)}
-					</span>
+				<div className="flex items-start justify-between gap-2">
+					<div className="flex min-w-0 items-baseline gap-1.5 flex-wrap">
+						<UserProfileHoverCard user={comment.author}>
+							<UserProfileLink
+								user={comment.author}
+								onClick={(e) => e.stopPropagation()}
+								className="flex min-w-0 items-baseline gap-1 cursor-pointer"
+							>
+								<span className="truncate text-sm font-semibold text-foreground">
+									{comment.author.fullName}
+								</span>
+								<span className="truncate text-xs text-muted-foreground">
+									@{comment.author.username}
+								</span>
+							</UserProfileLink>
+						</UserProfileHoverCard>
+						<span className="text-xs text-muted-foreground">·</span>
+						<span className="text-xs text-muted-foreground">
+							{formatCommentCreationDate(comment.createdAt)}
+						</span>
+					</div>
+					<CommentActionsDropdown
+						commentId={comment.id}
+						user={comment.author}
+					/>
 				</div>
 
 				<p className="mt-1 text-sm text-foreground whitespace-pre-line leading-relaxed">

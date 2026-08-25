@@ -16,12 +16,3 @@ export const ReportStatus = {
 } as const
 
 export type ReportStatus = (typeof ReportStatus)[keyof typeof ReportStatus]
-
-
-export const ReportTargetType = {
-  post: 'post',
-  comment: 'comment',
-  user: 'user'
-} as const
-
-export type ReportTargetType = (typeof ReportTargetType)[keyof typeof ReportTargetType]

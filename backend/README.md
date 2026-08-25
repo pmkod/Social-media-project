@@ -98,4 +98,3 @@ Chaque service propose une interface interactive de documentation :
 | `GET /comments/{commentId}/likes` | content | Non |
 | `GET /report-reasons` | report | Non |
 | `POST /reports` | report | Oui |
-| `GET /reports/my` | report | Oui |

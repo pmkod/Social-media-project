@@ -14,7 +14,7 @@ import {
 } from "@/core/components/ui/dropdown-menu.tsx";
 import { IconButton } from "@/core/components/ui/icon-button.tsx";
 import NiceModal from "@/core/components/ui/nice-modal.tsx";
-import { ReportPostModal } from "@/features/report/report-post.modal.tsx";
+import { ReportModal } from "@/features/report/report.modal.tsx";
 import { useAuthenticatedUser } from "@/features/user/authenticated-user/use-authenticated-user.ts";
 import { BlockUserAlertDialog } from "@/features/user/block-user/block-user-alert-dialog.tsx";
 import type { User } from "@/features/user/common/user.ts";
@@ -98,7 +98,7 @@ function PostActionsDropdown({
 						<DropdownMenuItem
 							variant="destructive"
 							onSelect={() => {
-								void NiceModal.show(ReportPostModal, { postId });
+								void NiceModal.show(ReportModal, { postId });
 							}}
 						>
 							<RiFlag2Line />

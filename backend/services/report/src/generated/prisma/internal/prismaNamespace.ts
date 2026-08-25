@@ -598,8 +598,9 @@ export const ReportScalarFieldEnum = {
   reasonId: 'reasonId',
   reasonText: 'reasonText',
   description: 'description',
-  targetType: 'targetType',
-  targetId: 'targetId',
+  postId: 'postId',
+  commentId: 'commentId',
+  userId: 'userId',
   status: 'status',
   createdAt: 'createdAt'
 } as const
@@ -659,20 +660,6 @@ export type StringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 
  * Reference to a field of type 'String[]'
  */
 export type ListStringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'String[]'>
-    
-
-
-/**
- * Reference to a field of type 'ReportTargetType'
- */
-export type EnumReportTargetTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ReportTargetType'>
-    
-
-
-/**
- * Reference to a field of type 'ReportTargetType[]'
- */
-export type ListEnumReportTargetTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ReportTargetType[]'>
     
 
 

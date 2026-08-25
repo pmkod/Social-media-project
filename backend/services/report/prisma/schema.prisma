@@ -13,27 +13,20 @@ enum ReportStatus {
   resolved
 }
 
-enum ReportTargetType {
-  post
-  comment
-  user
-}
-
 model Report {
-  id          String           @id @default(cuid())
-  reporterId  String           @map("reporter_id")
-  reasonId    String           @map("reason_id")
-  reasonText  String?          @map("reason_text") @db.VarChar(280)
-  description String?          @db.VarChar(2000)
-  targetType  ReportTargetType @map("target_type")
-  targetId    String           @map("target_id")
-  status      ReportStatus     @default(pending)
-  createdAt   DateTime         @default(now()) @map("created_at")
-  reason      ReportReason     @relation(fields: [reasonId], references: [id], onDelete: Restrict)
+  id          String        @id @default(cuid())
+  reporterId  String        @map("reporter_id")
+  reasonId    String?       @map("reason_id")
+  reasonText  String?       @map("reason_text") @db.VarChar(280)
+  description String?       @db.VarChar(2000)
+  postId      String?       @map("post_id")
+  commentId   String?       @map("comment_id")
+  userId      String?       @map("user_id")
+  status      ReportStatus  @default(pending)
+  createdAt   DateTime      @default(now()) @map("created_at")
+  reason      ReportReason? @relation(fields: [reasonId], references: [id], onDelete: Restrict)
 
-  @@index([reporterId, createdAt])
-  @@index([status, createdAt])
-  @@index([targetType, targetId])
+  @@index([createdAt])
   @@map("report")
 }
 

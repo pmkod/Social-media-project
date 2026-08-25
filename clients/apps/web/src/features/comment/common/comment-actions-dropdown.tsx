@@ -1,5 +1,4 @@
 import {
-	RiFileCopyLine,
 	RiFlag2Line,
 	RiMoreLine,
 	RiUserAddLine,
@@ -9,6 +8,7 @@ import {
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
+	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/core/components/ui/dropdown-menu.tsx";
 import { IconButton } from "@/core/components/ui/icon-button.tsx";
@@ -19,47 +19,29 @@ import { BlockUserAlertDialog } from "@/features/user/block-user/block-user-aler
 import type { User } from "@/features/user/common/user.ts";
 import { UnblockUserAlertDialog } from "@/features/user/unblock-user/unblock-user-alert-dialog.tsx";
 
-type UserProfileActionsDropdownProps = {
+type CommentActionsDropdownProps = {
+	commentId: string;
 	user: User;
 	size?: "xs" | "sm" | "md" | "lg";
 	variant?: "default" | "outline" | "secondary" | "ghost";
 };
 
-const getProfileShareUrl = (username: string) => {
-	const path = `/@${encodeURIComponent(username)}`;
-	return typeof window === "undefined"
-		? path
-		: new URL(path, window.location.origin).toString();
-};
-
-const copyToClipboard = async (value: string) => {
-	if (navigator.clipboard?.writeText) {
-		await navigator.clipboard.writeText(value);
-		return;
-	}
-	const textarea = document.createElement("textarea");
-	textarea.value = value;
-	textarea.style.position = "fixed";
-	textarea.style.opacity = "0";
-	document.body.appendChild(textarea);
-	textarea.select();
-	document.execCommand("copy");
-	textarea.remove();
-};
-
-function UserProfileActionsDropdown({
+function CommentActionsDropdown({
+	commentId,
 	user,
-	size = "lg",
+	size = "xs",
 	variant = "ghost",
-}: UserProfileActionsDropdownProps) {
+}: CommentActionsDropdownProps) {
 	const { data } = useAuthenticatedUser();
 	const authenticatedUser = data?.user;
-	const isOwnProfile = Boolean(
-		authenticatedUser?.id && user.id && authenticatedUser.id === user.id,
+	const isOwnComment = Boolean(
+		authenticatedUser?.id && user.id === authenticatedUser.id,
 	);
-	const canManageBlock = Boolean(user.id && !isOwnProfile);
-	const canReport = Boolean(authenticatedUser?.id && !isOwnProfile);
+	const canReport = Boolean(authenticatedUser?.id && !isOwnComment);
+	const canManageBlock = Boolean(user.id && !isOwnComment);
 	const isBlocked = user.isBlockedByAuthenticatedUser ?? false;
+
+	if (!canReport && !canManageBlock) return null;
 
 	return (
 		<DropdownMenu>
@@ -69,7 +51,7 @@ function UserProfileActionsDropdown({
 					variant={variant}
 					size={size}
 					onClick={(event) => event.stopPropagation()}
-					aria-label="Profile options"
+					aria-label="Comment options"
 				>
 					<RiMoreLine />
 				</IconButton>
@@ -78,22 +60,24 @@ function UserProfileActionsDropdown({
 				align="end"
 				onClick={(event) => event.stopPropagation()}
 			>
-				<DropdownMenuItem
-					onSelect={() => {
-						void copyToClipboard(getProfileShareUrl(user.username));
-					}}
-				>
-					<RiFileCopyLine />
-					Copy profile link
-				</DropdownMenuItem>
+				{canReport ? (
+					<DropdownMenuItem
+						variant="destructive"
+						onSelect={() => {
+							void NiceModal.show(ReportModal, { commentId });
+						}}
+					>
+						<RiFlag2Line />
+						Report comment
+					</DropdownMenuItem>
+				) : null}
+				{canReport && canManageBlock ? <DropdownMenuSeparator /> : null}
 				{canManageBlock ? (
 					isBlocked ? (
 						<DropdownMenuItem
-							onSelect={() =>
-								void NiceModal.show(UnblockUserAlertDialog, {
-									user,
-								})
-							}
+							onSelect={() => {
+								void NiceModal.show(UnblockUserAlertDialog, { user });
+							}}
 						>
 							<RiUserAddLine />
 							Unblock user @{user.username}
@@ -101,31 +85,18 @@ function UserProfileActionsDropdown({
 					) : (
 						<DropdownMenuItem
 							variant="destructive"
-							onSelect={() =>
-								void NiceModal.show(BlockUserAlertDialog, {
-									user,
-								})
-							}
+							onSelect={() => {
+								void NiceModal.show(BlockUserAlertDialog, { user });
+							}}
 						>
 							<RiUserForbidLine />
-							Block
+							Block user @{user.username}
 						</DropdownMenuItem>
 					)
-				) : null}
-				{canReport ? (
-					<DropdownMenuItem
-						variant="destructive"
-						onSelect={() => {
-							void NiceModal.show(ReportModal, { userId: user.id });
-						}}
-					>
-						<RiFlag2Line />
-						Report account
-					</DropdownMenuItem>
 				) : null}
 			</DropdownMenuContent>
 		</DropdownMenu>
 	);
 }
 
-export { UserProfileActionsDropdown };
+export { CommentActionsDropdown };
