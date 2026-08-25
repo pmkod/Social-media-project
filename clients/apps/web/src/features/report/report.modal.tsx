@@ -1,5 +1,6 @@
 import { useForm, useSelector } from "@tanstack/react-form";
 import { useMemo } from "react";
+import { toast } from "sonner";
 import { z } from "zod";
 import { Button } from "@/core/components/ui/button.tsx";
 import {
@@ -27,11 +28,11 @@ import { Textarea } from "@/core/components/ui/textarea.tsx";
 import { ReportReasonItem } from "@/features/report-reason/common/report-reason-item.tsx";
 import { ReportReasonItemLoader } from "@/features/report-reason/common/report-reason-item-loader.tsx";
 import { useReportReasons } from "@/features/report-reason/use-report-reasons.ts";
-import { ReportSuccessModal } from "./report-success.modal.tsx";
-import { useCreateReport } from "./use-create-report.ts";
+import type { Comment } from "../comment/index.ts";
 import type { Post } from "../post/common/post.ts";
 import type { User } from "../user/common/user.ts";
-import type { Comment } from "../comment/index.ts";
+import { ReportSuccessModal } from "./report-success.modal.tsx";
+import { useCreateReport } from "./use-create-report.ts";
 
 type ReportModalProps = { post?: Post; comment?: Comment; user?: User };
 
@@ -90,8 +91,13 @@ const ReportModal = create<ReportModalProps>(
 					});
 					modal.remove();
 					void NiceModal.show(ReportSuccessModal);
-				} catch {
-					// Keep the mutation error visible so the user can retry.
+				} catch (error) {
+					toast.error("Report could not be sent", {
+						description:
+							error instanceof Error && error.message
+								? error.message
+								: "Please check your connection and try again.",
+					});
 				}
 			},
 		});
@@ -232,20 +238,6 @@ const ReportModal = create<ReportModalProps>(
 											</Field>
 										)}
 									</form.Field>
-								</div>
-							) : null}
-
-							{createReport.error ? (
-								<div className="border-t border-border px-5 py-3">
-									<ExceptionBlock
-										title="Report could not be sent"
-										description={
-											createReport.error.message ||
-											"Please check your connection and try again."
-										}
-										borderless
-										className="min-h-0 py-2"
-									/>
 								</div>
 							) : null}
 						</DialogBody>

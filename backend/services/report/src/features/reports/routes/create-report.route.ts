@@ -1,11 +1,6 @@
 import { createRoute, defineOpenAPIRoute } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
-import {
-	getReportTargetFields,
-	reportTargetExists,
-	resolveReportTarget,
-} from "@/core/services/report-target.service";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { requireUserAuthentication } from "@/features/authentication/middlewares/require-user-authentication.middleware";
 import { ReportsRoutesTag } from "../reports.constants";
@@ -26,15 +21,8 @@ const routeDef = createRoute({
 	},
 	responses: {
 		[HttpStatus.CREATED.code]: { description: "Report created" },
-		[HttpStatus.BAD_REQUEST.code]: { description: "Invalid report details" },
-		[HttpStatus.NOT_FOUND.code]: { description: "Reason or target not found" },
-		[HttpStatus.CONFLICT.code]: {
-			description: "A pending report already exists for this target",
-		},
 	},
 });
-
-const normalizeOptionalText = (value?: string) => value?.trim() || null;
 
 const createReportRoute = defineOpenAPIRoute<
 	typeof routeDef,
@@ -46,69 +34,22 @@ const createReportRoute = defineOpenAPIRoute<
 		if (!reporterId) throw new Error("Unauthorized");
 
 		const body = c.req.valid("json");
-		const reason = body.reasonId
-			? await prisma.reportReason.findFirst({
-					where: { id: body.reasonId, active: true },
-					select: { id: true },
-				})
-			: null;
 
-		if (body.reasonId && !reason) {
-			return c.json(
-				{ message: "Report reason not found or inactive" },
-				HttpStatus.NOT_FOUND.code,
-			);
-		}
-
-		if (!reason && !body.reasonText?.trim()) {
-			return c.json(
-				{ message: "A custom reason is required" },
-				HttpStatus.BAD_REQUEST.code,
-			);
-		}
-
-		const reportTarget = resolveReportTarget(body);
-		const reportTargetFields = getReportTargetFields(reportTarget);
-
-		if (!(await reportTargetExists(reportTarget))) {
-			return c.json(
-				{ message: "Reported content not found" },
-				HttpStatus.NOT_FOUND.code,
-			);
-		}
-
-		const pendingReport = await prisma.report.findFirst({
-			where: {
-				reporterId,
-				...reportTargetFields,
-				status: "pending",
-			},
-			select: { id: true },
-		});
-
-		if (pendingReport) {
-			return c.json(
-				{
-					message: "You already have a pending report for this content",
-					reportId: pendingReport.id,
-				},
-				HttpStatus.CONFLICT.code,
-			);
-		}
-
-		const report = await prisma.report.create({
+		await prisma.report.create({
 			data: {
 				reporterId,
-				reasonId: reason?.id,
-				reasonText: normalizeOptionalText(body.reasonText),
-				description: normalizeOptionalText(body.description),
-				...reportTargetFields,
+				reasonId: body.reasonId,
+				postId: body.postId,
+				commentId: body.commentId,
+				userId: body.userId,
+				reasonText: body.reasonText,
+				description: body.description,
 			},
 			include: { reason: true },
 		});
 
 		return c.json(
-			{ message: "Report submitted successfully", report },
+			{ message: "Report submitted successfully" },
 			HttpStatus.CREATED.code,
 		);
 	},
