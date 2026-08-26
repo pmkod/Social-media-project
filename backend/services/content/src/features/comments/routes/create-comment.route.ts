@@ -5,22 +5,20 @@ import { userServiceClient } from "@/core/services/user-service.client";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { requireUserAuthentication } from "@/features/authentication/middlewares/require-user-authentication.middleware";
 import { CommentsRoutesTag } from "../comments.constants";
-import { CreateCommentValidationSchema } from "../comments.validation-schemas";
 
 const CreateCommentRequestBody = z.object({
-	content: CreateCommentValidationSchema.shape.content,
+	postId: z.string(),
+	parentCommentId: z.string().optional(),
+	content: z.string().min(1).max(2000),
 });
 
 const routeDef = createRoute({
 	method: "post",
-	path: "/posts/{postId}/comments",
+	path: "/comments",
 	summary: "Add a comment to a post",
 	tags: [CommentsRoutesTag],
 	middleware: [requireUserAuthentication],
 	request: {
-		params: z.object({
-			postId: z.string(),
-		}),
 		body: {
 			content: {
 				"multipart/form-data": {
@@ -47,8 +45,7 @@ const createCommentRoute = defineOpenAPIRoute<
 			throw new Error("Unauthorized");
 		}
 
-		const { postId } = c.req.valid("param");
-		const { content } = c.req.valid("form");
+		const { postId, parentCommentId, content } = c.req.valid("form");
 
 		const post = await prisma.post.findUnique({
 			where: { id: postId },
@@ -56,7 +53,7 @@ const createCommentRoute = defineOpenAPIRoute<
 		});
 
 		if (!post) {
-			return c.json({ error: "Post not found" }, HttpStatus.NOT_FOUND.code);
+			throw Error("Post not found");
 		}
 		if (
 			await userServiceClient.hasBlockRelationship(
@@ -64,28 +61,46 @@ const createCommentRoute = defineOpenAPIRoute<
 				post.authorId,
 			)
 		) {
-			return c.json({ error: "Post not found" }, HttpStatus.NOT_FOUND.code);
+			throw Error("Post not found");
 		}
 
-		const comment = await prisma.$transaction(async (tx) => {
-			const createdComment = await tx.comment.create({
-				data: {
-					postId,
-					authorId: authenticatedUserId,
-					content: content.trim(),
-				},
-				select: {
-					id: true,
-				},
+		let parentId: string | null = null;
+		if (parentCommentId) {
+			const parentComment = await prisma.comment.findUnique({
+				where: { id: parentCommentId },
+				select: { id: true, parentId: true, postId: true },
 			});
 
-			await tx.post.update({
-				where: { id: postId },
-				data: { commentsCount: { increment: 1 } },
-			});
+			if (!parentComment || parentComment.postId !== postId) {
+				throw Error("Parent comment not found");
+			}
 
-			return createdComment;
+			parentId = parentComment.parentId ?? parentComment.id;
+		}
+
+		const comment = await prisma.comment.create({
+			data: {
+				postId,
+				parentId,
+				authorId: authenticatedUserId,
+				content: content.trim(),
+			},
+			select: {
+				id: true,
+			},
 		});
+
+		await prisma.post.update({
+			where: { id: postId },
+			data: { commentsCount: { increment: 1 } },
+		});
+
+		if (parentId) {
+			await prisma.comment.update({
+				where: { id: parentId },
+				data: { repliesCount: { increment: 1 } },
+			});
+		}
 
 		const commentToSend = await prisma.comment.findUniqueOrThrow({
 			where: {

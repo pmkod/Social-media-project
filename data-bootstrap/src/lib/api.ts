@@ -17,13 +17,15 @@ const apiFetch = async <T>(path: string, userId: string, options: RequestInit = 
 
   logger.info(`API call: ${options.method ?? "GET"} ${url} as user ${userId}`);
 
+  const headers = new Headers(options.headers);
+  headers.set("Authorization", `Bearer ${token}`);
+  if (!(options.body instanceof FormData)) {
+    headers.set("Content-Type", "application/json");
+  }
+
   const response = await fetch(url, {
     ...options,
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-      ...options.headers,
-    },
+    headers,
   });
 
   if (!response.ok) {
@@ -42,10 +44,16 @@ const createPostViaApi = async (userId: string, body: CreatePostBody): Promise<{
 };
 
 const createCommentViaApi = async (userId: string, postId: string, body: CreateCommentBody): Promise<{ id: string }> => {
-  return apiFetch<{ id: string }>(`/posts/${postId}/comments`, userId, {
+  const formData = new FormData();
+  formData.append("postId", postId);
+  formData.append("content", body.content);
+
+  const response = await apiFetch<{ comment: { id: string } }>("/comments", userId, {
     method: "POST",
-    body: JSON.stringify(body),
+    body: formData,
   });
+
+  return response.comment;
 };
 
 const likePostViaApi = async (userId: string, postId: string): Promise<{ id: string }> => {

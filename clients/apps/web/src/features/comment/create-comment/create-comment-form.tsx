@@ -7,7 +7,6 @@ import { useAuthenticatedUser } from "@/features/user/authenticated-user/use-aut
 import { UserAvatar } from "@/features/user/common/components/user-avatar.tsx";
 import type { Comment } from "../common/comment.ts";
 import { useCreateComment } from "./use-create-comment.ts";
-import { useCreateCommentReply } from "./use-create-comment-reply.ts";
 
 const createCommentSchema = z.object({
 	content: z.string().refine((value) => value.trim().length > 0, {
@@ -29,11 +28,10 @@ function CreateCommentForm({
 	autoFocus,
 }: CreateCommentFormProps) {
 	const createComment = useCreateComment();
-	const createReply = useCreateCommentReply();
 	const { data } = useAuthenticatedUser();
 	const authenticatedUser = data?.user;
 
-	const isPending = createComment.isPending || createReply.isPending;
+	const isPending = createComment.isPending;
 	const textareaRef = useRef<HTMLTextAreaElement>(null);
 
 	useEffect(() => {
@@ -64,8 +62,12 @@ function CreateCommentForm({
 			};
 
 			if (parentComment) {
-				createReply.mutate(
-					{ comment: parentComment, content: value.content.trim() },
+				createComment.mutate(
+					{
+						postId,
+						parentCommentId: parentComment.id,
+						content: value.content.trim(),
+					},
 					mutationOptions,
 				);
 				return;

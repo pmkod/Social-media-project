@@ -1,9 +1,5 @@
 import { z } from "@hono/zod-openapi";
 
-const CreateCommentValidationSchema = z.object({
-	content: z.string().min(1).max(2000),
-});
-
 const CommentResponseBody = z.object({
 	id: z.string(),
 	postId: z.string(),
@@ -17,4 +13,4 @@ const CommentResponseBody = z.object({
 	updatedAt: z.date(),
 });
 
-export { CreateCommentValidationSchema, CommentResponseBody };
+export { CommentResponseBody };

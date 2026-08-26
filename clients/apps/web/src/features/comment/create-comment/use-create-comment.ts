@@ -1,11 +1,12 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { httpClient } from "@/core/http-clients/http-client.ts";
 import { postListQueryKeys } from "@/features/post/common/post-list.query-keys.ts";
-import { commentListQueryKeys } from "../common/comment-list.query-keys.ts";
 import type { Comment } from "../common/comment.ts";
+import { commentListQueryKeys } from "../common/comment-list.query-keys.ts";
 
 type CreateCommentInput = {
 	postId: string;
+	parentCommentId?: string;
 	content: string;
 };
 
@@ -16,12 +17,16 @@ type CreateCommentResponse = {
 
 const createComment = async (input: CreateCommentInput): Promise<Comment> => {
 	const formData = new FormData();
+	formData.append("postId", input.postId);
+	if (input.parentCommentId) {
+		formData.append("parentCommentId", input.parentCommentId);
+	}
 	if (input.content) {
 		formData.append("content", input.content);
 	}
 
 	const response = await httpClient
-		.post(`posts/${input.postId}/comments`, {
+		.post("comments", {
 			body: formData,
 		})
 		.json<CreateCommentResponse>();
@@ -40,6 +45,11 @@ const useCreateComment = () => {
 			queryClient.invalidateQueries({
 				queryKey: commentListQueryKeys.postComments(comment.postId),
 			});
+			if (comment.parentId) {
+				queryClient.invalidateQueries({
+					queryKey: commentListQueryKeys.replies(comment.parentId),
+				});
+			}
 		},
 	});
 };
