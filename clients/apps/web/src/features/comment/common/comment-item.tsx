@@ -1,19 +1,17 @@
-import { RiChat3Line, RiHeartFill, RiHeartLine } from "@remixicon/react";
-import { useEffect, useState } from "react";
-import { useIntersectionObserver } from "@/core/hooks/use-intersection-observer.ts";
+import { RiHeartFill, RiHeartLine } from "@remixicon/react";
+import { useState } from "react";
 import { cn } from "@/core/lib/utils.ts";
 import { formatCommentCreationDate } from "@/features/post/common/post.utils.ts";
 import { UserAvatar } from "@/features/user/common/components/user-avatar.tsx";
 import { UserProfileLink } from "@/features/user/common/user-profile-link.tsx";
 import { UserProfileHoverCard } from "@/features/user/user-profile/user-profile-hover-card.tsx";
+import { useCommentToReplyTo } from "../comment-to-reply-to/use-comment-to-reply-to.ts";
 import { useComments } from "../comments/use-comments.ts";
 import { useLikeComment } from "../like-comment/use-like-comment.ts";
 import { useUnlikeComment } from "../unlike-comment/use-unlike-comment.ts";
 import type { Comment } from "./comment.ts";
 import { CommentActionsDropdown } from "./comment-actions-dropdown.tsx";
 import { CommentItemLoader } from "./components/loaders/comment-item-loader.tsx";
-import { CreateCommentForm } from "../create-comment/create-comment-form.tsx";
-import { X } from "lucide-react";
 
 type CommentItemProps = {
 	comment: Comment;
@@ -21,8 +19,8 @@ type CommentItemProps = {
 };
 
 export function CommentItem({ comment, isReply = false }: CommentItemProps) {
-	const [isReplyFormOpen, setIsReplyFormOpen] = useState(false);
 	const [areRepliesExpanded, setAreRepliesExpanded] = useState(false);
+	const { commentToReplyTo, setCommentToReplyTo } = useCommentToReplyTo();
 	const likeComment = useLikeComment();
 	const unlikeComment = useUnlikeComment();
 	// const rootCommentId = comment.parentId ?? comment.id;
@@ -51,6 +49,7 @@ export function CommentItem({ comment, isReply = false }: CommentItemProps) {
 	const repliesCount = comment.repliesCount ?? 0;
 	const showedRepliesCount = replies.length;
 	const repliesThatRemainToBeSeenCount = repliesCount - showedRepliesCount;
+	const isSelectedForReply = commentToReplyTo?.id === comment.id;
 
 	const toggleLike = () => {
 		if (likeComment.isPending || unlikeComment.isPending) return;
@@ -130,25 +129,16 @@ export function CommentItem({ comment, isReply = false }: CommentItemProps) {
 
 						<button
 							type="button"
-							onClick={() => setIsReplyFormOpen((open) => !open)}
-							className="flex items-center gap-1.5 p-1.5 rounded-full hover:bg-accent hover:text-foreground cursor-pointer transition-colors"
+							onClick={() => setCommentToReplyTo(comment)}
+							aria-pressed={isSelectedForReply}
+							className={cn(
+								"flex items-center gap-1.5 p-1.5 rounded-full hover:bg-accent hover:text-foreground cursor-pointer transition-colors",
+								isSelectedForReply && "text-foreground",
+							)}
 						>
 							<span>Reply</span>
 						</button>
 					</div>
-
-					{isReplyFormOpen ? (
-						<div className="mt-2 overflow-hidden rounded-xl border border-border">
-							<CreateCommentForm
-								postId={comment.postId}
-								parentComment={comment}
-								onSuccess={() => {
-									setIsReplyFormOpen(false);
-									setAreRepliesExpanded(true);
-								}}
-							/>
-						</div>
-					) : null}
 				</div>
 			</article>
 			<div className={`pb-2 ${!isReply ? "pl-17" : "pl-0"}`}>

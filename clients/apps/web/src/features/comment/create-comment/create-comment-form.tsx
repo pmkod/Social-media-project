@@ -1,11 +1,12 @@
 import { RiSendPlane2Line } from "@remixicon/react";
 import { useForm, useSelector } from "@tanstack/react-form";
+import { X } from "lucide-react";
 import { useEffect, useRef } from "react";
 import { z } from "zod";
 import { Button } from "@/core/components/ui/button.tsx";
 import { useAuthenticatedUser } from "@/features/user/authenticated-user/use-authenticated-user.ts";
 import { UserAvatar } from "@/features/user/common/components/user-avatar.tsx";
-import type { Comment } from "../common/comment.ts";
+import { useCommentToReplyTo } from "../comment-to-reply-to/use-comment-to-reply-to.ts";
 import { useCreateComment } from "./use-create-comment.ts";
 
 const createCommentSchema = z.object({
@@ -16,33 +17,47 @@ const createCommentSchema = z.object({
 
 type CreateCommentFormProps = {
 	postId: string;
-	parentComment?: Comment;
 	onSuccess?: () => void;
 	autoFocus?: boolean;
 };
 
 function CreateCommentForm({
 	postId,
-	parentComment,
 	onSuccess,
 	autoFocus,
 }: CreateCommentFormProps) {
 	const createComment = useCreateComment();
+	const { commentToReplyTo, clearCommentToReplyTo } = useCommentToReplyTo();
 	const { data } = useAuthenticatedUser();
 	const authenticatedUser = data?.user;
+	const parentComment =
+		commentToReplyTo?.postId === postId ? commentToReplyTo : null;
 
 	const isPending = createComment.isPending;
 	const textareaRef = useRef<HTMLTextAreaElement>(null);
 
 	useEffect(() => {
-		if (autoFocus && textareaRef.current) {
+		if (commentToReplyTo && commentToReplyTo.postId !== postId) {
+			clearCommentToReplyTo();
+			return;
+		}
+
+		if ((autoFocus || parentComment) && textareaRef.current) {
 			textareaRef.current.focus();
 			textareaRef.current.scrollIntoView({
 				behavior: "smooth",
 				block: "center",
 			});
 		}
-	}, [autoFocus]);
+	}, [
+		autoFocus,
+		clearCommentToReplyTo,
+		commentToReplyTo,
+		parentComment,
+		postId,
+	]);
+
+	useEffect(() => clearCommentToReplyTo, [clearCommentToReplyTo]);
 
 	const form = useForm({
 		defaultValues: {
@@ -63,6 +78,7 @@ function CreateCommentForm({
 				{
 					onSuccess: () => {
 						form.reset();
+						clearCommentToReplyTo();
 						onSuccess?.();
 					},
 				},
@@ -82,6 +98,19 @@ function CreateCommentForm({
 				form.handleSubmit();
 			}}
 		>
+			{parentComment ? (
+				<div className="mb-2 flex items-center justify-between gap-3 text-sm text-muted-foreground">
+					<span>Replying to @{parentComment.author?.username ?? "user"}</span>
+					<button
+						type="button"
+						onClick={clearCommentToReplyTo}
+						aria-label="Cancel reply"
+						className="rounded-full p-1 transition-colors hover:bg-accent hover:text-foreground cursor-pointer"
+					>
+						<X className="size-4" />
+					</button>
+				</div>
+			) : null}
 			<div className="flex gap-3">
 				<UserAvatar user={authenticatedUser} size="md" />
 
@@ -106,7 +135,7 @@ function CreateCommentForm({
 				</div>
 				<Button type="submit" disabled={!hasContent || isPending}>
 					<RiSendPlane2Line className="h-4 w-4" />
-					Comment
+					{parentComment ? "Reply" : "Comment"}
 				</Button>
 			</div>
 
