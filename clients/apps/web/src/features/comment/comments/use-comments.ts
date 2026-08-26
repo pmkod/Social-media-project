@@ -20,37 +20,44 @@ export type CommentsInfiniteResult = {
 
 const fetchCommentsPage = async ({
 	postId,
+	parentCommentId,
 	pageParam = 1,
 }: {
 	postId: string;
+	parentCommentId?: string;
 	pageParam?: number;
 }): Promise<CommentsInfiniteResult> => {
 	const searchParams = new URLSearchParams({
+		postId,
 		page: pageParam.toString(),
-		limit: "16",
+		limit: "5",
 	});
+	if (parentCommentId) {
+		searchParams.set("parentCommentId", parentCommentId);
+	}
 
-	const res = await httpClient
-		.get(`posts/${postId}/comments`, {
+	return await httpClient
+		.get("comments", {
 			searchParams,
 		})
 		.json<CommentsResponse>();
-
-	return {
-		data: res.data ?? [],
-		pagination: res.pagination,
-	};
 };
 
 type UseCommentsParams = {
 	postId: string;
+	parentCommentId?: string;
 	enabled?: boolean;
 };
 
-export const useComments = ({ postId, enabled = true }: UseCommentsParams) => {
+export const useComments = ({
+	postId,
+	parentCommentId,
+	enabled = true,
+}: UseCommentsParams) => {
 	return useInfiniteQuery({
-		queryKey: commentListQueryKeys.postComments(postId),
-		queryFn: ({ pageParam }) => fetchCommentsPage({ postId, pageParam }),
+		queryKey: commentListQueryKeys.build({ postId, parentCommentId }),
+		queryFn: ({ pageParam }) =>
+			fetchCommentsPage({ postId, parentCommentId, pageParam }),
 		initialPageParam: 1,
 		enabled: enabled && Boolean(postId),
 		getNextPageParam: (lastPage) => {

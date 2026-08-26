@@ -1,4 +1,3 @@
-export * from "./comments/use-comment-replies.ts";
 export * from "./comments/use-comments.ts";
 export * from "./common/comment.ts";
 export * from "./common/comment-item.tsx";

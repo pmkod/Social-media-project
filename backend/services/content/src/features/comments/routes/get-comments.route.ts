@@ -7,16 +7,15 @@ import { CommentsRoutesTag } from "../comments.constants";
 
 const routeDef = createRoute({
 	method: "get",
-	path: "/posts/{postId}/comments",
-	summary: "Get comments for a post",
+	path: "/comments",
+	summary: "Get comments or replies for a post",
 	tags: [CommentsRoutesTag],
 	request: {
-		params: z.object({
-			postId: z.string(),
-		}),
 		query: z.object({
+			postId: z.string(),
+			parentCommentId: z.string().optional(),
 			page: z.string().optional().default("1"),
-			limit: z.string().optional().default("20"),
+			limit: z.string().optional().default("7"),
 		}),
 	},
 	responses: {
@@ -32,8 +31,8 @@ const getCommentsRoute = defineOpenAPIRoute<
 >({
 	route: routeDef,
 	handler: async (c) => {
-		const { postId } = c.req.valid("param");
 		const query = c.req.valid("query");
+		const { postId, parentCommentId } = query;
 		const page = Number.parseInt(query.page, 10) || 1;
 		const limit = Number.parseInt(query.limit, 10) || 20;
 		const skip = (page - 1) * limit;
@@ -56,19 +55,10 @@ const getCommentsRoute = defineOpenAPIRoute<
 				pagination: { total: 0, page, limit, totalPages: 0 },
 			});
 		}
-		const blockRelationships = authenticatedUserId
-			? await userServiceClient.fetchBlockRelationshipIds(authenticatedUserId)
-			: { blockedUserIds: [], blockedByUserIds: [] };
-		const hiddenUserIds = [
-			...blockRelationships.blockedUserIds,
-			...blockRelationships.blockedByUserIds,
-		];
+
 		const commentsWhere = {
 			postId,
-			parentId: null,
-			...(hiddenUserIds.length > 0
-				? { authorId: { notIn: hiddenUserIds } }
-				: {}),
+			parentId: parentCommentId ? parentCommentId : null,
 		};
 
 		const comments = await prisma.comment.findMany({
@@ -86,46 +76,23 @@ const getCommentsRoute = defineOpenAPIRoute<
 				repliesCount: true,
 				createdAt: true,
 				updatedAt: true,
-				replies: {
-					where:
-						hiddenUserIds.length > 0
-							? { authorId: { notIn: hiddenUserIds } }
-							: undefined,
-					take: 2,
-					orderBy: { createdAt: "asc" },
-					select: {
-						id: true,
-						postId: true,
-						authorId: true,
-						parentId: true,
-						content: true,
-						likesCount: true,
-						repliesCount: true,
-						createdAt: true,
-						updatedAt: true,
-					},
-				},
 			},
 		});
 		const total = await prisma.comment.count({ where: commentsWhere });
 
-		const allComments = comments.flatMap((comment) => [
-			comment,
-			...comment.replies,
-		]);
 		const authorIds = Array.from(
-			new Set(allComments.map((comment) => comment.authorId).filter(Boolean)),
+			new Set(comments.map((comment) => comment.authorId).filter(Boolean)),
 		);
 		const authorsMap = await userServiceClient.fetchAuthorsBatch(
 			authorIds,
 			authenticatedUserId,
 		);
 		const likedCommentIds = new Set<string>();
-		if (authenticatedUserId && allComments.length > 0) {
+		if (authenticatedUserId && comments.length > 0) {
 			const likes = await prisma.commentLike.findMany({
 				where: {
 					authorId: authenticatedUserId,
-					commentId: { in: allComments.map((comment) => comment.id) },
+					commentId: { in: comments.map((comment) => comment.id) },
 				},
 				select: { commentId: true },
 			});
@@ -133,16 +100,10 @@ const getCommentsRoute = defineOpenAPIRoute<
 		}
 
 		const enrichedComments = comments.map((comment) => {
-			const { replies, ...commentData } = comment;
 			return {
-				...commentData,
+				...comment,
 				isLikedByAuthenticatedUser: likedCommentIds.has(comment.id),
 				author: authorsMap.get(comment.authorId) ?? null,
-				replies: replies.map((reply) => ({
-					...reply,
-					isLikedByAuthenticatedUser: likedCommentIds.has(reply.id),
-					author: authorsMap.get(reply.authorId) ?? null,
-				})),
 			};
 		});
 

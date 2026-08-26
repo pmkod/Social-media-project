@@ -54,28 +54,18 @@ function CreateCommentForm({
 		onSubmit: async ({ value }) => {
 			if (isPending) return;
 
-			const mutationOptions = {
-				onSuccess: () => {
-					form.reset();
-					onSuccess?.();
-				},
-			};
-
-			if (parentComment) {
-				createComment.mutate(
-					{
-						postId,
-						parentCommentId: parentComment.id,
-						content: value.content.trim(),
-					},
-					mutationOptions,
-				);
-				return;
-			}
-
 			createComment.mutate(
-				{ postId, content: value.content.trim() },
-				mutationOptions,
+				{
+					postId,
+					content: value.content.trim(),
+					parentCommentId: parentComment ? parentComment.id : undefined,
+				},
+				{
+					onSuccess: () => {
+						form.reset();
+						onSuccess?.();
+					},
+				},
 			);
 		},
 	});

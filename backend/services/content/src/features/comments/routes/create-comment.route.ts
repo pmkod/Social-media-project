@@ -75,7 +75,7 @@ const createCommentRoute = defineOpenAPIRoute<
 				throw Error("Parent comment not found");
 			}
 
-			parentId = parentComment.parentId ?? parentComment.id;
+			parentId = parentComment.id;
 		}
 
 		const comment = await prisma.comment.create({

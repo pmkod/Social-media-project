@@ -1,11 +1,18 @@
 const commentListRootQueryKey = ["comment-list"] as const;
 
+type CommentListQueryParams = {
+	postId: string;
+	parentCommentId?: string;
+};
+
 const commentListQueryKeys = {
 	root: commentListRootQueryKey,
-	postComments: (postId: string) =>
-		[...commentListRootQueryKey, "post", postId] as const,
-	replies: (commentId: string) =>
-		[...commentListRootQueryKey, "comment", commentId, "replies"] as const,
+	build: ({ postId, parentCommentId }: CommentListQueryParams) =>
+		[
+			...commentListRootQueryKey,
+			{ postId, parentCommentId: parentCommentId ?? null },
+		] as const,
 };
 
 export { commentListQueryKeys };
+export type { CommentListQueryParams };

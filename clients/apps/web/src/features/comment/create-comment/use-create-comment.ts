@@ -43,11 +43,14 @@ const useCreateComment = () => {
 			// queryClient.invalidateQueries({ queryKey: postsQueryKey.root });
 			queryClient.invalidateQueries({ queryKey: postListQueryKeys.root });
 			queryClient.invalidateQueries({
-				queryKey: commentListQueryKeys.postComments(comment.postId),
+				queryKey: commentListQueryKeys.build({ postId: comment.postId }),
 			});
 			if (comment.parentId) {
 				queryClient.invalidateQueries({
-					queryKey: commentListQueryKeys.replies(comment.parentId),
+					queryKey: commentListQueryKeys.build({
+						postId: comment.postId,
+						parentCommentId: comment.parentId,
+					}),
 				});
 			}
 		},

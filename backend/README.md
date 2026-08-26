@@ -88,7 +88,7 @@ Chaque service propose une interface interactive de documentation :
 | `PUT /posts/{id}` | content | Oui |
 | `DELETE /posts/{id}` | content | Oui |
 | `POST /comments` | postId, parentCommentId?, content | Oui |
-| `GET /posts/{postId}/comments` | content | Non |
+| `GET /comments` | postId, parentCommentId?, page?, limit? | Non |
 | `DELETE /comments/{id}` | content | Oui |
 | `POST /posts/{postId}/likes` | content | Oui |
 | `DELETE /posts/{postId}/likes` | content | Oui |
