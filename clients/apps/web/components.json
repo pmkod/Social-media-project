@@ -17,5 +17,5 @@
 		"lib": "@/core/lib",
 		"hooks": "@/core/hooks"
 	},
-	"iconLibrary": "lucide"
+	"iconLibrary": "remixicon"
 }

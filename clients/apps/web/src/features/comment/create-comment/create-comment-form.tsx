@@ -1,6 +1,5 @@
-import { RiSendPlane2Line } from "@remixicon/react";
+import { RiCloseLine, RiSendPlane2Line } from "@remixicon/react";
 import { useForm, useSelector } from "@tanstack/react-form";
-import { X } from "lucide-react";
 import { useEffect, useRef } from "react";
 import { z } from "zod";
 import { Button } from "@/core/components/ui/button.tsx";
@@ -107,7 +106,7 @@ function CreateCommentForm({
 						aria-label="Cancel reply"
 						className="rounded-full p-1 transition-colors hover:bg-accent hover:text-foreground cursor-pointer"
 					>
-						<X className="size-4" />
+						<RiCloseLine className="size-4" />
 					</button>
 				</div>
 			) : null}

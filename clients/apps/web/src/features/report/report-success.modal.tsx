@@ -1,4 +1,4 @@
-import { CheckCircle2Icon } from "lucide-react";
+import { RiCheckboxCircleLine } from "@remixicon/react";
 import { Button } from "@/core/components/ui/button.tsx";
 import {
 	Dialog,
@@ -35,7 +35,7 @@ const ReportSuccessModal = create(() => {
 					</DialogDescription>
 				</DialogHeader>
 				<DialogBody className="flex items-center gap-3 px-5 py-6">
-					<CheckCircle2Icon className="size-8 shrink-0 text-emerald-500" />
+					<RiCheckboxCircleLine className="size-8 shrink-0 text-emerald-500" />
 					<p className="text-sm text-muted-foreground">
 						Your report has been recorded and will be reviewed.
 					</p>

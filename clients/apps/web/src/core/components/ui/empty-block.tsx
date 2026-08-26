@@ -1,4 +1,4 @@
-import { RefreshCcwIcon } from "lucide-react";
+import { RiRefreshLine } from "@remixicon/react";
 import type * as React from "react";
 
 import { Button } from "@/core/components/ui/button.tsx";
@@ -49,7 +49,7 @@ function EmptyBlock({
 						isLoading={isRefetching}
 						onClick={() => void onRefresh()}
 					>
-						{!isRefetching ? <RefreshCcwIcon /> : null}
+						{!isRefetching ? <RiRefreshLine /> : null}
 						Refresh
 					</Button>
 				</EmptyContent>

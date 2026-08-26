@@ -1,4 +1,4 @@
-import { Monitor, Moon, Sun } from "lucide-react";
+import { RiComputerLine, RiMoonLine, RiSunLine } from "@remixicon/react";
 import { Button } from "@/core/components/ui/button";
 import {
 	Select,
@@ -7,7 +7,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/core/components/ui/select";
-import { useTheme, type Theme } from "@/core/hooks/use-theme";
+import { type Theme, useTheme } from "@/core/hooks/use-theme";
 
 type ThemeSwitcherProps = {
 	className?: string;
@@ -44,9 +44,9 @@ export function ThemeSwitcher({
 				className={className}
 			>
 				{isDark ? (
-					<Moon className="size-4 text-foreground" />
+					<RiMoonLine className="size-4 text-foreground" />
 				) : (
-					<Sun className="size-4 text-foreground" />
+					<RiSunLine className="size-4 text-foreground" />
 				)}
 			</Button>
 		);
@@ -62,15 +62,15 @@ export function ThemeSwitcher({
 			</SelectTrigger>
 			<SelectContent align="end">
 				<SelectItem value="light">
-					<Sun className="size-4" />
+					<RiSunLine className="size-4" />
 					<span>Light</span>
 				</SelectItem>
 				<SelectItem value="dark">
-					<Moon className="size-4" />
+					<RiMoonLine className="size-4" />
 					<span>Dark</span>
 				</SelectItem>
 				<SelectItem value="system">
-					<Monitor className="size-4" />
+					<RiComputerLine className="size-4" />
 					<span>System</span>
 				</SelectItem>
 			</SelectContent>

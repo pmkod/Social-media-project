@@ -1,4 +1,4 @@
-import { Eye, EyeOff } from "lucide-react";
+import { RiEyeLine, RiEyeOffLine } from "@remixicon/react";
 import * as React from "react";
 import { Button } from "@/core/components/ui/button.tsx";
 import { Input, type InputProps } from "@/core/components/ui/input.tsx";
@@ -26,9 +26,9 @@ function PasswordInput({ className, ...props }: PasswordInputProps) {
 				aria-label={showPassword ? "Hide password" : "Show password"}
 			>
 				{showPassword ? (
-					<EyeOff className="size-4" />
+					<RiEyeOffLine className="size-4" />
 				) : (
-					<Eye className="size-4" />
+					<RiEyeLine className="size-4" />
 				)}
 			</Button>
 		</div>
