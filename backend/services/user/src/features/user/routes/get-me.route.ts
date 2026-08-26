@@ -30,6 +30,7 @@ const getMeRoute = defineOpenAPIRoute<typeof routeDef, HonoAuthenticatedEnv>({
 			where: { id: authenticatedUser.id },
 			select: {
 				id: true,
+				email: true,
 				username: true,
 				fullName: true,
 				createdAt: true,

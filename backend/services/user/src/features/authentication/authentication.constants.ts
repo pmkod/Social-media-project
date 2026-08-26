@@ -4,6 +4,7 @@ const UserVerificationGoals = {
 	signup: "signup",
 	login: "login",
 	passwordReset: "password_reset",
+	emailChange: "email_change",
 } as const;
 
 const MAXIMUM_NUMBER_OF_CODE_TRANSFERS_VIA_EMAIL = 5;

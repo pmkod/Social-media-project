@@ -5,6 +5,7 @@ import {
 	RiHome5Line,
 	RiNotification3Line,
 	RiSearchLine,
+	RiSettings3Line,
 	RiUserLine,
 } from "@remixicon/react";
 import { Link } from "@tanstack/react-router";
@@ -66,6 +67,7 @@ export function Sidebar() {
 						icon={RiBookmarkLine}
 						label="Bookmarks"
 					/>
+					<SidebarLink to="/settings" icon={RiSettings3Line} label="Settings" />
 					{data ? (
 						<SidebarLink
 							to="/$username"

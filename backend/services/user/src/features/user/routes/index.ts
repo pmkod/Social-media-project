@@ -1,4 +1,6 @@
 import { blockUserRoute } from "./block-user.route";
+import { changeEmailRoute } from "./change-email.route";
+import { changePasswordRoute } from "./change-password.route";
 import { checkUserExistsRoute } from "./check-user-exists.route";
 import { followUserRoute } from "./follow-user.route";
 import { getBlockRelationshipIdsRoute } from "./get-block-relationship-ids.route";
@@ -15,6 +17,7 @@ import { unblockUserRoute } from "./unblock-user.route";
 import { unfollowUserRoute } from "./unfollow-user.route";
 import { updatePostCountRoute } from "./update-post-count.route";
 import { updateProfileRoute } from "./update-profile.route";
+import { requestEmailChangeRoute } from "./request-email-change.route";
 
 const userRoutes = [
 	getMeRoute,
@@ -26,6 +29,9 @@ const userRoutes = [
 	getUserFollowingRoute,
 	getUsersBatchRoute,
 	updateProfileRoute,
+	changePasswordRoute,
+	requestEmailChangeRoute,
+	changeEmailRoute,
 	followUserRoute,
 	unfollowUserRoute,
 	blockUserRoute,

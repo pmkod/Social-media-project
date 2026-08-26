@@ -4,6 +4,7 @@ import {
 	RiHome5Line,
 	RiNotification3Line,
 	RiSearchLine,
+	RiSettings3Line,
 } from "@remixicon/react";
 import { Link } from "@tanstack/react-router";
 
@@ -44,6 +45,14 @@ export function BottomNav() {
 				activeProps={{ className: "text-sky-500" }}
 			>
 				<RiBookmarkLine className="h-6 w-6" />
+			</Link>
+			<Link
+				to="/settings"
+				aria-label="Settings"
+				className="p-2.5 text-muted-foreground hover:text-sky-500 transition-colors"
+				activeProps={{ className: "text-sky-500" }}
+			>
+				<RiSettings3Line className="h-6 w-6" />
 			</Link>
 		</nav>
 	);

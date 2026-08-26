@@ -1,4 +1,4 @@
-import { RiLogoutBoxLine, RiUserLine } from "@remixicon/react";
+import { RiLogoutBoxLine, RiSettings3Line, RiUserLine } from "@remixicon/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { Link, useNavigate } from "@tanstack/react-router";
 import {
@@ -56,6 +56,12 @@ function AuthenticatedUserDropdown() {
 					<Link to="/$username" params={profileParams}>
 						<RiUserLine />
 						Profile
+					</Link>
+				</DropdownMenuItem>
+				<DropdownMenuItem asChild>
+					<Link to="/settings">
+						<RiSettings3Line />
+						Settings
 					</Link>
 				</DropdownMenuItem>
 				<DropdownMenuSeparator />

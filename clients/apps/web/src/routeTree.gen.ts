@@ -14,6 +14,7 @@ import { Route as MainRouteRouteImport } from './routes/_main/route'
 import { Route as BaseAuthenticationRouteRouteImport } from './routes/_base/_authentication/route'
 import { Route as MainWithRightAsideRouteRouteImport } from './routes/_main/_with-right-aside/route'
 import { Route as MainDiscussionsRouteImport } from './routes/_main/discussions'
+import { Route as MainSettingsRouteImport } from './routes/_main/settings'
 import { Route as BaseAuthenticationIndexRouteImport } from './routes/_base/_authentication/index'
 import { Route as BaseAuthenticationCompleteSignupRouteImport } from './routes/_base/_authentication/complete-signup'
 import { Route as BaseAuthenticationNewPasswordRouteImport } from './routes/_base/_authentication/new-password'
@@ -47,6 +48,11 @@ const MainWithRightAsideRouteRoute = MainWithRightAsideRouteRouteImport.update({
 const MainDiscussionsRoute = MainDiscussionsRouteImport.update({
   id: '/discussions',
   path: '/discussions',
+  getParentRoute: () => MainRouteRoute,
+} as any)
+const MainSettingsRoute = MainSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
   getParentRoute: () => MainRouteRoute,
 } as any)
 const BaseAuthenticationIndexRoute = BaseAuthenticationIndexRouteImport.update({
@@ -129,6 +135,7 @@ const MainWithRightAsidePostsPostIdRoute =
 export interface FileRoutesByFullPath {
   '/': typeof BaseAuthenticationIndexRoute
   '/discussions': typeof MainDiscussionsRoute
+  '/settings': typeof MainSettingsRoute
   '/complete-signup': typeof BaseAuthenticationCompleteSignupRoute
   '/new-password': typeof BaseAuthenticationNewPasswordRoute
   '/password-reset': typeof BaseAuthenticationPasswordResetRoute
@@ -145,6 +152,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof BaseAuthenticationIndexRoute
   '/discussions': typeof MainDiscussionsRoute
+  '/settings': typeof MainSettingsRoute
   '/complete-signup': typeof BaseAuthenticationCompleteSignupRoute
   '/new-password': typeof BaseAuthenticationNewPasswordRoute
   '/password-reset': typeof BaseAuthenticationPasswordResetRoute
@@ -165,6 +173,7 @@ export interface FileRoutesById {
   '/_base/_authentication': typeof BaseAuthenticationRouteRouteWithChildren
   '/_main/_with-right-aside': typeof MainWithRightAsideRouteRouteWithChildren
   '/_main/discussions': typeof MainDiscussionsRoute
+  '/_main/settings': typeof MainSettingsRoute
   '/_base/_authentication/complete-signup': typeof BaseAuthenticationCompleteSignupRoute
   '/_base/_authentication/new-password': typeof BaseAuthenticationNewPasswordRoute
   '/_base/_authentication/password-reset': typeof BaseAuthenticationPasswordResetRoute
@@ -184,6 +193,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/discussions'
+    | '/settings'
     | '/complete-signup'
     | '/new-password'
     | '/password-reset'
@@ -200,6 +210,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/discussions'
+    | '/settings'
     | '/complete-signup'
     | '/new-password'
     | '/password-reset'
@@ -219,6 +230,7 @@ export interface FileRouteTypes {
     | '/_base/_authentication'
     | '/_main/_with-right-aside'
     | '/_main/discussions'
+    | '/_main/settings'
     | '/_base/_authentication/complete-signup'
     | '/_base/_authentication/new-password'
     | '/_base/_authentication/password-reset'
@@ -274,6 +286,13 @@ declare module '@tanstack/react-router' {
       path: '/discussions'
       fullPath: '/discussions'
       preLoaderRoute: typeof MainDiscussionsRouteImport
+      parentRoute: typeof MainRouteRoute
+    }
+    '/_main/settings': {
+      id: '/_main/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof MainSettingsRouteImport
       parentRoute: typeof MainRouteRoute
     }
     '/_base/_authentication/': {
@@ -438,11 +457,13 @@ const MainWithRightAsideRouteRouteWithChildren =
 interface MainRouteRouteChildren {
   MainWithRightAsideRouteRoute: typeof MainWithRightAsideRouteRouteWithChildren
   MainDiscussionsRoute: typeof MainDiscussionsRoute
+  MainSettingsRoute: typeof MainSettingsRoute
 }
 
 const MainRouteRouteChildren: MainRouteRouteChildren = {
   MainWithRightAsideRouteRoute: MainWithRightAsideRouteRouteWithChildren,
   MainDiscussionsRoute: MainDiscussionsRoute,
+  MainSettingsRoute: MainSettingsRoute,
 }
 
 const MainRouteRouteWithChildren = MainRouteRoute._addFileChildren(

@@ -18,6 +18,22 @@ const UpdateProfileValidationSchema = z.object({
 	removeCoverPicture: z.enum(["true", "false"]).optional(),
 });
 
+const ChangePasswordValidationSchema = z.object({
+	currentPassword: z.string().min(1),
+	newPassword: z.string().min(8),
+});
+
+const RequestEmailChangeValidationSchema = z.object({
+	newEmail: z.string().trim().email(),
+});
+
+const CompleteEmailChangeValidationSchema = z.object({
+	userVerification: z.object({
+		id: z.string(),
+		token: z.string(),
+	}),
+});
+
 const ProfileMediaFileResponseBody = z
 	.object({
 		id: z.string(),
@@ -42,7 +58,10 @@ const UserProfileResponseBody = z.object({
 });
 
 export {
+	ChangePasswordValidationSchema,
+	CompleteEmailChangeValidationSchema,
 	ProfileMediaFileResponseBody,
+	RequestEmailChangeValidationSchema,
 	UpdateProfileValidationSchema,
 	UserProfileResponseBody,
 };
