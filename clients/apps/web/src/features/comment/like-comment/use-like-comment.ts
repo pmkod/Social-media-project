@@ -1,6 +1,10 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+	type InfiniteData,
+	useMutation,
+	useQueryClient,
+} from "@tanstack/react-query";
 import { httpClient } from "@/core/http-clients/http-client.ts";
-import { updateCommentInQueryData } from "../common/comment-like.cache-utils.ts";
+import type { Comment } from "../common/comment.ts";
 import { commentListQueryKeys } from "../common/comment-list.query-keys.ts";
 
 type LikeCommentResponse = {
@@ -17,27 +21,27 @@ const useLikeComment = () => {
 			httpClient
 				.post(`comments/${commentId}/likes`)
 				.json<LikeCommentResponse>(),
-		onMutate: async (commentId) => {
-			await queryClient.cancelQueries({ queryKey: commentListQueryKeys.root });
-			const previousQueries = queryClient.getQueriesData({
-				queryKey: commentListQueryKeys.root,
-			});
-			queryClient.setQueriesData(
-				{ queryKey: commentListQueryKeys.root },
-				(data) => updateCommentInQueryData(data, commentId, true),
-			);
-			return { previousQueries };
-		},
-		onError: (_error, _commentId, context) => {
-			for (const [queryKey, data] of context?.previousQueries ?? []) {
-				queryClient.setQueryData(queryKey, data);
-			}
-		},
 		onSuccess: (response, commentId) => {
-			queryClient.setQueriesData(
-				{ queryKey: commentListQueryKeys.root },
-				(data) =>
-					updateCommentInQueryData(data, commentId, true, response.likesCount),
+			queryClient.setQueriesData<InfiniteData<{ data: Comment[] }>>(
+				{ queryKey: commentListQueryKeys.root, exact: false },
+				(oldData) => {
+					if (!oldData) return undefined;
+					return {
+						...oldData,
+						pages: oldData.pages.map((page) => ({
+							...page,
+							data: page.data.map((comment) =>
+								comment.id === commentId
+									? {
+											...comment,
+											likesCount: response.likesCount,
+											isLikedByAuthenticatedUser: true,
+										}
+									: comment,
+							),
+						})),
+					};
+				},
 			);
 		},
 	});

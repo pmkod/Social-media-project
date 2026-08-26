@@ -1,7 +1,6 @@
 export * from "./comments/use-comments.ts";
 export * from "./common/comment.ts";
 export * from "./common/comment-item.tsx";
-export * from "./common/comment-like.cache-utils.ts";
 export * from "./common/comment-list.query-keys.ts";
 export * from "./common/components/loaders/index.ts";
 export * from "./create-comment/create-comment-form.tsx";
