@@ -16,6 +16,7 @@ Ce backend suit une architecture microservices identique à celle du projet Ecom
 - **User Service** (`backend/services/user` - Port `8001`) : Authentification et profil utilisateur.
 - **Content Service** (`backend/services/content` - Port `8002`) : Publications (posts), commentaires, likes de posts et likes de commentaires.
 - **Report Service** (`backend/services/report` - Port `8003`) : Signalements des posts, commentaires et utilisateurs, ainsi que leurs raisons.
+- **Notification Service** (`backend/services/notification` - Port `8004`) : Notifications sociales groupées et état vu/non vu.
 
 ## Démarrage rapide
 
@@ -25,6 +26,7 @@ Ce backend suit une architecture microservices identique à celle du projet Ecom
 CREATE DATABASE social_media_project_user;
 CREATE DATABASE social_media_project_content;
 CREATE DATABASE social_media_report;
+CREATE DATABASE social_media_project_notification;
 ```
 
 2. **Copier les fichiers d'environnement** :
@@ -34,6 +36,7 @@ cp backend/gateway/.env.example backend/gateway/.env
 cp backend/services/user/.env.example backend/services/user/.env
 cp backend/services/content/.env.example backend/services/content/.env
 cp backend/services/report/.env.example backend/services/report/.env
+cp backend/services/notification/.env.example backend/services/notification/.env
 ```
 
 3. **Appliquer les schémas Prisma** :
@@ -46,6 +49,9 @@ cd backend/services/content
 bunx prisma db push
 
 cd backend/services/report
+bunx prisma migrate dev
+
+cd backend/services/notification
 bunx prisma migrate dev
 ```
 
@@ -63,6 +69,7 @@ Chaque service propose une interface interactive de documentation :
 - **User Service** : `http://localhost:8001/scalar`
 - **Content Service** : `http://localhost:8002/scalar`
 - **Report Service** : `http://localhost:8003/scalar`
+- **Notification Service** : `http://localhost:8004/scalar`
 - **API Gateway (Public)** : `http://localhost:8000`
 
 ## Points de terminaison principaux (via la Gateway)
@@ -98,3 +105,5 @@ Chaque service propose une interface interactive de documentation :
 | `GET /comments/{commentId}/likes` | content | Non |
 | `GET /report-reasons` | report | Non |
 | `POST /reports` | report | Oui |
+| `GET /notifications` | notification | Oui |
+| `PATCH /notifications/seen` | notification | Oui |

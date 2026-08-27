@@ -23,11 +23,11 @@ export function CommentItem({ comment, isReply = false }: CommentItemProps) {
 	const { commentToReplyTo, setCommentToReplyTo } = useCommentToReplyTo();
 	const likeComment = useLikeComment();
 	const unlikeComment = useUnlikeComment();
-	// const rootCommentId = comment.parentId ?? comment.id;
+	const isDeleted = comment.isDeleted ?? false;
 	const repliesQuery = useComments({
 		postId: comment.postId,
 		parentCommentId: comment.id ?? undefined,
-		enabled: isReply && areRepliesExpanded,
+		enabled: areRepliesExpanded,
 	});
 
 	const fetchMoreReplies = () => {
@@ -101,44 +101,53 @@ export function CommentItem({ comment, isReply = false }: CommentItemProps) {
 								{formatCommentCreationDate(comment.createdAt)}
 							</span>
 						</div>
-						<CommentActionsDropdown comment={comment} user={comment.author} />
+						{!isDeleted ? (
+							<CommentActionsDropdown comment={comment} user={comment.author} />
+						) : null}
 					</div>
 
-					<p className="mt-1 text-sm text-foreground whitespace-pre-line leading-relaxed">
-						{comment.content}
+					<p
+						className={cn(
+							"mt-1 whitespace-pre-line text-sm leading-relaxed",
+							isDeleted ? "italic text-muted-foreground" : "text-foreground",
+						)}
+					>
+						{isDeleted ? "Comment deleted" : comment.content}
 					</p>
 
-					<div className="-ml-1 flex items-center gap-2 text-muted-foreground text-xs">
-						<button
-							type="button"
-							onClick={toggleLike}
-							disabled={likeComment.isPending || unlikeComment.isPending}
-							aria-label={isLiked ? "Unlike comment" : "Like comment"}
-							className={cn(
-								"flex items-center gap-1.5 transition-colors p-1.5 cursor-pointer rounded-full hover:bg-accent disabled:opacity-60",
-								isLiked ? "text-rose-500" : "hover:text-rose-500",
-							)}
-						>
-							{isLiked ? (
-								<RiHeartFill className="size-4 text-rose-500" />
-							) : (
-								<RiHeartLine className="size-4" />
-							)}
-							<span className="font-light">{comment.likesCount ?? 0}</span>
-						</button>
+					{!isDeleted ? (
+						<div className="-ml-1 flex items-center gap-2 text-muted-foreground text-xs">
+							<button
+								type="button"
+								onClick={toggleLike}
+								disabled={likeComment.isPending || unlikeComment.isPending}
+								aria-label={isLiked ? "Unlike comment" : "Like comment"}
+								className={cn(
+									"flex items-center gap-1.5 transition-colors p-1.5 cursor-pointer rounded-full hover:bg-accent disabled:opacity-60",
+									isLiked ? "text-rose-500" : "hover:text-rose-500",
+								)}
+							>
+								{isLiked ? (
+									<RiHeartFill className="size-4 text-rose-500" />
+								) : (
+									<RiHeartLine className="size-4" />
+								)}
+								<span className="font-light">{comment.likesCount ?? 0}</span>
+							</button>
 
-						<button
-							type="button"
-							onClick={() => setCommentToReplyTo(comment)}
-							aria-pressed={isSelectedForReply}
-							className={cn(
-								"flex items-center gap-1.5 p-1.5 rounded-full hover:bg-accent hover:text-foreground cursor-pointer transition-colors",
-								isSelectedForReply && "text-foreground",
-							)}
-						>
-							<span>Reply</span>
-						</button>
-					</div>
+							<button
+								type="button"
+								onClick={() => setCommentToReplyTo(comment)}
+								aria-pressed={isSelectedForReply}
+								className={cn(
+									"flex items-center gap-1.5 p-1.5 rounded-full hover:bg-accent hover:text-foreground cursor-pointer transition-colors",
+									isSelectedForReply && "text-foreground",
+								)}
+							>
+								<span>Reply</span>
+							</button>
+						</div>
+					) : null}
 				</div>
 			</article>
 			<div className={`pb-2 ${!isReply ? "pl-17" : "pl-0"}`}>

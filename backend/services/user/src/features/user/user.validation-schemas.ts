@@ -54,6 +54,7 @@ const UserProfileResponseBody = z.object({
 	postCount: z.number(),
 	followersCount: z.number(),
 	followingCount: z.number(),
+	unseenNotificationsCount: z.number(),
 	createdAt: z.date(),
 });
 

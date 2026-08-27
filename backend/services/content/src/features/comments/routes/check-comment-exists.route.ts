@@ -23,10 +23,10 @@ const checkCommentExistsRoute = defineOpenAPIRoute({
 		const { id } = c.req.valid("param");
 		const comment = await prisma.comment.findUnique({
 			where: { id },
-			select: { id: true },
+			select: { id: true, deletedAt: true },
 		});
 
-		if (!comment) {
+		if (!comment || comment.deletedAt) {
 			return c.json({ exists: false }, HttpStatus.NOT_FOUND.code);
 		}
 

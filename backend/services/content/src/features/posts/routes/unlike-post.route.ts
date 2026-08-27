@@ -1,10 +1,11 @@
 import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
+import { notificationServiceClient } from "@/core/services/notification-service.client";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { requireUserAuthentication } from "@/features/authentication/middlewares/require-user-authentication.middleware";
-import { PostsRoutesTag } from "../posts.constants";
 import type { Post } from "@/generated/prisma/client";
+import { PostsRoutesTag } from "../posts.constants";
 
 const routeDef = createRoute({
 	method: "delete",
@@ -45,30 +46,30 @@ const unlikePostRoute = defineOpenAPIRoute<
 		if (!post) {
 			throw new Error("Post not found");
 		}
-		let postToSend: Pick<Post, "id" | "likesCount"> | undefined = {
+		let postToSend: Pick<Post, "id" | "likesCount"> | null = {
 			id: post.id,
 			likesCount: post.likesCount,
 		};
-		try {
-			await prisma.postLike.delete({
-				where: {
-					postId_authorId: {
-						postId,
-						authorId: authenticatedUserId,
-					},
-				},
-			});
-			postToSend = await prisma.post.update({
-				where: { id: postId },
-				data: {
-					likesCount: {
-						decrement: 1,
-					},
-				},
-				select: { id: true, likesCount: true },
-			});
-		} catch (error) {
-			console.log(error);
+		const existingLike = await prisma.postLike.findUnique({
+			where: {
+				postId_authorId: { postId, authorId: authenticatedUserId },
+			},
+			select: { id: true },
+		});
+		if (existingLike) {
+			const [, updatedPost] = await prisma.$transaction([
+				prisma.postLike.delete({ where: { id: existingLike.id } }),
+				prisma.post.update({
+					where: { id: postId },
+					data: { likesCount: { decrement: 1 } },
+					select: { id: true, likesCount: true },
+				}),
+			]);
+			postToSend = updatedPost;
+			await notificationServiceClient.removeNotification(
+				"POST_LIKE",
+				`post:${postId}:actor:${authenticatedUserId}`,
+			);
 		}
 
 		return c.json({

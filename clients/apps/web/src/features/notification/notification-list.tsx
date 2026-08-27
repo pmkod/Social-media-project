@@ -2,169 +2,221 @@ import {
 	RiChat3Line,
 	RiHeartFill,
 	RiNotification3Line,
-	RiRepeatLine,
 	RiUserAddLine,
 } from "@remixicon/react";
-import { useState } from "react";
+import { Link } from "@tanstack/react-router";
+import { useEffect } from "react";
+import { EmptyBlock } from "@/core/components/ui/empty-block.tsx";
+import { ExceptionBlock } from "@/core/components/ui/exception-block.tsx";
+import { useIntersectionObserver } from "@/core/hooks/use-intersection-observer.ts";
+import { cn } from "@/core/lib/utils.ts";
+import { formatPostCreationDate } from "@/features/post/common/post.utils.ts";
+import { useAuthenticatedUser } from "@/features/user/authenticated-user/use-authenticated-user.ts";
+import { UserAvatar } from "@/features/user/common/components/user-avatar.tsx";
+import type {
+	NotificationEventType,
+	NotificationGroup,
+} from "./notification.ts";
+import { useMarkNotificationsSeen } from "./use-mark-notifications-seen.ts";
+import { useNotifications } from "./use-notifications.ts";
 
-type NotificationItem = {
-	id: string;
-	type: "like" | "repost" | "comment" | "follow";
-	user: {
-		name: string;
-		handle: string;
-		avatar: string;
-	};
-	time: string;
-	contentSnippet?: string;
+const notificationCopy: Record<NotificationEventType, string> = {
+	FOLLOW: "started following you",
+	POST_LIKE: "liked your post",
+	POST_COMMENT: "commented on your post",
+	COMMENT_REPLY: "replied to your comment",
 };
 
-const FAKE_NOTIFICATIONS: NotificationItem[] = [
-	{
-		id: "notif-1",
-		type: "like",
-		user: {
-			name: "Sophie Martin",
-			handle: "sophiem",
-			avatar:
-				"https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80",
-		},
-		time: "10 min ago",
-		contentSnippet: "Excited to launch our new interface on Graphy!...",
-	},
-	{
-		id: "notif-2",
-		type: "repost",
-		user: {
-			name: "Alexandre Dubois",
-			handle: "alex_dev",
-			avatar:
-				"https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80",
-		},
-		time: "1h ago",
-		contentSnippet: "TypeScript 5.5 brings so many improvements...",
-	},
-	{
-		id: "notif-3",
-		type: "follow",
-		user: {
-			name: "Lucas Bernard",
-			handle: "lucas_b",
-			avatar:
-				"https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=150&auto=format&fit=crop&q=80",
-		},
-		time: "3h ago",
-	},
-	{
-		id: "notif-4",
-		type: "comment",
-		user: {
-			name: "Emma Laurent",
-			handle: "emma_design",
-			avatar:
-				"https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80",
-		},
-		time: "5h ago",
-		contentSnippet: "Great work! I completely agree with this approach.",
-	},
+const notificationLoaderIds = [
+	"notification-loader-1",
+	"notification-loader-2",
+	"notification-loader-3",
+	"notification-loader-4",
+	"notification-loader-5",
 ];
 
-export function NotificationList() {
-	const [activeTab, setActiveTab] = useState<"all" | "mentions">("all");
+function NotificationIcon({ eventType }: { eventType: NotificationEventType }) {
+	if (eventType === "POST_LIKE") {
+		return <RiHeartFill className="size-5 text-rose-500" />;
+	}
+	if (eventType === "FOLLOW") {
+		return <RiUserAddLine className="size-5 text-indigo-500" />;
+	}
+	return <RiChat3Line className="size-5 text-sky-500" />;
+}
+
+function NotificationActor({
+	notification,
+}: {
+	notification: NotificationGroup;
+}) {
+	const actorLabel =
+		notification.actor?.fullName ||
+		(notification.actor ? `@${notification.actor.username}` : "Someone");
+	const othersCount = Math.max(0, notification.actorCount - 1);
 
 	return (
+		<span>
+			<span className="font-semibold text-foreground">{actorLabel}</span>
+			{othersCount > 0
+				? ` and ${othersCount} other ${othersCount === 1 ? "user" : "users"}`
+				: ""}{" "}
+			<span className="text-muted-foreground">
+				{notificationCopy[notification.eventType]}
+			</span>
+		</span>
+	);
+}
+
+function NotificationItem({
+	notification,
+}: {
+	notification: NotificationGroup;
+}) {
+	const content = (
+		<div
+			className={cn(
+				"flex gap-3 p-4 transition-colors hover:bg-accent/60",
+				!notification.isSeen && "bg-sky-500/5",
+			)}
+		>
+			<div className="shrink-0 pt-1">
+				<NotificationIcon eventType={notification.eventType} />
+			</div>
+			<div className="min-w-0 flex-1">
+				<div className="flex items-center gap-2 text-sm">
+					<UserAvatar user={notification.actor ?? undefined} size="sm" />
+					<div className="min-w-0">
+						<NotificationActor notification={notification} />
+					</div>
+				</div>
+				{notification.contentPreview ? (
+					<p className="mt-2 line-clamp-2 rounded-xl border border-border bg-muted/60 p-2.5 text-sm text-muted-foreground">
+						{notification.contentPreview}
+					</p>
+				) : null}
+				<span className="mt-1 block text-xs text-muted-foreground">
+					{formatPostCreationDate(notification.latestCreatedAt)}
+				</span>
+			</div>
+			{!notification.isSeen ? (
+				<span
+					className="mt-2 size-2 shrink-0 rounded-full bg-sky-500"
+					aria-hidden="true"
+				/>
+			) : null}
+		</div>
+	);
+
+	if (notification.eventType === "FOLLOW" && notification.actor) {
+		return (
+			<Link
+				to="/$username"
+				params={{ username: `@${notification.actor.username}` }}
+			>
+				{content}
+			</Link>
+		);
+	}
+	if (notification.postId) {
+		return (
+			<Link to="/posts/$postId" params={{ postId: notification.postId }}>
+				{content}
+			</Link>
+		);
+	}
+	return content;
+}
+
+function NotificationListLoader({ count = 5 }: { count?: number }) {
+	return (
 		<div className="divide-y divide-border">
-			{/* Header */}
-			<div className="p-4 border-b border-border">
-				<h1 className="text-xl font-bold text-foreground flex items-center gap-2">
-					<RiNotification3Line className="h-6 w-6 text-sky-500" />
+			{notificationLoaderIds.slice(0, count).map((loaderId) => (
+				<div key={loaderId} className="flex animate-pulse gap-3 p-4">
+					<div className="size-5 rounded bg-muted" />
+					<div className="flex-1 space-y-3">
+						<div className="h-8 w-2/3 rounded bg-muted" />
+						<div className="h-12 rounded bg-muted" />
+					</div>
+				</div>
+			))}
+		</div>
+	);
+}
+
+export function NotificationList() {
+	const {
+		data,
+		fetchNextPage,
+		hasNextPage,
+		isError,
+		isFetchingNextPage,
+		isLoading,
+		isRefetching,
+		isSuccess,
+		refetch,
+	} = useNotifications();
+	const { isSuccess: isAuthenticatedUserLoaded } = useAuthenticatedUser();
+	const { mutate: markNotificationsSeen } = useMarkNotificationsSeen();
+	const { ref: observerTargetRef, isIntersecting } = useIntersectionObserver({
+		rootMargin: "100px",
+	});
+	const notifications = data?.pages.flatMap((page) => page.notifications) ?? [];
+
+	useEffect(() => {
+		if (!isIntersecting || !hasNextPage || isFetchingNextPage) return;
+		void fetchNextPage();
+	}, [isIntersecting, hasNextPage, isFetchingNextPage, fetchNextPage]);
+
+	useEffect(() => {
+		if (!isSuccess || !isAuthenticatedUserLoaded) return;
+		const timeoutId = window.setTimeout(() => {
+			markNotificationsSeen();
+		}, 3000);
+
+		return () => window.clearTimeout(timeoutId);
+	}, [isSuccess, isAuthenticatedUserLoaded, markNotificationsSeen]);
+
+	return (
+		<div className="min-h-screen">
+			<div className="border-b border-border p-4">
+				<h1 className="flex items-center gap-2 text-xl font-bold text-foreground">
+					<RiNotification3Line className="size-6 text-sky-500" />
 					<span>Notifications</span>
 				</h1>
+			</div>
 
-				{/* Tabs */}
-				<div className="flex gap-4 mt-4 border-b border-border">
-					<button
-						type="button"
-						onClick={() => setActiveTab("all")}
-						className={`pb-2 text-xs font-semibold border-b-2 transition-colors ${
-							activeTab === "all"
-								? "border-sky-500 text-sky-500"
-								: "border-transparent text-muted-foreground hover:text-foreground"
-						}`}
-					>
-						All
-					</button>
-					<button
-						type="button"
-						onClick={() => setActiveTab("mentions")}
-						className={`pb-2 text-xs font-semibold border-b-2 transition-colors ${
-							activeTab === "mentions"
-								? "border-sky-500 text-sky-500"
-								: "border-transparent text-muted-foreground hover:text-foreground"
-						}`}
-					>
-						Mentions
-					</button>
+			{isLoading ? (
+				<NotificationListLoader />
+			) : isError ? (
+				<ExceptionBlock
+					title="Unable to load notifications"
+					description="An error occurred while loading your notifications."
+					onRefresh={() => void refetch()}
+					isRefetching={isRefetching}
+					borderless
+				/>
+			) : notifications.length === 0 ? (
+				<EmptyBlock
+					title="No notifications yet"
+					description="New likes, comments, replies, and followers will appear here."
+					borderless
+				/>
+			) : (
+				<div className="divide-y divide-border">
+					{notifications.map((notification) => (
+						<NotificationItem
+							key={notification.key}
+							notification={notification}
+						/>
+					))}
+					{hasNextPage ? (
+						<div ref={observerTargetRef}>
+							<NotificationListLoader count={2} />
+						</div>
+					) : null}
 				</div>
-			</div>
-
-			{/* List */}
-			<div className="divide-y divide-border">
-				{FAKE_NOTIFICATIONS.map((notif) => (
-					<div
-						key={notif.id}
-						className="p-4 flex gap-3 hover:bg-accent/60 transition-colors"
-					>
-						{/* Icon Badge */}
-						<div className="shrink-0 pt-0.5">
-							{notif.type === "like" && (
-								<RiHeartFill className="h-5 w-5 text-rose-500" />
-							)}
-							{notif.type === "repost" && (
-								<RiRepeatLine className="h-5 w-5 text-emerald-500" />
-							)}
-							{notif.type === "comment" && (
-								<RiChat3Line className="h-5 w-5 text-sky-500" />
-							)}
-							{notif.type === "follow" && (
-								<RiUserAddLine className="h-5 w-5 text-indigo-500" />
-							)}
-						</div>
-
-						{/* Detail */}
-						<div className="flex-1 min-w-0">
-							<div className="flex items-center gap-2">
-								<img
-									src={notif.user.avatar}
-									alt={notif.user.name}
-									className="h-8 w-8 rounded-full object-cover shrink-0"
-								/>
-								<div className="min-w-0 text-xs">
-									<span className="font-semibold text-foreground">
-										{notif.user.name}
-									</span>{" "}
-									<span className="text-muted-foreground">
-										{notif.type === "like" && "liked your post"}
-										{notif.type === "repost" && "reposted your post"}
-										{notif.type === "comment" && "commented on your post"}
-										{notif.type === "follow" && "started following you"}
-									</span>
-								</div>
-							</div>
-
-							{notif.contentSnippet && (
-								<p className="mt-2 text-xs text-muted-foreground bg-muted/60 p-2.5 rounded-xl border border-border">
-									"{notif.contentSnippet}"
-								</p>
-							)}
-
-							<span className="text-[10px] text-muted-foreground mt-1 block">
-								{notif.time}
-							</span>
-						</div>
-					</div>
-				))}
-			</div>
+			)}
 		</div>
 	);
 }

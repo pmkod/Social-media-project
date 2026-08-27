@@ -981,6 +981,7 @@ export const UserScalarFieldEnum = {
   postCount: 'postCount',
   followersCount: 'followersCount',
   followingCount: 'followingCount',
+  unseenNotificationsCount: 'unseenNotificationsCount',
   emailVerified: 'emailVerified',
   active: 'active',
   createdAt: 'createdAt',

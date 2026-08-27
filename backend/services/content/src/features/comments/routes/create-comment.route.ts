@@ -1,6 +1,7 @@
 import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
+import { notificationServiceClient } from "@/core/services/notification-service.client";
 import { userServiceClient } from "@/core/services/user-service.client";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { requireUserAuthentication } from "@/features/authentication/middlewares/require-user-authentication.middleware";
@@ -49,7 +50,7 @@ const createCommentRoute = defineOpenAPIRoute<
 
 		const post = await prisma.post.findUnique({
 			where: { id: postId },
-			select: { id: true, authorId: true },
+			select: { id: true, authorId: true, text: true },
 		});
 
 		if (!post) {
@@ -64,43 +65,66 @@ const createCommentRoute = defineOpenAPIRoute<
 			throw Error("Post not found");
 		}
 
-		let parentId: string | null = null;
+		let parentComment: {
+			id: string;
+			authorId: string;
+			postId: string;
+			deletedAt: Date | null;
+		} | null = null;
 		if (parentCommentId) {
-			const parentComment = await prisma.comment.findUnique({
+			parentComment = await prisma.comment.findUnique({
 				where: { id: parentCommentId },
-				select: { id: true, parentId: true, postId: true },
+				select: {
+					id: true,
+					authorId: true,
+					postId: true,
+					deletedAt: true,
+				},
 			});
 
-			if (!parentComment || parentComment.postId !== postId) {
+			if (
+				!parentComment ||
+				parentComment.postId !== postId ||
+				parentComment.deletedAt
+			) {
 				throw Error("Parent comment not found");
 			}
-
-			parentId = parentComment.id;
 		}
 
-		const comment = await prisma.comment.create({
-			data: {
-				postId,
-				parentId,
-				authorId: authenticatedUserId,
-				content: content.trim(),
-			},
-			select: {
-				id: true,
-			},
-		});
-
-		await prisma.post.update({
-			where: { id: postId },
-			data: { commentsCount: { increment: 1 } },
-		});
-
-		if (parentId) {
-			await prisma.comment.update({
-				where: { id: parentId },
-				data: { repliesCount: { increment: 1 } },
+		const normalizedContent = content.trim();
+		const comment = await prisma.$transaction(async (tx) => {
+			const createdComment = await tx.comment.create({
+				data: {
+					postId,
+					parentId: parentComment?.id ?? null,
+					authorId: authenticatedUserId,
+					content: normalizedContent,
+				},
+				select: { id: true },
 			});
-		}
+			await tx.post.update({
+				where: { id: postId },
+				data: { commentsCount: { increment: 1 } },
+			});
+			if (parentComment) {
+				await tx.comment.update({
+					where: { id: parentComment.id },
+					data: { repliesCount: { increment: 1 } },
+				});
+			}
+			return createdComment;
+		});
+
+		await notificationServiceClient.createNotification({
+			recipientId: parentComment?.authorId ?? post.authorId,
+			actorId: authenticatedUserId,
+			eventType: parentComment ? "COMMENT_REPLY" : "POST_COMMENT",
+			entityId: parentComment?.id ?? postId,
+			sourceId: comment.id,
+			postId,
+			commentId: comment.id,
+			contentPreview: normalizedContent,
+		});
 
 		const commentToSend = await prisma.comment.findUniqueOrThrow({
 			where: {
@@ -116,6 +140,7 @@ const createCommentRoute = defineOpenAPIRoute<
 				repliesCount: true,
 				createdAt: true,
 				updatedAt: true,
+				deletedAt: true,
 			},
 		});
 
@@ -130,6 +155,7 @@ const createCommentRoute = defineOpenAPIRoute<
 				message: "Comment created successfully",
 				comment: {
 					...commentToSend,
+					isDeleted: false,
 					isLikedByAuthenticatedUser: false,
 					author,
 				},

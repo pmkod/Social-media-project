@@ -12,5 +12,6 @@ export type Comment = {
 	likesCount?: number;
 	repliesCount?: number;
 	isLikedByAuthenticatedUser?: boolean;
+	isDeleted?: boolean;
 	replies?: Comment[];
 };

@@ -1,4 +1,5 @@
 import {
+	RiDeleteBinLine,
 	RiFlag2Line,
 	RiMoreLine,
 	RiUserAddLine,
@@ -13,6 +14,7 @@ import {
 } from "@/core/components/ui/dropdown-menu.tsx";
 import { IconButton } from "@/core/components/ui/icon-button.tsx";
 import NiceModal from "@/core/components/ui/nice-modal.tsx";
+import { DeleteCommentAlertDialog } from "@/features/comment/delete-comment/delete-comment-alert-dialog.tsx";
 import { ReportModal } from "@/features/report/report.modal.tsx";
 import { useAuthenticatedUser } from "@/features/user/authenticated-user/use-authenticated-user.ts";
 import { BlockUserAlertDialog } from "@/features/user/block-user/block-user-alert-dialog.tsx";
@@ -39,10 +41,11 @@ function CommentActionsDropdown({
 		authenticatedUser?.id && user.id === authenticatedUser.id,
 	);
 	const canReport = Boolean(authenticatedUser?.id && !isOwnComment);
+	const canDelete = isOwnComment && !comment.isDeleted;
 	const canManageBlock = Boolean(user.id && !isOwnComment);
 	const isBlocked = user.isBlockedByAuthenticatedUser ?? false;
 
-	if (!canReport && !canManageBlock) return null;
+	if (!canReport && !canManageBlock && !canDelete) return null;
 
 	return (
 		<DropdownMenu>
@@ -61,6 +64,20 @@ function CommentActionsDropdown({
 				align="end"
 				onClick={(event) => event.stopPropagation()}
 			>
+				{canDelete ? (
+					<DropdownMenuItem
+						variant="destructive"
+						onSelect={() => {
+							void NiceModal.show(DeleteCommentAlertDialog, { comment });
+						}}
+					>
+						<RiDeleteBinLine />
+						Delete comment
+					</DropdownMenuItem>
+				) : null}
+				{canDelete && (canReport || canManageBlock) ? (
+					<DropdownMenuSeparator />
+				) : null}
 				{canReport ? (
 					<DropdownMenuItem
 						variant="destructive"

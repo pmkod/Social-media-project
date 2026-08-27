@@ -1,6 +1,7 @@
 import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
+import { notificationServiceClient } from "@/core/services/notification-service.client";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { requireUserAuthentication } from "@/features/authentication/middlewares/require-user-authentication.middleware";
 import { CommentsRoutesTag } from "../comments.constants";
@@ -47,30 +48,25 @@ const deleteCommentRoute = defineOpenAPIRoute<
 		if (comment.authorId !== authenticatedUserId) {
 			throw new Error("You are not authorized to delete this comment");
 		}
-
-		const deletedCommentsCount = comment.parentId
-			? 1
-			: await prisma.comment.count({
-					where: { OR: [{ id }, { parentId: id }] },
-				});
+		if (comment.deletedAt) {
+			return c.json({ success: true, message: "Comment already deleted" });
+		}
 
 		await prisma.$transaction([
-			prisma.comment.delete({
+			prisma.comment.update({
 				where: { id },
+				data: { deletedAt: new Date(), likesCount: 0 },
 			}),
+			prisma.commentLike.deleteMany({ where: { commentId: id } }),
 			prisma.post.update({
 				where: { id: comment.postId },
-				data: { commentsCount: { decrement: deletedCommentsCount } },
+				data: { commentsCount: { decrement: 1 } },
 			}),
-			...(comment.parentId
-				? [
-						prisma.comment.update({
-							where: { id: comment.parentId },
-							data: { repliesCount: { decrement: 1 } },
-						}),
-					]
-				: []),
 		]);
+		await notificationServiceClient.removeNotification(
+			comment.parentId ? "COMMENT_REPLY" : "POST_COMMENT",
+			comment.id,
+		);
 
 		return c.json({ success: true, message: "Comment deleted successfully" });
 	},

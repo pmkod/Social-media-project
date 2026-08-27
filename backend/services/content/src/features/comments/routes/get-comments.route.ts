@@ -76,6 +76,7 @@ const getCommentsRoute = defineOpenAPIRoute<
 				repliesCount: true,
 				createdAt: true,
 				updatedAt: true,
+				deletedAt: true,
 			},
 		});
 		const total = await prisma.comment.count({ where: commentsWhere });
@@ -100,9 +101,13 @@ const getCommentsRoute = defineOpenAPIRoute<
 		}
 
 		const enrichedComments = comments.map((comment) => {
+			const isDeleted = Boolean(comment.deletedAt);
 			return {
 				...comment,
-				isLikedByAuthenticatedUser: likedCommentIds.has(comment.id),
+				content: isDeleted ? "" : comment.content,
+				isDeleted,
+				isLikedByAuthenticatedUser:
+					!isDeleted && likedCommentIds.has(comment.id),
 				author: authorsMap.get(comment.authorId) ?? null,
 			};
 		});

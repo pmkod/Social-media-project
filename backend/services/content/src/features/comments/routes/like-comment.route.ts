@@ -38,10 +38,10 @@ const likeCommentRoute = defineOpenAPIRoute<
 
 		const comment = await prisma.comment.findUnique({
 			where: { id: commentId },
-			select: { id: true },
+			select: { id: true, deletedAt: true },
 		});
 
-		if (!comment) {
+		if (!comment || comment.deletedAt) {
 			throw new Error("Comment not found");
 		}
 

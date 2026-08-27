@@ -33,6 +33,7 @@ const getMeRoute = defineOpenAPIRoute<typeof routeDef, HonoAuthenticatedEnv>({
 				email: true,
 				username: true,
 				fullName: true,
+				unseenNotificationsCount: true,
 				createdAt: true,
 				lowQualityProfilePictureFile: { select: { id: true, filename: true } },
 				bestQualityProfilePictureFile: { select: { id: true, filename: true } },

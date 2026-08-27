@@ -32,11 +32,7 @@ const BaseAlertDialog = ({
 	const handleConfirm = async () => {
 		setIsConfirming(true);
 		try {
-			if (onConfirm instanceof Promise) {
-				await onConfirm();
-			} else {
-				onConfirm();
-			}
+			await onConfirm();
 			modal.remove();
 		} catch {
 			// The mutation retains the error and the dialog stays open for a retry.

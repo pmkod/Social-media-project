@@ -1,0 +1,37 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum NotificationEventType {
+  FOLLOW
+  POST_LIKE
+  POST_COMMENT
+  COMMENT_REPLY
+}
+
+model Notification {
+  id             String                @id @default(cuid())
+  recipientId    String                @map("recipient_id")
+  actorId        String                @map("actor_id")
+  eventType      NotificationEventType @map("event_type")
+  entityId       String                @map("entity_id")
+  sourceId       String                @map("source_id")
+  postId         String?               @map("post_id")
+  commentId      String?               @map("comment_id")
+  contentPreview String?               @map("content_preview") @db.VarChar(280)
+  isSeen         Boolean               @default(false) @map("is_seen")
+  createdAt      DateTime              @default(now()) @map("created_at")
+
+  @@unique([eventType, sourceId])
+  @@index([recipientId, createdAt, id])
+  @@index([recipientId, isSeen])
+  @@index([recipientId, eventType, entityId, createdAt])
+  @@index([postId])
+  @@index([commentId])
+  @@map("notification")
+}

@@ -11,6 +11,7 @@ type User = {
 	postCount?: number;
 	followersCount?: number;
 	followingCount?: number;
+	unseenNotificationsCount?: number;
 	createdAt?: string | null;
 	isFollowedByAuthenticatedUser?: boolean;
 	isBlockedByAuthenticatedUser?: boolean;

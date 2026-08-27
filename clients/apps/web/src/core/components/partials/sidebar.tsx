@@ -19,9 +19,16 @@ type SidebarLinkProps = {
 	icon: RemixiconComponentType;
 	label: string;
 	params?: { username: string };
+	badgeCount?: number;
 };
 
-function SidebarLink({ to, icon: Icon, label, params }: SidebarLinkProps) {
+function SidebarLink({
+	to,
+	icon: Icon,
+	label,
+	params,
+	badgeCount = 0,
+}: SidebarLinkProps) {
 	return (
 		<Link
 			to={to}
@@ -33,6 +40,11 @@ function SidebarLink({ to, icon: Icon, label, params }: SidebarLinkProps) {
 		>
 			<Icon className="size-6 shrink-0" />
 			<span className="text-lg">{label}</span>
+			{badgeCount > 0 ? (
+				<span className="ml-auto min-w-5 rounded-full bg-rose-500 px-1.5 py-0.5 text-center text-xs font-semibold text-white">
+					{badgeCount > 99 ? "99+" : badgeCount}
+				</span>
+			) : null}
 		</Link>
 	);
 }
@@ -56,6 +68,7 @@ export function Sidebar() {
 						to="/notifications"
 						icon={RiNotification3Line}
 						label="Notifications"
+						badgeCount={data?.user.unseenNotificationsCount}
 					/>
 					<SidebarLink
 						to="/discussions"

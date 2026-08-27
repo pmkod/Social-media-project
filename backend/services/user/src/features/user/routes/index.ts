@@ -13,12 +13,13 @@ import { getUserByUsernameRoute } from "./get-user-by-username.route";
 import { getUserFollowersRoute } from "./get-user-followers.route";
 import { getUserFollowingRoute } from "./get-user-following.route";
 import { getUsersBatchRoute } from "./get-users-batch.route";
+import { requestEmailChangeRoute } from "./request-email-change.route";
+import { searchUsersRoute } from "./search-users.route";
 import { unblockUserRoute } from "./unblock-user.route";
 import { unfollowUserRoute } from "./unfollow-user.route";
 import { updatePostCountRoute } from "./update-post-count.route";
 import { updateProfileRoute } from "./update-profile.route";
-import { requestEmailChangeRoute } from "./request-email-change.route";
-import { searchUsersRoute } from "./search-users.route";
+import { updateUnseenNotificationsCountRoute } from "./update-unseen-notifications-count.route";
 
 const userRoutes = [
 	getMeRoute,
@@ -39,6 +40,7 @@ const userRoutes = [
 	blockUserRoute,
 	unblockUserRoute,
 	updatePostCountRoute,
+	updateUnseenNotificationsCountRoute,
 	getFollowingIdsRoute,
 	getBlockRelationshipIdsRoute,
 	checkUserExistsRoute,
