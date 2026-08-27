@@ -385,6 +385,7 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 
 export const ModelName = {
   User: 'User',
+  SearchHistory: 'SearchHistory',
   File: 'File',
   Follow: 'Follow',
   Block: 'Block',
@@ -405,7 +406,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "file" | "follow" | "block" | "refreshToken" | "userVerification"
+    modelProps: "user" | "searchHistory" | "file" | "follow" | "block" | "refreshToken" | "userVerification"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -480,6 +481,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.UserCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.UserCountAggregateOutputType> | number
+        }
+      }
+    }
+    SearchHistory: {
+      payload: Prisma.$SearchHistoryPayload<ExtArgs>
+      fields: Prisma.SearchHistoryFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.SearchHistoryFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SearchHistoryPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.SearchHistoryFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SearchHistoryPayload>
+        }
+        findFirst: {
+          args: Prisma.SearchHistoryFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SearchHistoryPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.SearchHistoryFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SearchHistoryPayload>
+        }
+        findMany: {
+          args: Prisma.SearchHistoryFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SearchHistoryPayload>[]
+        }
+        create: {
+          args: Prisma.SearchHistoryCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SearchHistoryPayload>
+        }
+        createMany: {
+          args: Prisma.SearchHistoryCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.SearchHistoryCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SearchHistoryPayload>[]
+        }
+        delete: {
+          args: Prisma.SearchHistoryDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SearchHistoryPayload>
+        }
+        update: {
+          args: Prisma.SearchHistoryUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SearchHistoryPayload>
+        }
+        deleteMany: {
+          args: Prisma.SearchHistoryDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.SearchHistoryUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.SearchHistoryUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SearchHistoryPayload>[]
+        }
+        upsert: {
+          args: Prisma.SearchHistoryUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SearchHistoryPayload>
+        }
+        aggregate: {
+          args: Prisma.SearchHistoryAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateSearchHistory>
+        }
+        groupBy: {
+          args: Prisma.SearchHistoryGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SearchHistoryGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.SearchHistoryCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SearchHistoryCountAggregateOutputType> | number
         }
       }
     }
@@ -915,6 +990,17 @@ export const UserScalarFieldEnum = {
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
+export const SearchHistoryScalarFieldEnum = {
+  id: 'id',
+  ownerId: 'ownerId',
+  text: 'text',
+  userId: 'userId',
+  createdAt: 'createdAt'
+} as const
+
+export type SearchHistoryScalarFieldEnum = (typeof SearchHistoryScalarFieldEnum)[keyof typeof SearchHistoryScalarFieldEnum]
+
+
 export const FileScalarFieldEnum = {
   id: 'id',
   mimeType: 'mimeType',
@@ -1185,6 +1271,7 @@ export type PrismaClientOptions = ({
 }
 export type GlobalOmitConfig = {
   user?: Prisma.UserOmit
+  searchHistory?: Prisma.SearchHistoryOmit
   file?: Prisma.FileOmit
   follow?: Prisma.FollowOmit
   block?: Prisma.BlockOmit

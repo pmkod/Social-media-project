@@ -5,6 +5,7 @@ import {
 	RiLoader4Line,
 } from "@remixicon/react";
 import { useEffect, useState } from "react";
+import { Button } from "@/core/components/ui/button.tsx";
 import {
 	Dialog,
 	DialogBody,
@@ -14,7 +15,6 @@ import {
 } from "@/core/components/ui/dialog.tsx";
 import { EmptyBlock } from "@/core/components/ui/empty-block.tsx";
 import { ExceptionBlock } from "@/core/components/ui/exception-block.tsx";
-import { IconButton } from "@/core/components/ui/icon-button.tsx";
 import NiceModal, {
 	create,
 	useModal,
@@ -28,7 +28,6 @@ import { useRemoveBookmark } from "../use-remove-bookmark.ts";
 import { BOOKMARK_COLLECTIONS_PAGE_LIMIT } from "./bookmark-collection.constants.ts";
 import type { BookmarkCollection } from "./bookmark-collection.ts";
 import { BookmarkCollectionModal } from "./bookmark-collection-modal.tsx";
-import { Button } from "@/core/components/ui/button.tsx";
 
 type BookmarkCollectionPickerModalProps = {
 	postId: string;

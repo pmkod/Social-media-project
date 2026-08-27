@@ -31,20 +31,26 @@ const fetchSearchPostsPage = async ({
 	}
 
 	return await httpClient
-		.get("posts/search", { searchParams })
+		.get("posts", { searchParams })
 		.json<SearchPostsResponse>();
 };
 
 type UseSearchPostsParams = {
 	query: string;
+	enabled?: boolean;
 };
 
-const useSearchPosts = ({ query }: UseSearchPostsParams) =>
-	useInfiniteQuery({
-		queryKey: postListQueryKeys.search(query),
-		queryFn: ({ pageParam }) => fetchSearchPostsPage({ query, pageParam }),
+const useSearchPosts = ({ query, enabled = true }: UseSearchPostsParams) => {
+	const normalizedQuery = query.trim();
+
+	return useInfiniteQuery({
+		queryKey: postListQueryKeys.search(normalizedQuery),
+		enabled: enabled && normalizedQuery.length > 0,
+		queryFn: ({ pageParam }) =>
+			fetchSearchPostsPage({ query: normalizedQuery, pageParam }),
 		initialPageParam: null as SearchCursor | null,
 		getNextPageParam: (lastPage) => lastPage.pagination.nextCursor ?? undefined,
 	});
+};
 
 export { useSearchPosts };

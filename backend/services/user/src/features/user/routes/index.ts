@@ -18,11 +18,13 @@ import { unfollowUserRoute } from "./unfollow-user.route";
 import { updatePostCountRoute } from "./update-post-count.route";
 import { updateProfileRoute } from "./update-profile.route";
 import { requestEmailChangeRoute } from "./request-email-change.route";
+import { searchUsersRoute } from "./search-users.route";
 
 const userRoutes = [
 	getMeRoute,
 	getBlockedUsersRoute,
 	getFollowSuggestionsRoute,
+	searchUsersRoute,
 	getUserByUsernameRoute,
 	getUserByIdRoute,
 	getUserFollowersRoute,

@@ -35,8 +35,24 @@ model User {
   following                       Follow[]           @relation("UserFollowing")
   blockedUsers                    Block[]            @relation("UserBlocks")
   blockedByUsers                  Block[]            @relation("UserBlockedBy")
+  ownedSearchHistory              SearchHistory[]    @relation("SearchHistoryOwner")
+  searchHistoryAppearances        SearchHistory[]    @relation("SearchHistoryUser")
 
   @@map("user")
+}
+
+model SearchHistory {
+  id        String   @id @default(cuid())
+  ownerId   String   @map("owner_id")
+  text      String?  @db.VarChar(255)
+  userId    String?  @map("user_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  owner     User     @relation("SearchHistoryOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+  user      User?    @relation("SearchHistoryUser", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([ownerId, createdAt, id])
+  @@index([userId])
+  @@map("search_history")
 }
 
 model File {
