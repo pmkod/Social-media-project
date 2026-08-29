@@ -1,0 +1,78 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum DiscussionType {
+  PRIVATE
+  GROUP
+}
+
+enum DiscussionMemberRole {
+  OWNER
+  ADMIN
+  MEMBER
+}
+
+model Discussion {
+  id             String         @id @default(cuid())
+  type           DiscussionType
+  name           String?        @db.VarChar(100)
+  description    String?        @db.VarChar(500)
+  createdById    String         @map("created_by_id")
+  lastMessageId  String?        @unique @map("last_message_id")
+  lastActivityAt DateTime       @default(now()) @map("last_activity_at")
+  createdAt      DateTime       @default(now()) @map("created_at")
+  updatedAt      DateTime       @updatedAt @map("updated_at")
+  deletedAt      DateTime?      @map("deleted_at")
+
+  members     DiscussionMember[]
+  messages    Message[]          @relation("DiscussionMessages")
+  lastMessage Message?           @relation("DiscussionLastMessage", fields: [lastMessageId], references: [id], onDelete: SetNull)
+
+  @@index([lastActivityAt, id])
+  @@index([createdById])
+  @@map("discussion")
+}
+
+model DiscussionMember {
+  id           String               @id @default(cuid())
+  discussionId String               @map("discussion_id")
+  userId       String               @map("user_id")
+  role         DiscussionMemberRole @default(MEMBER)
+  joinedAt     DateTime             @default(now()) @map("joined_at")
+  lastReadAt   DateTime             @default(now()) @map("last_read_at")
+  leftAt       DateTime?            @map("left_at")
+
+  discussion Discussion @relation(fields: [discussionId], references: [id], onDelete: Cascade)
+
+  @@unique([discussionId, userId])
+  @@index([userId, leftAt, discussionId])
+  @@map("discussion_member")
+}
+
+model Message {
+  id              String    @id @default(cuid())
+  discussionId    String    @map("discussion_id")
+  senderId        String    @map("sender_id")
+  parentMessageId String?   @map("parent_message_id")
+  content         String    @db.VarChar(4000)
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+  editedAt        DateTime? @map("edited_at")
+  deletedAt       DateTime? @map("deleted_at")
+
+  discussion     Discussion  @relation("DiscussionMessages", fields: [discussionId], references: [id], onDelete: Cascade)
+  parentMessage  Message?    @relation("MessageHierarchy", fields: [parentMessageId], references: [id], onDelete: SetNull)
+  childMessages  Message[]   @relation("MessageHierarchy")
+  lastMessageFor Discussion? @relation("DiscussionLastMessage")
+
+  @@index([discussionId, createdAt, id])
+  @@index([senderId])
+  @@index([parentMessageId])
+  @@map("message")
+}

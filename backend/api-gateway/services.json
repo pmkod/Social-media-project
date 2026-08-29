@@ -12,5 +12,7 @@
 	{ "path": "/videos", "target": "http://localhost:8002" },
 	{ "path": "/reports", "target": "http://localhost:8003" },
 	{ "path": "/report-reasons", "target": "http://localhost:8003" },
-	{ "path": "/notifications", "target": "http://localhost:8004" }
+	{ "path": "/notifications", "target": "http://localhost:8004" },
+	{ "path": "/discussions", "target": "http://localhost:8005" },
+	{ "path": "/messages", "target": "http://localhost:8005" }
 ]

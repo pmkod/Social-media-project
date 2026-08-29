@@ -17,6 +17,7 @@ Ce backend suit une architecture microservices identique à celle du projet Ecom
 - **Content Service** (`backend/services/content` - Port `8002`) : Publications (posts), commentaires, likes de posts et likes de commentaires.
 - **Report Service** (`backend/services/report` - Port `8003`) : Signalements des posts, commentaires et utilisateurs, ainsi que leurs raisons.
 - **Notification Service** (`backend/services/notification` - Port `8004`) : Notifications sociales groupées et état vu/non vu.
+- **Chat Service** (`backend/services/chat` - Port `8005`) : Discussions privées et de groupe, membres, messages et marqueurs de lecture (HTTP uniquement, sans temps réel).
 
 ## Démarrage rapide
 
@@ -27,6 +28,7 @@ CREATE DATABASE social_media_project_user;
 CREATE DATABASE social_media_project_content;
 CREATE DATABASE social_media_report;
 CREATE DATABASE social_media_project_notification;
+CREATE DATABASE social_media_project_chat;
 ```
 
 2. **Copier les fichiers d'environnement** :
@@ -37,6 +39,7 @@ cp backend/services/user/.env.example backend/services/user/.env
 cp backend/services/content/.env.example backend/services/content/.env
 cp backend/services/report/.env.example backend/services/report/.env
 cp backend/services/notification/.env.example backend/services/notification/.env
+cp backend/services/chat/.env.example backend/services/chat/.env
 ```
 
 3. **Appliquer les schémas Prisma** :
@@ -52,6 +55,9 @@ cd backend/services/report
 bunx prisma migrate dev
 
 cd backend/services/notification
+bunx prisma migrate dev
+
+cd backend/services/chat
 bunx prisma migrate dev
 ```
 
@@ -70,6 +76,7 @@ Chaque service propose une interface interactive de documentation :
 - **Content Service** : `http://localhost:8002/scalar`
 - **Report Service** : `http://localhost:8003/scalar`
 - **Notification Service** : `http://localhost:8004/scalar`
+- **Chat Service** : `http://localhost:8005/scalar`
 - **API Gateway (Public)** : `http://localhost:8000`
 
 ## Points de terminaison principaux (via la Gateway)
@@ -107,3 +114,16 @@ Chaque service propose une interface interactive de documentation :
 | `POST /reports` | report | Oui |
 | `GET /notifications` | notification | Oui |
 | `PATCH /notifications/seen` | notification | Oui |
+| `POST /discussions` | chat | Oui |
+| `GET /discussions` | chat | Oui |
+| `GET /discussions/{discussionId}` | chat | Oui |
+| `PATCH /discussions/{discussionId}` | chat | Oui |
+| `DELETE /discussions/{discussionId}` | chat | Oui |
+| `PATCH /discussions/{discussionId}/read` | chat | Oui |
+| `POST /discussions/{discussionId}/members` | chat | Oui |
+| `PATCH /discussions/{discussionId}/members/{userId}` | chat | Oui |
+| `DELETE /discussions/{discussionId}/members/{userId}` | chat | Oui |
+| `GET /discussions/{discussionId}/messages` | chat | Oui |
+| `POST /discussions/{discussionId}/messages` | chat | Oui |
+| `PATCH /messages/{messageId}` | chat | Oui |
+| `DELETE /messages/{messageId}` | chat | Oui |

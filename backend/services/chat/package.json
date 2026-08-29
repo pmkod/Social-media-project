@@ -1,0 +1,25 @@
+{
+	"name": "chat",
+	"module": "src/index.ts",
+	"type": "module",
+	"private": true,
+	"scripts": {
+		"dev": "bun run --watch ./src/index.ts",
+		"generate": "prisma generate",
+		"test": "bun test",
+		"typecheck": "tsc --noEmit"
+	},
+	"dependencies": {
+		"@hono/zod-openapi": "^1.4.0",
+		"@prisma/adapter-pg": "7.8.0",
+		"@prisma/client": "7.8.0",
+		"hono": "^4.12.22"
+	},
+	"devDependencies": {
+		"@scalar/hono-api-reference": "^0.10.13",
+		"@types/bun": "latest",
+		"dotenv": "^16.4.7",
+		"prisma": "7.8.0",
+		"typescript": "^5"
+	}
+}
