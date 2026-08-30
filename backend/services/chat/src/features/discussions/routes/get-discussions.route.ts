@@ -34,8 +34,8 @@ const getDiscussionsRoute = defineOpenAPIRoute<
 >({
 	route: routeDef,
 	handler: async (c) => {
-		const authenticatedUserId = c.get("authenticatedUserId");
-		if (!authenticatedUserId) throw new Error("Unauthorized");
+		const authenticatedUser = c.get("authenticatedUser");
+		if (!authenticatedUser) throw new Error("Unauthorized");
 		const { limit, cursorActivityAt, cursorId } = c.req.valid("query");
 		if (Boolean(cursorActivityAt) !== Boolean(cursorId)) {
 			throw new HTTPException(400, {
@@ -49,7 +49,7 @@ const getDiscussionsRoute = defineOpenAPIRoute<
 			where: {
 				deletedAt: null,
 				members: {
-					some: { userId: authenticatedUserId, leftAt: null },
+					some: { userId: authenticatedUser.id, leftAt: null },
 				},
 				...(hasCursor
 					? {
@@ -71,7 +71,7 @@ const getDiscussionsRoute = defineOpenAPIRoute<
 			: discussions;
 		const presentedDiscussions = await presentDiscussions(
 			pageDiscussions,
-			authenticatedUserId,
+			authenticatedUser.id,
 		);
 		const lastDiscussion = pageDiscussions.at(-1);
 

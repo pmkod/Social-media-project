@@ -1,7 +1,5 @@
-import { RiGroupLine } from "@remixicon/react";
 import { useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { Button } from "@/core/components/ui/button.tsx";
 import {
 	Dialog,
 	DialogBody,
@@ -10,13 +8,9 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from "@/core/components/ui/dialog.tsx";
-import NiceModal, {
-	create,
-	useModal,
-} from "@/core/components/ui/nice-modal.tsx";
+import { create, useModal } from "@/core/components/ui/nice-modal.tsx";
 import type { User } from "@/features/user/common/user.ts";
 import { DiscussionUserPicker } from "../common/discussion-user-picker.tsx";
-import { CreateDiscussionModal } from "../create-discussion/create-discussion.modal.tsx";
 import { useCreateDiscussion } from "../hooks/use-create-discussion.ts";
 
 const StartDiscussionModal = create(() => {
@@ -50,13 +44,6 @@ const StartDiscussionModal = create(() => {
 		}
 	};
 
-	const openCreateGroupModal = () => {
-		close();
-		window.setTimeout(() => {
-			void NiceModal.show(CreateDiscussionModal);
-		}, 0);
-	};
-
 	return (
 		<Dialog
 			open={modal.visible}
@@ -72,23 +59,7 @@ const StartDiscussionModal = create(() => {
 					</DialogDescription>
 				</DialogHeader>
 
-				<DialogBody className="flex min-h-0 flex-col overflow-hidden">
-					<div className="shrink-0 px-5 pt-4">
-						<Button
-							type="button"
-							variant="secondary"
-							fullWidth
-							className="h-11 justify-start rounded-xl"
-							disabled={createDiscussion.isPending}
-							onClick={openCreateGroupModal}
-						>
-							<span className="flex size-8 items-center justify-center rounded-full bg-primary/10 text-primary">
-								<RiGroupLine className="size-4" />
-							</span>
-							Create a group conversation
-						</Button>
-					</div>
-
+				<DialogBody>
 					<DiscussionUserPicker
 						onSelect={(user) => void startPrivateDiscussion(user)}
 						pendingUserId={pendingUserId}

@@ -13,7 +13,7 @@ function DiscussionsLayout() {
 		<main className="h-screen flex min-w-0 flex-1 overflow-hidden border-border bg-background text-foreground md:h-dvh md:pr-4">
 			<aside
 				className={cn(
-					"flex h-full w-full min-w-0 flex-col bg-background lg:w-[22rem] lg:max-w-[38%] lg:shrink-0 lg:border-x",
+					"flex h-full w-full min-w-0 flex-col bg-background lg:w-88 lg:max-w-[38%] lg:shrink-0 lg:border-x",
 					discussionId && "hidden lg:flex",
 				)}
 			>

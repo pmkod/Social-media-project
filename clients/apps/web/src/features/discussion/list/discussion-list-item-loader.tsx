@@ -9,7 +9,7 @@ const loaderIds = [
 	"discussion-loader-6",
 ];
 
-function DiscussionItemLoader({ count = 6 }: { count?: number }) {
+function DiscussionListItemLoader({ count = 6 }: { count?: number }) {
 	return (
 		<div role="status" aria-label="Loading discussions">
 			{loaderIds.slice(0, count).map((loaderId) => (
@@ -31,4 +31,4 @@ function DiscussionItemLoader({ count = 6 }: { count?: number }) {
 	);
 }
 
-export { DiscussionItemLoader };
+export { DiscussionListItemLoader };

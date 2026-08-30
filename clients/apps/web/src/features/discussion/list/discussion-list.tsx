@@ -1,4 +1,4 @@
-import { RiChatNewLine, RiSearchLine } from "@remixicon/react";
+import { RiChatNewLine, RiGroup3Line, RiSearchLine } from "@remixicon/react";
 import { useEffect, useMemo, useState } from "react";
 import {
 	Empty,
@@ -16,7 +16,9 @@ import { getDiscussionTitle } from "../common/discussion.utils.ts";
 import { useDiscussions } from "../hooks/use-discussions.ts";
 import { StartDiscussionModal } from "../start-discussion/start-discussion.modal.tsx";
 import { DiscussionItem } from "./discussion-item.tsx";
-import { DiscussionItemLoader } from "./discussion-item-loader.tsx";
+import { DiscussionListItemLoader } from "./discussion-list-item-loader.tsx";
+import { Button } from "@/core/components/ui/button.tsx";
+import { CreateDiscussionModal } from "../create-discussion/create-discussion.modal.tsx";
 
 type DiscussionListProps = {
 	selectedDiscussionId?: string;
@@ -61,38 +63,56 @@ function DiscussionList({ selectedDiscussionId }: DiscussionListProps) {
 		void NiceModal.show(StartDiscussionModal);
 	};
 
+	const openCreateDiscussionGroupModal = () => {
+		void NiceModal.show(CreateDiscussionModal);
+	};
+
 	return (
 		<>
-			<header className="shrink-0 border-b border-border bg-background/95 px-4 pb-3 pt-4 backdrop-blur-md">
-				<div className="flex items-center justify-between gap-3">
+			<header className="shrink-0 border-b border-border bg-background/95 pb-3 pt-4 backdrop-blur-md">
+				<div className="flex items-center justify-between gap-3 pl-3 pr-2">
 					<h1 className="text-xl font-bold tracking-tight">Messages</h1>
-					<IconButton
-						type="button"
-						size="lg"
-						aria-label="Start a new conversation"
-						title="New conversation"
-						onClick={openStartDiscussionModal}
-					>
-						<RiChatNewLine />
-					</IconButton>
+
+					<div className="flex">
+						<IconButton
+							type="button"
+							aria-label="Start a new conversation"
+							title="New conversation"
+							variant={"ghost"}
+							onClick={openCreateDiscussionGroupModal}
+						>
+							<RiGroup3Line />
+						</IconButton>
+						<IconButton
+							type="button"
+							aria-label="Start a new conversation"
+							title="New conversation"
+							variant={"ghost"}
+							onClick={openStartDiscussionModal}
+						>
+							<RiChatNewLine />
+						</IconButton>
+					</div>
 				</div>
 
-				<label className="relative mt-4 block">
-					<span className="sr-only">Search conversations</span>
-					<RiSearchLine className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-					<input
-						type="search"
-						value={search}
-						onChange={(event) => setSearch(event.target.value)}
-						placeholder="Search conversations"
-						className="h-10 w-full rounded-full border border-transparent bg-muted pl-10 pr-4 text-sm outline-none transition focus:border-foreground/30 focus:bg-background focus:ring-2 focus:ring-ring/30"
-					/>
-				</label>
+				<div className=" px-4">
+					<label className="relative mt-4 block">
+						<span className="sr-only">Search conversations</span>
+						<RiSearchLine className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+						<input
+							type="search"
+							value={search}
+							onChange={(event) => setSearch(event.target.value)}
+							placeholder="Search conversations"
+							className="h-10 w-full rounded-full border border-transparent bg-muted pl-10 pr-4 text-sm outline-none transition focus:border-foreground/30 focus:bg-background focus:ring-2 focus:ring-ring/30"
+						/>
+					</label>
+				</div>
 			</header>
 
 			<div className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
 				{discussionsQuery.isLoading ? (
-					<DiscussionItemLoader />
+					<DiscussionListItemLoader />
 				) : discussionsQuery.isError ? (
 					<ExceptionBlock
 						borderless
@@ -103,10 +123,7 @@ function DiscussionList({ selectedDiscussionId }: DiscussionListProps) {
 						isRefetching={discussionsQuery.isRefetching}
 					/>
 				) : discussions.length === 0 ? (
-					<Empty className="h-full min-h-72 rounded-none">
-						<div className="flex size-12 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-							<RiChatNewLine className="size-6" />
-						</div>
+					<Empty>
 						<EmptyHeader>
 							<EmptyTitle>No conversations yet</EmptyTitle>
 							<EmptyDescription>
@@ -115,18 +132,14 @@ function DiscussionList({ selectedDiscussionId }: DiscussionListProps) {
 							</EmptyDescription>
 						</EmptyHeader>
 						<EmptyContent>
-							<button
-								type="button"
-								onClick={openStartDiscussionModal}
-								className="inline-flex h-9 cursor-pointer items-center justify-center gap-2 rounded bg-primary px-4 text-sm font-medium text-primary-foreground transition hover:bg-primary/90"
-							>
+							<Button type="button" onClick={openStartDiscussionModal}>
 								<RiChatNewLine className="size-4" />
 								Start a conversation
-							</button>
+							</Button>
 						</EmptyContent>
 					</Empty>
 				) : filteredDiscussions.length === 0 ? (
-					<Empty className="h-full min-h-56 rounded-none py-8">
+					<Empty>
 						<EmptyHeader>
 							<EmptyTitle>No matching conversation</EmptyTitle>
 							<EmptyDescription>
@@ -146,7 +159,7 @@ function DiscussionList({ selectedDiscussionId }: DiscussionListProps) {
 						))}
 						{discussionsQuery.hasNextPage && !normalizedSearch ? (
 							<div ref={observerTargetRef}>
-								<DiscussionItemLoader count={2} />
+								<DiscussionListItemLoader count={2} />
 							</div>
 						) : null}
 					</div>
