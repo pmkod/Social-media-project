@@ -28,7 +28,7 @@ function DiscussionItem({
 			aria-current={isSelected ? "page" : undefined}
 			className={cn(
 				"group flex w-full items-center gap-3 border-b border-border/70 px-4 py-3.5 text-left transition-colors hover:bg-accent/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring",
-				isSelected && "bg-primary/8 hover:bg-primary/10",
+				isSelected && "bg-muted",
 			)}
 		>
 			<DiscussionAvatar
