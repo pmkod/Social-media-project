@@ -13,7 +13,7 @@ import { Route as BaseRouteRouteImport } from './routes/_base/route'
 import { Route as MainRouteRouteImport } from './routes/_main/route'
 import { Route as BaseAuthenticationRouteRouteImport } from './routes/_base/_authentication/route'
 import { Route as MainWithRightAsideRouteRouteImport } from './routes/_main/_with-right-aside/route'
-import { Route as MainDiscussionsRouteImport } from './routes/_main/discussions'
+import { Route as MainDiscussionsRouteRouteImport } from './routes/_main/discussions/route'
 import { Route as MainSettingsRouteImport } from './routes/_main/settings'
 import { Route as BaseAuthenticationIndexRouteImport } from './routes/_base/_authentication/index'
 import { Route as BaseAuthenticationCompleteSignupRouteImport } from './routes/_base/_authentication/complete-signup'
@@ -27,6 +27,8 @@ import { Route as MainWithRightAsideBookmarksRouteImport } from './routes/_main/
 import { Route as MainWithRightAsideHomeRouteImport } from './routes/_main/_with-right-aside/home'
 import { Route as MainWithRightAsideNotificationsRouteImport } from './routes/_main/_with-right-aside/notifications'
 import { Route as MainWithRightAsideSearchRouteImport } from './routes/_main/_with-right-aside/search'
+import { Route as MainDiscussionsIndexRouteImport } from './routes/_main/discussions/index'
+import { Route as MainDiscussionsDiscussionIdRouteImport } from './routes/_main/discussions/$discussionId'
 import { Route as MainWithRightAsidePostsPostIdRouteImport } from './routes/_main/_with-right-aside/posts.$postId'
 
 const BaseRouteRoute = BaseRouteRouteImport.update({
@@ -45,7 +47,7 @@ const MainWithRightAsideRouteRoute = MainWithRightAsideRouteRouteImport.update({
   id: '/_with-right-aside',
   getParentRoute: () => MainRouteRoute,
 } as any)
-const MainDiscussionsRoute = MainDiscussionsRouteImport.update({
+const MainDiscussionsRouteRoute = MainDiscussionsRouteRouteImport.update({
   id: '/discussions',
   path: '/discussions',
   getParentRoute: () => MainRouteRoute,
@@ -125,6 +127,17 @@ const MainWithRightAsideSearchRoute =
     path: '/search',
     getParentRoute: () => MainWithRightAsideRouteRoute,
   } as any)
+const MainDiscussionsIndexRoute = MainDiscussionsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => MainDiscussionsRouteRoute,
+} as any)
+const MainDiscussionsDiscussionIdRoute =
+  MainDiscussionsDiscussionIdRouteImport.update({
+    id: '/$discussionId',
+    path: '/$discussionId',
+    getParentRoute: () => MainDiscussionsRouteRoute,
+  } as any)
 const MainWithRightAsidePostsPostIdRoute =
   MainWithRightAsidePostsPostIdRouteImport.update({
     id: '/posts/$postId',
@@ -134,7 +147,7 @@ const MainWithRightAsidePostsPostIdRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof BaseAuthenticationIndexRoute
-  '/discussions': typeof MainDiscussionsRoute
+  '/discussions': typeof MainDiscussionsRouteRouteWithChildren
   '/settings': typeof MainSettingsRoute
   '/complete-signup': typeof BaseAuthenticationCompleteSignupRoute
   '/new-password': typeof BaseAuthenticationNewPasswordRoute
@@ -147,11 +160,12 @@ export interface FileRoutesByFullPath {
   '/home': typeof MainWithRightAsideHomeRoute
   '/notifications': typeof MainWithRightAsideNotificationsRoute
   '/search': typeof MainWithRightAsideSearchRoute
+  '/discussions/$discussionId': typeof MainDiscussionsDiscussionIdRoute
+  '/discussions/': typeof MainDiscussionsIndexRoute
   '/posts/$postId': typeof MainWithRightAsidePostsPostIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof BaseAuthenticationIndexRoute
-  '/discussions': typeof MainDiscussionsRoute
   '/settings': typeof MainSettingsRoute
   '/complete-signup': typeof BaseAuthenticationCompleteSignupRoute
   '/new-password': typeof BaseAuthenticationNewPasswordRoute
@@ -164,6 +178,8 @@ export interface FileRoutesByTo {
   '/home': typeof MainWithRightAsideHomeRoute
   '/notifications': typeof MainWithRightAsideNotificationsRoute
   '/search': typeof MainWithRightAsideSearchRoute
+  '/discussions/$discussionId': typeof MainDiscussionsDiscussionIdRoute
+  '/discussions': typeof MainDiscussionsIndexRoute
   '/posts/$postId': typeof MainWithRightAsidePostsPostIdRoute
 }
 export interface FileRoutesById {
@@ -172,7 +188,7 @@ export interface FileRoutesById {
   '/_main': typeof MainRouteRouteWithChildren
   '/_base/_authentication': typeof BaseAuthenticationRouteRouteWithChildren
   '/_main/_with-right-aside': typeof MainWithRightAsideRouteRouteWithChildren
-  '/_main/discussions': typeof MainDiscussionsRoute
+  '/_main/discussions': typeof MainDiscussionsRouteRouteWithChildren
   '/_main/settings': typeof MainSettingsRoute
   '/_base/_authentication/complete-signup': typeof BaseAuthenticationCompleteSignupRoute
   '/_base/_authentication/new-password': typeof BaseAuthenticationNewPasswordRoute
@@ -185,7 +201,9 @@ export interface FileRoutesById {
   '/_main/_with-right-aside/home': typeof MainWithRightAsideHomeRoute
   '/_main/_with-right-aside/notifications': typeof MainWithRightAsideNotificationsRoute
   '/_main/_with-right-aside/search': typeof MainWithRightAsideSearchRoute
+  '/_main/discussions/$discussionId': typeof MainDiscussionsDiscussionIdRoute
   '/_base/_authentication/': typeof BaseAuthenticationIndexRoute
+  '/_main/discussions/': typeof MainDiscussionsIndexRoute
   '/_main/_with-right-aside/posts/$postId': typeof MainWithRightAsidePostsPostIdRoute
 }
 export interface FileRouteTypes {
@@ -205,11 +223,12 @@ export interface FileRouteTypes {
     | '/home'
     | '/notifications'
     | '/search'
+    | '/discussions/$discussionId'
+    | '/discussions/'
     | '/posts/$postId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/discussions'
     | '/settings'
     | '/complete-signup'
     | '/new-password'
@@ -222,6 +241,8 @@ export interface FileRouteTypes {
     | '/home'
     | '/notifications'
     | '/search'
+    | '/discussions/$discussionId'
+    | '/discussions'
     | '/posts/$postId'
   id:
     | '__root__'
@@ -242,7 +263,9 @@ export interface FileRouteTypes {
     | '/_main/_with-right-aside/home'
     | '/_main/_with-right-aside/notifications'
     | '/_main/_with-right-aside/search'
+    | '/_main/discussions/$discussionId'
     | '/_base/_authentication/'
+    | '/_main/discussions/'
     | '/_main/_with-right-aside/posts/$postId'
   fileRoutesById: FileRoutesById
 }
@@ -285,7 +308,7 @@ declare module '@tanstack/react-router' {
       id: '/_main/discussions'
       path: '/discussions'
       fullPath: '/discussions'
-      preLoaderRoute: typeof MainDiscussionsRouteImport
+      preLoaderRoute: typeof MainDiscussionsRouteRouteImport
       parentRoute: typeof MainRouteRoute
     }
     '/_main/settings': {
@@ -379,6 +402,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MainWithRightAsideSearchRouteImport
       parentRoute: typeof MainWithRightAsideRouteRoute
     }
+    '/_main/discussions/': {
+      id: '/_main/discussions/'
+      path: '/'
+      fullPath: '/discussions/'
+      preLoaderRoute: typeof MainDiscussionsIndexRouteImport
+      parentRoute: typeof MainDiscussionsRouteRoute
+    }
+    '/_main/discussions/$discussionId': {
+      id: '/_main/discussions/$discussionId'
+      path: '/$discussionId'
+      fullPath: '/discussions/$discussionId'
+      preLoaderRoute: typeof MainDiscussionsDiscussionIdRouteImport
+      parentRoute: typeof MainDiscussionsRouteRoute
+    }
     '/_main/_with-right-aside/posts/$postId': {
       id: '/_main/_with-right-aside/posts/$postId'
       path: '/posts/$postId'
@@ -454,15 +491,28 @@ const MainWithRightAsideRouteRouteWithChildren =
     MainWithRightAsideRouteRouteChildren,
   )
 
+interface MainDiscussionsRouteRouteChildren {
+  MainDiscussionsDiscussionIdRoute: typeof MainDiscussionsDiscussionIdRoute
+  MainDiscussionsIndexRoute: typeof MainDiscussionsIndexRoute
+}
+
+const MainDiscussionsRouteRouteChildren: MainDiscussionsRouteRouteChildren = {
+  MainDiscussionsDiscussionIdRoute: MainDiscussionsDiscussionIdRoute,
+  MainDiscussionsIndexRoute: MainDiscussionsIndexRoute,
+}
+
+const MainDiscussionsRouteRouteWithChildren =
+  MainDiscussionsRouteRoute._addFileChildren(MainDiscussionsRouteRouteChildren)
+
 interface MainRouteRouteChildren {
   MainWithRightAsideRouteRoute: typeof MainWithRightAsideRouteRouteWithChildren
-  MainDiscussionsRoute: typeof MainDiscussionsRoute
+  MainDiscussionsRouteRoute: typeof MainDiscussionsRouteRouteWithChildren
   MainSettingsRoute: typeof MainSettingsRoute
 }
 
 const MainRouteRouteChildren: MainRouteRouteChildren = {
   MainWithRightAsideRouteRoute: MainWithRightAsideRouteRouteWithChildren,
-  MainDiscussionsRoute: MainDiscussionsRoute,
+  MainDiscussionsRouteRoute: MainDiscussionsRouteRouteWithChildren,
   MainSettingsRoute: MainSettingsRoute,
 }
 
