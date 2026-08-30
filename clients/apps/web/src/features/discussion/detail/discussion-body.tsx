@@ -4,6 +4,7 @@ import { Button } from "@/core/components/ui/button.tsx";
 import { EmptyBlock } from "@/core/components/ui/empty-block.tsx";
 import { ExceptionBlock } from "@/core/components/ui/exception-block.tsx";
 import { Skeleton } from "@/core/components/ui/skeleton.tsx";
+import { DiscussionTypes } from "../common/discussion.constants.ts";
 import type { Discussion, Message } from "../common/discussion.ts";
 import {
 	formatMessageDay,
@@ -138,7 +139,7 @@ function DiscussionBody({
 							);
 							const isOwn = message.senderId === authenticatedUserId;
 							const showSender =
-								discussion.type === "GROUP" &&
+								discussion.type === DiscussionTypes.GROUP &&
 								!isOwn &&
 								(previousMessage?.senderId !== message.senderId || showDay);
 							const showAvatar =

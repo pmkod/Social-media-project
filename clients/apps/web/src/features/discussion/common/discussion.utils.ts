@@ -1,3 +1,4 @@
+import { DiscussionTypes } from "./discussion.constants.ts";
 import type { Discussion } from "./discussion.ts";
 
 const getOtherDiscussionMember = (
@@ -11,7 +12,7 @@ const getDiscussionTitle = (
 	discussion: Discussion,
 	authenticatedUserId?: string,
 ) => {
-	if (discussion.type === "GROUP") {
+	if (discussion.type === DiscussionTypes.GROUP) {
 		return discussion.name || "Untitled group";
 	}
 
@@ -26,7 +27,7 @@ const getDiscussionSubtitle = (
 	discussion: Discussion,
 	authenticatedUserId?: string,
 ) => {
-	if (discussion.type === "GROUP") {
+	if (discussion.type === DiscussionTypes.GROUP) {
 		const count = discussion.members.length;
 		return `${count} ${count === 1 ? "member" : "members"}`;
 	}
@@ -48,7 +49,7 @@ const getMessagePreview = (
 	const prefix =
 		message.senderId === authenticatedUserId
 			? "You: "
-			: discussion.type === "GROUP" && message.sender
+			: discussion.type === DiscussionTypes.GROUP && message.sender
 				? `${message.sender.fullName || `@${message.sender.username}`}: `
 				: "";
 	return `${prefix}${message.content || ""}`;

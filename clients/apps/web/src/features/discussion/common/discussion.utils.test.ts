@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { DiscussionTypes } from "./discussion.constants.ts";
 import type { Discussion, DiscussionMember } from "./discussion.ts";
 import {
 	getDiscussionSubtitle,
@@ -21,7 +22,7 @@ const member = (
 
 const discussion = (overrides: Partial<Discussion> = {}): Discussion => ({
 	id: "discussion-1",
-	type: "PRIVATE",
+	type: DiscussionTypes.PRIVATE,
 	name: null,
 	description: null,
 	createdById: "user-1",
@@ -47,7 +48,10 @@ describe("discussion display helpers", () => {
 	});
 
 	it("uses the group name and member count for a group", () => {
-		const value = discussion({ type: "GROUP", name: "Design team" });
+		const value = discussion({
+			type: DiscussionTypes.GROUP,
+			name: "Design team",
+		});
 
 		expect(getDiscussionTitle(value, "user-1")).toBe("Design team");
 		expect(getDiscussionSubtitle(value, "user-1")).toBe("2 members");

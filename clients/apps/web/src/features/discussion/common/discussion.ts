@@ -1,6 +1,7 @@
 import type { User } from "@/features/user/common/user.ts";
+import type { DiscussionTypes } from "./discussion.constants.ts";
 
-type DiscussionType = "PRIVATE" | "GROUP";
+type DiscussionType = (typeof DiscussionTypes)[keyof typeof DiscussionTypes];
 type DiscussionMemberRole = "OWNER" | "ADMIN" | "MEMBER";
 
 type DiscussionMember = {

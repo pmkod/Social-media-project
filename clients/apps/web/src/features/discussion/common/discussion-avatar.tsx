@@ -1,6 +1,7 @@
 import { RiGroupLine } from "@remixicon/react";
 import { cn } from "@/core/lib/utils.ts";
 import { UserAvatar } from "@/features/user/common/components/user-avatar.tsx";
+import { DiscussionTypes } from "./discussion.constants.ts";
 import type { Discussion } from "./discussion.ts";
 import { getOtherDiscussionMember } from "./discussion.utils.ts";
 
@@ -23,7 +24,7 @@ function DiscussionAvatar({
 	size = "md",
 	className,
 }: DiscussionAvatarProps) {
-	if (discussion.type === "PRIVATE") {
+	if (discussion.type === DiscussionTypes.PRIVATE) {
 		const otherMember = getOtherDiscussionMember(
 			discussion,
 			authenticatedUserId,
