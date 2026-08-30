@@ -3,23 +3,43 @@ import * as ImagePicker from 'expo-image-picker';
 import { ImagePlus, Send, Video, X } from 'lucide-react-native';
 import { useState } from 'react';
 import { Pressable, ScrollView, View } from 'react-native';
+import { useForm, useSelector } from '@tanstack/react-form';
 
 import { Button } from '@/components/ui/button';
+import { Field, FieldDescription, FieldError, FieldLabel } from '@/components/ui/field';
 import { Icon } from '@/components/ui/icon';
 import { Text } from '@/components/ui/text';
 import { Textarea } from '@/components/ui/textarea';
 import { useSession } from '@/core/auth/session-context';
 import { UserAvatar } from '@/features/post/components/user-avatar';
 import { useCreatePost } from '@/features/post/hooks/use-create-post';
+import { createPostSchema } from '@/features/post/post.schemas';
+import type { PostMediaAsset } from '@/features/post/post.types';
 
 const MAX_MEDIA_COUNT = 4;
 
 export function CreatePostComposer() {
   const { user } = useSession();
   const createPost = useCreatePost();
-  const [text, setText] = useState('');
-  const [medias, setMedias] = useState<ImagePicker.ImagePickerAsset[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const form = useForm({
+    defaultValues: {
+      text: '',
+      medias: [] as PostMediaAsset[],
+    },
+    validators: { onSubmit: createPostSchema },
+    onSubmit: async ({ value }) => {
+      setError(null);
+      try {
+        await createPost.mutateAsync({ text: value.text.trim(), medias: value.medias });
+        form.reset();
+      } catch (caughtError) {
+        setError(caughtError instanceof Error ? caughtError.message : 'Unable to publish this post.');
+      }
+    },
+  });
+  const text = useSelector(form.store, (state) => state.values.text);
+  const medias = useSelector(form.store, (state) => state.values.medias);
 
   const pickMedia = async () => {
     setError(null);
@@ -40,24 +60,7 @@ export function CreatePostComposer() {
     });
 
     if (!result.canceled) {
-      setMedias((current) => [...current, ...result.assets].slice(0, MAX_MEDIA_COUNT));
-    }
-  };
-
-  const submit = async () => {
-    setError(null);
-    const normalizedText = text.trim();
-    if (!normalizedText) {
-      setError('Write something before publishing.');
-      return;
-    }
-
-    try {
-      await createPost.mutateAsync({ text: normalizedText, medias });
-      setText('');
-      setMedias([]);
-    } catch (caughtError) {
-      setError(caughtError instanceof Error ? caughtError.message : 'Unable to publish this post.');
+      form.setFieldValue('medias', [...medias, ...result.assets].slice(0, MAX_MEDIA_COUNT));
     }
   };
 
@@ -66,14 +69,29 @@ export function CreatePostComposer() {
       <View className="flex-row items-start gap-3">
         <UserAvatar user={user} />
         <View className="min-w-0 flex-1">
-          <Textarea
-            className="min-h-20 border-0 px-0 py-1 text-[16px] shadow-none"
-            value={text}
-            onChangeText={setText}
-            placeholder="What’s happening?"
-            maxLength={500}
-            editable={!createPost.isPending}
-          />
+          <form.Field name="text" validators={{ onBlur: createPostSchema.shape.text }}>
+            {(field) => (
+              <Field invalid={!field.state.meta.isValid}>
+                <FieldLabel className="sr-only">Post content</FieldLabel>
+                <Textarea
+                  className="min-h-20 border-0 px-0 py-1 text-[16px] shadow-none"
+                  value={field.state.value}
+                  onChangeText={(value) => {
+                    setError(null);
+                    field.handleChange(value);
+                  }}
+                  onBlur={field.handleBlur}
+                  placeholder="What’s happening?"
+                  maxLength={500}
+                  editable={!createPost.isPending}
+                />
+                <FieldDescription className="text-right">
+                  {field.state.value.length}/500
+                </FieldDescription>
+                <FieldError errors={field.state.meta.errors} />
+              </Field>
+            )}
+          </form.Field>
 
           {medias.length > 0 ? (
             <ScrollView
@@ -95,7 +113,12 @@ export function CreatePostComposer() {
                   <Pressable
                     accessibilityLabel="Remove media"
                     className="absolute right-1 top-1 size-7 items-center justify-center rounded-full bg-black/70"
-                    onPress={() => setMedias((current) => current.filter((_, item) => item !== index))}>
+                    onPress={() =>
+                      form.setFieldValue(
+                        'medias',
+                        medias.filter((_, item) => item !== index)
+                      )
+                    }>
                     <Icon as={X} className="text-white" size={15} />
                   </Pressable>
                 </View>
@@ -115,17 +138,20 @@ export function CreatePostComposer() {
             </Pressable>
 
             <View className="flex-row items-center gap-3">
-              <Text className="text-muted-foreground text-xs">{text.length}/500</Text>
-              <Button
-                size="sm"
-                className="h-10 rounded-full bg-blue-600 px-5 active:bg-blue-700"
-                disabled={!text.trim() || createPost.isPending}
-                onPress={() => void submit()}>
-                <Icon as={Send} className="text-white" size={16} />
-                <Text className="font-bold text-white">
-                  {createPost.isPending ? 'Posting…' : 'Post'}
-                </Text>
-              </Button>
+              <form.Subscribe selector={(state) => state.isSubmitting}>
+                {(isSubmitting) => (
+                  <Button
+                    size="sm"
+                    className="h-10 rounded-full bg-blue-600 px-5 active:bg-blue-700"
+                    disabled={!text.trim() || isSubmitting}
+                    onPress={() => void form.handleSubmit()}>
+                    <Icon as={Send} className="text-white" size={16} />
+                    <Text className="font-bold text-white">
+                      {isSubmitting ? 'Posting…' : 'Post'}
+                    </Text>
+                  </Button>
+                )}
+              </form.Subscribe>
             </View>
           </View>
         </View>

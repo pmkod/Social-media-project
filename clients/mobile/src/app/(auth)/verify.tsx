@@ -1,18 +1,24 @@
+import { useForm } from '@tanstack/react-form';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useState } from 'react';
+import { Pressable, View } from 'react-native';
+
 import { Button } from '@/components/ui/button';
+import { Field, FieldDescription, FieldError, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { Text } from '@/components/ui/text';
 import { clearVerification } from '@/core/auth/auth.storage';
 import { useSession } from '@/core/auth/session-context';
 import { isVerificationGoal } from '@/features/authentication/auth.utils';
+import {
+  authenticationFields,
+  verificationSchema,
+} from '@/features/authentication/authentication.schemas';
 import { AuthScreen } from '@/features/authentication/components/auth-screen';
-import { FormField } from '@/features/authentication/components/form-field';
 import { SubmitError } from '@/features/authentication/components/submit-error';
 import { useCompleteLogin } from '@/features/authentication/hooks/use-complete-login';
 import { useResendVerificationCode } from '@/features/authentication/hooks/use-resend-verification-code';
 import { useUserVerification } from '@/features/authentication/hooks/use-user-verification';
-import { useLocalSearchParams, useRouter } from 'expo-router';
-import { useState } from 'react';
-import { Pressable, View } from 'react-native';
 
 export default function VerificationScreen() {
   const router = useRouter();
@@ -22,32 +28,35 @@ export default function VerificationScreen() {
   const verification = useUserVerification();
   const completeLogin = useCompleteLogin();
   const resendVerificationCode = useResendVerificationCode();
-  const [code, setCode] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [info, setInfo] = useState<string | null>(null);
-  const isSubmitting = verification.isPending || completeLogin.isPending;
-
-  const submit = async () => {
-    setError(null);
-    setInfo(null);
-    if (!goal) return setError('This verification link is invalid.');
-    if (!/^\d{6}$/.test(code)) return setError('Enter the 6-digit verification code.');
-
-    try {
-      await verification.mutateAsync(code);
-      if (goal === 'login') {
-        const response = await completeLogin.mutateAsync();
-        await clearVerification();
-        await completeAuthentication(response);
-      } else if (goal === 'signup') {
-        router.replace('/complete-signup');
-      } else {
-        router.replace('/new-password');
+  const form = useForm({
+    defaultValues: { code: '' },
+    validators: { onSubmit: verificationSchema },
+    onSubmit: async ({ value }) => {
+      setError(null);
+      setInfo(null);
+      if (!goal) {
+        setError('This verification link is invalid.');
+        return;
       }
-    } catch (caughtError) {
-      setError(caughtError instanceof Error ? caughtError.message : 'Unable to verify code.');
-    }
-  };
+
+      try {
+        await verification.mutateAsync(value.code);
+        if (goal === 'login') {
+          const response = await completeLogin.mutateAsync();
+          await clearVerification();
+          await completeAuthentication(response);
+        } else if (goal === 'signup') {
+          router.replace('/complete-signup');
+        } else {
+          router.replace('/new-password');
+        }
+      } catch (caughtError) {
+        setError(caughtError instanceof Error ? caughtError.message : 'Unable to verify code.');
+      }
+    },
+  });
 
   const resend = async () => {
     setError(null);
@@ -73,26 +82,45 @@ export default function VerificationScreen() {
             </Text>
           </View>
         ) : null}
-        <FormField label="Verification code">
-          <Input
-            className="h-14 text-center text-2xl font-bold tracking-[10px]"
-            value={code}
-            onChangeText={(value) => setCode(value.replace(/\D/g, '').slice(0, 6))}
-            placeholder="123456"
-            keyboardType="number-pad"
-            autoComplete="sms-otp"
-            textContentType="oneTimeCode"
-            maxLength={6}
-            returnKeyType="done"
-            onSubmitEditing={() => void submit()}
-          />
-        </FormField>
-        <Button
-          className="h-13 rounded-xl"
-          disabled={isSubmitting || !goal}
-          onPress={() => void submit()}>
-          <Text className="font-semibold">{isSubmitting ? 'Verifying…' : 'Verify'}</Text>
-        </Button>
+
+        <form.Field name="code" validators={{ onBlur: authenticationFields.code }}>
+          {(field) => (
+            <Field invalid={!field.state.meta.isValid}>
+              <FieldLabel>Verification code</FieldLabel>
+              <Input
+                className="h-14 text-center text-2xl font-bold tracking-[10px]"
+                value={field.state.value}
+                onChangeText={(value) => {
+                  setError(null);
+                  setInfo(null);
+                  field.handleChange(value.replace(/\D/g, '').slice(0, 6));
+                }}
+                onBlur={field.handleBlur}
+                placeholder="123456"
+                keyboardType="number-pad"
+                autoComplete="sms-otp"
+                textContentType="oneTimeCode"
+                maxLength={6}
+                returnKeyType="done"
+                onSubmitEditing={() => void form.handleSubmit()}
+              />
+              <FieldDescription>The code contains exactly 6 digits.</FieldDescription>
+              <FieldError errors={field.state.meta.errors} />
+            </Field>
+          )}
+        </form.Field>
+
+        <form.Subscribe selector={(state) => state.isSubmitting}>
+          {(isSubmitting) => (
+            <Button
+              className="h-13 rounded-xl"
+              disabled={isSubmitting || !goal}
+              onPress={() => void form.handleSubmit()}>
+              <Text className="font-semibold">{isSubmitting ? 'Verifying…' : 'Verify'}</Text>
+            </Button>
+          )}
+        </form.Subscribe>
+
         <View className="flex-row items-center justify-center gap-1">
           <Text className="text-muted-foreground text-sm">Didn&apos;t receive a code?</Text>
           <Pressable disabled={resendVerificationCode.isPending} onPress={() => void resend()}>

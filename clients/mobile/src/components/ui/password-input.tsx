@@ -1,13 +1,14 @@
-import { Button } from '@/components/ui/button';
-import { Icon } from '@/components/ui/icon';
-import { Input } from '@/components/ui/input';
 import { Eye, EyeOff } from 'lucide-react-native';
 import { useState } from 'react';
 import { View } from 'react-native';
 
-type PasswordFieldProps = React.ComponentProps<typeof Input>;
+import { Button } from '@/components/ui/button';
+import { Icon } from '@/components/ui/icon';
+import { Input } from '@/components/ui/input';
 
-export function PasswordField(props: PasswordFieldProps) {
+type PasswordInputProps = React.ComponentProps<typeof Input>;
+
+function PasswordInput(props: PasswordInputProps) {
   const [isVisible, setIsVisible] = useState(false);
 
   return (
@@ -24,3 +25,6 @@ export function PasswordField(props: PasswordFieldProps) {
     </View>
   );
 }
+
+export { PasswordInput };
+export type { PasswordInputProps };

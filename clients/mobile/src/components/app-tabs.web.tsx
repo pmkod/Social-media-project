@@ -9,9 +9,7 @@ import {
 import type { Href } from 'expo-router';
 import { Pressable, View, StyleSheet } from 'react-native';
 
-import { ThemedText } from './themed-text';
-import { ThemedView } from './themed-view';
-
+import { Text } from '@/components/ui/text';
 import { MaxContentWidth, Spacing } from '@/constants/theme';
 
 export default function AppTabs() {
@@ -35,13 +33,13 @@ export default function AppTabs() {
 export function TabButton({ children, isFocused, ...props }: TabTriggerSlotProps) {
   return (
     <Pressable {...props} style={({ pressed }) => pressed && styles.pressed}>
-      <ThemedView
-        type={isFocused ? 'backgroundSelected' : 'backgroundElement'}
+      <View
+        className={isFocused ? 'bg-accent' : 'bg-secondary'}
         style={styles.tabButtonView}>
-        <ThemedText type="small" themeColor={isFocused ? 'text' : 'textSecondary'}>
+        <Text className={isFocused ? 'text-sm font-medium' : 'text-muted-foreground text-sm'}>
           {children}
-        </ThemedText>
-      </ThemedView>
+        </Text>
+      </View>
     </Pressable>
   );
 }
@@ -49,13 +47,13 @@ export function TabButton({ children, isFocused, ...props }: TabTriggerSlotProps
 export function CustomTabList(props: TabListProps) {
   return (
     <View {...props} style={styles.tabListContainer}>
-      <ThemedView type="backgroundElement" style={styles.innerContainer}>
-        <ThemedText type="smallBold" style={styles.brandText}>
+      <View className="bg-secondary" style={styles.innerContainer}>
+        <Text className="text-sm font-bold" style={styles.brandText}>
           Chillspace
-        </ThemedText>
+        </Text>
 
         {props.children}
-      </ThemedView>
+      </View>
     </View>
   );
 }

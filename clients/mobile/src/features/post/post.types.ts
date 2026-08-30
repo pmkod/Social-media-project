@@ -1,3 +1,12 @@
+import type { ImagePickerAsset } from 'expo-image-picker';
+
+export type PostMediaAsset = Pick<
+  ImagePickerAsset,
+  'assetId' | 'fileName' | 'mimeType' | 'type' | 'uri'
+> & {
+  file?: File;
+};
+
 export type PostAuthor = {
   id: string;
   fullName: string | null;

@@ -1,6 +1,6 @@
 # Chillspace mobile
 
-Application Expo Router inspirée du frontend web Chillspace. Elle partage les mêmes contrats API et la même organisation du data fetching : Ky pour les clients HTTP et TanStack React Query pour les hooks, le cache et les mutations.
+Application Expo Router inspirée du frontend web Chillspace. Elle partage les mêmes contrats API et la même organisation technique : Ky pour les clients HTTP, TanStack React Query pour les hooks, le cache et les mutations, puis TanStack React Form avec Zod pour les formulaires et leur validation.
 
 ## Démarrage
 

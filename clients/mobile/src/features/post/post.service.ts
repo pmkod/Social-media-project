@@ -1,13 +1,13 @@
 import { API_BASE_URL } from '@/core/config/api.config';
-import type { ImagePickerAsset } from 'expo-image-picker';
+import type { PostMediaAsset } from '@/features/post/post.types';
 import { Platform } from 'react-native';
 
-export function createPostFormData(text: string, medias: ImagePickerAsset[]) {
+export function createPostFormData(text: string, medias: PostMediaAsset[]) {
   const formData = new FormData();
   formData.append('text', text.trim());
 
   medias.forEach((asset, index) => {
-    const webFile = (asset as ImagePickerAsset & { file?: File }).file;
+    const webFile = asset.file;
     if (Platform.OS === 'web' && webFile) {
       formData.append('medias', webFile);
       return;
