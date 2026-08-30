@@ -100,21 +100,13 @@ function DiscussionBody({
 					isRefetching={messagesQuery.isRefetching}
 				/>
 			) : messages.length === 0 ? (
-				<div className="flex h-full min-h-72 items-center justify-center">
-					<div>
-						<div className="mx-auto mb-2 flex size-11 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-							<RiChat1Line className="size-5" />
-						</div>
-						<EmptyBlock
-							borderless
-							className="min-h-0 p-3"
-							title="No messages yet"
-							description="Send the first message to start this conversation."
-						/>
-					</div>
-				</div>
+				<EmptyBlock
+					borderless
+					title="No messages yet"
+					description="Send the first message to start this conversation."
+				/>
 			) : (
-				<div className="mx-auto flex w-full max-w-4xl flex-col px-3 py-5 sm:px-5">
+				<div className="mx-auto flex w-full flex-col px-3 py-5 sm:px-5">
 					{messagesQuery.hasNextPage ? (
 						<div className="mb-5 flex justify-center">
 							<Button
@@ -150,12 +142,10 @@ function DiscussionBody({
 							return (
 								<div key={message.id}>
 									{showDay ? (
-										<div className="my-5 flex items-center gap-3">
-											<div className="h-px flex-1 bg-border/70" />
+										<div className="my-5 flex items-center justify-center gap-3">
 											<span className="rounded-full border border-border bg-background px-3 py-1 text-[11px] font-medium text-muted-foreground shadow-xs">
 												{formatMessageDay(message.createdAt)}
 											</span>
-											<div className="h-px flex-1 bg-border/70" />
 										</div>
 									) : null}
 									<MessageItem

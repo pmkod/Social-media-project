@@ -1,4 +1,4 @@
-import { RiChatNewLine, RiGroup3Line, RiSearchLine } from "@remixicon/react";
+import { RiChatNewLine, RiGroup3Line } from "@remixicon/react";
 import { useEffect, useMemo, useState } from "react";
 import { Button } from "@/core/components/ui/button.tsx";
 import {
@@ -11,6 +11,7 @@ import {
 import { ExceptionBlock } from "@/core/components/ui/exception-block.tsx";
 import { IconButton } from "@/core/components/ui/icon-button.tsx";
 import NiceModal from "@/core/components/ui/nice-modal.tsx";
+import { SearchInput } from "@/core/components/ui/search-input.tsx";
 import { useIntersectionObserver } from "@/core/hooks/use-intersection-observer.ts";
 import { useAuthenticatedUser } from "@/features/user/authenticated-user/use-authenticated-user.ts";
 import { getDiscussionTitle } from "../common/discussion.utils.ts";
@@ -69,8 +70,8 @@ function DiscussionList({ selectedDiscussionId }: DiscussionListProps) {
 
 	return (
 		<>
-			<header className="shrink-0 border-b border-border bg-background/95 pb-3 pt-4 backdrop-blur-md">
-				<div className="flex items-center justify-between gap-3 pl-3 pr-2">
+			<header className="bg-background backdrop-blur-md">
+				<div className="flex items-center justify-between gap-3 pl-3 pr-2 h-18">
 					<h1 className="text-xl font-bold tracking-tight">Messages</h1>
 
 					<div className="flex">
@@ -94,19 +95,14 @@ function DiscussionList({ selectedDiscussionId }: DiscussionListProps) {
 						</IconButton>
 					</div>
 				</div>
-
-				<div className=" px-4">
-					<label className="relative mt-4 block">
-						<span className="sr-only">Search conversations</span>
-						<RiSearchLine className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-						<input
-							type="search"
-							value={search}
-							onChange={(event) => setSearch(event.target.value)}
-							placeholder="Search conversations"
-							className="h-10 w-full rounded-full border border-transparent bg-muted pl-10 pr-4 text-sm outline-none transition focus:border-foreground/30 focus:bg-background focus:ring-2 focus:ring-ring/30"
-						/>
-					</label>
+				<div className="px-4 pb-2">
+					<SearchInput
+						label="Search conversations"
+						size="lg"
+						value={search}
+						onChange={(event) => setSearch(event.target.value)}
+						placeholder="Search conversations"
+					/>
 				</div>
 			</header>
 

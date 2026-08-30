@@ -43,7 +43,7 @@ function DiscussionFooter({
 
 	return (
 		<footer className="shrink-0 border-t border-border bg-background px-3 py-3 sm:px-4">
-			<div className="mx-auto max-w-4xl">
+			<div className="">
 				{replyingTo ? (
 					<div className="mb-2 flex items-center gap-3 rounded-xl border border-border bg-muted/60 px-3 py-2">
 						<div className="min-w-0 flex-1 border-l-2 border-primary pl-2.5">
@@ -92,7 +92,7 @@ function DiscussionFooter({
 						disabled={createMessage.isPending}
 						placeholder="Write a message"
 						aria-label="Message"
-						className="max-h-32 min-h-11 flex-1 resize-none rounded-2xl border border-input bg-muted/60 px-4 py-2.5 text-sm leading-5 outline-none transition placeholder:text-muted-foreground focus:border-ring focus:bg-background focus:ring-2 focus:ring-ring/30 disabled:opacity-60"
+						className="max-h-32 min-h-11 flex-1 resize-none rounded-full border border-input bg-muted/60 px-4 py-2.5 text-sm leading-5 outline-none transition placeholder:text-muted-foreground focus:border-ring focus:bg-background focus:ring-2 focus:ring-ring/30 disabled:opacity-60"
 					/>
 					<IconButton
 						type="submit"

@@ -17,7 +17,7 @@ function DiscussionHeader({
 	authenticatedUserId,
 }: DiscussionHeaderProps) {
 	return (
-		<header className="z-10 flex h-[4.75rem] shrink-0 items-center gap-3 border-b border-border bg-background/95 px-3 backdrop-blur-md sm:px-4">
+		<header className="z-10 flex h-18 shrink-0 items-center gap-3 border-b border-border bg-background/95 px-3 backdrop-blur-md sm:px-4">
 			<Link
 				to="/discussions"
 				aria-label="Back to conversations"
