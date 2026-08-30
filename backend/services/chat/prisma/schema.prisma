@@ -23,7 +23,8 @@ model Discussion {
   type           DiscussionType
   name           String?        @db.VarChar(100)
   description    String?        @db.VarChar(500)
-  createdById    String         @map("created_by_id")
+  isStarted      Boolean        @default(false) @map("is_started")
+  creatorId      String         @map("creator_id")
   lastMessageId  String?        @unique @map("last_message_id")
   lastActivityAt DateTime       @default(now()) @map("last_activity_at")
   createdAt      DateTime       @default(now()) @map("created_at")
@@ -35,7 +36,7 @@ model Discussion {
   lastMessage Message?           @relation("DiscussionLastMessage", fields: [lastMessageId], references: [id], onDelete: SetNull)
 
   @@index([lastActivityAt, id])
-  @@index([createdById])
+  @@index([creatorId])
   @@map("discussion")
 }
 

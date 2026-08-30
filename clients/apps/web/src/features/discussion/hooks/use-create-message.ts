@@ -59,6 +59,7 @@ const useCreateMessage = () => {
 								...data,
 								discussion: {
 									...data.discussion,
+									isStarted: true,
 									lastMessage: message,
 									lastActivityAt: message.createdAt,
 								},

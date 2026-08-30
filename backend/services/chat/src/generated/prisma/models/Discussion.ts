@@ -29,7 +29,8 @@ export type DiscussionMinAggregateOutputType = {
   type: $Enums.DiscussionType | null
   name: string | null
   description: string | null
-  createdById: string | null
+  isStarted: boolean | null
+  creatorId: string | null
   lastMessageId: string | null
   lastActivityAt: Date | null
   createdAt: Date | null
@@ -42,7 +43,8 @@ export type DiscussionMaxAggregateOutputType = {
   type: $Enums.DiscussionType | null
   name: string | null
   description: string | null
-  createdById: string | null
+  isStarted: boolean | null
+  creatorId: string | null
   lastMessageId: string | null
   lastActivityAt: Date | null
   createdAt: Date | null
@@ -55,7 +57,8 @@ export type DiscussionCountAggregateOutputType = {
   type: number
   name: number
   description: number
-  createdById: number
+  isStarted: number
+  creatorId: number
   lastMessageId: number
   lastActivityAt: number
   createdAt: number
@@ -70,7 +73,8 @@ export type DiscussionMinAggregateInputType = {
   type?: true
   name?: true
   description?: true
-  createdById?: true
+  isStarted?: true
+  creatorId?: true
   lastMessageId?: true
   lastActivityAt?: true
   createdAt?: true
@@ -83,7 +87,8 @@ export type DiscussionMaxAggregateInputType = {
   type?: true
   name?: true
   description?: true
-  createdById?: true
+  isStarted?: true
+  creatorId?: true
   lastMessageId?: true
   lastActivityAt?: true
   createdAt?: true
@@ -96,7 +101,8 @@ export type DiscussionCountAggregateInputType = {
   type?: true
   name?: true
   description?: true
-  createdById?: true
+  isStarted?: true
+  creatorId?: true
   lastMessageId?: true
   lastActivityAt?: true
   createdAt?: true
@@ -182,7 +188,8 @@ export type DiscussionGroupByOutputType = {
   type: $Enums.DiscussionType
   name: string | null
   description: string | null
-  createdById: string
+  isStarted: boolean
+  creatorId: string
   lastMessageId: string | null
   lastActivityAt: Date
   createdAt: Date
@@ -216,7 +223,8 @@ export type DiscussionWhereInput = {
   type?: Prisma.EnumDiscussionTypeFilter<"Discussion"> | $Enums.DiscussionType
   name?: Prisma.StringNullableFilter<"Discussion"> | string | null
   description?: Prisma.StringNullableFilter<"Discussion"> | string | null
-  createdById?: Prisma.StringFilter<"Discussion"> | string
+  isStarted?: Prisma.BoolFilter<"Discussion"> | boolean
+  creatorId?: Prisma.StringFilter<"Discussion"> | string
   lastMessageId?: Prisma.StringNullableFilter<"Discussion"> | string | null
   lastActivityAt?: Prisma.DateTimeFilter<"Discussion"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"Discussion"> | Date | string
@@ -232,7 +240,8 @@ export type DiscussionOrderByWithRelationInput = {
   type?: Prisma.SortOrder
   name?: Prisma.SortOrderInput | Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
-  createdById?: Prisma.SortOrder
+  isStarted?: Prisma.SortOrder
+  creatorId?: Prisma.SortOrder
   lastMessageId?: Prisma.SortOrderInput | Prisma.SortOrder
   lastActivityAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -252,7 +261,8 @@ export type DiscussionWhereUniqueInput = Prisma.AtLeast<{
   type?: Prisma.EnumDiscussionTypeFilter<"Discussion"> | $Enums.DiscussionType
   name?: Prisma.StringNullableFilter<"Discussion"> | string | null
   description?: Prisma.StringNullableFilter<"Discussion"> | string | null
-  createdById?: Prisma.StringFilter<"Discussion"> | string
+  isStarted?: Prisma.BoolFilter<"Discussion"> | boolean
+  creatorId?: Prisma.StringFilter<"Discussion"> | string
   lastActivityAt?: Prisma.DateTimeFilter<"Discussion"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"Discussion"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Discussion"> | Date | string
@@ -267,7 +277,8 @@ export type DiscussionOrderByWithAggregationInput = {
   type?: Prisma.SortOrder
   name?: Prisma.SortOrderInput | Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
-  createdById?: Prisma.SortOrder
+  isStarted?: Prisma.SortOrder
+  creatorId?: Prisma.SortOrder
   lastMessageId?: Prisma.SortOrderInput | Prisma.SortOrder
   lastActivityAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -286,7 +297,8 @@ export type DiscussionScalarWhereWithAggregatesInput = {
   type?: Prisma.EnumDiscussionTypeWithAggregatesFilter<"Discussion"> | $Enums.DiscussionType
   name?: Prisma.StringNullableWithAggregatesFilter<"Discussion"> | string | null
   description?: Prisma.StringNullableWithAggregatesFilter<"Discussion"> | string | null
-  createdById?: Prisma.StringWithAggregatesFilter<"Discussion"> | string
+  isStarted?: Prisma.BoolWithAggregatesFilter<"Discussion"> | boolean
+  creatorId?: Prisma.StringWithAggregatesFilter<"Discussion"> | string
   lastMessageId?: Prisma.StringNullableWithAggregatesFilter<"Discussion"> | string | null
   lastActivityAt?: Prisma.DateTimeWithAggregatesFilter<"Discussion"> | Date | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Discussion"> | Date | string
@@ -299,7 +311,8 @@ export type DiscussionCreateInput = {
   type: $Enums.DiscussionType
   name?: string | null
   description?: string | null
-  createdById: string
+  isStarted?: boolean
+  creatorId: string
   lastActivityAt?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -314,7 +327,8 @@ export type DiscussionUncheckedCreateInput = {
   type: $Enums.DiscussionType
   name?: string | null
   description?: string | null
-  createdById: string
+  isStarted?: boolean
+  creatorId: string
   lastMessageId?: string | null
   lastActivityAt?: Date | string
   createdAt?: Date | string
@@ -329,7 +343,8 @@ export type DiscussionUpdateInput = {
   type?: Prisma.EnumDiscussionTypeFieldUpdateOperationsInput | $Enums.DiscussionType
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdById?: Prisma.StringFieldUpdateOperationsInput | string
+  isStarted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  creatorId?: Prisma.StringFieldUpdateOperationsInput | string
   lastActivityAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -344,7 +359,8 @@ export type DiscussionUncheckedUpdateInput = {
   type?: Prisma.EnumDiscussionTypeFieldUpdateOperationsInput | $Enums.DiscussionType
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdById?: Prisma.StringFieldUpdateOperationsInput | string
+  isStarted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  creatorId?: Prisma.StringFieldUpdateOperationsInput | string
   lastMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastActivityAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -359,7 +375,8 @@ export type DiscussionCreateManyInput = {
   type: $Enums.DiscussionType
   name?: string | null
   description?: string | null
-  createdById: string
+  isStarted?: boolean
+  creatorId: string
   lastMessageId?: string | null
   lastActivityAt?: Date | string
   createdAt?: Date | string
@@ -372,7 +389,8 @@ export type DiscussionUpdateManyMutationInput = {
   type?: Prisma.EnumDiscussionTypeFieldUpdateOperationsInput | $Enums.DiscussionType
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdById?: Prisma.StringFieldUpdateOperationsInput | string
+  isStarted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  creatorId?: Prisma.StringFieldUpdateOperationsInput | string
   lastActivityAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -384,7 +402,8 @@ export type DiscussionUncheckedUpdateManyInput = {
   type?: Prisma.EnumDiscussionTypeFieldUpdateOperationsInput | $Enums.DiscussionType
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdById?: Prisma.StringFieldUpdateOperationsInput | string
+  isStarted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  creatorId?: Prisma.StringFieldUpdateOperationsInput | string
   lastMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastActivityAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -397,7 +416,8 @@ export type DiscussionCountOrderByAggregateInput = {
   type?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
-  createdById?: Prisma.SortOrder
+  isStarted?: Prisma.SortOrder
+  creatorId?: Prisma.SortOrder
   lastMessageId?: Prisma.SortOrder
   lastActivityAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -410,7 +430,8 @@ export type DiscussionMaxOrderByAggregateInput = {
   type?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
-  createdById?: Prisma.SortOrder
+  isStarted?: Prisma.SortOrder
+  creatorId?: Prisma.SortOrder
   lastMessageId?: Prisma.SortOrder
   lastActivityAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -423,7 +444,8 @@ export type DiscussionMinOrderByAggregateInput = {
   type?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
-  createdById?: Prisma.SortOrder
+  isStarted?: Prisma.SortOrder
+  creatorId?: Prisma.SortOrder
   lastMessageId?: Prisma.SortOrder
   lastActivityAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -451,6 +473,10 @@ export type EnumDiscussionTypeFieldUpdateOperationsInput = {
 
 export type NullableStringFieldUpdateOperationsInput = {
   set?: string | null
+}
+
+export type BoolFieldUpdateOperationsInput = {
+  set?: boolean
 }
 
 export type DateTimeFieldUpdateOperationsInput = {
@@ -526,7 +552,8 @@ export type DiscussionCreateWithoutMembersInput = {
   type: $Enums.DiscussionType
   name?: string | null
   description?: string | null
-  createdById: string
+  isStarted?: boolean
+  creatorId: string
   lastActivityAt?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -540,7 +567,8 @@ export type DiscussionUncheckedCreateWithoutMembersInput = {
   type: $Enums.DiscussionType
   name?: string | null
   description?: string | null
-  createdById: string
+  isStarted?: boolean
+  creatorId: string
   lastMessageId?: string | null
   lastActivityAt?: Date | string
   createdAt?: Date | string
@@ -570,7 +598,8 @@ export type DiscussionUpdateWithoutMembersInput = {
   type?: Prisma.EnumDiscussionTypeFieldUpdateOperationsInput | $Enums.DiscussionType
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdById?: Prisma.StringFieldUpdateOperationsInput | string
+  isStarted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  creatorId?: Prisma.StringFieldUpdateOperationsInput | string
   lastActivityAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -584,7 +613,8 @@ export type DiscussionUncheckedUpdateWithoutMembersInput = {
   type?: Prisma.EnumDiscussionTypeFieldUpdateOperationsInput | $Enums.DiscussionType
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdById?: Prisma.StringFieldUpdateOperationsInput | string
+  isStarted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  creatorId?: Prisma.StringFieldUpdateOperationsInput | string
   lastMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastActivityAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -598,7 +628,8 @@ export type DiscussionCreateWithoutMessagesInput = {
   type: $Enums.DiscussionType
   name?: string | null
   description?: string | null
-  createdById: string
+  isStarted?: boolean
+  creatorId: string
   lastActivityAt?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -612,7 +643,8 @@ export type DiscussionUncheckedCreateWithoutMessagesInput = {
   type: $Enums.DiscussionType
   name?: string | null
   description?: string | null
-  createdById: string
+  isStarted?: boolean
+  creatorId: string
   lastMessageId?: string | null
   lastActivityAt?: Date | string
   createdAt?: Date | string
@@ -631,7 +663,8 @@ export type DiscussionCreateWithoutLastMessageInput = {
   type: $Enums.DiscussionType
   name?: string | null
   description?: string | null
-  createdById: string
+  isStarted?: boolean
+  creatorId: string
   lastActivityAt?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -645,7 +678,8 @@ export type DiscussionUncheckedCreateWithoutLastMessageInput = {
   type: $Enums.DiscussionType
   name?: string | null
   description?: string | null
-  createdById: string
+  isStarted?: boolean
+  creatorId: string
   lastActivityAt?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -675,7 +709,8 @@ export type DiscussionUpdateWithoutMessagesInput = {
   type?: Prisma.EnumDiscussionTypeFieldUpdateOperationsInput | $Enums.DiscussionType
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdById?: Prisma.StringFieldUpdateOperationsInput | string
+  isStarted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  creatorId?: Prisma.StringFieldUpdateOperationsInput | string
   lastActivityAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -689,7 +724,8 @@ export type DiscussionUncheckedUpdateWithoutMessagesInput = {
   type?: Prisma.EnumDiscussionTypeFieldUpdateOperationsInput | $Enums.DiscussionType
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdById?: Prisma.StringFieldUpdateOperationsInput | string
+  isStarted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  creatorId?: Prisma.StringFieldUpdateOperationsInput | string
   lastMessageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   lastActivityAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -714,7 +750,8 @@ export type DiscussionUpdateWithoutLastMessageInput = {
   type?: Prisma.EnumDiscussionTypeFieldUpdateOperationsInput | $Enums.DiscussionType
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdById?: Prisma.StringFieldUpdateOperationsInput | string
+  isStarted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  creatorId?: Prisma.StringFieldUpdateOperationsInput | string
   lastActivityAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -728,7 +765,8 @@ export type DiscussionUncheckedUpdateWithoutLastMessageInput = {
   type?: Prisma.EnumDiscussionTypeFieldUpdateOperationsInput | $Enums.DiscussionType
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdById?: Prisma.StringFieldUpdateOperationsInput | string
+  isStarted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  creatorId?: Prisma.StringFieldUpdateOperationsInput | string
   lastActivityAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -782,7 +820,8 @@ export type DiscussionSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   type?: boolean
   name?: boolean
   description?: boolean
-  createdById?: boolean
+  isStarted?: boolean
+  creatorId?: boolean
   lastMessageId?: boolean
   lastActivityAt?: boolean
   createdAt?: boolean
@@ -799,7 +838,8 @@ export type DiscussionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
   type?: boolean
   name?: boolean
   description?: boolean
-  createdById?: boolean
+  isStarted?: boolean
+  creatorId?: boolean
   lastMessageId?: boolean
   lastActivityAt?: boolean
   createdAt?: boolean
@@ -813,7 +853,8 @@ export type DiscussionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
   type?: boolean
   name?: boolean
   description?: boolean
-  createdById?: boolean
+  isStarted?: boolean
+  creatorId?: boolean
   lastMessageId?: boolean
   lastActivityAt?: boolean
   createdAt?: boolean
@@ -827,7 +868,8 @@ export type DiscussionSelectScalar = {
   type?: boolean
   name?: boolean
   description?: boolean
-  createdById?: boolean
+  isStarted?: boolean
+  creatorId?: boolean
   lastMessageId?: boolean
   lastActivityAt?: boolean
   createdAt?: boolean
@@ -835,7 +877,7 @@ export type DiscussionSelectScalar = {
   deletedAt?: boolean
 }
 
-export type DiscussionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "type" | "name" | "description" | "createdById" | "lastMessageId" | "lastActivityAt" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["discussion"]>
+export type DiscussionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "type" | "name" | "description" | "isStarted" | "creatorId" | "lastMessageId" | "lastActivityAt" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["discussion"]>
 export type DiscussionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   members?: boolean | Prisma.Discussion$membersArgs<ExtArgs>
   messages?: boolean | Prisma.Discussion$messagesArgs<ExtArgs>
@@ -861,7 +903,8 @@ export type $DiscussionPayload<ExtArgs extends runtime.Types.Extensions.Internal
     type: $Enums.DiscussionType
     name: string | null
     description: string | null
-    createdById: string
+    isStarted: boolean
+    creatorId: string
     lastMessageId: string | null
     lastActivityAt: Date
     createdAt: Date
@@ -1297,7 +1340,8 @@ export interface DiscussionFieldRefs {
   readonly type: Prisma.FieldRef<"Discussion", 'DiscussionType'>
   readonly name: Prisma.FieldRef<"Discussion", 'String'>
   readonly description: Prisma.FieldRef<"Discussion", 'String'>
-  readonly createdById: Prisma.FieldRef<"Discussion", 'String'>
+  readonly isStarted: Prisma.FieldRef<"Discussion", 'Boolean'>
+  readonly creatorId: Prisma.FieldRef<"Discussion", 'String'>
   readonly lastMessageId: Prisma.FieldRef<"Discussion", 'String'>
   readonly lastActivityAt: Prisma.FieldRef<"Discussion", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"Discussion", 'DateTime'>

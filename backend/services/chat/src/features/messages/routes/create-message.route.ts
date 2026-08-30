@@ -113,6 +113,7 @@ const createMessageRoute = defineOpenAPIRoute<
 					lastActivityAt: { lte: createdMessage.createdAt },
 				},
 				data: {
+					isStarted: true,
 					lastMessageId: createdMessage.id,
 					lastActivityAt: createdMessage.createdAt,
 				},

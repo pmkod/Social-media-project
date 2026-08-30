@@ -38,7 +38,8 @@ type Discussion = {
 	type: DiscussionType;
 	name: string | null;
 	description: string | null;
-	createdById: string;
+	isStarted: boolean;
+	creatorId: string;
 	lastActivityAt: string;
 	createdAt: string;
 	updatedAt: string;

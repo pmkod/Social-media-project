@@ -21,12 +21,14 @@ import { useSearchUsers } from "@/features/user/search/use-search-users.ts";
 import { DiscussionTypes } from "../common/discussion.constants.ts";
 import { useCreateDiscussion } from "../hooks/use-create-discussion.ts";
 
-const StartDiscussionModal = create(() => {
+const CreatePrivateDiscussionModal = create(() => {
 	const modal = useModal();
 	const navigate = useNavigate();
 	const createDiscussion = useCreateDiscussion();
 	const [query, setQuery] = useState("");
-	const [pendingUserId, setPendingUserId] = useState<string | null>(null);
+	const pendingUserId = createDiscussion.isPending
+		? createDiscussion.variables.memberIds[0]
+		: null;
 	const [debouncedQuery] = useDebounceValue(query.trim(), 500);
 	// const authenticatedUser = useAuthenticatedUser();
 	const isSearchEnabled = debouncedQuery.length >= 2;
@@ -45,21 +47,16 @@ const StartDiscussionModal = create(() => {
 
 	const startPrivateDiscussion = async (user: User) => {
 		if (createDiscussion.isPending) return;
-		setPendingUserId(user.id);
-		try {
-			const { discussion } = await createDiscussion.mutateAsync({
-				type: DiscussionTypes.PRIVATE,
-				memberIds: [user.id],
-			});
-			modal.resolve(discussion);
-			modal.remove();
-			await navigate({
-				to: "/discussions/$discussionId",
-				params: { discussionId: discussion.id },
-			});
-		} catch {
-			setPendingUserId(null);
-		}
+		const { discussion } = await createDiscussion.mutateAsync({
+			type: DiscussionTypes.PRIVATE,
+			memberIds: [user.id],
+		});
+		modal.resolve(discussion);
+		modal.remove();
+		await navigate({
+			to: "/discussions/$discussionId",
+			params: { discussionId: discussion.id },
+		});
 	};
 
 	return (
@@ -176,4 +173,4 @@ const StartDiscussionModal = create(() => {
 	);
 });
 
-export { StartDiscussionModal };
+export { CreatePrivateDiscussionModal };

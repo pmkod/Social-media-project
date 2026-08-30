@@ -672,7 +672,8 @@ export const DiscussionScalarFieldEnum = {
   type: 'type',
   name: 'name',
   description: 'description',
-  createdById: 'createdById',
+  isStarted: 'isStarted',
+  creatorId: 'creatorId',
   lastMessageId: 'lastMessageId',
   lastActivityAt: 'lastActivityAt',
   createdAt: 'createdAt',
@@ -767,6 +768,13 @@ export type EnumDiscussionTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$P
  */
 export type ListEnumDiscussionTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DiscussionType[]'>
     
+
+
+/**
+ * Reference to a field of type 'Boolean'
+ */
+export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+
 
 
 /**
@@ -985,4 +993,3 @@ export type PrismaAction =
  * `PrismaClient` proxy available in interactive transactions.
  */
 export type TransactionClient = Omit<DefaultPrismaClient, runtime.ITXClientDenyList>
-

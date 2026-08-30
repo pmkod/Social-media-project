@@ -51,14 +51,27 @@ const getDiscussionsRoute = defineOpenAPIRoute<
 				members: {
 					some: { userId: authenticatedUser.id, leftAt: null },
 				},
-				...(hasCursor
-					? {
-							OR: [
-								{ lastActivityAt: { lt: cursorDate } },
-								{ lastActivityAt: cursorDate, id: { lt: cursorId } },
-							],
-						}
-					: {}),
+				AND: [
+					{
+						OR: [
+							{ isStarted: true },
+							{ isStarted: false, creatorId: authenticatedUser.id },
+						],
+					},
+					...(hasCursor
+						? [
+								{
+									OR: [
+										{ lastActivityAt: { lt: cursorDate } },
+										{
+											lastActivityAt: cursorDate,
+											id: { lt: cursorId },
+										},
+									],
+								},
+							]
+						: []),
+				],
 			},
 			include: discussionDetailsInclude,
 			orderBy: [{ lastActivityAt: "desc" }, { id: "desc" }],

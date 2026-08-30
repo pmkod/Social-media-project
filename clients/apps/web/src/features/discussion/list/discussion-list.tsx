@@ -1,5 +1,6 @@
 import { RiChatNewLine, RiGroup3Line, RiSearchLine } from "@remixicon/react";
 import { useEffect, useMemo, useState } from "react";
+import { Button } from "@/core/components/ui/button.tsx";
 import {
 	Empty,
 	EmptyContent,
@@ -13,12 +14,11 @@ import NiceModal from "@/core/components/ui/nice-modal.tsx";
 import { useIntersectionObserver } from "@/core/hooks/use-intersection-observer.ts";
 import { useAuthenticatedUser } from "@/features/user/authenticated-user/use-authenticated-user.ts";
 import { getDiscussionTitle } from "../common/discussion.utils.ts";
+import { CreateGroupDiscussionModal } from "../create-discussion/create-discussion.modal.tsx";
 import { useDiscussions } from "../hooks/use-discussions.ts";
-import { StartDiscussionModal } from "../start-discussion/start-discussion.modal.tsx";
+import { CreatePrivateDiscussionModal } from "../start-discussion/start-discussion.modal.tsx";
 import { DiscussionItem } from "./discussion-item.tsx";
 import { DiscussionListItemLoader } from "./discussion-list-item-loader.tsx";
-import { Button } from "@/core/components/ui/button.tsx";
-import { CreateDiscussionModal } from "../create-discussion/create-discussion.modal.tsx";
 
 type DiscussionListProps = {
 	selectedDiscussionId?: string;
@@ -59,12 +59,12 @@ function DiscussionList({ selectedDiscussionId }: DiscussionListProps) {
 		isIntersecting,
 	]);
 
-	const openStartDiscussionModal = () => {
-		void NiceModal.show(StartDiscussionModal);
+	const openCreatePrivateDiscussionModal = () => {
+		void NiceModal.show(CreatePrivateDiscussionModal);
 	};
 
-	const openCreateDiscussionGroupModal = () => {
-		void NiceModal.show(CreateDiscussionModal);
+	const openCreateGroupDiscussionModal = () => {
+		void NiceModal.show(CreateGroupDiscussionModal);
 	};
 
 	return (
@@ -79,7 +79,7 @@ function DiscussionList({ selectedDiscussionId }: DiscussionListProps) {
 							aria-label="Start a new conversation"
 							title="New conversation"
 							variant={"ghost"}
-							onClick={openCreateDiscussionGroupModal}
+							onClick={openCreateGroupDiscussionModal}
 						>
 							<RiGroup3Line />
 						</IconButton>
@@ -88,7 +88,7 @@ function DiscussionList({ selectedDiscussionId }: DiscussionListProps) {
 							aria-label="Start a new conversation"
 							title="New conversation"
 							variant={"ghost"}
-							onClick={openStartDiscussionModal}
+							onClick={openCreatePrivateDiscussionModal}
 						>
 							<RiChatNewLine />
 						</IconButton>
@@ -132,7 +132,7 @@ function DiscussionList({ selectedDiscussionId }: DiscussionListProps) {
 							</EmptyDescription>
 						</EmptyHeader>
 						<EmptyContent>
-							<Button type="button" onClick={openStartDiscussionModal}>
+							<Button type="button" onClick={openCreatePrivateDiscussionModal}>
 								<RiChatNewLine className="size-4" />
 								Start a conversation
 							</Button>

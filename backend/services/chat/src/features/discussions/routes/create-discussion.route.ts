@@ -150,7 +150,7 @@ const createDiscussionRoute = defineOpenAPIRoute<
 							const discussion = await tx.discussion.create({
 								data: {
 									type: "PRIVATE",
-									createdById: authenticatedUserId,
+									creatorId: authenticatedUserId,
 									members: {
 										create: [authenticatedUserId, otherUserId].map(
 											(userId) => ({
@@ -201,7 +201,7 @@ const createDiscussionRoute = defineOpenAPIRoute<
 				type: "GROUP",
 				name: data.name,
 				description: data.description || null,
-				createdById: authenticatedUserId,
+				creatorId: authenticatedUserId,
 				members: {
 					create: [
 						{

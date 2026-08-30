@@ -31,7 +31,7 @@ import { useSearchUsers } from "@/features/user/search/use-search-users.ts";
 import { DiscussionTypes } from "../common/discussion.constants.ts";
 import { useCreateDiscussion } from "../hooks/use-create-discussion.ts";
 
-const CreateDiscussionModal = create(() => {
+const CreateGroupDiscussionModal = create(() => {
 	const modal = useModal();
 	const navigate = useNavigate();
 	const createDiscussion = useCreateDiscussion();
@@ -329,4 +329,4 @@ const CreateDiscussionModal = create(() => {
 	);
 });
 
-export { CreateDiscussionModal };
+export { CreateGroupDiscussionModal };
