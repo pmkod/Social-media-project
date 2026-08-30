@@ -9,7 +9,7 @@ import { CreateReportSchema } from "../reports.validation-schemas";
 const routeDef = createRoute({
 	method: "post",
 	path: "/reports",
-	summary: "Report a post, comment, or user",
+	summary: "Report a post, comment, user, or discussion",
 	tags: [ReportsRoutesTag],
 	middleware: [requireUserAuthentication],
 	request: {
@@ -42,6 +42,7 @@ const createReportRoute = defineOpenAPIRoute<
 				postId: body.postId,
 				commentId: body.commentId,
 				userId: body.userId,
+				discussionId: body.discussionId,
 				reasonText: body.reasonText,
 				description: body.description,
 			},

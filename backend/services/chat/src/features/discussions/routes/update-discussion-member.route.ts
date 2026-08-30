@@ -40,11 +40,26 @@ const updateDiscussionMemberRoute = defineOpenAPIRoute<
 		const authenticatedUserId = c.get("authenticatedUserId");
 		if (!authenticatedUserId) throw new Error("Unauthorized");
 		const { discussionId, userId } = c.req.valid("param");
-		const { role } = c.req.valid("json");
+		const { role, isBlocked } = c.req.valid("json");
 		const actorMembership = await getActiveMembership(
 			discussionId,
 			authenticatedUserId,
 		);
+		if (isBlocked !== undefined) {
+			if (userId !== authenticatedUserId) {
+				throw new HTTPException(403, {
+					message: "Members can only change their own blocked state",
+				});
+			}
+			const member = await prisma.discussionMember.update({
+				where: { discussionId_userId: { discussionId, userId } },
+				data: { isBlocked },
+				select: { userId: true, role: true, joinedAt: true, isBlocked: true },
+			});
+			return c.json({ member });
+		}
+
+		if (!role) throw new Error("Member role missing");
 		if (
 			actorMembership.discussion.type !== "GROUP" ||
 			actorMembership.role !== "OWNER"
@@ -62,7 +77,7 @@ const updateDiscussionMemberRoute = defineOpenAPIRoute<
 		const targetMembership = await prisma.discussionMember.findUnique({
 			where: { discussionId_userId: { discussionId, userId } },
 		});
-		if (!targetMembership || targetMembership.leftAt) {
+		if (!targetMembership || targetMembership.hasLeft) {
 			throw new HTTPException(404, { message: "Group member not found" });
 		}
 		if (targetMembership.role === "OWNER") {

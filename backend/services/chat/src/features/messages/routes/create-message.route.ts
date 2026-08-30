@@ -43,18 +43,23 @@ const createMessageRoute = defineOpenAPIRoute<
 		const authenticatedUserId = c.get("authenticatedUserId");
 		if (!authenticatedUserId) throw new Error("Unauthorized");
 		const { discussionId } = c.req.valid("param");
-		const { content, parentMessageId } = c.req.valid("json");
+		const { content, media = [], parentMessageId } = c.req.valid("json");
 		const membership = await getActiveMembership(
 			discussionId,
 			authenticatedUserId,
 		);
+		if (membership.isBlocked) {
+			throw new HTTPException(403, {
+				message: "This discussion is blocked",
+			});
+		}
 
 		if (membership.discussion.type === "PRIVATE") {
 			const recipient = await prisma.discussionMember.findFirst({
 				where: {
 					discussionId,
 					userId: { not: authenticatedUserId },
-					leftAt: null,
+					hasLeft: false,
 				},
 				select: { userId: true },
 			});
@@ -104,6 +109,7 @@ const createMessageRoute = defineOpenAPIRoute<
 					senderId: authenticatedUserId,
 					content,
 					parentMessageId: parentMessageId || null,
+					media: media.length ? { create: media } : undefined,
 				},
 				select: messageDetailsSelect,
 			});
@@ -122,10 +128,14 @@ const createMessageRoute = defineOpenAPIRoute<
 				where: {
 					discussionId,
 					userId: authenticatedUserId,
-					leftAt: null,
+					hasLeft: false,
 					lastReadAt: { lt: createdMessage.createdAt },
 				},
 				data: { lastReadAt: createdMessage.createdAt },
+			});
+			await tx.discussionMember.updateMany({
+				where: { discussionId, hasLeft: false, isDeleted: true },
+				data: { isDeleted: false },
 			});
 			return createdMessage;
 		});

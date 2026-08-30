@@ -1,11 +1,26 @@
-import { RiArrowLeftLine } from "@remixicon/react";
+import {
+	RiArrowLeftLine,
+	RiFlag2Line,
+	RiInformationLine,
+	RiMoreLine,
+} from "@remixicon/react";
 import { Link } from "@tanstack/react-router";
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuTrigger,
+} from "@/core/components/ui/dropdown-menu.tsx";
+import { IconButton } from "@/core/components/ui/icon-button.tsx";
+import NiceModal from "@/core/components/ui/nice-modal.tsx";
+import { ReportModal } from "@/features/report/report.modal.tsx";
 import type { Discussion } from "../common/discussion.ts";
 import {
 	getDiscussionSubtitle,
 	getDiscussionTitle,
 } from "../common/discussion.utils.ts";
 import { DiscussionAvatar } from "../common/discussion-avatar.tsx";
+import { DiscussionInfoModal } from "../info/discussion-info.modal.tsx";
 
 type DiscussionHeaderProps = {
 	discussion: Discussion;
@@ -39,6 +54,45 @@ function DiscussionHeader({
 					{getDiscussionSubtitle(discussion, authenticatedUserId)}
 				</p>
 			</div>
+
+			<DropdownMenu>
+				<DropdownMenuTrigger asChild>
+					<IconButton
+						type="button"
+						variant="ghost"
+						size="lg"
+						aria-label="Options de la discussion"
+					>
+						<RiMoreLine />
+					</IconButton>
+				</DropdownMenuTrigger>
+				<DropdownMenuContent align="end" className="min-w-64">
+					<DropdownMenuItem
+						disabled={!authenticatedUserId}
+						onSelect={() => {
+							if (!authenticatedUserId) return;
+							void NiceModal.show(DiscussionInfoModal, {
+								discussion,
+								authenticatedUserId,
+							});
+						}}
+					>
+						<RiInformationLine />
+						Informations sur la discussion
+					</DropdownMenuItem>
+					<DropdownMenuItem
+						variant="destructive"
+						onSelect={() => {
+							void NiceModal.show(ReportModal, {
+								discussionId: discussion.id,
+							});
+						}}
+					>
+						<RiFlag2Line />
+						Signaler
+					</DropdownMenuItem>
+				</DropdownMenuContent>
+			</DropdownMenu>
 		</header>
 	);
 }

@@ -119,13 +119,13 @@ const createDiscussionRoute = defineOpenAPIRoute<
 											members: {
 												some: {
 													userId: authenticatedUserId,
-													leftAt: null,
+													hasLeft: false,
 												},
 											},
 										},
 										{
 											members: {
-												some: { userId: otherUserId, leftAt: null },
+												some: { userId: otherUserId, hasLeft: false },
 											},
 										},
 										{
@@ -134,7 +134,7 @@ const createDiscussionRoute = defineOpenAPIRoute<
 													userId: {
 														notIn: [authenticatedUserId, otherUserId],
 													},
-													leftAt: null,
+													hasLeft: false,
 												},
 											},
 										},
@@ -179,6 +179,23 @@ const createDiscussionRoute = defineOpenAPIRoute<
 
 			if (!privateDiscussionResult) {
 				throw new Error("Unable to create the private discussion");
+			}
+			await prisma.discussionMember.update({
+				where: {
+					discussionId_userId: {
+						discussionId: privateDiscussionResult.discussion.id,
+						userId: authenticatedUserId,
+					},
+				},
+				data: { isDeleted: false, isBlocked: false },
+			});
+			const authenticatedMembership =
+				privateDiscussionResult.discussion.members.find(
+					(member) => member.userId === authenticatedUserId,
+				);
+			if (authenticatedMembership) {
+				authenticatedMembership.isDeleted = false;
+				authenticatedMembership.isBlocked = false;
 			}
 			const [presentedDiscussion] = await presentDiscussions(
 				[privateDiscussionResult.discussion],

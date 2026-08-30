@@ -52,7 +52,7 @@ const getMessagePreview = (
 			: discussion.type === DiscussionTypes.GROUP && message.sender
 				? `${message.sender.fullName || `@${message.sender.username}`}: `
 				: "";
-	return `${prefix}${message.content || ""}`;
+	return `${prefix}${message.content || (message.media.length ? "Média" : "")}`;
 };
 
 const formatDiscussionDate = (dateInput: string) => {

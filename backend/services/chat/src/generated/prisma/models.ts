@@ -11,4 +11,5 @@
 export type * from './models/Discussion.ts'
 export type * from './models/DiscussionMember.ts'
 export type * from './models/Message.ts'
+export type * from './models/MessageMedia.ts'
 export type * from './commonInputTypes.ts'

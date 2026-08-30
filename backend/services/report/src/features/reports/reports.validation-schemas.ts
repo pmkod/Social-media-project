@@ -9,10 +9,13 @@ const ReportTargetSchema = z
 		postId: OptionalIdSchema,
 		commentId: OptionalIdSchema,
 		userId: OptionalIdSchema,
+		discussionId: OptionalIdSchema,
 	})
 	.refine(
 		(value) =>
-			[value.postId, value.commentId, value.userId].filter(Boolean).length === 1,
+			[value.postId, value.commentId, value.userId, value.discussionId].filter(
+				Boolean,
+			).length === 1,
 		{
 			message: "Exactly one report target is required",
 		},
@@ -26,10 +29,13 @@ const CreateReportSchema = z
 		postId: OptionalIdSchema,
 		commentId: OptionalIdSchema,
 		userId: OptionalIdSchema,
+		discussionId: OptionalIdSchema,
 	})
 	.refine(
 		(value) =>
-			[value.postId, value.commentId, value.userId].filter(Boolean).length === 1,
+			[value.postId, value.commentId, value.userId, value.discussionId].filter(
+				Boolean,
+			).length === 1,
 		{
 			message: "Exactly one report target is required",
 		},

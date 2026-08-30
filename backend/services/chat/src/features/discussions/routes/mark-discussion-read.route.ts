@@ -64,7 +64,8 @@ const markDiscussionReadRoute = defineOpenAPIRoute<
 			where: {
 				discussionId,
 				userId: authenticatedUserId,
-				leftAt: null,
+				hasLeft: false,
+				isDeleted: false,
 				lastReadAt: { lt: readAt },
 			},
 			data: { lastReadAt: readAt },

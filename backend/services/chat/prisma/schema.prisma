@@ -18,6 +18,13 @@ enum DiscussionMemberRole {
   MEMBER
 }
 
+enum MessageMediaType {
+  IMAGE
+  VIDEO
+  AUDIO
+  FILE
+}
+
 model Discussion {
   id             String         @id @default(cuid())
   type           DiscussionType
@@ -47,12 +54,14 @@ model DiscussionMember {
   role         DiscussionMemberRole @default(MEMBER)
   joinedAt     DateTime             @default(now()) @map("joined_at")
   lastReadAt   DateTime             @default(now()) @map("last_read_at")
-  leftAt       DateTime?            @map("left_at")
+  hasLeft      Boolean              @default(false) @map("has_left")
+  isDeleted    Boolean              @default(false) @map("is_deleted")
+  isBlocked    Boolean              @default(false) @map("is_blocked")
 
   discussion Discussion @relation(fields: [discussionId], references: [id], onDelete: Cascade)
 
   @@unique([discussionId, userId])
-  @@index([userId, leftAt, discussionId])
+  @@index([userId, hasLeft, isDeleted, discussionId])
   @@map("discussion_member")
 }
 
@@ -61,19 +70,38 @@ model Message {
   discussionId    String    @map("discussion_id")
   senderId        String    @map("sender_id")
   parentMessageId String?   @map("parent_message_id")
-  content         String    @db.VarChar(4000)
+  content         String?   @db.VarChar(4000)
   createdAt       DateTime  @default(now()) @map("created_at")
   updatedAt       DateTime  @updatedAt @map("updated_at")
   editedAt        DateTime? @map("edited_at")
   deletedAt       DateTime? @map("deleted_at")
 
-  discussion     Discussion  @relation("DiscussionMessages", fields: [discussionId], references: [id], onDelete: Cascade)
-  parentMessage  Message?    @relation("MessageHierarchy", fields: [parentMessageId], references: [id], onDelete: SetNull)
-  childMessages  Message[]   @relation("MessageHierarchy")
-  lastMessageFor Discussion? @relation("DiscussionLastMessage")
+  discussion     Discussion     @relation("DiscussionMessages", fields: [discussionId], references: [id], onDelete: Cascade)
+  parentMessage  Message?       @relation("MessageHierarchy", fields: [parentMessageId], references: [id], onDelete: SetNull)
+  childMessages  Message[]      @relation("MessageHierarchy")
+  lastMessageFor Discussion?    @relation("DiscussionLastMessage")
+  media          MessageMedia[]
 
   @@index([discussionId, createdAt, id])
   @@index([senderId])
   @@index([parentMessageId])
   @@map("message")
+}
+
+model MessageMedia {
+  id        String           @id @default(cuid())
+  messageId String           @map("message_id")
+  type      MessageMediaType
+  url       String           @db.VarChar(2048)
+  fileName  String?          @map("file_name") @db.VarChar(255)
+  mimeType  String?          @map("mime_type") @db.VarChar(127)
+  width     Int?
+  height    Int?
+  createdAt DateTime         @default(now()) @map("created_at")
+
+  message Message @relation(fields: [messageId], references: [id], onDelete: Cascade)
+
+  @@index([messageId])
+  @@index([createdAt, id])
+  @@map("message_media")
 }

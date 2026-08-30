@@ -8,6 +8,10 @@ const discussionQueryKeys = {
 		["discussion-messages", discussionId, { limit }] as const,
 	messagesRoot: (discussionId: string) =>
 		["discussion-messages", discussionId] as const,
+	media: (discussionId: string, limit: number) =>
+		["discussion-media", discussionId, { limit }] as const,
+	mediaRoot: (discussionId: string) =>
+		["discussion-media", discussionId] as const,
 };
 
 export { discussionQueryKeys };

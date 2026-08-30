@@ -3,6 +3,7 @@ import type { DiscussionTypes } from "./discussion.constants.ts";
 
 type DiscussionType = (typeof DiscussionTypes)[keyof typeof DiscussionTypes];
 type DiscussionMemberRole = "OWNER" | "ADMIN" | "MEMBER";
+type MessageMediaType = "IMAGE" | "VIDEO" | "AUDIO" | "FILE";
 
 type DiscussionMember = {
 	userId: string;
@@ -17,6 +18,17 @@ type ParentMessage = {
 	senderId: string;
 	content: string | null;
 	isDeleted: boolean;
+	hasMedia: boolean;
+};
+
+type MessageMedia = {
+	id: string;
+	type: MessageMediaType;
+	url: string;
+	fileName: string | null;
+	mimeType: string | null;
+	width: number | null;
+	height: number | null;
 };
 
 type Message = {
@@ -29,6 +41,7 @@ type Message = {
 	updatedAt: string;
 	editedAt: string | null;
 	deletedAt: string | null;
+	media: MessageMedia[];
 	sender: User | null;
 	parentMessage: ParentMessage | null;
 };
@@ -44,6 +57,7 @@ type Discussion = {
 	createdAt: string;
 	updatedAt: string;
 	currentUserRole: DiscussionMemberRole | null;
+	currentUserIsBlocked: boolean;
 	unreadCount: number;
 	members: DiscussionMember[];
 	lastMessage: Message | null;
@@ -90,10 +104,31 @@ type CreateMessageResponse = {
 	message: Message;
 };
 
+type DiscussionMedia = MessageMedia & {
+	createdAt: string;
+	message: {
+		id: string;
+		senderId: string;
+		content: string | null;
+		createdAt: string;
+	};
+};
+
+type DiscussionMediaResponse = {
+	media: DiscussionMedia[];
+	pagination: {
+		limit: number;
+		hasNextPage: boolean;
+		nextCursor: { createdAt: string; id: string } | null;
+	};
+};
+
 export type {
 	CreateDiscussionResponse,
 	CreateMessageResponse,
 	Discussion,
+	DiscussionMedia,
+	DiscussionMediaResponse,
 	DiscussionMember,
 	DiscussionMemberRole,
 	DiscussionResponse,
@@ -101,6 +136,8 @@ export type {
 	DiscussionsResponse,
 	DiscussionType,
 	Message,
+	MessageMedia,
+	MessageMediaType,
 	MessagesCursor,
 	MessagesResponse,
 	ParentMessage,

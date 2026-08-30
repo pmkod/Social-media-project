@@ -8,7 +8,7 @@ import { getOtherDiscussionMember } from "./discussion.utils.ts";
 type DiscussionAvatarProps = {
 	discussion: Discussion;
 	authenticatedUserId?: string;
-	size?: "sm" | "md" | "lg";
+	size?: "sm" | "md" | "lg" | "xl";
 	className?: string;
 };
 
@@ -16,6 +16,7 @@ const sizeClasses = {
 	sm: "size-9",
 	md: "size-11",
 	lg: "size-12",
+	xl: "size-24",
 } as const;
 
 function DiscussionAvatar({
@@ -45,7 +46,11 @@ function DiscussionAvatar({
 				className,
 			)}
 		>
-			<RiGroupLine className={size === "sm" ? "size-4" : "size-5"} />
+			<RiGroupLine
+				className={
+					size === "sm" ? "size-4" : size === "xl" ? "size-10" : "size-5"
+				}
+			/>
 		</div>
 	);
 }

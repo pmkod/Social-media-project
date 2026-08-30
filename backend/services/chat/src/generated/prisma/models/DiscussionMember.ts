@@ -31,7 +31,9 @@ export type DiscussionMemberMinAggregateOutputType = {
   role: $Enums.DiscussionMemberRole | null
   joinedAt: Date | null
   lastReadAt: Date | null
-  leftAt: Date | null
+  hasLeft: boolean | null
+  isDeleted: boolean | null
+  isBlocked: boolean | null
 }
 
 export type DiscussionMemberMaxAggregateOutputType = {
@@ -41,7 +43,9 @@ export type DiscussionMemberMaxAggregateOutputType = {
   role: $Enums.DiscussionMemberRole | null
   joinedAt: Date | null
   lastReadAt: Date | null
-  leftAt: Date | null
+  hasLeft: boolean | null
+  isDeleted: boolean | null
+  isBlocked: boolean | null
 }
 
 export type DiscussionMemberCountAggregateOutputType = {
@@ -51,7 +55,9 @@ export type DiscussionMemberCountAggregateOutputType = {
   role: number
   joinedAt: number
   lastReadAt: number
-  leftAt: number
+  hasLeft: number
+  isDeleted: number
+  isBlocked: number
   _all: number
 }
 
@@ -63,7 +69,9 @@ export type DiscussionMemberMinAggregateInputType = {
   role?: true
   joinedAt?: true
   lastReadAt?: true
-  leftAt?: true
+  hasLeft?: true
+  isDeleted?: true
+  isBlocked?: true
 }
 
 export type DiscussionMemberMaxAggregateInputType = {
@@ -73,7 +81,9 @@ export type DiscussionMemberMaxAggregateInputType = {
   role?: true
   joinedAt?: true
   lastReadAt?: true
-  leftAt?: true
+  hasLeft?: true
+  isDeleted?: true
+  isBlocked?: true
 }
 
 export type DiscussionMemberCountAggregateInputType = {
@@ -83,7 +93,9 @@ export type DiscussionMemberCountAggregateInputType = {
   role?: true
   joinedAt?: true
   lastReadAt?: true
-  leftAt?: true
+  hasLeft?: true
+  isDeleted?: true
+  isBlocked?: true
   _all?: true
 }
 
@@ -166,7 +178,9 @@ export type DiscussionMemberGroupByOutputType = {
   role: $Enums.DiscussionMemberRole
   joinedAt: Date
   lastReadAt: Date
-  leftAt: Date | null
+  hasLeft: boolean
+  isDeleted: boolean
+  isBlocked: boolean
   _count: DiscussionMemberCountAggregateOutputType | null
   _min: DiscussionMemberMinAggregateOutputType | null
   _max: DiscussionMemberMaxAggregateOutputType | null
@@ -197,7 +211,9 @@ export type DiscussionMemberWhereInput = {
   role?: Prisma.EnumDiscussionMemberRoleFilter<"DiscussionMember"> | $Enums.DiscussionMemberRole
   joinedAt?: Prisma.DateTimeFilter<"DiscussionMember"> | Date | string
   lastReadAt?: Prisma.DateTimeFilter<"DiscussionMember"> | Date | string
-  leftAt?: Prisma.DateTimeNullableFilter<"DiscussionMember"> | Date | string | null
+  hasLeft?: Prisma.BoolFilter<"DiscussionMember"> | boolean
+  isDeleted?: Prisma.BoolFilter<"DiscussionMember"> | boolean
+  isBlocked?: Prisma.BoolFilter<"DiscussionMember"> | boolean
   discussion?: Prisma.XOR<Prisma.DiscussionScalarRelationFilter, Prisma.DiscussionWhereInput>
 }
 
@@ -208,7 +224,9 @@ export type DiscussionMemberOrderByWithRelationInput = {
   role?: Prisma.SortOrder
   joinedAt?: Prisma.SortOrder
   lastReadAt?: Prisma.SortOrder
-  leftAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  hasLeft?: Prisma.SortOrder
+  isDeleted?: Prisma.SortOrder
+  isBlocked?: Prisma.SortOrder
   discussion?: Prisma.DiscussionOrderByWithRelationInput
 }
 
@@ -223,7 +241,9 @@ export type DiscussionMemberWhereUniqueInput = Prisma.AtLeast<{
   role?: Prisma.EnumDiscussionMemberRoleFilter<"DiscussionMember"> | $Enums.DiscussionMemberRole
   joinedAt?: Prisma.DateTimeFilter<"DiscussionMember"> | Date | string
   lastReadAt?: Prisma.DateTimeFilter<"DiscussionMember"> | Date | string
-  leftAt?: Prisma.DateTimeNullableFilter<"DiscussionMember"> | Date | string | null
+  hasLeft?: Prisma.BoolFilter<"DiscussionMember"> | boolean
+  isDeleted?: Prisma.BoolFilter<"DiscussionMember"> | boolean
+  isBlocked?: Prisma.BoolFilter<"DiscussionMember"> | boolean
   discussion?: Prisma.XOR<Prisma.DiscussionScalarRelationFilter, Prisma.DiscussionWhereInput>
 }, "id" | "discussionId_userId">
 
@@ -234,7 +254,9 @@ export type DiscussionMemberOrderByWithAggregationInput = {
   role?: Prisma.SortOrder
   joinedAt?: Prisma.SortOrder
   lastReadAt?: Prisma.SortOrder
-  leftAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  hasLeft?: Prisma.SortOrder
+  isDeleted?: Prisma.SortOrder
+  isBlocked?: Prisma.SortOrder
   _count?: Prisma.DiscussionMemberCountOrderByAggregateInput
   _max?: Prisma.DiscussionMemberMaxOrderByAggregateInput
   _min?: Prisma.DiscussionMemberMinOrderByAggregateInput
@@ -250,7 +272,9 @@ export type DiscussionMemberScalarWhereWithAggregatesInput = {
   role?: Prisma.EnumDiscussionMemberRoleWithAggregatesFilter<"DiscussionMember"> | $Enums.DiscussionMemberRole
   joinedAt?: Prisma.DateTimeWithAggregatesFilter<"DiscussionMember"> | Date | string
   lastReadAt?: Prisma.DateTimeWithAggregatesFilter<"DiscussionMember"> | Date | string
-  leftAt?: Prisma.DateTimeNullableWithAggregatesFilter<"DiscussionMember"> | Date | string | null
+  hasLeft?: Prisma.BoolWithAggregatesFilter<"DiscussionMember"> | boolean
+  isDeleted?: Prisma.BoolWithAggregatesFilter<"DiscussionMember"> | boolean
+  isBlocked?: Prisma.BoolWithAggregatesFilter<"DiscussionMember"> | boolean
 }
 
 export type DiscussionMemberCreateInput = {
@@ -259,7 +283,9 @@ export type DiscussionMemberCreateInput = {
   role?: $Enums.DiscussionMemberRole
   joinedAt?: Date | string
   lastReadAt?: Date | string
-  leftAt?: Date | string | null
+  hasLeft?: boolean
+  isDeleted?: boolean
+  isBlocked?: boolean
   discussion: Prisma.DiscussionCreateNestedOneWithoutMembersInput
 }
 
@@ -270,7 +296,9 @@ export type DiscussionMemberUncheckedCreateInput = {
   role?: $Enums.DiscussionMemberRole
   joinedAt?: Date | string
   lastReadAt?: Date | string
-  leftAt?: Date | string | null
+  hasLeft?: boolean
+  isDeleted?: boolean
+  isBlocked?: boolean
 }
 
 export type DiscussionMemberUpdateInput = {
@@ -279,7 +307,9 @@ export type DiscussionMemberUpdateInput = {
   role?: Prisma.EnumDiscussionMemberRoleFieldUpdateOperationsInput | $Enums.DiscussionMemberRole
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastReadAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  leftAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  hasLeft?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isBlocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   discussion?: Prisma.DiscussionUpdateOneRequiredWithoutMembersNestedInput
 }
 
@@ -290,7 +320,9 @@ export type DiscussionMemberUncheckedUpdateInput = {
   role?: Prisma.EnumDiscussionMemberRoleFieldUpdateOperationsInput | $Enums.DiscussionMemberRole
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastReadAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  leftAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  hasLeft?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isBlocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type DiscussionMemberCreateManyInput = {
@@ -300,7 +332,9 @@ export type DiscussionMemberCreateManyInput = {
   role?: $Enums.DiscussionMemberRole
   joinedAt?: Date | string
   lastReadAt?: Date | string
-  leftAt?: Date | string | null
+  hasLeft?: boolean
+  isDeleted?: boolean
+  isBlocked?: boolean
 }
 
 export type DiscussionMemberUpdateManyMutationInput = {
@@ -309,7 +343,9 @@ export type DiscussionMemberUpdateManyMutationInput = {
   role?: Prisma.EnumDiscussionMemberRoleFieldUpdateOperationsInput | $Enums.DiscussionMemberRole
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastReadAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  leftAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  hasLeft?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isBlocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type DiscussionMemberUncheckedUpdateManyInput = {
@@ -319,7 +355,9 @@ export type DiscussionMemberUncheckedUpdateManyInput = {
   role?: Prisma.EnumDiscussionMemberRoleFieldUpdateOperationsInput | $Enums.DiscussionMemberRole
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastReadAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  leftAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  hasLeft?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isBlocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type DiscussionMemberListRelationFilter = {
@@ -344,7 +382,9 @@ export type DiscussionMemberCountOrderByAggregateInput = {
   role?: Prisma.SortOrder
   joinedAt?: Prisma.SortOrder
   lastReadAt?: Prisma.SortOrder
-  leftAt?: Prisma.SortOrder
+  hasLeft?: Prisma.SortOrder
+  isDeleted?: Prisma.SortOrder
+  isBlocked?: Prisma.SortOrder
 }
 
 export type DiscussionMemberMaxOrderByAggregateInput = {
@@ -354,7 +394,9 @@ export type DiscussionMemberMaxOrderByAggregateInput = {
   role?: Prisma.SortOrder
   joinedAt?: Prisma.SortOrder
   lastReadAt?: Prisma.SortOrder
-  leftAt?: Prisma.SortOrder
+  hasLeft?: Prisma.SortOrder
+  isDeleted?: Prisma.SortOrder
+  isBlocked?: Prisma.SortOrder
 }
 
 export type DiscussionMemberMinOrderByAggregateInput = {
@@ -364,7 +406,9 @@ export type DiscussionMemberMinOrderByAggregateInput = {
   role?: Prisma.SortOrder
   joinedAt?: Prisma.SortOrder
   lastReadAt?: Prisma.SortOrder
-  leftAt?: Prisma.SortOrder
+  hasLeft?: Prisma.SortOrder
+  isDeleted?: Prisma.SortOrder
+  isBlocked?: Prisma.SortOrder
 }
 
 export type DiscussionMemberCreateNestedManyWithoutDiscussionInput = {
@@ -419,7 +463,9 @@ export type DiscussionMemberCreateWithoutDiscussionInput = {
   role?: $Enums.DiscussionMemberRole
   joinedAt?: Date | string
   lastReadAt?: Date | string
-  leftAt?: Date | string | null
+  hasLeft?: boolean
+  isDeleted?: boolean
+  isBlocked?: boolean
 }
 
 export type DiscussionMemberUncheckedCreateWithoutDiscussionInput = {
@@ -428,7 +474,9 @@ export type DiscussionMemberUncheckedCreateWithoutDiscussionInput = {
   role?: $Enums.DiscussionMemberRole
   joinedAt?: Date | string
   lastReadAt?: Date | string
-  leftAt?: Date | string | null
+  hasLeft?: boolean
+  isDeleted?: boolean
+  isBlocked?: boolean
 }
 
 export type DiscussionMemberCreateOrConnectWithoutDiscussionInput = {
@@ -467,7 +515,9 @@ export type DiscussionMemberScalarWhereInput = {
   role?: Prisma.EnumDiscussionMemberRoleFilter<"DiscussionMember"> | $Enums.DiscussionMemberRole
   joinedAt?: Prisma.DateTimeFilter<"DiscussionMember"> | Date | string
   lastReadAt?: Prisma.DateTimeFilter<"DiscussionMember"> | Date | string
-  leftAt?: Prisma.DateTimeNullableFilter<"DiscussionMember"> | Date | string | null
+  hasLeft?: Prisma.BoolFilter<"DiscussionMember"> | boolean
+  isDeleted?: Prisma.BoolFilter<"DiscussionMember"> | boolean
+  isBlocked?: Prisma.BoolFilter<"DiscussionMember"> | boolean
 }
 
 export type DiscussionMemberCreateManyDiscussionInput = {
@@ -476,7 +526,9 @@ export type DiscussionMemberCreateManyDiscussionInput = {
   role?: $Enums.DiscussionMemberRole
   joinedAt?: Date | string
   lastReadAt?: Date | string
-  leftAt?: Date | string | null
+  hasLeft?: boolean
+  isDeleted?: boolean
+  isBlocked?: boolean
 }
 
 export type DiscussionMemberUpdateWithoutDiscussionInput = {
@@ -485,7 +537,9 @@ export type DiscussionMemberUpdateWithoutDiscussionInput = {
   role?: Prisma.EnumDiscussionMemberRoleFieldUpdateOperationsInput | $Enums.DiscussionMemberRole
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastReadAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  leftAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  hasLeft?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isBlocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type DiscussionMemberUncheckedUpdateWithoutDiscussionInput = {
@@ -494,7 +548,9 @@ export type DiscussionMemberUncheckedUpdateWithoutDiscussionInput = {
   role?: Prisma.EnumDiscussionMemberRoleFieldUpdateOperationsInput | $Enums.DiscussionMemberRole
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastReadAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  leftAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  hasLeft?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isBlocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type DiscussionMemberUncheckedUpdateManyWithoutDiscussionInput = {
@@ -503,7 +559,9 @@ export type DiscussionMemberUncheckedUpdateManyWithoutDiscussionInput = {
   role?: Prisma.EnumDiscussionMemberRoleFieldUpdateOperationsInput | $Enums.DiscussionMemberRole
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastReadAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  leftAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  hasLeft?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isBlocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 
@@ -515,7 +573,9 @@ export type DiscussionMemberSelect<ExtArgs extends runtime.Types.Extensions.Inte
   role?: boolean
   joinedAt?: boolean
   lastReadAt?: boolean
-  leftAt?: boolean
+  hasLeft?: boolean
+  isDeleted?: boolean
+  isBlocked?: boolean
   discussion?: boolean | Prisma.DiscussionDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["discussionMember"]>
 
@@ -526,7 +586,9 @@ export type DiscussionMemberSelectCreateManyAndReturn<ExtArgs extends runtime.Ty
   role?: boolean
   joinedAt?: boolean
   lastReadAt?: boolean
-  leftAt?: boolean
+  hasLeft?: boolean
+  isDeleted?: boolean
+  isBlocked?: boolean
   discussion?: boolean | Prisma.DiscussionDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["discussionMember"]>
 
@@ -537,7 +599,9 @@ export type DiscussionMemberSelectUpdateManyAndReturn<ExtArgs extends runtime.Ty
   role?: boolean
   joinedAt?: boolean
   lastReadAt?: boolean
-  leftAt?: boolean
+  hasLeft?: boolean
+  isDeleted?: boolean
+  isBlocked?: boolean
   discussion?: boolean | Prisma.DiscussionDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["discussionMember"]>
 
@@ -548,10 +612,12 @@ export type DiscussionMemberSelectScalar = {
   role?: boolean
   joinedAt?: boolean
   lastReadAt?: boolean
-  leftAt?: boolean
+  hasLeft?: boolean
+  isDeleted?: boolean
+  isBlocked?: boolean
 }
 
-export type DiscussionMemberOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "discussionId" | "userId" | "role" | "joinedAt" | "lastReadAt" | "leftAt", ExtArgs["result"]["discussionMember"]>
+export type DiscussionMemberOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "discussionId" | "userId" | "role" | "joinedAt" | "lastReadAt" | "hasLeft" | "isDeleted" | "isBlocked", ExtArgs["result"]["discussionMember"]>
 export type DiscussionMemberInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   discussion?: boolean | Prisma.DiscussionDefaultArgs<ExtArgs>
 }
@@ -574,7 +640,9 @@ export type $DiscussionMemberPayload<ExtArgs extends runtime.Types.Extensions.In
     role: $Enums.DiscussionMemberRole
     joinedAt: Date
     lastReadAt: Date
-    leftAt: Date | null
+    hasLeft: boolean
+    isDeleted: boolean
+    isBlocked: boolean
   }, ExtArgs["result"]["discussionMember"]>
   composites: {}
 }
@@ -1005,7 +1073,9 @@ export interface DiscussionMemberFieldRefs {
   readonly role: Prisma.FieldRef<"DiscussionMember", 'DiscussionMemberRole'>
   readonly joinedAt: Prisma.FieldRef<"DiscussionMember", 'DateTime'>
   readonly lastReadAt: Prisma.FieldRef<"DiscussionMember", 'DateTime'>
-  readonly leftAt: Prisma.FieldRef<"DiscussionMember", 'DateTime'>
+  readonly hasLeft: Prisma.FieldRef<"DiscussionMember", 'Boolean'>
+  readonly isDeleted: Prisma.FieldRef<"DiscussionMember", 'Boolean'>
+  readonly isBlocked: Prisma.FieldRef<"DiscussionMember", 'Boolean'>
 }
     
 

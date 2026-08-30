@@ -43,16 +43,10 @@ const removeDiscussionMemberRoute = defineOpenAPIRoute<
 				message: "Members cannot leave a private discussion",
 			});
 		}
-		if (isLeaving && actorMembership.role === "OWNER") {
-			throw new HTTPException(409, {
-				message: "The owner must delete the group instead of leaving it",
-			});
-		}
-
 		const targetMembership = await prisma.discussionMember.findUnique({
 			where: { discussionId_userId: { discussionId, userId } },
 		});
-		if (!targetMembership || targetMembership.leftAt) {
+		if (!targetMembership || targetMembership.hasLeft) {
 			throw new HTTPException(404, { message: "Group member not found" });
 		}
 		if (!isLeaving) {
@@ -71,9 +65,29 @@ const removeDiscussionMemberRoute = defineOpenAPIRoute<
 			}
 		}
 
-		await prisma.discussionMember.update({
-			where: { discussionId_userId: { discussionId, userId } },
-			data: { leftAt: new Date() },
+		await prisma.$transaction(async (tx) => {
+			if (isLeaving && targetMembership.role === "OWNER") {
+				const successor = await tx.discussionMember.findFirst({
+					where: {
+						discussionId,
+						userId: { not: userId },
+						hasLeft: false,
+					},
+					orderBy: [{ role: "asc" }, { joinedAt: "asc" }],
+					select: { id: true },
+				});
+				if (successor) {
+					await tx.discussionMember.update({
+						where: { id: successor.id },
+						data: { role: "OWNER" },
+					});
+				}
+			}
+
+			await tx.discussionMember.update({
+				where: { discussionId_userId: { discussionId, userId } },
+				data: { hasLeft: true, isDeleted: true, isBlocked: false },
+			});
 		});
 		return c.json({ success: true, userId });
 	},

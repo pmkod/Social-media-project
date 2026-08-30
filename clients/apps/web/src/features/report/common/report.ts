@@ -11,6 +11,7 @@ type Report = {
 	postId?: string | null;
 	commentId?: string | null;
 	userId?: string | null;
+	discussionId?: string | null;
 	status: ReportStatus;
 	createdAt: string;
 	reason?: ReportReason | null;

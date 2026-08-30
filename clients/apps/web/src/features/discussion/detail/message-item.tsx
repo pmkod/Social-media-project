@@ -1,8 +1,13 @@
 import { RiReplyLine } from "@remixicon/react";
+import NiceModal from "@/core/components/ui/nice-modal.tsx";
 import { cn } from "@/core/lib/utils.ts";
 import { UserAvatar } from "@/features/user/common/components/user-avatar.tsx";
 import type { Message } from "../common/discussion.ts";
 import { formatMessageTime } from "../common/discussion.utils.ts";
+import {
+	DiscussionMediaPreviewModal,
+	DiscussionMediaTile,
+} from "../media/discussion-media-preview.modal.tsx";
 
 type MessageItemProps = {
 	message: Message;
@@ -47,14 +52,39 @@ function MessageItem({
 					<p className="line-clamp-2">
 						{message.parentMessage.isDeleted
 							? "Original message deleted"
-							: message.parentMessage.content}
+							: message.parentMessage.content ||
+								(message.parentMessage.hasMedia ? "Média" : "Message")}
 					</p>
 				</div>
 			) : null}
 
-			<p className="whitespace-pre-wrap break-words">
-				{message.isDeleted ? "Message deleted" : message.content}
-			</p>
+			{!message.isDeleted && message.media.length > 0 ? (
+				<div
+					className={cn(
+						"mb-2 grid gap-1.5",
+						message.media.length > 1 ? "grid-cols-2" : "grid-cols-1",
+					)}
+				>
+					{message.media.map((media, index) => (
+						<DiscussionMediaTile
+							key={media.id}
+							media={media}
+							className="min-w-40"
+							onClick={() =>
+								void NiceModal.show(DiscussionMediaPreviewModal, {
+									items: message.media,
+									initialIndex: index,
+								})
+							}
+						/>
+					))}
+				</div>
+			) : null}
+			{message.isDeleted || message.content ? (
+				<p className="whitespace-pre-wrap break-words">
+					{message.isDeleted ? "Message deleted" : message.content}
+				</p>
+			) : null}
 			<div
 				className={cn(
 					"mt-1 flex items-center justify-end gap-1 text-[10px]",

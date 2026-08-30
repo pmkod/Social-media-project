@@ -8,7 +8,7 @@ import { getUnreadMessageCount } from "./discussions.service";
 
 const discussionDetailsInclude = {
 	members: {
-		where: { leftAt: null },
+		where: { hasLeft: false },
 		orderBy: { joinedAt: "asc" },
 	},
 	lastMessage: { select: messageDetailsSelect },
@@ -64,6 +64,7 @@ const presentDiscussions = async (
 				createdAt: discussion.createdAt,
 				updatedAt: discussion.updatedAt,
 				currentUserRole: authenticatedMembership?.role ?? null,
+				currentUserIsBlocked: authenticatedMembership?.isBlocked ?? false,
 				unreadCount,
 				members: discussion.members.map((member) => ({
 					userId: member.userId,

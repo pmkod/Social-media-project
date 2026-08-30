@@ -12,7 +12,8 @@ const getActiveMembership = async (
 
 	if (
 		!membership ||
-		membership.leftAt ||
+		membership.hasLeft ||
+		membership.isDeleted ||
 		membership.discussion.deletedAt
 	) {
 		throw new HTTPException(404, { message: "Discussion not found" });

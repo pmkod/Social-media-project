@@ -78,7 +78,7 @@ const addDiscussionMembersRoute = defineOpenAPIRoute<
 			where: {
 				discussionId,
 				userId: { in: uniqueUserIds },
-				leftAt: null,
+				hasLeft: false,
 			},
 			select: { userId: true },
 		});
@@ -103,7 +103,9 @@ const addDiscussionMembersRoute = defineOpenAPIRoute<
 						role: "MEMBER",
 						joinedAt: now,
 						lastReadAt: now,
-						leftAt: null,
+						hasLeft: false,
+						isDeleted: false,
+						isBlocked: false,
 					},
 				}),
 			),

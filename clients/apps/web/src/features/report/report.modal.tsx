@@ -34,7 +34,12 @@ import type { User } from "../user/common/user.ts";
 import { ReportSuccessModal } from "./report-success.modal.tsx";
 import { useCreateReport } from "./use-create-report.ts";
 
-type ReportModalProps = { post?: Post; comment?: Comment; user?: User };
+type ReportModalProps = {
+	post?: Post;
+	comment?: Comment;
+	user?: User;
+	discussionId?: string;
+};
 
 type ReportFormValues = {
 	reasonId: string;
@@ -61,7 +66,7 @@ const reportSchema = z
 	});
 
 const ReportModal = create<ReportModalProps>(
-	({ post, comment, user }: ReportModalProps) => {
+	({ post, comment, user, discussionId }: ReportModalProps) => {
 		const modal = useModal();
 		const reportReasonsQuery = useReportReasons();
 		const createReport = useCreateReport();
@@ -88,6 +93,7 @@ const ReportModal = create<ReportModalProps>(
 						commentId: comment?.id,
 						postId: post?.id,
 						userId: user?.id,
+						discussionId,
 					});
 					modal.remove();
 					void NiceModal.show(ReportSuccessModal);

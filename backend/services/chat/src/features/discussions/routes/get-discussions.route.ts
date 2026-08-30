@@ -49,7 +49,11 @@ const getDiscussionsRoute = defineOpenAPIRoute<
 			where: {
 				deletedAt: null,
 				members: {
-					some: { userId: authenticatedUser.id, leftAt: null },
+					some: {
+						userId: authenticatedUser.id,
+						hasLeft: false,
+						isDeleted: false,
+					},
 				},
 				AND: [
 					{

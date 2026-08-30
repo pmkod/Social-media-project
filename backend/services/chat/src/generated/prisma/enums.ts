@@ -24,3 +24,13 @@ export const DiscussionMemberRole = {
 } as const
 
 export type DiscussionMemberRole = (typeof DiscussionMemberRole)[keyof typeof DiscussionMemberRole]
+
+
+export const MessageMediaType = {
+  IMAGE: 'IMAGE',
+  VIDEO: 'VIDEO',
+  AUDIO: 'AUDIO',
+  FILE: 'FILE'
+} as const
+
+export type MessageMediaType = (typeof MessageMediaType)[keyof typeof MessageMediaType]

@@ -386,7 +386,8 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 export const ModelName = {
   Discussion: 'Discussion',
   DiscussionMember: 'DiscussionMember',
-  Message: 'Message'
+  Message: 'Message',
+  MessageMedia: 'MessageMedia'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -402,7 +403,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "discussion" | "discussionMember" | "message"
+    modelProps: "discussion" | "discussionMember" | "message" | "messageMedia"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -628,6 +629,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    MessageMedia: {
+      payload: Prisma.$MessageMediaPayload<ExtArgs>
+      fields: Prisma.MessageMediaFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.MessageMediaFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MessageMediaPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.MessageMediaFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MessageMediaPayload>
+        }
+        findFirst: {
+          args: Prisma.MessageMediaFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MessageMediaPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.MessageMediaFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MessageMediaPayload>
+        }
+        findMany: {
+          args: Prisma.MessageMediaFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MessageMediaPayload>[]
+        }
+        create: {
+          args: Prisma.MessageMediaCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MessageMediaPayload>
+        }
+        createMany: {
+          args: Prisma.MessageMediaCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.MessageMediaCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MessageMediaPayload>[]
+        }
+        delete: {
+          args: Prisma.MessageMediaDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MessageMediaPayload>
+        }
+        update: {
+          args: Prisma.MessageMediaUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MessageMediaPayload>
+        }
+        deleteMany: {
+          args: Prisma.MessageMediaDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.MessageMediaUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.MessageMediaUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MessageMediaPayload>[]
+        }
+        upsert: {
+          args: Prisma.MessageMediaUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MessageMediaPayload>
+        }
+        aggregate: {
+          args: Prisma.MessageMediaAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateMessageMedia>
+        }
+        groupBy: {
+          args: Prisma.MessageMediaGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MessageMediaGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.MessageMediaCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MessageMediaCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -691,7 +766,9 @@ export const DiscussionMemberScalarFieldEnum = {
   role: 'role',
   joinedAt: 'joinedAt',
   lastReadAt: 'lastReadAt',
-  leftAt: 'leftAt'
+  hasLeft: 'hasLeft',
+  isDeleted: 'isDeleted',
+  isBlocked: 'isBlocked'
 } as const
 
 export type DiscussionMemberScalarFieldEnum = (typeof DiscussionMemberScalarFieldEnum)[keyof typeof DiscussionMemberScalarFieldEnum]
@@ -710,6 +787,21 @@ export const MessageScalarFieldEnum = {
 } as const
 
 export type MessageScalarFieldEnum = (typeof MessageScalarFieldEnum)[keyof typeof MessageScalarFieldEnum]
+
+
+export const MessageMediaScalarFieldEnum = {
+  id: 'id',
+  messageId: 'messageId',
+  type: 'type',
+  url: 'url',
+  fileName: 'fileName',
+  mimeType: 'mimeType',
+  width: 'width',
+  height: 'height',
+  createdAt: 'createdAt'
+} as const
+
+export type MessageMediaScalarFieldEnum = (typeof MessageMediaScalarFieldEnum)[keyof typeof MessageMediaScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -806,6 +898,20 @@ export type ListEnumDiscussionMemberRoleFieldRefInput<$PrismaModel> = FieldRefIn
 
 
 /**
+ * Reference to a field of type 'MessageMediaType'
+ */
+export type EnumMessageMediaTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MessageMediaType'>
+    
+
+
+/**
+ * Reference to a field of type 'MessageMediaType[]'
+ */
+export type ListEnumMessageMediaTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MessageMediaType[]'>
+    
+
+
+/**
  * Reference to a field of type 'Int'
  */
 export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
@@ -816,6 +922,20 @@ export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'In
  * Reference to a field of type 'Int[]'
  */
 export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Float'
+ */
+export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
+    
+
+
+/**
+ * Reference to a field of type 'Float[]'
+ */
+export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
     
 
 /**
@@ -931,6 +1051,7 @@ export type GlobalOmitConfig = {
   discussion?: Prisma.DiscussionOmit
   discussionMember?: Prisma.DiscussionMemberOmit
   message?: Prisma.MessageOmit
+  messageMedia?: Prisma.MessageMediaOmit
 }
 
 /* Types for Logging */

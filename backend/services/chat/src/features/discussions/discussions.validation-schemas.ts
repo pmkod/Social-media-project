@@ -24,9 +24,17 @@ const AddDiscussionMembersRequestBody = z.object({
 	userIds: z.array(z.string().min(1)).min(1).max(50),
 });
 
-const UpdateDiscussionMemberRequestBody = z.object({
-	role: z.enum(EditableDiscussionMemberRoles),
-});
+const UpdateDiscussionMemberRequestBody = z
+	.object({
+		role: z.enum(EditableDiscussionMemberRoles).optional(),
+		isBlocked: z.boolean().optional(),
+	})
+	.refine(
+		(data) =>
+			[data.role !== undefined, data.isBlocked !== undefined].filter(Boolean)
+				.length === 1,
+		{ message: "Exactly one member setting must be provided" },
+	);
 
 const MarkDiscussionReadRequestBody = z.object({
 	messageId: z.string().min(1).optional(),

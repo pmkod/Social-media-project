@@ -9,6 +9,7 @@ type CreateReportInput = {
 	postId?: string;
 	commentId?: string;
 	userId?: string;
+	discussionId?: string;
 };
 
 const useCreateReport = () => {

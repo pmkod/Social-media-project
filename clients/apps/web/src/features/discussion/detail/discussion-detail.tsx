@@ -58,6 +58,7 @@ function DiscussionDetail({ discussionId }: { discussionId: string }) {
 			/>
 			<DiscussionFooter
 				discussionId={discussion.id}
+				isBlocked={discussion.currentUserIsBlocked}
 				replyingTo={replyingTo}
 				onCancelReply={() => setReplyingTo(null)}
 			/>
