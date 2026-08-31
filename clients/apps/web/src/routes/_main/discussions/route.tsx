@@ -10,7 +10,7 @@ function DiscussionsLayout() {
 	const { discussionId } = useParams({ strict: false });
 
 	return (
-		<main className="h-screen flex min-w-0 flex-1 overflow-hidden border-border bg-background text-foreground md:h-dvh md:pr-4">
+		<main className="h-screen flex min-w-0 flex-1 overflow-hidden border-border bg-background text-foreground md:h-dvh">
 			<aside
 				className={cn(
 					"flex h-full w-full min-w-0 flex-col bg-background lg:w-88 lg:max-w-[38%] lg:shrink-0 lg:border-x",

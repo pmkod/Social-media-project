@@ -78,19 +78,14 @@ function ActionButton({
 			onClick={onClick}
 			disabled={disabled}
 			className={cn(
-				"group flex min-w-0 flex-col items-center gap-2 rounded-xl px-2 py-3 text-center transition hover:bg-accent disabled:cursor-not-allowed disabled:opacity-45",
+				"group flex min-w-0 flex-col items-center gap-2 rounded-xl w-24 py-3 cursor-pointer text-center transition hover:bg-accent disabled:cursor-not-allowed disabled:opacity-45",
 				destructive && "text-destructive hover:bg-destructive/10",
 			)}
 		>
-			<span
-				className={cn(
-					"flex size-11 items-center justify-center rounded-full bg-primary/10 text-primary transition group-hover:bg-primary/15",
-					destructive && "bg-destructive/10 text-destructive",
-				)}
-			>
-				<Icon className="size-5" />
+			<span className={cn("", destructive && " text-destructive")}>
+				<Icon className="size-6" />
 			</span>
-			<span className="text-xs font-medium leading-4">{label}</span>
+			<span className="text-sm font-normal leading-4">{label}</span>
 		</button>
 	);
 }
@@ -231,7 +226,7 @@ const DiscussionInfoModal = create<DiscussionInfoModalProps>(
 
 						<section
 							aria-label="Actions de la discussion"
-							className="grid grid-cols-4 border-y border-border px-2 py-2"
+							className="flex items-center justify-center px-2 py-2 mx-auto"
 						>
 							{isGroup ? (
 								<>
