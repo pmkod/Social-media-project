@@ -45,7 +45,7 @@ const useSearchPosts = ({ query, enabled = true }: UseSearchPostsParams) => {
 
 	return useInfiniteQuery({
 		queryKey: postListQueryKeys.search(normalizedQuery),
-		enabled: enabled && normalizedQuery.length > 0,
+		enabled,
 		queryFn: ({ pageParam }) =>
 			fetchSearchPostsPage({ query: normalizedQuery, pageParam }),
 		initialPageParam: null as SearchCursor | null,

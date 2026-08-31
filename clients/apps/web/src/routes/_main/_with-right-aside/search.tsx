@@ -1,7 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { z } from "zod";
-import { EmptyBlock } from "@/core/components/ui/empty-block.tsx";
 import { MainContainer } from "@/core/components/ui/main-container.tsx";
 import { useDebounceValue } from "@/core/hooks/use-debounce-value.ts";
 import { SearchBar } from "@/features/search/search-bar.tsx";
@@ -99,15 +98,7 @@ function SearchPage() {
 				) : null}
 			</div>
 
-			{committedQuery ? (
-				<SearchResults query={committedQuery} onSelectUser={selectUserSearch} />
-			) : (
-				<EmptyBlock
-					borderless
-					title="Search for people and posts"
-					description="Enter a keyword or a username to start searching."
-				/>
-			)}
+			<SearchResults query={committedQuery} onSelectUser={selectUserSearch} />
 		</MainContainer>
 	);
 }

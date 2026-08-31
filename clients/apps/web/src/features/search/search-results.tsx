@@ -17,6 +17,7 @@ type SearchResultsProps = {
 };
 
 function SearchResults({ query, onSelectUser }: SearchResultsProps) {
+	const hasSearchQuery = query.trim().length > 0;
 	const usersQuery = useSearchUsers({ query, limit: 5 });
 	const postsQuery = useSearchPosts({ query });
 	const { ref: postsObserverTargetRef, isIntersecting } =
@@ -39,50 +40,52 @@ function SearchResults({ query, onSelectUser }: SearchResultsProps) {
 
 	return (
 		<div className="pb-8">
-			<section className="mb-6 overflow-hidden rounded-xl border border-border bg-background">
-				<h2 className="border-b border-border px-6 py-4 text-lg font-semibold text-foreground">
-					People
-				</h2>
+			{hasSearchQuery ? (
+				<section className="mb-6 overflow-hidden rounded-xl border border-border bg-background">
+					<h2 className="border-b border-border px-6 py-4 text-lg font-semibold text-foreground">
+						People
+					</h2>
 
-				{usersQuery.isLoading ? (
-					<UserRowItemListLoader count={5} />
-				) : usersQuery.isError ? (
-					<ExceptionBlock
-						borderless
-						title="Unable to load people"
-						description="An error occurred while searching for people."
-						onRefresh={() => void usersQuery.refetch()}
-						isRefetching={usersQuery.isRefetching}
-					/>
-				) : users.length === 0 ? (
-					<p className="px-6 py-5 text-sm text-muted-foreground">
-						No people found for “{query}”.
-					</p>
-				) : (
-					<>
-						{users.map((user) => (
-							<UserRowItem
-								key={user.id}
-								user={user}
-								onClick={() => onSelectUser(user)}
-							/>
-						))}
-						{usersQuery.hasNextPage ? (
-							<div className="border-t border-border p-2">
-								<Button
-									type="button"
-									variant="ghost"
-									fullWidth
-									isLoading={usersQuery.isFetchingNextPage}
-									onClick={() => void usersQuery.fetchNextPage()}
-								>
-									Show more people
-								</Button>
-							</div>
-						) : null}
-					</>
-				)}
-			</section>
+					{usersQuery.isLoading ? (
+						<UserRowItemListLoader count={5} />
+					) : usersQuery.isError ? (
+						<ExceptionBlock
+							borderless
+							title="Unable to load people"
+							description="An error occurred while searching for people."
+							onRefresh={() => void usersQuery.refetch()}
+							isRefetching={usersQuery.isRefetching}
+						/>
+					) : users.length === 0 ? (
+						<p className="px-6 py-5 text-sm text-muted-foreground">
+							No people found for “{query}”.
+						</p>
+					) : (
+						<>
+							{users.map((user) => (
+								<UserRowItem
+									key={user.id}
+									user={user}
+									onClick={() => onSelectUser(user)}
+								/>
+							))}
+							{usersQuery.hasNextPage ? (
+								<div className="border-t border-border p-2">
+									<Button
+										type="button"
+										variant="ghost"
+										fullWidth
+										isLoading={usersQuery.isFetchingNextPage}
+										onClick={() => void usersQuery.fetchNextPage()}
+									>
+										Show more people
+									</Button>
+								</div>
+							) : null}
+						</>
+					)}
+				</section>
+			) : null}
 
 			<section>
 				<h2 className="mb-3 px-1 text-lg font-semibold text-foreground">
@@ -94,14 +97,22 @@ function SearchResults({ query, onSelectUser }: SearchResultsProps) {
 				) : postsQuery.isError ? (
 					<ExceptionBlock
 						title="Unable to load posts"
-						description="An error occurred while searching posts."
+						description={
+							hasSearchQuery
+								? "An error occurred while searching posts."
+								: "An error occurred while loading posts."
+						}
 						onRefresh={() => void postsQuery.refetch()}
 						isRefetching={postsQuery.isRefetching}
 					/>
 				) : posts.length === 0 ? (
 					<EmptyBlock
-						title="No posts found"
-						description={`No posts match “${query}”.`}
+						title={hasSearchQuery ? "No posts found" : "No posts yet"}
+						description={
+							hasSearchQuery
+								? `No posts match “${query}”.`
+								: "There are no posts to display yet."
+						}
 					/>
 				) : (
 					<div>
