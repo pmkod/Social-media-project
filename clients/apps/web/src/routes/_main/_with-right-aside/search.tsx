@@ -54,10 +54,7 @@ function SearchPage() {
 			</div>
 
 			<div className="pb-8">
-				<UserSearchList
-					query={committedQuery}
-					onSelectUser={selectUserSearch}
-				/>
+				<UserSearchList query={committedQuery} />
 				<PostSearchList query={committedQuery} />
 			</div>
 		</MainContainer>

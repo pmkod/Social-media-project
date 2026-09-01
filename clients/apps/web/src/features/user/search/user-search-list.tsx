@@ -2,15 +2,13 @@ import { Button } from "@/core/components/ui/button.tsx";
 import { ExceptionBlock } from "@/core/components/ui/exception-block.tsx";
 import { UserRowItem } from "@/features/user/common/components/user-row-item.tsx";
 import { UserRowItemListLoader } from "@/features/user/common/components/user-row-item-list-loader.tsx";
-import type { User } from "@/features/user/common/user.ts";
 import { useSearchUsers } from "./use-search-users.ts";
 
 type UserSearchListProps = {
 	query: string;
-	onSelectUser: (user: User) => void;
 };
 
-function UserSearchList({ query, onSelectUser }: UserSearchListProps) {
+function UserSearchList({ query }: UserSearchListProps) {
 	const usersQuery = useSearchUsers({ query, limit: 5 });
 
 	if (query.trim().length === 0) return null;
@@ -36,11 +34,7 @@ function UserSearchList({ query, onSelectUser }: UserSearchListProps) {
 			) : (
 				<>
 					{users.map((user) => (
-						<UserRowItem
-							key={user.id}
-							user={user}
-							onClick={() => onSelectUser(user)}
-						/>
+						<UserRowItem key={user.id} user={user} />
 					))}
 					{usersQuery.hasNextPage ? (
 						<div className="border-t border-border p-2 flex justify-center">
