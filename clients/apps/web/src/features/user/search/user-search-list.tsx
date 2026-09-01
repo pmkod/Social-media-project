@@ -19,10 +19,6 @@ function UserSearchList({ query, onSelectUser }: UserSearchListProps) {
 
 	return (
 		<section className="mb-6 overflow-hidden rounded-xl border border-border bg-background">
-			<h2 className="border-b border-border px-6 py-4 text-lg font-semibold text-foreground">
-				People
-			</h2>
-
 			{usersQuery.isLoading ? (
 				<UserRowItemListLoader count={5} />
 			) : usersQuery.isError ? (
@@ -47,11 +43,10 @@ function UserSearchList({ query, onSelectUser }: UserSearchListProps) {
 						/>
 					))}
 					{usersQuery.hasNextPage ? (
-						<div className="border-t border-border p-2">
+						<div className="border-t border-border p-2 flex justify-center">
 							<Button
 								type="button"
 								variant="ghost"
-								fullWidth
 								isLoading={usersQuery.isFetchingNextPage}
 								onClick={() => void usersQuery.fetchNextPage()}
 							>

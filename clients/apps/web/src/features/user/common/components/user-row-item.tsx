@@ -15,7 +15,7 @@ function UserRowItem({ user, onClick }: UserRowItemProps) {
 	return (
 		<UserProfileLink
 			className={cn(
-				"flex items-center w-full justify-between gap-3 px-6 py-3 transition-colors hover:bg-gray-100/80 cursor-pointer",
+				"flex items-center w-full justify-between gap-3 px-6 py-3 transition-colors hover:bg-muted/30 cursor-pointer",
 			)}
 			user={user}
 			onClick={(e) => {

@@ -1,4 +1,4 @@
-import { RiSearchLine } from "@remixicon/react";
+import { RiCloseLine, RiSearchLine } from "@remixicon/react";
 import type { ChangeEventHandler, ComponentProps } from "react";
 import { useEffect, useRef, useState } from "react";
 import { useDebounceValue } from "@/core/hooks/use-debounce-value.ts";
