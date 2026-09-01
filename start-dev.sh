@@ -14,7 +14,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$SCRIPT_DIR" || exit 1
 
 echo -e "${BLUE}====================================================${RESET}"
-echo -e "${BLUE}      Démarrage du frontend et du backend           ${RESET}"
+echo -e "${BLUE}   Démarrage de RustFS, du frontend et du backend  ${RESET}"
 echo -e "${BLUE}====================================================${RESET}\n"
 
 # Tableau pour suivre les PIDs des processus enfants
@@ -54,6 +54,40 @@ run_service() {
     PIDS+=("$!")
 }
 
+# Lance RustFS depuis le dossier personnel, comme après un `cd` sans argument.
+run_rustfs() {
+    local rustfs_dir="$HOME"
+    local rustfs_bin="${rustfs_dir}/rustfs"
+    local data_dir="${rustfs_dir}/rustfsdir/data"
+
+    if [[ ! -x "$rustfs_bin" ]]; then
+        echo -e "${YELLOW}❌ RustFS est introuvable ou non exécutable : ${rustfs_bin}${RESET}"
+        return 1
+    fi
+
+    echo -e "${MAGENTA}🚀 Lancement de RUSTFS${RESET} (API 9000, Console 9001) depuis ${rustfs_dir}"
+
+    (
+        cd "$rustfs_dir" || exit 1
+        exec ./rustfs server \
+            --address 0.0.0.0:9000 \
+            --console-address 0.0.0.0:9001 \
+            --console-enable \
+            --access-key minioadmin \
+            --secret-key minioadmin \
+            "$data_dir"
+    ) > >(
+        while IFS= read -r line; do
+            echo -e "${MAGENTA}[RUSTFS]${RESET} ${line}"
+        done
+    ) 2>&1 &
+
+    PIDS+=("$!")
+}
+
+# Lancement du stockage objet
+run_rustfs || exit 1
+
 # Lancement du frontend
 run_service "WEB-APP         " "clients/apps/web" "$CYAN" 3000
 
@@ -65,7 +99,7 @@ run_service "NOTIFICATION    " "backend/services/notification" "$BLUE" 8004
 run_service "CHAT-SERVICE    " "backend/services/chat" "$GREEN" 8005
 run_service "API-GATEWAY     " "backend/api-gateway" "$CYAN" 8000
 
-echo -e "\n${GREEN}✔ Le frontend et le backend ont été démarrés !${RESET}"
+echo -e "\n${GREEN}✔ RustFS, le frontend et le backend ont été démarrés !${RESET}"
 echo -e "${GRAY}Appuyez sur Ctrl+C pour tout arrêter.${RESET}\n"
 
 # Attente des processus d'arrière-plan
