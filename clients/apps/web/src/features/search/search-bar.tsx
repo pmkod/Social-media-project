@@ -1,5 +1,6 @@
 import { RiCloseLine, RiSearchLine } from "@remixicon/react";
-import type { ChangeEventHandler, ComponentProps } from "react";
+import { useNavigate, useSearch } from "@tanstack/react-router";
+import type { ChangeEvent } from "react";
 import { useEffect, useRef, useState } from "react";
 import { useDebounceValue } from "@/core/hooks/use-debounce-value.ts";
 import { UserAvatar } from "@/features/user/common/components/user-avatar.tsx";
@@ -8,18 +9,10 @@ import type { User } from "@/features/user/common/user.ts";
 import { UserProfileLink } from "@/features/user/common/user-profile-link.tsx";
 import { useSearchUsers } from "@/features/user/search/use-search-users.ts";
 import { useClearSearchHistory } from "./use-clear-search-history.ts";
+import { useCreateSearchHistory } from "./use-create-search-history.ts";
 import { useDeleteSearchHistoryItem } from "./use-delete-search-history-item.ts";
 import { useSearchHistory } from "./use-search-history.ts";
 import { useSearchSuggestions } from "./use-search-suggestions.ts";
-
-type SearchBarProps = Omit<
-	ComponentProps<"input">,
-	"className" | "type" | "onChange" | "onFocus" | "onKeyDown"
-> & {
-	onChange: ChangeEventHandler<HTMLInputElement>;
-	onSelectText: (text: string) => void;
-	onSelectUser: (user: User) => void;
-};
 
 function SearchUserLink({
 	user,
@@ -47,16 +40,11 @@ function SearchUserLink({
 	);
 }
 
-const SearchBar = ({
-	placeholder = "Search posts",
-	"aria-label": ariaLabel = "Search posts",
-	value = "",
-	onChange,
-	onSelectText,
-	onSelectUser,
-	...props
-}: SearchBarProps) => {
-	const query = String(value);
+function SearchBar() {
+	const { q } = useSearch({ from: "/_main/_with-right-aside/search" });
+	const navigate = useNavigate({ from: "/_main/_with-right-aside/search" });
+	const committedQuery = q?.trim() ?? "";
+	const [query, setQuery] = useState(committedQuery);
 	const [isPopoverOpen, setIsPopoverOpen] = useState(false);
 	const [debouncedQuery] = useDebounceValue(query, 350);
 	const searchAreaRef = useRef<HTMLDivElement>(null);
@@ -73,6 +61,11 @@ const SearchBar = ({
 	const historyQuery = useSearchHistory(20, normalizedQuery.length === 0);
 	const deleteHistoryItem = useDeleteSearchHistoryItem();
 	const clearHistory = useClearSearchHistory();
+	const createSearchHistory = useCreateSearchHistory();
+
+	useEffect(() => {
+		setQuery(committedQuery);
+	}, [committedQuery]);
 
 	useEffect(() => {
 		const closePopoverOnOutsidePointerDown = (event: PointerEvent) => {
@@ -92,19 +85,24 @@ const SearchBar = ({
 			);
 	}, []);
 
-	const handleChange: ChangeEventHandler<HTMLInputElement> = (event) => {
-		onChange(event);
+	const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+		setQuery(event.target.value);
 		setIsPopoverOpen(true);
 	};
 
 	const handleSelectText = (text: string) => {
+		const normalizedText = text.trim();
+		if (!normalizedText) return;
+
 		setIsPopoverOpen(false);
-		onSelectText(text);
+		setQuery(normalizedText);
+		createSearchHistory.mutate({ text: normalizedText });
+		void navigate({ search: { q: normalizedText } });
 	};
 
 	const handleSelectUser = (user: User) => {
 		setIsPopoverOpen(false);
-		onSelectUser(user);
+		createSearchHistory.mutate({ userId: user.id });
 	};
 
 	const suggestions =
@@ -135,10 +133,11 @@ const SearchBar = ({
 			<RiSearchLine className="pointer-events-none absolute left-4 top-1/2 size-5 -translate-y-1/2 text-muted-foreground" />
 			<input
 				type="search"
-				placeholder={placeholder}
-				aria-label={ariaLabel}
+				placeholder="Search posts"
+				aria-label="Search posts"
 				className="h-12 w-full rounded-full border border-transparent bg-muted pl-12 pr-5 text-sm text-foreground outline-none transition focus:border-foreground"
-				value={value}
+				value={query}
+				maxLength={100}
 				onChange={handleChange}
 				onFocus={() => setIsPopoverOpen(true)}
 				onKeyDown={(event) => {
@@ -151,7 +150,6 @@ const SearchBar = ({
 						handleSelectText(query);
 					}
 				}}
-				{...props}
 			/>
 
 			{isPopoverOpen ? (
@@ -287,6 +285,6 @@ const SearchBar = ({
 			) : null}
 		</div>
 	);
-};
+}
 
 export { SearchBar };
