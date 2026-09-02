@@ -42,30 +42,28 @@ function SearchUserLink({
 
 function SearchBar() {
 	const { q } = useSearch({ from: "/_main/_with-right-aside/search" });
-	const committedQuery = q?.trim() ?? "";
-	const [query, setQuery] = useState(committedQuery);
-	const [debouncedQuery] = useDebounceValue(query, 350);
-	const normalizedQuery = query.trim();
-	const normalizedDebouncedQuery = debouncedQuery.trim();
+	const [search, setSearch] = useState(q ?? "");
+	const [debouncedSearch] = useDebounceValue(search, 350);
+	const searchTerm = search.trim();
 	const [isPopoverOpen, setIsPopoverOpen] = useState(false);
 	const navigate = useNavigate();
 	const searchAreaRef = useRef<HTMLDivElement>(null);
-	const isDebouncedQueryCurrent =
-		normalizedQuery.toLowerCase() === normalizedDebouncedQuery.toLowerCase();
-	const suggestionsQuery = useSearchSuggestions(normalizedDebouncedQuery);
+	const isSearchCurrent =
+		searchTerm.toLowerCase() === debouncedSearch.trim().toLowerCase();
+	const suggestionsQuery = useSearchSuggestions(debouncedSearch);
 	const usersQuery = useSearchUsers({
-		query: normalizedDebouncedQuery,
+		query: debouncedSearch,
 		limit: 5,
-		enabled: normalizedQuery.length > 0,
+		enabled: searchTerm.length > 0,
 	});
-	const historyQuery = useSearchHistory(20, normalizedQuery.length === 0);
+	const historyQuery = useSearchHistory(20, searchTerm.length === 0);
 	const deleteHistoryItem = useDeleteSearchHistoryItem();
 	const clearHistory = useClearSearchHistory();
 	const createSearchHistory = useCreateSearchHistory();
 
 	useEffect(() => {
-		setQuery(committedQuery);
-	}, [committedQuery]);
+		setSearch(q ?? "");
+	}, [q]);
 
 	useEffect(() => {
 		const closePopoverOnOutsidePointerDown = (event: PointerEvent) => {
@@ -86,7 +84,7 @@ function SearchBar() {
 	}, []);
 
 	const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-		setQuery(event.target.value);
+		setSearch(event.target.value);
 		setIsPopoverOpen(true);
 	};
 
@@ -95,7 +93,7 @@ function SearchBar() {
 		if (!normalizedText) return;
 
 		setIsPopoverOpen(false);
-		setQuery(normalizedText);
+		setSearch(normalizedText);
 		createSearchHistory.mutate({ text: normalizedText });
 		void navigate({ to: "/search", search: { q: normalizedText } });
 	};
@@ -106,10 +104,10 @@ function SearchBar() {
 	};
 
 	const suggestions =
-		normalizedQuery.length > 0
+		searchTerm.length > 0
 			? [
-					normalizedQuery,
-					...(isDebouncedQueryCurrent
+					searchTerm,
+					...(isSearchCurrent
 						? (suggestionsQuery.data?.suggestions ?? [])
 						: []),
 				].filter(
@@ -123,7 +121,7 @@ function SearchBar() {
 				)
 			: [];
 
-	const users = isDebouncedQueryCurrent
+	const users = isSearchCurrent
 		? (usersQuery.data?.pages.flatMap((page) => page.users) ?? [])
 		: [];
 	const history =
@@ -137,7 +135,7 @@ function SearchBar() {
 				placeholder="Search posts"
 				aria-label="Search posts"
 				className="h-12 w-full rounded-full border border-transparent bg-muted pl-12 pr-5 text-sm text-foreground outline-none transition focus:border-foreground"
-				value={query}
+				value={search}
 				maxLength={100}
 				onChange={handleChange}
 				onFocus={() => setIsPopoverOpen(true)}
@@ -148,14 +146,14 @@ function SearchBar() {
 					}
 					if (event.key === "Enter") {
 						event.preventDefault();
-						handleSelectText(query);
+						handleSelectText(search);
 					}
 				}}
 			/>
 
 			{isPopoverOpen ? (
 				<div className="absolute left-0 right-0 top-full z-30 mt-2 max-h-[min(32rem,70vh)] overflow-y-auto rounded-xl border border-border bg-background shadow-lg">
-					{normalizedQuery.length > 0 ? (
+					{searchTerm.length > 0 ? (
 						<>
 							<div>
 								{suggestions.map((suggestion) => (
@@ -174,7 +172,7 @@ function SearchBar() {
 							</div>
 
 							<div className="border-t border-border">
-								{!isDebouncedQueryCurrent || usersQuery.isLoading ? (
+								{!isSearchCurrent || usersQuery.isLoading ? (
 									<UserRowItemListLoader count={3} />
 								) : usersQuery.isError ? (
 									<p className="px-5 py-4 text-sm text-muted-foreground">
