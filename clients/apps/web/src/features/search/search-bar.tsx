@@ -25,7 +25,7 @@ function SearchUserLink({
 		<UserProfileLink
 			user={user}
 			onClick={onClick}
-			className="flex min-w-0 flex-1 items-center gap-3 px-5 py-3 text-left transition-colors hover:bg-muted/60"
+			className="flex min-w-0 flex-1 items-center gap-3 px-5 py-3 text-left transition-colors hover:bg-muted/30"
 		>
 			<UserAvatar user={user} size="md" />
 			<span className="min-w-0">
@@ -42,14 +42,14 @@ function SearchUserLink({
 
 function SearchBar() {
 	const { q } = useSearch({ from: "/_main/_with-right-aside/search" });
-	const navigate = useNavigate({ from: "/_main/_with-right-aside/search" });
 	const committedQuery = q?.trim() ?? "";
 	const [query, setQuery] = useState(committedQuery);
-	const [isPopoverOpen, setIsPopoverOpen] = useState(false);
 	const [debouncedQuery] = useDebounceValue(query, 350);
-	const searchAreaRef = useRef<HTMLDivElement>(null);
 	const normalizedQuery = query.trim();
 	const normalizedDebouncedQuery = debouncedQuery.trim();
+	const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+	const navigate = useNavigate();
+	const searchAreaRef = useRef<HTMLDivElement>(null);
 	const isDebouncedQueryCurrent =
 		normalizedQuery.toLowerCase() === normalizedDebouncedQuery.toLowerCase();
 	const suggestionsQuery = useSearchSuggestions(normalizedDebouncedQuery);
@@ -97,7 +97,7 @@ function SearchBar() {
 		setIsPopoverOpen(false);
 		setQuery(normalizedText);
 		createSearchHistory.mutate({ text: normalizedText });
-		void navigate({ search: { q: normalizedText } });
+		void navigate({ to: "/search", search: { q: normalizedText } });
 	};
 
 	const handleSelectUser = (user: User) => {
@@ -122,6 +122,7 @@ function SearchBar() {
 						) === index,
 				)
 			: [];
+
 	const users = isDebouncedQueryCurrent
 		? (usersQuery.data?.pages.flatMap((page) => page.users) ?? [])
 		: [];
@@ -162,9 +163,11 @@ function SearchBar() {
 										type="button"
 										key={suggestion.toLowerCase()}
 										onClick={() => handleSelectText(suggestion)}
-										className="flex w-full cursor-pointer items-center gap-3 px-5 py-3 text-left text-sm font-medium text-foreground transition-colors hover:bg-muted/60"
+										className="flex w-full cursor-pointer items-center gap-3 px-5 py-3 text-left text-sm font-medium text-foreground transition-colors hover:bg-muted/30"
 									>
-										<RiSearchLine className="size-5 shrink-0 text-muted-foreground" />
+										<div className="border rounded-full size-10 flex items-center justify-center">
+											<RiSearchLine className="size-5 shrink-0 text-muted-foreground" />
+										</div>
 										<span className="truncate">{suggestion}</span>
 									</button>
 								))}
@@ -177,11 +180,7 @@ function SearchBar() {
 									<p className="px-5 py-4 text-sm text-muted-foreground">
 										Unable to load people.
 									</p>
-								) : users.length === 0 ? (
-									<p className="px-5 py-4 text-sm text-muted-foreground">
-										No people found.
-									</p>
-								) : (
+								) : users.length === 0 ? null : (
 									users
 										.slice(0, 5)
 										.map((user) => (
@@ -234,7 +233,7 @@ function SearchBar() {
 									{history.map((item) => (
 										<div
 											key={item.id}
-											className="flex items-center transition-colors hover:bg-muted/60"
+											className="relative flex items-center transition-colors hover:bg-muted/30"
 										>
 											{item.user ? (
 												<SearchUserLink
@@ -249,7 +248,9 @@ function SearchBar() {
 													}
 													className="flex min-w-0 flex-1 cursor-pointer items-center gap-3 px-5 py-4 text-left text-sm font-medium text-foreground"
 												>
-													<RiSearchLine className="size-5 shrink-0 text-muted-foreground" />
+													<div className="border rounded-full size-10 flex items-center justify-center">
+														<RiSearchLine className="size-5 shrink-0 text-muted-foreground" />
+													</div>
 													<span className="truncate">{item.text}</span>
 												</button>
 											)}
@@ -258,7 +259,7 @@ function SearchBar() {
 												aria-label="Remove from recent searches"
 												disabled={deleteHistoryItem.isPending}
 												onClick={() => deleteHistoryItem.mutate(item.id)}
-												className="mr-3 flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-full text-primary transition-colors hover:bg-primary/10 disabled:cursor-default disabled:opacity-50"
+												className=" absolute right-3 top-1/2 transform -translate-y-1/2 flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-full text-primary transition-colors disabled:cursor-default disabled:opacity-50"
 											>
 												<RiCloseLine className="size-5" />
 											</button>
@@ -270,7 +271,7 @@ function SearchBar() {
 											type="button"
 											disabled={historyQuery.isFetchingNextPage}
 											onClick={() => void historyQuery.fetchNextPage()}
-											className="w-full cursor-pointer border-t border-border px-5 py-3 text-sm font-semibold text-primary transition-colors hover:bg-muted/60 disabled:cursor-default disabled:opacity-50"
+											className="w-full cursor-pointer border-t border-border px-5 py-3 text-sm font-semibold text-primary transition-colors hover:bg-muted/30 disabled:cursor-default disabled:opacity-50"
 										>
 											{historyQuery.isFetchingNextPage
 												? "Loading…"
