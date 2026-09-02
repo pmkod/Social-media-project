@@ -14,7 +14,7 @@ import { Route as MainRouteRouteImport } from './routes/_main/route'
 import { Route as BaseAuthenticationRouteRouteImport } from './routes/_base/_authentication/route'
 import { Route as MainWithRightAsideRouteRouteImport } from './routes/_main/_with-right-aside/route'
 import { Route as MainDiscussionsRouteRouteImport } from './routes/_main/discussions/route'
-import { Route as MainSettingsRouteImport } from './routes/_main/settings'
+import { Route as MainSettingsRouteRouteImport } from './routes/_main/settings/route'
 import { Route as BaseAuthenticationIndexRouteImport } from './routes/_base/_authentication/index'
 import { Route as BaseAuthenticationCompleteSignupRouteImport } from './routes/_base/_authentication/complete-signup'
 import { Route as BaseAuthenticationNewPasswordRouteImport } from './routes/_base/_authentication/new-password'
@@ -29,7 +29,15 @@ import { Route as MainWithRightAsideNotificationsRouteImport } from './routes/_m
 import { Route as MainWithRightAsideSearchRouteImport } from './routes/_main/_with-right-aside/search'
 import { Route as MainDiscussionsIndexRouteImport } from './routes/_main/discussions/index'
 import { Route as MainDiscussionsDiscussionIdRouteImport } from './routes/_main/discussions/$discussionId'
+import { Route as MainSettingsIndexRouteImport } from './routes/_main/settings/index'
+import { Route as MainSettingsAccountRouteImport } from './routes/_main/settings/account'
+import { Route as MainSettingsLanguageRouteImport } from './routes/_main/settings/language'
+import { Route as MainSettingsPrivacyRouteImport } from './routes/_main/settings/privacy'
+import { Route as MainSettingsSecurityRouteImport } from './routes/_main/settings/security'
+import { Route as MainSettingsThemeRouteImport } from './routes/_main/settings/theme'
 import { Route as MainWithRightAsidePostsPostIdRouteImport } from './routes/_main/_with-right-aside/posts.$postId'
+import { Route as MainSettingsAccountChangeEmailRouteImport } from './routes/_main/settings/account/change-email'
+import { Route as MainSettingsSecurityChangePasswordRouteImport } from './routes/_main/settings/security/change-password'
 
 const BaseRouteRoute = BaseRouteRouteImport.update({
   id: '/_base',
@@ -52,7 +60,7 @@ const MainDiscussionsRouteRoute = MainDiscussionsRouteRouteImport.update({
   path: '/discussions',
   getParentRoute: () => MainRouteRoute,
 } as any)
-const MainSettingsRoute = MainSettingsRouteImport.update({
+const MainSettingsRouteRoute = MainSettingsRouteRouteImport.update({
   id: '/settings',
   path: '/settings',
   getParentRoute: () => MainRouteRoute,
@@ -138,17 +146,59 @@ const MainDiscussionsDiscussionIdRoute =
     path: '/$discussionId',
     getParentRoute: () => MainDiscussionsRouteRoute,
   } as any)
+const MainSettingsIndexRoute = MainSettingsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => MainSettingsRouteRoute,
+} as any)
+const MainSettingsAccountRoute = MainSettingsAccountRouteImport.update({
+  id: '/account',
+  path: '/account',
+  getParentRoute: () => MainSettingsRouteRoute,
+} as any)
+const MainSettingsLanguageRoute = MainSettingsLanguageRouteImport.update({
+  id: '/language',
+  path: '/language',
+  getParentRoute: () => MainSettingsRouteRoute,
+} as any)
+const MainSettingsPrivacyRoute = MainSettingsPrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => MainSettingsRouteRoute,
+} as any)
+const MainSettingsSecurityRoute = MainSettingsSecurityRouteImport.update({
+  id: '/security',
+  path: '/security',
+  getParentRoute: () => MainSettingsRouteRoute,
+} as any)
+const MainSettingsThemeRoute = MainSettingsThemeRouteImport.update({
+  id: '/theme',
+  path: '/theme',
+  getParentRoute: () => MainSettingsRouteRoute,
+} as any)
 const MainWithRightAsidePostsPostIdRoute =
   MainWithRightAsidePostsPostIdRouteImport.update({
     id: '/posts/$postId',
     path: '/posts/$postId',
     getParentRoute: () => MainWithRightAsideRouteRoute,
   } as any)
+const MainSettingsAccountChangeEmailRoute =
+  MainSettingsAccountChangeEmailRouteImport.update({
+    id: '/change-email',
+    path: '/change-email',
+    getParentRoute: () => MainSettingsAccountRoute,
+  } as any)
+const MainSettingsSecurityChangePasswordRoute =
+  MainSettingsSecurityChangePasswordRouteImport.update({
+    id: '/change-password',
+    path: '/change-password',
+    getParentRoute: () => MainSettingsSecurityRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof BaseAuthenticationIndexRoute
   '/discussions': typeof MainDiscussionsRouteRouteWithChildren
-  '/settings': typeof MainSettingsRoute
+  '/settings': typeof MainSettingsRouteRouteWithChildren
   '/complete-signup': typeof BaseAuthenticationCompleteSignupRoute
   '/new-password': typeof BaseAuthenticationNewPasswordRoute
   '/password-reset': typeof BaseAuthenticationPasswordResetRoute
@@ -161,12 +211,19 @@ export interface FileRoutesByFullPath {
   '/notifications': typeof MainWithRightAsideNotificationsRoute
   '/search': typeof MainWithRightAsideSearchRoute
   '/discussions/$discussionId': typeof MainDiscussionsDiscussionIdRoute
+  '/settings/account': typeof MainSettingsAccountRouteWithChildren
+  '/settings/language': typeof MainSettingsLanguageRoute
+  '/settings/privacy': typeof MainSettingsPrivacyRoute
+  '/settings/security': typeof MainSettingsSecurityRouteWithChildren
+  '/settings/theme': typeof MainSettingsThemeRoute
   '/discussions/': typeof MainDiscussionsIndexRoute
+  '/settings/': typeof MainSettingsIndexRoute
   '/posts/$postId': typeof MainWithRightAsidePostsPostIdRoute
+  '/settings/account/change-email': typeof MainSettingsAccountChangeEmailRoute
+  '/settings/security/change-password': typeof MainSettingsSecurityChangePasswordRoute
 }
 export interface FileRoutesByTo {
   '/': typeof BaseAuthenticationIndexRoute
-  '/settings': typeof MainSettingsRoute
   '/complete-signup': typeof BaseAuthenticationCompleteSignupRoute
   '/new-password': typeof BaseAuthenticationNewPasswordRoute
   '/password-reset': typeof BaseAuthenticationPasswordResetRoute
@@ -179,8 +236,16 @@ export interface FileRoutesByTo {
   '/notifications': typeof MainWithRightAsideNotificationsRoute
   '/search': typeof MainWithRightAsideSearchRoute
   '/discussions/$discussionId': typeof MainDiscussionsDiscussionIdRoute
+  '/settings/account': typeof MainSettingsAccountRouteWithChildren
+  '/settings/language': typeof MainSettingsLanguageRoute
+  '/settings/privacy': typeof MainSettingsPrivacyRoute
+  '/settings/security': typeof MainSettingsSecurityRouteWithChildren
+  '/settings/theme': typeof MainSettingsThemeRoute
   '/discussions': typeof MainDiscussionsIndexRoute
+  '/settings': typeof MainSettingsIndexRoute
   '/posts/$postId': typeof MainWithRightAsidePostsPostIdRoute
+  '/settings/account/change-email': typeof MainSettingsAccountChangeEmailRoute
+  '/settings/security/change-password': typeof MainSettingsSecurityChangePasswordRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -189,7 +254,7 @@ export interface FileRoutesById {
   '/_base/_authentication': typeof BaseAuthenticationRouteRouteWithChildren
   '/_main/_with-right-aside': typeof MainWithRightAsideRouteRouteWithChildren
   '/_main/discussions': typeof MainDiscussionsRouteRouteWithChildren
-  '/_main/settings': typeof MainSettingsRoute
+  '/_main/settings': typeof MainSettingsRouteRouteWithChildren
   '/_base/_authentication/complete-signup': typeof BaseAuthenticationCompleteSignupRoute
   '/_base/_authentication/new-password': typeof BaseAuthenticationNewPasswordRoute
   '/_base/_authentication/password-reset': typeof BaseAuthenticationPasswordResetRoute
@@ -202,9 +267,17 @@ export interface FileRoutesById {
   '/_main/_with-right-aside/notifications': typeof MainWithRightAsideNotificationsRoute
   '/_main/_with-right-aside/search': typeof MainWithRightAsideSearchRoute
   '/_main/discussions/$discussionId': typeof MainDiscussionsDiscussionIdRoute
+  '/_main/settings/account': typeof MainSettingsAccountRouteWithChildren
+  '/_main/settings/language': typeof MainSettingsLanguageRoute
+  '/_main/settings/privacy': typeof MainSettingsPrivacyRoute
+  '/_main/settings/security': typeof MainSettingsSecurityRouteWithChildren
+  '/_main/settings/theme': typeof MainSettingsThemeRoute
   '/_base/_authentication/': typeof BaseAuthenticationIndexRoute
   '/_main/discussions/': typeof MainDiscussionsIndexRoute
+  '/_main/settings/': typeof MainSettingsIndexRoute
   '/_main/_with-right-aside/posts/$postId': typeof MainWithRightAsidePostsPostIdRoute
+  '/_main/settings/account/change-email': typeof MainSettingsAccountChangeEmailRoute
+  '/_main/settings/security/change-password': typeof MainSettingsSecurityChangePasswordRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -224,12 +297,19 @@ export interface FileRouteTypes {
     | '/notifications'
     | '/search'
     | '/discussions/$discussionId'
+    | '/settings/account'
+    | '/settings/language'
+    | '/settings/privacy'
+    | '/settings/security'
+    | '/settings/theme'
     | '/discussions/'
+    | '/settings/'
     | '/posts/$postId'
+    | '/settings/account/change-email'
+    | '/settings/security/change-password'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/settings'
     | '/complete-signup'
     | '/new-password'
     | '/password-reset'
@@ -242,8 +322,16 @@ export interface FileRouteTypes {
     | '/notifications'
     | '/search'
     | '/discussions/$discussionId'
+    | '/settings/account'
+    | '/settings/language'
+    | '/settings/privacy'
+    | '/settings/security'
+    | '/settings/theme'
     | '/discussions'
+    | '/settings'
     | '/posts/$postId'
+    | '/settings/account/change-email'
+    | '/settings/security/change-password'
   id:
     | '__root__'
     | '/_base'
@@ -264,9 +352,17 @@ export interface FileRouteTypes {
     | '/_main/_with-right-aside/notifications'
     | '/_main/_with-right-aside/search'
     | '/_main/discussions/$discussionId'
+    | '/_main/settings/account'
+    | '/_main/settings/language'
+    | '/_main/settings/privacy'
+    | '/_main/settings/security'
+    | '/_main/settings/theme'
     | '/_base/_authentication/'
     | '/_main/discussions/'
+    | '/_main/settings/'
     | '/_main/_with-right-aside/posts/$postId'
+    | '/_main/settings/account/change-email'
+    | '/_main/settings/security/change-password'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -315,7 +411,7 @@ declare module '@tanstack/react-router' {
       id: '/_main/settings'
       path: '/settings'
       fullPath: '/settings'
-      preLoaderRoute: typeof MainSettingsRouteImport
+      preLoaderRoute: typeof MainSettingsRouteRouteImport
       parentRoute: typeof MainRouteRoute
     }
     '/_base/_authentication/': {
@@ -416,12 +512,68 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MainDiscussionsDiscussionIdRouteImport
       parentRoute: typeof MainDiscussionsRouteRoute
     }
+    '/_main/settings/': {
+      id: '/_main/settings/'
+      path: '/'
+      fullPath: '/settings/'
+      preLoaderRoute: typeof MainSettingsIndexRouteImport
+      parentRoute: typeof MainSettingsRouteRoute
+    }
+    '/_main/settings/account': {
+      id: '/_main/settings/account'
+      path: '/account'
+      fullPath: '/settings/account'
+      preLoaderRoute: typeof MainSettingsAccountRouteImport
+      parentRoute: typeof MainSettingsRouteRoute
+    }
+    '/_main/settings/language': {
+      id: '/_main/settings/language'
+      path: '/language'
+      fullPath: '/settings/language'
+      preLoaderRoute: typeof MainSettingsLanguageRouteImport
+      parentRoute: typeof MainSettingsRouteRoute
+    }
+    '/_main/settings/privacy': {
+      id: '/_main/settings/privacy'
+      path: '/privacy'
+      fullPath: '/settings/privacy'
+      preLoaderRoute: typeof MainSettingsPrivacyRouteImport
+      parentRoute: typeof MainSettingsRouteRoute
+    }
+    '/_main/settings/security': {
+      id: '/_main/settings/security'
+      path: '/security'
+      fullPath: '/settings/security'
+      preLoaderRoute: typeof MainSettingsSecurityRouteImport
+      parentRoute: typeof MainSettingsRouteRoute
+    }
+    '/_main/settings/theme': {
+      id: '/_main/settings/theme'
+      path: '/theme'
+      fullPath: '/settings/theme'
+      preLoaderRoute: typeof MainSettingsThemeRouteImport
+      parentRoute: typeof MainSettingsRouteRoute
+    }
     '/_main/_with-right-aside/posts/$postId': {
       id: '/_main/_with-right-aside/posts/$postId'
       path: '/posts/$postId'
       fullPath: '/posts/$postId'
       preLoaderRoute: typeof MainWithRightAsidePostsPostIdRouteImport
       parentRoute: typeof MainWithRightAsideRouteRoute
+    }
+    '/_main/settings/account/change-email': {
+      id: '/_main/settings/account/change-email'
+      path: '/change-email'
+      fullPath: '/settings/account/change-email'
+      preLoaderRoute: typeof MainSettingsAccountChangeEmailRouteImport
+      parentRoute: typeof MainSettingsAccountRoute
+    }
+    '/_main/settings/security/change-password': {
+      id: '/_main/settings/security/change-password'
+      path: '/change-password'
+      fullPath: '/settings/security/change-password'
+      preLoaderRoute: typeof MainSettingsSecurityChangePasswordRouteImport
+      parentRoute: typeof MainSettingsSecurityRoute
     }
   }
 }
@@ -504,16 +656,60 @@ const MainDiscussionsRouteRouteChildren: MainDiscussionsRouteRouteChildren = {
 const MainDiscussionsRouteRouteWithChildren =
   MainDiscussionsRouteRoute._addFileChildren(MainDiscussionsRouteRouteChildren)
 
+interface MainSettingsAccountRouteChildren {
+  MainSettingsAccountChangeEmailRoute: typeof MainSettingsAccountChangeEmailRoute
+}
+
+const MainSettingsAccountRouteChildren: MainSettingsAccountRouteChildren = {
+  MainSettingsAccountChangeEmailRoute: MainSettingsAccountChangeEmailRoute,
+}
+
+const MainSettingsAccountRouteWithChildren =
+  MainSettingsAccountRoute._addFileChildren(MainSettingsAccountRouteChildren)
+
+interface MainSettingsSecurityRouteChildren {
+  MainSettingsSecurityChangePasswordRoute: typeof MainSettingsSecurityChangePasswordRoute
+}
+
+const MainSettingsSecurityRouteChildren: MainSettingsSecurityRouteChildren = {
+  MainSettingsSecurityChangePasswordRoute:
+    MainSettingsSecurityChangePasswordRoute,
+}
+
+const MainSettingsSecurityRouteWithChildren =
+  MainSettingsSecurityRoute._addFileChildren(MainSettingsSecurityRouteChildren)
+
+interface MainSettingsRouteRouteChildren {
+  MainSettingsAccountRoute: typeof MainSettingsAccountRouteWithChildren
+  MainSettingsLanguageRoute: typeof MainSettingsLanguageRoute
+  MainSettingsPrivacyRoute: typeof MainSettingsPrivacyRoute
+  MainSettingsSecurityRoute: typeof MainSettingsSecurityRouteWithChildren
+  MainSettingsThemeRoute: typeof MainSettingsThemeRoute
+  MainSettingsIndexRoute: typeof MainSettingsIndexRoute
+}
+
+const MainSettingsRouteRouteChildren: MainSettingsRouteRouteChildren = {
+  MainSettingsAccountRoute: MainSettingsAccountRouteWithChildren,
+  MainSettingsLanguageRoute: MainSettingsLanguageRoute,
+  MainSettingsPrivacyRoute: MainSettingsPrivacyRoute,
+  MainSettingsSecurityRoute: MainSettingsSecurityRouteWithChildren,
+  MainSettingsThemeRoute: MainSettingsThemeRoute,
+  MainSettingsIndexRoute: MainSettingsIndexRoute,
+}
+
+const MainSettingsRouteRouteWithChildren =
+  MainSettingsRouteRoute._addFileChildren(MainSettingsRouteRouteChildren)
+
 interface MainRouteRouteChildren {
   MainWithRightAsideRouteRoute: typeof MainWithRightAsideRouteRouteWithChildren
   MainDiscussionsRouteRoute: typeof MainDiscussionsRouteRouteWithChildren
-  MainSettingsRoute: typeof MainSettingsRoute
+  MainSettingsRouteRoute: typeof MainSettingsRouteRouteWithChildren
 }
 
 const MainRouteRouteChildren: MainRouteRouteChildren = {
   MainWithRightAsideRouteRoute: MainWithRightAsideRouteRouteWithChildren,
   MainDiscussionsRouteRoute: MainDiscussionsRouteRouteWithChildren,
-  MainSettingsRoute: MainSettingsRoute,
+  MainSettingsRouteRoute: MainSettingsRouteRouteWithChildren,
 }
 
 const MainRouteRouteWithChildren = MainRouteRoute._addFileChildren(

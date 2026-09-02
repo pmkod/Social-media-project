@@ -1,0 +1,48 @@
+import { RiComputerLine, RiMoonLine, RiSunLine } from "@remixicon/react";
+import { createFileRoute } from "@tanstack/react-router";
+import { useTheme } from "@/core/hooks/use-theme.ts";
+import { cn } from "@/core/lib/utils.ts";
+import { SettingsHeader } from "@/features/settings/settings-page.tsx";
+
+export const Route = createFileRoute("/_main/settings/theme")({
+	component: ThemeSettingsPage,
+});
+
+function ThemeSettingsPage() {
+	const { theme, setTheme, mounted } = useTheme();
+	const themes = [
+		{ id: "light", label: "Light", icon: RiSunLine },
+		{ id: "dark", label: "Dark", icon: RiMoonLine },
+		{ id: "system", label: "System", icon: RiComputerLine },
+	] as const;
+
+	return (
+		<>
+			<SettingsHeader
+				title="Theme"
+				description="Choose the appearance that feels best to you."
+			/>
+			<div className="mt-8 grid gap-3 sm:grid-cols-3">
+				{themes.map((themeOption) => {
+					const Icon = themeOption.icon;
+					const isSelected = mounted && theme === themeOption.id;
+					return (
+						<button
+							type="button"
+							key={themeOption.id}
+							onClick={() => setTheme(themeOption.id)}
+							aria-pressed={isSelected}
+							className={cn(
+								"flex cursor-pointer items-center gap-3 rounded-xl bg-muted/60 px-4 py-5 text-left transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+								isSelected && "bg-primary/10 text-primary",
+							)}
+						>
+							<Icon className="size-5" />
+							<span className="font-medium">{themeOption.label}</span>
+						</button>
+					);
+				})}
+			</div>
+		</>
+	);
+}
