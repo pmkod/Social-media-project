@@ -16,7 +16,7 @@ function AppHeader({
 		<header
 			data-slot="app-header"
 			className={cn(
-				"z-20 flex h-16 items-center justify-between gap-4 px-4 bg-background/80 backdrop-blur-md",
+				"z-20 flex h-20 items-center justify-between gap-4 px-4 bg-background/80 backdrop-blur-md",
 				sticky && "sticky top-0",
 				bordered && "border-b border-border",
 				className,
@@ -119,7 +119,7 @@ function AppHeaderTitle({ className, ...props }: React.ComponentProps<"h1">) {
 		<h1
 			data-slot="app-header-title"
 			className={cn(
-				"text-lg font-bold tracking-tight text-foreground leading-tight truncate",
+				"text-xl font-bold tracking-tight text-foreground leading-tight truncate",
 				className,
 			)}
 			{...props}

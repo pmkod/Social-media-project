@@ -78,8 +78,12 @@ function SettingsLayout() {
 
 	return (
 		<main className="min-h-screen min-w-0 flex-1 bg-background">
-			<div className="lg:grid lg:grid-cols-[20rem_minmax(0,1fr)] lg:gap-14">
-				<section className={!isOverview ? "hidden lg:block" : ""}>
+			<div className="lg:grid lg:grid-cols-[25rem_minmax(0,1fr)] lg:gap-10">
+				<section
+					className={` h-screen ${
+						!isOverview ? "hidden lg:block " : "border-x"
+					}`}
+				>
 					<AppHeader>
 						<AppHeaderLeftPart>
 							<AppHeaderTitle>Settings</AppHeaderTitle>
@@ -99,8 +103,8 @@ function SettingsLayout() {
 									className={cn(
 										"group flex w-full cursor-pointer items-center gap-3 rounded-md px-3 py-3 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
 										isSelected
-											? "bg-muted/60 text-white"
-											: "hover:bg-muted/60 ",
+											? "bg-muted/30 text-white"
+											: "hover:bg-muted/30 ",
 									)}
 								>
 									<Icon className="size-5 shrink-0" />

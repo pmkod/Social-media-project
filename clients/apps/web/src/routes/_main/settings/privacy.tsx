@@ -1,9 +1,12 @@
 import { RiFileShieldLine, RiFileTextLine } from "@remixicon/react";
 import { createFileRoute } from "@tanstack/react-router";
+import { SettingsRow } from "@/features/settings/settings-page.tsx";
 import {
-	SettingsHeader,
-	SettingsRow,
-} from "@/features/settings/settings-page.tsx";
+	AppHeader,
+	AppHeaderGoBackButton,
+	AppHeaderLeftPart,
+	AppHeaderTitle,
+} from "@/core/components/ui/app-header";
 
 export const Route = createFileRoute("/_main/settings/privacy")({
 	component: PrivacySettingsPage,
@@ -11,12 +14,14 @@ export const Route = createFileRoute("/_main/settings/privacy")({
 
 function PrivacySettingsPage() {
 	return (
-		<>
-			<SettingsHeader
-				title="Privacy and safety"
-				description="Read how your data is handled and the rules that apply when using Goodspace."
-			/>
-			<div className="mt-8 space-y-1">
+		<div className="">
+			<AppHeader>
+				<AppHeaderLeftPart>
+					<AppHeaderGoBackButton />
+					<AppHeaderTitle>Privacy and safety</AppHeaderTitle>
+				</AppHeaderLeftPart>
+			</AppHeader>
+			<div className="space-y-1">
 				<SettingsRow
 					icon={RiFileShieldLine}
 					title="Privacy policy"
@@ -30,6 +35,6 @@ function PrivacySettingsPage() {
 					href="/terms-of-service"
 				/>
 			</div>
-		</>
+		</div>
 	);
 }
