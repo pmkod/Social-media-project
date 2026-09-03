@@ -80,9 +80,7 @@ function SettingsLayout() {
 		<main className="min-h-screen min-w-0 flex-1 bg-background">
 			<div className="lg:grid lg:grid-cols-[25rem_minmax(0,1fr)] lg:gap-10">
 				<section
-					className={` h-screen ${
-						!isOverview ? "hidden lg:block " : "border-x"
-					}`}
+					className={`h-screen ${!isOverview ? "hidden lg:block " : ""}`}
 				>
 					<AppHeader>
 						<AppHeaderLeftPart>
