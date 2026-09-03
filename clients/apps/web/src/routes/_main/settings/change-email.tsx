@@ -7,6 +7,7 @@ import {
 } from "@/core/components/ui/app-header";
 import { useAuthenticatedUser } from "@/features/user/authenticated-user/use-authenticated-user.ts";
 import { ChangeEmailForm } from "@/features/user/change-email/change-email.form.tsx";
+import { SettingsUserVerificationGoals } from "@/features/user/settings-user-verification/settings-user-verification.constants.ts";
 
 export const Route = createFileRoute("/_main/settings/change-email")({
 	component: ChangeEmailSettingsPage,
@@ -27,7 +28,12 @@ function ChangeEmailSettingsPage() {
 			<div className="mt-8 max-w-xl pl-12">
 				<ChangeEmailForm
 					currentEmail={data?.user.email}
-					onSuccess={() => void navigate({ to: "/settings/account" })}
+					onSuccess={() =>
+						navigate({
+							to: "/settings/user-verification",
+							search: { goal: SettingsUserVerificationGoals.emailChange },
+						})
+					}
 				/>
 			</div>
 		</>

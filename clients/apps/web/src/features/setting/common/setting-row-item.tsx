@@ -9,6 +9,7 @@ export type SettingsPath =
 	| "/settings"
 	| "/settings/account"
 	| "/settings/change-email"
+	| "/settings/user-verification"
 	| "/settings/security"
 	| "/settings/change-password"
 	| "/settings/privacy"

@@ -1,7 +1,6 @@
 import {
 	RiChat3Line,
 	RiHeartFill,
-	RiNotification3Line,
 	RiUserAddLine,
 } from "@remixicon/react";
 import { Link } from "@tanstack/react-router";
@@ -179,13 +178,6 @@ export function NotificationList() {
 
 	return (
 		<div className="min-h-screen">
-			<div className="border-b border-border p-4">
-				<h1 className="flex items-center gap-2 text-xl font-bold text-foreground">
-					<RiNotification3Line className="size-6 text-sky-500" />
-					<span>Notifications</span>
-				</h1>
-			</div>
-
 			{isLoading ? (
 				<NotificationListLoader />
 			) : isError ? (

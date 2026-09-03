@@ -38,7 +38,7 @@ const settingsSections: SettingsSection[] = [
 		description: "Manage your email address",
 		path: "/settings/account",
 		icon: RiUserSettingsLine,
-		activePaths: ["/settings/change-email"],
+		activePaths: ["/settings/change-email", "/settings/user-verification"],
 	},
 	{
 		id: "security",

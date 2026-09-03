@@ -40,7 +40,7 @@ function ThemeSettingsPage() {
 							onClick={() => setTheme(themeOption.id)}
 							aria-pressed={isSelected}
 							className={cn(
-								"flex cursor-pointer items-center gap-3 rounded-xl bg-muted/60 px-4 py-5 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+								"flex cursor-pointer items-center gap-3 rounded bg-muted/60 px-4 py-5 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
 								isSelected
 									? "bg-primary/10 text-primary"
 									: " hover:bg-muted/30",
