@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { httpClient } from "@/core/http-clients/http-client.ts";
 import { postListQueryKeys } from "@/features/post/common/post-list.query-keys.ts";
+import { postDetailsQueryKey } from "@/features/post/post-detail/post-detail.query-key.ts";
 import type { Comment } from "../common/comment.ts";
 import { commentListQueryKeys } from "../common/comment-list.query-keys.ts";
 
@@ -40,7 +41,9 @@ const useCreateComment = () => {
 	return useMutation({
 		mutationFn: createComment,
 		onSuccess: (comment) => {
-			// queryClient.invalidateQueries({ queryKey: postsQueryKey.root });
+			queryClient.invalidateQueries({
+				queryKey: postDetailsQueryKey.build(comment.postId),
+			});
 			queryClient.invalidateQueries({ queryKey: postListQueryKeys.root });
 			queryClient.invalidateQueries({
 				queryKey: commentListQueryKeys.build({ postId: comment.postId }),

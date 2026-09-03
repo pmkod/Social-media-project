@@ -3,6 +3,7 @@ import { z } from "zod";
 import { MainContainer } from "@/core/components/ui/main-container.tsx";
 import { PostSearchList } from "@/features/post/search/post-search-list.tsx";
 import { SearchBar } from "@/features/search/search-bar.tsx";
+import { SparkSearchSection } from "@/features/spark/spark-gallery.tsx";
 import { UserSearchList } from "@/features/user/search/user-search-list.tsx";
 
 const searchPageSearchParams = z.object({
@@ -26,6 +27,7 @@ function SearchPage() {
 
 			<div className="pb-8">
 				<UserSearchList query={committedQuery} />
+				<SparkSearchSection query={committedQuery} />
 				<PostSearchList query={committedQuery} />
 			</div>
 		</MainContainer>

@@ -20,7 +20,10 @@ export type PostMediaItem = {
 	highQualityFile?: PostFileItem | null;
 };
 
+export type PostType = "POST" | "SPARK";
+
 export type Post = {
+	type: PostType;
 	id: string;
 	author: User;
 	text?: string;

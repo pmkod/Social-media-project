@@ -18,9 +18,14 @@ type FollowSuggestionsResponse = {
 	};
 };
 
-const useFollowSuggestions = () => {
+const useFollowSuggestions = ({
+	enabled = true,
+}: {
+	enabled?: boolean;
+} = {}) => {
 	const limit = 7;
 	return useInfiniteQuery({
+		enabled,
 		queryKey: userListQueryKeys.followSuggestions({ limit }),
 		queryFn: async ({ pageParam }) => {
 			const searchParams = new URLSearchParams({ limit: String(limit) });

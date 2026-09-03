@@ -18,6 +18,7 @@ import { Route as BaseTermsOfServiceRouteImport } from './routes/_base/terms-of-
 import { Route as MainWithRightAsideRouteRouteImport } from './routes/_main/_with-right-aside/route'
 import { Route as MainDiscussionsRouteRouteImport } from './routes/_main/discussions/route'
 import { Route as MainSettingsRouteRouteImport } from './routes/_main/settings/route'
+import { Route as MainSparksRouteImport } from './routes/_main/sparks'
 import { Route as BaseAuthenticationIndexRouteImport } from './routes/_base/_authentication/index'
 import { Route as BaseAuthenticationCompleteSignupRouteImport } from './routes/_base/_authentication/complete-signup'
 import { Route as BaseAuthenticationNewPasswordRouteImport } from './routes/_base/_authentication/new-password'
@@ -82,6 +83,11 @@ const MainDiscussionsRouteRoute = MainDiscussionsRouteRouteImport.update({
 const MainSettingsRouteRoute = MainSettingsRouteRouteImport.update({
   id: '/settings',
   path: '/settings',
+  getParentRoute: () => MainRouteRoute,
+} as any)
+const MainSparksRoute = MainSparksRouteImport.update({
+  id: '/sparks',
+  path: '/sparks',
   getParentRoute: () => MainRouteRoute,
 } as any)
 const BaseAuthenticationIndexRoute = BaseAuthenticationIndexRouteImport.update({
@@ -226,6 +232,7 @@ export interface FileRoutesByFullPath {
   '/about': typeof BaseAboutRoute
   '/privacy-policy': typeof BasePrivacyPolicyRoute
   '/terms-of-service': typeof BaseTermsOfServiceRoute
+  '/sparks': typeof MainSparksRoute
   '/complete-signup': typeof BaseAuthenticationCompleteSignupRoute
   '/new-password': typeof BaseAuthenticationNewPasswordRoute
   '/password-reset': typeof BaseAuthenticationPasswordResetRoute
@@ -255,6 +262,7 @@ export interface FileRoutesByTo {
   '/about': typeof BaseAboutRoute
   '/privacy-policy': typeof BasePrivacyPolicyRoute
   '/terms-of-service': typeof BaseTermsOfServiceRoute
+  '/sparks': typeof MainSparksRoute
   '/complete-signup': typeof BaseAuthenticationCompleteSignupRoute
   '/new-password': typeof BaseAuthenticationNewPasswordRoute
   '/password-reset': typeof BaseAuthenticationPasswordResetRoute
@@ -290,6 +298,7 @@ export interface FileRoutesById {
   '/_base/about': typeof BaseAboutRoute
   '/_base/privacy-policy': typeof BasePrivacyPolicyRoute
   '/_base/terms-of-service': typeof BaseTermsOfServiceRoute
+  '/_main/sparks': typeof MainSparksRoute
   '/_base/_authentication/complete-signup': typeof BaseAuthenticationCompleteSignupRoute
   '/_base/_authentication/new-password': typeof BaseAuthenticationNewPasswordRoute
   '/_base/_authentication/password-reset': typeof BaseAuthenticationPasswordResetRoute
@@ -324,6 +333,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/privacy-policy'
     | '/terms-of-service'
+    | '/sparks'
     | '/complete-signup'
     | '/new-password'
     | '/password-reset'
@@ -353,6 +363,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/privacy-policy'
     | '/terms-of-service'
+    | '/sparks'
     | '/complete-signup'
     | '/new-password'
     | '/password-reset'
@@ -387,6 +398,7 @@ export interface FileRouteTypes {
     | '/_base/about'
     | '/_base/privacy-policy'
     | '/_base/terms-of-service'
+    | '/_main/sparks'
     | '/_base/_authentication/complete-signup'
     | '/_base/_authentication/new-password'
     | '/_base/_authentication/password-reset'
@@ -481,6 +493,13 @@ declare module '@tanstack/react-router' {
       path: '/settings'
       fullPath: '/settings'
       preLoaderRoute: typeof MainSettingsRouteRouteImport
+      parentRoute: typeof MainRouteRoute
+    }
+    '/_main/sparks': {
+      id: '/_main/sparks'
+      path: '/sparks'
+      fullPath: '/sparks'
+      preLoaderRoute: typeof MainSparksRouteImport
       parentRoute: typeof MainRouteRoute
     }
     '/_base/_authentication/': {
@@ -769,12 +788,14 @@ interface MainRouteRouteChildren {
   MainWithRightAsideRouteRoute: typeof MainWithRightAsideRouteRouteWithChildren
   MainDiscussionsRouteRoute: typeof MainDiscussionsRouteRouteWithChildren
   MainSettingsRouteRoute: typeof MainSettingsRouteRouteWithChildren
+  MainSparksRoute: typeof MainSparksRoute
 }
 
 const MainRouteRouteChildren: MainRouteRouteChildren = {
   MainWithRightAsideRouteRoute: MainWithRightAsideRouteRouteWithChildren,
   MainDiscussionsRouteRoute: MainDiscussionsRouteRouteWithChildren,
   MainSettingsRouteRoute: MainSettingsRouteRouteWithChildren,
+  MainSparksRoute: MainSparksRoute,
 }
 
 const MainRouteRouteWithChildren = MainRouteRoute._addFileChildren(

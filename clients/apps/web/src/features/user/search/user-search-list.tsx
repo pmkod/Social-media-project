@@ -2,6 +2,7 @@ import { Button } from "@/core/components/ui/button.tsx";
 import { ExceptionBlock } from "@/core/components/ui/exception-block.tsx";
 import { UserRowItem } from "@/features/user/common/components/user-row-item.tsx";
 import { UserRowItemListLoader } from "@/features/user/common/components/user-row-item-list-loader.tsx";
+import { useFollowSuggestions } from "../follow-suggestions/use-follow-suggestions.ts";
 import { useSearchUsers } from "./use-search-users.ts";
 
 type UserSearchListProps = {
@@ -9,14 +10,18 @@ type UserSearchListProps = {
 };
 
 function UserSearchList({ query }: UserSearchListProps) {
-	const usersQuery = useSearchUsers({ query, limit: 5 });
-
-	if (query.trim().length === 0) return null;
+	const hasQuery = query.trim().length > 0;
+	const searchUsers = useSearchUsers({ query, limit: 5 });
+	const suggestions = useFollowSuggestions({ enabled: !hasQuery });
+	const usersQuery = hasQuery ? searchUsers : suggestions;
 
 	const users = usersQuery.data?.pages.flatMap((page) => page.users) ?? [];
 
 	return (
 		<section className="mb-6 overflow-hidden rounded-xl border border-border bg-background">
+			<h2 className="border-b px-4 py-3 font-semibold">
+				{hasQuery ? "People" : "People to discover"}
+			</h2>
 			{usersQuery.isLoading ? (
 				<UserRowItemListLoader count={5} />
 			) : usersQuery.isError ? (
@@ -29,7 +34,9 @@ function UserSearchList({ query }: UserSearchListProps) {
 				/>
 			) : users.length === 0 ? (
 				<p className="px-6 py-5 text-sm text-muted-foreground">
-					No people found for “{query}”.
+					{hasQuery
+						? `No people found for “${query}”.`
+						: "No suggestions right now."}
 				</p>
 			) : (
 				<>

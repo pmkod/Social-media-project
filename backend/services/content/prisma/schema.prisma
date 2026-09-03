@@ -7,8 +7,14 @@ datasource db {
   provider = "postgresql"
 }
 
+enum PostType {
+  POST
+  SPARK
+}
+
 model Post {
   id            String      @id @default(cuid())
+  type          PostType    @default(POST)
   authorId      String      @map("author_id")
   text          String      @map("content")
   likesCount    Int         @default(0) @map("likes_count")
@@ -21,6 +27,8 @@ model Post {
   bookmarks     Bookmark[]
 
   @@index([createdAt, id])
+  @@index([type, createdAt, id])
+  @@index([authorId, type, createdAt, id])
   @@map("post")
 }
 

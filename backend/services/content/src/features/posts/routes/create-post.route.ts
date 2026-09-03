@@ -9,14 +9,12 @@ import {
 	PostMediaTypes,
 	PostsRoutesTag,
 } from "../posts.constants";
-import { PostValidationSchema } from "../posts.validation-schemas";
+import { CreatePostRequestBody } from "../posts.validation-schemas";
+import { deleteFile } from "@/core/services/storage.service";
+import type { Prisma } from "@/generated/prisma/client";
+import { validateSparkVideo } from "../services/spark-video-validation.service";
 import { compressPostMediaFile } from "../services/post-media-compression.service";
 import { setPostMediaFile } from "../services/post-media-storage.service";
-
-const CreatePostRequestBody = z.object({
-	text: PostValidationSchema.shape.text,
-	medias: PostValidationSchema.shape.medias.optional(),
-});
 
 const routeDef = createRoute({
 	method: "post",
@@ -54,102 +52,86 @@ const createPostRoute = defineOpenAPIRoute<
 			throw new Error("Unauthorized");
 		}
 
-		const { text, medias } = c.req.valid("form");
+		const { text, medias, type } = c.req.valid("form");
+		if (type === "SPARK") await validateSparkVideo(medias[0]!);
 
-		const post = await prisma.post.create({
-			data: {
-				authorId: authenticatedUserId,
-				text,
-			},
-			select: {
-				id: true,
-			},
-		});
-
-		if (medias && medias.length > 0) {
-			const startingPosition = 1;
-			for (let i = 0; i < medias.length; i++) {
-				const media = medias[i];
-				if (!(media instanceof File)) continue;
-				const position = startingPosition + i;
-
+		const authors = await userServiceClient.fetchAuthorsBatch(
+			[authenticatedUserId],
+			authenticatedUserId,
+		);
+		const postId = crypto.randomUUID();
+		const uploadedFiles: string[] = [];
+		let postToSend;
+		try {
+			const mediaRecords: Prisma.PostMediaCreateWithoutPostInput[] = [];
+			for (const [index, media] of medias.entries()) {
 				const isVideo = media.type.startsWith("video/");
-				const mediaType = isVideo ? PostMediaTypes.VIDEO : PostMediaTypes.IMAGE;
-
 				const lowQualityFile = isVideo
 					? media
-					: await compressPostMediaFile({
-							file: media,
-							quality: 50,
-						});
-				const highQualityFile = media;
-
-				const lowQualityFileExt = isVideo
-					? media.name.split(".").pop() || "mp4"
-					: PostMediaCompressionFormat.ext;
-				const highQualityFileExt =
-					highQualityFile.name.split(".").pop() || "webp";
-
-				const lowQualityMediaFileName = `post_${post.id}_low_${Date.now()}_${i}.${lowQualityFileExt}`;
-				const highQualityMediaFileName = `post_${post.id}_high_${Date.now()}_${i}.${highQualityFileExt}`;
-
-				await setPostMediaFile({
-					file: lowQualityFile,
-					filename: lowQualityMediaFileName,
-				});
-				await setPostMediaFile({
-					file: highQualityFile,
-					filename: highQualityMediaFileName,
-				});
-
-				await prisma.postMedia.create({
-					data: {
-						post: {
-							connect: {
-								id: post.id,
-							},
-						},
-						position: position,
-						mediaType: mediaType,
-						lowQualityFile: {
-							create: {
-								filename: lowQualityMediaFileName,
-								mimeType: lowQualityFile.type,
-							},
-						},
-						highQualityFile: {
-							create: {
-								filename: highQualityMediaFileName,
-								mimeType: highQualityFile.type,
-							},
-						},
+					: await compressPostMediaFile({ file: media, quality: 50 });
+				const extensions: Record<string, string> = {
+					"video/mp4": "mp4",
+					"video/webm": "webm",
+					"video/ogg": "ogg",
+					"image/jpeg": "jpg",
+					"image/png": "png",
+					"image/webp": "webp",
+				};
+				const lowFilename = `post_${postId}_low_${index}.${extensions[lowQualityFile.type] ?? PostMediaCompressionFormat.ext}`;
+				const highFilename = `post_${postId}_high_${index}.${extensions[media.type]}`;
+				for (const [file, filename] of [
+					[lowQualityFile, lowFilename],
+					[media, highFilename],
+				] as const) {
+					uploadedFiles.push(filename);
+					await setPostMediaFile({ file, filename });
+				}
+				mediaRecords.push({
+					position: index + 1,
+					mediaType: isVideo ? PostMediaTypes.VIDEO : PostMediaTypes.IMAGE,
+					lowQualityFile: {
+						create: { filename: lowFilename, mimeType: lowQualityFile.type },
+					},
+					highQualityFile: {
+						create: { filename: highFilename, mimeType: media.type },
 					},
 				});
 			}
-		}
-
-		const postToSend = await prisma.post.findUniqueOrThrow({
-			where: {
-				id: post.id,
-			},
-			select: {
-				id: true,
-				text: true,
-				likesCount: true,
-				commentsCount: true,
-				medias: {
-					select: {
-						id: true,
-						highQualityFile: { select: { filename: true } },
-						position: true,
+			// Publish only once every media upload succeeds. Nested writes are atomic.
+			postToSend = await prisma.post.create({
+				data: {
+					id: postId,
+					authorId: authenticatedUserId,
+					type,
+					text,
+					medias: { create: mediaRecords },
+				},
+				include: {
+					medias: {
+						include: { lowQualityFile: true, highQualityFile: true },
+						orderBy: { position: "asc" },
 					},
 				},
-			},
-		});
+			});
+		} catch (error) {
+			await Promise.allSettled(
+				uploadedFiles.map((fileName) => deleteFile({ fileName })),
+			);
+			throw error;
+		}
 		await userServiceClient.adjustPostCount(authenticatedUserId, 1);
 
 		return c.json(
-			{ message: "Post created successfully", post: postToSend },
+			{
+				message:
+					type === "SPARK" ? "Spark published" : "Post created successfully",
+				post: {
+					...postToSend,
+					author: authors.get(authenticatedUserId) ?? null,
+					isLikedByAuthenticatedUser: false,
+					isBookmarkedByAuthenticatedUser: false,
+				},
+			},
 			HttpStatus.CREATED.code,
 		);
 	},

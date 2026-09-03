@@ -31,7 +31,8 @@ function PostSearchList({ query }: PostSearchListProps) {
 	const posts = postsQuery.data?.pages.flatMap((page) => page.posts) ?? [];
 
 	return (
-		<section>
+		<section aria-label="Posts">
+			<h2 className="mb-3 px-1 font-semibold">Posts</h2>
 			{postsQuery.isLoading ? (
 				<PostListLoader />
 			) : postsQuery.isError ? (

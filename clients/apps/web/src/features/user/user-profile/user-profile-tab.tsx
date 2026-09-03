@@ -41,6 +41,10 @@ function UserProfileTabListLoader() {
 			</div>
 			<div className="relative flex flex-1 items-center justify-center gap-x-1.5 px-3 py-3">
 				<Skeleton className="size-5" />
+				<Skeleton className="h-5 w-14" />
+			</div>
+			<div className="relative flex flex-1 items-center justify-center gap-x-1.5 px-3 py-3">
+				<Skeleton className="size-5" />
 				<Skeleton className="h-5 w-12" />
 			</div>
 		</div>

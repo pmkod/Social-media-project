@@ -103,6 +103,7 @@ const getBookmarksRoute = defineOpenAPIRoute<
 				id: true,
 				authorId: true,
 				text: true,
+				type: true,
 				likesCount: true,
 				commentsCount: true,
 				createdAt: true,
@@ -149,7 +150,10 @@ const getBookmarksRoute = defineOpenAPIRoute<
 		const postIds = items.map((post) => post.id);
 		const authorIds = Array.from(new Set(items.map((post) => post.authorId)));
 
-		const authorsMap = await userServiceClient.fetchAuthorsBatch(authorIds, ownerId);
+		const authorsMap = await userServiceClient.fetchAuthorsBatch(
+			authorIds,
+			ownerId,
+		);
 		const likedPostIds =
 			postIds.length > 0
 				? new Set(

@@ -1,39 +1,49 @@
 import {
 	RiCloseLine,
+	RiFlashlightLine,
 	RiImageLine,
 	RiPlayFill,
 	RiSendPlane2Line,
 } from "@remixicon/react";
 import { useForm, useSelector } from "@tanstack/react-form";
-import { useEffect, useMemo } from "react";
-import { z } from "zod";
+import { isHTTPError } from "ky";
+import { useEffect, useMemo, useState } from "react";
 import { Button } from "@/core/components/ui/button.tsx";
 import NiceModal from "@/core/components/ui/nice-modal.tsx";
 import { useSelectFiles } from "@/core/hooks/use-select-files.ts";
 import { cn } from "@/core/lib/utils.ts";
+import { useAuthenticatedUser } from "@/features/user/authenticated-user/use-authenticated-user.ts";
+import { UserAvatar } from "@/features/user/common/components/user-avatar.tsx";
+import type { PostType } from "../common/post.ts";
+import {
+	checkSparkDuration,
+	createPostSchema,
+	POST_MAX_FILE_SIZE,
+	POST_MEDIA_MIME_TYPES,
+} from "./create-post.validation.ts";
 import { MediaPreviewModal } from "./media-preview.modal.tsx";
 import { useCreatePost } from "./use-create-post";
 
-const CURRENT_USER_AVATAR =
-	"https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80";
+type CreatePostFormProps = {
+	type?: PostType;
+	onSuccess?: () => void;
+	onBusyChange?: (busy: boolean) => void;
+};
 
-const MAX_MEDIA = 4;
-
-const createPostSchema = z
-	.object({
-		text: z.string(),
-		medias: z.array(z.custom<File>((val) => val instanceof File)),
-	})
-	.refine((data) => data.text.trim().length > 0 || data.medias.length > 0, {
-		message: "A post must contain text or at least one media file",
-	});
-
-function CreatePostForm() {
+function CreatePostForm({
+	type: initialType,
+	onSuccess,
+	onBusyChange,
+}: CreatePostFormProps = {}) {
 	const { mutate, isPending } = useCreatePost();
 	const { selectFiles } = useSelectFiles();
+	const { data: authenticatedUser } = useAuthenticatedUser();
+	const [error, setError] = useState<string | null>(null);
+	const [isValidatingMedia, setIsValidatingMedia] = useState(false);
 
 	const form = useForm({
 		defaultValues: {
+			type: initialType ?? ("POST" as PostType),
 			text: "",
 			medias: [] as File[],
 		},
@@ -41,22 +51,42 @@ function CreatePostForm() {
 			onSubmit: createPostSchema,
 		},
 		onSubmit: async ({ value }) => {
-			if (isPending) return;
+			if (isPending || isValidatingMedia) return;
+			setError(null);
 
 			mutate(
 				{
+					type: value.type,
 					text: value.text.trim(),
 					medias: value.medias,
 				},
 				{
+					onError: (error) =>
+						setError(
+							isHTTPError(error) &&
+								typeof error.data === "object" &&
+								error.data !== null &&
+								"message" in error.data &&
+								typeof error.data.message === "string"
+								? error.data.message
+								: "Unable to publish. Please try again. Your draft has been kept.",
+						),
 					onSuccess: () => {
 						form.reset();
+						onSuccess?.();
 					},
 				},
 			);
 		},
 	});
 
+	const type = useSelector(form.store, (state) => state.values.type);
+	const isSpark = type === "SPARK";
+	const maxMedia = isSpark ? 1 : 4;
+	const isBusy = isPending || isValidatingMedia;
+	useEffect(() => {
+		onBusyChange?.(isBusy);
+	}, [isBusy, onBusyChange]);
 	const medias = useSelector(form.store, (state) => state.values.medias);
 	const text = useSelector(form.store, (state) => state.values.text);
 
@@ -81,15 +111,44 @@ function CreatePostForm() {
 	}, [mediaPreviews]);
 
 	const handleMediaSelect = async () => {
-		const selectedFiles = await selectFiles({ accept: "image/*,video/*" });
-		if (!selectedFiles || selectedFiles.length === 0) return;
-
-		const currentMedias = form.getFieldValue("medias") || [];
-		const remainingSlots = MAX_MEDIA - currentMedias.length;
-		if (remainingSlots <= 0) return;
-
-		const filesToAdd = selectedFiles.slice(0, remainingSlots);
-		form.setFieldValue("medias", [...currentMedias, ...filesToAdd]);
+		setError(null);
+		const selectedFiles = await selectFiles({
+			accept: (isSpark
+				? POST_MEDIA_MIME_TYPES.filter((mime) => mime.startsWith("video/"))
+				: POST_MEDIA_MIME_TYPES
+			).join(","),
+			multiple: !isSpark,
+		});
+		if (!selectedFiles.length) return;
+		setIsValidatingMedia(true);
+		try {
+			if (
+				selectedFiles.some(
+					(file) =>
+						!POST_MEDIA_MIME_TYPES.includes(file.type) ||
+						file.size === 0 ||
+						file.size > POST_MAX_FILE_SIZE ||
+						(isSpark && !file.type.startsWith("video/")),
+				)
+			) {
+				throw new Error(
+					"Choose a supported file up to 20 MB. Sparks require a video.",
+				);
+			}
+			const currentMedias = form.getFieldValue("medias");
+			if (selectedFiles.length > maxMedia - currentMedias.length)
+				throw new Error(
+					`You can attach up to ${maxMedia} ${isSpark ? "video" : "files"}.`,
+				);
+			if (isSpark) await checkSparkDuration(selectedFiles[0]);
+			form.setFieldValue("medias", [...currentMedias, ...selectedFiles]);
+		} catch (error) {
+			setError(
+				error instanceof Error ? error.message : "Unable to read this file.",
+			);
+		} finally {
+			setIsValidatingMedia(false);
+		}
 	};
 
 	const handleRemoveFile = (index: number) => {
@@ -112,8 +171,8 @@ function CreatePostForm() {
 		});
 	};
 
-	const hasContent = Boolean((text || "").trim()) || (medias || []).length > 0;
-	const isMaxMediaReached = (medias || []).length >= MAX_MEDIA;
+	const hasContent = createPostSchema.safeParse({ type, text, medias }).success;
+	const isMaxMediaReached = (medias || []).length >= maxMedia;
 
 	return (
 		<form
@@ -124,12 +183,32 @@ function CreatePostForm() {
 			}}
 			className="pb-4 px-4 pt-6 border border-border rounded-xl"
 		>
+			{!initialType ? (
+				<fieldset className="mb-4 flex gap-2">
+					<legend className="sr-only">Publication type</legend>
+					{(["POST", "SPARK"] as const).map((option) => (
+						<Button
+							key={option}
+							type="button"
+							variant={type === option ? "secondary" : "ghost"}
+							aria-pressed={type === option}
+							disabled={isBusy}
+							onClick={() => {
+								form.setFieldValue("type", option);
+								form.setFieldValue("medias", []);
+								setError(null);
+							}}
+						>
+							{option === "SPARK" ? (
+								<RiFlashlightLine className="size-4" />
+							) : null}
+							{option === "SPARK" ? "Spark" : "Post"}
+						</Button>
+					))}
+				</fieldset>
+			) : null}
 			<div className="flex gap-3">
-				<img
-					src={CURRENT_USER_AVATAR}
-					alt="Your avatar"
-					className="h-10 w-10 rounded-full object-cover shrink-0 ring-1 ring-border"
-				/>
+				<UserAvatar user={authenticatedUser?.user} size="lg" />
 
 				<div className="flex-1 min-w-0 space-y-3">
 					<form.Field name="text">
@@ -138,9 +217,13 @@ function CreatePostForm() {
 								value={field.state.value}
 								onChange={(e) => field.handleChange(e.target.value)}
 								onBlur={field.handleBlur}
-								placeholder="What's happening?"
+								aria-label={isSpark ? "Spark caption" : "Post text"}
+								maxLength={5000}
+								placeholder={
+									isSpark ? "Give your Spark a caption…" : "What's happening?"
+								}
 								rows={3}
-								disabled={isPending}
+								disabled={isBusy}
 								className="min-h-0 w-full resize-none font-normal placeholder:font-normal border-0 bg-transparent px-0 py-0 text-xl text-foreground placeholder:text-muted-foreground focus-visible:ring-0 ring-0 outline-none disabled:opacity-60"
 							/>
 						)}
@@ -187,7 +270,7 @@ function CreatePostForm() {
 									<button
 										type="button"
 										onClick={() => handleRemoveFile(index)}
-										disabled={isPending}
+										disabled={isBusy}
 										className="absolute top-1.5 right-1.5 p-1 rounded-full bg-black/70 text-white hover:bg-black transition-colors disabled:opacity-50 z-10 cursor-pointer flex items-center justify-center"
 										aria-label="Remove media"
 									>
@@ -200,27 +283,39 @@ function CreatePostForm() {
 				</div>
 			</div>
 
+			{isSpark ? (
+				<p className="mt-3 text-xs text-muted-foreground">
+					One video. Up to 90 seconds and 20 MB. Make it a Spark.
+				</p>
+			) : null}
+			{error ? (
+				<p role="alert" className="mt-3 text-sm text-destructive">
+					{error}
+				</p>
+			) : null}
 			<div className="mt-3 flex items-center justify-between pt-3 border-t border-border">
 				<div className="flex items-center gap-2">
 					<Button
 						type="button"
 						variant="ghost"
 						onClick={handleMediaSelect}
-						disabled={isPending || isMaxMediaReached}
+						disabled={isBusy || isMaxMediaReached}
 					>
 						<RiImageLine className="h-4 w-4" />
-						Media
+						{isValidatingMedia ? "Checking…" : isSpark ? "Add video" : "Media"}
 					</Button>
 					{(medias || []).length > 0 ? (
 						<span className="text-xs text-muted-foreground font-medium">
-							{(medias || []).length}/{MAX_MEDIA}
+							{(medias || []).length}/{maxMedia}
 						</span>
 					) : null}
 				</div>
 
-				<Button type="submit" disabled={!hasContent || isPending}>
+				<Button type="submit" disabled={!hasContent || isBusy}>
 					<RiSendPlane2Line className="h-4 w-4" />
-					<span>{isPending ? "Posting..." : "Post"}</span>
+					<span>
+						{isPending ? "Publishing…" : isSpark ? "Publish Spark" : "Post"}
+					</span>
 				</Button>
 			</div>
 		</form>

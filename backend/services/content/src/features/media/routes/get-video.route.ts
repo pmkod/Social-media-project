@@ -1,6 +1,7 @@
 import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { getS3File } from "@/core/services/storage.service";
+import { parseVideoRange } from "../video-range";
 import { MediaRoutesTag } from "../media.constants";
 
 const routeDef = createRoute({
@@ -20,6 +21,7 @@ const routeDef = createRoute({
 		206: {
 			description: "Video stream (Partial content - Range)",
 		},
+		416: { description: "Requested range not satisfiable" },
 		[HttpStatus.NOT_FOUND.code]: {
 			description: "Video not found",
 		},
@@ -34,10 +36,7 @@ const getVideoRoute = defineOpenAPIRoute({
 		const s3File = getS3File({ fileName });
 		const exists = await s3File.exists();
 		if (!exists) {
-			return c.json(
-				{ error: "Video not found" },
-				HttpStatus.NOT_FOUND.code,
-			);
+			return c.json({ error: "Video not found" }, HttpStatus.NOT_FOUND.code);
 		}
 
 		const ext = fileName.split(".").pop()?.toLowerCase();
@@ -47,29 +46,31 @@ const getVideoRoute = defineOpenAPIRoute({
 		else if (ext === "ogg") mimeType = "video/ogg";
 		else if (ext === "mov") mimeType = "video/quicktime";
 
-		const fileSize = s3File.size;
+		const fileSize = (await s3File.stat()).size;
 		const rangeHeader = c.req.header("range");
 
 		if (rangeHeader) {
-			const parts = rangeHeader.replace(/bytes=/, "").split("-");
-			const start = Number.parseInt(parts[0], 10);
-			const end = parts[1] ? Number.parseInt(parts[1], 10) : fileSize - 1;
-
-			if (
-				Number.isNaN(start) ||
-				start >= fileSize ||
-				end >= fileSize ||
-				start > end
-			) {
+			const range = parseVideoRange(rangeHeader, fileSize);
+			if (!range) {
 				return c.text("Requested range not satisfiable", 416, {
 					"Content-Range": `bytes */${fileSize}`,
 				});
 			}
+			const { start, end } = range;
 
 			const chunkSize = end - start + 1;
-			const slicedFile = s3File.slice(start, end + 1);
+			// Bun 1.2's S3 slice().stream() ignores the slice. Request the range
+			// explicitly and relay the stream, without buffering the whole video.
+			const partial = await fetch(s3File.presign({ expiresIn: 60 }), {
+				headers: { Range: `bytes=${start}-${end}` },
+				signal: c.req.raw.signal,
+			});
+			if (partial.status !== 206 || !partial.body) {
+				await partial.body?.cancel();
+				throw new Error("Unable to stream the requested video range");
+			}
 
-			return c.body(slicedFile.stream(), 206, {
+			return c.body(partial.body, 206, {
 				"Content-Range": `bytes ${start}-${end}/${fileSize}`,
 				"Accept-Ranges": "bytes",
 				"Content-Length": chunkSize.toString(),

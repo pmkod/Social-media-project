@@ -1,8 +1,11 @@
 import { z } from "@hono/zod-openapi";
 
+export const PostTypeSchema = z.enum(["POST", "SPARK"]);
+
 const PostValidationSchema = z.object({
 	id: z.string(),
-	text: z.string().min(1).max(5000),
+	type: PostTypeSchema,
+	text: z.string().trim().max(5000),
 	createdAt: z.string(),
 	medias: z
 		.array(
@@ -16,9 +19,43 @@ const PostValidationSchema = z.object({
 					"video/webm",
 					"video/ogg",
 				])
+				.min(1)
 				.max(20_000_000),
 		)
 		.max(4),
 });
 
 export { PostValidationSchema };
+
+// Multipart forms contain a File for one upload and an array for several.
+export const CreatePostRequestBody = z
+	.object({
+		type: PostTypeSchema.default("POST"),
+		text: PostValidationSchema.shape.text.default(""),
+		medias: z
+			.union([
+				PostValidationSchema.shape.medias.element.transform((file) => [file]),
+				PostValidationSchema.shape.medias,
+			])
+			.default([]),
+	})
+	.superRefine((data, ctx) => {
+		if (data.type === "SPARK") {
+			if (
+				data.medias.length !== 1 ||
+				!data.medias[0]?.type.startsWith("video/")
+			) {
+				ctx.addIssue({
+					code: "custom",
+					path: ["medias"],
+					message: "A Spark requires exactly one video.",
+				});
+			}
+		} else if (!data.text && data.medias.length === 0) {
+			ctx.addIssue({
+				code: "custom",
+				path: ["text"],
+				message: "Add text or at least one media file.",
+			});
+		}
+	});

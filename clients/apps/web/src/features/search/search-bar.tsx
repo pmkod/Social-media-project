@@ -132,8 +132,8 @@ function SearchBar() {
 			<RiSearchLine className="pointer-events-none absolute left-4 top-1/2 size-5 -translate-y-1/2 text-muted-foreground" />
 			<input
 				type="search"
-				placeholder="Search posts"
-				aria-label="Search posts"
+				placeholder="Search posts, Sparks and people"
+				aria-label="Search posts, Sparks and people"
 				className="h-12 w-full rounded-full border border-transparent bg-muted pl-12 pr-5 text-sm text-foreground outline-none transition focus:border-foreground"
 				value={search}
 				maxLength={100}
