@@ -28,6 +28,7 @@ type SettingsSection = {
 	description: string;
 	path: Exclude<SettingsPath, "/settings">;
 	icon: RemixiconComponentType;
+	activePaths?: readonly SettingsPath[];
 };
 
 const settingsSections: SettingsSection[] = [
@@ -37,6 +38,7 @@ const settingsSections: SettingsSection[] = [
 		description: "Manage your email address",
 		path: "/settings/account",
 		icon: RiUserSettingsLine,
+		activePaths: ["/settings/change-email"],
 	},
 	{
 		id: "security",
@@ -44,6 +46,7 @@ const settingsSections: SettingsSection[] = [
 		description: "Keep your account secure",
 		path: "/settings/security",
 		icon: RiShieldKeyholeLine,
+		activePaths: ["/settings/change-password"],
 	},
 	{
 		id: "privacy",
@@ -75,7 +78,7 @@ function SettingsLayout() {
 
 	return (
 		<main className="min-h-screen min-w-0 flex-1 bg-background">
-			<div className="lg:grid lg:grid-cols-[25rem_minmax(0,1fr)] lg:gap-10">
+			<div className="lg:grid lg:grid-cols-[25rem_minmax(0,1fr)]">
 				<section
 					className={`h-screen ${!isOverview ? "hidden lg:block " : ""}`}
 				>
@@ -89,7 +92,8 @@ function SettingsLayout() {
 						{settingsSections.map((section) => {
 							const isSelected =
 								location.pathname === section.path ||
-								location.pathname.startsWith(`${section.path}/`);
+								location.pathname.startsWith(`${section.path}/`) ||
+								section.activePaths?.some((path) => location.pathname === path);
 							return (
 								<SettingRowItem
 									icon={section.icon}
@@ -104,7 +108,9 @@ function SettingsLayout() {
 					</nav>
 				</section>
 
-				<section className={cn("min-w-0", isOverview && "hidden lg:block")}>
+				<section
+					className={cn("min-w-0 px-10", isOverview && "hidden lg:block")}
+				>
 					<Outlet />
 				</section>
 			</div>

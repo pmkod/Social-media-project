@@ -21,12 +21,12 @@ function SecuritySettingsPage() {
 					<AppHeaderTitle>Security</AppHeaderTitle>
 				</AppHeaderLeftPart>
 			</AppHeader>
-			<div className="mt-8 space-y-1">
+			<div className="space-y-1">
 				<SettingRowItem
 					icon={RiLockPasswordLine}
 					title="Change your password"
 					description="Update your password at any time."
-					to="/settings/security/change-password"
+					to="/settings/change-password"
 				/>
 			</div>
 		</>

@@ -1,36 +1,6 @@
-import { RiArrowLeftLine } from "@remixicon/react";
-import { Link } from "@tanstack/react-router";
 import type { SettingsPath } from "@/features/setting/common/setting-row-item.tsx";
 
 export type { SettingsPath };
-
-export function SettingsHeader({
-	title,
-	description,
-	backTo = "/settings",
-}: {
-	title: string;
-	description: string;
-	backTo?: SettingsPath;
-}) {
-	return (
-		<div className="flex items-start gap-3">
-			<Link
-				to={backTo}
-				aria-label="Back to settings"
-				className="mt-0.5 inline-flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
-			>
-				<RiArrowLeftLine className="size-5" />
-			</Link>
-			<div>
-				<h2 className="text-2xl font-bold tracking-tight">{title}</h2>
-				<p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">
-					{description}
-				</p>
-			</div>
-		</div>
-	);
-}
 
 export function SettingsOverview() {
 	return (

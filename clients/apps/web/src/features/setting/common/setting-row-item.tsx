@@ -8,9 +8,9 @@ import { Link } from "@tanstack/react-router";
 export type SettingsPath =
 	| "/settings"
 	| "/settings/account"
-	| "/settings/account/change-email"
+	| "/settings/change-email"
 	| "/settings/security"
-	| "/settings/security/change-password"
+	| "/settings/change-password"
 	| "/settings/privacy"
 	| "/settings/theme"
 	| "/settings/language";
@@ -50,7 +50,11 @@ export function SettingRowItem({
 					</span>
 				) : null}
 			</span>
-			{trailing ?? <ArrowIcon className="size-5 shrink-0 opacity-60" />}
+			{trailing !== undefined ? (
+				trailing
+			) : href || to ? (
+				<ArrowIcon className="size-5 shrink-0 opacity-60" />
+			) : null}
 		</>
 	);
 	const className =

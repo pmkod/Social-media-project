@@ -7,9 +7,7 @@ import {
 } from "@/core/components/ui/app-header";
 import { ChangePasswordForm } from "@/features/settings/change-password.form.tsx";
 
-export const Route = createFileRoute(
-	"/_main/settings/security/change-password",
-)({
+export const Route = createFileRoute("/_main/settings/change-password")({
 	component: ChangePasswordSettingsPage,
 });
 
@@ -24,9 +22,11 @@ function ChangePasswordSettingsPage() {
 					<AppHeaderTitle>Change password</AppHeaderTitle>
 				</AppHeaderLeftPart>
 			</AppHeader>
-			<ChangePasswordForm
-				onSuccess={() => void navigate({ to: "/settings/security" })}
-			/>
+			<div className="mt-8 max-w-xl pl-12">
+				<ChangePasswordForm
+					onSuccess={() => void navigate({ to: "/settings/security" })}
+				/>
+			</div>
 		</>
 	);
 }

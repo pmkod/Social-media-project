@@ -21,16 +21,16 @@ function LanguageSettingsPage() {
 					<AppHeaderTitle>Language</AppHeaderTitle>
 				</AppHeaderLeftPart>
 			</AppHeader>
-			<div className="mt-8">
+			<div>
 				<SettingRowItem
 					icon={RiGlobalLine}
 					title="Display language"
 					description="English"
-					trailing={
-						<span className="rounded-full bg-muted px-3 py-1 text-xs font-medium text-muted-foreground">
-							Coming soon
-						</span>
-					}
+					// trailing={
+					// 	<span className="rounded-full bg-muted px-3 py-1 text-xs font-medium text-muted-foreground">
+					// 		Coming soon
+					// 	</span>
+					// }
 					disabled
 				/>
 			</div>

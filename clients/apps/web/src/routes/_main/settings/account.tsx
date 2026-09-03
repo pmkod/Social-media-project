@@ -24,12 +24,12 @@ function AccountSettingsPage() {
 					<AppHeaderTitle>Account</AppHeaderTitle>
 				</AppHeaderLeftPart>
 			</AppHeader>
-			<div className="mt-8 space-y-1">
+			<div className="space-y-1">
 				<SettingRowItem
 					icon={RiMailLine}
 					title="Change your email"
 					description={data?.user.email ?? "Update your email address."}
-					to="/settings/account/change-email"
+					to="/settings/change-email"
 				/>
 			</div>
 		</>

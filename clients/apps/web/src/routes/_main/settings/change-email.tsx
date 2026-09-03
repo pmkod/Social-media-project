@@ -8,7 +8,7 @@ import {
 import { ChangeEmailForm } from "@/features/settings/change-email.form.tsx";
 import { useAuthenticatedUser } from "@/features/user/authenticated-user/use-authenticated-user.ts";
 
-export const Route = createFileRoute("/_main/settings/account/change-email")({
+export const Route = createFileRoute("/_main/settings/change-email")({
 	component: ChangeEmailSettingsPage,
 });
 
@@ -24,10 +24,12 @@ function ChangeEmailSettingsPage() {
 					<AppHeaderTitle>Change email</AppHeaderTitle>
 				</AppHeaderLeftPart>
 			</AppHeader>
-			<ChangeEmailForm
-				currentEmail={data?.user.email}
-				onSuccess={() => void navigate({ to: "/settings/account" })}
-			/>
+			<div className="mt-8 max-w-xl pl-12">
+				<ChangeEmailForm
+					currentEmail={data?.user.email}
+					onSuccess={() => void navigate({ to: "/settings/account" })}
+				/>
+			</div>
 		</>
 	);
 }

@@ -100,7 +100,7 @@ function ChangeEmailForm({
 
 	if (step === "verification") {
 		return (
-			<div className="mt-8 max-w-xl space-y-7">
+			<div className="space-y-7">
 				<button
 					type="button"
 					onClick={() => {
@@ -158,13 +158,15 @@ function ChangeEmailForm({
 						</codeForm.Field>
 					</FieldGroup>
 
-					<codeForm.Subscribe selector={(state) => state.isSubmitting}>
-						{(isSubmitting) => (
-							<Button type="submit" size="lg" isLoading={isSubmitting}>
-								Verify and save
-							</Button>
-						)}
-					</codeForm.Subscribe>
+					<div className="flex justify-end">
+						<codeForm.Subscribe selector={(state) => state.isSubmitting}>
+							{(isSubmitting) => (
+								<Button type="submit" size="lg" isLoading={isSubmitting}>
+									Verify and save
+								</Button>
+							)}
+						</codeForm.Subscribe>
+					</div>
 				</form>
 
 				<button
@@ -189,7 +191,7 @@ function ChangeEmailForm({
 				emailForm.handleSubmit();
 			}}
 			onChange={() => setErrorMessage(null)}
-			className="mt-8 max-w-xl space-y-7"
+			className="space-y-7"
 		>
 			{errorMessage ? (
 				<Alert colorScheme="destructive">
@@ -229,13 +231,15 @@ function ChangeEmailForm({
 				</emailForm.Field>
 			</FieldGroup>
 
-			<emailForm.Subscribe selector={(state) => state.isSubmitting}>
-				{(isSubmitting) => (
-					<Button type="submit" size="lg" isLoading={isSubmitting}>
-						Send verification code
-					</Button>
-				)}
-			</emailForm.Subscribe>
+			<div className="flex justify-end">
+				<emailForm.Subscribe selector={(state) => state.isSubmitting}>
+					{(isSubmitting) => (
+						<Button type="submit" size="lg" isLoading={isSubmitting}>
+							Send verification code
+						</Button>
+					)}
+				</emailForm.Subscribe>
+			</div>
 		</form>
 	);
 }

@@ -29,7 +29,7 @@ function ThemeSettingsPage() {
 					<AppHeaderTitle>Theme</AppHeaderTitle>
 				</AppHeaderLeftPart>
 			</AppHeader>
-			<div className="mt-8 grid gap-3 sm:grid-cols-3">
+			<div className="grid gap-3 sm:grid-cols-3">
 				{themes.map((themeOption) => {
 					const Icon = themeOption.icon;
 					const isSelected = mounted && theme === themeOption.id;
@@ -40,8 +40,10 @@ function ThemeSettingsPage() {
 							onClick={() => setTheme(themeOption.id)}
 							aria-pressed={isSelected}
 							className={cn(
-								"flex cursor-pointer items-center gap-3 rounded-xl bg-muted/60 px-4 py-5 text-left transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-								isSelected && "bg-primary/10 text-primary",
+								"flex cursor-pointer items-center gap-3 rounded-xl bg-muted/60 px-4 py-5 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+								isSelected
+									? "bg-primary/10 text-primary"
+									: " hover:bg-muted/30",
 							)}
 						>
 							<Icon className="size-5" />

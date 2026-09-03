@@ -62,7 +62,7 @@ function ChangePasswordForm({ onSuccess }: { onSuccess: () => void }) {
 				form.handleSubmit();
 			}}
 			onChange={() => setErrorMessage(null)}
-			className="mt-8 max-w-xl space-y-7"
+			className="space-y-7"
 		>
 			{errorMessage ? (
 				<Alert colorScheme="destructive">
@@ -127,13 +127,15 @@ function ChangePasswordForm({ onSuccess }: { onSuccess: () => void }) {
 				</form.Field>
 			</FieldGroup>
 
-			<form.Subscribe selector={(state) => state.isSubmitting}>
-				{(isSubmitting) => (
-					<Button type="submit" size="lg" isLoading={isSubmitting}>
-						Save password
-					</Button>
-				)}
-			</form.Subscribe>
+			<div className="flex justify-end">
+				<form.Subscribe selector={(state) => state.isSubmitting}>
+					{(isSubmitting) => (
+						<Button type="submit" size="lg" isLoading={isSubmitting}>
+							Save password
+						</Button>
+					)}
+				</form.Subscribe>
+			</div>
 		</form>
 	);
 }
