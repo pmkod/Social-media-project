@@ -33,6 +33,7 @@ mock.module("@/core/databases", () => ({
 mock.module("@/core/services/user-service.client", () => ({
 	userServiceClient: {
 		fetchBlockRelationshipIds: blocks,
+		fetchFollowingIds: async () => ["creator", "blocked", "blocked-by"],
 		fetchAuthorsBatch: async () => new Map(),
 		adjustPostCount: async () => {},
 	},
@@ -44,12 +45,20 @@ mock.module("./services/post-media-storage.service", () => ({
 const { createPostRoute } = await import("./routes/create-post.route");
 const { searchPostsRoute } = await import("./routes/search-posts.route");
 const { getUserPostsRoute } = await import("./routes/get-user-posts.route");
+const { getFeedFollowingRoute } = await import(
+	"./routes/get-feed-following.route"
+);
 const app = new OpenAPIHono<HonoAuthenticatedEnv>();
 app.use("*", async (c, next) => {
 	c.set("authenticatedUser", { id: "viewer" });
 	await next();
 });
-app.openapiRoutes([createPostRoute, searchPostsRoute, getUserPostsRoute]);
+app.openapiRoutes([
+	createPostRoute,
+	searchPostsRoute,
+	getUserPostsRoute,
+	getFeedFollowingRoute,
+]);
 app.onError((error, c) => c.json({ message: error.message }, 400));
 let directory: string;
 let shortVideo: File;
@@ -239,5 +248,74 @@ describe("Chillz discovery and profiles", () => {
 				nextCursor: { id: "b", createdAt: "2026-09-01T00:00:00.000Z" },
 			},
 		});
+	});
+});
+
+describe("Chillz following feed", () => {
+	test("filters Chillz and allowed followed authors before applying the cursor and limit", async () => {
+		findMany.mockImplementationOnce(async () => [
+			{
+				id: "b",
+				authorId: "creator",
+				type: "CHILLZ",
+				createdAt: new Date("2026-09-01"),
+			},
+			{
+				id: "a",
+				authorId: "viewer",
+				type: "CHILLZ",
+				createdAt: new Date("2026-09-01"),
+			},
+		]);
+		const response = await app.request(
+			"/feed/following?type=CHILLZ&limit=1&cursorId=c&cursorCreatedAt=2026-09-02T00:00:00Z",
+		);
+		expect(response.status).toBe(200);
+		expect(findMany.mock.calls[0]?.[0]).toMatchObject({
+			where: {
+				type: "CHILLZ",
+				authorId: { in: ["viewer", "creator"] },
+				OR: [
+					{ createdAt: { lt: new Date("2026-09-02") } },
+					{ createdAt: new Date("2026-09-02"), id: { lt: "c" } },
+				],
+			},
+			take: 2,
+			orderBy: [{ createdAt: "desc" }, { id: "desc" }],
+		});
+		expect(await response.json()).toMatchObject({
+			posts: [{ id: "b", type: "CHILLZ" }],
+			pagination: {
+				limit: 1,
+				hasNextPage: true,
+				nextCursor: { id: "b", createdAt: "2026-09-01T00:00:00.000Z" },
+			},
+		});
+	});
+
+	test("keeps the original mixed feed and rejects unsupported types", async () => {
+		await app.request("/feed/following");
+		expect(findMany.mock.calls[0]?.[0]).toMatchObject({
+			where: { authorId: { in: ["viewer", "creator"] } },
+		});
+		expect(findMany.mock.calls[0]?.[0]).not.toHaveProperty("where.type");
+		expect((await app.request("/feed/following?type=REEL")).status).toBe(400);
+		expect(findMany).toHaveBeenCalledTimes(1);
+	});
+
+	test("returns an empty page without an authenticated user or for a blocked author", async () => {
+		const anonymousApp = new OpenAPIHono<HonoAuthenticatedEnv>();
+		anonymousApp.openapiRoutes([getFeedFollowingRoute]);
+		for (const response of [
+			await anonymousApp.request("/feed/following?type=CHILLZ"),
+			await app.request("/feed/following?type=CHILLZ&authorId=blocked"),
+		]) {
+			expect(response.status).toBe(200);
+			expect(await response.json()).toMatchObject({
+				posts: [],
+				pagination: { nextCursor: null, hasNextPage: false },
+			});
+		}
+		expect(findMany).not.toHaveBeenCalled();
 	});
 });

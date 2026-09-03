@@ -176,6 +176,7 @@ export type FileWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"File"> | Date | string
   lowQualityPostMedia?: Prisma.XOR<Prisma.PostMediaNullableScalarRelationFilter, Prisma.PostMediaWhereInput> | null
   highQualityPostMedia?: Prisma.XOR<Prisma.PostMediaNullableScalarRelationFilter, Prisma.PostMediaWhereInput> | null
+  storyMediaFile?: Prisma.XOR<Prisma.StoryNullableScalarRelationFilter, Prisma.StoryWhereInput> | null
 }
 
 export type FileOrderByWithRelationInput = {
@@ -185,6 +186,7 @@ export type FileOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   lowQualityPostMedia?: Prisma.PostMediaOrderByWithRelationInput
   highQualityPostMedia?: Prisma.PostMediaOrderByWithRelationInput
+  storyMediaFile?: Prisma.StoryOrderByWithRelationInput
 }
 
 export type FileWhereUniqueInput = Prisma.AtLeast<{
@@ -197,6 +199,7 @@ export type FileWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"File"> | Date | string
   lowQualityPostMedia?: Prisma.XOR<Prisma.PostMediaNullableScalarRelationFilter, Prisma.PostMediaWhereInput> | null
   highQualityPostMedia?: Prisma.XOR<Prisma.PostMediaNullableScalarRelationFilter, Prisma.PostMediaWhereInput> | null
+  storyMediaFile?: Prisma.XOR<Prisma.StoryNullableScalarRelationFilter, Prisma.StoryWhereInput> | null
 }, "id">
 
 export type FileOrderByWithAggregationInput = {
@@ -226,6 +229,7 @@ export type FileCreateInput = {
   createdAt?: Date | string
   lowQualityPostMedia?: Prisma.PostMediaCreateNestedOneWithoutLowQualityFileInput
   highQualityPostMedia?: Prisma.PostMediaCreateNestedOneWithoutHighQualityFileInput
+  storyMediaFile?: Prisma.StoryCreateNestedOneWithoutMediaFileInput
 }
 
 export type FileUncheckedCreateInput = {
@@ -235,6 +239,7 @@ export type FileUncheckedCreateInput = {
   createdAt?: Date | string
   lowQualityPostMedia?: Prisma.PostMediaUncheckedCreateNestedOneWithoutLowQualityFileInput
   highQualityPostMedia?: Prisma.PostMediaUncheckedCreateNestedOneWithoutHighQualityFileInput
+  storyMediaFile?: Prisma.StoryUncheckedCreateNestedOneWithoutMediaFileInput
 }
 
 export type FileUpdateInput = {
@@ -244,6 +249,7 @@ export type FileUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lowQualityPostMedia?: Prisma.PostMediaUpdateOneWithoutLowQualityFileNestedInput
   highQualityPostMedia?: Prisma.PostMediaUpdateOneWithoutHighQualityFileNestedInput
+  storyMediaFile?: Prisma.StoryUpdateOneWithoutMediaFileNestedInput
 }
 
 export type FileUncheckedUpdateInput = {
@@ -253,6 +259,7 @@ export type FileUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lowQualityPostMedia?: Prisma.PostMediaUncheckedUpdateOneWithoutLowQualityFileNestedInput
   highQualityPostMedia?: Prisma.PostMediaUncheckedUpdateOneWithoutHighQualityFileNestedInput
+  storyMediaFile?: Prisma.StoryUncheckedUpdateOneWithoutMediaFileNestedInput
 }
 
 export type FileCreateManyInput = {
@@ -302,6 +309,11 @@ export type FileMinOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
 }
 
+export type FileScalarRelationFilter = {
+  is?: Prisma.FileWhereInput
+  isNot?: Prisma.FileWhereInput
+}
+
 export type FileCreateNestedOneWithoutLowQualityPostMediaInput = {
   create?: Prisma.XOR<Prisma.FileCreateWithoutLowQualityPostMediaInput, Prisma.FileUncheckedCreateWithoutLowQualityPostMediaInput>
   connectOrCreate?: Prisma.FileCreateOrConnectWithoutLowQualityPostMediaInput
@@ -334,12 +346,27 @@ export type FileUpdateOneWithoutHighQualityPostMediaNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.FileUpdateToOneWithWhereWithoutHighQualityPostMediaInput, Prisma.FileUpdateWithoutHighQualityPostMediaInput>, Prisma.FileUncheckedUpdateWithoutHighQualityPostMediaInput>
 }
 
+export type FileCreateNestedOneWithoutStoryMediaFileInput = {
+  create?: Prisma.XOR<Prisma.FileCreateWithoutStoryMediaFileInput, Prisma.FileUncheckedCreateWithoutStoryMediaFileInput>
+  connectOrCreate?: Prisma.FileCreateOrConnectWithoutStoryMediaFileInput
+  connect?: Prisma.FileWhereUniqueInput
+}
+
+export type FileUpdateOneRequiredWithoutStoryMediaFileNestedInput = {
+  create?: Prisma.XOR<Prisma.FileCreateWithoutStoryMediaFileInput, Prisma.FileUncheckedCreateWithoutStoryMediaFileInput>
+  connectOrCreate?: Prisma.FileCreateOrConnectWithoutStoryMediaFileInput
+  upsert?: Prisma.FileUpsertWithoutStoryMediaFileInput
+  connect?: Prisma.FileWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.FileUpdateToOneWithWhereWithoutStoryMediaFileInput, Prisma.FileUpdateWithoutStoryMediaFileInput>, Prisma.FileUncheckedUpdateWithoutStoryMediaFileInput>
+}
+
 export type FileCreateWithoutLowQualityPostMediaInput = {
   id?: string
   mimeType?: string | null
   filename: string
   createdAt?: Date | string
   highQualityPostMedia?: Prisma.PostMediaCreateNestedOneWithoutHighQualityFileInput
+  storyMediaFile?: Prisma.StoryCreateNestedOneWithoutMediaFileInput
 }
 
 export type FileUncheckedCreateWithoutLowQualityPostMediaInput = {
@@ -348,6 +375,7 @@ export type FileUncheckedCreateWithoutLowQualityPostMediaInput = {
   filename: string
   createdAt?: Date | string
   highQualityPostMedia?: Prisma.PostMediaUncheckedCreateNestedOneWithoutHighQualityFileInput
+  storyMediaFile?: Prisma.StoryUncheckedCreateNestedOneWithoutMediaFileInput
 }
 
 export type FileCreateOrConnectWithoutLowQualityPostMediaInput = {
@@ -361,6 +389,7 @@ export type FileCreateWithoutHighQualityPostMediaInput = {
   filename: string
   createdAt?: Date | string
   lowQualityPostMedia?: Prisma.PostMediaCreateNestedOneWithoutLowQualityFileInput
+  storyMediaFile?: Prisma.StoryCreateNestedOneWithoutMediaFileInput
 }
 
 export type FileUncheckedCreateWithoutHighQualityPostMediaInput = {
@@ -369,6 +398,7 @@ export type FileUncheckedCreateWithoutHighQualityPostMediaInput = {
   filename: string
   createdAt?: Date | string
   lowQualityPostMedia?: Prisma.PostMediaUncheckedCreateNestedOneWithoutLowQualityFileInput
+  storyMediaFile?: Prisma.StoryUncheckedCreateNestedOneWithoutMediaFileInput
 }
 
 export type FileCreateOrConnectWithoutHighQualityPostMediaInput = {
@@ -393,6 +423,7 @@ export type FileUpdateWithoutLowQualityPostMediaInput = {
   filename?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   highQualityPostMedia?: Prisma.PostMediaUpdateOneWithoutHighQualityFileNestedInput
+  storyMediaFile?: Prisma.StoryUpdateOneWithoutMediaFileNestedInput
 }
 
 export type FileUncheckedUpdateWithoutLowQualityPostMediaInput = {
@@ -401,6 +432,7 @@ export type FileUncheckedUpdateWithoutLowQualityPostMediaInput = {
   filename?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   highQualityPostMedia?: Prisma.PostMediaUncheckedUpdateOneWithoutHighQualityFileNestedInput
+  storyMediaFile?: Prisma.StoryUncheckedUpdateOneWithoutMediaFileNestedInput
 }
 
 export type FileUpsertWithoutHighQualityPostMediaInput = {
@@ -420,6 +452,7 @@ export type FileUpdateWithoutHighQualityPostMediaInput = {
   filename?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lowQualityPostMedia?: Prisma.PostMediaUpdateOneWithoutLowQualityFileNestedInput
+  storyMediaFile?: Prisma.StoryUpdateOneWithoutMediaFileNestedInput
 }
 
 export type FileUncheckedUpdateWithoutHighQualityPostMediaInput = {
@@ -428,6 +461,59 @@ export type FileUncheckedUpdateWithoutHighQualityPostMediaInput = {
   filename?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lowQualityPostMedia?: Prisma.PostMediaUncheckedUpdateOneWithoutLowQualityFileNestedInput
+  storyMediaFile?: Prisma.StoryUncheckedUpdateOneWithoutMediaFileNestedInput
+}
+
+export type FileCreateWithoutStoryMediaFileInput = {
+  id?: string
+  mimeType?: string | null
+  filename: string
+  createdAt?: Date | string
+  lowQualityPostMedia?: Prisma.PostMediaCreateNestedOneWithoutLowQualityFileInput
+  highQualityPostMedia?: Prisma.PostMediaCreateNestedOneWithoutHighQualityFileInput
+}
+
+export type FileUncheckedCreateWithoutStoryMediaFileInput = {
+  id?: string
+  mimeType?: string | null
+  filename: string
+  createdAt?: Date | string
+  lowQualityPostMedia?: Prisma.PostMediaUncheckedCreateNestedOneWithoutLowQualityFileInput
+  highQualityPostMedia?: Prisma.PostMediaUncheckedCreateNestedOneWithoutHighQualityFileInput
+}
+
+export type FileCreateOrConnectWithoutStoryMediaFileInput = {
+  where: Prisma.FileWhereUniqueInput
+  create: Prisma.XOR<Prisma.FileCreateWithoutStoryMediaFileInput, Prisma.FileUncheckedCreateWithoutStoryMediaFileInput>
+}
+
+export type FileUpsertWithoutStoryMediaFileInput = {
+  update: Prisma.XOR<Prisma.FileUpdateWithoutStoryMediaFileInput, Prisma.FileUncheckedUpdateWithoutStoryMediaFileInput>
+  create: Prisma.XOR<Prisma.FileCreateWithoutStoryMediaFileInput, Prisma.FileUncheckedCreateWithoutStoryMediaFileInput>
+  where?: Prisma.FileWhereInput
+}
+
+export type FileUpdateToOneWithWhereWithoutStoryMediaFileInput = {
+  where?: Prisma.FileWhereInput
+  data: Prisma.XOR<Prisma.FileUpdateWithoutStoryMediaFileInput, Prisma.FileUncheckedUpdateWithoutStoryMediaFileInput>
+}
+
+export type FileUpdateWithoutStoryMediaFileInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  filename?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lowQualityPostMedia?: Prisma.PostMediaUpdateOneWithoutLowQualityFileNestedInput
+  highQualityPostMedia?: Prisma.PostMediaUpdateOneWithoutHighQualityFileNestedInput
+}
+
+export type FileUncheckedUpdateWithoutStoryMediaFileInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  filename?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lowQualityPostMedia?: Prisma.PostMediaUncheckedUpdateOneWithoutLowQualityFileNestedInput
+  highQualityPostMedia?: Prisma.PostMediaUncheckedUpdateOneWithoutHighQualityFileNestedInput
 }
 
 
@@ -439,6 +525,7 @@ export type FileSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   createdAt?: boolean
   lowQualityPostMedia?: boolean | Prisma.File$lowQualityPostMediaArgs<ExtArgs>
   highQualityPostMedia?: boolean | Prisma.File$highQualityPostMediaArgs<ExtArgs>
+  storyMediaFile?: boolean | Prisma.File$storyMediaFileArgs<ExtArgs>
 }, ExtArgs["result"]["file"]>
 
 export type FileSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -466,6 +553,7 @@ export type FileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = run
 export type FileInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   lowQualityPostMedia?: boolean | Prisma.File$lowQualityPostMediaArgs<ExtArgs>
   highQualityPostMedia?: boolean | Prisma.File$highQualityPostMediaArgs<ExtArgs>
+  storyMediaFile?: boolean | Prisma.File$storyMediaFileArgs<ExtArgs>
 }
 export type FileIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
 export type FileIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -475,6 +563,7 @@ export type $FilePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   objects: {
     lowQualityPostMedia: Prisma.$PostMediaPayload<ExtArgs> | null
     highQualityPostMedia: Prisma.$PostMediaPayload<ExtArgs> | null
+    storyMediaFile: Prisma.$StoryPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -877,6 +966,7 @@ export interface Prisma__FileClient<T, Null = never, ExtArgs extends runtime.Typ
   readonly [Symbol.toStringTag]: "PrismaPromise"
   lowQualityPostMedia<T extends Prisma.File$lowQualityPostMediaArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.File$lowQualityPostMediaArgs<ExtArgs>>): Prisma.Prisma__PostMediaClient<runtime.Types.Result.GetResult<Prisma.$PostMediaPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   highQualityPostMedia<T extends Prisma.File$highQualityPostMediaArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.File$highQualityPostMediaArgs<ExtArgs>>): Prisma.Prisma__PostMediaClient<runtime.Types.Result.GetResult<Prisma.$PostMediaPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  storyMediaFile<T extends Prisma.File$storyMediaFileArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.File$storyMediaFileArgs<ExtArgs>>): Prisma.Prisma__StoryClient<runtime.Types.Result.GetResult<Prisma.$StoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1338,6 +1428,25 @@ export type File$highQualityPostMediaArgs<ExtArgs extends runtime.Types.Extensio
    */
   include?: Prisma.PostMediaInclude<ExtArgs> | null
   where?: Prisma.PostMediaWhereInput
+}
+
+/**
+ * File.storyMediaFile
+ */
+export type File$storyMediaFileArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Story
+   */
+  select?: Prisma.StorySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Story
+   */
+  omit?: Prisma.StoryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.StoryInclude<ExtArgs> | null
+  where?: Prisma.StoryWhereInput
 }
 
 /**

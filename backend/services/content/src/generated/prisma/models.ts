@@ -11,6 +11,8 @@
 export type * from './models/Post.ts'
 export type * from './models/PostMedia.ts'
 export type * from './models/File.ts'
+export type * from './models/Story.ts'
+export type * from './models/StoryView.ts'
 export type * from './models/Comment.ts'
 export type * from './models/PostLike.ts'
 export type * from './models/CommentLike.ts'

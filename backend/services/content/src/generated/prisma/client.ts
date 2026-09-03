@@ -24,7 +24,7 @@ export * as $Enums from './enums.ts'
 export * from "./enums.ts"
 /**
  * ## Prisma Client
- * 
+ *
  * Type-safe database client for TypeScript
  * @example
  * ```
@@ -34,7 +34,7 @@ export * from "./enums.ts"
  * // Fetch zero or more Posts
  * const posts = await prisma.post.findMany()
  * ```
- * 
+ *
  * Read more in our [docs](https://pris.ly/d/client).
  */
 export const PrismaClient = $Class.getPrismaClientClass()
@@ -56,6 +56,16 @@ export type PostMedia = Prisma.PostMediaModel
  * 
  */
 export type File = Prisma.FileModel
+/**
+ * Model Story
+ *
+ */
+export type Story = Prisma.StoryModel
+/**
+ * Model StoryView
+ *
+ */
+export type StoryView = Prisma.StoryViewModel
 /**
  * Model Comment
  * 

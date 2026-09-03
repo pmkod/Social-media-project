@@ -20,6 +20,19 @@ Chillz use the existing Post, Comment, PostLike and Bookmark models with `Post.t
 Existing posts keep `POST`. Search (`GET /posts`) and profile lists (`GET /posts/users/:userId`)
 accept `type=POST|CHILLZ`, defaulting to `POST`. The following feed, likes and bookmarks may contain both types.
 
+`GET /feed/following?type=CHILLZ` returns only Chillz from the current user and
+followed accounts, excluding blocked accounts and using the existing cursor pagination.
+Omitting `type` keeps the mixed following feed. The web hook `useFollowingChillzFeed`
+provides this filtered feed with a separate cache and an optional `enabled` flag.
+
+## Stories
+
+Stories are single image or video uploads visible to the author and followed users
+for 24 hours. The content service exposes `POST /stories` (multipart field `media`),
+`GET /stories` (active stories grouped by author) and `POST /stories/:storyId/view`.
+The gateway exposes the same paths publicly; authentication is required for all
+three endpoints.
+
 Before starting the updated service, apply the migrations and generate the client:
 
 ```bash

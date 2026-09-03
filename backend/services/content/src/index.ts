@@ -8,11 +8,13 @@ import { bookmarksRoutes } from "./features/bookmarks/routes";
 import { commentsRoutes } from "./features/comments/routes";
 import { mediaRoutes } from "./features/media/routes";
 import { postsRoutes } from "./features/posts/routes";
+import { storiesRoutes } from "./features/stories/routes";
 
 const app = new OpenAPIHono();
 
 app.use("*", setAuthenticatedUser);
 app.openapiRoutes(postsRoutes);
+app.openapiRoutes(storiesRoutes);
 app.openapiRoutes(commentsRoutes);
 app.openapiRoutes(bookmarksRoutes);
 app.openapiRoutes(mediaRoutes);

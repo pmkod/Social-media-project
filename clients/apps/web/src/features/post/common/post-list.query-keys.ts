@@ -8,7 +8,10 @@ type BookmarksQueryParams = {
 const postListQueryKeys = {
 	root: postListRootQueryKey,
 	feed: () => [...postListRootQueryKey, "feed"] as const,
-	feedFollowing: () => [...postListRootQueryKey, "feed", "following"] as const,
+	feedFollowing: (type?: PostType) =>
+		type
+			? ([...postListRootQueryKey, "feed", "following", type] as const)
+			: ([...postListRootQueryKey, "feed", "following"] as const),
 	search: (query: string, type: PostType = "POST") =>
 		[
 			...postListRootQueryKey,
