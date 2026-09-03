@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as BaseRouteRouteImport } from './routes/_base/route'
 import { Route as MainRouteRouteImport } from './routes/_main/route'
 import { Route as BaseAuthenticationRouteRouteImport } from './routes/_base/_authentication/route'
+import { Route as BaseAboutRouteImport } from './routes/_base/about'
 import { Route as BasePrivacyPolicyRouteImport } from './routes/_base/privacy-policy'
 import { Route as BaseTermsOfServiceRouteImport } from './routes/_base/terms-of-service'
 import { Route as MainWithRightAsideRouteRouteImport } from './routes/_main/_with-right-aside/route'
@@ -52,6 +53,11 @@ const MainRouteRoute = MainRouteRouteImport.update({
 } as any)
 const BaseAuthenticationRouteRoute = BaseAuthenticationRouteRouteImport.update({
   id: '/_authentication',
+  getParentRoute: () => BaseRouteRoute,
+} as any)
+const BaseAboutRoute = BaseAboutRouteImport.update({
+  id: '/about',
+  path: '/about',
   getParentRoute: () => BaseRouteRoute,
 } as any)
 const BasePrivacyPolicyRoute = BasePrivacyPolicyRouteImport.update({
@@ -217,6 +223,7 @@ export interface FileRoutesByFullPath {
   '/': typeof BaseAuthenticationIndexRoute
   '/discussions': typeof MainDiscussionsRouteRouteWithChildren
   '/settings': typeof MainSettingsRouteRouteWithChildren
+  '/about': typeof BaseAboutRoute
   '/privacy-policy': typeof BasePrivacyPolicyRoute
   '/terms-of-service': typeof BaseTermsOfServiceRoute
   '/complete-signup': typeof BaseAuthenticationCompleteSignupRoute
@@ -245,6 +252,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof BaseAuthenticationIndexRoute
+  '/about': typeof BaseAboutRoute
   '/privacy-policy': typeof BasePrivacyPolicyRoute
   '/terms-of-service': typeof BaseTermsOfServiceRoute
   '/complete-signup': typeof BaseAuthenticationCompleteSignupRoute
@@ -279,6 +287,7 @@ export interface FileRoutesById {
   '/_main/_with-right-aside': typeof MainWithRightAsideRouteRouteWithChildren
   '/_main/discussions': typeof MainDiscussionsRouteRouteWithChildren
   '/_main/settings': typeof MainSettingsRouteRouteWithChildren
+  '/_base/about': typeof BaseAboutRoute
   '/_base/privacy-policy': typeof BasePrivacyPolicyRoute
   '/_base/terms-of-service': typeof BaseTermsOfServiceRoute
   '/_base/_authentication/complete-signup': typeof BaseAuthenticationCompleteSignupRoute
@@ -312,6 +321,7 @@ export interface FileRouteTypes {
     | '/'
     | '/discussions'
     | '/settings'
+    | '/about'
     | '/privacy-policy'
     | '/terms-of-service'
     | '/complete-signup'
@@ -340,6 +350,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/about'
     | '/privacy-policy'
     | '/terms-of-service'
     | '/complete-signup'
@@ -373,6 +384,7 @@ export interface FileRouteTypes {
     | '/_main/_with-right-aside'
     | '/_main/discussions'
     | '/_main/settings'
+    | '/_base/about'
     | '/_base/privacy-policy'
     | '/_base/terms-of-service'
     | '/_base/_authentication/complete-signup'
@@ -427,6 +439,13 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: '/'
       preLoaderRoute: typeof BaseAuthenticationRouteRouteImport
+      parentRoute: typeof BaseRouteRoute
+    }
+    '/_base/about': {
+      id: '/_base/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof BaseAboutRouteImport
       parentRoute: typeof BaseRouteRoute
     }
     '/_base/privacy-policy': {
@@ -663,12 +682,14 @@ const BaseAuthenticationRouteRouteWithChildren =
 
 interface BaseRouteRouteChildren {
   BaseAuthenticationRouteRoute: typeof BaseAuthenticationRouteRouteWithChildren
+  BaseAboutRoute: typeof BaseAboutRoute
   BasePrivacyPolicyRoute: typeof BasePrivacyPolicyRoute
   BaseTermsOfServiceRoute: typeof BaseTermsOfServiceRoute
 }
 
 const BaseRouteRouteChildren: BaseRouteRouteChildren = {
   BaseAuthenticationRouteRoute: BaseAuthenticationRouteRouteWithChildren,
+  BaseAboutRoute: BaseAboutRoute,
   BasePrivacyPolicyRoute: BasePrivacyPolicyRoute,
   BaseTermsOfServiceRoute: BaseTermsOfServiceRoute,
 }

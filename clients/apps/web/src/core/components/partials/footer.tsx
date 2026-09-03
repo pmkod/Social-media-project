@@ -8,7 +8,6 @@ const footerLinks = [
 	{ label: "Privacy policy", to: "/privacy-policy" },
 	{ label: "Terms", to: "/terms-of-service" },
 	{ label: "About", to: "/about" },
-	{ label: "Contact", to: "/contact" },
 ];
 
 export function Footer() {
@@ -26,7 +25,7 @@ export function Footer() {
 				{/* Bottom level */}
 				<div className="mt-6 flex flex-col items-center justify-between gap-4 sm:flex-row">
 					<p className="text-sm text-muted-foreground">
-						© {currentYear} Graphy. All rights reserved.
+						© {currentYear}. All rights reserved.
 					</p>
 					<nav className="flex flex-wrap items-center gap-4 sm:gap-6">
 						{footerLinks.map((link) => (
