@@ -13,7 +13,7 @@ import {
 } from "@/core/components/ui/field.tsx";
 import { PasswordInput } from "@/core/components/ui/password-input.tsx";
 import { UserValidationSchema } from "@/features/user/common/user.validation-schemas.ts";
-import { useChangePassword } from "./settings.api.ts";
+import { useChangePassword } from "./use-change-password.ts";
 
 const changePasswordSchema = z
 	.object({

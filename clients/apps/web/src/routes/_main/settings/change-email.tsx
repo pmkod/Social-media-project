@@ -5,8 +5,8 @@ import {
 	AppHeaderLeftPart,
 	AppHeaderTitle,
 } from "@/core/components/ui/app-header";
-import { ChangeEmailForm } from "@/features/settings/change-email.form.tsx";
 import { useAuthenticatedUser } from "@/features/user/authenticated-user/use-authenticated-user.ts";
+import { ChangeEmailForm } from "@/features/user/change-email/change-email.form.tsx";
 
 export const Route = createFileRoute("/_main/settings/change-email")({
 	component: ChangeEmailSettingsPage,

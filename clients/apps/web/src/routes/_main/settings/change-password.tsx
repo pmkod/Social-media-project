@@ -5,7 +5,7 @@ import {
 	AppHeaderLeftPart,
 	AppHeaderTitle,
 } from "@/core/components/ui/app-header";
-import { ChangePasswordForm } from "@/features/settings/change-password.form.tsx";
+import { ChangePasswordForm } from "@/features/user/change-password/change-password.form.tsx";
 
 export const Route = createFileRoute("/_main/settings/change-password")({
 	component: ChangePasswordSettingsPage,

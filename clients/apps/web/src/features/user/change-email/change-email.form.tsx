@@ -18,10 +18,8 @@ import { useResendUserVerificationCode } from "@/features/authentication/resend-
 import { useUserVerification } from "@/features/authentication/user-verification/use-user-verification.ts";
 import { authenticatedUserQueryKey } from "@/features/user/authenticated-user/authenticated-user.query-key.ts";
 import { UserValidationSchema } from "@/features/user/common/user.validation-schemas.ts";
-import {
-	useCompleteEmailChange,
-	useRequestEmailChange,
-} from "./settings.api.ts";
+import { useCompleteEmailChange } from "./use-complete-email-change.ts";
+import { useRequestEmailChange } from "./use-request-email-change.ts";
 
 const emailSchema = z.object({
 	newEmail: UserValidationSchema.shape.email,
