@@ -1,8 +1,13 @@
 import { RiComputerLine, RiMoonLine, RiSunLine } from "@remixicon/react";
 import { createFileRoute } from "@tanstack/react-router";
+import {
+	AppHeader,
+	AppHeaderGoBackButton,
+	AppHeaderLeftPart,
+	AppHeaderTitle,
+} from "@/core/components/ui/app-header";
 import { useTheme } from "@/core/hooks/use-theme.ts";
 import { cn } from "@/core/lib/utils.ts";
-import { SettingsHeader } from "@/features/settings/settings-page.tsx";
 
 export const Route = createFileRoute("/_main/settings/theme")({
 	component: ThemeSettingsPage,
@@ -18,10 +23,12 @@ function ThemeSettingsPage() {
 
 	return (
 		<>
-			<SettingsHeader
-				title="Theme"
-				description="Choose the appearance that feels best to you."
-			/>
+			<AppHeader>
+				<AppHeaderLeftPart>
+					<AppHeaderGoBackButton to="/settings" />
+					<AppHeaderTitle>Theme</AppHeaderTitle>
+				</AppHeaderLeftPart>
+			</AppHeader>
 			<div className="mt-8 grid gap-3 sm:grid-cols-3">
 				{themes.map((themeOption) => {
 					const Icon = themeOption.icon;

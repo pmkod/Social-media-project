@@ -1,7 +1,12 @@
 import { RiLockPasswordLine } from "@remixicon/react";
 import { createFileRoute } from "@tanstack/react-router";
+import {
+	AppHeader,
+	AppHeaderGoBackButton,
+	AppHeaderLeftPart,
+	AppHeaderTitle,
+} from "@/core/components/ui/app-header";
 import { SettingRowItem } from "@/features/setting/common/setting-row-item.tsx";
-import { SettingsHeader } from "@/features/settings/settings-page.tsx";
 
 export const Route = createFileRoute("/_main/settings/security")({
 	component: SecuritySettingsPage,
@@ -10,10 +15,12 @@ export const Route = createFileRoute("/_main/settings/security")({
 function SecuritySettingsPage() {
 	return (
 		<>
-			<SettingsHeader
-				title="Security"
-				description="Manage the information that protects access to your account."
-			/>
+			<AppHeader>
+				<AppHeaderLeftPart>
+					<AppHeaderGoBackButton to="/settings" />
+					<AppHeaderTitle>Security</AppHeaderTitle>
+				</AppHeaderLeftPart>
+			</AppHeader>
 			<div className="mt-8 space-y-1">
 				<SettingRowItem
 					icon={RiLockPasswordLine}

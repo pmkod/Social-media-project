@@ -1,7 +1,12 @@
 import { RiMailLine } from "@remixicon/react";
 import { createFileRoute } from "@tanstack/react-router";
+import {
+	AppHeader,
+	AppHeaderGoBackButton,
+	AppHeaderLeftPart,
+	AppHeaderTitle,
+} from "@/core/components/ui/app-header";
 import { SettingRowItem } from "@/features/setting/common/setting-row-item.tsx";
-import { SettingsHeader } from "@/features/settings/settings-page.tsx";
 import { useAuthenticatedUser } from "@/features/user/authenticated-user/use-authenticated-user.ts";
 
 export const Route = createFileRoute("/_main/settings/account")({
@@ -13,10 +18,12 @@ function AccountSettingsPage() {
 
 	return (
 		<>
-			<SettingsHeader
-				title="Account"
-				description="See and update the information connected to your account."
-			/>
+			<AppHeader>
+				<AppHeaderLeftPart>
+					<AppHeaderGoBackButton to="/settings" />
+					<AppHeaderTitle>Account</AppHeaderTitle>
+				</AppHeaderLeftPart>
+			</AppHeader>
 			<div className="mt-8 space-y-1">
 				<SettingRowItem
 					icon={RiMailLine}

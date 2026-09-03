@@ -1,6 +1,7 @@
 import {
 	type RemixiconComponentType,
 	RiArrowRightSLine,
+	RiArrowRightUpLine,
 } from "@remixicon/react";
 import { Link } from "@tanstack/react-router";
 
@@ -24,6 +25,7 @@ export function SettingRowItem({
 	trailing,
 	disabled = false,
 	isSelected = false,
+	isExternal = false,
 }: {
 	icon?: RemixiconComponentType;
 	title: string;
@@ -34,7 +36,9 @@ export function SettingRowItem({
 	trailing?: React.ReactNode;
 	disabled?: boolean;
 	isSelected?: boolean;
+	isExternal?: boolean;
 }) {
+	const ArrowIcon = isExternal ? RiArrowRightUpLine : RiArrowRightSLine;
 	const content = (
 		<>
 			{Icon ? <Icon className="size-5 shrink-0" /> : null}
@@ -46,7 +50,7 @@ export function SettingRowItem({
 					</span>
 				) : null}
 			</span>
-			{trailing ?? <RiArrowRightSLine className="size-5 shrink-0 opacity-60" />}
+			{trailing ?? <ArrowIcon className="size-5 shrink-0 opacity-60" />}
 		</>
 	);
 	const className =

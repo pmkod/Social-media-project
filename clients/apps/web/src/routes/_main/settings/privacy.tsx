@@ -27,12 +27,14 @@ function PrivacySettingsPage() {
 					title="Privacy policy"
 					description="Learn how we collect, use, and protect your data."
 					href="/privacy-policy"
+					isExternal
 				/>
 				<SettingRowItem
 					icon={RiFileTextLine}
 					title="Terms of service"
 					description="Review the terms for using Goodspace."
 					href="/terms-of-service"
+					isExternal
 				/>
 			</div>
 		</div>

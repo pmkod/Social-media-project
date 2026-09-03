@@ -1,7 +1,12 @@
 import { RiGlobalLine } from "@remixicon/react";
 import { createFileRoute } from "@tanstack/react-router";
+import {
+	AppHeader,
+	AppHeaderGoBackButton,
+	AppHeaderLeftPart,
+	AppHeaderTitle,
+} from "@/core/components/ui/app-header";
 import { SettingRowItem } from "@/features/setting/common/setting-row-item.tsx";
-import { SettingsHeader } from "@/features/settings/settings-page.tsx";
 
 export const Route = createFileRoute("/_main/settings/language")({
 	component: LanguageSettingsPage,
@@ -10,10 +15,12 @@ export const Route = createFileRoute("/_main/settings/language")({
 function LanguageSettingsPage() {
 	return (
 		<>
-			<SettingsHeader
-				title="Language"
-				description="Language selection will be available soon."
-			/>
+			<AppHeader>
+				<AppHeaderLeftPart>
+					<AppHeaderGoBackButton to="/settings" />
+					<AppHeaderTitle>Language</AppHeaderTitle>
+				</AppHeaderLeftPart>
+			</AppHeader>
 			<div className="mt-8">
 				<SettingRowItem
 					icon={RiGlobalLine}

@@ -1,6 +1,11 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import {
+	AppHeader,
+	AppHeaderGoBackButton,
+	AppHeaderLeftPart,
+	AppHeaderTitle,
+} from "@/core/components/ui/app-header";
 import { ChangePasswordForm } from "@/features/settings/change-password.form.tsx";
-import { SettingsHeader } from "@/features/settings/settings-page.tsx";
 
 export const Route = createFileRoute(
 	"/_main/settings/security/change-password",
@@ -13,11 +18,12 @@ function ChangePasswordSettingsPage() {
 
 	return (
 		<>
-			<SettingsHeader
-				title="Change password"
-				description="Use a strong password that you do not use elsewhere."
-				backTo="/settings/security"
-			/>
+			<AppHeader>
+				<AppHeaderLeftPart>
+					<AppHeaderGoBackButton to="/settings/security" />
+					<AppHeaderTitle>Change password</AppHeaderTitle>
+				</AppHeaderLeftPart>
+			</AppHeader>
 			<ChangePasswordForm
 				onSuccess={() => void navigate({ to: "/settings/security" })}
 			/>

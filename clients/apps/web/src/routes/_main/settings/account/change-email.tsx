@@ -1,6 +1,11 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import {
+	AppHeader,
+	AppHeaderGoBackButton,
+	AppHeaderLeftPart,
+	AppHeaderTitle,
+} from "@/core/components/ui/app-header";
 import { ChangeEmailForm } from "@/features/settings/change-email.form.tsx";
-import { SettingsHeader } from "@/features/settings/settings-page.tsx";
 import { useAuthenticatedUser } from "@/features/user/authenticated-user/use-authenticated-user.ts";
 
 export const Route = createFileRoute("/_main/settings/account/change-email")({
@@ -13,11 +18,12 @@ function ChangeEmailSettingsPage() {
 
 	return (
 		<>
-			<SettingsHeader
-				title="Change email"
-				description="Your new address must be verified before it is saved."
-				backTo="/settings/account"
-			/>
+			<AppHeader>
+				<AppHeaderLeftPart>
+					<AppHeaderGoBackButton to="/settings/account" />
+					<AppHeaderTitle>Change email</AppHeaderTitle>
+				</AppHeaderLeftPart>
+			</AppHeader>
 			<ChangeEmailForm
 				currentEmail={data?.user.email}
 				onSuccess={() => void navigate({ to: "/settings/account" })}

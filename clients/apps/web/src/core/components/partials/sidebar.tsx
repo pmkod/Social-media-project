@@ -53,7 +53,7 @@ export function Sidebar() {
 	const { data } = useAuthenticatedUser();
 
 	return (
-		<aside className="hidden md:flex flex-col justify-between w-64 lg:w-72 p-4 h-screen sticky top-0 shrink-0">
+		<aside className="hidden md:flex flex-col justify-between w-64 lg:w-84 p-4 h-screen sticky top-0 shrink-0">
 			<div className="space-y-6">
 				{/* Logo at Top */}
 				<div className="px-3 py-2">
