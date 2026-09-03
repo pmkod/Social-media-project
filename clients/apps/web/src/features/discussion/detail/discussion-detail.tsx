@@ -34,7 +34,7 @@ function DiscussionDetail({ discussionId }: { discussionId: string }) {
 		return (
 			<div className="flex h-full items-center justify-center p-4">
 				<ExceptionBlock
-					borderless
+					bordered={false}
 					className="min-h-72"
 					title="Conversation unavailable"
 					description="This conversation could not be found or you no longer have access to it."

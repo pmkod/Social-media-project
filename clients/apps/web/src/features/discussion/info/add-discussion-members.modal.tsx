@@ -126,7 +126,7 @@ const AddDiscussionMembersModal = create<AddDiscussionMembersModalProps>(
 								<UserRowItemListLoader count={5} />
 							) : usersQuery.isError ? (
 								<ExceptionBlock
-									borderless
+									bordered={false}
 									className="min-h-56"
 									title="Recherche indisponible"
 									description="Réessayez dans quelques instants."
@@ -135,7 +135,7 @@ const AddDiscussionMembersModal = create<AddDiscussionMembersModalProps>(
 								/>
 							) : users.length === 0 ? (
 								<EmptyBlock
-									borderless
+									bordered={false}
 									className="min-h-56"
 									title="Aucune personne disponible"
 									description="Les comptes trouvés font peut-être déjà partie du groupe."

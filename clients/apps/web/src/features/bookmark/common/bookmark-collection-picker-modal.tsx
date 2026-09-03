@@ -159,7 +159,7 @@ const BookmarkCollectionPickerModal =
 								</div>
 							) : collectionsQuery.isError ? (
 								<ExceptionBlock
-									borderless
+									bordered={false}
 									className="px-6 py-8"
 									title="Unable to load collections"
 									description="Something went wrong while loading your bookmark collections."
@@ -168,7 +168,7 @@ const BookmarkCollectionPickerModal =
 								/>
 							) : collections.length === 0 ? (
 								<EmptyBlock
-									borderless
+									bordered={false}
 									className="px-6 py-8"
 									title={
 										debouncedSearch

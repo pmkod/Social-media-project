@@ -111,7 +111,7 @@ function DiscussionList({ selectedDiscussionId }: DiscussionListProps) {
 					<DiscussionListItemLoader />
 				) : discussionsQuery.isError ? (
 					<ExceptionBlock
-						borderless
+						bordered={false}
 						className="h-full min-h-72"
 						title="Unable to load conversations"
 						description="Your conversations could not be loaded. Check your connection and try again."

@@ -96,7 +96,7 @@ function PostDetailPage() {
 								<CommentListLoader count={3} />
 							) : allComments.length === 0 ? (
 								<EmptyBlock
-									borderless
+									bordered={false}
 									title="No comments yet"
 									description="Be the first to share your thoughts on this post."
 								/>

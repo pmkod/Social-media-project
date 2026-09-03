@@ -37,7 +37,7 @@ export function UserLikedPosts({ userId }: UserLikedPostsProps) {
 				description="An error occurred while loading this list."
 				onRefresh={() => void query.refetch()}
 				isRefetching={query.isRefetching}
-				borderless
+				bordered={false}
 			/>
 		);
 	}
@@ -49,7 +49,7 @@ export function UserLikedPosts({ userId }: UserLikedPostsProps) {
 				<EmptyBlock
 					title="No liked posts"
 					description="Liked posts will appear here."
-					borderless
+					bordered={false}
 				/>
 			</div>
 		);

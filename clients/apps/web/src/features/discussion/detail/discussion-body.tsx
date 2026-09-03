@@ -92,7 +92,7 @@ function DiscussionBody({
 				<MessageListLoader />
 			) : messagesQuery.isError ? (
 				<ExceptionBlock
-					borderless
+					bordered={false}
 					className="h-full min-h-72"
 					title="Unable to load messages"
 					description="The messages in this conversation could not be loaded."
@@ -101,7 +101,7 @@ function DiscussionBody({
 				/>
 			) : messages.length === 0 ? (
 				<EmptyBlock
-					borderless
+					bordered={false}
 					title="No messages yet"
 					description="Send the first message to start this conversation."
 				/>

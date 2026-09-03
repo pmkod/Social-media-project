@@ -21,7 +21,7 @@ function UserSearchList({ query }: UserSearchListProps) {
 				<UserRowItemListLoader count={5} />
 			) : usersQuery.isError ? (
 				<ExceptionBlock
-					borderless
+					bordered={false}
 					title="Unable to load people"
 					description="An error occurred while searching for people."
 					onRefresh={() => void usersQuery.refetch()}

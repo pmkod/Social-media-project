@@ -16,7 +16,7 @@ type EmptyBlockProps = {
 	description: React.ReactNode;
 	onRefresh?: () => void;
 	isRefetching?: boolean;
-	borderless?: boolean;
+	bordered?: boolean;
 	className?: string;
 };
 
@@ -25,16 +25,16 @@ function EmptyBlock({
 	description,
 	onRefresh,
 	isRefetching = false,
-	borderless = false,
+	bordered = true,
 	className,
 }: EmptyBlockProps) {
 	return (
 		<Empty
 			className={cn(
 				"min-h-56 bg-background",
-				borderless ? "border-0" : "border border-border",
+				bordered ? "border border-border" : "border-0",
 				className,
-				borderless && "border-0",
+				!bordered && "border-0",
 			)}
 		>
 			<EmptyHeader>

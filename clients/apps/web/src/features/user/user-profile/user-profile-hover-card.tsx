@@ -70,7 +70,7 @@ function UserProfileHoverCard({ user, children }: UserProfileHoverCardProps) {
 					<ExceptionBlock
 						title="Unable to load profile"
 						onRefresh={profileQuery.refetch}
-						borderless
+						bordered={false}
 					/>
 				) : (
 					<UserProfilePreview user={profileUser} />

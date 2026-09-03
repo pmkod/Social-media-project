@@ -22,7 +22,7 @@ export function SettingsOverview() {
 			<EmptyBlock
 				title="Settings"
 				description="Choose a section to manage your account, security, privacy, appearance, or language preferences."
-				borderless
+				bordered={false}
 			/>
 		</div>
 	);

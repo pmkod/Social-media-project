@@ -60,7 +60,7 @@ function ProfilePage() {
 						<ExceptionBlock
 							title="You are blocked"
 							description="You can’t view this profile or interact with this user because they have blocked you."
-							borderless
+							bordered={false}
 						/>
 					</div>
 				) : profileQuery.data?.user.isBlockedByAuthenticatedUser ? (
@@ -68,7 +68,7 @@ function ProfilePage() {
 						<ExceptionBlock
 							title="You blocked this user"
 							description="You can’t view this profile or interact with this user"
-							borderless
+							bordered={false}
 						/>
 					</div>
 				) : (

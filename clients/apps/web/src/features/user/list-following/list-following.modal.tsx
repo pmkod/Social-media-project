@@ -69,13 +69,13 @@ const ListFollowingModal = create(({ userId }: ListFollowingModalProps) => {
 								description="An error occurred while loading the following list."
 								onRefresh={handleRefetch}
 								isRefetching={query.isRefetching}
-								borderless
+								bordered={false}
 							/>
 						) : users.length === 0 ? (
 							<EmptyBlock
 								title="No following users"
 								description="Following users will appear here once this profile follows them."
-								borderless
+								bordered={false}
 							/>
 						) : (
 							<div className="divide-y divide-border">

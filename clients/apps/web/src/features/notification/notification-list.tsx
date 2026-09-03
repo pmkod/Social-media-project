@@ -182,13 +182,13 @@ export function NotificationList() {
 					description="An error occurred while loading your notifications."
 					onRefresh={() => void refetch()}
 					isRefetching={isRefetching}
-					borderless
+					bordered={false}
 				/>
 			) : notifications.length === 0 ? (
 				<EmptyBlock
 					title="No notifications yet"
 					description="New likes, comments, replies, and followers will appear here."
-					borderless
+					bordered={false}
 				/>
 			) : (
 				<div className="divide-y divide-border">

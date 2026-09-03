@@ -412,7 +412,7 @@ const DiscussionInfoModal = create<DiscussionInfoModalProps>(
 								</div>
 							) : mediaQuery.isError ? (
 								<ExceptionBlock
-									borderless
+									bordered={false}
 									className="min-h-48"
 									title="Médias indisponibles"
 									description="Les médias de cette discussion n’ont pas pu être chargés."
@@ -421,7 +421,7 @@ const DiscussionInfoModal = create<DiscussionInfoModalProps>(
 								/>
 							) : media.length === 0 ? (
 								<EmptyBlock
-									borderless
+									bordered={false}
 									className="min-h-40"
 									title="Aucun média partagé"
 									description="Les images, vidéos, audios et fichiers apparaîtront ici."

@@ -114,7 +114,7 @@ const CreatePrivateDiscussionModal = create(() => {
 								<UserRowItemListLoader count={5} />
 							) : usersQuery.isError ? (
 								<ExceptionBlock
-									borderless
+									bordered={false}
 									className="min-h-56"
 									title="Unable to search people"
 									description="An error occurred while searching. Please try again."
@@ -123,7 +123,7 @@ const CreatePrivateDiscussionModal = create(() => {
 								/>
 							) : users.length === 0 ? (
 								<EmptyBlock
-									borderless
+									bordered={false}
 									className="min-h-56"
 									title="No people found"
 									description={`No account matches “${debouncedQuery}”.`}

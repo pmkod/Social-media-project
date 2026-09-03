@@ -173,7 +173,7 @@ const ReportModal = create<ReportModalProps>(
 									description="Check your connection and try again."
 									onRefresh={() => reportReasonsQuery.refetch()}
 									isRefetching={reportReasonsQuery.isRefetching}
-									borderless
+									bordered={false}
 									className="min-h-64"
 								/>
 							) : reportReasons.length === 0 ? (
@@ -182,7 +182,7 @@ const ReportModal = create<ReportModalProps>(
 									description="Reporting is temporarily unavailable. Please try again later."
 									onRefresh={() => reportReasonsQuery.refetch()}
 									isRefetching={reportReasonsQuery.isRefetching}
-									borderless
+									bordered={false}
 									className="min-h-64"
 								/>
 							) : (

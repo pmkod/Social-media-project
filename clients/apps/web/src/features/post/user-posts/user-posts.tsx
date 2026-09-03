@@ -37,7 +37,7 @@ export function UserPosts({ userId }: UserPostsProps) {
 				description="An error occurred while loading this list."
 				onRefresh={() => void query.refetch()}
 				isRefetching={query.isRefetching}
-				borderless
+				bordered={false}
 			/>
 		);
 	}
@@ -49,7 +49,7 @@ export function UserPosts({ userId }: UserPostsProps) {
 				<EmptyBlock
 					title="No posts yet"
 					description="Posts by this user will appear here."
-					borderless
+					bordered={false}
 				/>
 			</div>
 		);

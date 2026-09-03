@@ -30,7 +30,7 @@ function FollowSuggestions() {
 							description="An error occurred while loading profiles to follow."
 							onRefresh={() => refetch()}
 							isRefetching={isRefetching}
-							borderless
+							bordered={false}
 							className="h-96"
 						/>
 					) : users.length === 0 ? (
@@ -39,7 +39,7 @@ function FollowSuggestions() {
 							description="No suggestions right now"
 							onRefresh={() => refetch()}
 							isRefetching={isRefetching}
-							borderless
+							bordered={false}
 							className="h§-96"
 						/>
 					) : (

@@ -16,7 +16,7 @@ type ExceptionBlockProps = {
 	description?: React.ReactNode;
 	onRefresh?: () => void;
 	isRefetching?: boolean;
-	borderless?: boolean;
+	bordered?: boolean;
 	className?: string;
 };
 
@@ -25,16 +25,16 @@ function ExceptionBlock({
 	description,
 	onRefresh,
 	isRefetching = false,
-	borderless = false,
+	bordered = true,
 	className,
 }: ExceptionBlockProps) {
 	return (
 		<Exception
 			className={cn(
 				" bg-background",
-				borderless ? "border-0" : "border border-border",
+				bordered ? "border border-border" : "border-0",
 				className,
-				borderless && "border-0",
+				!bordered && "border-0",
 			)}
 		>
 			<ExceptionHeader>
