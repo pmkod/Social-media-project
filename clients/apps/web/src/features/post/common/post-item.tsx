@@ -225,7 +225,7 @@ export function PostItem({
 			// search={{ focusComment: true }}
 			// onClick={(e) => e.stopPropagation()}
 			className={cn(
-				"block border-x border-t last:border-b last:rounded-b-xl border-border p-4 hover:bg-muted/30 transition-colors cursor-pointer",
+				"block border-x border-t last:border-b last:rounded-b-xl border-border p-4 hover:bg-accent transition-colors cursor-pointer",
 				roundedTopOnFirstItem ? "first:rounded-t-xl" : "",
 			)}
 		>

@@ -18,7 +18,7 @@ function ReportReasonItem({
 	return (
 		<label
 			className={cn(
-				"flex w-full cursor-pointer items-center gap-3 border-b border-border px-5 py-4 text-left transition-colors last:border-b-0 hover:bg-muted/60",
+				"flex w-full cursor-pointer items-center gap-3 border-b border-border px-5 py-4 text-left transition-colors last:border-b-0 hover:bg-accent",
 				isSelected && "bg-muted/70",
 				disabled && "cursor-not-allowed opacity-60",
 			)}

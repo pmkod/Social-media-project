@@ -25,7 +25,7 @@ function SearchUserLink({
 		<UserProfileLink
 			user={user}
 			onClick={onClick}
-			className="flex min-w-0 flex-1 items-center gap-3 px-5 py-3 text-left transition-colors hover:bg-muted/30"
+			className="flex min-w-0 flex-1 items-center gap-3 px-5 py-3 text-left transition-colors hover:bg-accent"
 		>
 			<UserAvatar user={user} size="md" />
 			<span className="min-w-0">
@@ -161,7 +161,7 @@ function SearchBar() {
 										type="button"
 										key={suggestion.toLowerCase()}
 										onClick={() => handleSelectText(suggestion)}
-										className="flex w-full cursor-pointer items-center gap-3 px-5 py-3 text-left text-sm font-medium text-foreground transition-colors hover:bg-muted/30"
+										className="flex w-full cursor-pointer items-center gap-3 px-5 py-3 text-left text-sm font-medium text-foreground transition-colors hover:bg-accent"
 									>
 										<div className="border rounded-full size-10 flex items-center justify-center">
 											<RiSearchLine className="size-5 shrink-0 text-muted-foreground" />
@@ -231,7 +231,7 @@ function SearchBar() {
 									{history.map((item) => (
 										<div
 											key={item.id}
-											className="relative flex items-center transition-colors hover:bg-muted/30"
+											className="relative flex items-center transition-colors hover:bg-accent"
 										>
 											{item.user ? (
 												<SearchUserLink
@@ -269,7 +269,7 @@ function SearchBar() {
 											type="button"
 											disabled={historyQuery.isFetchingNextPage}
 											onClick={() => void historyQuery.fetchNextPage()}
-											className="w-full cursor-pointer border-t border-border px-5 py-3 text-sm font-semibold text-primary transition-colors hover:bg-muted/30 disabled:cursor-default disabled:opacity-50"
+											className="w-full cursor-pointer border-t border-border px-5 py-3 text-sm font-semibold text-primary transition-colors hover:bg-accent disabled:cursor-default disabled:opacity-50"
 										>
 											{historyQuery.isFetchingNextPage
 												? "Loading…"

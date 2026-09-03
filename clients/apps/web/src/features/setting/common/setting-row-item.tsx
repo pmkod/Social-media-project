@@ -60,9 +60,7 @@ export function SettingRowItem({
 	);
 	const className =
 		"group flex w-full cursor-pointer items-center gap-3 rounded-md px-3 py-3 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-default disabled:hover:bg-transparent";
-	const stateClassName = isSelected
-		? "bg-muted/30 text-white"
-		: "hover:bg-muted/30";
+	const stateClassName = isSelected ? "bg-accent" : "hover:bg-accent";
 	const rowClassName = `${className} ${stateClassName}`;
 
 	if (to) {

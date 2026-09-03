@@ -58,18 +58,19 @@ function SettingsUserVerificationForm({
 	});
 
 	return (
-		<div className="flex flex-col gap-6">
-			<div className="flex flex-col gap-1">
-				<h2 className="text-2xl font-semibold tracking-tight">Verification</h2>
+		<div className="flex flex-col">
+			<div className="flex flex-col gap-1 mb-2">
 				<p className="text-sm text-muted-foreground">
 					Enter the 6-digit code sent to your email address.
 				</p>
 			</div>
 
 			{errorMessage ? (
-				<Alert colorScheme="destructive">
-					<AlertDescription>{errorMessage}</AlertDescription>
-				</Alert>
+				<div className="mb-2">
+					<Alert colorScheme="destructive">
+						<AlertDescription>{errorMessage}</AlertDescription>
+					</Alert>
+				</div>
 			) : null}
 
 			<form
@@ -112,8 +113,7 @@ function SettingsUserVerificationForm({
 					)}
 				</form.Subscribe>
 			</form>
-
-			<p className="flex items-center justify-center gap-2 text-center text-sm text-muted-foreground">
+			<p className="flex items-center justify-center gap-2 text-center text-sm text-muted-foreground mt-2">
 				Didn't receive a code?{" "}
 				<button
 					type="button"

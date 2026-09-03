@@ -33,7 +33,7 @@ function SidebarLink({
 		<Link
 			to={to}
 			params={params}
-			className="flex items-center gap-4 rounded-md px-4 py-2 font-normal text-muted-foreground transition-colors hover:bg-muted/30"
+			className="flex items-center gap-4 rounded-md px-4 py-2 font-normal text-muted-foreground transition-colors hover:bg-accent"
 			activeProps={{
 				className: "text-primary font-semibold",
 			}}

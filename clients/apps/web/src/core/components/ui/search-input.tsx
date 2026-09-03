@@ -5,7 +5,7 @@ import { useId } from "react";
 import { Input, type InputProps } from "@/core/components/ui/input.tsx";
 import { cn } from "@/core/lib/utils.ts";
 
-const searchInputVariants = cva("rounded-full bg-muted/60 shadow-none", {
+const searchInputVariants = cva("rounded-full bg-accent shadow-none", {
 	variants: {
 		size: {
 			default: "pl-9",

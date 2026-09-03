@@ -1,8 +1,4 @@
-import {
-	RiChat3Line,
-	RiHeartFill,
-	RiUserAddLine,
-} from "@remixicon/react";
+import { RiChat3Line, RiHeartFill, RiUserAddLine } from "@remixicon/react";
 import { Link } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { EmptyBlock } from "@/core/components/ui/empty-block.tsx";
@@ -90,7 +86,7 @@ function NotificationItem({
 					</div>
 				</div>
 				{notification.contentPreview ? (
-					<p className="mt-2 line-clamp-2 rounded-xl border border-border bg-muted/60 p-2.5 text-sm text-muted-foreground">
+					<p className="mt-2 line-clamp-2 rounded-xl border border-border bg-accent p-2.5 text-sm text-muted-foreground">
 						{notification.contentPreview}
 					</p>
 				) : null}

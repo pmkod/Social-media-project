@@ -168,7 +168,7 @@ const CreateGroupDiscussionModal = create(() => {
 										{selectedUsers.map((user) => (
 											<div
 												key={user.id}
-												className="flex shrink-0 items-center gap-2 rounded-full border border-border bg-muted/60 py-1 pl-1 pr-2"
+												className="flex shrink-0 items-center gap-2 rounded-full border border-border bg-accent py-1 pl-1 pr-2"
 											>
 												<UserAvatar user={user} size="xs" />
 												<span className="max-w-28 truncate text-xs font-medium">
