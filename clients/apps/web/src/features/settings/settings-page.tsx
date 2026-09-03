@@ -1,85 +1,8 @@
-import {
-	type RemixiconComponentType,
-	RiArrowLeftLine,
-	RiArrowRightSLine,
-} from "@remixicon/react";
+import { RiArrowLeftLine } from "@remixicon/react";
 import { Link } from "@tanstack/react-router";
+import type { SettingsPath } from "@/features/setting/common/setting-row-item.tsx";
 
-export type SettingsPath =
-	| "/settings"
-	| "/settings/account"
-	| "/settings/account/change-email"
-	| "/settings/security"
-	| "/settings/security/change-password"
-	| "/settings/privacy"
-	| "/settings/theme"
-	| "/settings/language";
-
-export function SettingsRow({
-	icon: Icon,
-	title,
-	description,
-	onClick,
-	to,
-	href,
-	trailing,
-	disabled = false,
-}: {
-	icon: RemixiconComponentType;
-	title: string;
-	description: string;
-	onClick?: () => void;
-	to?: SettingsPath;
-	href?: string;
-	trailing?: React.ReactNode;
-	disabled?: boolean;
-}) {
-	const content = (
-		<>
-			<span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-muted text-muted-foreground">
-				<Icon className="size-5" />
-			</span>
-			<span className="min-w-0 flex-1">
-				<span className="block font-medium text-foreground">{title}</span>
-				<span className="mt-0.5 block text-sm text-muted-foreground">
-					{description}
-				</span>
-			</span>
-			{trailing ?? (
-				<RiArrowRightSLine className="size-5 shrink-0 text-muted-foreground" />
-			)}
-		</>
-	);
-	const className =
-		"flex w-full cursor-pointer items-center gap-4 rounded-xl px-3 py-4 text-left transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-default disabled:hover:bg-transparent";
-
-	if (to) {
-		return (
-			<Link to={to} className={className}>
-				{content}
-			</Link>
-		);
-	}
-
-	if (href) {
-		return (
-			<a href={href} className={className}>
-				{content}
-			</a>
-		);
-	}
-
-	return (
-		<button
-			type="button"
-			onClick={onClick}
-			disabled={disabled}
-			className={className}
-		>
-			{content}
-		</button>
-	);
-}
+export type { SettingsPath };
 
 export function SettingsHeader({
 	title,

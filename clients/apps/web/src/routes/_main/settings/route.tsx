@@ -1,25 +1,22 @@
 import {
 	type RemixiconComponentType,
-	RiArrowRightSLine,
 	RiFileShieldLine,
 	RiPaletteLine,
 	RiShieldKeyholeLine,
 	RiTranslate2,
 	RiUserSettingsLine,
 } from "@remixicon/react";
-import {
-	createFileRoute,
-	Link,
-	Outlet,
-	useLocation,
-} from "@tanstack/react-router";
+import { createFileRoute, Outlet, useLocation } from "@tanstack/react-router";
 import {
 	AppHeader,
 	AppHeaderLeftPart,
 	AppHeaderTitle,
 } from "@/core/components/ui/app-header";
 import { cn } from "@/core/lib/utils.ts";
-import type { SettingsPath } from "@/features/settings/settings-page.tsx";
+import {
+	SettingRowItem,
+	type SettingsPath,
+} from "@/features/setting/common/setting-row-item.tsx";
 
 export const Route = createFileRoute("/_main/settings")({
 	component: SettingsLayout,
@@ -50,8 +47,8 @@ const settingsSections: SettingsSection[] = [
 	},
 	{
 		id: "privacy",
-		label: "Privacy and safety",
-		description: "Review privacy and terms",
+		label: "Additional resources",
+		description: "Read our privacy policy and terms",
 		path: "/settings/privacy",
 		icon: RiFileShieldLine,
 	},
@@ -90,34 +87,18 @@ function SettingsLayout() {
 
 					<nav className="space-y-1" aria-label="Settings sections">
 						{settingsSections.map((section) => {
-							const Icon = section.icon;
 							const isSelected =
 								location.pathname === section.path ||
 								location.pathname.startsWith(`${section.path}/`);
 							return (
-								<Link
+								<SettingRowItem
+									icon={section.icon}
+									title={section.label}
+									description={section.description}
 									to={section.path}
 									key={section.id}
-									className={cn(
-										"group flex w-full cursor-pointer items-center gap-3 rounded-md px-3 py-3 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-										isSelected
-											? "bg-muted/30 text-white"
-											: "hover:bg-muted/30 ",
-									)}
-								>
-									<Icon className="size-5 shrink-0" />
-									<span className="min-w-0 flex-1">
-										<span className="block font-medium">{section.label}</span>
-										<span
-											className={cn(
-												"mt-0.5 block truncate text-xs text-muted-foreground",
-											)}
-										>
-											{section.description}
-										</span>
-									</span>
-									<RiArrowRightSLine className="size-5 shrink-0 opacity-60" />
-								</Link>
+									isSelected={isSelected}
+								/>
 							);
 						})}
 					</nav>
