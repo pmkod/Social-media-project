@@ -2,11 +2,11 @@ import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
-export const SPARK_MAX_DURATION_SECONDS = 90;
+export const CHILLZ_MAX_DURATION_SECONDS = 90;
 
 /** Inspect the actual upload; browser metadata and MIME types are not sufficient. */
-export async function validateSparkVideo(file: File): Promise<void> {
-	const directory = await mkdtemp(join(tmpdir(), "chillspace-spark-"));
+export async function validateChillzVideo(file: File): Promise<void> {
+	const directory = await mkdtemp(join(tmpdir(), "chillspace-chillz-"));
 	try {
 		const path = join(directory, "upload");
 		await Bun.write(path, file);
@@ -44,8 +44,8 @@ export async function validateSparkVideo(file: File): Promise<void> {
 			if (videos.length === 0 || !Number.isFinite(duration) || duration <= 0) {
 				throw new Error("Choose a video with a valid duration.");
 			}
-			if (duration > SPARK_MAX_DURATION_SECONDS) {
-				throw new Error("Sparks must be 90 seconds or shorter.");
+			if (duration > CHILLZ_MAX_DURATION_SECONDS) {
+				throw new Error("Chillz must be 90 seconds or shorter.");
 			}
 		} finally {
 			clearTimeout(timeout);

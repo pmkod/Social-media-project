@@ -1,8 +1,8 @@
 import {
 	RiChat3Line,
-	RiFlashlightFill,
 	RiHeartFill,
 	RiHeartLine,
+	RiPlayCircleFill,
 } from "@remixicon/react";
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
@@ -25,9 +25,9 @@ import { buildVideoUrl } from "@/features/post/post-media.functions.ts";
 import { useUnlikePost } from "@/features/post/unlike-post/use-unlike-post.ts";
 import { UserAvatar } from "@/features/user/common/components/user-avatar.tsx";
 import { UserProfileLink } from "@/features/user/common/user-profile-link.tsx";
-import { SparkPlayer } from "./spark-player.tsx";
+import { ChillzPlayer } from "./chillz-player.tsx";
 
-export function sparkVideoUrl(post: Post) {
+export function chillzVideoUrl(post: Post) {
 	const media = post.medias?.find(
 		(item) => item.mediaType?.toUpperCase() === "VIDEO",
 	);
@@ -35,7 +35,7 @@ export function sparkVideoUrl(post: Post) {
 	return file ? buildVideoUrl(file.filename || file.url || "") : "";
 }
 
-export function SparkItem({
+export function ChillzItem({
 	post,
 	onComment,
 	paused = false,
@@ -50,7 +50,7 @@ export function SparkItem({
 	const unlike = useUnlikePost();
 	const liked = post.isLikedByAuthenticatedUser ?? false;
 	const caption = post.text || post.content || "";
-	const videoUrl = sparkVideoUrl(post);
+	const videoUrl = chillzVideoUrl(post);
 	return (
 		<article className="mx-auto w-full max-w-md overflow-hidden rounded-2xl border border-border bg-background shadow-sm">
 			<header className="flex items-center gap-3 px-4 py-3">
@@ -77,18 +77,18 @@ export function SparkItem({
 					</p>
 				</div>
 				<Link
-					to="/sparks"
+					to="/chillz"
 					className="flex items-center gap-1 text-xs font-semibold text-primary"
 				>
-					<RiFlashlightFill className="size-4" />
-					Spark
+					<RiPlayCircleFill className="size-4" />
+					Chillz
 				</Link>
 				{post.author ? (
 					<PostActionsDropdown user={post.author} post={post} size="sm" />
 				) : null}
 			</header>
 			{videoUrl ? (
-				<SparkPlayer
+				<ChillzPlayer
 					key={videoUrl}
 					src={videoUrl}
 					paused={paused || commentsOpen}
@@ -102,7 +102,7 @@ export function SparkItem({
 				<div className="flex items-center gap-4">
 					<button
 						type="button"
-						aria-label={liked ? "Unlike Spark" : "Like Spark"}
+						aria-label={liked ? "Unlike Chillz" : "Like Chillz"}
 						aria-pressed={liked}
 						disabled={like.isPending || unlike.isPending}
 						onClick={() =>
@@ -122,7 +122,7 @@ export function SparkItem({
 					</button>
 					<button
 						type="button"
-						aria-label="Comment on Spark"
+						aria-label="Comment on Chillz"
 						onClick={() => (onComment ? onComment() : setCommentsOpen(true))}
 						className="flex items-center gap-1.5 rounded-full py-2"
 					>
@@ -159,7 +159,7 @@ export function SparkItem({
 					<DialogHeader>
 						<DialogTitle>Comments</DialogTitle>
 						<DialogDescription>
-							Join the conversation on this Spark.
+							Join the conversation on this Chillz.
 						</DialogDescription>
 					</DialogHeader>
 					<DialogBody>

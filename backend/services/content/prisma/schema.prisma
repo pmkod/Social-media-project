@@ -9,7 +9,7 @@ datasource db {
 
 enum PostType {
   POST
-  SPARK
+  CHILLZ
 }
 
 model Post {

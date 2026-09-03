@@ -11,7 +11,7 @@
 
 export const PostType = {
   POST: 'POST',
-  SPARK: 'SPARK'
+  CHILLZ: 'CHILLZ'
 } as const
 
 export type PostType = (typeof PostType)[keyof typeof PostType]

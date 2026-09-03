@@ -9,11 +9,11 @@ export const POST_MEDIA_MIME_TYPES = [
 	"video/ogg",
 ];
 export const POST_MAX_FILE_SIZE = 20_000_000;
-export const SPARK_MAX_DURATION = 90;
+export const CHILLZ_MAX_DURATION = 90;
 
 export const createPostSchema = z
 	.object({
-		type: z.enum(["POST", "SPARK"]),
+		type: z.enum(["POST", "CHILLZ"]),
 		text: z.string().trim().max(5000),
 		medias: z
 			.array(
@@ -30,7 +30,7 @@ export const createPostSchema = z
 			.max(4),
 	})
 	.superRefine((data, ctx) => {
-		if (data.type === "SPARK") {
+		if (data.type === "CHILLZ") {
 			if (
 				data.medias.length !== 1 ||
 				!data.medias[0]?.type.startsWith("video/")
@@ -38,7 +38,7 @@ export const createPostSchema = z
 				ctx.addIssue({
 					code: "custom",
 					path: ["medias"],
-					message: "A Spark requires exactly one video.",
+					message: "A Chillz requires exactly one video.",
 				});
 			}
 		} else if (!data.text && data.medias.length === 0) {
@@ -50,7 +50,7 @@ export const createPostSchema = z
 		}
 	});
 
-export async function checkSparkDuration(file: File): Promise<void> {
+export async function checkChillzDuration(file: File): Promise<void> {
 	const url = URL.createObjectURL(file);
 	const video = document.createElement("video");
 	try {
@@ -65,7 +65,7 @@ export async function checkSparkDuration(file: File): Promise<void> {
 				if (
 					!Number.isFinite(video.duration) ||
 					video.duration <= 0 ||
-					video.duration > SPARK_MAX_DURATION
+					video.duration > CHILLZ_MAX_DURATION
 				) {
 					reject(new Error("Choose a video of 90 seconds or less."));
 				} else resolve();

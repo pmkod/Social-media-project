@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 
-export function SparkPlayer({
+export function ChillzPlayer({
 	src,
 	paused = false,
 }: {
@@ -49,7 +49,7 @@ export function SparkPlayer({
 				playsInline
 				controls
 				preload="metadata"
-				aria-label="Spark video"
+				aria-label="Chillz video"
 				onError={() => setFailed(true)}
 				className="h-full w-full object-contain"
 			/>

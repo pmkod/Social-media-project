@@ -1,6 +1,6 @@
 import { z } from "@hono/zod-openapi";
 
-export const PostTypeSchema = z.enum(["POST", "SPARK"]);
+export const PostTypeSchema = z.enum(["POST", "CHILLZ"]);
 
 const PostValidationSchema = z.object({
 	id: z.string(),
@@ -40,7 +40,7 @@ export const CreatePostRequestBody = z
 			.default([]),
 	})
 	.superRefine((data, ctx) => {
-		if (data.type === "SPARK") {
+		if (data.type === "CHILLZ") {
 			if (
 				data.medias.length !== 1 ||
 				!data.medias[0]?.type.startsWith("video/")
@@ -48,7 +48,7 @@ export const CreatePostRequestBody = z
 				ctx.addIssue({
 					code: "custom",
 					path: ["medias"],
-					message: "A Spark requires exactly one video.",
+					message: "A Chillz requires exactly one video.",
 				});
 			}
 		} else if (!data.text && data.medias.length === 0) {

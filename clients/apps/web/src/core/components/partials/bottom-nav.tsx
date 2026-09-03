@@ -1,9 +1,9 @@
 import {
 	RiBookmarkLine,
 	RiChat3Line,
-	RiFlashlightLine,
 	RiHome5Line,
 	RiNotification3Line,
+	RiPlayCircleLine,
 	RiSearchLine,
 	RiSettings3Line,
 } from "@remixicon/react";
@@ -31,12 +31,12 @@ export function BottomNav() {
 				<RiSearchLine className="h-6 w-6" />
 			</Link>
 			<Link
-				to="/sparks"
-				aria-label="Sparks"
+				to="/chillz"
+				aria-label="Chillz"
 				className="p-2 text-muted-foreground transition-colors hover:text-sky-500"
 				activeProps={{ className: "text-sky-500" }}
 			>
-				<RiFlashlightLine className="size-6" />
+				<RiPlayCircleLine className="size-6" />
 			</Link>
 			<Link
 				to="/notifications"

@@ -16,6 +16,7 @@ import { Route as BaseAboutRouteImport } from './routes/_base/about'
 import { Route as BasePrivacyPolicyRouteImport } from './routes/_base/privacy-policy'
 import { Route as BaseTermsOfServiceRouteImport } from './routes/_base/terms-of-service'
 import { Route as MainWithRightAsideRouteRouteImport } from './routes/_main/_with-right-aside/route'
+import { Route as MainChillzRouteImport } from './routes/_main/chillz'
 import { Route as MainDiscussionsRouteRouteImport } from './routes/_main/discussions/route'
 import { Route as MainSettingsRouteRouteImport } from './routes/_main/settings/route'
 import { Route as MainSparksRouteImport } from './routes/_main/sparks'
@@ -73,6 +74,11 @@ const BaseTermsOfServiceRoute = BaseTermsOfServiceRouteImport.update({
 } as any)
 const MainWithRightAsideRouteRoute = MainWithRightAsideRouteRouteImport.update({
   id: '/_with-right-aside',
+  getParentRoute: () => MainRouteRoute,
+} as any)
+const MainChillzRoute = MainChillzRouteImport.update({
+  id: '/chillz',
+  path: '/chillz',
   getParentRoute: () => MainRouteRoute,
 } as any)
 const MainDiscussionsRouteRoute = MainDiscussionsRouteRouteImport.update({
@@ -232,6 +238,7 @@ export interface FileRoutesByFullPath {
   '/about': typeof BaseAboutRoute
   '/privacy-policy': typeof BasePrivacyPolicyRoute
   '/terms-of-service': typeof BaseTermsOfServiceRoute
+  '/chillz': typeof MainChillzRoute
   '/sparks': typeof MainSparksRoute
   '/complete-signup': typeof BaseAuthenticationCompleteSignupRoute
   '/new-password': typeof BaseAuthenticationNewPasswordRoute
@@ -262,6 +269,7 @@ export interface FileRoutesByTo {
   '/about': typeof BaseAboutRoute
   '/privacy-policy': typeof BasePrivacyPolicyRoute
   '/terms-of-service': typeof BaseTermsOfServiceRoute
+  '/chillz': typeof MainChillzRoute
   '/sparks': typeof MainSparksRoute
   '/complete-signup': typeof BaseAuthenticationCompleteSignupRoute
   '/new-password': typeof BaseAuthenticationNewPasswordRoute
@@ -298,6 +306,7 @@ export interface FileRoutesById {
   '/_base/about': typeof BaseAboutRoute
   '/_base/privacy-policy': typeof BasePrivacyPolicyRoute
   '/_base/terms-of-service': typeof BaseTermsOfServiceRoute
+  '/_main/chillz': typeof MainChillzRoute
   '/_main/sparks': typeof MainSparksRoute
   '/_base/_authentication/complete-signup': typeof BaseAuthenticationCompleteSignupRoute
   '/_base/_authentication/new-password': typeof BaseAuthenticationNewPasswordRoute
@@ -333,6 +342,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/privacy-policy'
     | '/terms-of-service'
+    | '/chillz'
     | '/sparks'
     | '/complete-signup'
     | '/new-password'
@@ -363,6 +373,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/privacy-policy'
     | '/terms-of-service'
+    | '/chillz'
     | '/sparks'
     | '/complete-signup'
     | '/new-password'
@@ -398,6 +409,7 @@ export interface FileRouteTypes {
     | '/_base/about'
     | '/_base/privacy-policy'
     | '/_base/terms-of-service'
+    | '/_main/chillz'
     | '/_main/sparks'
     | '/_base/_authentication/complete-signup'
     | '/_base/_authentication/new-password'
@@ -479,6 +491,13 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: '/'
       preLoaderRoute: typeof MainWithRightAsideRouteRouteImport
+      parentRoute: typeof MainRouteRoute
+    }
+    '/_main/chillz': {
+      id: '/_main/chillz'
+      path: '/chillz'
+      fullPath: '/chillz'
+      preLoaderRoute: typeof MainChillzRouteImport
       parentRoute: typeof MainRouteRoute
     }
     '/_main/discussions': {
@@ -788,6 +807,7 @@ interface MainRouteRouteChildren {
   MainWithRightAsideRouteRoute: typeof MainWithRightAsideRouteRouteWithChildren
   MainDiscussionsRouteRoute: typeof MainDiscussionsRouteRouteWithChildren
   MainSettingsRouteRoute: typeof MainSettingsRouteRouteWithChildren
+  MainChillzRoute: typeof MainChillzRoute
   MainSparksRoute: typeof MainSparksRoute
 }
 
@@ -795,6 +815,7 @@ const MainRouteRouteChildren: MainRouteRouteChildren = {
   MainWithRightAsideRouteRoute: MainWithRightAsideRouteRouteWithChildren,
   MainDiscussionsRouteRoute: MainDiscussionsRouteRouteWithChildren,
   MainSettingsRouteRoute: MainSettingsRouteRouteWithChildren,
+  MainChillzRoute: MainChillzRoute,
   MainSparksRoute: MainSparksRoute,
 }
 

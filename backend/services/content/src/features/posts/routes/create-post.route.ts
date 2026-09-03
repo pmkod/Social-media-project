@@ -12,7 +12,7 @@ import {
 import { CreatePostRequestBody } from "../posts.validation-schemas";
 import { deleteFile } from "@/core/services/storage.service";
 import type { Prisma } from "@/generated/prisma/client";
-import { validateSparkVideo } from "../services/spark-video-validation.service";
+import { validateChillzVideo } from "../services/chillz-video-validation.service";
 import { compressPostMediaFile } from "../services/post-media-compression.service";
 import { setPostMediaFile } from "../services/post-media-storage.service";
 
@@ -53,7 +53,7 @@ const createPostRoute = defineOpenAPIRoute<
 		}
 
 		const { text, medias, type } = c.req.valid("form");
-		if (type === "SPARK") await validateSparkVideo(medias[0]!);
+		if (type === "CHILLZ") await validateChillzVideo(medias[0]!);
 
 		const authors = await userServiceClient.fetchAuthorsBatch(
 			[authenticatedUserId],
@@ -124,7 +124,7 @@ const createPostRoute = defineOpenAPIRoute<
 		return c.json(
 			{
 				message:
-					type === "SPARK" ? "Spark published" : "Post created successfully",
+					type === "CHILLZ" ? "Chillz published" : "Post created successfully",
 				post: {
 					...postToSend,
 					author: authors.get(authenticatedUserId) ?? null,

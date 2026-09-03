@@ -9,11 +9,11 @@ import {
 } from "@/core/components/ui/app-header";
 import { ExceptionBlock } from "@/core/components/ui/exception-block.tsx";
 import { MainContainer } from "@/core/components/ui/main-container.tsx";
+import { ChillzItem } from "@/features/chillz/chillz-item.tsx";
 import { PostComments } from "@/features/comment/post-comments.tsx";
 import { PostItemLoader } from "@/features/post/common/components/loaders/post-item-loader.tsx";
 import { PostItem } from "@/features/post/common/post-item.tsx";
 import { usePost } from "@/features/post/post-detail/use-post";
-import { SparkItem } from "@/features/spark/spark-item.tsx";
 
 export const Route = createFileRoute("/_main/_with-right-aside/posts/$postId")({
 	validateSearch: z.object({ focusComment: z.boolean().optional() }),
@@ -25,22 +25,22 @@ function PostDetailPage() {
 	const { focusComment } = Route.useSearch();
 	const query = usePost({ postId });
 	const commentsRef = useRef<HTMLDivElement>(null);
-	const isSpark = query.data?.post.type === "SPARK";
+	const isChillz = query.data?.post.type === "CHILLZ";
 	return (
 		<MainContainer>
 			<AppHeader>
 				<AppHeaderLeftPart>
-					<AppHeaderGoBackButton to={isSpark ? "/sparks" : "/home"} />
-					<AppHeaderTitle>{isSpark ? "Spark" : "Post"}</AppHeaderTitle>
+					<AppHeaderGoBackButton to={isChillz ? "/chillz" : "/home"} />
+					<AppHeaderTitle>{isChillz ? "Chillz" : "Post"}</AppHeaderTitle>
 				</AppHeaderLeftPart>
 			</AppHeader>
 			{query.isPending ? (
 				<PostItemLoader hasMedia />
 			) : query.isSuccess ? (
 				<>
-					{isSpark ? (
+					{isChillz ? (
 						<div className="pb-4">
-							<SparkItem
+							<ChillzItem
 								post={query.data.post}
 								onComment={() => {
 									commentsRef.current?.scrollIntoView({

@@ -2,7 +2,7 @@
 import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, expect, test, vi } from "vitest";
-import { SparkPlayer } from "./spark-player";
+import { ChillzPlayer } from "./chillz-player";
 
 let root: Root;
 let container: HTMLDivElement;
@@ -54,8 +54,8 @@ async function visibility(index: number, ratio: number) {
 	);
 }
 
-test("only plays a sufficiently visible Spark and pauses offscreen", async () => {
-	await act(() => root.render(<SparkPlayer src="/test.mp4" />));
+test("only plays a sufficiently visible Chillz and pauses offscreen", async () => {
+	await act(() => root.render(<ChillzPlayer src="/test.mp4" />));
 	expect(play).not.toHaveBeenCalled();
 	await visibility(0, 0.4);
 	expect(play).not.toHaveBeenCalled();
@@ -71,14 +71,14 @@ test("only plays a sufficiently visible Spark and pauses offscreen", async () =>
 });
 
 test("pauses for a dialog and when the browser tab is hidden", async () => {
-	await act(() => root.render(<SparkPlayer src="/test.mp4" />));
+	await act(() => root.render(<ChillzPlayer src="/test.mp4" />));
 	await visibility(0, 1);
 	pause.mockClear();
 	play.mockClear();
-	await act(() => root.render(<SparkPlayer src="/test.mp4" paused />));
+	await act(() => root.render(<ChillzPlayer src="/test.mp4" paused />));
 	expect(pause).toHaveBeenCalled();
 	expect(play).not.toHaveBeenCalled();
-	await act(() => root.render(<SparkPlayer src="/test.mp4" />));
+	await act(() => root.render(<ChillzPlayer src="/test.mp4" />));
 	expect(play).toHaveBeenCalledTimes(1);
 	pause.mockClear();
 	Object.defineProperty(document, "hidden", {
@@ -93,10 +93,10 @@ test("pauses for a dialog and when the browser tab is hidden", async () => {
 
 test("keeps manual controls if autoplay is denied and exposes load errors", async () => {
 	play.mockRejectedValue(new Error("Autoplay denied"));
-	await act(() => root.render(<SparkPlayer src="/test.mp4" />));
+	await act(() => root.render(<ChillzPlayer src="/test.mp4" />));
 	await visibility(0, 1);
 	const video = container.querySelector("video");
-	if (!video) throw new Error("Spark video is missing");
+	if (!video) throw new Error("Chillz video is missing");
 	expect(video.controls).toBe(true);
 	await act(() => {
 		video.dispatchEvent(new Event("error"));

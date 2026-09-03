@@ -14,21 +14,25 @@ bun run dev
 
 This project was created using `bun init` in bun v1.2.22. [Bun](https://bun.com) is a fast all-in-one JavaScript runtime.
 
-## Sparks
+## Chillz
 
-Sparks use the existing Post, Comment, PostLike and Bookmark models with `Post.type = SPARK`.
+Chillz use the existing Post, Comment, PostLike and Bookmark models with `Post.type = CHILLZ`.
 Existing posts keep `POST`. Search (`GET /posts`) and profile lists (`GET /posts/users/:userId`)
-accept `type=POST|SPARK`, defaulting to `POST`. The following feed, likes and bookmarks may contain both types.
+accept `type=POST|CHILLZ`, defaulting to `POST`. The following feed, likes and bookmarks may contain both types.
 
-Before starting the updated service, apply the additive migration and generate the client:
+Before starting the updated service, apply the migrations and generate the client:
 
 ```bash
 bunx prisma migrate deploy
 bunx prisma generate
 ```
 
-The server needs `ffprobe` (from FFmpeg) on its PATH to inspect Spark uploads.
-A Spark contains exactly one MP4, WebM or Ogg video, up to 20 MB and 90 seconds.
+The Chillz migration renames the former `SPARK` enum value to `CHILLZ` in place,
+preserving existing posts, media, comments, likes and bookmarks.
+The web page is now `/chillz`; old `/sparks` links redirect there with their search query.
+
+The server needs `ffprobe` (from FFmpeg) on its PATH to inspect Chillz uploads.
+A Chillz contains exactly one MP4, WebM or Ogg video, up to 20 MB and 90 seconds.
 Its caption is optional (5,000 characters maximum). Files are uploaded before the
 post and media records are created together; failed uploads are cleaned up.
 

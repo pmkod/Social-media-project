@@ -2,9 +2,9 @@ import {
 	type RemixiconComponentType,
 	RiBookmarkLine,
 	RiChat3Line,
-	RiFlashlightLine,
 	RiHome5Line,
 	RiNotification3Line,
+	RiPlayCircleLine,
 	RiSearchLine,
 	RiSettings3Line,
 	RiUserLine,
@@ -65,7 +65,7 @@ export function Sidebar() {
 				<nav className="space-y-1">
 					<SidebarLink to="/home" icon={RiHome5Line} label="Home" />
 					<SidebarLink to="/search" icon={RiSearchLine} label="Search" />
-					<SidebarLink to="/sparks" icon={RiFlashlightLine} label="Sparks" />
+					<SidebarLink to="/chillz" icon={RiPlayCircleLine} label="Chillz" />
 					<SidebarLink
 						to="/notifications"
 						icon={RiNotification3Line}

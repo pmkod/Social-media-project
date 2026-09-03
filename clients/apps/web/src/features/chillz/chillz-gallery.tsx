@@ -1,4 +1,4 @@
-import { RiFlashlightLine, RiHeartLine, RiPlayFill } from "@remixicon/react";
+import { RiHeartLine, RiPlayCircleLine, RiPlayFill } from "@remixicon/react";
 import { Link } from "@tanstack/react-router";
 import { Button } from "@/core/components/ui/button.tsx";
 import { EmptyBlock } from "@/core/components/ui/empty-block.tsx";
@@ -6,9 +6,9 @@ import { ExceptionBlock } from "@/core/components/ui/exception-block.tsx";
 import { Skeleton } from "@/core/components/ui/skeleton.tsx";
 import { useSearchPosts } from "@/features/post/search/use-search-posts.ts";
 import { useUserPosts } from "@/features/post/user-posts/use-user-posts.ts";
-import { sparkVideoUrl } from "./spark-item.tsx";
+import { chillzVideoUrl } from "./chillz-item.tsx";
 
-function SparkGallery({
+function ChillzGallery({
 	query,
 	horizontal = false,
 	emptyDescription,
@@ -21,7 +21,7 @@ function SparkGallery({
 	if (query.isPending)
 		return (
 			<section
-				aria-label="Loading Sparks"
+				aria-label="Loading Chillz"
 				aria-busy="true"
 				className="grid grid-cols-3 gap-2 p-4"
 			>
@@ -34,7 +34,7 @@ function SparkGallery({
 		return (
 			<ExceptionBlock
 				bordered={false}
-				title="Unable to load Sparks"
+				title="Unable to load Chillz"
 				description="Please try again."
 				onRefresh={() => void query.refetch()}
 				isRefetching={query.isRefetching}
@@ -44,7 +44,7 @@ function SparkGallery({
 		return (
 			<EmptyBlock
 				bordered={false}
-				title="No Sparks yet"
+				title="No Chillz yet"
 				description={emptyDescription}
 			/>
 		);
@@ -62,11 +62,11 @@ function SparkGallery({
 						key={post.id}
 						to="/posts/$postId"
 						params={{ postId: post.id }}
-						aria-label={`Watch Spark by ${post.author?.fullName ?? "creator"}: ${post.text || "video"}`}
+						aria-label={`Watch Chillz by ${post.author?.fullName ?? "creator"}: ${post.text || "video"}`}
 						className={`group relative aspect-[9/16] overflow-hidden rounded-xl bg-muted focus-visible:outline-2 focus-visible:outline-primary ${horizontal ? "w-40 shrink-0 snap-start sm:w-44" : ""}`}
 					>
 						<video
-							src={sparkVideoUrl(post)}
+							src={chillzVideoUrl(post)}
 							muted
 							playsInline
 							preload="metadata"
@@ -76,7 +76,7 @@ function SparkGallery({
 						<RiPlayFill className="absolute left-3 top-3 size-5 text-white drop-shadow" />
 						<div className="absolute inset-x-0 bottom-0 space-y-1.5 p-3 text-white">
 							<p className="line-clamp-2 break-words text-sm font-medium">
-								{post.text || "Catch this Spark"}
+								{post.text || "Catch this Chillz"}
 							</p>
 							<p className="truncate text-xs text-white/80">
 								@{post.author?.username ?? "creator"}
@@ -96,7 +96,7 @@ function SparkGallery({
 						isLoading={query.isFetchingNextPage}
 						onClick={() => void query.fetchNextPage()}
 					>
-						{query.isFetchNextPageError ? "Try again" : "More Sparks"}
+						{query.isFetchNextPageError ? "Try again" : "More Chillz"}
 					</Button>
 				</div>
 			) : null}
@@ -104,32 +104,32 @@ function SparkGallery({
 	);
 }
 
-export function SparkSearchSection({ query }: { query: string }) {
-	const sparks = useSearchPosts({ query, type: "SPARK" });
+export function ChillzSearchSection({ query }: { query: string }) {
+	const chillz = useSearchPosts({ query, type: "CHILLZ" });
 	return (
 		<section
-			aria-label="Sparks"
+			aria-label="Chillz"
 			className="mb-6 overflow-hidden rounded-xl border"
 		>
 			<header className="flex items-center justify-between gap-2 border-b px-4 py-3">
 				<h2 className="flex items-center gap-2 font-semibold">
-					<RiFlashlightLine className="size-5 text-primary" />
-					{query ? "Sparks" : "Discover Sparks"}
+					<RiPlayCircleLine className="size-5 text-primary" />
+					{query ? "Chillz" : "Discover Chillz"}
 				</h2>
 				<Link
-					to="/sparks"
+					to="/chillz"
 					search={query ? { q: query } : {}}
 					className="text-sm font-medium text-primary"
 				>
 					See all
 				</Link>
 			</header>
-			<SparkGallery
-				query={sparks}
+			<ChillzGallery
+				query={chillz}
 				horizontal
 				emptyDescription={
 					query
-						? `No Sparks match “${query}”. Try another search.`
+						? `No Chillz match “${query}”. Try another search.`
 						: "Short videos from the community will appear here."
 				}
 			/>
@@ -137,13 +137,13 @@ export function SparkSearchSection({ query }: { query: string }) {
 	);
 }
 
-export function UserSparks({ userId }: { userId?: string }) {
-	const query = useUserPosts({ userId: userId ?? "", type: "SPARK" });
+export function UserChillz({ userId }: { userId?: string }) {
+	const query = useUserPosts({ userId: userId ?? "", type: "CHILLZ" });
 	return (
 		<div className="border-x border-t">
-			<SparkGallery
+			<ChillzGallery
 				query={query}
-				emptyDescription="Sparks shared by this person will appear here."
+				emptyDescription="Chillz shared by this person will appear here."
 			/>
 		</div>
 	);

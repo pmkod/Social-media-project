@@ -13,7 +13,7 @@ import { join } from "node:path";
 import { OpenAPIHono } from "@hono/zod-openapi";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { CreatePostRequestBody } from "./posts.validation-schemas";
-import { validateSparkVideo } from "./services/spark-video-validation.service";
+import { validateChillzVideo } from "./services/chillz-video-validation.service";
 
 const findMany = mock(async (_args: unknown): Promise<any[]> => []);
 const create = mock(async (args: any) => ({ ...args.data, medias: [] }));
@@ -55,7 +55,7 @@ let directory: string;
 let shortVideo: File;
 let longVideo: File;
 beforeAll(async () => {
-	directory = await mkdtemp(join(tmpdir(), "spark-test-"));
+	directory = await mkdtemp(join(tmpdir(), "chillz-test-"));
 	for (const seconds of [1, 91]) {
 		const path = join(directory, `${seconds}.mp4`);
 		const process = Bun.spawn(
@@ -109,7 +109,7 @@ function form(type: string, files: File[] = [], text = "") {
 	return body;
 }
 
-describe("Spark creation", () => {
+describe("Chillz creation", () => {
 	test("preserves existing posts and allows media-only posts", () => {
 		expect(CreatePostRequestBody.parse({ text: " Hello " })).toMatchObject({
 			type: "POST",
@@ -123,11 +123,11 @@ describe("Spark creation", () => {
 	test("accepts a single multipart video without a caption", async () => {
 		const response = await app.request("/posts", {
 			method: "POST",
-			body: form("SPARK", [shortVideo]),
+			body: form("CHILLZ", [shortVideo]),
 		});
 		expect(response.status).toBe(201);
 		expect(create.mock.calls[0]?.[0].data).toMatchObject({
-			type: "SPARK",
+			type: "CHILLZ",
 			text: "",
 			authorId: "viewer",
 		});
@@ -147,7 +147,7 @@ describe("Spark creation", () => {
 		]) {
 			const response = await app.request("/posts", {
 				method: "POST",
-				body: form("SPARK", files),
+				body: form("CHILLZ", files),
 			});
 			expect(response.status).toBe(400);
 		}
@@ -155,11 +155,11 @@ describe("Spark creation", () => {
 		expect(upload).not.toHaveBeenCalled();
 	});
 	test("checks real duration and rejects a fake video before uploading", async () => {
-		await expect(validateSparkVideo(shortVideo)).resolves.toBeUndefined();
-		await expect(validateSparkVideo(longVideo)).rejects.toThrow("90 seconds");
+		await expect(validateChillzVideo(shortVideo)).resolves.toBeUndefined();
+		await expect(validateChillzVideo(longVideo)).rejects.toThrow("90 seconds");
 		const response = await app.request("/posts", {
 			method: "POST",
-			body: form("SPARK", [
+			body: form("CHILLZ", [
 				new File(["not a video"], "fake.mp4", { type: "video/mp4" }),
 			]),
 		});
@@ -175,7 +175,7 @@ describe("Spark creation", () => {
 			});
 		const response = await app.request("/posts", {
 			method: "POST",
-			body: form("SPARK", [shortVideo]),
+			body: form("CHILLZ", [shortVideo]),
 		});
 		expect(response.status).toBe(400);
 		expect(create).not.toHaveBeenCalled();
@@ -183,18 +183,18 @@ describe("Spark creation", () => {
 	});
 });
 
-describe("Spark discovery and profiles", () => {
-	test("defaults to posts and explicitly filters Sparks before pagination", async () => {
+describe("Chillz discovery and profiles", () => {
+	test("defaults to posts and explicitly filters Chillz before pagination", async () => {
 		await app.request("/posts");
 		expect(findMany.mock.calls[0]?.[0]).toMatchObject({
 			where: { type: "POST" },
 		});
 		await app.request(
-			"/posts?type=SPARK&q=moment&limit=2&cursorId=cursor&cursorCreatedAt=2026-09-01T00:00:00Z",
+			"/posts?type=CHILLZ&q=moment&limit=2&cursorId=cursor&cursorCreatedAt=2026-09-01T00:00:00Z",
 		);
 		expect(findMany.mock.calls[1]?.[0]).toMatchObject({
 			where: {
-				type: "SPARK",
+				type: "CHILLZ",
 				text: { contains: "moment", mode: "insensitive" },
 				authorId: { notIn: ["blocked", "blocked-by"] },
 				OR: expect.any(Array),
@@ -204,11 +204,11 @@ describe("Spark discovery and profiles", () => {
 		});
 	});
 	test("filters the profile by author and type, hiding blocked profiles", async () => {
-		await app.request("/posts/users/creator?type=SPARK");
+		await app.request("/posts/users/creator?type=CHILLZ");
 		expect(findMany.mock.calls[0]?.[0]).toMatchObject({
-			where: { authorId: "creator", type: "SPARK" },
+			where: { authorId: "creator", type: "CHILLZ" },
 		});
-		const response = await app.request("/posts/users/blocked?type=SPARK");
+		const response = await app.request("/posts/users/blocked?type=CHILLZ");
 		expect(await response.json()).toMatchObject({
 			posts: [],
 			pagination: { hasNextPage: false },
@@ -222,18 +222,18 @@ describe("Spark discovery and profiles", () => {
 				id: "b",
 				authorId: "creator",
 				createdAt: new Date("2026-09-01"),
-				type: "SPARK",
+				type: "CHILLZ",
 			},
 			{
 				id: "a",
 				authorId: "creator",
 				createdAt: new Date("2026-09-01"),
-				type: "SPARK",
+				type: "CHILLZ",
 			},
 		]);
-		const response = await app.request("/posts?type=SPARK&limit=1");
+		const response = await app.request("/posts?type=CHILLZ&limit=1");
 		expect(await response.json()).toMatchObject({
-			posts: [{ id: "b", type: "SPARK" }],
+			posts: [{ id: "b", type: "CHILLZ" }],
 			pagination: {
 				hasNextPage: true,
 				nextCursor: { id: "b", createdAt: "2026-09-01T00:00:00.000Z" },

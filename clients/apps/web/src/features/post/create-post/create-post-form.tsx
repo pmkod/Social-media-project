@@ -1,7 +1,7 @@
 import {
 	RiCloseLine,
-	RiFlashlightLine,
 	RiImageLine,
+	RiPlayCircleLine,
 	RiPlayFill,
 	RiSendPlane2Line,
 } from "@remixicon/react";
@@ -16,7 +16,7 @@ import { useAuthenticatedUser } from "@/features/user/authenticated-user/use-aut
 import { UserAvatar } from "@/features/user/common/components/user-avatar.tsx";
 import type { PostType } from "../common/post.ts";
 import {
-	checkSparkDuration,
+	checkChillzDuration,
 	createPostSchema,
 	POST_MAX_FILE_SIZE,
 	POST_MEDIA_MIME_TYPES,
@@ -81,8 +81,8 @@ function CreatePostForm({
 	});
 
 	const type = useSelector(form.store, (state) => state.values.type);
-	const isSpark = type === "SPARK";
-	const maxMedia = isSpark ? 1 : 4;
+	const isChillz = type === "CHILLZ";
+	const maxMedia = isChillz ? 1 : 4;
 	const isBusy = isPending || isValidatingMedia;
 	useEffect(() => {
 		onBusyChange?.(isBusy);
@@ -113,11 +113,11 @@ function CreatePostForm({
 	const handleMediaSelect = async () => {
 		setError(null);
 		const selectedFiles = await selectFiles({
-			accept: (isSpark
+			accept: (isChillz
 				? POST_MEDIA_MIME_TYPES.filter((mime) => mime.startsWith("video/"))
 				: POST_MEDIA_MIME_TYPES
 			).join(","),
-			multiple: !isSpark,
+			multiple: !isChillz,
 		});
 		if (!selectedFiles.length) return;
 		setIsValidatingMedia(true);
@@ -128,19 +128,19 @@ function CreatePostForm({
 						!POST_MEDIA_MIME_TYPES.includes(file.type) ||
 						file.size === 0 ||
 						file.size > POST_MAX_FILE_SIZE ||
-						(isSpark && !file.type.startsWith("video/")),
+						(isChillz && !file.type.startsWith("video/")),
 				)
 			) {
 				throw new Error(
-					"Choose a supported file up to 20 MB. Sparks require a video.",
+					"Choose a supported file up to 20 MB. Chillz require a video.",
 				);
 			}
 			const currentMedias = form.getFieldValue("medias");
 			if (selectedFiles.length > maxMedia - currentMedias.length)
 				throw new Error(
-					`You can attach up to ${maxMedia} ${isSpark ? "video" : "files"}.`,
+					`You can attach up to ${maxMedia} ${isChillz ? "video" : "files"}.`,
 				);
-			if (isSpark) await checkSparkDuration(selectedFiles[0]);
+			if (isChillz) await checkChillzDuration(selectedFiles[0]);
 			form.setFieldValue("medias", [...currentMedias, ...selectedFiles]);
 		} catch (error) {
 			setError(
@@ -186,7 +186,7 @@ function CreatePostForm({
 			{!initialType ? (
 				<fieldset className="mb-4 flex gap-2">
 					<legend className="sr-only">Publication type</legend>
-					{(["POST", "SPARK"] as const).map((option) => (
+					{(["POST", "CHILLZ"] as const).map((option) => (
 						<Button
 							key={option}
 							type="button"
@@ -199,10 +199,10 @@ function CreatePostForm({
 								setError(null);
 							}}
 						>
-							{option === "SPARK" ? (
-								<RiFlashlightLine className="size-4" />
+							{option === "CHILLZ" ? (
+								<RiPlayCircleLine className="size-4" />
 							) : null}
-							{option === "SPARK" ? "Spark" : "Post"}
+							{option === "CHILLZ" ? "Chillz" : "Post"}
 						</Button>
 					))}
 				</fieldset>
@@ -217,10 +217,10 @@ function CreatePostForm({
 								value={field.state.value}
 								onChange={(e) => field.handleChange(e.target.value)}
 								onBlur={field.handleBlur}
-								aria-label={isSpark ? "Spark caption" : "Post text"}
+								aria-label={isChillz ? "Chillz caption" : "Post text"}
 								maxLength={5000}
 								placeholder={
-									isSpark ? "Give your Spark a caption…" : "What's happening?"
+									isChillz ? "Give your Chillz a caption…" : "What's happening?"
 								}
 								rows={3}
 								disabled={isBusy}
@@ -283,9 +283,9 @@ function CreatePostForm({
 				</div>
 			</div>
 
-			{isSpark ? (
+			{isChillz ? (
 				<p className="mt-3 text-xs text-muted-foreground">
-					One video. Up to 90 seconds and 20 MB. Make it a Spark.
+					One video. Up to 90 seconds and 20 MB. Make it a Chillz.
 				</p>
 			) : null}
 			{error ? (
@@ -302,7 +302,7 @@ function CreatePostForm({
 						disabled={isBusy || isMaxMediaReached}
 					>
 						<RiImageLine className="h-4 w-4" />
-						{isValidatingMedia ? "Checking…" : isSpark ? "Add video" : "Media"}
+						{isValidatingMedia ? "Checking…" : isChillz ? "Add video" : "Media"}
 					</Button>
 					{(medias || []).length > 0 ? (
 						<span className="text-xs text-muted-foreground font-medium">
@@ -314,7 +314,7 @@ function CreatePostForm({
 				<Button type="submit" disabled={!hasContent || isBusy}>
 					<RiSendPlane2Line className="h-4 w-4" />
 					<span>
-						{isPending ? "Publishing…" : isSpark ? "Publish Spark" : "Post"}
+						{isPending ? "Publishing…" : isChillz ? "Publish Chillz" : "Post"}
 					</span>
 				</Button>
 			</div>

@@ -1,4 +1,4 @@
-import { RiFlashlightLine, RiHeartLine, RiMenu5Line } from "@remixicon/react";
+import { RiHeartLine, RiMenu5Line, RiPlayCircleLine } from "@remixicon/react";
 import { createFileRoute } from "@tanstack/react-router";
 import {
 	AppHeader,
@@ -8,9 +8,9 @@ import {
 } from "@/core/components/ui/app-header.tsx";
 import { ExceptionBlock } from "@/core/components/ui/exception-block";
 import { MainContainer } from "@/core/components/ui/main-container";
+import { UserChillz } from "@/features/chillz/chillz-gallery.tsx";
 import { UserLikedPosts } from "@/features/post/user-liked-posts/user-liked-posts";
 import { UserPosts } from "@/features/post/user-posts/user-posts";
-import { UserSparks } from "@/features/spark/spark-gallery.tsx";
 import { useUserProfile } from "@/features/user/user-profile/use-user-profile.ts";
 import {
 	UserProfileTab,
@@ -82,9 +82,9 @@ function ProfilePage() {
 									<RiMenu5Line className="size-5" />
 									Posts
 								</UserProfileTabTrigger>
-								<UserProfileTabTrigger value="sparks">
-									<RiFlashlightLine className="size-5" />
-									Sparks
+								<UserProfileTabTrigger value="chillz">
+									<RiPlayCircleLine className="size-5" />
+									Chillz
 								</UserProfileTabTrigger>
 								<UserProfileTabTrigger value="likes">
 									<RiHeartLine className="size-5" />
@@ -96,8 +96,8 @@ function ProfilePage() {
 						<UserProfileTabContent value="posts">
 							<UserPosts userId={profileQuery.data?.user.id} />
 						</UserProfileTabContent>
-						<UserProfileTabContent value="sparks">
-							<UserSparks userId={profileQuery.data?.user.id} />
+						<UserProfileTabContent value="chillz">
+							<UserChillz userId={profileQuery.data?.user.id} />
 						</UserProfileTabContent>
 						<UserProfileTabContent value="likes">
 							<UserLikedPosts userId={profileQuery.data?.user.id} />
