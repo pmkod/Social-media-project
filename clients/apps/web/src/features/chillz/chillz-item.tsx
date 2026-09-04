@@ -52,90 +52,32 @@ export function ChillzItem({
 	const caption = post.text || post.content || "";
 	const videoUrl = chillzVideoUrl(post);
 	return (
-		<article className="mx-auto w-full max-w-md overflow-hidden rounded-2xl border border-border bg-background shadow-sm">
-			<header className="flex items-center gap-3 px-4 py-3">
-				{post.author ? (
-					<UserProfileLink user={post.author}>
-						<UserAvatar user={post.author} />
-					</UserProfileLink>
-				) : (
-					<UserAvatar />
-				)}
-				<div className="min-w-0 flex-1">
+		<div className="flex items-end justify-center mx-auto h-full">
+			<div className="max-w-72 flex-1 h-max mr-5">
+				<header className="flex items-start gap-3 py-3">
 					{post.author ? (
-						<UserProfileLink
-							user={post.author}
-							className="block truncate text-sm font-semibold"
-						>
-							{post.author.fullName}
+						<UserProfileLink user={post.author}>
+							<UserAvatar user={post.author} />
 						</UserProfileLink>
 					) : (
-						<span className="text-sm">Unavailable account</span>
+						<UserAvatar />
 					)}
-					<p className="text-xs text-muted-foreground">
-						{formatPostCreationDate(post.createdAt)}
-					</p>
-				</div>
-				<Link
-					to="/chillz"
-					className="flex items-center gap-1 text-xs font-semibold text-primary"
-				>
-					<RiPlayCircleFill className="size-4" />
-					Chillz
-				</Link>
-				{post.author ? (
-					<PostActionsDropdown user={post.author} post={post} size="sm" />
-				) : null}
-			</header>
-			{videoUrl ? (
-				<ChillzPlayer
-					key={videoUrl}
-					src={videoUrl}
-					paused={paused || commentsOpen}
-				/>
-			) : (
-				<p className="bg-black p-12 text-center text-white">
-					Video unavailable
-				</p>
-			)}
-			<div className="px-4 pb-3 pt-2">
-				<div className="flex items-center gap-4">
-					<button
-						type="button"
-						aria-label={liked ? "Unlike Chillz" : "Like Chillz"}
-						aria-pressed={liked}
-						disabled={like.isPending || unlike.isPending}
-						onClick={() =>
-							(liked ? unlike : like).mutate(post.id, {
-								onError: () =>
-									toast.error("Unable to update your like. Please try again."),
-							})
-						}
-						className="flex items-center gap-1.5 rounded-full py-2 disabled:opacity-50"
-					>
-						{liked ? (
-							<RiHeartFill className="size-6 text-rose-500" />
+					<div className="min-w-0 flex-1">
+						{post.author ? (
+							<UserProfileLink
+								user={post.author}
+								className="block truncate text-sm font-semibold"
+							>
+								{post.author.fullName}
+							</UserProfileLink>
 						) : (
-							<RiHeartLine className="size-6" />
+							<span className="text-sm">Unavailable account</span>
 						)}
-						<span className="text-sm">{post.likesCount ?? 0}</span>
-					</button>
-					<button
-						type="button"
-						aria-label="Comment on Chillz"
-						onClick={() => (onComment ? onComment() : setCommentsOpen(true))}
-						className="flex items-center gap-1.5 rounded-full py-2"
-					>
-						<RiChat3Line className="size-6" />
-						<span className="text-sm">{post.commentsCount ?? 0}</span>
-					</button>
-					<div className="ml-auto">
-						<BookmarkButton
-							postId={post.id}
-							isBookmarked={post.isBookmarkedByAuthenticatedUser ?? false}
-						/>
+						<p className="text-xs text-muted-foreground">
+							{formatPostCreationDate(post.createdAt)}
+						</p>
 					</div>
-				</div>
+				</header>
 				{caption ? (
 					<p
 						className={`whitespace-pre-wrap break-words text-sm ${expanded ? "" : "line-clamp-2"}`}
@@ -154,7 +96,63 @@ export function ChillzItem({
 					</button>
 				) : null}
 			</div>
-			<Dialog open={commentsOpen} onOpenChange={setCommentsOpen}>
+			<div className="h-full aspect-9/16 overflow-hidden rounded-xl">
+				{videoUrl ? (
+					<ChillzPlayer
+						key={videoUrl}
+						src={videoUrl}
+						paused={paused || commentsOpen}
+					/>
+				) : (
+					<p className="bg-black p-12 text-center text-white">
+						Video unavailable
+					</p>
+				)}
+			</div>
+
+			<div className="h-max w-max flex flex-col items-center gap-1 p-3 ml-4">
+				<button
+					type="button"
+					aria-label={liked ? "Unlike Chillz" : "Like Chillz"}
+					aria-pressed={liked}
+					disabled={like.isPending || unlike.isPending}
+					onClick={() =>
+						(liked ? unlike : like).mutate(post.id, {
+							onError: () =>
+								toast.error("Unable to update your like. Please try again."),
+						})
+					}
+					className="flex flex-col items-center gap-1.5 rounded-full py-2 disabled:opacity-50"
+				>
+					{liked ? (
+						<RiHeartFill className="size-6 text-rose-500" />
+					) : (
+						<RiHeartLine className="size-6" />
+					)}
+					<span className="text-sm">{post.likesCount ?? 0}</span>
+				</button>
+				<button
+					type="button"
+					aria-label="Comment on Chillz"
+					onClick={() => (onComment ? onComment() : setCommentsOpen(true))}
+					className="flex flex-col items-center gap-1.5 rounded-full py-2"
+				>
+					<RiChat3Line className="size-6" />
+					<span className="text-sm">{post.commentsCount ?? 0}</span>
+				</button>
+				<div className="w-max">
+					<BookmarkButton
+						postId={post.id}
+						isBookmarked={post.isBookmarkedByAuthenticatedUser ?? false}
+					/>
+				</div>
+
+				{post.author ? (
+					<PostActionsDropdown user={post.author} post={post} size="lg" />
+				) : null}
+			</div>
+
+			{/* <Dialog open={commentsOpen} onOpenChange={setCommentsOpen}>
 				<DialogContent>
 					<DialogHeader>
 						<DialogTitle>Comments</DialogTitle>
@@ -166,7 +164,7 @@ export function ChillzItem({
 						{commentsOpen ? <PostComments postId={post.id} autoFocus /> : null}
 					</DialogBody>
 				</DialogContent>
-			</Dialog>
-		</article>
+			</Dialog> */}
+		</div>
 	);
 }

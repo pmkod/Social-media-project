@@ -312,7 +312,9 @@ function StandardPostItem({
 						</div>
 
 						{/* Bookmark */}
-						<BookmarkButton postId={post.id} isBookmarked={isBookmarked} />
+						<div className="-mr-2">
+							<BookmarkButton postId={post.id} isBookmarked={isBookmarked} />
+						</div>
 					</div>
 				</div>
 			</div>

@@ -40,7 +40,7 @@ export function ChillzPlayer({
 		};
 	}, [visible, paused]);
 	return (
-		<div className="relative flex aspect-[9/16] max-h-[calc(100dvh-18rem)] min-h-64 w-full items-center justify-center bg-black">
+		<div className="relative flex h-full w-full items-center justify-center bg-black">
 			<video
 				ref={ref}
 				src={src}

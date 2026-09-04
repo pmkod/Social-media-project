@@ -22,7 +22,7 @@ function BookmarkButton({ postId, isBookmarked }: BookmarkButtonProps) {
 			type="button"
 			onClick={handleClick}
 			aria-label="Manage bookmark collections"
-			className={`group -mr-2 flex cursor-pointer items-center gap-1.5 rounded-full p-2 transition-colors hover:bg-accent disabled:cursor-default disabled:opacity-60 ${
+			className={`group flex cursor-pointer items-center gap-1.5 rounded-full p-2 transition-colors hover:bg-accent disabled:cursor-default disabled:opacity-60 ${
 				isBookmarked ? "text-amber-500" : "hover:text-amber-500"
 			}`}
 		>

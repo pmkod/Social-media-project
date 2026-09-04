@@ -28,8 +28,11 @@ type PostActionsDropdownProps = {
 	variant?: "default" | "outline" | "secondary" | "ghost";
 };
 
-const getPostShareUrl = (postId: string) => {
-	const path = `/posts/${encodeURIComponent(postId)}`;
+const getPostShareUrl = (post: Post) => {
+	const path =
+		post.type === "POST"
+			? `/posts/${encodeURIComponent(post.id)}`
+			: `/chillzs/${encodeURIComponent(post.id)}`;
 	return typeof window === "undefined"
 		? path
 		: new URL(path, window.location.origin).toString();
