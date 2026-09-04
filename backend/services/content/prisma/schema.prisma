@@ -54,36 +54,8 @@ model File {
   createdAt            DateTime   @default(now()) @map("created_at")
   lowQualityPostMedia  PostMedia? @relation("PostMediaLowQuality")
   highQualityPostMedia PostMedia? @relation("PostMediaHighQuality")
-  storyMediaFile       Story?     @relation("StoryMediaFile")
 
   @@map("file")
-}
-
-model Story {
-  id          String     @id @default(cuid())
-  authorId    String     @map("author_id")
-  mediaType   String     @map("media_type") @db.VarChar(50)
-  mediaFileId String     @unique @map("media_file_id")
-  createdAt   DateTime   @default(now()) @map("created_at")
-  expiresAt   DateTime   @map("expires_at")
-  mediaFile   File       @relation("StoryMediaFile", fields: [mediaFileId], references: [id], onDelete: Cascade)
-  views       StoryView[]
-
-  @@index([authorId, expiresAt, createdAt])
-  @@index([expiresAt])
-  @@map("story")
-}
-
-model StoryView {
-  id       String   @id @default(cuid())
-  storyId  String   @map("story_id")
-  viewerId String   @map("viewer_id")
-  viewedAt DateTime @default(now()) @map("viewed_at")
-  story    Story    @relation(fields: [storyId], references: [id], onDelete: Cascade)
-
-  @@unique([storyId, viewerId])
-  @@index([viewerId, viewedAt])
-  @@map("story_view")
 }
 
 model Comment {

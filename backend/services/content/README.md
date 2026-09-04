@@ -25,14 +25,6 @@ followed accounts, excluding blocked accounts and using the existing cursor pagi
 Omitting `type` keeps the mixed following feed. The web hook `useFollowingChillzFeed`
 provides this filtered feed with a separate cache and an optional `enabled` flag.
 
-## Stories
-
-Stories are single image or video uploads visible to the author and followed users
-for 24 hours. The content service exposes `POST /stories` (multipart field `media`),
-`GET /stories` (active stories grouped by author) and `POST /stories/:storyId/view`.
-The gateway exposes the same paths publicly; authentication is required for all
-three endpoints.
-
 Before starting the updated service, apply the migrations and generate the client:
 
 ```bash

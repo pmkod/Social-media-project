@@ -57,16 +57,6 @@ export type PostMedia = Prisma.PostMediaModel
  */
 export type File = Prisma.FileModel
 /**
- * Model Story
- *
- */
-export type Story = Prisma.StoryModel
-/**
- * Model StoryView
- *
- */
-export type StoryView = Prisma.StoryViewModel
-/**
  * Model Comment
  * 
  */
