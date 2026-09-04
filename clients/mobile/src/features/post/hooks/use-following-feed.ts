@@ -5,7 +5,7 @@ import { postListQueryKeys } from '@/features/post/post.query-keys';
 import type { FeedCursor, FeedResponse } from '@/features/post/post.types';
 
 async function fetchFollowingFeedPage(pageParam?: FeedCursor | null) {
-  const searchParams = new URLSearchParams({ limit: '10' });
+  const searchParams = new URLSearchParams({ limit: '10', type: 'POST' });
   if (pageParam?.id && pageParam.createdAt) {
     searchParams.set('cursorId', pageParam.id);
     searchParams.set('cursorCreatedAt', pageParam.createdAt);
