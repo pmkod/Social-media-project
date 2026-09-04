@@ -16,13 +16,7 @@ export const Route = createFileRoute("/_main/_with-right-aside/home")({
 function HomePage() {
 	return (
 		<MainContainer>
-			<AppHeader>
-				<AppHeaderLeftPart>
-					<AppHeaderTitle>Feed</AppHeaderTitle>
-				</AppHeaderLeftPart>
-			</AppHeader>
-
-			<div className="space-y-5">
+			<div className="space-y-5 pt-7">
 				<StoriesTray />
 				<CreatePostForm />
 				<Feed />

@@ -73,7 +73,7 @@ function CreateStoryCard({ onClick }: { onClick: () => void }) {
 }
 
 function StoriesTray() {
-	const { data, isLoading, isError, refetch, isRefetching } = useStories();
+	const { data, isLoading, isError } = useStories();
 	const { data: authenticatedUser } = useAuthenticatedUser();
 	const [isComposerOpen, setIsComposerOpen] = useState(false);
 	const [viewerGroupIndex, setViewerGroupIndex] = useState<number | null>(null);
@@ -84,33 +84,7 @@ function StoriesTray() {
 
 	return (
 		<>
-			<section
-				className="rounded-xl border border-border bg-card p-4"
-				aria-label="Stories"
-			>
-				<div className="mb-3 flex items-center justify-between gap-3">
-					<div>
-						<h2 className="text-base font-semibold">Stories</h2>
-						<p className="text-xs text-muted-foreground">
-							Share a moment · disappears in 24h
-						</p>
-					</div>
-					{isError ? (
-						<Button
-							type="button"
-							variant="ghost"
-							size="icon-sm"
-							onClick={() => void refetch()}
-							disabled={isRefetching}
-							aria-label="Retry loading stories"
-						>
-							<RiRefreshLine
-								className={cn("size-4", isRefetching && "animate-spin")}
-							/>
-						</Button>
-					) : null}
-				</div>
-
+			<section aria-label="Stories">
 				<div className="flex gap-3 overflow-x-auto pb-1">
 					<CreateStoryCard onClick={() => setIsComposerOpen(true)} />
 					{isLoading

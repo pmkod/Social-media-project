@@ -43,12 +43,12 @@ export { Prisma }
 
 /**
  * Model Post
- * 
+ *
  */
 export type Post = Prisma.PostModel
 /**
  * Model PostMedia
- * 
+ *
  */
 export type PostMedia = Prisma.PostMediaModel
 /**
