@@ -23,6 +23,7 @@ export function ChillzComments({
 	isDesktop: boolean;
 }) {
 	const contentRef = useRef<HTMLDivElement>(null);
+	const triggerRef = useRef<HTMLElement | null>(null);
 	const title = (
 		<>
 			Comments{" "}
@@ -61,7 +62,16 @@ export function ChillzComments({
 				className="h-[75dvh] max-h-[calc(100dvh-2rem)] gap-0 overflow-hidden rounded-t-2xl pb-[env(safe-area-inset-bottom)]"
 				onOpenAutoFocus={(event) => {
 					event.preventDefault();
+					triggerRef.current =
+						document.activeElement instanceof HTMLElement
+							? document.activeElement
+							: null;
 					contentRef.current?.focus();
+				}}
+				onCloseAutoFocus={(event) => {
+					event.preventDefault();
+					if (triggerRef.current?.isConnected)
+						triggerRef.current.focus({ preventScroll: true });
 				}}
 			>
 				<SheetHeader className="shrink-0 border-b pr-12">

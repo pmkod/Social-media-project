@@ -131,7 +131,12 @@ export function ChillzItem({
 					aria-label="Comment on Chillz"
 					onClick={() => {
 						if (onComment) onComment();
-						else void navigate({ to: "/chillz/$chillzId", params: { chillzId: post.id }, search: { focusComment: true } });
+						else
+							void navigate({
+								to: "/chillz/$chillzId",
+								params: { chillzId: post.id },
+								search: { focusComment: true },
+							});
 					}}
 					aria-expanded={commentsOpen}
 					aria-controls={commentsOpen ? "chillz-comments" : undefined}

@@ -8,6 +8,7 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/core/components/ui/dropdown-menu.tsx";
+import { cn } from "@/core/lib/utils.ts";
 import { useLogout } from "@/features/authentication/logout/use-logout.ts";
 import { UserAvatar } from "../common/components/user-avatar.tsx";
 import {
@@ -15,7 +16,11 @@ import {
 	useAuthenticatedUser,
 } from "./use-authenticated-user.ts";
 
-function AuthenticatedUserDropdown() {
+function AuthenticatedUserDropdown({
+	compactBelowLaptop = false,
+}: {
+	compactBelowLaptop?: boolean;
+}) {
 	const { data } = useAuthenticatedUser();
 	const authenticatedUser = data?.user;
 	const logout = useLogout();
@@ -37,11 +42,20 @@ function AuthenticatedUserDropdown() {
 			<DropdownMenuTrigger asChild>
 				<button
 					type="button"
-					className="flex w-full min-w-0 items-center gap-3 rounded-2xl p-2 text-left transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+					className={cn(
+						"flex w-full min-w-0 items-center gap-3 rounded-2xl p-2 text-left transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+						compactBelowLaptop &&
+							"justify-center gap-0 lg:justify-start lg:gap-3",
+					)}
 					aria-label="Ouvrir le menu du profil"
 				>
 					<UserAvatar user={authenticatedUser} size="default" />
-					<div className="min-w-0 flex-1">
+					<div
+						className={cn(
+							"min-w-0 flex-1",
+							compactBelowLaptop && "hidden lg:block",
+						)}
+					>
 						<div className="truncate text-xs font-semibold text-foreground">
 							{authenticatedUser.fullName}
 						</div>

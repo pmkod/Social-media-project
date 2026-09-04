@@ -1,5 +1,6 @@
 import {
 	type RemixiconComponentType,
+	RiAddLine,
 	RiBookmarkLine,
 	RiChat3Line,
 	RiHome5Line,
@@ -34,15 +35,17 @@ function SidebarLink({
 		<Link
 			to={to}
 			params={params}
-			className="flex items-center gap-4 rounded-md px-4 py-2 font-normal text-muted-foreground transition-colors hover:bg-accent"
+			aria-label={label}
+			title={label}
+			className="relative flex items-center justify-center rounded-md px-2 py-2 font-normal text-muted-foreground transition-colors hover:bg-accent lg:justify-start lg:gap-4 lg:px-4"
 			activeProps={{
 				className: "text-primary font-semibold",
 			}}
 		>
-			<Icon className="size-6 shrink-0" />
-			<span className="text-lg">{label}</span>
+			<Icon className="size-6 shrink-0" aria-hidden="true" />
+			<span className="hidden text-lg lg:inline">{label}</span>
 			{badgeCount > 0 ? (
-				<span className="ml-auto min-w-5 rounded-full bg-rose-500 px-1.5 py-0.5 text-center text-xs font-semibold text-white">
+				<span className="absolute right-0 top-0 min-w-4 rounded-full bg-rose-500 px-1 text-center text-[10px] font-semibold text-white lg:static lg:ml-auto lg:min-w-5 lg:px-1.5 lg:py-0.5 lg:text-xs">
 					{badgeCount > 99 ? "99+" : badgeCount}
 				</span>
 			) : null}
@@ -54,11 +57,11 @@ export function Sidebar() {
 	const { data } = useAuthenticatedUser();
 
 	return (
-		<aside className="hidden md:flex flex-col justify-between w-64 lg:w-84 p-4 h-screen sticky top-0 shrink-0">
+		<aside className="sticky top-0 hidden h-screen w-20 shrink-0 flex-col justify-between px-2 py-4 md:flex lg:w-84 lg:p-4">
 			<div className="space-y-6">
 				{/* Logo at Top */}
-				<div className="px-3 py-2">
-					<Logo />
+				<div className="py-2 text-center lg:px-3 lg:text-left">
+					<Logo compactBelowLaptop />
 				</div>
 
 				{/* Navigation Links */}
@@ -95,13 +98,21 @@ export function Sidebar() {
 			</div>
 			<div>
 				{/* User Profile / Logout Section at Bottom */}
-				<div className="px-2 pb-3">
-					<Button size="lg" fullWidth type="button" onClick={() => {}}>
-						Post
+				<div className="pb-3 lg:px-2">
+					<Button
+						size="lg"
+						fullWidth
+						type="button"
+						title="Post"
+						className="px-0 has-[>svg]:px-0 lg:px-6 lg:has-[>svg]:px-6"
+						onClick={() => {}}
+					>
+						<RiAddLine className="size-5 lg:hidden" aria-hidden="true" />
+						<span className="sr-only lg:not-sr-only">Post</span>
 					</Button>
 				</div>
-				<div className="pt-4 px-2">
-					<AuthenticatedUserDropdown />
+				<div className="pt-4 lg:px-2">
+					<AuthenticatedUserDropdown compactBelowLaptop />
 				</div>
 			</div>
 		</aside>

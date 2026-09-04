@@ -30,18 +30,17 @@ export function ChillzFeed({
 	);
 	// Keep directly opened videos in the feed even if they are outside its loaded pages.
 	const [linkedPosts, setLinkedPosts] = useState<Post[]>([]);
-	const isLoaded = [...feedPosts, ...linkedPosts].some(
-		(post) => post.id === chillzId,
-	);
-	const detail = usePost({ postId: isLoaded ? "" : chillzId });
+	const isInFeed = feedPosts.some((post) => post.id === chillzId);
+	const detail = usePost({ postId: isInFeed ? "" : chillzId });
 	const linkedPost = detail.data?.post;
 	useEffect(() => {
 		if (linkedPost?.type === "CHILLZ") {
-			setLinkedPosts((posts) =>
-				posts.some((post) => post.id === linkedPost.id)
-					? posts
-					: [...posts, linkedPost],
-			);
+			setLinkedPosts((posts) => {
+				if (posts.includes(linkedPost)) return posts;
+				return posts.some((post) => post.id === linkedPost.id)
+					? posts.map((post) => (post.id === linkedPost.id ? linkedPost : post))
+					: [...posts, linkedPost];
+			});
 		}
 	}, [linkedPost]);
 	const posts = useMemo(
