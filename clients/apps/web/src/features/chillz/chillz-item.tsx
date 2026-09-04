@@ -1,22 +1,7 @@
-import {
-	RiChat3Line,
-	RiHeartFill,
-	RiHeartLine,
-	RiPlayCircleFill,
-} from "@remixicon/react";
-import { Link } from "@tanstack/react-router";
+import { RiChat3Line, RiHeartFill, RiHeartLine } from "@remixicon/react";
 import { useState } from "react";
 import { toast } from "sonner";
-import {
-	Dialog,
-	DialogBody,
-	DialogContent,
-	DialogDescription,
-	DialogHeader,
-	DialogTitle,
-} from "@/core/components/ui/dialog.tsx";
 import { BookmarkButton } from "@/features/bookmark/common/bookmark-button.tsx";
-import { PostComments } from "@/features/comment/post-comments.tsx";
 import type { Post } from "@/features/post/common/post.ts";
 import { formatPostCreationDate } from "@/features/post/common/post.utils.ts";
 import { PostActionsDropdown } from "@/features/post/common/post-actions-dropdown.tsx";
@@ -25,6 +10,7 @@ import { buildVideoUrl } from "@/features/post/post-media.functions.ts";
 import { useUnlikePost } from "@/features/post/unlike-post/use-unlike-post.ts";
 import { UserAvatar } from "@/features/user/common/components/user-avatar.tsx";
 import { UserProfileLink } from "@/features/user/common/user-profile-link.tsx";
+import { UserProfileHoverCard } from "@/features/user/user-profile/user-profile-hover-card.tsx";
 import { ChillzPlayer } from "./chillz-player.tsx";
 
 export function chillzVideoUrl(post: Post) {
@@ -56,20 +42,24 @@ export function ChillzItem({
 			<div className="max-w-72 flex-1 h-max mr-5">
 				<header className="flex items-start gap-3 py-3">
 					{post.author ? (
-						<UserProfileLink user={post.author}>
-							<UserAvatar user={post.author} />
-						</UserProfileLink>
+						<UserProfileHoverCard user={post.author}>
+							<UserProfileLink user={post.author}>
+								<UserAvatar user={post.author} />
+							</UserProfileLink>
+						</UserProfileHoverCard>
 					) : (
 						<UserAvatar />
 					)}
 					<div className="min-w-0 flex-1">
 						{post.author ? (
-							<UserProfileLink
-								user={post.author}
-								className="block truncate text-sm font-semibold"
-							>
-								{post.author.fullName}
-							</UserProfileLink>
+							<UserProfileHoverCard user={post.author}>
+								<UserProfileLink
+									user={post.author}
+									className="block truncate text-sm font-semibold"
+								>
+									{post.author.fullName}
+								</UserProfileLink>
+							</UserProfileHoverCard>
 						) : (
 							<span className="text-sm">Unavailable account</span>
 						)}
@@ -110,7 +100,7 @@ export function ChillzItem({
 				)}
 			</div>
 
-			<div className="h-max w-max flex flex-col items-center gap-1 p-3 ml-4">
+			<div className="h-max w-max flex flex-col items-center gap-5 p-3 ml-4">
 				<button
 					type="button"
 					aria-label={liked ? "Unlike Chillz" : "Like Chillz"}
@@ -122,23 +112,33 @@ export function ChillzItem({
 								toast.error("Unable to update your like. Please try again."),
 						})
 					}
-					className="flex flex-col items-center gap-1.5 rounded-full py-2 disabled:opacity-50"
+					className={`group cursor-pointer leading-none flex flex-col items-center gap-0.5 disabled:opacity-50 ${
+						liked ? "text-rose-500" : "hover:text-rose-500"
+					}`}
 				>
-					{liked ? (
-						<RiHeartFill className="size-6 text-rose-500" />
-					) : (
-						<RiHeartLine className="size-6" />
-					)}
-					<span className="text-sm">{post.likesCount ?? 0}</span>
+					<span className="rounded-full p-2 transition-colors group-hover:bg-accent">
+						{liked ? (
+							<RiHeartFill className="size-7 text-rose-500" />
+						) : (
+							<RiHeartLine className="size-7" />
+						)}
+					</span>
+					<span className="text-base font-light leading-none">
+						{post.likesCount ?? 0}
+					</span>
 				</button>
 				<button
 					type="button"
 					aria-label="Comment on Chillz"
 					onClick={() => (onComment ? onComment() : setCommentsOpen(true))}
-					className="flex flex-col items-center gap-1.5 rounded-full py-2"
+					className="group cursor-pointer flex flex-col items-center gap-0.5"
 				>
-					<RiChat3Line className="size-6" />
-					<span className="text-sm">{post.commentsCount ?? 0}</span>
+					<span className="rounded-full p-2 transition-colors group-hover:bg-accent group-hover:text-sky-500">
+						<RiChat3Line className="size-6" />
+					</span>
+					<span className="text-base font-light leading-none">
+						{post.commentsCount ?? 0}
+					</span>
 				</button>
 				<div className="w-max">
 					<BookmarkButton
@@ -151,20 +151,6 @@ export function ChillzItem({
 					<PostActionsDropdown user={post.author} post={post} size="lg" />
 				) : null}
 			</div>
-
-			{/* <Dialog open={commentsOpen} onOpenChange={setCommentsOpen}>
-				<DialogContent>
-					<DialogHeader>
-						<DialogTitle>Comments</DialogTitle>
-						<DialogDescription>
-							Join the conversation on this Chillz.
-						</DialogDescription>
-					</DialogHeader>
-					<DialogBody>
-						{commentsOpen ? <PostComments postId={post.id} autoFocus /> : null}
-					</DialogBody>
-				</DialogContent>
-			</Dialog> */}
 		</div>
 	);
 }

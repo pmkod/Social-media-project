@@ -80,6 +80,7 @@ function PostActionsDropdown({
 					size={size}
 					onClick={(event) => event.stopPropagation()}
 					aria-label="Post options"
+					className="rounded-full"
 				>
 					<RiMoreLine />
 				</IconButton>
