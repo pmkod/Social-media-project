@@ -1,4 +1,5 @@
 import { RiChat3Line, RiHeartFill, RiHeartLine } from "@remixicon/react";
+import { useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { toast } from "sonner";
 import { BookmarkButton } from "@/features/bookmark/common/bookmark-button.tsx";
@@ -25,12 +26,14 @@ export function ChillzItem({
 	post,
 	onComment,
 	paused = false,
+	commentsOpen = false,
 }: {
 	post: Post;
 	onComment?: () => void;
 	paused?: boolean;
+	commentsOpen?: boolean;
 }) {
-	const [commentsOpen, setCommentsOpen] = useState(false);
+	const navigate = useNavigate();
 	const [expanded, setExpanded] = useState(false);
 	const like = useLikePost();
 	const unlike = useUnlikePost();
@@ -38,8 +41,8 @@ export function ChillzItem({
 	const caption = post.text || post.content || "";
 	const videoUrl = chillzVideoUrl(post);
 	return (
-		<div className="flex items-end justify-center mx-auto h-full">
-			<div className="max-w-72 flex-1 h-max mr-5">
+		<div className="chillz-item">
+			<div className="chillz-info">
 				<header className="flex items-start gap-3 py-3">
 					{post.author ? (
 						<UserProfileHoverCard user={post.author}>
@@ -63,7 +66,7 @@ export function ChillzItem({
 						) : (
 							<span className="text-sm">Unavailable account</span>
 						)}
-						<p className="text-xs text-muted-foreground">
+						<p className="text-xs text-white/75 lg:text-muted-foreground">
 							{formatPostCreationDate(post.createdAt)}
 						</p>
 					</div>
@@ -80,19 +83,15 @@ export function ChillzItem({
 						type="button"
 						aria-expanded={expanded}
 						onClick={() => setExpanded(!expanded)}
-						className="mt-1 text-xs text-muted-foreground"
+						className="mt-1 cursor-pointer text-xs text-white/75 lg:text-muted-foreground"
 					>
 						{expanded ? "Less" : "More"}
 					</button>
 				) : null}
 			</div>
-			<div className="h-full aspect-9/16 overflow-hidden rounded-xl">
+			<div className="chillz-media">
 				{videoUrl ? (
-					<ChillzPlayer
-						key={videoUrl}
-						src={videoUrl}
-						paused={paused || commentsOpen}
-					/>
+					<ChillzPlayer key={videoUrl} src={videoUrl} paused={paused} />
 				) : (
 					<p className="bg-black p-12 text-center text-white">
 						Video unavailable
@@ -100,7 +99,7 @@ export function ChillzItem({
 				)}
 			</div>
 
-			<div className="h-max w-max flex flex-col items-center gap-5 p-3 ml-4">
+			<div className="chillz-actions">
 				<button
 					type="button"
 					aria-label={liked ? "Unlike Chillz" : "Like Chillz"}
@@ -130,7 +129,12 @@ export function ChillzItem({
 				<button
 					type="button"
 					aria-label="Comment on Chillz"
-					onClick={() => (onComment ? onComment() : setCommentsOpen(true))}
+					onClick={() => {
+						if (onComment) onComment();
+						else void navigate({ to: "/chillz/$chillzId", params: { chillzId: post.id }, search: { focusComment: true } });
+					}}
+					aria-expanded={commentsOpen}
+					aria-controls={commentsOpen ? "chillz-comments" : undefined}
 					className="group cursor-pointer flex flex-col items-center gap-0.5"
 				>
 					<span className="rounded-full p-2 transition-colors group-hover:bg-accent group-hover:text-sky-500">

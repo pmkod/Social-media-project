@@ -60,8 +60,8 @@ function ChillzGallery({
 				{posts.map((post) => (
 					<Link
 						key={post.id}
-						to="/posts/$postId"
-						params={{ postId: post.id }}
+						to="/chillz/$chillzId"
+						params={{ chillzId: post.id }}
 						aria-label={`Watch Chillz by ${post.author?.fullName ?? "creator"}: ${post.text || "video"}`}
 						className={`group relative aspect-[9/16] overflow-hidden rounded-xl bg-muted focus-visible:outline-2 focus-visible:outline-primary ${horizontal ? "w-40 shrink-0 snap-start sm:w-44" : ""}`}
 					>
@@ -116,11 +116,7 @@ export function ChillzSearchSection({ query }: { query: string }) {
 					<RiPlayCircleLine className="size-5 text-primary" />
 					{query ? "Chillz" : "Discover Chillz"}
 				</h2>
-				<Link
-					to="/chillz"
-					search={query ? { q: query } : {}}
-					className="text-sm font-medium text-primary"
-				>
+				<Link to="/chillz" className="text-sm font-medium text-primary">
 					See all
 				</Link>
 			</header>

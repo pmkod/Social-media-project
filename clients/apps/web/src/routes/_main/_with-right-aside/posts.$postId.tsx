@@ -1,5 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { useRef } from "react";
+import { createFileRoute, Navigate } from "@tanstack/react-router";
 import { z } from "zod";
 import {
 	AppHeader,
@@ -9,7 +8,6 @@ import {
 } from "@/core/components/ui/app-header";
 import { ExceptionBlock } from "@/core/components/ui/exception-block.tsx";
 import { MainContainer } from "@/core/components/ui/main-container.tsx";
-import { ChillzItem } from "@/features/chillz/chillz-item.tsx";
 import { PostComments } from "@/features/comment/post-comments.tsx";
 import { PostItemLoader } from "@/features/post/common/components/loaders/post-item-loader.tsx";
 import { PostItem } from "@/features/post/common/post-item.tsx";
@@ -24,8 +22,17 @@ function PostDetailPage() {
 	const { postId } = Route.useParams();
 	const { focusComment } = Route.useSearch();
 	const query = usePost({ postId });
-	const commentsRef = useRef<HTMLDivElement>(null);
 	const isChillz = query.data?.post.type === "CHILLZ";
+	if (isChillz) {
+		return (
+			<Navigate
+				to="/chillz/$chillzId"
+				params={{ chillzId: postId }}
+				search={{ focusComment }}
+				replace
+			/>
+		);
+	}
 	return (
 		<MainContainer>
 			<AppHeader>
@@ -38,25 +45,8 @@ function PostDetailPage() {
 				<PostItemLoader hasMedia />
 			) : query.isSuccess ? (
 				<>
-					{isChillz ? (
-						<div className="pb-4">
-							<ChillzItem
-								post={query.data.post}
-								onComment={() => {
-									commentsRef.current?.scrollIntoView({
-										behavior: "smooth",
-										block: "start",
-									});
-									commentsRef.current
-										?.querySelector("textarea")
-										?.focus({ preventScroll: true });
-								}}
-							/>
-						</div>
-					) : (
-						<PostItem post={query.data.post} />
-					)}
-					<div ref={commentsRef}>
+					<PostItem post={query.data.post} />
+					<div>
 						<PostComments
 							key={postId}
 							postId={postId}

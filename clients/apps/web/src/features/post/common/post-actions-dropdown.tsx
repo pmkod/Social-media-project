@@ -32,7 +32,7 @@ const getPostShareUrl = (post: Post) => {
 	const path =
 		post.type === "POST"
 			? `/posts/${encodeURIComponent(post.id)}`
-			: `/chillzs/${encodeURIComponent(post.id)}`;
+			: `/chillz/${encodeURIComponent(post.id)}`;
 	return typeof window === "undefined"
 		? path
 		: new URL(path, window.location.origin).toString();
@@ -91,7 +91,7 @@ function PostActionsDropdown({
 			>
 				<DropdownMenuItem
 					onSelect={() => {
-						void copyToClipboard(getPostShareUrl(post.id));
+						void copyToClipboard(getPostShareUrl(post));
 					}}
 				>
 					<RiFileCopyLine />

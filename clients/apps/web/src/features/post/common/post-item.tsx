@@ -324,7 +324,7 @@ function StandardPostItem({
 
 export function PostItem(props: PostItemProps) {
 	return props.post.type === "CHILLZ" ? (
-		<div className="py-3">
+		<div className="h-[min(48rem,85dvh)] py-3">
 			<ChillzItem post={props.post} />
 		</div>
 	) : (
