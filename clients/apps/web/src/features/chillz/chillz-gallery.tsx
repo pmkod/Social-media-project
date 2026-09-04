@@ -107,15 +107,9 @@ function ChillzGallery({
 export function ChillzSearchSection({ query }: { query: string }) {
 	const chillz = useSearchPosts({ query, type: "CHILLZ" });
 	return (
-		<section
-			aria-label="Chillz"
-			className="mb-6 overflow-hidden rounded-xl border"
-		>
-			<header className="flex items-center justify-between gap-2 border-b px-4 py-3">
-				<h2 className="flex items-center gap-2 font-semibold">
-					<RiPlayCircleLine className="size-5 text-primary" />
-					{query ? "Chillz" : "Discover Chillz"}
-				</h2>
+		<section aria-label="Chillz" className="mb-6 overflow-hidden">
+			<header className="flex items-center justify-between gap-2">
+				<h2 className="flex items-center gap-2 font-semibold">Chillz</h2>
 				<Link to="/chillz" className="text-sm font-medium text-primary">
 					See all
 				</Link>
