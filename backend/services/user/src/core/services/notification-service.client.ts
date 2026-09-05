@@ -3,6 +3,7 @@ import { Configurations } from "../configurations";
 type NotificationEventType =
 	| "FOLLOW"
 	| "POST_LIKE"
+	| "COMMENT_LIKE"
 	| "POST_COMMENT"
 	| "COMMENT_REPLY";
 

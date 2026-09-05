@@ -10,6 +10,7 @@ datasource db {
 enum NotificationEventType {
   FOLLOW
   POST_LIKE
+  COMMENT_LIKE
   POST_COMMENT
   COMMENT_REPLY
 }

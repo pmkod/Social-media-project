@@ -1,14 +1,14 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { httpClient } from "@/core/http-clients/http-client.ts";
-import { notificationQueryKeys } from "./notification.query-keys.ts";
 import type {
 	NotificationsCursor,
 	NotificationsResponse,
-} from "./notification.ts";
+} from "../common/notification.ts";
+import { notificationListQueryKeys } from "./notification-list.query-keys.ts";
 
 const useNotifications = (limit = 25) =>
 	useInfiniteQuery({
-		queryKey: notificationQueryKeys.all,
+		queryKey: notificationListQueryKeys.all,
 		queryFn: ({ pageParam }) => {
 			const searchParams = new URLSearchParams({ limit: limit.toString() });
 			if (pageParam) {

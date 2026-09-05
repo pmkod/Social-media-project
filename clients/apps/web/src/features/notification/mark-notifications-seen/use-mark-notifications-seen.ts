@@ -6,8 +6,8 @@ import {
 import { httpClient } from "@/core/http-clients/http-client.ts";
 import type { UseAuthenticatedUserQueryData } from "@/features/user/authenticated-user/types/use-authenticated-user-query-data.ts";
 import { authenticatedUserQueryKey } from "@/features/user/authenticated-user/use-authenticated-user.ts";
-import { notificationQueryKeys } from "./notification.query-keys.ts";
-import type { NotificationsResponse } from "./notification.ts";
+import type { NotificationsResponse } from "../common/notification.ts";
+import { notificationListQueryKeys } from "../list/notification-list.query-keys.ts";
 
 const useMarkNotificationsSeen = () => {
 	const queryClient = useQueryClient();
@@ -17,7 +17,7 @@ const useMarkNotificationsSeen = () => {
 			httpClient.patch("notifications/seen").json<{ updatedCount: number }>(),
 		onSuccess: () => {
 			queryClient.setQueryData<InfiniteData<NotificationsResponse>>(
-				notificationQueryKeys.all,
+				notificationListQueryKeys.all,
 				(oldData) =>
 					oldData
 						? {

@@ -3,6 +3,7 @@ import type { User } from "@/features/user/common/user.ts";
 type NotificationEventType =
 	| "FOLLOW"
 	| "POST_LIKE"
+	| "COMMENT_LIKE"
 	| "POST_COMMENT"
 	| "COMMENT_REPLY";
 

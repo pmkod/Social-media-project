@@ -3,6 +3,7 @@ import { Configurations } from "../configurations";
 type NotificationEventType =
 	| "FOLLOW"
 	| "POST_LIKE"
+	| "COMMENT_LIKE"
 	| "POST_COMMENT"
 	| "COMMENT_REPLY";
 
@@ -94,6 +95,29 @@ class NotificationServiceClient {
 		} catch (error) {
 			console.error(
 				"[NotificationServiceClient] Failed to remove post notifications:",
+				error,
+			);
+		}
+	}
+
+	async removeNotificationsForComment(commentId: string): Promise<void> {
+		try {
+			const response = await fetch(
+				`${this.baseUrl}/internal/notifications/remove-by-comment`,
+				{
+					method: "POST",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify({ commentId }),
+				},
+			);
+			if (!response.ok) {
+				console.error(
+					`[NotificationServiceClient] Failed to remove comment notifications, status: ${response.status}`,
+				);
+			}
+		} catch (error) {
+			console.error(
+				"[NotificationServiceClient] Failed to remove comment notifications:",
 				error,
 			);
 		}

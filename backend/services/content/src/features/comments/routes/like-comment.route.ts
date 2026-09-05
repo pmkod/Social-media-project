@@ -1,6 +1,7 @@
 import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
+import { notificationServiceClient } from "@/core/services/notification-service.client";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { requireUserAuthentication } from "@/features/authentication/middlewares/require-user-authentication.middleware";
 import { CommentsRoutesTag } from "../comments.constants";
@@ -38,7 +39,13 @@ const likeCommentRoute = defineOpenAPIRoute<
 
 		const comment = await prisma.comment.findUnique({
 			where: { id: commentId },
-			select: { id: true, deletedAt: true },
+			select: {
+				id: true,
+				authorId: true,
+				postId: true,
+				content: true,
+				deletedAt: true,
+			},
 		});
 
 		if (!comment || comment.deletedAt) {
@@ -55,19 +62,38 @@ const likeCommentRoute = defineOpenAPIRoute<
 			select: { id: true },
 		});
 
+		let createdLike = false;
 		if (!existingLike) {
-			await prisma.$transaction([
-				prisma.commentLike.create({
-					data: {
-						commentId,
-						authorId: authenticatedUserId,
-					},
-				}),
-				prisma.comment.update({
-					where: { id: commentId },
-					data: { likesCount: { increment: 1 } },
-				}),
-			]);
+			try {
+				await prisma.$transaction([
+					prisma.commentLike.create({
+						data: {
+							commentId,
+							authorId: authenticatedUserId,
+						},
+					}),
+					prisma.comment.update({
+						where: { id: commentId },
+						data: { likesCount: { increment: 1 } },
+					}),
+				]);
+				createdLike = true;
+			} catch (_error) {
+				// A concurrent like may have created the unique row first.
+			}
+		}
+
+		if (createdLike) {
+			await notificationServiceClient.createNotification({
+				recipientId: comment.authorId,
+				actorId: authenticatedUserId,
+				eventType: "COMMENT_LIKE",
+				entityId: commentId,
+				sourceId: `comment:${commentId}:actor:${authenticatedUserId}`,
+				postId: comment.postId,
+				commentId,
+				contentPreview: comment.content,
+			});
 		}
 
 		const { likesCount } = await prisma.comment.findUniqueOrThrow({
