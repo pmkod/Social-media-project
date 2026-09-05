@@ -16,7 +16,7 @@ export function Feed() {
 		isError,
 		refetch,
 		isRefetching,
-	} = useFollowingFeed({ type: "POST" });
+	} = useFollowingFeed();
 	const { ref: observerTargetRef, isIntersecting: isTargetIntersecting } =
 		useIntersectionObserver({ rootMargin: "100px" });
 

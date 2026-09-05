@@ -9,9 +9,7 @@
 * 🟢 You can import this file directly.
 */
 
-export const PostType = {
-  POST: 'POST',
-  CHILLZ: 'CHILLZ'
-} as const
 
-export type PostType = (typeof PostType)[keyof typeof PostType]
+
+// This file is empty because there are no enums in the schema.
+export {}

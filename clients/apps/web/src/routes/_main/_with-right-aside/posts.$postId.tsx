@@ -1,4 +1,4 @@
-import { createFileRoute, Navigate } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
 import {
 	AppHeader,
@@ -22,23 +22,12 @@ function PostDetailPage() {
 	const { postId } = Route.useParams();
 	const { focusComment } = Route.useSearch();
 	const query = usePost({ postId });
-	const isChillz = query.data?.post.type === "CHILLZ";
-	if (isChillz) {
-		return (
-			<Navigate
-				to="/chillz/$chillzId"
-				params={{ chillzId: postId }}
-				search={{ focusComment }}
-				replace
-			/>
-		);
-	}
 	return (
 		<MainContainer>
 			<AppHeader>
 				<AppHeaderLeftPart>
-					<AppHeaderGoBackButton to={isChillz ? "/chillz" : "/home"} />
-					<AppHeaderTitle>{isChillz ? "Chillz" : "Post"}</AppHeaderTitle>
+					<AppHeaderGoBackButton to="/home" />
+					<AppHeaderTitle>Post</AppHeaderTitle>
 				</AppHeaderLeftPart>
 			</AppHeader>
 			{query.isPending ? (

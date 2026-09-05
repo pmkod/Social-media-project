@@ -85,7 +85,6 @@ const getUserLikedPostsRoute = defineOpenAPIRoute<
 				id: true,
 				authorId: true,
 				text: true,
-				type: true,
 				likesCount: true,
 				commentsCount: true,
 				createdAt: true,

@@ -1,7 +1,6 @@
 import {
 	RiCloseLine,
 	RiImageLine,
-	RiPlayCircleLine,
 	RiPlayFill,
 	RiSendPlane2Line,
 } from "@remixicon/react";
@@ -14,9 +13,7 @@ import { useSelectFiles } from "@/core/hooks/use-select-files.ts";
 import { cn } from "@/core/lib/utils.ts";
 import { useAuthenticatedUser } from "@/features/user/authenticated-user/use-authenticated-user.ts";
 import { UserAvatar } from "@/features/user/common/components/user-avatar.tsx";
-import type { PostType } from "../common/post.ts";
 import {
-	checkChillzDuration,
 	createPostSchema,
 	POST_MAX_FILE_SIZE,
 	POST_MEDIA_MIME_TYPES,
@@ -25,16 +22,11 @@ import { MediaPreviewModal } from "./media-preview.modal.tsx";
 import { useCreatePost } from "./use-create-post";
 
 type CreatePostFormProps = {
-	type?: PostType;
 	onSuccess?: () => void;
 	onBusyChange?: (busy: boolean) => void;
 };
 
-function CreatePostForm({
-	type: initialType,
-	onSuccess,
-	onBusyChange,
-}: CreatePostFormProps = {}) {
+function CreatePostForm({ onSuccess, onBusyChange }: CreatePostFormProps = {}) {
 	const { mutate, isPending } = useCreatePost();
 	const { selectFiles } = useSelectFiles();
 	const { data: authenticatedUser } = useAuthenticatedUser();
@@ -43,7 +35,6 @@ function CreatePostForm({
 
 	const form = useForm({
 		defaultValues: {
-			type: initialType ?? ("POST" as PostType),
 			text: "",
 			medias: [] as File[],
 		},
@@ -56,7 +47,6 @@ function CreatePostForm({
 
 			mutate(
 				{
-					type: value.type,
 					text: value.text.trim(),
 					medias: value.medias,
 				},
@@ -80,9 +70,7 @@ function CreatePostForm({
 		},
 	});
 
-	const type = useSelector(form.store, (state) => state.values.type);
-	const isChillz = type === "CHILLZ";
-	const maxMedia = isChillz ? 1 : 4;
+	const maxMedia = 4;
 	const isBusy = isPending || isValidatingMedia;
 	useEffect(() => {
 		onBusyChange?.(isBusy);
@@ -113,11 +101,8 @@ function CreatePostForm({
 	const handleMediaSelect = async () => {
 		setError(null);
 		const selectedFiles = await selectFiles({
-			accept: (isChillz
-				? POST_MEDIA_MIME_TYPES.filter((mime) => mime.startsWith("video/"))
-				: POST_MEDIA_MIME_TYPES
-			).join(","),
-			multiple: !isChillz,
+			accept: POST_MEDIA_MIME_TYPES.join(","),
+			multiple: true,
 		});
 		if (!selectedFiles.length) return;
 		setIsValidatingMedia(true);
@@ -127,20 +112,14 @@ function CreatePostForm({
 					(file) =>
 						!POST_MEDIA_MIME_TYPES.includes(file.type) ||
 						file.size === 0 ||
-						file.size > POST_MAX_FILE_SIZE ||
-						(isChillz && !file.type.startsWith("video/")),
+						file.size > POST_MAX_FILE_SIZE,
 				)
 			) {
-				throw new Error(
-					"Choose a supported file up to 20 MB. Chillz require a video.",
-				);
+				throw new Error("Choose a supported file up to 20 MB.");
 			}
 			const currentMedias = form.getFieldValue("medias");
 			if (selectedFiles.length > maxMedia - currentMedias.length)
-				throw new Error(
-					`You can attach up to ${maxMedia} ${isChillz ? "video" : "files"}.`,
-				);
-			if (isChillz) await checkChillzDuration(selectedFiles[0]);
+				throw new Error(`You can attach up to ${maxMedia} files.`);
 			form.setFieldValue("medias", [...currentMedias, ...selectedFiles]);
 		} catch (error) {
 			setError(
@@ -171,7 +150,7 @@ function CreatePostForm({
 		});
 	};
 
-	const hasContent = createPostSchema.safeParse({ type, text, medias }).success;
+	const hasContent = createPostSchema.safeParse({ text, medias }).success;
 	const isMaxMediaReached = (medias || []).length >= maxMedia;
 
 	return (
@@ -183,30 +162,6 @@ function CreatePostForm({
 			}}
 			className="pb-4 px-4 pt-6 border border-border rounded-xl"
 		>
-			{!initialType ? (
-				<fieldset className="mb-4 flex gap-2">
-					<legend className="sr-only">Publication type</legend>
-					{(["POST", "CHILLZ"] as const).map((option) => (
-						<Button
-							key={option}
-							type="button"
-							variant={type === option ? "secondary" : "ghost"}
-							aria-pressed={type === option}
-							disabled={isBusy}
-							onClick={() => {
-								form.setFieldValue("type", option);
-								form.setFieldValue("medias", []);
-								setError(null);
-							}}
-						>
-							{option === "CHILLZ" ? (
-								<RiPlayCircleLine className="size-4" />
-							) : null}
-							{option === "CHILLZ" ? "Chillz" : "Post"}
-						</Button>
-					))}
-				</fieldset>
-			) : null}
 			<div className="flex gap-3">
 				<UserAvatar user={authenticatedUser?.user} size="lg" />
 
@@ -217,11 +172,9 @@ function CreatePostForm({
 								value={field.state.value}
 								onChange={(e) => field.handleChange(e.target.value)}
 								onBlur={field.handleBlur}
-								aria-label={isChillz ? "Chillz caption" : "Post text"}
+								aria-label="Post text"
 								maxLength={5000}
-								placeholder={
-									isChillz ? "Give your Chillz a caption…" : "What's happening?"
-								}
+								placeholder="What's happening?"
 								rows={3}
 								disabled={isBusy}
 								className="min-h-0 w-full resize-none font-normal placeholder:font-normal border-0 bg-transparent px-0 py-0 text-xl text-foreground placeholder:text-muted-foreground focus-visible:ring-0 ring-0 outline-none disabled:opacity-60"
@@ -283,11 +236,6 @@ function CreatePostForm({
 				</div>
 			</div>
 
-			{isChillz ? (
-				<p className="mt-3 text-xs text-muted-foreground">
-					One video. Up to 90 seconds and 20 MB. Make it a Chillz.
-				</p>
-			) : null}
 			{error ? (
 				<p role="alert" className="mt-3 text-sm text-destructive">
 					{error}
@@ -302,7 +250,7 @@ function CreatePostForm({
 						disabled={isBusy || isMaxMediaReached}
 					>
 						<RiImageLine className="h-4 w-4" />
-						{isValidatingMedia ? "Checking…" : isChillz ? "Add video" : "Media"}
+						{isValidatingMedia ? "Checking…" : "Media"}
 					</Button>
 					{(medias || []).length > 0 ? (
 						<span className="text-xs text-muted-foreground font-medium">
@@ -313,9 +261,7 @@ function CreatePostForm({
 
 				<Button type="submit" disabled={!hasContent || isBusy}>
 					<RiSendPlane2Line className="h-4 w-4" />
-					<span>
-						{isPending ? "Publishing…" : isChillz ? "Publish Chillz" : "Post"}
-					</span>
+					<span>{isPending ? "Publishing…" : "Post"}</span>
 				</Button>
 			</div>
 		</form>

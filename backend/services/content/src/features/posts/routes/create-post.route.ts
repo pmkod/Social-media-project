@@ -12,7 +12,6 @@ import {
 import { CreatePostRequestBody } from "../posts.validation-schemas";
 import { deleteFile } from "@/core/services/storage.service";
 import type { Prisma } from "@/generated/prisma/client";
-import { validateChillzVideo } from "../services/chillz-video-validation.service";
 import { compressPostMediaFile } from "../services/post-media-compression.service";
 import { setPostMediaFile } from "../services/post-media-storage.service";
 
@@ -52,8 +51,7 @@ const createPostRoute = defineOpenAPIRoute<
 			throw new Error("Unauthorized");
 		}
 
-		const { text, medias, type } = c.req.valid("form");
-		if (type === "CHILLZ") await validateChillzVideo(medias[0]!);
+		const { text, medias } = c.req.valid("form");
 
 		const authors = await userServiceClient.fetchAuthorsBatch(
 			[authenticatedUserId],
@@ -102,7 +100,6 @@ const createPostRoute = defineOpenAPIRoute<
 				data: {
 					id: postId,
 					authorId: authenticatedUserId,
-					type,
 					text,
 					medias: { create: mediaRecords },
 				},
@@ -123,8 +120,7 @@ const createPostRoute = defineOpenAPIRoute<
 
 		return c.json(
 			{
-				message:
-					type === "CHILLZ" ? "Chillz published" : "Post created successfully",
+				message: "Post created successfully",
 				post: {
 					...postToSend,
 					author: authors.get(authenticatedUserId) ?? null,

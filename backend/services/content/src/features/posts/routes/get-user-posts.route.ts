@@ -4,7 +4,6 @@ import { prisma } from "@/core/databases";
 import { userServiceClient } from "@/core/services/user-service.client";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { PostsRoutesTag } from "../posts.constants";
-import { PostTypeSchema } from "../posts.validation-schemas";
 
 const routeDef = createRoute({
 	method: "get",
@@ -14,7 +13,6 @@ const routeDef = createRoute({
 	request: {
 		params: z.object({ userId: z.string() }),
 		query: z.object({
-			type: PostTypeSchema.default("POST"),
 			cursorId: z.string().optional(),
 			cursorCreatedAt: z.string().optional(),
 			limit: z.string().optional().default("10"),
@@ -75,7 +73,6 @@ const getUserPostsRoute = defineOpenAPIRoute<
 
 		const posts = await prisma.post.findMany({
 			where: {
-				type: query.type,
 				authorId: userId,
 				...(cursorCondition ? cursorCondition : {}),
 			},
@@ -85,7 +82,6 @@ const getUserPostsRoute = defineOpenAPIRoute<
 				id: true,
 				authorId: true,
 				text: true,
-				type: true,
 				likesCount: true,
 				commentsCount: true,
 				createdAt: true,

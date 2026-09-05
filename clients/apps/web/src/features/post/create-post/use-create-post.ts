@@ -1,11 +1,10 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { httpClient } from "@/core/http-clients/http-client.ts";
 import { userDetailsQueryKeys } from "@/features/user/common/user-details-query-keys.ts";
-import type { Post, PostType } from "../common/post.ts";
+import type { Post } from "../common/post.ts";
 import { postListQueryKeys } from "../common/post-list.query-keys.ts";
 
 type CreatePostInput = {
-	type?: PostType;
 	text: string;
 	medias?: File[];
 };
@@ -17,7 +16,6 @@ type CreatedPostResponse = {
 
 const createPost = async (input: CreatePostInput): Promise<Post> => {
 	const formData = new FormData();
-	formData.append("type", input.type ?? "POST");
 	if (input.text) {
 		formData.append("text", input.text);
 	}

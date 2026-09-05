@@ -16,10 +16,8 @@ import { Route as BaseAboutRouteImport } from './routes/_base/about'
 import { Route as BasePrivacyPolicyRouteImport } from './routes/_base/privacy-policy'
 import { Route as BaseTermsOfServiceRouteImport } from './routes/_base/terms-of-service'
 import { Route as MainWithRightAsideRouteRouteImport } from './routes/_main/_with-right-aside/route'
-import { Route as MainChillzRouteImport } from './routes/_main/chillz'
 import { Route as MainDiscussionsRouteRouteImport } from './routes/_main/discussions/route'
 import { Route as MainSettingsRouteRouteImport } from './routes/_main/settings/route'
-import { Route as MainSparksRouteImport } from './routes/_main/sparks'
 import { Route as BaseAuthenticationIndexRouteImport } from './routes/_base/_authentication/index'
 import { Route as BaseAuthenticationCompleteSignupRouteImport } from './routes/_base/_authentication/complete-signup'
 import { Route as BaseAuthenticationNewPasswordRouteImport } from './routes/_base/_authentication/new-password'
@@ -32,8 +30,6 @@ import { Route as MainWithRightAsideBookmarksRouteImport } from './routes/_main/
 import { Route as MainWithRightAsideHomeRouteImport } from './routes/_main/_with-right-aside/home'
 import { Route as MainWithRightAsideNotificationsRouteImport } from './routes/_main/_with-right-aside/notifications'
 import { Route as MainWithRightAsideSearchRouteImport } from './routes/_main/_with-right-aside/search'
-import { Route as MainChillzIndexRouteImport } from './routes/_main/chillz.index'
-import { Route as MainChillzChillzIdRouteImport } from './routes/_main/chillz.$chillzId'
 import { Route as MainDiscussionsIndexRouteImport } from './routes/_main/discussions/index'
 import { Route as MainDiscussionsDiscussionIdRouteImport } from './routes/_main/discussions/$discussionId'
 import { Route as MainSettingsIndexRouteImport } from './routes/_main/settings/index'
@@ -78,11 +74,6 @@ const MainWithRightAsideRouteRoute = MainWithRightAsideRouteRouteImport.update({
   id: '/_with-right-aside',
   getParentRoute: () => MainRouteRoute,
 } as any)
-const MainChillzRoute = MainChillzRouteImport.update({
-  id: '/chillz',
-  path: '/chillz',
-  getParentRoute: () => MainRouteRoute,
-} as any)
 const MainDiscussionsRouteRoute = MainDiscussionsRouteRouteImport.update({
   id: '/discussions',
   path: '/discussions',
@@ -91,11 +82,6 @@ const MainDiscussionsRouteRoute = MainDiscussionsRouteRouteImport.update({
 const MainSettingsRouteRoute = MainSettingsRouteRouteImport.update({
   id: '/settings',
   path: '/settings',
-  getParentRoute: () => MainRouteRoute,
-} as any)
-const MainSparksRoute = MainSparksRouteImport.update({
-  id: '/sparks',
-  path: '/sparks',
   getParentRoute: () => MainRouteRoute,
 } as any)
 const BaseAuthenticationIndexRoute = BaseAuthenticationIndexRouteImport.update({
@@ -168,16 +154,6 @@ const MainWithRightAsideSearchRoute =
     path: '/search',
     getParentRoute: () => MainWithRightAsideRouteRoute,
   } as any)
-const MainChillzIndexRoute = MainChillzIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => MainChillzRoute,
-} as any)
-const MainChillzChillzIdRoute = MainChillzChillzIdRouteImport.update({
-  id: '/$chillzId',
-  path: '/$chillzId',
-  getParentRoute: () => MainChillzRoute,
-} as any)
 const MainDiscussionsIndexRoute = MainDiscussionsIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -250,8 +226,6 @@ export interface FileRoutesByFullPath {
   '/about': typeof BaseAboutRoute
   '/privacy-policy': typeof BasePrivacyPolicyRoute
   '/terms-of-service': typeof BaseTermsOfServiceRoute
-  '/chillz': typeof MainChillzRouteWithChildren
-  '/sparks': typeof MainSparksRoute
   '/complete-signup': typeof BaseAuthenticationCompleteSignupRoute
   '/new-password': typeof BaseAuthenticationNewPasswordRoute
   '/password-reset': typeof BaseAuthenticationPasswordResetRoute
@@ -263,7 +237,6 @@ export interface FileRoutesByFullPath {
   '/home': typeof MainWithRightAsideHomeRoute
   '/notifications': typeof MainWithRightAsideNotificationsRoute
   '/search': typeof MainWithRightAsideSearchRoute
-  '/chillz/$chillzId': typeof MainChillzChillzIdRoute
   '/discussions/$discussionId': typeof MainDiscussionsDiscussionIdRoute
   '/settings/account': typeof MainSettingsAccountRoute
   '/settings/change-email': typeof MainSettingsChangeEmailRoute
@@ -273,7 +246,6 @@ export interface FileRoutesByFullPath {
   '/settings/security': typeof MainSettingsSecurityRoute
   '/settings/theme': typeof MainSettingsThemeRoute
   '/settings/user-verification': typeof MainSettingsUserVerificationRoute
-  '/chillz/': typeof MainChillzIndexRoute
   '/discussions/': typeof MainDiscussionsIndexRoute
   '/settings/': typeof MainSettingsIndexRoute
   '/posts/$postId': typeof MainWithRightAsidePostsPostIdRoute
@@ -283,7 +255,6 @@ export interface FileRoutesByTo {
   '/about': typeof BaseAboutRoute
   '/privacy-policy': typeof BasePrivacyPolicyRoute
   '/terms-of-service': typeof BaseTermsOfServiceRoute
-  '/sparks': typeof MainSparksRoute
   '/complete-signup': typeof BaseAuthenticationCompleteSignupRoute
   '/new-password': typeof BaseAuthenticationNewPasswordRoute
   '/password-reset': typeof BaseAuthenticationPasswordResetRoute
@@ -295,7 +266,6 @@ export interface FileRoutesByTo {
   '/home': typeof MainWithRightAsideHomeRoute
   '/notifications': typeof MainWithRightAsideNotificationsRoute
   '/search': typeof MainWithRightAsideSearchRoute
-  '/chillz/$chillzId': typeof MainChillzChillzIdRoute
   '/discussions/$discussionId': typeof MainDiscussionsDiscussionIdRoute
   '/settings/account': typeof MainSettingsAccountRoute
   '/settings/change-email': typeof MainSettingsChangeEmailRoute
@@ -305,7 +275,6 @@ export interface FileRoutesByTo {
   '/settings/security': typeof MainSettingsSecurityRoute
   '/settings/theme': typeof MainSettingsThemeRoute
   '/settings/user-verification': typeof MainSettingsUserVerificationRoute
-  '/chillz': typeof MainChillzIndexRoute
   '/discussions': typeof MainDiscussionsIndexRoute
   '/settings': typeof MainSettingsIndexRoute
   '/posts/$postId': typeof MainWithRightAsidePostsPostIdRoute
@@ -321,8 +290,6 @@ export interface FileRoutesById {
   '/_base/about': typeof BaseAboutRoute
   '/_base/privacy-policy': typeof BasePrivacyPolicyRoute
   '/_base/terms-of-service': typeof BaseTermsOfServiceRoute
-  '/_main/chillz': typeof MainChillzRouteWithChildren
-  '/_main/sparks': typeof MainSparksRoute
   '/_base/_authentication/complete-signup': typeof BaseAuthenticationCompleteSignupRoute
   '/_base/_authentication/new-password': typeof BaseAuthenticationNewPasswordRoute
   '/_base/_authentication/password-reset': typeof BaseAuthenticationPasswordResetRoute
@@ -334,7 +301,6 @@ export interface FileRoutesById {
   '/_main/_with-right-aside/home': typeof MainWithRightAsideHomeRoute
   '/_main/_with-right-aside/notifications': typeof MainWithRightAsideNotificationsRoute
   '/_main/_with-right-aside/search': typeof MainWithRightAsideSearchRoute
-  '/_main/chillz/$chillzId': typeof MainChillzChillzIdRoute
   '/_main/discussions/$discussionId': typeof MainDiscussionsDiscussionIdRoute
   '/_main/settings/account': typeof MainSettingsAccountRoute
   '/_main/settings/change-email': typeof MainSettingsChangeEmailRoute
@@ -345,7 +311,6 @@ export interface FileRoutesById {
   '/_main/settings/theme': typeof MainSettingsThemeRoute
   '/_main/settings/user-verification': typeof MainSettingsUserVerificationRoute
   '/_base/_authentication/': typeof BaseAuthenticationIndexRoute
-  '/_main/chillz/': typeof MainChillzIndexRoute
   '/_main/discussions/': typeof MainDiscussionsIndexRoute
   '/_main/settings/': typeof MainSettingsIndexRoute
   '/_main/_with-right-aside/posts/$postId': typeof MainWithRightAsidePostsPostIdRoute
@@ -359,8 +324,6 @@ export interface FileRouteTypes {
     | '/about'
     | '/privacy-policy'
     | '/terms-of-service'
-    | '/chillz'
-    | '/sparks'
     | '/complete-signup'
     | '/new-password'
     | '/password-reset'
@@ -372,7 +335,6 @@ export interface FileRouteTypes {
     | '/home'
     | '/notifications'
     | '/search'
-    | '/chillz/$chillzId'
     | '/discussions/$discussionId'
     | '/settings/account'
     | '/settings/change-email'
@@ -382,7 +344,6 @@ export interface FileRouteTypes {
     | '/settings/security'
     | '/settings/theme'
     | '/settings/user-verification'
-    | '/chillz/'
     | '/discussions/'
     | '/settings/'
     | '/posts/$postId'
@@ -392,7 +353,6 @@ export interface FileRouteTypes {
     | '/about'
     | '/privacy-policy'
     | '/terms-of-service'
-    | '/sparks'
     | '/complete-signup'
     | '/new-password'
     | '/password-reset'
@@ -404,7 +364,6 @@ export interface FileRouteTypes {
     | '/home'
     | '/notifications'
     | '/search'
-    | '/chillz/$chillzId'
     | '/discussions/$discussionId'
     | '/settings/account'
     | '/settings/change-email'
@@ -414,7 +373,6 @@ export interface FileRouteTypes {
     | '/settings/security'
     | '/settings/theme'
     | '/settings/user-verification'
-    | '/chillz'
     | '/discussions'
     | '/settings'
     | '/posts/$postId'
@@ -429,8 +387,6 @@ export interface FileRouteTypes {
     | '/_base/about'
     | '/_base/privacy-policy'
     | '/_base/terms-of-service'
-    | '/_main/chillz'
-    | '/_main/sparks'
     | '/_base/_authentication/complete-signup'
     | '/_base/_authentication/new-password'
     | '/_base/_authentication/password-reset'
@@ -442,7 +398,6 @@ export interface FileRouteTypes {
     | '/_main/_with-right-aside/home'
     | '/_main/_with-right-aside/notifications'
     | '/_main/_with-right-aside/search'
-    | '/_main/chillz/$chillzId'
     | '/_main/discussions/$discussionId'
     | '/_main/settings/account'
     | '/_main/settings/change-email'
@@ -453,7 +408,6 @@ export interface FileRouteTypes {
     | '/_main/settings/theme'
     | '/_main/settings/user-verification'
     | '/_base/_authentication/'
-    | '/_main/chillz/'
     | '/_main/discussions/'
     | '/_main/settings/'
     | '/_main/_with-right-aside/posts/$postId'
@@ -515,13 +469,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MainWithRightAsideRouteRouteImport
       parentRoute: typeof MainRouteRoute
     }
-    '/_main/chillz': {
-      id: '/_main/chillz'
-      path: '/chillz'
-      fullPath: '/chillz'
-      preLoaderRoute: typeof MainChillzRouteImport
-      parentRoute: typeof MainRouteRoute
-    }
     '/_main/discussions': {
       id: '/_main/discussions'
       path: '/discussions'
@@ -534,13 +481,6 @@ declare module '@tanstack/react-router' {
       path: '/settings'
       fullPath: '/settings'
       preLoaderRoute: typeof MainSettingsRouteRouteImport
-      parentRoute: typeof MainRouteRoute
-    }
-    '/_main/sparks': {
-      id: '/_main/sparks'
-      path: '/sparks'
-      fullPath: '/sparks'
-      preLoaderRoute: typeof MainSparksRouteImport
       parentRoute: typeof MainRouteRoute
     }
     '/_base/_authentication/': {
@@ -626,20 +566,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/search'
       preLoaderRoute: typeof MainWithRightAsideSearchRouteImport
       parentRoute: typeof MainWithRightAsideRouteRoute
-    }
-    '/_main/chillz/': {
-      id: '/_main/chillz/'
-      path: '/'
-      fullPath: '/chillz/'
-      preLoaderRoute: typeof MainChillzIndexRouteImport
-      parentRoute: typeof MainChillzRoute
-    }
-    '/_main/chillz/$chillzId': {
-      id: '/_main/chillz/$chillzId'
-      path: '/$chillzId'
-      fullPath: '/chillz/$chillzId'
-      preLoaderRoute: typeof MainChillzChillzIdRouteImport
-      parentRoute: typeof MainChillzRoute
     }
     '/_main/discussions/': {
       id: '/_main/discussions/'
@@ -839,34 +765,16 @@ const MainSettingsRouteRouteChildren: MainSettingsRouteRouteChildren = {
 const MainSettingsRouteRouteWithChildren =
   MainSettingsRouteRoute._addFileChildren(MainSettingsRouteRouteChildren)
 
-interface MainChillzRouteChildren {
-  MainChillzChillzIdRoute: typeof MainChillzChillzIdRoute
-  MainChillzIndexRoute: typeof MainChillzIndexRoute
-}
-
-const MainChillzRouteChildren: MainChillzRouteChildren = {
-  MainChillzChillzIdRoute: MainChillzChillzIdRoute,
-  MainChillzIndexRoute: MainChillzIndexRoute,
-}
-
-const MainChillzRouteWithChildren = MainChillzRoute._addFileChildren(
-  MainChillzRouteChildren,
-)
-
 interface MainRouteRouteChildren {
   MainWithRightAsideRouteRoute: typeof MainWithRightAsideRouteRouteWithChildren
   MainDiscussionsRouteRoute: typeof MainDiscussionsRouteRouteWithChildren
   MainSettingsRouteRoute: typeof MainSettingsRouteRouteWithChildren
-  MainChillzRoute: typeof MainChillzRouteWithChildren
-  MainSparksRoute: typeof MainSparksRoute
 }
 
 const MainRouteRouteChildren: MainRouteRouteChildren = {
   MainWithRightAsideRouteRoute: MainWithRightAsideRouteRouteWithChildren,
   MainDiscussionsRouteRoute: MainDiscussionsRouteRouteWithChildren,
   MainSettingsRouteRoute: MainSettingsRouteRouteWithChildren,
-  MainChillzRoute: MainChillzRouteWithChildren,
-  MainSparksRoute: MainSparksRoute,
 }
 
 const MainRouteRouteWithChildren = MainRouteRoute._addFileChildren(

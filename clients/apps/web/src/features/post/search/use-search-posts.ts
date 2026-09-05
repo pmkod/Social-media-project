@@ -1,6 +1,6 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { httpClient } from "@/core/http-clients/http-client.ts";
-import type { Post, PostType } from "../common/post.ts";
+import type { Post } from "../common/post.ts";
 import { postListQueryKeys } from "../common/post-list.query-keys.ts";
 
 type SearchCursor = {
@@ -19,14 +19,12 @@ type SearchPostsResponse = {
 
 const fetchSearchPostsPage = async ({
 	query,
-	type,
 	pageParam,
 }: {
 	query: string;
-	type: PostType;
 	pageParam?: SearchCursor | null;
 }) => {
-	const searchParams = new URLSearchParams({ q: query, limit: "10", type });
+	const searchParams = new URLSearchParams({ q: query, limit: "10" });
 	if (pageParam) {
 		searchParams.set("cursorId", pageParam.id);
 		searchParams.set("cursorCreatedAt", pageParam.createdAt);
@@ -39,22 +37,17 @@ const fetchSearchPostsPage = async ({
 
 type UseSearchPostsParams = {
 	query: string;
-	type?: PostType;
 	enabled?: boolean;
 };
 
-const useSearchPosts = ({
-	query,
-	type = "POST",
-	enabled = true,
-}: UseSearchPostsParams) => {
+const useSearchPosts = ({ query, enabled = true }: UseSearchPostsParams) => {
 	const normalizedQuery = query.trim();
 
 	return useInfiniteQuery({
-		queryKey: postListQueryKeys.search(normalizedQuery, type),
+		queryKey: postListQueryKeys.search(normalizedQuery),
 		enabled,
 		queryFn: ({ pageParam }) =>
-			fetchSearchPostsPage({ query: normalizedQuery, type, pageParam }),
+			fetchSearchPostsPage({ query: normalizedQuery, pageParam }),
 		initialPageParam: null as SearchCursor | null,
 		getNextPageParam: (lastPage) => lastPage.pagination.nextCursor ?? undefined,
 	});

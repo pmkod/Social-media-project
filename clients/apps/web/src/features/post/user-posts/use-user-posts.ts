@@ -1,6 +1,6 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { httpClient } from "@/core/http-clients/http-client.ts";
-import type { Post, PostType } from "../common/post.ts";
+import type { Post } from "../common/post.ts";
 import { postListQueryKeys } from "../common/post-list.query-keys.ts";
 
 type UserPostsCursor = {
@@ -19,14 +19,13 @@ type UserPostsResponse = {
 
 type UseUserPostsParams = {
 	userId: string;
-	type?: PostType;
 };
 
-const useUserPosts = ({ userId, type = "POST" }: UseUserPostsParams) =>
+const useUserPosts = ({ userId }: UseUserPostsParams) =>
 	useInfiniteQuery({
-		queryKey: postListQueryKeys.userPosts(userId, type),
+		queryKey: postListQueryKeys.userPosts(userId),
 		queryFn: async ({ pageParam }) => {
-			const searchParams = new URLSearchParams({ limit: "10", type });
+			const searchParams = new URLSearchParams({ limit: "10" });
 			if (pageParam) {
 				searchParams.set("cursorId", pageParam.id);
 				searchParams.set("cursorCreatedAt", pageParam.createdAt);

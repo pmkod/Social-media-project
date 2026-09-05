@@ -1,10 +1,7 @@
 import { z } from "@hono/zod-openapi";
 
-export const PostTypeSchema = z.enum(["POST", "CHILLZ"]);
-
 const PostValidationSchema = z.object({
 	id: z.string(),
-	type: PostTypeSchema,
 	text: z.string().trim().max(5000),
 	createdAt: z.string(),
 	medias: z
@@ -30,7 +27,6 @@ export { PostValidationSchema };
 // Multipart forms contain a File for one upload and an array for several.
 export const CreatePostRequestBody = z
 	.object({
-		type: PostTypeSchema.default("POST"),
 		text: PostValidationSchema.shape.text.default(""),
 		medias: z
 			.union([
@@ -40,18 +36,7 @@ export const CreatePostRequestBody = z
 			.default([]),
 	})
 	.superRefine((data, ctx) => {
-		if (data.type === "CHILLZ") {
-			if (
-				data.medias.length !== 1 ||
-				!data.medias[0]?.type.startsWith("video/")
-			) {
-				ctx.addIssue({
-					code: "custom",
-					path: ["medias"],
-					message: "A Chillz requires exactly one video.",
-				});
-			}
-		} else if (!data.text && data.medias.length === 0) {
+		if (!data.text && data.medias.length === 0) {
 			ctx.addIssue({
 				code: "custom",
 				path: ["text"],

@@ -10,7 +10,6 @@ import { Link } from "@tanstack/react-router";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { cn } from "@/core/lib/utils.ts";
 import { BookmarkButton } from "@/features/bookmark/common/bookmark-button.tsx";
-import { ChillzItem } from "@/features/chillz/chillz-item.tsx";
 import { UserAvatar } from "@/features/user/common/components/user-avatar.tsx";
 import { UserProfileLink } from "@/features/user/common/user-profile-link.tsx";
 import { UserProfileHoverCard } from "@/features/user/user-profile/user-profile-hover-card.tsx";
@@ -323,11 +322,5 @@ function StandardPostItem({
 }
 
 export function PostItem(props: PostItemProps) {
-	return props.post.type === "CHILLZ" ? (
-		<div className="h-[min(48rem,85dvh)] py-3">
-			<ChillzItem post={props.post} />
-		</div>
-	) : (
-		<StandardPostItem {...props} />
-	);
+	return <StandardPostItem {...props} />;
 }
