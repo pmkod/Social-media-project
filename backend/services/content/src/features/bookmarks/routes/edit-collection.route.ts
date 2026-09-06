@@ -3,6 +3,7 @@ import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { requireUserAuthentication } from "@/features/authentication/middlewares/require-user-authentication.middleware";
+import { Prisma } from "@/generated/prisma/client";
 import { BookmarksRoutesTag } from "../bookmarks.constants";
 import { UpdateBookmarkCollectionSchema } from "../bookmarks.validation-schemas";
 
@@ -22,6 +23,9 @@ const routeDef = createRoute({
 	},
 	responses: {
 		[HttpStatus.OK.code]: { description: "Bookmark collection updated" },
+		[HttpStatus.CONFLICT.code]: {
+			description: "A collection with this name already exists",
+		},
 	},
 });
 
@@ -31,7 +35,7 @@ const editCollectionRoute = defineOpenAPIRoute<
 >({
 	route: routeDef,
 	handler: async (c) => {
-		const ownerId = c.get("authenticatedUserId");
+		const ownerId = c.get("authenticatedUser")?.id;
 		if (!ownerId) throw new Error("Unauthorized");
 
 		const { collectionId } = c.req.valid("param");
@@ -47,24 +51,37 @@ const editCollectionRoute = defineOpenAPIRoute<
 			);
 		}
 
-		const updatedCollection = await prisma.bookmarkCollection.update({
-			where: { id: collection.id },
-			data: body,
-			select: {
-				id: true,
-				ownerId: true,
-				name: true,
-				description: true,
-				createdAt: true,
-				updatedAt: true,
-				_count: { select: { items: true } },
-			},
-		});
+		try {
+			const updatedCollection = await prisma.bookmarkCollection.update({
+				where: { id: collection.id },
+				data: body,
+				select: {
+					id: true,
+					ownerId: true,
+					name: true,
+					description: true,
+					createdAt: true,
+					updatedAt: true,
+					_count: { select: { items: true } },
+				},
+			});
 
-		const { _count, ...result } = updatedCollection;
-		return c.json({
-			bookmarkCollection: { ...result, bookmarksCount: _count.items },
-		});
+			const { _count, ...result } = updatedCollection;
+			return c.json({
+				bookmarkCollection: { ...result, bookmarksCount: _count.items },
+			});
+		} catch (error) {
+			if (
+				error instanceof Prisma.PrismaClientKnownRequestError &&
+				error.code === "P2002"
+			) {
+				return c.json(
+					{ message: "A collection with this name already exists" },
+					HttpStatus.CONFLICT.code,
+				);
+			}
+			throw error;
+		}
 	},
 });
 

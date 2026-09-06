@@ -33,7 +33,7 @@ const likePostRoute = defineOpenAPIRoute<typeof routeDef, HonoAuthenticatedEnv>(
 	{
 		route: routeDef,
 		handler: async (c) => {
-			const authenticatedUserId = c.get("authenticatedUserId");
+			const authenticatedUserId = c.get("authenticatedUser")?.id;
 			if (!authenticatedUserId) {
 				throw new Error("Unauthorized");
 			}

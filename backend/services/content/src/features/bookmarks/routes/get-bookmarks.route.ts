@@ -4,6 +4,7 @@ import { prisma } from "@/core/databases";
 import { userServiceClient } from "@/core/services/user-service.client";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { requireUserAuthentication } from "@/features/authentication/middlewares/require-user-authentication.middleware";
+import type { Prisma } from "@/generated/prisma/client";
 import { BookmarksRoutesTag } from "../bookmarks.constants";
 
 const routeDef = createRoute({
@@ -26,13 +27,51 @@ const routeDef = createRoute({
 	},
 });
 
+const bookmarkedPostSelect = {
+	id: true,
+	authorId: true,
+	text: true,
+	likesCount: true,
+	commentsCount: true,
+	createdAt: true,
+	updatedAt: true,
+	medias: {
+		select: {
+			id: true,
+			postId: true,
+			position: true,
+			mediaType: true,
+			createdAt: true,
+			lowQualityFileId: true,
+			lowQualityFile: {
+				select: {
+					id: true,
+					mimeType: true,
+					filename: true,
+					createdAt: true,
+				},
+			},
+			highQualityFileId: true,
+			highQualityFile: {
+				select: {
+					id: true,
+					mimeType: true,
+					filename: true,
+					createdAt: true,
+				},
+			},
+		},
+		orderBy: { position: "asc" },
+	},
+} satisfies Prisma.PostSelect;
+
 const getBookmarksRoute = defineOpenAPIRoute<
 	typeof routeDef,
 	HonoAuthenticatedEnv
 >({
 	route: routeDef,
 	handler: async (c) => {
-		const ownerId = c.get("authenticatedUserId");
+		const ownerId = c.get("authenticatedUser")?.id;
 		if (!ownerId) throw new Error("Unauthorized");
 		const query = c.req.valid("query");
 		if (query.bookmarkCollectionId) {
@@ -80,74 +119,77 @@ const getBookmarksRoute = defineOpenAPIRoute<
 				}
 			: undefined;
 
-		const posts = await prisma.post.findMany({
-			where: {
-				bookmarks: {
-					some: query.bookmarkCollectionId
-						? {
+		const bookmarkEntries = query.bookmarkCollectionId
+			? (
+					await prisma.bookmarkCollectionItem.findMany({
+						where: {
+							collectionId: query.bookmarkCollectionId,
+							bookmark: {
 								ownerId,
-								collectionItems: {
-									some: { collectionId: query.bookmarkCollectionId },
-								},
-							}
-						: { ownerId, collectionItems: { some: {} } },
-				},
-				...(hiddenUserIds.length > 0
-					? { authorId: { notIn: hiddenUserIds } }
-					: {}),
-				...(cursorCondition ? cursorCondition : {}),
-			},
-			orderBy: [{ createdAt: "desc" }, { id: "desc" }],
-			take: limit + 1,
-			select: {
-				id: true,
-				authorId: true,
-				text: true,
-				likesCount: true,
-				commentsCount: true,
-				createdAt: true,
-				updatedAt: true,
-				medias: {
-					select: {
-						id: true,
-						postId: true,
-						position: true,
-						mediaType: true,
-						createdAt: true,
-						lowQualityFileId: true,
-						lowQualityFile: {
-							select: {
-								id: true,
-								mimeType: true,
-								filename: true,
-								createdAt: true,
+								post:
+									hiddenUserIds.length > 0
+										? { authorId: { notIn: hiddenUserIds } }
+										: {},
+							},
+							...(cursorCondition ? cursorCondition : {}),
+						},
+						orderBy: [{ createdAt: "desc" }, { id: "desc" }],
+						take: limit + 1,
+						select: {
+							id: true,
+							createdAt: true,
+							bookmark: {
+								select: { post: { select: bookmarkedPostSelect } },
 							},
 						},
-						highQualityFileId: true,
-						highQualityFile: {
-							select: {
-								id: true,
-								mimeType: true,
-								filename: true,
-								createdAt: true,
-							},
+					})
+				).map((item) => ({
+					cursorId: item.id,
+					cursorCreatedAt: item.createdAt,
+					post: item.bookmark.post,
+				}))
+			: (
+					await prisma.bookmark.findMany({
+						where: {
+							ownerId,
+							collectionItems: { some: {} },
+							post:
+								hiddenUserIds.length > 0
+									? { authorId: { notIn: hiddenUserIds } }
+									: {},
+							...(cursorCondition ? cursorCondition : {}),
 						},
-					},
-					orderBy: { position: "asc" },
-				},
-			},
-		});
+						orderBy: [{ createdAt: "desc" }, { id: "desc" }],
+						take: limit + 1,
+						select: {
+							id: true,
+							createdAt: true,
+							post: { select: bookmarkedPostSelect },
+						},
+					})
+				).map((bookmark) => ({
+					cursorId: bookmark.id,
+					cursorCreatedAt: bookmark.createdAt,
+					post: bookmark.post,
+				}));
 
-		const hasNextPage = posts.length > limit;
-		const items = hasNextPage ? posts.slice(0, limit) : posts;
+		const hasNextPage = bookmarkEntries.length > limit;
+		const items = hasNextPage
+			? bookmarkEntries.slice(0, limit)
+			: bookmarkEntries;
 		const lastItem = items.at(-1);
 		const nextCursor =
 			hasNextPage && lastItem
-				? { id: lastItem.id, createdAt: lastItem.createdAt.toISOString() }
+				? {
+						id: lastItem.cursorId,
+						createdAt: lastItem.cursorCreatedAt.toISOString(),
+					}
 				: null;
 
-		const postIds = items.map((post) => post.id);
-		const authorIds = Array.from(new Set(items.map((post) => post.authorId)));
+		const postIds = items.map(({ post }) => post.id);
+		const authorIds = Array.from(
+			new Set(items.map(({ post }) => post.authorId)),
+		);
 
 		const authorsMap = await userServiceClient.fetchAuthorsBatch(
 			authorIds,
@@ -166,7 +208,7 @@ const getBookmarksRoute = defineOpenAPIRoute<
 				: new Set<string>();
 
 		return c.json({
-			posts: items.map((post) => ({
+			posts: items.map(({ post }) => ({
 				...post,
 				isLikedByAuthenticatedUser: likedPostIds.has(post.id),
 				isBookmarkedByAuthenticatedUser: true,

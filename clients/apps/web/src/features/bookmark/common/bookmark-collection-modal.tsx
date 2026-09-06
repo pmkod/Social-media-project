@@ -1,4 +1,5 @@
 import { useForm } from "@tanstack/react-form";
+import { isHTTPError } from "ky";
 import { z } from "zod";
 import { Button } from "@/core/components/ui/button.tsx";
 import {
@@ -53,6 +54,15 @@ const BookmarkCollectionModal = create<BookmarkCollectionModalProps>(
 		const editCollection = useEditBookmarkCollection();
 		const isEditing = Boolean(collection);
 		const mutation = isEditing ? editCollection : createCollection;
+		const mutationErrorMessage =
+			mutation.isError &&
+			isHTTPError(mutation.error) &&
+			typeof mutation.error.data === "object" &&
+			mutation.error.data !== null &&
+			"message" in mutation.error.data &&
+			typeof mutation.error.data.message === "string"
+				? mutation.error.data.message
+				: "Unable to save this collection. Please try again.";
 
 		const close = () => {
 			modal.resolve();
@@ -182,7 +192,7 @@ const BookmarkCollectionModal = create<BookmarkCollectionModalProps>(
 
 							{mutation.isError ? (
 								<p className="mt-4 text-sm text-destructive" role="alert">
-									Unable to save this collection. Please try again.
+									{mutationErrorMessage}
 								</p>
 							) : null}
 						</DialogBody>
@@ -207,5 +217,5 @@ const BookmarkCollectionModal = create<BookmarkCollectionModalProps>(
 	},
 );
 
-export { BookmarkCollectionModal };
 export type { BookmarkCollectionModalFormValues };
+export { BookmarkCollectionModal };

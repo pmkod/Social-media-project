@@ -3,6 +3,7 @@ import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { requireUserAuthentication } from "@/features/authentication/middlewares/require-user-authentication.middleware";
+import { Prisma } from "@/generated/prisma/client";
 import { BookmarksRoutesTag } from "../bookmarks.constants";
 import { CreateBookmarkCollectionSchema } from "../bookmarks.validation-schemas";
 
@@ -21,6 +22,9 @@ const routeDef = createRoute({
 	},
 	responses: {
 		[HttpStatus.CREATED.code]: { description: "Collection created" },
+		[HttpStatus.CONFLICT.code]: {
+			description: "A collection with this name already exists",
+		},
 	},
 });
 
@@ -30,18 +34,31 @@ const createCollectionRoute = defineOpenAPIRoute<
 >({
 	route: routeDef,
 	handler: async (c) => {
-		const ownerId = c.get("authenticatedUserId");
+		const ownerId = c.get("authenticatedUser")?.id;
 		if (!ownerId) throw new Error("Unauthorized");
 		const body = c.req.valid("json");
-		const collection = await prisma.bookmarkCollection.create({
-			data: { ...body, ownerId },
-		});
-		return c.json(
-			{
-				bookmarkCollection: { ...collection, bookmarksCount: 0 },
-			},
-			HttpStatus.CREATED.code,
-		);
+		try {
+			const collection = await prisma.bookmarkCollection.create({
+				data: { ...body, ownerId },
+			});
+			return c.json(
+				{
+					bookmarkCollection: { ...collection, bookmarksCount: 0 },
+				},
+				HttpStatus.CREATED.code,
+			);
+		} catch (error) {
+			if (
+				error instanceof Prisma.PrismaClientKnownRequestError &&
+				error.code === "P2002"
+			) {
+				return c.json(
+					{ message: "A collection with this name already exists" },
+					HttpStatus.CONFLICT.code,
+				);
+			}
+			throw error;
+		}
 	},
 });
 

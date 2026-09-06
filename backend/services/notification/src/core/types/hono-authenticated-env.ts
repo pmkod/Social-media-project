@@ -3,7 +3,6 @@ type HonoAuthenticatedEnv = {
 		authenticatedUser?: {
 			id: string;
 		};
-		authenticatedUserId?: string;
 	};
 };
 

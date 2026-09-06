@@ -4,8 +4,6 @@ type HonoAuthenticatedEnv = {
 			id: string;
 			sessionId: string;
 		};
-		authenticatedUserId?: string;
-		authenticatedSessionId?: string;
 	};
 };
 

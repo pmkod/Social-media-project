@@ -38,7 +38,7 @@ const getMessagesRoute = defineOpenAPIRoute<
 >({
 	route: routeDef,
 	handler: async (c) => {
-		const authenticatedUserId = c.get("authenticatedUserId");
+		const authenticatedUserId = c.get("authenticatedUser")?.id;
 		if (!authenticatedUserId) throw new Error("Unauthorized");
 		const { discussionId } = c.req.valid("param");
 		const { limit, cursorCreatedAt, cursorId } = c.req.valid("query");

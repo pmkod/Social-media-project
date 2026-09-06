@@ -10,8 +10,6 @@ const requireUserAuthentication = async (
 		return c.json({ message: "Unauthorized" }, 401);
 	}
 
-	c.set("authenticatedUserId", authenticatedUser.id);
-	c.set("authenticatedSessionId", authenticatedUser.sessionId);
 	return await next();
 };
 

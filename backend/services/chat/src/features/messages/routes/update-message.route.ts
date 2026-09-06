@@ -43,7 +43,7 @@ const updateMessageRoute = defineOpenAPIRoute<
 >({
 	route: routeDef,
 	handler: async (c) => {
-		const authenticatedUserId = c.get("authenticatedUserId");
+		const authenticatedUserId = c.get("authenticatedUser")?.id;
 		if (!authenticatedUserId) throw new Error("Unauthorized");
 		const { messageId } = c.req.valid("param");
 		const { content } = c.req.valid("json");

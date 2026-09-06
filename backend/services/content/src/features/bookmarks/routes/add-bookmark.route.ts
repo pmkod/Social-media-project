@@ -33,7 +33,7 @@ const addBookmarkRoute = defineOpenAPIRoute<
 >({
 	route: routeDef,
 	handler: async (c) => {
-		const ownerId = c.get("authenticatedUserId");
+		const ownerId = c.get("authenticatedUser")?.id;
 		if (!ownerId) throw new Error("Unauthorized");
 		const { postId } = c.req.valid("param");
 		const { bookmarkCollectionId } = c.req.valid("json");

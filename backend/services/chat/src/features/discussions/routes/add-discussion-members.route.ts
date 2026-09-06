@@ -39,7 +39,7 @@ const addDiscussionMembersRoute = defineOpenAPIRoute<
 >({
 	route: routeDef,
 	handler: async (c) => {
-		const authenticatedUserId = c.get("authenticatedUserId");
+		const authenticatedUserId = c.get("authenticatedUser")?.id;
 		if (!authenticatedUserId) throw new Error("Unauthorized");
 		const { discussionId } = c.req.valid("param");
 		const { userIds } = c.req.valid("json");
