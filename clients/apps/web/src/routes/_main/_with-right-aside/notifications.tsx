@@ -90,13 +90,15 @@ function NotificationsPage() {
 						className="min-h-96"
 					/>
 				) : (
-					<div className="divide-y divide-border">
-						{notifications.map((notification) => (
-							<NotificationItem
-								key={notification.groupKey}
-								notification={notification}
-							/>
-						))}
+					<div>
+						<div className="divide-y divide-border">
+							{notifications.map((notification) => (
+								<NotificationItem
+									key={notification.groupKey}
+									notification={notification}
+								/>
+							))}
+						</div>
 						{hasNextPage ? (
 							<div ref={observerTargetRef}>
 								<NotificationListItemLoader count={2} />

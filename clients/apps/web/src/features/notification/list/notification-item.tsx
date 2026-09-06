@@ -110,22 +110,26 @@ function NotificationItem({ notification }: NotificationItemProps) {
 
 	if (notification.eventType === "FOLLOW" && notification.initiator) {
 		return (
-			<Link
-				to="/$username"
-				params={{ username: `@${notification.initiator.username}` }}
-			>
-				{content}
-			</Link>
+			<div>
+				<Link
+					to="/$username"
+					params={{ username: `@${notification.initiator.username}` }}
+				>
+					{content}
+				</Link>
+			</div>
 		);
 	}
 	if (notification.eventType === "POST_LIKE" && notification.targetId) {
 		return (
-			<Link to="/posts/$postId" params={{ postId: notification.targetId }}>
-				{content}
-			</Link>
+			<div>
+				<Link to="/posts/$postId" params={{ postId: notification.targetId }}>
+					{content}
+				</Link>
+			</div>
 		);
 	}
-	return content;
+	return <div>{content}</div>;
 }
 
 export { NotificationItem };
