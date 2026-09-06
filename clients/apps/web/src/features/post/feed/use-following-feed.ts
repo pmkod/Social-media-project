@@ -52,5 +52,6 @@ export const useFollowingFeed = ({
 		getNextPageParam: (lastPage) => {
 			return lastPage.pagination.nextCursor ?? undefined;
 		},
+		refetchOnWindowFocus: false,
 	});
 };
