@@ -14,7 +14,7 @@ enum ReportStatus {
 }
 
 model Report {
-  id           String        @id @default(cuid())
+  id           String        @id @default(uuid())
   reporterId   String        @map("reporter_id")
   reasonId     String?       @map("reason_id")
   reasonText   String?       @map("reason_text") @db.VarChar(280)
@@ -32,7 +32,7 @@ model Report {
 }
 
 model ReportReason {
-  id          String   @id @default(cuid())
+  id          String   @id @default(uuid())
   name        String   @unique @db.VarChar(100)
   description String?  @db.VarChar(500)
   createdAt   DateTime @default(now()) @map("created_at")

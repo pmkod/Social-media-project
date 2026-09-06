@@ -1,0 +1,2 @@
+-- RenameIndex
+ALTER INDEX "notification_recipient_id_event_type_group_key_initiator_id_tar" RENAME TO "notification_recipient_id_event_type_group_key_initiator_id_idx";

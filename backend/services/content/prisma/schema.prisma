@@ -8,7 +8,7 @@ datasource db {
 }
 
 model Post {
-  id            String      @id @default(cuid())
+  id            String      @id @default(uuid())
   authorId      String      @map("author_id")
   text          String      @map("content")
   likesCount    Int         @default(0) @map("likes_count")
@@ -51,20 +51,20 @@ model File {
 }
 
 model Comment {
-  id            String        @id @default(cuid())
-  postId        String        @map("post_id")
-  authorId      String        @map("author_id")
-  parentId      String?       @map("parent_id")
-  content       String
-  likesCount    Int           @default(0) @map("likes_count")
-  repliesCount  Int           @default(0) @map("replies_count")
-  deletedAt     DateTime?     @map("deleted_at")
-  createdAt     DateTime      @default(now()) @map("created_at")
-  updatedAt     DateTime      @updatedAt @map("updated_at")
-  post          Post          @relation(fields: [postId], references: [id], onDelete: Cascade)
-  parent        Comment?      @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
-  replies       Comment[]     @relation("CommentReplies")
-  commentLikes  CommentLike[]
+  id           String        @id @default(uuid())
+  postId       String        @map("post_id")
+  authorId     String        @map("author_id")
+  parentId     String?       @map("parent_id")
+  content      String
+  likesCount   Int           @default(0) @map("likes_count")
+  repliesCount Int           @default(0) @map("replies_count")
+  deletedAt    DateTime?     @map("deleted_at")
+  createdAt    DateTime      @default(now()) @map("created_at")
+  updatedAt    DateTime      @updatedAt @map("updated_at")
+  post         Post          @relation(fields: [postId], references: [id], onDelete: Cascade)
+  parent       Comment?      @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  replies      Comment[]     @relation("CommentReplies")
+  commentLikes CommentLike[]
 
   @@index([postId, parentId, createdAt])
   @@index([parentId, createdAt])
@@ -73,7 +73,7 @@ model Comment {
 }
 
 model PostLike {
-  id        String   @id @default(cuid())
+  id        String   @id @default(uuid())
   postId    String   @map("post_id")
   authorId  String   @map("author_id")
   createdAt DateTime @default(now()) @map("created_at")
@@ -84,7 +84,7 @@ model PostLike {
 }
 
 model CommentLike {
-  id        String   @id @default(cuid())
+  id        String   @id @default(uuid())
   commentId String   @map("comment_id")
   authorId  String   @map("author_id")
   createdAt DateTime @default(now()) @map("created_at")
@@ -95,7 +95,7 @@ model CommentLike {
 }
 
 model Bookmark {
-  id              String                   @id @default(cuid())
+  id              String                   @id @default(uuid())
   postId          String                   @map("post_id")
   ownerId         String                   @map("owner_id")
   createdAt       DateTime                 @default(now()) @map("created_at")
@@ -108,7 +108,7 @@ model Bookmark {
 }
 
 model BookmarkCollection {
-  id          String                   @id @default(cuid())
+  id          String                   @id @default(uuid())
   ownerId     String                   @map("owner_id")
   name        String                   @db.VarChar(60)
   description String?                  @db.VarChar(280)
@@ -122,7 +122,7 @@ model BookmarkCollection {
 }
 
 model BookmarkCollectionItem {
-  id           String             @id @default(cuid())
+  id           String             @id @default(uuid())
   collectionId String             @map("collection_id")
   bookmarkId   String             @map("bookmark_id")
   createdAt    DateTime           @default(now()) @map("created_at")
