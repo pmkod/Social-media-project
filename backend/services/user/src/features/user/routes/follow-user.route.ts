@@ -1,7 +1,11 @@
 import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
-import { notificationServiceClient } from "@/core/services/notification-service.client";
+import {
+	NotificationEventTypes,
+	NotificationGroupKeyBuilder,
+	notificationServiceClient,
+} from "@/core/services/notification-service.client";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { requireUserAuthentication } from "@/features/authentication/middlewares/require-user-authentication.middleware";
 import { UserRoutesTag } from "../user.constants";
@@ -92,8 +96,8 @@ const followUserRoute = defineOpenAPIRoute<
 			await notificationServiceClient.createNotification({
 				recipientId: userId,
 				initiatorId: authenticatedUser.id,
-				eventType: "FOLLOW",
-				groupKey: "FOLLOW",
+				eventType: NotificationEventTypes.FOLLOW,
+				groupKey: NotificationGroupKeyBuilder.buildFollow(),
 			});
 		}
 

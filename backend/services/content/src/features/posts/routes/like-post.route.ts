@@ -1,7 +1,11 @@
 import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
-import { notificationServiceClient } from "@/core/services/notification-service.client";
+import {
+	NotificationEventTypes,
+	NotificationGroupKeyBuilder,
+	notificationServiceClient,
+} from "@/core/services/notification-service.client";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { requireUserAuthentication } from "@/features/authentication/middlewares/require-user-authentication.middleware";
 import type { Post } from "@/generated/prisma/client";
@@ -83,9 +87,9 @@ const likePostRoute = defineOpenAPIRoute<typeof routeDef, HonoAuthenticatedEnv>(
 				await notificationServiceClient.createNotification({
 					recipientId: post.authorId,
 					initiatorId: authenticatedUserId,
-					eventType: "POST_LIKE",
+					eventType: NotificationEventTypes.POST_LIKE,
 					targetId: postId,
-					groupKey: `POST_LIKE:${postId}`,
+					groupKey: NotificationGroupKeyBuilder.buildPostLike(postId),
 				});
 			}
 

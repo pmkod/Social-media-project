@@ -1,7 +1,11 @@
 import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
-import { notificationServiceClient } from "@/core/services/notification-service.client";
+import {
+	NotificationEventTypes,
+	NotificationGroupKeyBuilder,
+	notificationServiceClient,
+} from "@/core/services/notification-service.client";
 import { userServiceClient } from "@/core/services/user-service.client";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { requireUserAuthentication } from "@/features/authentication/middlewares/require-user-authentication.middleware";
@@ -115,10 +119,12 @@ const createCommentRoute = defineOpenAPIRoute<
 			return createdComment;
 		});
 
-		const eventType = parentComment ? "COMMENT_REPLY" : "POST_COMMENT";
+		const eventType = parentComment
+			? NotificationEventTypes.COMMENT_REPLY
+			: NotificationEventTypes.POST_COMMENT;
 		const groupKey = parentComment
-			? `COMMENT_REPLY:${parentComment.id}:${postId}`
-			: `POST_COMMENT:${postId}`;
+			? NotificationGroupKeyBuilder.buildCommentReply(parentComment.id, postId)
+			: NotificationGroupKeyBuilder.buildPostComment(postId);
 		await notificationServiceClient.createNotification({
 			recipientId: parentComment?.authorId ?? post.authorId,
 			initiatorId: authenticatedUserId,

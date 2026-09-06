@@ -12,7 +12,7 @@ Types d’événements actuellement supportés :
 - `POST_COMMENT`
 - `COMMENT_REPLY`
 
-Le service évite les doublons avec les identifiants métier de la notification (`recipientId`, `initiatorId`, `eventType`, `targetId` et `groupKey`). `targetId` est polymorphique et nullable : il peut désigner un post, un commentaire ou rester nul pour un `FOLLOW`. Le client utilise `groupKey` pour regrouper les notifications, puis `eventType` et `targetId` pour récupérer les données nécessaires. Le service ignore également les notifications dont le destinataire est le même que l’initiateur (`recipientId === initiatorId`).
+Le service évite les doublons avec les identifiants métier de la notification (`recipientId`, `initiatorId`, `eventType`, `targetId` et `groupKey`). `targetId` est polymorphique et nullable : il peut désigner un post, un commentaire ou rester nul pour un `FOLLOW`. Le client utilise `groupKey` pour regrouper les notifications et récupérer l’identifiant du post concerné pour les liens, puis `eventType` et `targetId` pour récupérer les autres données nécessaires. La construction des clés est centralisée dans `backend/shared/notification-group-key.builder.ts`. Le service ignore également les notifications dont le destinataire est le même que l’initiateur (`recipientId === initiatorId`).
 
 ## Actions qui créent des notifications
 
@@ -20,7 +20,7 @@ Le service évite les doublons avec les identifiants métier de la notification 
 | --- | --- | --- | --- | --- |
 | Suivre un utilisateur | `POST /users/{id}/follow` | Une nouvelle relation de suivi est créée. Aucune notification n’est recréée si le suivi existe déjà. | `FOLLOW`, envoyé à l’utilisateur suivi. L’initiateur est l’utilisateur authentifié. | `recipientId + initiatorId + groupKey` (`targetId` nul) |
 | Aimer un post | `POST /posts/{postId}/likes` | Un nouveau like est effectivement créé. | `POST_LIKE`, envoyé à l’auteur du post. L’initiateur est l’utilisateur qui aime le post. | `targetId` du post + `initiatorId` + `groupKey` |
-| Aimer un commentaire | `POST /comments/{commentId}/likes` | Un nouveau like de commentaire est effectivement créé. | `COMMENT_LIKE`, envoyé à l’auteur du commentaire. L’initiateur est l’utilisateur qui aime le commentaire. | `targetId` du commentaire + `initiatorId` + `groupKey` |
+| Aimer un commentaire | `POST /comments/{commentId}/likes` | Un nouveau like de commentaire est effectivement créé. | `COMMENT_LIKE`, envoyé à l’auteur du commentaire. L’initiateur est l’utilisateur qui aime le commentaire. | `targetId` du commentaire + `initiatorId` + `groupKey` (`COMMENT_LIKE:{commentId}:{postId}`) |
 | Ajouter un commentaire | `POST /comments` | Le commentaire est créé avec succès. | `POST_COMMENT` si le commentaire est directement rattaché au post, envoyé à l’auteur du post. | `targetId` du commentaire + `groupKey` du post |
 | Répondre à un commentaire | `POST /comments` | Le commentaire est créé avec un `parentCommentId`. | `COMMENT_REPLY`, envoyé à l’auteur du commentaire parent. | `targetId` de la réponse + `groupKey` du commentaire parent et du post |
 

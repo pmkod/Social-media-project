@@ -1,11 +1,7 @@
+import type { NotificationEventType } from "../../../../../shared/notification.constants";
+import { NotificationEventTypes } from "../../../../../shared/notification.constants";
+import { NotificationGroupKeyBuilder } from "../../../../../shared/notification-group-key.builder";
 import { Configurations } from "../configurations";
-
-type NotificationEventType =
-	| "FOLLOW"
-	| "POST_LIKE"
-	| "COMMENT_LIKE"
-	| "POST_COMMENT"
-	| "COMMENT_REPLY";
 
 type CreateNotificationInput = {
 	recipientId: string;
@@ -76,4 +72,5 @@ class NotificationServiceClient {
 	}
 }
 
+export { NotificationEventTypes, NotificationGroupKeyBuilder };
 export const notificationServiceClient = new NotificationServiceClient();

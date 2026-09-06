@@ -1,3 +1,4 @@
+import { NotificationEventTypes } from "./notification.constants.ts";
 import type { NotificationGroup, NotificationRecord } from "./notification.ts";
 
 type NotificationGroupAccumulator = NotificationGroup & {
@@ -18,6 +19,31 @@ function compareNotificationRecency(
 
 function getNotificationGroupKey(notification: NotificationRecord): string {
 	return notification.groupKey;
+}
+
+function getNotificationPostId(
+	notification: Pick<NotificationGroup, "eventType" | "groupKey" | "targetId">,
+): string | null {
+	if (notification.eventType === NotificationEventTypes.POST_LIKE) {
+		return notification.targetId;
+	}
+
+	const [eventType, firstId, secondId] = notification.groupKey.split(":");
+	if (eventType !== notification.eventType) return null;
+
+	if (notification.eventType === NotificationEventTypes.POST_COMMENT) {
+		return firstId || null;
+	}
+
+	if (
+		(notification.eventType === NotificationEventTypes.COMMENT_LIKE ||
+			notification.eventType === NotificationEventTypes.COMMENT_REPLY) &&
+		secondId
+	) {
+		return secondId;
+	}
+
+	return null;
 }
 
 function groupNotifications(
@@ -130,4 +156,4 @@ export function formatNotificationCreationDate(
 	});
 }
 
-export { groupNotifications };
+export { getNotificationPostId, groupNotifications };

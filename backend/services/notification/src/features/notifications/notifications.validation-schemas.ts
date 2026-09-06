@@ -1,7 +1,7 @@
 import { z } from "@hono/zod-openapi";
-import { NotificationEventTypes } from "./notifications.constants";
+import { NotificationEventTypesValues } from "./notifications.constants";
 
-const NotificationEventTypeSchema = z.enum(NotificationEventTypes);
+const NotificationEventTypeSchema = z.enum(NotificationEventTypesValues);
 
 const CreateNotificationRequestBody = z.object({
 	recipientId: z.string().min(1),

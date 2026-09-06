@@ -2,6 +2,7 @@ import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
 import { userServiceClient } from "@/core/services/user-service.client";
+import { NotificationGroupKeyBuilder } from "../../../../../../shared/notification-group-key.builder";
 import { NotificationsRoutesTag } from "../notifications.constants";
 
 const routeDef = createRoute({
@@ -30,7 +31,9 @@ const removePostNotificationsRoute = defineOpenAPIRoute({
 		const postNotificationsWhere = {
 			OR: [
 				{ targetId: postId },
-				{ groupKey: `POST_COMMENT:${postId}` },
+				{
+					groupKey: NotificationGroupKeyBuilder.buildPostComment(postId),
+				},
 				{ groupKey: { endsWith: `:${postId}` } },
 			],
 		};

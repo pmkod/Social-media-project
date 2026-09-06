@@ -1,11 +1,14 @@
+import type { NotificationEventType } from "../../../../../shared/notification.constants";
+import {
+	NotificationEventTypes,
+	NotificationEventTypesValues,
+} from "../../../../../shared/notification.constants";
+
 const NotificationsRoutesTag = "Notifications";
 
-const NotificationEventTypes = [
-	"FOLLOW",
-	"POST_LIKE",
-	"COMMENT_LIKE",
-	"POST_COMMENT",
-	"COMMENT_REPLY",
-] as const;
-
-export { NotificationEventTypes, NotificationsRoutesTag };
+export {
+	NotificationEventTypes,
+	NotificationEventTypesValues,
+	NotificationsRoutesTag,
+};
+export type { NotificationEventType };

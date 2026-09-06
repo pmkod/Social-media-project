@@ -2,6 +2,7 @@ import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
 import { userServiceClient } from "@/core/services/user-service.client";
+import { NotificationGroupKeyBuilder } from "../../../../../../shared/notification-group-key.builder";
 import { NotificationsRoutesTag } from "../notifications.constants";
 
 const routeDef = createRoute({
@@ -30,7 +31,12 @@ const removeCommentNotificationsRoute = defineOpenAPIRoute({
 		const commentNotificationsWhere = {
 			OR: [
 				{ targetId: commentId },
-				{ groupKey: { startsWith: `COMMENT_REPLY:${commentId}:` } },
+				{
+					groupKey: {
+						startsWith:
+							NotificationGroupKeyBuilder.buildCommentReplyPrefix(commentId),
+					},
+				},
 			],
 		};
 		const notifications = await prisma.notification.findMany({

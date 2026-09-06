@@ -1,8 +1,6 @@
 import {
 	RiChat1Line,
 	RiHeartFill,
-	RiMessage2Line,
-	RiMessageLine,
 	RiNotificationLine,
 	RiUserAddLine,
 } from "@remixicon/react";
@@ -10,28 +8,38 @@ import { Link } from "@tanstack/react-router";
 import { cn } from "@/core/lib/utils.ts";
 import { UserAvatar } from "@/features/user/common/components/user-avatar.tsx";
 import { UserProfileHoverCard } from "@/features/user/user-profile/user-profile-hover-card.tsx";
+import { NotificationEventTypes } from "../common/notification.constants.ts";
 import type {
 	NotificationEventType,
 	NotificationGroup,
 } from "../common/notification.ts";
-import { formatNotificationCreationDate } from "../common/notification.utils.ts";
+import {
+	formatNotificationCreationDate,
+	getNotificationPostId,
+} from "../common/notification.utils.ts";
 
 const notificationCopy: Record<NotificationEventType, string> = {
-	FOLLOW: "started following you",
-	POST_LIKE: "liked your post",
-	COMMENT_LIKE: "liked your comment",
-	POST_COMMENT: "commented on your post",
-	COMMENT_REPLY: "replied to your comment",
+	[NotificationEventTypes.FOLLOW]: "started following you",
+	[NotificationEventTypes.POST_LIKE]: "liked your post",
+	[NotificationEventTypes.COMMENT_LIKE]: "liked your comment",
+	[NotificationEventTypes.POST_COMMENT]: "commented on your post",
+	[NotificationEventTypes.COMMENT_REPLY]: "replied to your comment",
 };
 
 function NotificationIcon({ eventType }: { eventType: NotificationEventType }) {
-	if (eventType === "POST_LIKE" || eventType === "COMMENT_LIKE") {
+	if (
+		eventType === NotificationEventTypes.POST_LIKE ||
+		eventType === NotificationEventTypes.COMMENT_LIKE
+	) {
 		return <RiHeartFill className="size-5 text-rose-500" />;
 	}
-	if (eventType === "FOLLOW") {
+	if (eventType === NotificationEventTypes.FOLLOW) {
 		return <RiUserAddLine className="size-5 text-blue-500" />;
 	}
-	if (eventType === "POST_COMMENT" || eventType === "COMMENT_REPLY") {
+	if (
+		eventType === NotificationEventTypes.POST_COMMENT ||
+		eventType === NotificationEventTypes.COMMENT_REPLY
+	) {
 		return <RiChat1Line className="size-5 text-blue-500" />;
 	}
 	return <RiNotificationLine className="size-5 text-sky-500" />;
@@ -67,6 +75,7 @@ type NotificationItemProps = {
 };
 
 function NotificationItem({ notification }: NotificationItemProps) {
+	const postId = getNotificationPostId(notification);
 	const content = (
 		<div
 			className={cn(
@@ -108,7 +117,10 @@ function NotificationItem({ notification }: NotificationItemProps) {
 		</div>
 	);
 
-	if (notification.eventType === "FOLLOW" && notification.initiator) {
+	if (
+		notification.eventType === NotificationEventTypes.FOLLOW &&
+		notification.initiator
+	) {
 		return (
 			<div>
 				<Link
@@ -120,10 +132,10 @@ function NotificationItem({ notification }: NotificationItemProps) {
 			</div>
 		);
 	}
-	if (notification.eventType === "POST_LIKE" && notification.targetId) {
+	if (postId) {
 		return (
 			<div>
-				<Link to="/posts/$postId" params={{ postId: notification.targetId }}>
+				<Link to="/posts/$postId" params={{ postId }}>
 					{content}
 				</Link>
 			</div>

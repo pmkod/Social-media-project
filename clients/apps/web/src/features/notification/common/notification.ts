@@ -1,11 +1,5 @@
 import type { User } from "@/features/user/common/user.ts";
-
-type NotificationEventType =
-	| "FOLLOW"
-	| "POST_LIKE"
-	| "COMMENT_LIKE"
-	| "POST_COMMENT"
-	| "COMMENT_REPLY";
+import type { NotificationEventType } from "./notification.constants.ts";
 
 type NotificationRecord = {
 	id: string;
