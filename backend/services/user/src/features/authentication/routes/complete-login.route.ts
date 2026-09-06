@@ -2,6 +2,7 @@ import { createRoute, defineOpenAPIRoute } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
 import { getRequestClientMetadata } from "@/core/functions/request.functions";
+import { sessionServiceClient } from "@/core/services/session-service.client";
 import {
 	AuthenticationRoutesTag,
 	UserVerificationGoals,
@@ -11,7 +12,6 @@ import {
 	AuthenticatedResponseSchema,
 	CompleteLoginValidationSchema,
 } from "../authentication.validation-schemas";
-import { createAuthenticatedResponse } from "../authentication-session.service";
 import { verifyIfUserVerificationCompleted } from "../user-verification.service";
 
 const completeLoginRoute = defineOpenAPIRoute({
@@ -59,9 +59,9 @@ const completeLoginRoute = defineOpenAPIRoute({
 			where: { id: verificationInDb.userId, active: true },
 		});
 
-		const authenticatedResponse = await createAuthenticatedResponse({
-			user,
-			clientMetadata: getRequestClientMetadata(c),
+		const session = await sessionServiceClient.createSession({
+			userId: user.id,
+			...getRequestClientMetadata(c),
 		});
 
 		await prisma.userVerification.update({
@@ -71,7 +71,7 @@ const completeLoginRoute = defineOpenAPIRoute({
 			},
 		});
 
-		return c.json(authenticatedResponse);
+		return c.json({ session });
 	},
 });
 
