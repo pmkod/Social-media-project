@@ -58,7 +58,7 @@ const deleteCollectionRoute = defineOpenAPIRoute<
 			}
 		});
 
-		return c.json({ success: true });
+		return c.json({ message: "Collection deleted successfully" });
 	},
 });
 

@@ -10,7 +10,7 @@ const useDeleteBookmarkCollection = () => {
 		mutationFn: (collectionId: string) =>
 			httpClient
 				.delete(`collections/${collectionId}`)
-				.json<{ success: boolean }>(),
+				.json<{ message: string }>(),
 		onSuccess: () => {
 			queryClient.invalidateQueries({
 				queryKey: bookmarkCollectionsQueryKeys.root,

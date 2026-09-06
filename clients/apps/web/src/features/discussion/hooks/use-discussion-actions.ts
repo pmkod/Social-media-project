@@ -18,7 +18,7 @@ const useDeleteDiscussion = () => {
 		mutationFn: (discussionId: string) =>
 			httpClient
 				.delete(`discussions/${discussionId}`)
-				.json<{ success: boolean }>(),
+				.json<{ message: string }>(),
 		onSuccess: (_, discussionId) => invalidateDiscussion(discussionId),
 	});
 };
@@ -35,7 +35,7 @@ const useLeaveDiscussion = () => {
 		}) =>
 			httpClient
 				.delete(`discussions/${discussionId}/members/${userId}`)
-				.json<{ success: boolean }>(),
+				.json<{ message: string; userId: string }>(),
 		onSuccess: (_, { discussionId }) => invalidateDiscussion(discussionId),
 	});
 };
@@ -52,7 +52,7 @@ const useRemoveDiscussionMember = () => {
 		}) =>
 			httpClient
 				.delete(`discussions/${discussionId}/members/${userId}`)
-				.json<{ success: boolean }>(),
+				.json<{ message: string; userId: string }>(),
 		onSuccess: (_, { discussionId }) => invalidateDiscussion(discussionId),
 	});
 };

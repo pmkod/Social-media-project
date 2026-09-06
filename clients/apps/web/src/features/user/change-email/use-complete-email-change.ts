@@ -8,7 +8,7 @@ const useCompleteEmailChange = () => {
 			const { userVerification } = getUserVerificationDataFromLocalStorage();
 			return httpClient
 				.put("users/me/email", { json: { userVerification } })
-				.json<{ success: boolean; email: string }>();
+				.json<{ message: string; email: string }>();
 		},
 	});
 };

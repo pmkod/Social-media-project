@@ -89,7 +89,12 @@ const removeDiscussionMemberRoute = defineOpenAPIRoute<
 				data: { hasLeft: true, isDeleted: true, isBlocked: false },
 			});
 		});
-		return c.json({ success: true, userId });
+		return c.json({
+			message: isLeaving
+				? "Left discussion successfully"
+				: "Discussion member removed successfully",
+			userId,
+		});
 	},
 });
 

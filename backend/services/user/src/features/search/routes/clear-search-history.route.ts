@@ -29,7 +29,7 @@ const clearSearchHistoryRoute = defineOpenAPIRoute<
 			where: { ownerId: authenticatedUser.id },
 		});
 
-		return c.json({ success: true });
+		return c.json({ message: "Search history cleared successfully" });
 	},
 });
 

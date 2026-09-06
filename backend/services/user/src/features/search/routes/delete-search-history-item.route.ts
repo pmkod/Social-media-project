@@ -31,7 +31,12 @@ const deleteSearchHistoryItemRoute = defineOpenAPIRoute<
 			where: { id: historyId, ownerId: authenticatedUser.id },
 		});
 
-		return c.json({ success: result.count > 0 });
+		return c.json({
+			message:
+				result.count > 0
+					? "Search history item deleted successfully"
+					: "Search history item not found",
+		});
 	},
 });
 

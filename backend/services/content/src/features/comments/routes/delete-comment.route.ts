@@ -49,7 +49,7 @@ const deleteCommentRoute = defineOpenAPIRoute<
 			throw new Error("You are not authorized to delete this comment");
 		}
 		if (comment.deletedAt) {
-			return c.json({ success: true, message: "Comment already deleted" });
+			return c.json({ message: "Comment already deleted" });
 		}
 
 		await prisma.$transaction([
@@ -65,7 +65,7 @@ const deleteCommentRoute = defineOpenAPIRoute<
 		]);
 		await notificationServiceClient.removeNotificationsForComment(comment.id);
 
-		return c.json({ success: true, message: "Comment deleted successfully" });
+		return c.json({ message: "Comment deleted successfully" });
 	},
 });
 

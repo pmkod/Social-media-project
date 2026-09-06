@@ -105,7 +105,7 @@ const likeCommentRoute = defineOpenAPIRoute<
 		});
 
 		return c.json(
-			{ success: true, message: "Comment liked", likesCount },
+			{ message: "Comment liked", likesCount },
 			HttpStatus.CREATED.code,
 		);
 	},

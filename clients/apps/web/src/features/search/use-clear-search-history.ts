@@ -7,7 +7,7 @@ const useClearSearchHistory = () => {
 
 	return useMutation({
 		mutationFn: () =>
-			httpClient.delete("search/history").json<{ success: boolean }>(),
+			httpClient.delete("search/history").json<{ message: string }>(),
 		onSuccess: () => {
 			queryClient.invalidateQueries({
 				queryKey: searchQueryKeys.historyRoot,

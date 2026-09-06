@@ -79,7 +79,7 @@ const resendUserVerificationCodeRoute = defineOpenAPIRoute({
 			content: `Your new validation code is ${newCode}`,
 		});
 
-		return c.json({ success: true });
+		return c.json({ message: "Verification code resent successfully" });
 	},
 });
 

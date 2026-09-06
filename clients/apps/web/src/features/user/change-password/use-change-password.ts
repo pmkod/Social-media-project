@@ -11,7 +11,7 @@ const useChangePassword = () => {
 		mutationFn: (body: ChangePasswordRequest) =>
 			httpClient
 				.put("users/me/password", { json: body })
-				.json<{ success: boolean }>(),
+				.json<{ message: string }>(),
 	});
 };
 

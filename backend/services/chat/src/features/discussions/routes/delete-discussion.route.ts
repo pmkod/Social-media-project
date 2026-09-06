@@ -43,7 +43,7 @@ const deleteDiscussionRoute = defineOpenAPIRoute<
 			},
 			data: { isDeleted: true },
 		});
-		return c.json({ success: true });
+		return c.json({ message: "Discussion deleted successfully" });
 	},
 });
 

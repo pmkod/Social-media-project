@@ -9,7 +9,6 @@ import { postDetailsQueryKey } from "../post-detail/post-detail.query-key.ts";
 import { postListQueryKeys } from "../common/post-list.query-keys.ts";
 
 export type UnlikePostResponse = {
-	success: boolean;
 	message: string;
 	post: Post;
 };

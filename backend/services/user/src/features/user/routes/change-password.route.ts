@@ -63,7 +63,10 @@ const changePasswordRoute = defineOpenAPIRoute<
 			data: { password: passwordHash },
 		});
 
-		return c.json({ success: true }, HttpStatus.OK.code);
+		return c.json(
+			{ message: "Password updated successfully" },
+			HttpStatus.OK.code,
+		);
 	},
 });
 

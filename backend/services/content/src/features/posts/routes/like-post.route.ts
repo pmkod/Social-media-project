@@ -94,7 +94,7 @@ const likePostRoute = defineOpenAPIRoute<typeof routeDef, HonoAuthenticatedEnv>(
 			}
 
 			return c.json(
-				{ success: true, message: "Post liked", post: postToSend },
+				{ message: "Post liked", post: postToSend },
 				HttpStatus.CREATED.code,
 			);
 		},

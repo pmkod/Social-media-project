@@ -83,11 +83,7 @@ const unlikeCommentRoute = defineOpenAPIRoute<
 			select: { likesCount: true },
 		});
 
-		return c.json({
-			success: true,
-			message: "Comment unliked",
-			likesCount,
-		});
+		return c.json({ message: "Comment unliked", likesCount });
 	},
 });
 

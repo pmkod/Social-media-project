@@ -56,7 +56,7 @@ const deletePostRoute = defineOpenAPIRoute<
 		await userServiceClient.adjustPostCount(authenticatedUserId, -1);
 		await notificationServiceClient.removeNotificationsForPost(id);
 
-		return c.json({ success: true, message: "Post deleted successfully" });
+		return c.json({ message: "Post deleted successfully" });
 	},
 });
 

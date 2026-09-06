@@ -82,7 +82,7 @@ const doUserVerificationRoute = defineOpenAPIRoute({
 			data: { verifiedAt: new Date() },
 		});
 
-		return c.json({ success: true });
+		return c.json({ message: "User verified successfully" });
 	},
 });
 

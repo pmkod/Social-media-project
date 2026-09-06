@@ -9,7 +9,7 @@ const useDeleteComment = () => {
 
 	return useMutation({
 		mutationFn: (commentId: string) =>
-			httpClient.delete(`comments/${commentId}`).json<{ success: boolean }>(),
+			httpClient.delete(`comments/${commentId}`).json<{ message: string }>(),
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: postDetailsQueryKey.root });
 			queryClient.invalidateQueries({ queryKey: commentListQueryKeys.root });

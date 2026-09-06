@@ -87,7 +87,10 @@ const changeEmailRoute = defineOpenAPIRoute<
 			data: { goalAchievedAt: new Date() },
 		});
 
-		return c.json({ success: true, email: user.email }, HttpStatus.OK.code);
+		return c.json(
+			{ message: "Email updated successfully", email: user.email },
+			HttpStatus.OK.code,
+		);
 	},
 });
 

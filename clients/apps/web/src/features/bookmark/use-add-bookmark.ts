@@ -17,7 +17,7 @@ type AddBookmarkInput = {
 };
 
 type AddBookmarkResponse = {
-	success: boolean;
+	message: string;
 	post: Pick<Post, "id"> & {
 		isBookmarkedByAuthenticatedUser: boolean;
 	};

@@ -81,7 +81,7 @@ const addBookmarkRoute = defineOpenAPIRoute<
 
 		return c.json(
 			{
-				success: true,
+				message: "Post added to collection",
 				post: {
 					id: post.id,
 					isBookmarkedByAuthenticatedUser: true,

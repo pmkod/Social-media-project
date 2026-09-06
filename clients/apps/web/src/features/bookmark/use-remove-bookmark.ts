@@ -12,7 +12,7 @@ import type { BookmarkCollection } from "./common/bookmark-collection.ts";
 import { bookmarkCollectionsQueryKeys } from "./common/bookmark-collections.query-keys.ts";
 
 type RemoveBookmarkResponse = {
-	success: boolean;
+	message: string;
 	post: Pick<Post, "id"> & {
 		isBookmarkedByAuthenticatedUser: boolean;
 	};

@@ -68,7 +68,7 @@ const removeBookmarkRoute = defineOpenAPIRoute<
 		});
 
 		return c.json({
-			success: true,
+			message: "Post removed from collection",
 			post: {
 				id: postId,
 				isBookmarkedByAuthenticatedUser: isBookmarked,

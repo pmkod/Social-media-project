@@ -31,7 +31,7 @@ const logoutRoute = defineOpenAPIRoute<typeof routeDef, HonoAuthenticatedEnv>({
 			authenticatedUser.sessionId,
 		);
 
-		return c.json({ success: true });
+		return c.json({ message: "Logged out successfully" });
 	},
 });
 export { logoutRoute };

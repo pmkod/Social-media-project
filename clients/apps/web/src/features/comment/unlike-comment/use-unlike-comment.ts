@@ -8,7 +8,6 @@ import type { Comment } from "../common/comment.ts";
 import { commentListQueryKeys } from "../common/comment-list.query-keys.ts";
 
 type UnlikeCommentResponse = {
-	success: boolean;
 	message: string;
 	likesCount: number;
 };

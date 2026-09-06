@@ -9,7 +9,7 @@ const useDeleteSearchHistoryItem = () => {
 		mutationFn: (historyId: string) =>
 			httpClient
 				.delete(`search/history/${historyId}`)
-				.json<{ success: boolean }>(),
+				.json<{ message: string }>(),
 		onSuccess: () => {
 			queryClient.invalidateQueries({
 				queryKey: searchQueryKeys.historyRoot,

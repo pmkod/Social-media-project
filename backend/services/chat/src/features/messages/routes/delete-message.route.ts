@@ -51,7 +51,12 @@ const deleteMessageRoute = defineOpenAPIRoute<
 			});
 		}
 
-		return c.json({ success: true, alreadyDeleted: Boolean(message.deletedAt) });
+		return c.json({
+			message: message.deletedAt
+				? "Message already deleted"
+				: "Message deleted successfully",
+			alreadyDeleted: Boolean(message.deletedAt),
+		});
 	},
 });
 

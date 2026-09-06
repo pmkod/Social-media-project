@@ -79,11 +79,7 @@ const unlikePostRoute = defineOpenAPIRoute<
 			});
 		}
 
-		return c.json({
-			success: true,
-			message: "Post unliked",
-			post: postToSend,
-		});
+		return c.json({ message: "Post unliked", post: postToSend });
 	},
 });
 
