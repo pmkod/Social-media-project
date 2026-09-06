@@ -1,18 +1,17 @@
 import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
+import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
+import { requireUserAuthentication } from "@/features/authentication/middlewares/require-user-authentication.middleware";
 import { SessionsRoutesTag } from "../sessions.constants";
 import { sessionRepository } from "../sessions.repository";
-import {
-	GetActiveSessionsQuery,
-	SessionSchema,
-} from "../sessions.validation-schemas";
+import { SessionSchema } from "../sessions.validation-schemas";
 
 const routeDef = createRoute({
 	method: "get",
 	path: "/sessions/active",
 	summary: "Get all active sessions for a user",
 	tags: [SessionsRoutesTag],
-	request: { query: GetActiveSessionsQuery },
+	middleware: [requireUserAuthentication],
 	responses: {
 		[HttpStatus.OK.code]: {
 			description: "Active sessions",
@@ -25,11 +24,17 @@ const routeDef = createRoute({
 	},
 });
 
-const getAllActiveSessionsRoute = defineOpenAPIRoute({
+const getAllActiveSessionsRoute = defineOpenAPIRoute<
+	typeof routeDef,
+	HonoAuthenticatedEnv
+>({
 	route: routeDef,
 	handler: async (c) => {
-		const { userId } = c.req.valid("query");
-		const sessions = await sessionRepository.getAllActiveSessions(userId);
+		const authenticatedUser = c.get("authenticatedUser");
+		if (!authenticatedUser) throw new Error("Unauthorized");
+		const sessions = await sessionRepository.getAllActiveSessions(
+			authenticatedUser.id,
+		);
 		return c.json({ sessions });
 	},
 });

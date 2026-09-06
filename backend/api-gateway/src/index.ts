@@ -25,7 +25,9 @@ app.use("*", async (c) => {
 		return await sendTo({ c, target: route.target });
 	}
 
-	const { authenticatedUser } = verifyAuthorizationHeader(authorizationHeader);
+	const { authenticatedUser } = await verifyAuthorizationHeader(
+		authorizationHeader,
+	);
 
 	return await sendTo({ c, target: route.target, authenticatedUser });
 });

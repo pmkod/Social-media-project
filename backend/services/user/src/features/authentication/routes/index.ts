@@ -6,7 +6,6 @@ import { doUserVerificationRoute } from "./do-user-verification.route";
 import { resendUserVerificationCodeRoute } from "./resend-user-verification-code.route";
 import { passwordResetRoute } from "./password-reset.route";
 import { newPasswordRoute } from "./new-password.route";
-import { refreshTokenRoute } from "./refresh-token.route";
 import { logoutRoute } from "./logout.route";
 
 const authenticationRoutes = [
@@ -18,7 +17,6 @@ const authenticationRoutes = [
 	resendUserVerificationCodeRoute,
 	passwordResetRoute,
 	newPasswordRoute,
-	refreshTokenRoute,
 	logoutRoute,
 ];
 

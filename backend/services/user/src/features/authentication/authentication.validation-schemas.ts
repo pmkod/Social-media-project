@@ -61,8 +61,11 @@ const NewPasswordValidationSchema = z.object({
 	newPassword: z.string().min(8),
 });
 
-const RefreshTokenValidationSchema = z.object({
-	refreshToken: z.string(),
+const AuthenticatedResponseSchema = z.object({
+	session: z.object({
+		id: z.string().uuid(),
+		token: z.string().min(1),
+	}),
 });
 
 export {
@@ -74,5 +77,5 @@ export {
 	ResendUserVerificationCodeValidationSchema,
 	PasswordResetValidationSchema,
 	NewPasswordValidationSchema,
-	RefreshTokenValidationSchema,
+	AuthenticatedResponseSchema,
 };

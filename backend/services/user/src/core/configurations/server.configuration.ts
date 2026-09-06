@@ -6,6 +6,7 @@ const ServerConfiguration = {
 		"NOTIFICATION_SERVICE_URL",
 		"http://localhost:8004",
 	),
+	sessionServiceUrl: getEnv("SESSION_SERVICE_URL", "http://localhost:8006"),
 };
 
 export { ServerConfiguration };

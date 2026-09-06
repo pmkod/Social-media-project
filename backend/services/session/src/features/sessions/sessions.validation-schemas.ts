@@ -23,10 +23,6 @@ const CreateSessionRequestBody = z.object({
 	userAgent: z.string().trim().min(1).max(1024).nullable().optional(),
 });
 
-const GetActiveSessionsQuery = z.object({
-	userId: UserIdSchema,
-});
-
 const SessionIdParams = z.object({
 	sessionId: SessionIdSchema,
 });
@@ -38,7 +34,6 @@ const VerifySessionRequestBody = z.object({
 
 export {
 	CreateSessionRequestBody,
-	GetActiveSessionsQuery,
 	SessionIdParams,
 	SessionSchema,
 	SessionWithTokenSchema,

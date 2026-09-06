@@ -5,6 +5,7 @@ import { seedUsers } from "./seeders/users.seeder";
 import { seedPosts } from "./seeders/posts.seeder";
 import { seedComments } from "./seeders/comments.seeder";
 import { seedLikes } from "./seeders/likes.seeder";
+import { cleanupApiSessions } from "./lib/api";
 
 const main = async () => {
 	logger.info("Starting data bootstrap...");
@@ -32,6 +33,7 @@ const main = async () => {
 		logger.error(error instanceof Error ? error.message : String(error));
 		process.exitCode = 1;
 	} finally {
+		if (Config.useApi) await cleanupApiSessions();
 		await disconnectDatabases();
 	}
 };

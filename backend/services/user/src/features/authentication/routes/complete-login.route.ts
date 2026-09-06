@@ -1,29 +1,18 @@
-import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
+import { createRoute, defineOpenAPIRoute } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
+import { getRequestClientMetadata } from "@/core/functions/request.functions";
 import {
 	AuthenticationRoutesTag,
 	UserVerificationGoals,
 } from "../authentication.constants";
+import { isUserVerificationExpired } from "../authentication.functions";
 import {
-	generateRefreshTokenString,
-	hashRefreshToken,
-	isUserVerificationExpired,
-} from "../authentication.functions";
-import { CompleteLoginValidationSchema } from "../authentication.validation-schemas";
-import { generateAccessToken } from "../jwt.functions";
+	AuthenticatedResponseSchema,
+	CompleteLoginValidationSchema,
+} from "../authentication.validation-schemas";
+import { createAuthenticatedResponse } from "../authentication-session.service";
 import { verifyIfUserVerificationCompleted } from "../user-verification.service";
-
-const CompleteLoginResponseBody = z.object({
-	accessToken: z.string(),
-	refreshToken: z.string(),
-	user: z.object({
-		id: z.string(),
-		email: z.string(),
-		username: z.string(),
-		fullName: z.string().nullable(),
-	}),
-});
 
 const completeLoginRoute = defineOpenAPIRoute({
 	route: createRoute({
@@ -44,7 +33,7 @@ const completeLoginRoute = defineOpenAPIRoute({
 			[HttpStatus.OK.code]: {
 				description: "Success",
 				content: {
-					"application/json": { schema: CompleteLoginResponseBody },
+					"application/json": { schema: AuthenticatedResponseSchema },
 				},
 			},
 		},
@@ -70,18 +59,9 @@ const completeLoginRoute = defineOpenAPIRoute({
 			where: { id: verificationInDb.userId, active: true },
 		});
 
-		const rawRefreshToken = generateRefreshTokenString();
-		const refreshTokenInDb = await prisma.refreshToken.create({
-			data: {
-				active: true,
-				userId: user.id,
-				token: hashRefreshToken(rawRefreshToken),
-			},
-		});
-
-		const accessToken = generateAccessToken({
-			refreshTokenId: refreshTokenInDb.id,
-			userId: user.id,
+		const authenticatedResponse = await createAuthenticatedResponse({
+			user,
+			clientMetadata: getRequestClientMetadata(c),
 		});
 
 		await prisma.userVerification.update({
@@ -91,16 +71,7 @@ const completeLoginRoute = defineOpenAPIRoute({
 			},
 		});
 
-		return c.json({
-			accessToken,
-			refreshToken: rawRefreshToken,
-			user: {
-				id: user.id,
-				email: user.email,
-				username: user.username,
-				fullName: user.fullName,
-			},
-		});
+		return c.json(authenticatedResponse);
 	},
 });
 

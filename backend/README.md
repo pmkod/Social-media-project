@@ -8,11 +8,11 @@ Ce backend suit une architecture microservices identique à celle du projet Ecom
 - **Framework HTTP & OpenAPI** : Hono + `@hono/zod-openapi` + `@scalar/hono-api-reference`
 - **ORM & DB** : Prisma 7 + `@prisma/adapter-pg` + PostgreSQL
 - **Gateway** : Custom Bun + Hono API Gateway (`backend/gateway`)
-- **Authentification** : Centralisée dans la Gateway. Transmise aux microservices via l'en-tête `X-Authenticated-User-Id`.
+- **Authentification** : Centralisée dans la Gateway. L'identité vérifiée est transmise aux microservices via les en-têtes `X-Authenticated-User-Id` et `X-Authenticated-Session-Id`.
 
 ## Services
 
-- **API Gateway** (`backend/gateway` - Port `8000`) : Routage des requêtes publiques, validation des JWT et proxying.
+- **API Gateway** (`backend/api-gateway` - Port `8000`) : Routage des requêtes publiques, validation centralisée des sessions et proxying.
 - **User Service** (`backend/services/user` - Port `8001`) : Authentification et profil utilisateur.
 - **Content Service** (`backend/services/content` - Port `8002`) : Publications (posts), commentaires, likes de posts et likes de commentaires.
 - **Report Service** (`backend/services/report` - Port `8003`) : Signalements des posts, commentaires et utilisateurs, ainsi que leurs raisons.
@@ -96,8 +96,11 @@ Chaque service propose une interface interactive de documentation :
 | `POST /authentication/resend-user-verification-code` | user | Non |
 | `POST /authentication/password-reset` | user | Non |
 | `POST /authentication/new-password` | user | Non |
-| `POST /authentication/refresh-token` | user | Non |
 | `POST /authentication/logout` | user | Oui |
+| `GET /sessions/active` | session | Oui |
+| `GET /sessions/{sessionId}` | session | Oui |
+| `PATCH /sessions/{sessionId}/disable` | session | Oui |
+| `POST /sessions/logout-others` | session | Oui |
 | `GET /users/me` | user | Oui |
 | `GET /users/{userId}` | user | Non |
 | `PUT /users/me` | user | Oui |

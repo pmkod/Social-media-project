@@ -6,9 +6,10 @@ export type AuthUser = {
 };
 
 export type AuthenticatedResponse = {
-  accessToken: string;
-  refreshToken: string;
-  user: AuthUser;
+	session: {
+		id: string;
+		token: string;
+	};
 };
 
 export type VerificationGoal = 'login' | 'signup' | 'password_reset';

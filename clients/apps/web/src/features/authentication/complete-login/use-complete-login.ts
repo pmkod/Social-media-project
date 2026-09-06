@@ -1,12 +1,8 @@
 import { useMutation } from "@tanstack/react-query";
 import { baseHttpClient } from "@/core/http-clients/http-client.ts";
-import { saveAccessAndRefreshToken } from "@/core/utils/token.utils.ts";
+import { saveSessionCredentials } from "@/core/utils/session.utils.ts";
 import type { AuthenticatedResponse } from "../common/authenticated-response.ts";
 import { getUserVerificationDataFromLocalStorage } from "../common/authentication.utils.ts";
-
-type UseCompleteLoginResponseBody = AuthenticatedResponse & {
-	hasStore: boolean;
-};
 
 const useCompleteLogin = () => {
 	return useMutation({
@@ -15,7 +11,7 @@ const useCompleteLogin = () => {
 			if (!data?.userVerification) {
 				throw new Error("Verification data not found");
 			}
-			const { accessToken, refreshToken, hasStore } = await baseHttpClient
+			const { session } = await baseHttpClient
 				.post("authentication/complete-login", {
 					json: {
 						userVerification: {
@@ -24,9 +20,11 @@ const useCompleteLogin = () => {
 						},
 					},
 				})
-				.json<UseCompleteLoginResponseBody>();
-			saveAccessAndRefreshToken({ accessToken, refreshToken });
-			return { hasStore };
+				.json<AuthenticatedResponse>();
+			saveSessionCredentials({
+				sessionId: session.id,
+				sessionToken: session.token,
+			});
 		},
 	});
 };

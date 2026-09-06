@@ -32,9 +32,14 @@ function AuthenticatedUserDropdown({
 	const profileParams = { username: `@${authenticatedUser.username}` };
 
 	const handleLogout = async () => {
-		await logout.mutateAsync();
-		queryClient.removeQueries({ queryKey: authenticatedUserQueryKey });
-		await navigate({ to: "/" });
+		try {
+			await logout.mutateAsync();
+		} catch {
+			// The local session is still cleared when the backend is unavailable.
+		} finally {
+			queryClient.removeQueries({ queryKey: authenticatedUserQueryKey });
+			await navigate({ to: "/" });
+		}
 	};
 
 	return (

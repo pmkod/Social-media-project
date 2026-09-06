@@ -138,6 +138,28 @@ const disableSession = async (id: string): Promise<Session | null> => {
 	return toSession({ ...storedSession, active: false, logoutAt });
 };
 
+const disableAllOtherSessions = async (
+	userId: string,
+	currentSessionId: string,
+): Promise<number> => {
+	const sessions = await getAllActiveSessions(userId);
+	const otherSessions = sessions.filter(
+		(session) => session.id !== currentSessionId,
+	);
+	if (otherSessions.length === 0) return 0;
+
+	const client = await getRedis();
+	const logoutAt = new Date().toISOString();
+	const transaction = client.multi();
+	for (const session of otherSessions) {
+		transaction.hSet(sessionKey(session.id), { active: "0", logoutAt });
+		transaction.sRem(activeSessionsKey(userId), session.id);
+	}
+	await transaction.exec();
+
+	return otherSessions.length;
+};
+
 const verifySession = async (
 	id: string,
 	token: string,
@@ -156,6 +178,7 @@ const verifySession = async (
 
 const sessionRepository = {
 	createSession,
+	disableAllOtherSessions,
 	disableSession,
 	getAllActiveSessions,
 	getSession,

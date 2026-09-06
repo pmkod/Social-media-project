@@ -8,5 +8,5 @@ export const Route = createFileRoute("/_base/_authentication/new-password")({
 function RouteComponent() {
 	const navigate = useNavigate();
 
-	return <NewPasswordForm onSuccess={() => navigate({ to: "/home" })} />;
+	return <NewPasswordForm onSuccess={() => navigate({ to: "/" })} />;
 }

@@ -14,5 +14,6 @@
 	{ "path": "/report-reasons", "target": "http://localhost:8003" },
 	{ "path": "/notifications", "target": "http://localhost:8004" },
 	{ "path": "/discussions", "target": "http://localhost:8005" },
-	{ "path": "/messages", "target": "http://localhost:8005" }
+	{ "path": "/messages", "target": "http://localhost:8005" },
+	{ "path": "/sessions", "target": "http://localhost:8006" }
 ]

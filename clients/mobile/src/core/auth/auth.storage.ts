@@ -6,28 +6,39 @@ import {
 } from '@/core/storage/secure-storage';
 
 const STORAGE_KEYS = {
-  accessToken: 'chillspace.access-token',
-  refreshToken: 'chillspace.refresh-token',
+  sessionId: 'chillspace.session-id',
+  sessionToken: 'chillspace.session-token',
+  legacyAccessToken: 'chillspace.access-token',
+  legacyRefreshToken: 'chillspace.refresh-token',
   user: 'chillspace.user',
   verification: 'chillspace.user-verification',
 } as const;
 
 const sessionClearedListeners = new Set<() => void>();
 
-export const getAccessToken = () => getStoredValue(STORAGE_KEYS.accessToken);
-export const getRefreshToken = () => getStoredValue(STORAGE_KEYS.refreshToken);
+export const getSessionId = () => getStoredValue(STORAGE_KEYS.sessionId);
+export const getSessionToken = () => getStoredValue(STORAGE_KEYS.sessionToken);
 
-export async function saveTokens(accessToken: string, refreshToken: string) {
+export async function getSessionCredentials() {
+  const [sessionId, sessionToken] = await Promise.all([getSessionId(), getSessionToken()]);
+  return sessionId && sessionToken ? { sessionId, sessionToken } : null;
+}
+
+export async function saveSessionCredentials(sessionId: string, sessionToken: string) {
   await Promise.all([
-    setStoredValue(STORAGE_KEYS.accessToken, accessToken),
-    setStoredValue(STORAGE_KEYS.refreshToken, refreshToken),
+    setStoredValue(STORAGE_KEYS.sessionId, sessionId),
+    setStoredValue(STORAGE_KEYS.sessionToken, sessionToken),
+    deleteStoredValue(STORAGE_KEYS.legacyAccessToken),
+    deleteStoredValue(STORAGE_KEYS.legacyRefreshToken),
   ]);
 }
 
 export async function clearSessionStorage() {
   await Promise.all([
-    deleteStoredValue(STORAGE_KEYS.accessToken),
-    deleteStoredValue(STORAGE_KEYS.refreshToken),
+    deleteStoredValue(STORAGE_KEYS.sessionId),
+    deleteStoredValue(STORAGE_KEYS.sessionToken),
+    deleteStoredValue(STORAGE_KEYS.legacyAccessToken),
+    deleteStoredValue(STORAGE_KEYS.legacyRefreshToken),
     deleteStoredValue(STORAGE_KEYS.user),
   ]);
   sessionClearedListeners.forEach((listener) => listener());

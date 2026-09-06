@@ -4,10 +4,12 @@ import { Configurations } from "./core/configurations";
 import { Environments } from "./core/constants/environment.constants";
 import { getRedis } from "./core/databases";
 import { exceptionHandler } from "./core/exceptions/exception.handler";
+import { setAuthenticatedUser } from "./features/authentication/middlewares/set-authenticated-user.middleware";
 import { sessionsRoutes } from "./features/sessions/routes";
 
 const app = new OpenAPIHono();
 
+app.use("*", setAuthenticatedUser);
 app.openapiRoutes(sessionsRoutes);
 app.onError(exceptionHandler);
 app.get("/health", async (c) => {

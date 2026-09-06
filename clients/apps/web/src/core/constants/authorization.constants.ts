@@ -1,6 +1,6 @@
-const AuthorizationTokenKeys = {
-	accessToken: "accessToken",
-	refreshToken: "refreshToken",
+const SessionStorageKeys = {
+	sessionId: "sessionId",
+	sessionToken: "sessionToken",
 };
 
-export { AuthorizationTokenKeys };
+export { SessionStorageKeys };

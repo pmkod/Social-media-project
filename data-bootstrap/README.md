@@ -37,7 +37,7 @@ cp .env.example .env
 | `CONTENT_DATABASE_URL` | URL PostgreSQL du service content | `postgresql://postgres:postgres@localhost:5432/social_media_content?schema=public` |
 | `USE_API` | Utiliser les endpoints API au lieu de la DB directe | `false` |
 | `GATEWAY_BASE_URL` | URL de l'API Gateway (mode API) | `http://localhost:8000` |
-| `ACCESS_TOKEN_SECRET_KEY` | Secret JWT commun à la gateway et au service user | `super-secret-access-key-social-media-2026` |
+| `SESSION_SERVICE_BASE_URL` | URL interne du Session Service (mode API) | `http://localhost:8006` |
 | `SEED_USER_COUNT` | Nombre d'utilisateurs à créer | `10` |
 | `SEED_POSTS_PER_USER` | Nombre de posts par utilisateur | `3` |
 | `SEED_COMMENTS_PER_POST` | Nombre de commentaires par post (approximatif) | `2` |

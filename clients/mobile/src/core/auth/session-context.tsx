@@ -1,11 +1,12 @@
 import type { AuthenticatedResponse, AuthUser } from '@/core/auth/auth.types';
 import { useQueryClient } from '@tanstack/react-query';
+import { httpClient } from '@/core/http-clients/http-client';
 import {
   clearSessionStorage,
-  getAccessToken,
   getAuthUser,
+  getSessionCredentials,
   saveAuthUser,
-  saveTokens,
+  saveSessionCredentials,
   subscribeToSessionCleared,
 } from '@/core/auth/auth.storage';
 import { createContext, type PropsWithChildren, useContext, useEffect, useMemo, useState } from 'react';
@@ -23,7 +24,7 @@ const SessionContext = createContext<SessionContextValue | null>(null);
 export function SessionProvider({ children }: PropsWithChildren) {
   const queryClient = useQueryClient();
   const [isLoading, setIsLoading] = useState(true);
-  const [accessToken, setAccessToken] = useState<string | null>(null);
+  const [sessionId, setSessionId] = useState<string | null>(null);
   const [user, setUser] = useState<AuthUser | null>(null);
 
   useEffect(() => {
@@ -31,14 +32,14 @@ export function SessionProvider({ children }: PropsWithChildren) {
     const unsubscribe = subscribeToSessionCleared(() => {
       if (!isMounted) return;
       queryClient.clear();
-      setAccessToken(null);
+      setSessionId(null);
       setUser(null);
     });
 
-    Promise.all([getAccessToken(), getAuthUser()])
-      .then(([storedAccessToken, storedUser]) => {
-        if (!isMounted) return;
-        setAccessToken(storedAccessToken);
+    Promise.all([getSessionCredentials(), getAuthUser()])
+      .then(([storedCredentials, storedUser]) => {
+		if (!isMounted) return;
+        setSessionId(storedCredentials?.sessionId ?? null);
         setUser(storedUser);
       })
       .finally(() => {
@@ -53,26 +54,36 @@ export function SessionProvider({ children }: PropsWithChildren) {
 
   const value = useMemo<SessionContextValue>(
     () => ({
-      isAuthenticated: Boolean(accessToken),
+      isAuthenticated: Boolean(sessionId),
       isLoading,
       user,
       completeAuthentication: async (response) => {
         queryClient.clear();
-        await Promise.all([
-          saveTokens(response.accessToken, response.refreshToken),
-          saveAuthUser(response.user),
-        ]);
-        setAccessToken(response.accessToken);
-        setUser(response.user);
+        await saveSessionCredentials(response.session.id, response.session.token);
+        setSessionId(response.session.id);
+
+        try {
+          const { user: authenticatedUser } = await httpClient
+            .get('users/me')
+            .json<{ user: AuthUser }>();
+          await saveAuthUser(authenticatedUser);
+          setUser(authenticatedUser);
+        } catch {
+          setUser(null);
+        }
       },
       signOut: async () => {
-        await clearSessionStorage();
+        try {
+          await httpClient.post('authentication/logout');
+        } finally {
+          await clearSessionStorage();
+        }
         queryClient.clear();
-        setAccessToken(null);
+        setSessionId(null);
         setUser(null);
       },
     }),
-    [accessToken, isLoading, queryClient, user]
+    [sessionId, isLoading, queryClient, user]
   );
 
   return <SessionContext.Provider value={value}>{children}</SessionContext.Provider>;

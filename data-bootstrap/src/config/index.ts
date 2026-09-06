@@ -29,8 +29,7 @@ type ConfigType = {
   contentDatabaseUrl: string;
   useApi: boolean;
   gatewayBaseUrl: string;
-  accessTokenSecretKey: string;
-  accessTokenExpirationSec: number;
+  sessionServiceBaseUrl: string;
   seedUserCount: number;
   seedPostsPerUser: number;
   seedCommentsPerPost: number;
@@ -46,8 +45,7 @@ const Config: ConfigType = {
 
   useApi: getEnvBoolean("USE_API", false),
   gatewayBaseUrl: getEnv("GATEWAY_BASE_URL", "http://localhost:8000"),
-  accessTokenSecretKey: getEnv("ACCESS_TOKEN_SECRET_KEY", "super-secret-access-key-social-media-2026"),
-  accessTokenExpirationSec: getEnvNumber("ACCESS_TOKEN_EXPIRATION_SEC", 900),
+  sessionServiceBaseUrl: getEnv("SESSION_SERVICE_BASE_URL", "http://localhost:8006"),
 
   seedUserCount: getEnvNumber("SEED_USER_COUNT", 10),
   seedPostsPerUser: getEnvNumber("SEED_POSTS_PER_USER", 3),

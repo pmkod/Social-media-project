@@ -1,6 +1,8 @@
 type AuthenticatedResponse = {
-	accessToken: string;
-	refreshToken: string;
+	session: {
+		id: string;
+		token: string;
+	};
 };
 
 export type { AuthenticatedResponse };

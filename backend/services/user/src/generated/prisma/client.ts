@@ -67,11 +67,6 @@ export type Follow = Prisma.FollowModel
  */
 export type Block = Prisma.BlockModel
 /**
- * Model RefreshToken
- * 
- */
-export type RefreshToken = Prisma.RefreshTokenModel
-/**
  * Model UserVerification
  * 
  */

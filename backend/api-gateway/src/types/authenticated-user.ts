@@ -1,6 +1,6 @@
 type AuthenticatedUser = {
 	id: string;
-	refreshTokenId?: string;
+	sessionId: string;
 };
 
 export type { AuthenticatedUser };

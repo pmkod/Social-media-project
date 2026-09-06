@@ -1,15 +1,15 @@
 import { useQuery } from "@tanstack/react-query";
 import { httpClient } from "@/core/http-clients/http-client.ts";
-import { getAccessToken } from "@/core/utils/token.utils.ts";
-import type { UseAuthenticatedUserQueryData } from "./types/use-authenticated-user-query-data.ts";
+import { getSessionCredentials } from "@/core/utils/session.utils.ts";
 import { authenticatedUserQueryKey } from "./authenticated-user.query-key.ts";
+import type { UseAuthenticatedUserQueryData } from "./types/use-authenticated-user-query-data.ts";
 
 const useAuthenticatedUser = () => {
 	return useQuery({
 		queryKey: authenticatedUserQueryKey,
 		queryFn: () => {
-			const accessToken = getAccessToken();
-			if (!accessToken) {
+			const sessionCredentials = getSessionCredentials();
+			if (!sessionCredentials) {
 				throw new Error();
 			}
 			return httpClient.get("users/me").json<UseAuthenticatedUserQueryData>();
@@ -18,4 +18,4 @@ const useAuthenticatedUser = () => {
 	});
 };
 
-export { useAuthenticatedUser, authenticatedUserQueryKey };
+export { authenticatedUserQueryKey, useAuthenticatedUser };
