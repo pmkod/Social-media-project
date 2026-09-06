@@ -1,7 +1,7 @@
 import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
-import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
+import type { HonoEnv } from "@/core/types/hono-env";
 import type { Prisma } from "@/generated/prisma/client";
 import { UserRoutesTag } from "../user.constants";
 import { ProfileMediaFileResponseBody } from "../user.validation-schemas";
@@ -56,7 +56,7 @@ const routeDef = createRoute({
 
 const searchUsersRoute = defineOpenAPIRoute<
 	typeof routeDef,
-	HonoAuthenticatedEnv
+	HonoEnv
 >({
 	route: routeDef,
 	handler: async (c) => {

@@ -65,7 +65,6 @@ const getSearchHistoryRoute = defineOpenAPIRoute<
 	route: routeDef,
 	handler: async (c) => {
 		const authenticatedUser = c.get("authenticatedUser");
-		if (!authenticatedUser) throw new Error("Unauthorized");
 
 		const query = c.req.valid("query");
 		const limit = Math.min(

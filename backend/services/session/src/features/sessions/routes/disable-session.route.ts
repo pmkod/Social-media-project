@@ -37,7 +37,6 @@ const disableSessionRoute = defineOpenAPIRoute<
 	route: routeDef,
 	handler: async (c) => {
 		const authenticatedUser = c.get("authenticatedUser");
-		if (!authenticatedUser) throw new Error("Unauthorized");
 		const { sessionId } = c.req.valid("param");
 		const existingSession = await sessionRepository.getSession(sessionId);
 		if (!existingSession || existingSession.userId !== authenticatedUser.id) {

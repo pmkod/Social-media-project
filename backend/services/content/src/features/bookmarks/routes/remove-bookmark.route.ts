@@ -26,8 +26,7 @@ const removeBookmarkRoute = defineOpenAPIRoute<
 >({
 	route: routeDef,
 	handler: async (c) => {
-		const ownerId = c.get("authenticatedUser")?.id;
-		if (!ownerId) throw new Error("Unauthorized");
+		const ownerId = c.get("authenticatedUser").id;
 		const { postId } = c.req.valid("param");
 		const { bookmarkCollectionId } = c.req.valid("query");
 

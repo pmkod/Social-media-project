@@ -1,6 +1,6 @@
 type HonoAuthenticatedEnv = {
 	Variables: {
-		authenticatedUser?: {
+		authenticatedUser: {
 			id: string;
 		};
 	};

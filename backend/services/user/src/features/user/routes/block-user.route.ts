@@ -32,7 +32,6 @@ const blockUserRoute = defineOpenAPIRoute<
 		const { id: userId } = c.req.valid("param");
 
 		const authenticatedUser = c.get("authenticatedUser");
-		if (!authenticatedUser) throw new Error("Unauthorized");
 
 		if (userId === authenticatedUser.id) {
 			throw Error("You cannot block yourself");

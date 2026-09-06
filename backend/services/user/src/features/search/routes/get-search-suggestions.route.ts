@@ -1,6 +1,6 @@
 import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
-import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
+import type { HonoEnv } from "@/core/types/hono-env";
 import { SearchRoutesTag } from "../search.constants";
 
 const routeDef = createRoute({
@@ -25,7 +25,7 @@ const routeDef = createRoute({
 
 const getSearchSuggestionsRoute = defineOpenAPIRoute<
 	typeof routeDef,
-	HonoAuthenticatedEnv
+	HonoEnv
 >({
 	route: routeDef,
 	handler: (c) => c.json({ suggestions: [] }),

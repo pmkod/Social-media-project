@@ -1,8 +1,8 @@
 import type { Context, Next } from "hono";
-import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
+import type { HonoEnv } from "@/core/types/hono-env";
 
 const requireUserAuthentication = async (
-	c: Context<HonoAuthenticatedEnv>,
+	c: Context<HonoEnv>,
 	next: Next,
 ) => {
 	const authenticatedUser = c.get("authenticatedUser");

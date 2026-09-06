@@ -55,7 +55,6 @@ export type UserMinAggregateOutputType = {
   followersCount: number | null
   followingCount: number | null
   unseenNotificationsCount: number | null
-  emailVerified: boolean | null
   active: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -76,7 +75,6 @@ export type UserMaxAggregateOutputType = {
   followersCount: number | null
   followingCount: number | null
   unseenNotificationsCount: number | null
-  emailVerified: boolean | null
   active: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -97,7 +95,6 @@ export type UserCountAggregateOutputType = {
   followersCount: number
   followingCount: number
   unseenNotificationsCount: number
-  emailVerified: number
   active: number
   createdAt: number
   updatedAt: number
@@ -134,7 +131,6 @@ export type UserMinAggregateInputType = {
   followersCount?: true
   followingCount?: true
   unseenNotificationsCount?: true
-  emailVerified?: true
   active?: true
   createdAt?: true
   updatedAt?: true
@@ -155,7 +151,6 @@ export type UserMaxAggregateInputType = {
   followersCount?: true
   followingCount?: true
   unseenNotificationsCount?: true
-  emailVerified?: true
   active?: true
   createdAt?: true
   updatedAt?: true
@@ -176,7 +171,6 @@ export type UserCountAggregateInputType = {
   followersCount?: true
   followingCount?: true
   unseenNotificationsCount?: true
-  emailVerified?: true
   active?: true
   createdAt?: true
   updatedAt?: true
@@ -284,7 +278,6 @@ export type UserGroupByOutputType = {
   followersCount: number
   followingCount: number
   unseenNotificationsCount: number
-  emailVerified: boolean
   active: boolean
   createdAt: Date
   updatedAt: Date
@@ -328,7 +321,6 @@ export type UserWhereInput = {
   followersCount?: Prisma.IntFilter<"User"> | number
   followingCount?: Prisma.IntFilter<"User"> | number
   unseenNotificationsCount?: Prisma.IntFilter<"User"> | number
-  emailVerified?: Prisma.BoolFilter<"User"> | boolean
   active?: Prisma.BoolFilter<"User"> | boolean
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
@@ -360,7 +352,6 @@ export type UserOrderByWithRelationInput = {
   followersCount?: Prisma.SortOrder
   followingCount?: Prisma.SortOrder
   unseenNotificationsCount?: Prisma.SortOrder
-  emailVerified?: Prisma.SortOrder
   active?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -395,7 +386,6 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   followersCount?: Prisma.IntFilter<"User"> | number
   followingCount?: Prisma.IntFilter<"User"> | number
   unseenNotificationsCount?: Prisma.IntFilter<"User"> | number
-  emailVerified?: Prisma.BoolFilter<"User"> | boolean
   active?: Prisma.BoolFilter<"User"> | boolean
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
@@ -427,7 +417,6 @@ export type UserOrderByWithAggregationInput = {
   followersCount?: Prisma.SortOrder
   followingCount?: Prisma.SortOrder
   unseenNotificationsCount?: Prisma.SortOrder
-  emailVerified?: Prisma.SortOrder
   active?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -456,7 +445,6 @@ export type UserScalarWhereWithAggregatesInput = {
   followersCount?: Prisma.IntWithAggregatesFilter<"User"> | number
   followingCount?: Prisma.IntWithAggregatesFilter<"User"> | number
   unseenNotificationsCount?: Prisma.IntWithAggregatesFilter<"User"> | number
-  emailVerified?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
   active?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
@@ -473,7 +461,6 @@ export type UserCreateInput = {
   followersCount?: number
   followingCount?: number
   unseenNotificationsCount?: number
-  emailVerified?: boolean
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -505,7 +492,6 @@ export type UserUncheckedCreateInput = {
   followersCount?: number
   followingCount?: number
   unseenNotificationsCount?: number
-  emailVerified?: boolean
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -529,7 +515,6 @@ export type UserUpdateInput = {
   followersCount?: Prisma.IntFieldUpdateOperationsInput | number
   followingCount?: Prisma.IntFieldUpdateOperationsInput | number
   unseenNotificationsCount?: Prisma.IntFieldUpdateOperationsInput | number
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -561,7 +546,6 @@ export type UserUncheckedUpdateInput = {
   followersCount?: Prisma.IntFieldUpdateOperationsInput | number
   followingCount?: Prisma.IntFieldUpdateOperationsInput | number
   unseenNotificationsCount?: Prisma.IntFieldUpdateOperationsInput | number
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -589,7 +573,6 @@ export type UserCreateManyInput = {
   followersCount?: number
   followingCount?: number
   unseenNotificationsCount?: number
-  emailVerified?: boolean
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -606,7 +589,6 @@ export type UserUpdateManyMutationInput = {
   followersCount?: Prisma.IntFieldUpdateOperationsInput | number
   followingCount?: Prisma.IntFieldUpdateOperationsInput | number
   unseenNotificationsCount?: Prisma.IntFieldUpdateOperationsInput | number
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -627,7 +609,6 @@ export type UserUncheckedUpdateManyInput = {
   followersCount?: Prisma.IntFieldUpdateOperationsInput | number
   followingCount?: Prisma.IntFieldUpdateOperationsInput | number
   unseenNotificationsCount?: Prisma.IntFieldUpdateOperationsInput | number
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -648,7 +629,6 @@ export type UserCountOrderByAggregateInput = {
   followersCount?: Prisma.SortOrder
   followingCount?: Prisma.SortOrder
   unseenNotificationsCount?: Prisma.SortOrder
-  emailVerified?: Prisma.SortOrder
   active?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -676,7 +656,6 @@ export type UserMaxOrderByAggregateInput = {
   followersCount?: Prisma.SortOrder
   followingCount?: Prisma.SortOrder
   unseenNotificationsCount?: Prisma.SortOrder
-  emailVerified?: Prisma.SortOrder
   active?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -697,7 +676,6 @@ export type UserMinOrderByAggregateInput = {
   followersCount?: Prisma.SortOrder
   followingCount?: Prisma.SortOrder
   unseenNotificationsCount?: Prisma.SortOrder
-  emailVerified?: Prisma.SortOrder
   active?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -985,7 +963,6 @@ export type UserCreateWithoutOwnedSearchHistoryInput = {
   followersCount?: number
   followingCount?: number
   unseenNotificationsCount?: number
-  emailVerified?: boolean
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1016,7 +993,6 @@ export type UserUncheckedCreateWithoutOwnedSearchHistoryInput = {
   followersCount?: number
   followingCount?: number
   unseenNotificationsCount?: number
-  emailVerified?: boolean
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1044,7 +1020,6 @@ export type UserCreateWithoutSearchHistoryAppearancesInput = {
   followersCount?: number
   followingCount?: number
   unseenNotificationsCount?: number
-  emailVerified?: boolean
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1075,7 +1050,6 @@ export type UserUncheckedCreateWithoutSearchHistoryAppearancesInput = {
   followersCount?: number
   followingCount?: number
   unseenNotificationsCount?: number
-  emailVerified?: boolean
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1114,7 +1088,6 @@ export type UserUpdateWithoutOwnedSearchHistoryInput = {
   followersCount?: Prisma.IntFieldUpdateOperationsInput | number
   followingCount?: Prisma.IntFieldUpdateOperationsInput | number
   unseenNotificationsCount?: Prisma.IntFieldUpdateOperationsInput | number
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1145,7 +1118,6 @@ export type UserUncheckedUpdateWithoutOwnedSearchHistoryInput = {
   followersCount?: Prisma.IntFieldUpdateOperationsInput | number
   followingCount?: Prisma.IntFieldUpdateOperationsInput | number
   unseenNotificationsCount?: Prisma.IntFieldUpdateOperationsInput | number
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1179,7 +1151,6 @@ export type UserUpdateWithoutSearchHistoryAppearancesInput = {
   followersCount?: Prisma.IntFieldUpdateOperationsInput | number
   followingCount?: Prisma.IntFieldUpdateOperationsInput | number
   unseenNotificationsCount?: Prisma.IntFieldUpdateOperationsInput | number
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1210,7 +1181,6 @@ export type UserUncheckedUpdateWithoutSearchHistoryAppearancesInput = {
   followersCount?: Prisma.IntFieldUpdateOperationsInput | number
   followingCount?: Prisma.IntFieldUpdateOperationsInput | number
   unseenNotificationsCount?: Prisma.IntFieldUpdateOperationsInput | number
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1233,7 +1203,6 @@ export type UserCreateWithoutLowQualityProfilePictureFileInput = {
   followersCount?: number
   followingCount?: number
   unseenNotificationsCount?: number
-  emailVerified?: boolean
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1263,7 +1232,6 @@ export type UserUncheckedCreateWithoutLowQualityProfilePictureFileInput = {
   followersCount?: number
   followingCount?: number
   unseenNotificationsCount?: number
-  emailVerified?: boolean
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1292,7 +1260,6 @@ export type UserCreateWithoutBestQualityProfilePictureFileInput = {
   followersCount?: number
   followingCount?: number
   unseenNotificationsCount?: number
-  emailVerified?: boolean
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1322,7 +1289,6 @@ export type UserUncheckedCreateWithoutBestQualityProfilePictureFileInput = {
   followersCount?: number
   followingCount?: number
   unseenNotificationsCount?: number
-  emailVerified?: boolean
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1351,7 +1317,6 @@ export type UserCreateWithoutLowQualityCoverPictureFileInput = {
   followersCount?: number
   followingCount?: number
   unseenNotificationsCount?: number
-  emailVerified?: boolean
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1381,7 +1346,6 @@ export type UserUncheckedCreateWithoutLowQualityCoverPictureFileInput = {
   followersCount?: number
   followingCount?: number
   unseenNotificationsCount?: number
-  emailVerified?: boolean
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1410,7 +1374,6 @@ export type UserCreateWithoutBestQualityCoverPictureFileInput = {
   followersCount?: number
   followingCount?: number
   unseenNotificationsCount?: number
-  emailVerified?: boolean
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1440,7 +1403,6 @@ export type UserUncheckedCreateWithoutBestQualityCoverPictureFileInput = {
   followersCount?: number
   followingCount?: number
   unseenNotificationsCount?: number
-  emailVerified?: boolean
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1480,7 +1442,6 @@ export type UserUpdateWithoutLowQualityProfilePictureFileInput = {
   followersCount?: Prisma.IntFieldUpdateOperationsInput | number
   followingCount?: Prisma.IntFieldUpdateOperationsInput | number
   unseenNotificationsCount?: Prisma.IntFieldUpdateOperationsInput | number
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1510,7 +1471,6 @@ export type UserUncheckedUpdateWithoutLowQualityProfilePictureFileInput = {
   followersCount?: Prisma.IntFieldUpdateOperationsInput | number
   followingCount?: Prisma.IntFieldUpdateOperationsInput | number
   unseenNotificationsCount?: Prisma.IntFieldUpdateOperationsInput | number
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1545,7 +1505,6 @@ export type UserUpdateWithoutBestQualityProfilePictureFileInput = {
   followersCount?: Prisma.IntFieldUpdateOperationsInput | number
   followingCount?: Prisma.IntFieldUpdateOperationsInput | number
   unseenNotificationsCount?: Prisma.IntFieldUpdateOperationsInput | number
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1575,7 +1534,6 @@ export type UserUncheckedUpdateWithoutBestQualityProfilePictureFileInput = {
   followersCount?: Prisma.IntFieldUpdateOperationsInput | number
   followingCount?: Prisma.IntFieldUpdateOperationsInput | number
   unseenNotificationsCount?: Prisma.IntFieldUpdateOperationsInput | number
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1610,7 +1568,6 @@ export type UserUpdateWithoutLowQualityCoverPictureFileInput = {
   followersCount?: Prisma.IntFieldUpdateOperationsInput | number
   followingCount?: Prisma.IntFieldUpdateOperationsInput | number
   unseenNotificationsCount?: Prisma.IntFieldUpdateOperationsInput | number
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1640,7 +1597,6 @@ export type UserUncheckedUpdateWithoutLowQualityCoverPictureFileInput = {
   followersCount?: Prisma.IntFieldUpdateOperationsInput | number
   followingCount?: Prisma.IntFieldUpdateOperationsInput | number
   unseenNotificationsCount?: Prisma.IntFieldUpdateOperationsInput | number
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1675,7 +1631,6 @@ export type UserUpdateWithoutBestQualityCoverPictureFileInput = {
   followersCount?: Prisma.IntFieldUpdateOperationsInput | number
   followingCount?: Prisma.IntFieldUpdateOperationsInput | number
   unseenNotificationsCount?: Prisma.IntFieldUpdateOperationsInput | number
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1705,7 +1660,6 @@ export type UserUncheckedUpdateWithoutBestQualityCoverPictureFileInput = {
   followersCount?: Prisma.IntFieldUpdateOperationsInput | number
   followingCount?: Prisma.IntFieldUpdateOperationsInput | number
   unseenNotificationsCount?: Prisma.IntFieldUpdateOperationsInput | number
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1729,7 +1683,6 @@ export type UserCreateWithoutFollowingInput = {
   followersCount?: number
   followingCount?: number
   unseenNotificationsCount?: number
-  emailVerified?: boolean
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1760,7 +1713,6 @@ export type UserUncheckedCreateWithoutFollowingInput = {
   followersCount?: number
   followingCount?: number
   unseenNotificationsCount?: number
-  emailVerified?: boolean
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1788,7 +1740,6 @@ export type UserCreateWithoutFollowersInput = {
   followersCount?: number
   followingCount?: number
   unseenNotificationsCount?: number
-  emailVerified?: boolean
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1819,7 +1770,6 @@ export type UserUncheckedCreateWithoutFollowersInput = {
   followersCount?: number
   followingCount?: number
   unseenNotificationsCount?: number
-  emailVerified?: boolean
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1858,7 +1808,6 @@ export type UserUpdateWithoutFollowingInput = {
   followersCount?: Prisma.IntFieldUpdateOperationsInput | number
   followingCount?: Prisma.IntFieldUpdateOperationsInput | number
   unseenNotificationsCount?: Prisma.IntFieldUpdateOperationsInput | number
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1889,7 +1838,6 @@ export type UserUncheckedUpdateWithoutFollowingInput = {
   followersCount?: Prisma.IntFieldUpdateOperationsInput | number
   followingCount?: Prisma.IntFieldUpdateOperationsInput | number
   unseenNotificationsCount?: Prisma.IntFieldUpdateOperationsInput | number
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1923,7 +1871,6 @@ export type UserUpdateWithoutFollowersInput = {
   followersCount?: Prisma.IntFieldUpdateOperationsInput | number
   followingCount?: Prisma.IntFieldUpdateOperationsInput | number
   unseenNotificationsCount?: Prisma.IntFieldUpdateOperationsInput | number
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1954,7 +1901,6 @@ export type UserUncheckedUpdateWithoutFollowersInput = {
   followersCount?: Prisma.IntFieldUpdateOperationsInput | number
   followingCount?: Prisma.IntFieldUpdateOperationsInput | number
   unseenNotificationsCount?: Prisma.IntFieldUpdateOperationsInput | number
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1977,7 +1923,6 @@ export type UserCreateWithoutBlockedUsersInput = {
   followersCount?: number
   followingCount?: number
   unseenNotificationsCount?: number
-  emailVerified?: boolean
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -2008,7 +1953,6 @@ export type UserUncheckedCreateWithoutBlockedUsersInput = {
   followersCount?: number
   followingCount?: number
   unseenNotificationsCount?: number
-  emailVerified?: boolean
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -2036,7 +1980,6 @@ export type UserCreateWithoutBlockedByUsersInput = {
   followersCount?: number
   followingCount?: number
   unseenNotificationsCount?: number
-  emailVerified?: boolean
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -2067,7 +2010,6 @@ export type UserUncheckedCreateWithoutBlockedByUsersInput = {
   followersCount?: number
   followingCount?: number
   unseenNotificationsCount?: number
-  emailVerified?: boolean
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -2106,7 +2048,6 @@ export type UserUpdateWithoutBlockedUsersInput = {
   followersCount?: Prisma.IntFieldUpdateOperationsInput | number
   followingCount?: Prisma.IntFieldUpdateOperationsInput | number
   unseenNotificationsCount?: Prisma.IntFieldUpdateOperationsInput | number
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2137,7 +2078,6 @@ export type UserUncheckedUpdateWithoutBlockedUsersInput = {
   followersCount?: Prisma.IntFieldUpdateOperationsInput | number
   followingCount?: Prisma.IntFieldUpdateOperationsInput | number
   unseenNotificationsCount?: Prisma.IntFieldUpdateOperationsInput | number
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2171,7 +2111,6 @@ export type UserUpdateWithoutBlockedByUsersInput = {
   followersCount?: Prisma.IntFieldUpdateOperationsInput | number
   followingCount?: Prisma.IntFieldUpdateOperationsInput | number
   unseenNotificationsCount?: Prisma.IntFieldUpdateOperationsInput | number
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2202,7 +2141,6 @@ export type UserUncheckedUpdateWithoutBlockedByUsersInput = {
   followersCount?: Prisma.IntFieldUpdateOperationsInput | number
   followingCount?: Prisma.IntFieldUpdateOperationsInput | number
   unseenNotificationsCount?: Prisma.IntFieldUpdateOperationsInput | number
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2225,7 +2163,6 @@ export type UserCreateWithoutUserVerificationsInput = {
   followersCount?: number
   followingCount?: number
   unseenNotificationsCount?: number
-  emailVerified?: boolean
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -2256,7 +2193,6 @@ export type UserUncheckedCreateWithoutUserVerificationsInput = {
   followersCount?: number
   followingCount?: number
   unseenNotificationsCount?: number
-  emailVerified?: boolean
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -2295,7 +2231,6 @@ export type UserUpdateWithoutUserVerificationsInput = {
   followersCount?: Prisma.IntFieldUpdateOperationsInput | number
   followingCount?: Prisma.IntFieldUpdateOperationsInput | number
   unseenNotificationsCount?: Prisma.IntFieldUpdateOperationsInput | number
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2326,7 +2261,6 @@ export type UserUncheckedUpdateWithoutUserVerificationsInput = {
   followersCount?: Prisma.IntFieldUpdateOperationsInput | number
   followingCount?: Prisma.IntFieldUpdateOperationsInput | number
   unseenNotificationsCount?: Prisma.IntFieldUpdateOperationsInput | number
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2438,7 +2372,6 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   followersCount?: boolean
   followingCount?: boolean
   unseenNotificationsCount?: boolean
-  emailVerified?: boolean
   active?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -2471,7 +2404,6 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   followersCount?: boolean
   followingCount?: boolean
   unseenNotificationsCount?: boolean
-  emailVerified?: boolean
   active?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -2496,7 +2428,6 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   followersCount?: boolean
   followingCount?: boolean
   unseenNotificationsCount?: boolean
-  emailVerified?: boolean
   active?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -2521,13 +2452,12 @@ export type UserSelectScalar = {
   followersCount?: boolean
   followingCount?: boolean
   unseenNotificationsCount?: boolean
-  emailVerified?: boolean
   active?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "username" | "password" | "fullName" | "bio" | "lowQualityProfilePictureFileId" | "bestQualityProfilePictureFileId" | "lowQualityCoverPictureFileId" | "bestQualityCoverPictureFileId" | "postCount" | "followersCount" | "followingCount" | "unseenNotificationsCount" | "emailVerified" | "active" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "username" | "password" | "fullName" | "bio" | "lowQualityProfilePictureFileId" | "bestQualityProfilePictureFileId" | "lowQualityCoverPictureFileId" | "bestQualityCoverPictureFileId" | "postCount" | "followersCount" | "followingCount" | "unseenNotificationsCount" | "active" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   lowQualityProfilePictureFile?: boolean | Prisma.User$lowQualityProfilePictureFileArgs<ExtArgs>
   bestQualityProfilePictureFile?: boolean | Prisma.User$bestQualityProfilePictureFileArgs<ExtArgs>
@@ -2585,7 +2515,6 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     followersCount: number
     followingCount: number
     unseenNotificationsCount: number
-    emailVerified: boolean
     active: boolean
     createdAt: Date
     updatedAt: Date
@@ -3037,7 +2966,6 @@ export interface UserFieldRefs {
   readonly followersCount: Prisma.FieldRef<"User", 'Int'>
   readonly followingCount: Prisma.FieldRef<"User", 'Int'>
   readonly unseenNotificationsCount: Prisma.FieldRef<"User", 'Int'>
-  readonly emailVerified: Prisma.FieldRef<"User", 'Boolean'>
   readonly active: Prisma.FieldRef<"User", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>

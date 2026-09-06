@@ -66,7 +66,6 @@ const loginRoute = defineOpenAPIRoute({
 		const userVerification = await prisma.userVerification.create({
 			data: {
 				email: user.email,
-				username: user.username,
 				code: codeHash,
 				token,
 				numberOfFailedAttempts: 0,

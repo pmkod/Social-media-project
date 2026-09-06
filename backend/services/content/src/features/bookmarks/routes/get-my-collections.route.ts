@@ -32,7 +32,6 @@ const getMyCollectionsRoute = defineOpenAPIRoute<
 	route: routeDef,
 	handler: async (c) => {
 		const authenticatedUser = c.get("authenticatedUser");
-		if (!authenticatedUser?.id) throw new Error("Unauthorized");
 		const query = c.req.valid("query");
 		const searchQuery = query.q?.trim();
 		const limit = Math.min(

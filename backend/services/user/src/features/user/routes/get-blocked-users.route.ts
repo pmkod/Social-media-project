@@ -31,7 +31,6 @@ const getBlockedUsersRoute = defineOpenAPIRoute<
 	route: routeDef,
 	handler: async (c) => {
 		const authenticatedUser = c.get("authenticatedUser");
-		if (!authenticatedUser) throw new Error("Unauthorized");
 		const query = c.req.valid("query");
 		const limit = Math.min(
 			Math.max(Number.parseInt(query.limit, 10) || 20, 1),

@@ -23,8 +23,7 @@ const markNotificationsSeenRoute = defineOpenAPIRoute<
 >({
 	route: routeDef,
 	handler: async (c) => {
-		const authenticatedUserId = c.get("authenticatedUser")?.id;
-		if (!authenticatedUserId) throw new Error("Unauthorized");
+		const authenticatedUserId = c.get("authenticatedUser").id;
 
 		const updated = await prisma.notification.updateMany({
 			where: { recipientId: authenticatedUserId, isSeen: false },

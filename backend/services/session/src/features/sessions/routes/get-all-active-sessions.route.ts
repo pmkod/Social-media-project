@@ -31,7 +31,6 @@ const getAllActiveSessionsRoute = defineOpenAPIRoute<
 	route: routeDef,
 	handler: async (c) => {
 		const authenticatedUser = c.get("authenticatedUser");
-		if (!authenticatedUser) throw new Error("Unauthorized");
 		const sessions = await sessionRepository.getAllActiveSessions(
 			authenticatedUser.id,
 		);

@@ -35,9 +35,6 @@ const changeEmailRoute = defineOpenAPIRoute<
 	route: routeDef,
 	handler: async (c) => {
 		const authenticatedUser = c.get("authenticatedUser");
-		if (!authenticatedUser) {
-			throw new Error("Unauthorized");
-		}
 
 		const { userVerification } = c.req.valid("json");
 		const verificationInDb = await verifyIfUserVerificationCompleted({
@@ -77,7 +74,6 @@ const changeEmailRoute = defineOpenAPIRoute<
 			where: { id: authenticatedUser.id },
 			data: {
 				email: verificationInDb.email,
-				emailVerified: true,
 			},
 			select: { email: true },
 		});

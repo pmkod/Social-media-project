@@ -35,9 +35,6 @@ const changePasswordRoute = defineOpenAPIRoute<
 	route: routeDef,
 	handler: async (c) => {
 		const authenticatedUser = c.get("authenticatedUser");
-		if (!authenticatedUser) {
-			throw new Error("Unauthorized");
-		}
 
 		const { currentPassword, newPassword } = c.req.valid("json");
 		const user = await prisma.user.findUnique({

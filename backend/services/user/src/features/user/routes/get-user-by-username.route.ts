@@ -1,6 +1,6 @@
 import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
-import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
+import type { HonoEnv } from "@/core/types/hono-env";
 import { getPublicUserProfile } from "../services/get-public-user-profile.service";
 import { UserRoutesTag } from "../user.constants";
 
@@ -18,7 +18,7 @@ const routeDef = createRoute({
 
 const getUserByUsernameRoute = defineOpenAPIRoute<
 	typeof routeDef,
-	HonoAuthenticatedEnv
+	HonoEnv
 >({
 	route: routeDef,
 	handler: async (c) => {

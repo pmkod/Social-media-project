@@ -23,7 +23,6 @@ const clearSearchHistoryRoute = defineOpenAPIRoute<
 	route: routeDef,
 	handler: async (c) => {
 		const authenticatedUser = c.get("authenticatedUser");
-		if (!authenticatedUser) throw new Error("Unauthorized");
 
 		await prisma.searchHistory.deleteMany({
 			where: { ownerId: authenticatedUser.id },

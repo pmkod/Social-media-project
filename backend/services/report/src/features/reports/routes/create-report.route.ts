@@ -30,8 +30,7 @@ const createReportRoute = defineOpenAPIRoute<
 >({
 	route: routeDef,
 	handler: async (c) => {
-		const reporterId = c.get("authenticatedUser")?.id;
-		if (!reporterId) throw new Error("Unauthorized");
+		const reporterId = c.get("authenticatedUser").id;
 
 		const body = c.req.valid("json");
 

@@ -39,7 +39,6 @@ const createSearchHistoryRoute = defineOpenAPIRoute<
 	route: routeDef,
 	handler: async (c) => {
 		const authenticatedUser = c.get("authenticatedUser");
-		if (!authenticatedUser) throw new Error("Unauthorized");
 
 		const body = c.req.valid("json");
 		const text = body.text?.trim() || undefined;

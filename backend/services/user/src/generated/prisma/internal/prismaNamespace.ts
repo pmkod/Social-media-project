@@ -907,7 +907,6 @@ export const UserScalarFieldEnum = {
   followersCount: 'followersCount',
   followingCount: 'followingCount',
   unseenNotificationsCount: 'unseenNotificationsCount',
-  emailVerified: 'emailVerified',
   active: 'active',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -960,7 +959,6 @@ export type BlockScalarFieldEnum = (typeof BlockScalarFieldEnum)[keyof typeof Bl
 export const UserVerificationScalarFieldEnum = {
   id: 'id',
   email: 'email',
-  username: 'username',
   fullName: 'fullName',
   password: 'password',
   goal: 'goal',

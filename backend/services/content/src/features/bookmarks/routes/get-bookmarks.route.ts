@@ -71,8 +71,7 @@ const getBookmarksRoute = defineOpenAPIRoute<
 >({
 	route: routeDef,
 	handler: async (c) => {
-		const ownerId = c.get("authenticatedUser")?.id;
-		if (!ownerId) throw new Error("Unauthorized");
+		const ownerId = c.get("authenticatedUser").id;
 		const query = c.req.valid("query");
 		if (query.bookmarkCollectionId) {
 			const collection = await prisma.bookmarkCollection.findFirst({

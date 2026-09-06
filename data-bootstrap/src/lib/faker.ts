@@ -34,7 +34,6 @@ const generateUserData = (index: number) => {
     password,
     fullName,
     bio,
-    emailVerified: true,
     active: true,
   };
 };
@@ -77,7 +76,6 @@ const predefinedUserData = () => ({
   password: "pierremariekod@gmail.com",
   fullName: "Kouassi Kodossou",
   bio: null as string | null,
-  emailVerified: true,
   active: true,
 });
 

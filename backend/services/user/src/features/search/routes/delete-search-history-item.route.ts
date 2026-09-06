@@ -24,7 +24,6 @@ const deleteSearchHistoryItemRoute = defineOpenAPIRoute<
 	route: routeDef,
 	handler: async (c) => {
 		const authenticatedUser = c.get("authenticatedUser");
-		if (!authenticatedUser) throw new Error("Unauthorized");
 		const { historyId } = c.req.valid("param");
 
 		const result = await prisma.searchHistory.deleteMany({

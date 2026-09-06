@@ -25,7 +25,6 @@ const unblockUserRoute = defineOpenAPIRoute<
 	route: routeDef,
 	handler: async (c) => {
 		const authenticatedUser = c.get("authenticatedUser");
-		if (!authenticatedUser) throw new Error("Unauthorized");
 		const { id: userId } = c.req.valid("param");
 
 		const targetUser = await prisma.user.findUnique({

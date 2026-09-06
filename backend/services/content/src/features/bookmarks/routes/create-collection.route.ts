@@ -34,8 +34,7 @@ const createCollectionRoute = defineOpenAPIRoute<
 >({
 	route: routeDef,
 	handler: async (c) => {
-		const ownerId = c.get("authenticatedUser")?.id;
-		if (!ownerId) throw new Error("Unauthorized");
+		const ownerId = c.get("authenticatedUser").id;
 		const body = c.req.valid("json");
 		try {
 			const collection = await prisma.bookmarkCollection.create({

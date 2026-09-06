@@ -35,7 +35,6 @@ const getDiscussionsRoute = defineOpenAPIRoute<
 	route: routeDef,
 	handler: async (c) => {
 		const authenticatedUser = c.get("authenticatedUser");
-		if (!authenticatedUser) throw new Error("Unauthorized");
 		const { limit, cursorActivityAt, cursorId } = c.req.valid("query");
 		if (Boolean(cursorActivityAt) !== Boolean(cursorId)) {
 			throw new HTTPException(400, {

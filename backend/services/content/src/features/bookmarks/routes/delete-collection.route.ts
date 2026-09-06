@@ -24,8 +24,7 @@ const deleteCollectionRoute = defineOpenAPIRoute<
 >({
 	route: routeDef,
 	handler: async (c) => {
-		const ownerId = c.get("authenticatedUser")?.id;
-		if (!ownerId) throw new Error("Unauthorized");
+		const ownerId = c.get("authenticatedUser").id;
 		const { collectionId } = c.req.valid("param");
 		const collection = await prisma.bookmarkCollection.findFirst({
 			where: { id: collectionId, ownerId },

@@ -46,10 +46,7 @@ const createPostRoute = defineOpenAPIRoute<
 >({
 	route: routeDef,
 	handler: async (c) => {
-		const authenticatedUserId = c.get("authenticatedUser")?.id;
-		if (!authenticatedUserId) {
-			throw new Error("Unauthorized");
-		}
+		const authenticatedUserId = c.get("authenticatedUser").id;
 
 		const { text, medias } = c.req.valid("form");
 

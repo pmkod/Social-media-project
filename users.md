@@ -1,6 +1,6 @@
 # Liste des 20 Utilisateurs Créés & Vérifiés
 
-Tous les 20 utilisateurs ci-dessous ont été créés via l'API, validés (`emailVerified: true`, `active: true`), et sont immédiatement prêts pour la connexion via l'application Web ou les commandes `curl`.
+Tous les 20 utilisateurs ci-dessous ont été créés via l'API, validés (`active: true`), et sont immédiatement prêts pour la connexion via l'application Web ou les commandes `curl`.
 
 ---
 

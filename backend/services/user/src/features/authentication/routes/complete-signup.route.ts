@@ -68,7 +68,6 @@ const completeSignupRoute = defineOpenAPIRoute({
 				username,
 				fullName: verificationInDb.fullName,
 				password: verificationInDb.password,
-				emailVerified: true,
 			},
 		});
 

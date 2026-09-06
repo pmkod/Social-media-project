@@ -39,9 +39,6 @@ const requestEmailChangeRoute = defineOpenAPIRoute<
 	route: routeDef,
 	handler: async (c) => {
 		const authenticatedUser = c.get("authenticatedUser");
-		if (!authenticatedUser) {
-			throw new Error("Unauthorized");
-		}
 
 		const newEmail = c.req.valid("json").newEmail.toLowerCase();
 		const user = await prisma.user.findUnique({

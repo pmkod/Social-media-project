@@ -26,7 +26,6 @@ model User {
   followersCount                  Int                @default(0) @map("followers_count")
   followingCount                  Int                @default(0) @map("following_count")
   unseenNotificationsCount        Int                @default(0) @map("unseen_notifications_count")
-  emailVerified                   Boolean            @default(false) @map("email_verified")
   active                          Boolean            @default(true)
   createdAt                       DateTime           @default(now()) @map("created_at")
   updatedAt                       DateTime           @updatedAt @map("updated_at")
@@ -99,7 +98,6 @@ model Block {
 model UserVerification {
   id                            String    @id @default(uuid())
   email                         String?
-  username                      String?
   fullName                      String?   @map("full_name")
   password                      String?
   goal                          String?
