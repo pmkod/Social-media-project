@@ -1,0 +1,21 @@
+{
+	"name": "session",
+	"module": "src/index.ts",
+	"type": "module",
+	"private": true,
+	"scripts": {
+		"dev": "bun run --watch ./src/index.ts",
+		"test": "bun test",
+		"typecheck": "tsc --noEmit"
+	},
+	"dependencies": {
+		"@hono/zod-openapi": "^1.4.0",
+		"hono": "^4.12.22",
+		"redis": "^6.2.1"
+	},
+	"devDependencies": {
+		"@scalar/hono-api-reference": "^0.10.13",
+		"@types/bun": "latest",
+		"typescript": "^5"
+	}
+}

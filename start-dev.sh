@@ -97,6 +97,7 @@ run_service "CONTENT-SERVICE " "backend/services/content" "$YELLOW" 8002
 run_service "REPORT-SERVICE  " "backend/services/report" "$MAGENTA" 8003
 run_service "NOTIFICATION    " "backend/services/notification" "$BLUE" 8004
 run_service "CHAT-SERVICE    " "backend/services/chat" "$GREEN" 8005
+run_service "SESSION-SERVICE " "backend/services/session" "$BLUE" 8006
 run_service "API-GATEWAY     " "backend/api-gateway" "$CYAN" 8000
 
 echo -e "\n${GREEN}✔ RustFS, le frontend et le backend ont été démarrés !${RESET}"

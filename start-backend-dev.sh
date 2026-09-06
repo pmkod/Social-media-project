@@ -61,6 +61,7 @@ run_service "CONTENT-SERVICE" "backend/services/content" "$GREEN" 8002
 run_service "REPORT-SERVICE " "backend/services/report" "$YELLOW" 8003
 run_service "NOTIFICATION    " "backend/services/notification" "$BLUE" 8004
 run_service "CHAT-SERVICE    " "backend/services/chat" "$RED" 8005
+run_service "SESSION-SERVICE " "backend/services/session" "$GREEN" 8006
 run_service "API-GATEWAY    " "backend/api-gateway" "$MAGENTA" 8000
 
 echo -e "\n${GREEN}✔ Tous les services ont été démarrés !${RESET}"

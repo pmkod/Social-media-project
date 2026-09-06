@@ -18,6 +18,7 @@ Ce backend suit une architecture microservices identique à celle du projet Ecom
 - **Report Service** (`backend/services/report` - Port `8003`) : Signalements des posts, commentaires et utilisateurs, ainsi que leurs raisons.
 - **Notification Service** (`backend/services/notification` - Port `8004`) : Notifications sociales groupées et état vu/non vu.
 - **Chat Service** (`backend/services/chat` - Port `8005`) : Discussions privées et de groupe, membres, messages et marqueurs de lecture (HTTP uniquement, sans temps réel).
+- **Session Service** (`backend/services/session` - Port `8006`) : Sessions utilisateur persistées dans Redis.
 
 ## Démarrage rapide
 
@@ -40,7 +41,10 @@ cp backend/services/content/.env.example backend/services/content/.env
 cp backend/services/report/.env.example backend/services/report/.env
 cp backend/services/notification/.env.example backend/services/notification/.env
 cp backend/services/chat/.env.example backend/services/chat/.env
+cp backend/services/session/.env.example backend/services/session/.env
 ```
+
+Le Session Service nécessite aussi une instance Redis accessible via `REDIS_URL` (par défaut `redis://localhost:6379/0`).
 
 3. **Appliquer les schémas Prisma** :
 
@@ -77,6 +81,7 @@ Chaque service propose une interface interactive de documentation :
 - **Report Service** : `http://localhost:8003/scalar`
 - **Notification Service** : `http://localhost:8004/scalar`
 - **Chat Service** : `http://localhost:8005/scalar`
+- **Session Service** : `http://localhost:8006/scalar`
 - **API Gateway (Public)** : `http://localhost:8000`
 
 ## Points de terminaison principaux (via la Gateway)
