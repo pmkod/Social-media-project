@@ -91,10 +91,9 @@ const followUserRoute = defineOpenAPIRoute<
 		if (!existingFollow) {
 			await notificationServiceClient.createNotification({
 				recipientId: userId,
-				actorId: authenticatedUser.id,
+				initiatorId: authenticatedUser.id,
 				eventType: "FOLLOW",
-				entityId: userId,
-				sourceId: `user:${userId}:actor:${authenticatedUser.id}`,
+				groupKey: "FOLLOW",
 			});
 		}
 

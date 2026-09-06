@@ -83,16 +83,20 @@ const blockUserRoute = defineOpenAPIRoute<
 			(follow) => follow.followerId === userId,
 		);
 		if (authenticatedUserWasFollowing) {
-			await notificationServiceClient.removeNotification(
-				"FOLLOW",
-				`user:${userId}:actor:${authenticatedUser.id}`,
-			);
+			await notificationServiceClient.removeNotification({
+				eventType: "FOLLOW",
+				recipientId: userId,
+				initiatorId: authenticatedUser.id,
+				groupKey: "FOLLOW",
+			});
 		}
 		if (targetUserWasFollowing) {
-			await notificationServiceClient.removeNotification(
-				"FOLLOW",
-				`user:${authenticatedUser.id}:actor:${userId}`,
-			);
+			await notificationServiceClient.removeNotification({
+				eventType: "FOLLOW",
+				recipientId: authenticatedUser.id,
+				initiatorId: userId,
+				groupKey: "FOLLOW",
+			});
 		}
 
 		await prisma.user.update({

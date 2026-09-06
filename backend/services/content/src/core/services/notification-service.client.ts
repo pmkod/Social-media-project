@@ -9,13 +9,18 @@ type NotificationEventType =
 
 type CreateNotificationInput = {
 	recipientId: string;
-	actorId: string;
+	initiatorId: string;
 	eventType: NotificationEventType;
-	entityId: string;
-	sourceId: string;
-	postId?: string;
-	commentId?: string;
-	contentPreview?: string;
+	targetId?: string;
+	groupKey: string;
+};
+
+type RemoveNotificationInput = {
+	eventType: NotificationEventType;
+	recipientId: string;
+	initiatorId: string;
+	targetId?: string;
+	groupKey: string;
 };
 
 class NotificationServiceClient {
@@ -32,11 +37,7 @@ class NotificationServiceClient {
 			const response = await fetch(`${this.baseUrl}/internal/notifications`, {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({
-					...data,
-					contentPreview:
-						data.contentPreview?.trim().slice(0, 280) || undefined,
-				}),
+				body: JSON.stringify(data),
 			});
 			if (!response.ok) {
 				console.error(
@@ -51,17 +52,14 @@ class NotificationServiceClient {
 		}
 	}
 
-	async removeNotification(
-		eventType: NotificationEventType,
-		sourceId: string,
-	): Promise<void> {
+	async removeNotification(data: RemoveNotificationInput): Promise<void> {
 		try {
 			const response = await fetch(
 				`${this.baseUrl}/internal/notifications/remove`,
 				{
 					method: "POST",
 					headers: { "Content-Type": "application/json" },
-					body: JSON.stringify({ eventType, sourceId }),
+					body: JSON.stringify(data),
 				},
 			);
 			if (!response.ok) {

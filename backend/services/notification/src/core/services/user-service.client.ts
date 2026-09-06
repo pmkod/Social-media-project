@@ -42,7 +42,7 @@ class UserServiceClient {
 			});
 			if (!response.ok) {
 				console.error(
-					`[UserServiceClient] Failed to fetch notification actors, status: ${response.status}`,
+					`[UserServiceClient] Failed to fetch notification initiators, status: ${response.status}`,
 				);
 				return usersMap;
 			}
@@ -51,7 +51,7 @@ class UserServiceClient {
 			for (const user of users) usersMap.set(user.id, user);
 		} catch (error) {
 			console.error(
-				"[UserServiceClient] Failed to fetch notification actors:",
+				"[UserServiceClient] Failed to fetch notification initiators:",
 				error,
 			);
 		}

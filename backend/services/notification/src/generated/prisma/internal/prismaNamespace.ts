@@ -520,13 +520,10 @@ export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof
 export const NotificationScalarFieldEnum = {
   id: 'id',
   recipientId: 'recipientId',
-  actorId: 'actorId',
+  initiatorId: 'initiatorId',
   eventType: 'eventType',
-  entityId: 'entityId',
-  sourceId: 'sourceId',
-  postId: 'postId',
-  commentId: 'commentId',
-  contentPreview: 'contentPreview',
+  targetId: 'targetId',
+  groupKey: 'groupKey',
   isSeen: 'isSeen',
   createdAt: 'createdAt'
 } as const

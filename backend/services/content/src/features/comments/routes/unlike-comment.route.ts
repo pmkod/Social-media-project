@@ -39,7 +39,7 @@ const unlikeCommentRoute = defineOpenAPIRoute<
 
 		const comment = await prisma.comment.findUnique({
 			where: { id: commentId },
-			select: { id: true },
+			select: { id: true, authorId: true },
 		});
 
 		if (!comment) {
@@ -62,10 +62,13 @@ const unlikeCommentRoute = defineOpenAPIRoute<
 					},
 				},
 			});
-			await notificationServiceClient.removeNotification(
-				"COMMENT_LIKE",
-				`comment:${commentId}:actor:${authenticatedUserId}`,
-			);
+			await notificationServiceClient.removeNotification({
+				eventType: "COMMENT_LIKE",
+				recipientId: comment.authorId,
+				initiatorId: authenticatedUserId,
+				targetId: commentId,
+				groupKey: `COMMENT_LIKE:${commentId}`,
+			});
 		}
 
 		const { likesCount } = await prisma.comment.findUniqueOrThrow({

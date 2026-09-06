@@ -66,10 +66,13 @@ const unlikePostRoute = defineOpenAPIRoute<
 				}),
 			]);
 			postToSend = updatedPost;
-			await notificationServiceClient.removeNotification(
-				"POST_LIKE",
-				`post:${postId}:actor:${authenticatedUserId}`,
-			);
+			await notificationServiceClient.removeNotification({
+				eventType: "POST_LIKE",
+				recipientId: post.authorId,
+				initiatorId: authenticatedUserId,
+				targetId: postId,
+				groupKey: `POST_LIKE:${postId}`,
+			});
 		}
 
 		return c.json({

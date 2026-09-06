@@ -68,10 +68,12 @@ const unfollowUserRoute = defineOpenAPIRoute<
 				});
 				return updatedTargetUser.followersCount;
 			});
-			await notificationServiceClient.removeNotification(
-				"FOLLOW",
-				`user:${userId}:actor:${authenticatedUser.id}`,
-			);
+			await notificationServiceClient.removeNotification({
+				eventType: "FOLLOW",
+				recipientId: userId,
+				initiatorId: authenticatedUser.id,
+				groupKey: "FOLLOW",
+			});
 		}
 
 		return c.json(

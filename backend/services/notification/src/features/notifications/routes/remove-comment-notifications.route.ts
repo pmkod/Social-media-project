@@ -27,13 +27,21 @@ const removeCommentNotificationsRoute = defineOpenAPIRoute({
 	route: routeDef,
 	handler: async (c) => {
 		const { commentId } = c.req.valid("json");
+		const commentNotificationsWhere = {
+			OR: [
+				{ targetId: commentId },
+				{ groupKey: { startsWith: `COMMENT_REPLY:${commentId}:` } },
+			],
+		};
 		const notifications = await prisma.notification.findMany({
-			where: { commentId },
+			where: commentNotificationsWhere,
 			select: { recipientId: true, isSeen: true },
 		});
 		if (notifications.length === 0) return c.json({ removedCount: 0 });
 
-		await prisma.notification.deleteMany({ where: { commentId } });
+		await prisma.notification.deleteMany({
+			where: commentNotificationsWhere,
+		});
 		const unseenCountsByRecipient = new Map<string, number>();
 		for (const notification of notifications) {
 			if (notification.isSeen) continue;

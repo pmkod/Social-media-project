@@ -7,15 +7,23 @@ type NotificationEventType =
 	| "POST_COMMENT"
 	| "COMMENT_REPLY";
 
-type NotificationGroup = {
-	key: string;
+type NotificationRecord = {
+	id: string;
 	eventType: NotificationEventType;
-	entityId: string;
-	postId: string | null;
-	commentId: string | null;
-	contentPreview: string | null;
-	actorCount: number;
-	actor: User | null;
+	initiatorId: string;
+	targetId: string | null;
+	groupKey: string;
+	initiator: User | null;
+	isSeen: boolean;
+	createdAt: string;
+};
+
+type NotificationGroup = {
+	groupKey: string;
+	eventType: NotificationEventType;
+	targetId: string | null;
+	initiatorCount: number;
+	initiator: User | null;
 	latestCreatedAt: string;
 	isSeen: boolean;
 };
@@ -26,7 +34,7 @@ type NotificationsCursor = {
 };
 
 type NotificationsResponse = {
-	notifications: NotificationGroup[];
+	notifications: NotificationRecord[];
 	pagination: {
 		limit: number;
 		hasNextPage: boolean;
@@ -37,6 +45,7 @@ type NotificationsResponse = {
 export type {
 	NotificationEventType,
 	NotificationGroup,
+	NotificationRecord,
 	NotificationsCursor,
 	NotificationsResponse,
 };

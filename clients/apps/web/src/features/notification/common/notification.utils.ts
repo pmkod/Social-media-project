@@ -1,3 +1,84 @@
+import type { NotificationGroup, NotificationRecord } from "./notification.ts";
+
+type NotificationGroupAccumulator = NotificationGroup & {
+	initiatorIds: Set<string>;
+	latestNotificationId: string;
+};
+
+function compareNotificationRecency(
+	a: Pick<NotificationRecord, "id" | "createdAt">,
+	b: Pick<NotificationRecord, "id" | "createdAt">,
+): number {
+	const createdAtDifference =
+		new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+	if (createdAtDifference !== 0) return createdAtDifference;
+	if (a.id === b.id) return 0;
+	return a.id > b.id ? 1 : -1;
+}
+
+function getNotificationGroupKey(notification: NotificationRecord): string {
+	return notification.groupKey;
+}
+
+function groupNotifications(
+	notifications: NotificationRecord[],
+): NotificationGroup[] {
+	const groups = new Map<string, NotificationGroupAccumulator>();
+
+	for (const notification of notifications) {
+		const key = getNotificationGroupKey(notification);
+		const group = groups.get(key);
+
+		if (!group) {
+			groups.set(key, {
+				groupKey: key,
+				eventType: notification.eventType,
+				targetId: notification.targetId,
+				initiatorCount: 1,
+				initiator: notification.initiator,
+				latestCreatedAt: notification.createdAt,
+				isSeen: notification.isSeen,
+				initiatorIds: new Set([notification.initiatorId]),
+				latestNotificationId: notification.id,
+			});
+			continue;
+		}
+
+		group.initiatorIds.add(notification.initiatorId);
+		group.isSeen = group.isSeen && notification.isSeen;
+
+		if (
+			compareNotificationRecency(notification, {
+				id: group.latestNotificationId,
+				createdAt: group.latestCreatedAt,
+			}) > 0
+		) {
+			group.targetId = notification.targetId;
+			group.initiator = notification.initiator;
+			group.latestCreatedAt = notification.createdAt;
+			group.latestNotificationId = notification.id;
+		}
+	}
+
+	return Array.from(groups.values())
+		.sort((a, b) =>
+			compareNotificationRecency(
+				{
+					id: b.latestNotificationId,
+					createdAt: b.latestCreatedAt,
+				},
+				{
+					id: a.latestNotificationId,
+					createdAt: a.latestCreatedAt,
+				},
+			),
+		)
+		.map(({ initiatorIds, latestNotificationId, ...group }) => ({
+			...group,
+			initiatorCount: initiatorIds.size,
+		}));
+}
+
 /**
  * Formats a post creation date for display in the UI (feeds, cards, lists).
  * Returns relative time for recent posts ("Just now", "5 min", "2 hr", "3 d")
@@ -48,3 +129,5 @@ export function formatNotificationCreationDate(
 		year: isCurrentYear ? undefined : "numeric",
 	});
 }
+
+export { groupNotifications };

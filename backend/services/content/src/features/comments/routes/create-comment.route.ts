@@ -115,15 +115,16 @@ const createCommentRoute = defineOpenAPIRoute<
 			return createdComment;
 		});
 
+		const eventType = parentComment ? "COMMENT_REPLY" : "POST_COMMENT";
+		const groupKey = parentComment
+			? `COMMENT_REPLY:${parentComment.id}:${postId}`
+			: `POST_COMMENT:${postId}`;
 		await notificationServiceClient.createNotification({
 			recipientId: parentComment?.authorId ?? post.authorId,
-			actorId: authenticatedUserId,
-			eventType: parentComment ? "COMMENT_REPLY" : "POST_COMMENT",
-			entityId: parentComment?.id ?? postId,
-			sourceId: comment.id,
-			postId,
-			commentId: comment.id,
-			contentPreview: normalizedContent,
+			initiatorId: authenticatedUserId,
+			eventType,
+			targetId: comment.id,
+			groupKey,
 		});
 
 		const commentToSend = await prisma.comment.findUniqueOrThrow({

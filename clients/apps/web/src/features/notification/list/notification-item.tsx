@@ -1,17 +1,20 @@
 import {
+	RiChat1Line,
 	RiHeartFill,
+	RiMessage2Line,
+	RiMessageLine,
 	RiNotificationLine,
 	RiUserAddLine,
 } from "@remixicon/react";
 import { Link } from "@tanstack/react-router";
 import { cn } from "@/core/lib/utils.ts";
 import { UserAvatar } from "@/features/user/common/components/user-avatar.tsx";
+import { UserProfileHoverCard } from "@/features/user/user-profile/user-profile-hover-card.tsx";
 import type {
 	NotificationEventType,
 	NotificationGroup,
 } from "../common/notification.ts";
 import { formatNotificationCreationDate } from "../common/notification.utils.ts";
-import { UserProfileHoverCard } from "@/features/user/user-profile/user-profile-hover-card.tsx";
 
 const notificationCopy: Record<NotificationEventType, string> = {
 	FOLLOW: "started following you",
@@ -29,24 +32,26 @@ function NotificationIcon({ eventType }: { eventType: NotificationEventType }) {
 		return <RiUserAddLine className="size-5 text-blue-500" />;
 	}
 	if (eventType === "POST_COMMENT" || eventType === "COMMENT_REPLY") {
-		return <RiUserAddLine className="size-5 text-blue-500" />;
+		return <RiChat1Line className="size-5 text-blue-500" />;
 	}
 	return <RiNotificationLine className="size-5 text-sky-500" />;
 }
 
-function NotificationActor({
+function NotificationInitiator({
 	notification,
 }: {
 	notification: NotificationGroup;
 }) {
-	const actorLabel =
-		notification.actor?.fullName ||
-		(notification.actor ? `@${notification.actor.username}` : "Someone");
-	const othersCount = Math.max(0, notification.actorCount - 1);
+	const initiatorLabel =
+		notification.initiator?.fullName ||
+		(notification.initiator
+			? `@${notification.initiator.username}`
+			: "Someone");
+	const othersCount = Math.max(0, notification.initiatorCount - 1);
 
 	return (
 		<span>
-			<span className="font-semibold text-foreground">{actorLabel}</span>
+			<span className="font-semibold text-foreground">{initiatorLabel}</span>
 			{othersCount > 0
 				? ` and ${othersCount} other ${othersCount === 1 ? "user" : "users"}`
 				: ""}{" "}
@@ -74,26 +79,22 @@ function NotificationItem({ notification }: NotificationItemProps) {
 			</div>
 			<div className="min-w-0 flex-1">
 				<div className="flex items-center gap-2 text-sm">
-					{notification.actor ? (
+					{notification.initiator ? (
 						<>
-							<UserProfileHoverCard user={notification.actor}>
-								<UserAvatar user={notification.actor ?? undefined} size="sm" />
+							<UserProfileHoverCard user={notification.initiator}>
+								<UserAvatar
+									user={notification.initiator ?? undefined}
+									size="sm"
+								/>
 							</UserProfileHoverCard>
-							<UserProfileHoverCard user={notification.actor}>
+							<UserProfileHoverCard user={notification.initiator}>
 								<div>
-									<NotificationActor notification={notification} />
+									<NotificationInitiator notification={notification} />
 								</div>
 							</UserProfileHoverCard>
 						</>
 					) : null}
 				</div>
-				{notification.contentPreview ? (
-					<div className="mt-2 border border-border/20 p-2.5 rounded-xl">
-						<p className="line-clamp-2 text-sm text-muted-foreground">
-							{notification.contentPreview}
-						</p>
-					</div>
-				) : null}
 				<span className="mt-1 block text-xs text-muted-foreground">
 					{formatNotificationCreationDate(notification.latestCreatedAt)}
 				</span>
@@ -107,19 +108,19 @@ function NotificationItem({ notification }: NotificationItemProps) {
 		</div>
 	);
 
-	if (notification.eventType === "FOLLOW" && notification.actor) {
+	if (notification.eventType === "FOLLOW" && notification.initiator) {
 		return (
 			<Link
 				to="/$username"
-				params={{ username: `@${notification.actor.username}` }}
+				params={{ username: `@${notification.initiator.username}` }}
 			>
 				{content}
 			</Link>
 		);
 	}
-	if (notification.postId) {
+	if (notification.eventType === "POST_LIKE" && notification.targetId) {
 		return (
-			<Link to="/posts/$postId" params={{ postId: notification.postId }}>
+			<Link to="/posts/$postId" params={{ postId: notification.targetId }}>
 				{content}
 			</Link>
 		);

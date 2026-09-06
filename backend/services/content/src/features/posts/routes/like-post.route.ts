@@ -38,7 +38,7 @@ const likePostRoute = defineOpenAPIRoute<typeof routeDef, HonoAuthenticatedEnv>(
 
 			const post = await prisma.post.findUnique({
 				where: { id: postId },
-				select: { id: true, authorId: true, text: true, likesCount: true },
+				select: { id: true, authorId: true, likesCount: true },
 			});
 
 			if (!post) {
@@ -82,12 +82,10 @@ const likePostRoute = defineOpenAPIRoute<typeof routeDef, HonoAuthenticatedEnv>(
 			if (createdLike) {
 				await notificationServiceClient.createNotification({
 					recipientId: post.authorId,
-					actorId: authenticatedUserId,
+					initiatorId: authenticatedUserId,
 					eventType: "POST_LIKE",
-					entityId: postId,
-					sourceId: `post:${postId}:actor:${authenticatedUserId}`,
-					postId,
-					contentPreview: post.text,
+					targetId: postId,
+					groupKey: `POST_LIKE:${postId}`,
 				});
 			}
 

@@ -25,9 +25,16 @@ const routeDef = createRoute({
 const removeNotificationRoute = defineOpenAPIRoute({
 	route: routeDef,
 	handler: async (c) => {
-		const { eventType, sourceId } = c.req.valid("json");
-		const notification = await prisma.notification.findUnique({
-			where: { eventType_sourceId: { eventType, sourceId } },
+		const data = c.req.valid("json");
+		const notificationIdentityWhere = {
+			recipientId: data.recipientId,
+			initiatorId: data.initiatorId,
+			eventType: data.eventType,
+			targetId: data.targetId ?? null,
+			groupKey: data.groupKey,
+		};
+		const notification = await prisma.notification.findFirst({
+			where: notificationIdentityWhere,
 			select: { id: true, recipientId: true, isSeen: true },
 		});
 

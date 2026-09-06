@@ -43,7 +43,6 @@ const likeCommentRoute = defineOpenAPIRoute<
 				id: true,
 				authorId: true,
 				postId: true,
-				content: true,
 				deletedAt: true,
 			},
 		});
@@ -86,13 +85,10 @@ const likeCommentRoute = defineOpenAPIRoute<
 		if (createdLike) {
 			await notificationServiceClient.createNotification({
 				recipientId: comment.authorId,
-				actorId: authenticatedUserId,
+				initiatorId: authenticatedUserId,
 				eventType: "COMMENT_LIKE",
-				entityId: commentId,
-				sourceId: `comment:${commentId}:actor:${authenticatedUserId}`,
-				postId: comment.postId,
-				commentId,
-				contentPreview: comment.content,
+				targetId: commentId,
+				groupKey: `COMMENT_LIKE:${commentId}`,
 			});
 		}
 
