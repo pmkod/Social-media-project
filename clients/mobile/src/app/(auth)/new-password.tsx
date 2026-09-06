@@ -8,6 +8,7 @@ import { Field, FieldDescription, FieldError, FieldLabel } from '@/components/ui
 import { PasswordInput } from '@/components/ui/password-input';
 import { Text } from '@/components/ui/text';
 import { clearVerification } from '@/core/auth/auth.storage';
+import { useSession } from '@/core/auth/session-context';
 import {
   authenticationFields,
   newPasswordSchema,
@@ -18,6 +19,7 @@ import { useNewPassword } from '@/features/authentication/hooks/use-new-password
 
 export default function NewPasswordScreen() {
   const router = useRouter();
+  const { completeAuthentication } = useSession();
   const newPassword = useNewPassword();
   const [error, setError] = useState<string | null>(null);
   const form = useForm({
@@ -26,9 +28,10 @@ export default function NewPasswordScreen() {
     onSubmit: async ({ value }) => {
       setError(null);
       try {
-        await newPassword.mutateAsync(value.password);
+        const response = await newPassword.mutateAsync(value.password);
         await clearVerification();
-        router.replace('/login');
+        await completeAuthentication(response);
+        router.replace('/home');
       } catch (caughtError) {
         setError(caughtError instanceof Error ? caughtError.message : 'Unable to update password.');
       }

@@ -1,6 +1,8 @@
 import { createRoute, defineOpenAPIRoute } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
+import { getRequestClientMetadata } from "@/core/functions/request.functions";
+import { sessionServiceClient } from "@/core/services/session-service.client";
 import {
 	AuthenticationRoutesTag,
 	UserVerificationGoals,
@@ -9,7 +11,10 @@ import {
 	hashPassword,
 	isUserVerificationExpired,
 } from "../authentication.functions";
-import { NewPasswordValidationSchema } from "../authentication.validation-schemas";
+import {
+	AuthenticatedResponseSchema,
+	NewPasswordValidationSchema,
+} from "../authentication.validation-schemas";
 import { verifyIfUserVerificationCompleted } from "../user-verification.service";
 
 const newPasswordRoute = defineOpenAPIRoute({
@@ -30,6 +35,9 @@ const newPasswordRoute = defineOpenAPIRoute({
 		responses: {
 			[HttpStatus.OK.code]: {
 				description: "Password updated successfully",
+				content: {
+					"application/json": { schema: AuthenticatedResponseSchema },
+				},
 			},
 		},
 	}),
@@ -52,9 +60,14 @@ const newPasswordRoute = defineOpenAPIRoute({
 
 		const hashedPassword = await hashPassword(newPassword);
 
-		await prisma.user.update({
+		const user = await prisma.user.update({
 			where: { id: verificationInDb.userId },
 			data: { password: hashedPassword },
+		});
+
+		const session = await sessionServiceClient.createSession({
+			userId: user.id,
+			...getRequestClientMetadata(c),
 		});
 
 		await prisma.userVerification.update({
@@ -62,7 +75,7 @@ const newPasswordRoute = defineOpenAPIRoute({
 			data: { goalAchievedAt: new Date() },
 		});
 
-		return c.json({ success: true });
+		return c.json({ session });
 	},
 });
 
