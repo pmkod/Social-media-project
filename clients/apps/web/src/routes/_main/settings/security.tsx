@@ -1,4 +1,4 @@
-import { RiLockPasswordLine } from "@remixicon/react";
+import { RiComputerLine, RiLockPasswordLine } from "@remixicon/react";
 import { createFileRoute } from "@tanstack/react-router";
 import {
 	AppHeader,
@@ -6,7 +6,6 @@ import {
 	AppHeaderLeftPart,
 	AppHeaderTitle,
 } from "@/core/components/ui/app-header";
-import { SessionList } from "@/features/session/session-list.tsx";
 import { SettingRowItem } from "@/features/setting/common/setting-row-item.tsx";
 
 export const Route = createFileRoute("/_main/settings/security")({
@@ -29,8 +28,13 @@ function SecuritySettingsPage() {
 					description="Update your password at any time."
 					to="/settings/change-password"
 				/>
+				<SettingRowItem
+					icon={RiComputerLine}
+					title="Sessions"
+					description="Review and manage devices connected to your account."
+					to="/settings/sessions"
+				/>
 			</div>
-			<SessionList />
 		</>
 	);
 }

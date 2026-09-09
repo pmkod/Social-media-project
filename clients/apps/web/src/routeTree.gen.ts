@@ -39,6 +39,7 @@ import { Route as MainSettingsChangePasswordRouteImport } from './routes/_main/s
 import { Route as MainSettingsLanguageRouteImport } from './routes/_main/settings/language'
 import { Route as MainSettingsPrivacyRouteImport } from './routes/_main/settings/privacy'
 import { Route as MainSettingsSecurityRouteImport } from './routes/_main/settings/security'
+import { Route as MainSettingsSessionsRouteImport } from './routes/_main/settings/sessions'
 import { Route as MainSettingsThemeRouteImport } from './routes/_main/settings/theme'
 import { Route as MainSettingsUserVerificationRouteImport } from './routes/_main/settings/user-verification'
 import { Route as MainWithRightAsidePostsPostIdRouteImport } from './routes/_main/_with-right-aside/posts.$postId'
@@ -201,6 +202,11 @@ const MainSettingsSecurityRoute = MainSettingsSecurityRouteImport.update({
   path: '/security',
   getParentRoute: () => MainSettingsRouteRoute,
 } as any)
+const MainSettingsSessionsRoute = MainSettingsSessionsRouteImport.update({
+  id: '/sessions',
+  path: '/sessions',
+  getParentRoute: () => MainSettingsRouteRoute,
+} as any)
 const MainSettingsThemeRoute = MainSettingsThemeRouteImport.update({
   id: '/theme',
   path: '/theme',
@@ -244,6 +250,7 @@ export interface FileRoutesByFullPath {
   '/settings/language': typeof MainSettingsLanguageRoute
   '/settings/privacy': typeof MainSettingsPrivacyRoute
   '/settings/security': typeof MainSettingsSecurityRoute
+  '/settings/sessions': typeof MainSettingsSessionsRoute
   '/settings/theme': typeof MainSettingsThemeRoute
   '/settings/user-verification': typeof MainSettingsUserVerificationRoute
   '/discussions/': typeof MainDiscussionsIndexRoute
@@ -273,6 +280,7 @@ export interface FileRoutesByTo {
   '/settings/language': typeof MainSettingsLanguageRoute
   '/settings/privacy': typeof MainSettingsPrivacyRoute
   '/settings/security': typeof MainSettingsSecurityRoute
+  '/settings/sessions': typeof MainSettingsSessionsRoute
   '/settings/theme': typeof MainSettingsThemeRoute
   '/settings/user-verification': typeof MainSettingsUserVerificationRoute
   '/discussions': typeof MainDiscussionsIndexRoute
@@ -308,6 +316,7 @@ export interface FileRoutesById {
   '/_main/settings/language': typeof MainSettingsLanguageRoute
   '/_main/settings/privacy': typeof MainSettingsPrivacyRoute
   '/_main/settings/security': typeof MainSettingsSecurityRoute
+  '/_main/settings/sessions': typeof MainSettingsSessionsRoute
   '/_main/settings/theme': typeof MainSettingsThemeRoute
   '/_main/settings/user-verification': typeof MainSettingsUserVerificationRoute
   '/_base/_authentication/': typeof BaseAuthenticationIndexRoute
@@ -342,6 +351,7 @@ export interface FileRouteTypes {
     | '/settings/language'
     | '/settings/privacy'
     | '/settings/security'
+    | '/settings/sessions'
     | '/settings/theme'
     | '/settings/user-verification'
     | '/discussions/'
@@ -371,6 +381,7 @@ export interface FileRouteTypes {
     | '/settings/language'
     | '/settings/privacy'
     | '/settings/security'
+    | '/settings/sessions'
     | '/settings/theme'
     | '/settings/user-verification'
     | '/discussions'
@@ -405,6 +416,7 @@ export interface FileRouteTypes {
     | '/_main/settings/language'
     | '/_main/settings/privacy'
     | '/_main/settings/security'
+    | '/_main/settings/sessions'
     | '/_main/settings/theme'
     | '/_main/settings/user-verification'
     | '/_base/_authentication/'
@@ -630,6 +642,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MainSettingsSecurityRouteImport
       parentRoute: typeof MainSettingsRouteRoute
     }
+    '/_main/settings/sessions': {
+      id: '/_main/settings/sessions'
+      path: '/sessions'
+      fullPath: '/settings/sessions'
+      preLoaderRoute: typeof MainSettingsSessionsRouteImport
+      parentRoute: typeof MainSettingsRouteRoute
+    }
     '/_main/settings/theme': {
       id: '/_main/settings/theme'
       path: '/theme'
@@ -745,6 +764,7 @@ interface MainSettingsRouteRouteChildren {
   MainSettingsLanguageRoute: typeof MainSettingsLanguageRoute
   MainSettingsPrivacyRoute: typeof MainSettingsPrivacyRoute
   MainSettingsSecurityRoute: typeof MainSettingsSecurityRoute
+  MainSettingsSessionsRoute: typeof MainSettingsSessionsRoute
   MainSettingsThemeRoute: typeof MainSettingsThemeRoute
   MainSettingsUserVerificationRoute: typeof MainSettingsUserVerificationRoute
   MainSettingsIndexRoute: typeof MainSettingsIndexRoute
@@ -757,6 +777,7 @@ const MainSettingsRouteRouteChildren: MainSettingsRouteRouteChildren = {
   MainSettingsLanguageRoute: MainSettingsLanguageRoute,
   MainSettingsPrivacyRoute: MainSettingsPrivacyRoute,
   MainSettingsSecurityRoute: MainSettingsSecurityRoute,
+  MainSettingsSessionsRoute: MainSettingsSessionsRoute,
   MainSettingsThemeRoute: MainSettingsThemeRoute,
   MainSettingsUserVerificationRoute: MainSettingsUserVerificationRoute,
   MainSettingsIndexRoute: MainSettingsIndexRoute,

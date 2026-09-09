@@ -46,7 +46,7 @@ const settingsSections: SettingsSection[] = [
 		description: "Keep your account secure",
 		path: "/settings/security",
 		icon: RiShieldKeyholeLine,
-		activePaths: ["/settings/change-password"],
+		activePaths: ["/settings/change-password", "/settings/sessions"],
 	},
 	{
 		id: "privacy",

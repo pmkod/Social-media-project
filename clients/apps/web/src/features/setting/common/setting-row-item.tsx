@@ -12,6 +12,7 @@ export type SettingsPath =
 	| "/settings/user-verification"
 	| "/settings/security"
 	| "/settings/change-password"
+	| "/settings/sessions"
 	| "/settings/privacy"
 	| "/settings/theme"
 	| "/settings/language";
