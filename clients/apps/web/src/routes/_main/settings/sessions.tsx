@@ -50,18 +50,19 @@ function SessionsSettingsPage() {
 			</AppHeader>
 
 			{activeSessions.isPending ? (
-				<div className="space-y-6">
-					<section className="overflow-hidden rounded-xl border border-border">
-						<div className="space-y-3 px-5 py-6 sm:px-6">
+				<div className="space-y-2">
+					<section className="overflow-hidden">
+						<div className="space-y-3 py-6">
 							<Skeleton className="h-8 w-64" />
 							<Skeleton className="h-5 w-full max-w-xl" />
 						</div>
-						<div className="border-t border-border p-5 sm:p-6">
+						<div className="pb-5">
 							<Skeleton className="h-14 w-full" />
 						</div>
 					</section>
-					<section className="overflow-hidden rounded-xl border border-border">
-						<div className="space-y-3 px-5 py-6 sm:px-6">
+					<hr />
+					<section className="overflow-hidden">
+						<div className="space-y-3 py-6">
 							<Skeleton className="h-8 w-72" />
 							<Skeleton className="h-5 w-full max-w-2xl" />
 						</div>
@@ -116,20 +117,17 @@ function SessionsSettingsPage() {
 									aren&apos;t currently using them.
 								</p>
 							</div>
-							<Button
+							<button
 								type="button"
-								variant="link"
-								colorScheme="destructive"
-								size="default"
-								className="h-auto justify-start px-0 py-0 text-base"
+								className="h-auto flex items-center cursor-pointer text-destructive border-b border-b-transparent hover:border-b-destructive gap-x-2 text-base"
 								disabled={otherSessions.length === 0}
 								onClick={() => {
 									void NiceModal.show(LogoutOtherSessionsAlertDialog);
 								}}
 							>
-								<RiLogoutBoxLine />
+								<RiLogoutBoxLine className="size-4" />
 								Log out of all other sessions
-							</Button>
+							</button>
 						</div>
 						{otherSessions.length > 0 ? (
 							<div>
