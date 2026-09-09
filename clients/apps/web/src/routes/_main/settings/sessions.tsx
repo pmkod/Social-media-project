@@ -84,7 +84,7 @@ function SessionsSettingsPage() {
 				<div className="space-y-6">
 					<section>
 						<div className="space-y-1">
-							<h2 className="text-2xl font-bold tracking-tight">
+							<h2 className="text-lg font-bold tracking-tight">
 								Current active session
 							</h2>
 							<p className="text-sm leading-relaxed text-muted-foreground sm:text-base">
@@ -109,7 +109,7 @@ function SessionsSettingsPage() {
 					<section>
 						<div className="space-y-4">
 							<div className="space-y-1">
-								<h2 className="text-2xl font-bold tracking-tight">
+								<h2 className="text-lg font-bold tracking-tight">
 									Other sessions
 								</h2>
 								<p className="text-sm leading-relaxed text-muted-foreground sm:text-base">

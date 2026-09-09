@@ -67,15 +67,12 @@ function SessionRow({
 			<div className="min-w-0 flex-1">
 				<div className="flex flex-wrap items-center gap-2">
 					<p className="font-medium leading-tight">{getSessionName(session)}</p>
-					{isCurrent ? (
-						<span className="rounded-md bg-primary px-2 py-1 text-xs font-semibold text-primary-foreground">
-							Active now
-						</span>
-					) : null}
+					-{" "}
+					<p className="text-xs text-muted-foreground">
+						Created {formatSessionTime(session.createdAt)}
+					</p>
 				</div>
-				<p className="mt-1 text-sm text-muted-foreground">
-					{isCurrent ? "This device" : formatSessionTime(session.createdAt)}
-				</p>
+
 				<p
 					className="mt-1 line-clamp-2 break-all text-xs leading-relaxed text-muted-foreground"
 					title={session.userAgent ?? undefined}
