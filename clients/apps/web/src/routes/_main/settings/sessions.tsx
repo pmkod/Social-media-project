@@ -13,8 +13,8 @@ import NiceModal from "@/core/components/ui/nice-modal.tsx";
 import { Skeleton } from "@/core/components/ui/skeleton.tsx";
 import { getSessionId } from "@/core/utils/session.utils.ts";
 import type { Session } from "@/features/session/common/session.ts";
-import { SessionRow } from "@/features/session/list-active-sessions/session-row";
 import { DisableSessionAlertDialog } from "@/features/session/disable-session/disable-session-alert-dialog.tsx";
+import { SessionRow } from "@/features/session/list-active-sessions/session-row";
 import { useActiveSessions } from "@/features/session/list-active-sessions/use-active-sessions.ts";
 import { LogoutOtherSessionsAlertDialog } from "@/features/session/logout-other-sessions/logout-other-sessions-alert-dialog.tsx";
 
@@ -117,9 +117,11 @@ function SessionsSettingsPage() {
 									aren&apos;t currently using them.
 								</p>
 							</div>
-							<button
+							<Button
 								type="button"
-								className="h-auto flex items-center cursor-pointer text-destructive border-b border-b-transparent hover:border-b-destructive gap-x-2 text-base"
+								variant="outline"
+								colorScheme="destructive"
+								size="sm"
 								disabled={otherSessions.length === 0}
 								onClick={() => {
 									void NiceModal.show(LogoutOtherSessionsAlertDialog);
@@ -127,7 +129,7 @@ function SessionsSettingsPage() {
 							>
 								<RiLogoutBoxLine className="size-4" />
 								Log out of all other sessions
-							</button>
+							</Button>
 						</div>
 						{otherSessions.length > 0 ? (
 							<div>

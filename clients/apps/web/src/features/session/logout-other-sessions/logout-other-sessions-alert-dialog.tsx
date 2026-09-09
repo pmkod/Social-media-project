@@ -17,14 +17,14 @@ const LogoutOtherSessionsAlertDialog = create(() => {
 					const { disabledCount } = await logoutOtherSessions.mutateAsync();
 					toast.success(
 						disabledCount === 1
-							? "1 other session was disconnected"
-							: `${disabledCount} other sessions were disconnected`,
+							? "1 other session was logged out"
+							: `${disabledCount} other sessions were logged out`,
 					);
 				} catch (error) {
 					toast.error(
 						error instanceof Error
 							? error.message
-							: "Unable to disconnect other sessions",
+							: "Unable to log out of other sessions",
 					);
 					throw error;
 				}

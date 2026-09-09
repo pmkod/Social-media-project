@@ -26,14 +26,14 @@ const DisableSessionAlertDialog = create<DisableSessionAlertDialogProps>(
 				title={
 					isCurrent
 						? "Log out of this session?"
-						: `Disconnect ${deviceName !== "Unknown device" ? deviceName : "this session"}?`
+						: `Log out of ${deviceName !== "Unknown device" ? deviceName : "this session"}?`
 				}
 				description={
 					isCurrent
 						? "You will be logged out of your account on this device and returned to the sign-in page."
 						: "This device will be signed out and will need to log in again to access your account."
 				}
-				confirmText={isCurrent ? "Log out" : "Disconnect"}
+				confirmText="Log out"
 				confirmColorScheme="destructive"
 				onConfirm={async () => {
 					try {
@@ -44,12 +44,12 @@ const DisableSessionAlertDialog = create<DisableSessionAlertDialogProps>(
 							await navigate({ to: "/" });
 							return;
 						}
-						toast.success("Session disabled");
+						toast.success("Session logged out");
 					} catch (error) {
 						toast.error(
 							error instanceof Error
 								? error.message
-								: "Unable to disable session",
+								: "Unable to log out of session",
 						);
 						throw error;
 					}

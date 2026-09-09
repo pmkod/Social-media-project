@@ -1,6 +1,6 @@
 import {
-	RiArrowRightSLine,
 	RiComputerLine,
+	RiLogoutBoxLine,
 	RiSmartphoneLine,
 } from "@remixicon/react";
 import { Button } from "@/core/components/ui/button.tsx";
@@ -51,11 +51,12 @@ function SessionRow({
 	const DeviceIcon = isMobileSession(session)
 		? RiSmartphoneLine
 		: RiComputerLine;
+	const userAgent = session.userAgent ?? "User agent unavailable";
 
 	return (
-		<div className="flex items-center gap-3 py-4">
+		<div className="flex items-start gap-3 py-4">
 			<div
-				className={`flex shrink-0 items-center justify-center rounded-full border size-12  ${
+				className={`flex size-12 shrink-0 items-center justify-center rounded-full border ${
 					isCurrent
 						? "border-primary/70 bg-primary/5 text-primary"
 						: "border-border bg-background text-muted-foreground"
@@ -75,18 +76,26 @@ function SessionRow({
 				<p className="mt-1 text-sm text-muted-foreground">
 					{isCurrent ? "This device" : formatSessionTime(session.createdAt)}
 				</p>
+				<p
+					className="mt-1 line-clamp-2 break-all text-xs leading-relaxed text-muted-foreground"
+					title={session.userAgent ?? undefined}
+				>
+					<span className="font-medium text-foreground/70">User agent:</span>{" "}
+					{userAgent}
+				</p>
 			</div>
 			<Button
 				type="button"
-				variant="ghost"
-				size="icon"
-				aria-label={
-					isCurrent ? "Log out of this session" : "Disable this session"
-				}
-				title={isCurrent ? "Log out of this session" : "Disable this session"}
+				variant="outline"
+				colorScheme="destructive"
+				size="sm"
+				className="mt-1"
+				aria-label="Log out of this session"
+				title="Log out of this session"
 				onClick={onDisable}
 			>
-				<RiArrowRightSLine className="size-6 text-muted-foreground" />
+				<RiLogoutBoxLine />
+				<span className="hidden sm:inline">Log out</span>
 			</Button>
 		</div>
 	);
