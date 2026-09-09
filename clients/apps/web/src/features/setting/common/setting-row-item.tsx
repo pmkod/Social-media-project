@@ -74,7 +74,12 @@ export function SettingRowItem({
 
 	if (href) {
 		return (
-			<a href={href} className={rowClassName}>
+			<a
+				href={href}
+				className={rowClassName}
+				target={isExternal ? "_blank" : undefined}
+				rel={isExternal ? "noopener noreferrer" : undefined}
+			>
 				{content}
 			</a>
 		);
