@@ -4,8 +4,8 @@ import { toast } from "sonner";
 import { BaseAlertDialog } from "@/core/components/ui/base-alert-dialog.tsx";
 import { create } from "@/core/components/ui/nice-modal.tsx";
 import { deleteSessionCredentials } from "@/core/utils/session.utils.ts";
-import type { Session } from "./common/session.ts";
-import { getSessionName } from "./common/session.utils.ts";
+import type { Session } from "../common/session.ts";
+import { getSessionName } from "../common/session.utils.ts";
 import { useDisableSession } from "./use-disable-session.ts";
 
 type DisableSessionAlertDialogProps = {

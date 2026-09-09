@@ -1,20 +1,19 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { httpClient } from "@/core/http-clients/http-client.ts";
-import { activeSessionsQueryKey } from "./common/session.query-key.ts";
-import type { Session } from "./common/session.ts";
+import { activeSessionsQueryKey } from "../common/session.query-key.ts";
 
-const useDisableSession = () => {
+const useLogoutOtherSessions = () => {
 	const queryClient = useQueryClient();
 
 	return useMutation({
-		mutationFn: (sessionId: string) =>
+		mutationFn: () =>
 			httpClient
-				.patch(`sessions/${sessionId}/disable`)
-				.json<{ session: Session }>(),
+				.post("sessions/logout-others")
+				.json<{ disabledCount: number }>(),
 		onSuccess: async () => {
 			await queryClient.invalidateQueries({ queryKey: activeSessionsQueryKey });
 		},
 	});
 };
 
-export { useDisableSession };
+export { useLogoutOtherSessions };
