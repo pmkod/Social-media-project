@@ -44,7 +44,6 @@ const useCreateComment = () => {
 			queryClient.invalidateQueries({
 				queryKey: postDetailsQueryKey.build(comment.postId),
 			});
-			queryClient.invalidateQueries({ queryKey: postListQueryKeys.root });
 			queryClient.invalidateQueries({
 				queryKey: commentListQueryKeys.build({ postId: comment.postId }),
 			});
