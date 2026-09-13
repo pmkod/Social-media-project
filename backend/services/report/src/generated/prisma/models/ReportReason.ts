@@ -196,15 +196,15 @@ export type ReportReasonOrderByWithRelationInput = {
 
 export type ReportReasonWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  name?: string
   AND?: Prisma.ReportReasonWhereInput | Prisma.ReportReasonWhereInput[]
   OR?: Prisma.ReportReasonWhereInput[]
   NOT?: Prisma.ReportReasonWhereInput | Prisma.ReportReasonWhereInput[]
+  name?: Prisma.StringFilter<"ReportReason"> | string
   description?: Prisma.StringNullableFilter<"ReportReason"> | string | null
   createdAt?: Prisma.DateTimeFilter<"ReportReason"> | Date | string
   active?: Prisma.BoolFilter<"ReportReason"> | boolean
   reports?: Prisma.ReportListRelationFilter
-}, "id" | "name">
+}, "id">
 
 export type ReportReasonOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
