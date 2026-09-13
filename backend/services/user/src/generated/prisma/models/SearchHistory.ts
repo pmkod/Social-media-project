@@ -26,25 +26,25 @@ export type AggregateSearchHistory = {
 
 export type SearchHistoryMinAggregateOutputType = {
   id: string | null
-  ownerId: string | null
+  searcherId: string | null
   text: string | null
-  userId: string | null
+  searchedUserId: string | null
   createdAt: Date | null
 }
 
 export type SearchHistoryMaxAggregateOutputType = {
   id: string | null
-  ownerId: string | null
+  searcherId: string | null
   text: string | null
-  userId: string | null
+  searchedUserId: string | null
   createdAt: Date | null
 }
 
 export type SearchHistoryCountAggregateOutputType = {
   id: number
-  ownerId: number
+  searcherId: number
   text: number
-  userId: number
+  searchedUserId: number
   createdAt: number
   _all: number
 }
@@ -52,25 +52,25 @@ export type SearchHistoryCountAggregateOutputType = {
 
 export type SearchHistoryMinAggregateInputType = {
   id?: true
-  ownerId?: true
+  searcherId?: true
   text?: true
-  userId?: true
+  searchedUserId?: true
   createdAt?: true
 }
 
 export type SearchHistoryMaxAggregateInputType = {
   id?: true
-  ownerId?: true
+  searcherId?: true
   text?: true
-  userId?: true
+  searchedUserId?: true
   createdAt?: true
 }
 
 export type SearchHistoryCountAggregateInputType = {
   id?: true
-  ownerId?: true
+  searcherId?: true
   text?: true
-  userId?: true
+  searchedUserId?: true
   createdAt?: true
   _all?: true
 }
@@ -149,9 +149,9 @@ export type SearchHistoryGroupByArgs<ExtArgs extends runtime.Types.Extensions.In
 
 export type SearchHistoryGroupByOutputType = {
   id: string
-  ownerId: string
+  searcherId: string
   text: string | null
-  userId: string | null
+  searchedUserId: string | null
   createdAt: Date
   _count: SearchHistoryCountAggregateOutputType | null
   _min: SearchHistoryMinAggregateOutputType | null
@@ -178,22 +178,22 @@ export type SearchHistoryWhereInput = {
   OR?: Prisma.SearchHistoryWhereInput[]
   NOT?: Prisma.SearchHistoryWhereInput | Prisma.SearchHistoryWhereInput[]
   id?: Prisma.StringFilter<"SearchHistory"> | string
-  ownerId?: Prisma.StringFilter<"SearchHistory"> | string
+  searcherId?: Prisma.StringFilter<"SearchHistory"> | string
   text?: Prisma.StringNullableFilter<"SearchHistory"> | string | null
-  userId?: Prisma.StringNullableFilter<"SearchHistory"> | string | null
+  searchedUserId?: Prisma.StringNullableFilter<"SearchHistory"> | string | null
   createdAt?: Prisma.DateTimeFilter<"SearchHistory"> | Date | string
-  owner?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-  user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  searcher?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  searchedUser?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
 }
 
 export type SearchHistoryOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  ownerId?: Prisma.SortOrder
+  searcherId?: Prisma.SortOrder
   text?: Prisma.SortOrderInput | Prisma.SortOrder
-  userId?: Prisma.SortOrderInput | Prisma.SortOrder
+  searchedUserId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  owner?: Prisma.UserOrderByWithRelationInput
-  user?: Prisma.UserOrderByWithRelationInput
+  searcher?: Prisma.UserOrderByWithRelationInput
+  searchedUser?: Prisma.UserOrderByWithRelationInput
 }
 
 export type SearchHistoryWhereUniqueInput = Prisma.AtLeast<{
@@ -201,19 +201,19 @@ export type SearchHistoryWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.SearchHistoryWhereInput | Prisma.SearchHistoryWhereInput[]
   OR?: Prisma.SearchHistoryWhereInput[]
   NOT?: Prisma.SearchHistoryWhereInput | Prisma.SearchHistoryWhereInput[]
-  ownerId?: Prisma.StringFilter<"SearchHistory"> | string
+  searcherId?: Prisma.StringFilter<"SearchHistory"> | string
   text?: Prisma.StringNullableFilter<"SearchHistory"> | string | null
-  userId?: Prisma.StringNullableFilter<"SearchHistory"> | string | null
+  searchedUserId?: Prisma.StringNullableFilter<"SearchHistory"> | string | null
   createdAt?: Prisma.DateTimeFilter<"SearchHistory"> | Date | string
-  owner?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-  user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  searcher?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  searchedUser?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
 }, "id">
 
 export type SearchHistoryOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  ownerId?: Prisma.SortOrder
+  searcherId?: Prisma.SortOrder
   text?: Prisma.SortOrderInput | Prisma.SortOrder
-  userId?: Prisma.SortOrderInput | Prisma.SortOrder
+  searchedUserId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.SearchHistoryCountOrderByAggregateInput
   _max?: Prisma.SearchHistoryMaxOrderByAggregateInput
@@ -225,9 +225,9 @@ export type SearchHistoryScalarWhereWithAggregatesInput = {
   OR?: Prisma.SearchHistoryScalarWhereWithAggregatesInput[]
   NOT?: Prisma.SearchHistoryScalarWhereWithAggregatesInput | Prisma.SearchHistoryScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"SearchHistory"> | string
-  ownerId?: Prisma.StringWithAggregatesFilter<"SearchHistory"> | string
+  searcherId?: Prisma.StringWithAggregatesFilter<"SearchHistory"> | string
   text?: Prisma.StringNullableWithAggregatesFilter<"SearchHistory"> | string | null
-  userId?: Prisma.StringNullableWithAggregatesFilter<"SearchHistory"> | string | null
+  searchedUserId?: Prisma.StringNullableWithAggregatesFilter<"SearchHistory"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"SearchHistory"> | Date | string
 }
 
@@ -235,15 +235,15 @@ export type SearchHistoryCreateInput = {
   id?: string
   text?: string | null
   createdAt?: Date | string
-  owner: Prisma.UserCreateNestedOneWithoutOwnedSearchHistoryInput
-  user?: Prisma.UserCreateNestedOneWithoutSearchHistoryAppearancesInput
+  searcher: Prisma.UserCreateNestedOneWithoutSearchHistoryAsSearcherInput
+  searchedUser?: Prisma.UserCreateNestedOneWithoutSearchHistoryAsSearchedUserInput
 }
 
 export type SearchHistoryUncheckedCreateInput = {
   id?: string
-  ownerId: string
+  searcherId: string
   text?: string | null
-  userId?: string | null
+  searchedUserId?: string | null
   createdAt?: Date | string
 }
 
@@ -251,23 +251,23 @@ export type SearchHistoryUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   text?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  owner?: Prisma.UserUpdateOneRequiredWithoutOwnedSearchHistoryNestedInput
-  user?: Prisma.UserUpdateOneWithoutSearchHistoryAppearancesNestedInput
+  searcher?: Prisma.UserUpdateOneRequiredWithoutSearchHistoryAsSearcherNestedInput
+  searchedUser?: Prisma.UserUpdateOneWithoutSearchHistoryAsSearchedUserNestedInput
 }
 
 export type SearchHistoryUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerId?: Prisma.StringFieldUpdateOperationsInput | string
+  searcherId?: Prisma.StringFieldUpdateOperationsInput | string
   text?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  searchedUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type SearchHistoryCreateManyInput = {
   id?: string
-  ownerId: string
+  searcherId: string
   text?: string | null
-  userId?: string | null
+  searchedUserId?: string | null
   createdAt?: Date | string
 }
 
@@ -279,9 +279,9 @@ export type SearchHistoryUpdateManyMutationInput = {
 
 export type SearchHistoryUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerId?: Prisma.StringFieldUpdateOperationsInput | string
+  searcherId?: Prisma.StringFieldUpdateOperationsInput | string
   text?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  searchedUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -297,174 +297,174 @@ export type SearchHistoryOrderByRelationAggregateInput = {
 
 export type SearchHistoryCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  ownerId?: Prisma.SortOrder
+  searcherId?: Prisma.SortOrder
   text?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
+  searchedUserId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
 export type SearchHistoryMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  ownerId?: Prisma.SortOrder
+  searcherId?: Prisma.SortOrder
   text?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
+  searchedUserId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
 export type SearchHistoryMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  ownerId?: Prisma.SortOrder
+  searcherId?: Prisma.SortOrder
   text?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
+  searchedUserId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
-export type SearchHistoryCreateNestedManyWithoutOwnerInput = {
-  create?: Prisma.XOR<Prisma.SearchHistoryCreateWithoutOwnerInput, Prisma.SearchHistoryUncheckedCreateWithoutOwnerInput> | Prisma.SearchHistoryCreateWithoutOwnerInput[] | Prisma.SearchHistoryUncheckedCreateWithoutOwnerInput[]
-  connectOrCreate?: Prisma.SearchHistoryCreateOrConnectWithoutOwnerInput | Prisma.SearchHistoryCreateOrConnectWithoutOwnerInput[]
-  createMany?: Prisma.SearchHistoryCreateManyOwnerInputEnvelope
+export type SearchHistoryCreateNestedManyWithoutSearcherInput = {
+  create?: Prisma.XOR<Prisma.SearchHistoryCreateWithoutSearcherInput, Prisma.SearchHistoryUncheckedCreateWithoutSearcherInput> | Prisma.SearchHistoryCreateWithoutSearcherInput[] | Prisma.SearchHistoryUncheckedCreateWithoutSearcherInput[]
+  connectOrCreate?: Prisma.SearchHistoryCreateOrConnectWithoutSearcherInput | Prisma.SearchHistoryCreateOrConnectWithoutSearcherInput[]
+  createMany?: Prisma.SearchHistoryCreateManySearcherInputEnvelope
   connect?: Prisma.SearchHistoryWhereUniqueInput | Prisma.SearchHistoryWhereUniqueInput[]
 }
 
-export type SearchHistoryCreateNestedManyWithoutUserInput = {
-  create?: Prisma.XOR<Prisma.SearchHistoryCreateWithoutUserInput, Prisma.SearchHistoryUncheckedCreateWithoutUserInput> | Prisma.SearchHistoryCreateWithoutUserInput[] | Prisma.SearchHistoryUncheckedCreateWithoutUserInput[]
-  connectOrCreate?: Prisma.SearchHistoryCreateOrConnectWithoutUserInput | Prisma.SearchHistoryCreateOrConnectWithoutUserInput[]
-  createMany?: Prisma.SearchHistoryCreateManyUserInputEnvelope
+export type SearchHistoryCreateNestedManyWithoutSearchedUserInput = {
+  create?: Prisma.XOR<Prisma.SearchHistoryCreateWithoutSearchedUserInput, Prisma.SearchHistoryUncheckedCreateWithoutSearchedUserInput> | Prisma.SearchHistoryCreateWithoutSearchedUserInput[] | Prisma.SearchHistoryUncheckedCreateWithoutSearchedUserInput[]
+  connectOrCreate?: Prisma.SearchHistoryCreateOrConnectWithoutSearchedUserInput | Prisma.SearchHistoryCreateOrConnectWithoutSearchedUserInput[]
+  createMany?: Prisma.SearchHistoryCreateManySearchedUserInputEnvelope
   connect?: Prisma.SearchHistoryWhereUniqueInput | Prisma.SearchHistoryWhereUniqueInput[]
 }
 
-export type SearchHistoryUncheckedCreateNestedManyWithoutOwnerInput = {
-  create?: Prisma.XOR<Prisma.SearchHistoryCreateWithoutOwnerInput, Prisma.SearchHistoryUncheckedCreateWithoutOwnerInput> | Prisma.SearchHistoryCreateWithoutOwnerInput[] | Prisma.SearchHistoryUncheckedCreateWithoutOwnerInput[]
-  connectOrCreate?: Prisma.SearchHistoryCreateOrConnectWithoutOwnerInput | Prisma.SearchHistoryCreateOrConnectWithoutOwnerInput[]
-  createMany?: Prisma.SearchHistoryCreateManyOwnerInputEnvelope
+export type SearchHistoryUncheckedCreateNestedManyWithoutSearcherInput = {
+  create?: Prisma.XOR<Prisma.SearchHistoryCreateWithoutSearcherInput, Prisma.SearchHistoryUncheckedCreateWithoutSearcherInput> | Prisma.SearchHistoryCreateWithoutSearcherInput[] | Prisma.SearchHistoryUncheckedCreateWithoutSearcherInput[]
+  connectOrCreate?: Prisma.SearchHistoryCreateOrConnectWithoutSearcherInput | Prisma.SearchHistoryCreateOrConnectWithoutSearcherInput[]
+  createMany?: Prisma.SearchHistoryCreateManySearcherInputEnvelope
   connect?: Prisma.SearchHistoryWhereUniqueInput | Prisma.SearchHistoryWhereUniqueInput[]
 }
 
-export type SearchHistoryUncheckedCreateNestedManyWithoutUserInput = {
-  create?: Prisma.XOR<Prisma.SearchHistoryCreateWithoutUserInput, Prisma.SearchHistoryUncheckedCreateWithoutUserInput> | Prisma.SearchHistoryCreateWithoutUserInput[] | Prisma.SearchHistoryUncheckedCreateWithoutUserInput[]
-  connectOrCreate?: Prisma.SearchHistoryCreateOrConnectWithoutUserInput | Prisma.SearchHistoryCreateOrConnectWithoutUserInput[]
-  createMany?: Prisma.SearchHistoryCreateManyUserInputEnvelope
+export type SearchHistoryUncheckedCreateNestedManyWithoutSearchedUserInput = {
+  create?: Prisma.XOR<Prisma.SearchHistoryCreateWithoutSearchedUserInput, Prisma.SearchHistoryUncheckedCreateWithoutSearchedUserInput> | Prisma.SearchHistoryCreateWithoutSearchedUserInput[] | Prisma.SearchHistoryUncheckedCreateWithoutSearchedUserInput[]
+  connectOrCreate?: Prisma.SearchHistoryCreateOrConnectWithoutSearchedUserInput | Prisma.SearchHistoryCreateOrConnectWithoutSearchedUserInput[]
+  createMany?: Prisma.SearchHistoryCreateManySearchedUserInputEnvelope
   connect?: Prisma.SearchHistoryWhereUniqueInput | Prisma.SearchHistoryWhereUniqueInput[]
 }
 
-export type SearchHistoryUpdateManyWithoutOwnerNestedInput = {
-  create?: Prisma.XOR<Prisma.SearchHistoryCreateWithoutOwnerInput, Prisma.SearchHistoryUncheckedCreateWithoutOwnerInput> | Prisma.SearchHistoryCreateWithoutOwnerInput[] | Prisma.SearchHistoryUncheckedCreateWithoutOwnerInput[]
-  connectOrCreate?: Prisma.SearchHistoryCreateOrConnectWithoutOwnerInput | Prisma.SearchHistoryCreateOrConnectWithoutOwnerInput[]
-  upsert?: Prisma.SearchHistoryUpsertWithWhereUniqueWithoutOwnerInput | Prisma.SearchHistoryUpsertWithWhereUniqueWithoutOwnerInput[]
-  createMany?: Prisma.SearchHistoryCreateManyOwnerInputEnvelope
+export type SearchHistoryUpdateManyWithoutSearcherNestedInput = {
+  create?: Prisma.XOR<Prisma.SearchHistoryCreateWithoutSearcherInput, Prisma.SearchHistoryUncheckedCreateWithoutSearcherInput> | Prisma.SearchHistoryCreateWithoutSearcherInput[] | Prisma.SearchHistoryUncheckedCreateWithoutSearcherInput[]
+  connectOrCreate?: Prisma.SearchHistoryCreateOrConnectWithoutSearcherInput | Prisma.SearchHistoryCreateOrConnectWithoutSearcherInput[]
+  upsert?: Prisma.SearchHistoryUpsertWithWhereUniqueWithoutSearcherInput | Prisma.SearchHistoryUpsertWithWhereUniqueWithoutSearcherInput[]
+  createMany?: Prisma.SearchHistoryCreateManySearcherInputEnvelope
   set?: Prisma.SearchHistoryWhereUniqueInput | Prisma.SearchHistoryWhereUniqueInput[]
   disconnect?: Prisma.SearchHistoryWhereUniqueInput | Prisma.SearchHistoryWhereUniqueInput[]
   delete?: Prisma.SearchHistoryWhereUniqueInput | Prisma.SearchHistoryWhereUniqueInput[]
   connect?: Prisma.SearchHistoryWhereUniqueInput | Prisma.SearchHistoryWhereUniqueInput[]
-  update?: Prisma.SearchHistoryUpdateWithWhereUniqueWithoutOwnerInput | Prisma.SearchHistoryUpdateWithWhereUniqueWithoutOwnerInput[]
-  updateMany?: Prisma.SearchHistoryUpdateManyWithWhereWithoutOwnerInput | Prisma.SearchHistoryUpdateManyWithWhereWithoutOwnerInput[]
+  update?: Prisma.SearchHistoryUpdateWithWhereUniqueWithoutSearcherInput | Prisma.SearchHistoryUpdateWithWhereUniqueWithoutSearcherInput[]
+  updateMany?: Prisma.SearchHistoryUpdateManyWithWhereWithoutSearcherInput | Prisma.SearchHistoryUpdateManyWithWhereWithoutSearcherInput[]
   deleteMany?: Prisma.SearchHistoryScalarWhereInput | Prisma.SearchHistoryScalarWhereInput[]
 }
 
-export type SearchHistoryUpdateManyWithoutUserNestedInput = {
-  create?: Prisma.XOR<Prisma.SearchHistoryCreateWithoutUserInput, Prisma.SearchHistoryUncheckedCreateWithoutUserInput> | Prisma.SearchHistoryCreateWithoutUserInput[] | Prisma.SearchHistoryUncheckedCreateWithoutUserInput[]
-  connectOrCreate?: Prisma.SearchHistoryCreateOrConnectWithoutUserInput | Prisma.SearchHistoryCreateOrConnectWithoutUserInput[]
-  upsert?: Prisma.SearchHistoryUpsertWithWhereUniqueWithoutUserInput | Prisma.SearchHistoryUpsertWithWhereUniqueWithoutUserInput[]
-  createMany?: Prisma.SearchHistoryCreateManyUserInputEnvelope
+export type SearchHistoryUpdateManyWithoutSearchedUserNestedInput = {
+  create?: Prisma.XOR<Prisma.SearchHistoryCreateWithoutSearchedUserInput, Prisma.SearchHistoryUncheckedCreateWithoutSearchedUserInput> | Prisma.SearchHistoryCreateWithoutSearchedUserInput[] | Prisma.SearchHistoryUncheckedCreateWithoutSearchedUserInput[]
+  connectOrCreate?: Prisma.SearchHistoryCreateOrConnectWithoutSearchedUserInput | Prisma.SearchHistoryCreateOrConnectWithoutSearchedUserInput[]
+  upsert?: Prisma.SearchHistoryUpsertWithWhereUniqueWithoutSearchedUserInput | Prisma.SearchHistoryUpsertWithWhereUniqueWithoutSearchedUserInput[]
+  createMany?: Prisma.SearchHistoryCreateManySearchedUserInputEnvelope
   set?: Prisma.SearchHistoryWhereUniqueInput | Prisma.SearchHistoryWhereUniqueInput[]
   disconnect?: Prisma.SearchHistoryWhereUniqueInput | Prisma.SearchHistoryWhereUniqueInput[]
   delete?: Prisma.SearchHistoryWhereUniqueInput | Prisma.SearchHistoryWhereUniqueInput[]
   connect?: Prisma.SearchHistoryWhereUniqueInput | Prisma.SearchHistoryWhereUniqueInput[]
-  update?: Prisma.SearchHistoryUpdateWithWhereUniqueWithoutUserInput | Prisma.SearchHistoryUpdateWithWhereUniqueWithoutUserInput[]
-  updateMany?: Prisma.SearchHistoryUpdateManyWithWhereWithoutUserInput | Prisma.SearchHistoryUpdateManyWithWhereWithoutUserInput[]
+  update?: Prisma.SearchHistoryUpdateWithWhereUniqueWithoutSearchedUserInput | Prisma.SearchHistoryUpdateWithWhereUniqueWithoutSearchedUserInput[]
+  updateMany?: Prisma.SearchHistoryUpdateManyWithWhereWithoutSearchedUserInput | Prisma.SearchHistoryUpdateManyWithWhereWithoutSearchedUserInput[]
   deleteMany?: Prisma.SearchHistoryScalarWhereInput | Prisma.SearchHistoryScalarWhereInput[]
 }
 
-export type SearchHistoryUncheckedUpdateManyWithoutOwnerNestedInput = {
-  create?: Prisma.XOR<Prisma.SearchHistoryCreateWithoutOwnerInput, Prisma.SearchHistoryUncheckedCreateWithoutOwnerInput> | Prisma.SearchHistoryCreateWithoutOwnerInput[] | Prisma.SearchHistoryUncheckedCreateWithoutOwnerInput[]
-  connectOrCreate?: Prisma.SearchHistoryCreateOrConnectWithoutOwnerInput | Prisma.SearchHistoryCreateOrConnectWithoutOwnerInput[]
-  upsert?: Prisma.SearchHistoryUpsertWithWhereUniqueWithoutOwnerInput | Prisma.SearchHistoryUpsertWithWhereUniqueWithoutOwnerInput[]
-  createMany?: Prisma.SearchHistoryCreateManyOwnerInputEnvelope
+export type SearchHistoryUncheckedUpdateManyWithoutSearcherNestedInput = {
+  create?: Prisma.XOR<Prisma.SearchHistoryCreateWithoutSearcherInput, Prisma.SearchHistoryUncheckedCreateWithoutSearcherInput> | Prisma.SearchHistoryCreateWithoutSearcherInput[] | Prisma.SearchHistoryUncheckedCreateWithoutSearcherInput[]
+  connectOrCreate?: Prisma.SearchHistoryCreateOrConnectWithoutSearcherInput | Prisma.SearchHistoryCreateOrConnectWithoutSearcherInput[]
+  upsert?: Prisma.SearchHistoryUpsertWithWhereUniqueWithoutSearcherInput | Prisma.SearchHistoryUpsertWithWhereUniqueWithoutSearcherInput[]
+  createMany?: Prisma.SearchHistoryCreateManySearcherInputEnvelope
   set?: Prisma.SearchHistoryWhereUniqueInput | Prisma.SearchHistoryWhereUniqueInput[]
   disconnect?: Prisma.SearchHistoryWhereUniqueInput | Prisma.SearchHistoryWhereUniqueInput[]
   delete?: Prisma.SearchHistoryWhereUniqueInput | Prisma.SearchHistoryWhereUniqueInput[]
   connect?: Prisma.SearchHistoryWhereUniqueInput | Prisma.SearchHistoryWhereUniqueInput[]
-  update?: Prisma.SearchHistoryUpdateWithWhereUniqueWithoutOwnerInput | Prisma.SearchHistoryUpdateWithWhereUniqueWithoutOwnerInput[]
-  updateMany?: Prisma.SearchHistoryUpdateManyWithWhereWithoutOwnerInput | Prisma.SearchHistoryUpdateManyWithWhereWithoutOwnerInput[]
+  update?: Prisma.SearchHistoryUpdateWithWhereUniqueWithoutSearcherInput | Prisma.SearchHistoryUpdateWithWhereUniqueWithoutSearcherInput[]
+  updateMany?: Prisma.SearchHistoryUpdateManyWithWhereWithoutSearcherInput | Prisma.SearchHistoryUpdateManyWithWhereWithoutSearcherInput[]
   deleteMany?: Prisma.SearchHistoryScalarWhereInput | Prisma.SearchHistoryScalarWhereInput[]
 }
 
-export type SearchHistoryUncheckedUpdateManyWithoutUserNestedInput = {
-  create?: Prisma.XOR<Prisma.SearchHistoryCreateWithoutUserInput, Prisma.SearchHistoryUncheckedCreateWithoutUserInput> | Prisma.SearchHistoryCreateWithoutUserInput[] | Prisma.SearchHistoryUncheckedCreateWithoutUserInput[]
-  connectOrCreate?: Prisma.SearchHistoryCreateOrConnectWithoutUserInput | Prisma.SearchHistoryCreateOrConnectWithoutUserInput[]
-  upsert?: Prisma.SearchHistoryUpsertWithWhereUniqueWithoutUserInput | Prisma.SearchHistoryUpsertWithWhereUniqueWithoutUserInput[]
-  createMany?: Prisma.SearchHistoryCreateManyUserInputEnvelope
+export type SearchHistoryUncheckedUpdateManyWithoutSearchedUserNestedInput = {
+  create?: Prisma.XOR<Prisma.SearchHistoryCreateWithoutSearchedUserInput, Prisma.SearchHistoryUncheckedCreateWithoutSearchedUserInput> | Prisma.SearchHistoryCreateWithoutSearchedUserInput[] | Prisma.SearchHistoryUncheckedCreateWithoutSearchedUserInput[]
+  connectOrCreate?: Prisma.SearchHistoryCreateOrConnectWithoutSearchedUserInput | Prisma.SearchHistoryCreateOrConnectWithoutSearchedUserInput[]
+  upsert?: Prisma.SearchHistoryUpsertWithWhereUniqueWithoutSearchedUserInput | Prisma.SearchHistoryUpsertWithWhereUniqueWithoutSearchedUserInput[]
+  createMany?: Prisma.SearchHistoryCreateManySearchedUserInputEnvelope
   set?: Prisma.SearchHistoryWhereUniqueInput | Prisma.SearchHistoryWhereUniqueInput[]
   disconnect?: Prisma.SearchHistoryWhereUniqueInput | Prisma.SearchHistoryWhereUniqueInput[]
   delete?: Prisma.SearchHistoryWhereUniqueInput | Prisma.SearchHistoryWhereUniqueInput[]
   connect?: Prisma.SearchHistoryWhereUniqueInput | Prisma.SearchHistoryWhereUniqueInput[]
-  update?: Prisma.SearchHistoryUpdateWithWhereUniqueWithoutUserInput | Prisma.SearchHistoryUpdateWithWhereUniqueWithoutUserInput[]
-  updateMany?: Prisma.SearchHistoryUpdateManyWithWhereWithoutUserInput | Prisma.SearchHistoryUpdateManyWithWhereWithoutUserInput[]
+  update?: Prisma.SearchHistoryUpdateWithWhereUniqueWithoutSearchedUserInput | Prisma.SearchHistoryUpdateWithWhereUniqueWithoutSearchedUserInput[]
+  updateMany?: Prisma.SearchHistoryUpdateManyWithWhereWithoutSearchedUserInput | Prisma.SearchHistoryUpdateManyWithWhereWithoutSearchedUserInput[]
   deleteMany?: Prisma.SearchHistoryScalarWhereInput | Prisma.SearchHistoryScalarWhereInput[]
 }
 
-export type SearchHistoryCreateWithoutOwnerInput = {
+export type SearchHistoryCreateWithoutSearcherInput = {
   id?: string
   text?: string | null
   createdAt?: Date | string
-  user?: Prisma.UserCreateNestedOneWithoutSearchHistoryAppearancesInput
+  searchedUser?: Prisma.UserCreateNestedOneWithoutSearchHistoryAsSearchedUserInput
 }
 
-export type SearchHistoryUncheckedCreateWithoutOwnerInput = {
+export type SearchHistoryUncheckedCreateWithoutSearcherInput = {
   id?: string
   text?: string | null
-  userId?: string | null
+  searchedUserId?: string | null
   createdAt?: Date | string
 }
 
-export type SearchHistoryCreateOrConnectWithoutOwnerInput = {
+export type SearchHistoryCreateOrConnectWithoutSearcherInput = {
   where: Prisma.SearchHistoryWhereUniqueInput
-  create: Prisma.XOR<Prisma.SearchHistoryCreateWithoutOwnerInput, Prisma.SearchHistoryUncheckedCreateWithoutOwnerInput>
+  create: Prisma.XOR<Prisma.SearchHistoryCreateWithoutSearcherInput, Prisma.SearchHistoryUncheckedCreateWithoutSearcherInput>
 }
 
-export type SearchHistoryCreateManyOwnerInputEnvelope = {
-  data: Prisma.SearchHistoryCreateManyOwnerInput | Prisma.SearchHistoryCreateManyOwnerInput[]
+export type SearchHistoryCreateManySearcherInputEnvelope = {
+  data: Prisma.SearchHistoryCreateManySearcherInput | Prisma.SearchHistoryCreateManySearcherInput[]
   skipDuplicates?: boolean
 }
 
-export type SearchHistoryCreateWithoutUserInput = {
+export type SearchHistoryCreateWithoutSearchedUserInput = {
   id?: string
   text?: string | null
   createdAt?: Date | string
-  owner: Prisma.UserCreateNestedOneWithoutOwnedSearchHistoryInput
+  searcher: Prisma.UserCreateNestedOneWithoutSearchHistoryAsSearcherInput
 }
 
-export type SearchHistoryUncheckedCreateWithoutUserInput = {
+export type SearchHistoryUncheckedCreateWithoutSearchedUserInput = {
   id?: string
-  ownerId: string
+  searcherId: string
   text?: string | null
   createdAt?: Date | string
 }
 
-export type SearchHistoryCreateOrConnectWithoutUserInput = {
+export type SearchHistoryCreateOrConnectWithoutSearchedUserInput = {
   where: Prisma.SearchHistoryWhereUniqueInput
-  create: Prisma.XOR<Prisma.SearchHistoryCreateWithoutUserInput, Prisma.SearchHistoryUncheckedCreateWithoutUserInput>
+  create: Prisma.XOR<Prisma.SearchHistoryCreateWithoutSearchedUserInput, Prisma.SearchHistoryUncheckedCreateWithoutSearchedUserInput>
 }
 
-export type SearchHistoryCreateManyUserInputEnvelope = {
-  data: Prisma.SearchHistoryCreateManyUserInput | Prisma.SearchHistoryCreateManyUserInput[]
+export type SearchHistoryCreateManySearchedUserInputEnvelope = {
+  data: Prisma.SearchHistoryCreateManySearchedUserInput | Prisma.SearchHistoryCreateManySearchedUserInput[]
   skipDuplicates?: boolean
 }
 
-export type SearchHistoryUpsertWithWhereUniqueWithoutOwnerInput = {
+export type SearchHistoryUpsertWithWhereUniqueWithoutSearcherInput = {
   where: Prisma.SearchHistoryWhereUniqueInput
-  update: Prisma.XOR<Prisma.SearchHistoryUpdateWithoutOwnerInput, Prisma.SearchHistoryUncheckedUpdateWithoutOwnerInput>
-  create: Prisma.XOR<Prisma.SearchHistoryCreateWithoutOwnerInput, Prisma.SearchHistoryUncheckedCreateWithoutOwnerInput>
+  update: Prisma.XOR<Prisma.SearchHistoryUpdateWithoutSearcherInput, Prisma.SearchHistoryUncheckedUpdateWithoutSearcherInput>
+  create: Prisma.XOR<Prisma.SearchHistoryCreateWithoutSearcherInput, Prisma.SearchHistoryUncheckedCreateWithoutSearcherInput>
 }
 
-export type SearchHistoryUpdateWithWhereUniqueWithoutOwnerInput = {
+export type SearchHistoryUpdateWithWhereUniqueWithoutSearcherInput = {
   where: Prisma.SearchHistoryWhereUniqueInput
-  data: Prisma.XOR<Prisma.SearchHistoryUpdateWithoutOwnerInput, Prisma.SearchHistoryUncheckedUpdateWithoutOwnerInput>
+  data: Prisma.XOR<Prisma.SearchHistoryUpdateWithoutSearcherInput, Prisma.SearchHistoryUncheckedUpdateWithoutSearcherInput>
 }
 
-export type SearchHistoryUpdateManyWithWhereWithoutOwnerInput = {
+export type SearchHistoryUpdateManyWithWhereWithoutSearcherInput = {
   where: Prisma.SearchHistoryScalarWhereInput
-  data: Prisma.XOR<Prisma.SearchHistoryUpdateManyMutationInput, Prisma.SearchHistoryUncheckedUpdateManyWithoutOwnerInput>
+  data: Prisma.XOR<Prisma.SearchHistoryUpdateManyMutationInput, Prisma.SearchHistoryUncheckedUpdateManyWithoutSearcherInput>
 }
 
 export type SearchHistoryScalarWhereInput = {
@@ -472,80 +472,80 @@ export type SearchHistoryScalarWhereInput = {
   OR?: Prisma.SearchHistoryScalarWhereInput[]
   NOT?: Prisma.SearchHistoryScalarWhereInput | Prisma.SearchHistoryScalarWhereInput[]
   id?: Prisma.StringFilter<"SearchHistory"> | string
-  ownerId?: Prisma.StringFilter<"SearchHistory"> | string
+  searcherId?: Prisma.StringFilter<"SearchHistory"> | string
   text?: Prisma.StringNullableFilter<"SearchHistory"> | string | null
-  userId?: Prisma.StringNullableFilter<"SearchHistory"> | string | null
+  searchedUserId?: Prisma.StringNullableFilter<"SearchHistory"> | string | null
   createdAt?: Prisma.DateTimeFilter<"SearchHistory"> | Date | string
 }
 
-export type SearchHistoryUpsertWithWhereUniqueWithoutUserInput = {
+export type SearchHistoryUpsertWithWhereUniqueWithoutSearchedUserInput = {
   where: Prisma.SearchHistoryWhereUniqueInput
-  update: Prisma.XOR<Prisma.SearchHistoryUpdateWithoutUserInput, Prisma.SearchHistoryUncheckedUpdateWithoutUserInput>
-  create: Prisma.XOR<Prisma.SearchHistoryCreateWithoutUserInput, Prisma.SearchHistoryUncheckedCreateWithoutUserInput>
+  update: Prisma.XOR<Prisma.SearchHistoryUpdateWithoutSearchedUserInput, Prisma.SearchHistoryUncheckedUpdateWithoutSearchedUserInput>
+  create: Prisma.XOR<Prisma.SearchHistoryCreateWithoutSearchedUserInput, Prisma.SearchHistoryUncheckedCreateWithoutSearchedUserInput>
 }
 
-export type SearchHistoryUpdateWithWhereUniqueWithoutUserInput = {
+export type SearchHistoryUpdateWithWhereUniqueWithoutSearchedUserInput = {
   where: Prisma.SearchHistoryWhereUniqueInput
-  data: Prisma.XOR<Prisma.SearchHistoryUpdateWithoutUserInput, Prisma.SearchHistoryUncheckedUpdateWithoutUserInput>
+  data: Prisma.XOR<Prisma.SearchHistoryUpdateWithoutSearchedUserInput, Prisma.SearchHistoryUncheckedUpdateWithoutSearchedUserInput>
 }
 
-export type SearchHistoryUpdateManyWithWhereWithoutUserInput = {
+export type SearchHistoryUpdateManyWithWhereWithoutSearchedUserInput = {
   where: Prisma.SearchHistoryScalarWhereInput
-  data: Prisma.XOR<Prisma.SearchHistoryUpdateManyMutationInput, Prisma.SearchHistoryUncheckedUpdateManyWithoutUserInput>
+  data: Prisma.XOR<Prisma.SearchHistoryUpdateManyMutationInput, Prisma.SearchHistoryUncheckedUpdateManyWithoutSearchedUserInput>
 }
 
-export type SearchHistoryCreateManyOwnerInput = {
+export type SearchHistoryCreateManySearcherInput = {
   id?: string
   text?: string | null
-  userId?: string | null
+  searchedUserId?: string | null
   createdAt?: Date | string
 }
 
-export type SearchHistoryCreateManyUserInput = {
+export type SearchHistoryCreateManySearchedUserInput = {
   id?: string
-  ownerId: string
+  searcherId: string
   text?: string | null
   createdAt?: Date | string
 }
 
-export type SearchHistoryUpdateWithoutOwnerInput = {
+export type SearchHistoryUpdateWithoutSearcherInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   text?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  user?: Prisma.UserUpdateOneWithoutSearchHistoryAppearancesNestedInput
+  searchedUser?: Prisma.UserUpdateOneWithoutSearchHistoryAsSearchedUserNestedInput
 }
 
-export type SearchHistoryUncheckedUpdateWithoutOwnerInput = {
+export type SearchHistoryUncheckedUpdateWithoutSearcherInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   text?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  searchedUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type SearchHistoryUncheckedUpdateManyWithoutOwnerInput = {
+export type SearchHistoryUncheckedUpdateManyWithoutSearcherInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   text?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  searchedUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type SearchHistoryUpdateWithoutUserInput = {
+export type SearchHistoryUpdateWithoutSearchedUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   text?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  owner?: Prisma.UserUpdateOneRequiredWithoutOwnedSearchHistoryNestedInput
+  searcher?: Prisma.UserUpdateOneRequiredWithoutSearchHistoryAsSearcherNestedInput
 }
 
-export type SearchHistoryUncheckedUpdateWithoutUserInput = {
+export type SearchHistoryUncheckedUpdateWithoutSearchedUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerId?: Prisma.StringFieldUpdateOperationsInput | string
+  searcherId?: Prisma.StringFieldUpdateOperationsInput | string
   text?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type SearchHistoryUncheckedUpdateManyWithoutUserInput = {
+export type SearchHistoryUncheckedUpdateManyWithoutSearchedUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  ownerId?: Prisma.StringFieldUpdateOperationsInput | string
+  searcherId?: Prisma.StringFieldUpdateOperationsInput | string
   text?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -554,67 +554,67 @@ export type SearchHistoryUncheckedUpdateManyWithoutUserInput = {
 
 export type SearchHistorySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  ownerId?: boolean
+  searcherId?: boolean
   text?: boolean
-  userId?: boolean
+  searchedUserId?: boolean
   createdAt?: boolean
-  owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  user?: boolean | Prisma.SearchHistory$userArgs<ExtArgs>
+  searcher?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  searchedUser?: boolean | Prisma.SearchHistory$searchedUserArgs<ExtArgs>
 }, ExtArgs["result"]["searchHistory"]>
 
 export type SearchHistorySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  ownerId?: boolean
+  searcherId?: boolean
   text?: boolean
-  userId?: boolean
+  searchedUserId?: boolean
   createdAt?: boolean
-  owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  user?: boolean | Prisma.SearchHistory$userArgs<ExtArgs>
+  searcher?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  searchedUser?: boolean | Prisma.SearchHistory$searchedUserArgs<ExtArgs>
 }, ExtArgs["result"]["searchHistory"]>
 
 export type SearchHistorySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  ownerId?: boolean
+  searcherId?: boolean
   text?: boolean
-  userId?: boolean
+  searchedUserId?: boolean
   createdAt?: boolean
-  owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  user?: boolean | Prisma.SearchHistory$userArgs<ExtArgs>
+  searcher?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  searchedUser?: boolean | Prisma.SearchHistory$searchedUserArgs<ExtArgs>
 }, ExtArgs["result"]["searchHistory"]>
 
 export type SearchHistorySelectScalar = {
   id?: boolean
-  ownerId?: boolean
+  searcherId?: boolean
   text?: boolean
-  userId?: boolean
+  searchedUserId?: boolean
   createdAt?: boolean
 }
 
-export type SearchHistoryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "ownerId" | "text" | "userId" | "createdAt", ExtArgs["result"]["searchHistory"]>
+export type SearchHistoryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "searcherId" | "text" | "searchedUserId" | "createdAt", ExtArgs["result"]["searchHistory"]>
 export type SearchHistoryInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  user?: boolean | Prisma.SearchHistory$userArgs<ExtArgs>
+  searcher?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  searchedUser?: boolean | Prisma.SearchHistory$searchedUserArgs<ExtArgs>
 }
 export type SearchHistoryIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  user?: boolean | Prisma.SearchHistory$userArgs<ExtArgs>
+  searcher?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  searchedUser?: boolean | Prisma.SearchHistory$searchedUserArgs<ExtArgs>
 }
 export type SearchHistoryIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  user?: boolean | Prisma.SearchHistory$userArgs<ExtArgs>
+  searcher?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  searchedUser?: boolean | Prisma.SearchHistory$searchedUserArgs<ExtArgs>
 }
 
 export type $SearchHistoryPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "SearchHistory"
   objects: {
-    owner: Prisma.$UserPayload<ExtArgs>
-    user: Prisma.$UserPayload<ExtArgs> | null
+    searcher: Prisma.$UserPayload<ExtArgs>
+    searchedUser: Prisma.$UserPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
-    ownerId: string
+    searcherId: string
     text: string | null
-    userId: string | null
+    searchedUserId: string | null
     createdAt: Date
   }, ExtArgs["result"]["searchHistory"]>
   composites: {}
@@ -1010,8 +1010,8 @@ readonly fields: SearchHistoryFieldRefs;
  */
 export interface Prisma__SearchHistoryClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  owner<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  user<T extends Prisma.SearchHistory$userArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SearchHistory$userArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  searcher<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  searchedUser<T extends Prisma.SearchHistory$searchedUserArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SearchHistory$searchedUserArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1042,9 +1042,9 @@ export interface Prisma__SearchHistoryClient<T, Null = never, ExtArgs extends ru
  */
 export interface SearchHistoryFieldRefs {
   readonly id: Prisma.FieldRef<"SearchHistory", 'String'>
-  readonly ownerId: Prisma.FieldRef<"SearchHistory", 'String'>
+  readonly searcherId: Prisma.FieldRef<"SearchHistory", 'String'>
   readonly text: Prisma.FieldRef<"SearchHistory", 'String'>
-  readonly userId: Prisma.FieldRef<"SearchHistory", 'String'>
+  readonly searchedUserId: Prisma.FieldRef<"SearchHistory", 'String'>
   readonly createdAt: Prisma.FieldRef<"SearchHistory", 'DateTime'>
 }
     
@@ -1447,9 +1447,9 @@ export type SearchHistoryDeleteManyArgs<ExtArgs extends runtime.Types.Extensions
 }
 
 /**
- * SearchHistory.user
+ * SearchHistory.searchedUser
  */
-export type SearchHistory$userArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type SearchHistory$searchedUserArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
    * Select specific fields to fetch from the User
    */

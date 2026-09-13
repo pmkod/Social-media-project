@@ -100,7 +100,7 @@ function SearchBar() {
 
 	const handleSelectUser = (user: User) => {
 		setIsPopoverOpen(false);
-		createSearchHistory.mutate({ userId: user.id });
+		createSearchHistory.mutate({ searchedUserId: user.id });
 	};
 
 	const suggestions =
@@ -233,10 +233,12 @@ function SearchBar() {
 											key={item.id}
 											className="relative flex items-center transition-colors hover:bg-accent"
 										>
-											{item.user ? (
+											{item.searchedUser ? (
 												<SearchUserLink
-													user={item.user}
-													onClick={() => handleSelectUser(item.user as User)}
+													user={item.searchedUser}
+													onClick={() =>
+														handleSelectUser(item.searchedUser as User)
+													}
 												/>
 											) : (
 												<button

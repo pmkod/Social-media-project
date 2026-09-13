@@ -25,7 +25,7 @@ const clearSearchHistoryRoute = defineOpenAPIRoute<
 		const authenticatedUser = c.get("authenticatedUser");
 
 		await prisma.searchHistory.deleteMany({
-			where: { ownerId: authenticatedUser.id },
+			where: { searcherId: authenticatedUser.id },
 		});
 
 		return c.json({ message: "Search history cleared successfully" });

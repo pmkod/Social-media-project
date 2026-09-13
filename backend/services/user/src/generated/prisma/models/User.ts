@@ -329,8 +329,8 @@ export type UserWhereInput = {
   following?: Prisma.FollowListRelationFilter
   blockedUsers?: Prisma.BlockListRelationFilter
   blockedByUsers?: Prisma.BlockListRelationFilter
-  ownedSearchHistory?: Prisma.SearchHistoryListRelationFilter
-  searchHistoryAppearances?: Prisma.SearchHistoryListRelationFilter
+  searchHistoryAsSearcher?: Prisma.SearchHistoryListRelationFilter
+  searchHistoryAsSearchedUser?: Prisma.SearchHistoryListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -356,8 +356,8 @@ export type UserOrderByWithRelationInput = {
   following?: Prisma.FollowOrderByRelationAggregateInput
   blockedUsers?: Prisma.BlockOrderByRelationAggregateInput
   blockedByUsers?: Prisma.BlockOrderByRelationAggregateInput
-  ownedSearchHistory?: Prisma.SearchHistoryOrderByRelationAggregateInput
-  searchHistoryAppearances?: Prisma.SearchHistoryOrderByRelationAggregateInput
+  searchHistoryAsSearcher?: Prisma.SearchHistoryOrderByRelationAggregateInput
+  searchHistoryAsSearchedUser?: Prisma.SearchHistoryOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -386,8 +386,8 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   following?: Prisma.FollowListRelationFilter
   blockedUsers?: Prisma.BlockListRelationFilter
   blockedByUsers?: Prisma.BlockListRelationFilter
-  ownedSearchHistory?: Prisma.SearchHistoryListRelationFilter
-  searchHistoryAppearances?: Prisma.SearchHistoryListRelationFilter
+  searchHistoryAsSearcher?: Prisma.SearchHistoryListRelationFilter
+  searchHistoryAsSearchedUser?: Prisma.SearchHistoryListRelationFilter
 }, "id" | "email" | "username">
 
 export type UserOrderByWithAggregationInput = {
@@ -461,8 +461,8 @@ export type UserCreateInput = {
   following?: Prisma.FollowCreateNestedManyWithoutFollowerInput
   blockedUsers?: Prisma.BlockCreateNestedManyWithoutBlockerInput
   blockedByUsers?: Prisma.BlockCreateNestedManyWithoutBlockedInput
-  ownedSearchHistory?: Prisma.SearchHistoryCreateNestedManyWithoutOwnerInput
-  searchHistoryAppearances?: Prisma.SearchHistoryCreateNestedManyWithoutUserInput
+  searchHistoryAsSearcher?: Prisma.SearchHistoryCreateNestedManyWithoutSearcherInput
+  searchHistoryAsSearchedUser?: Prisma.SearchHistoryCreateNestedManyWithoutSearchedUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -488,8 +488,8 @@ export type UserUncheckedCreateInput = {
   following?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowerInput
   blockedUsers?: Prisma.BlockUncheckedCreateNestedManyWithoutBlockerInput
   blockedByUsers?: Prisma.BlockUncheckedCreateNestedManyWithoutBlockedInput
-  ownedSearchHistory?: Prisma.SearchHistoryUncheckedCreateNestedManyWithoutOwnerInput
-  searchHistoryAppearances?: Prisma.SearchHistoryUncheckedCreateNestedManyWithoutUserInput
+  searchHistoryAsSearcher?: Prisma.SearchHistoryUncheckedCreateNestedManyWithoutSearcherInput
+  searchHistoryAsSearchedUser?: Prisma.SearchHistoryUncheckedCreateNestedManyWithoutSearchedUserInput
 }
 
 export type UserUpdateInput = {
@@ -515,8 +515,8 @@ export type UserUpdateInput = {
   following?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
   blockedUsers?: Prisma.BlockUpdateManyWithoutBlockerNestedInput
   blockedByUsers?: Prisma.BlockUpdateManyWithoutBlockedNestedInput
-  ownedSearchHistory?: Prisma.SearchHistoryUpdateManyWithoutOwnerNestedInput
-  searchHistoryAppearances?: Prisma.SearchHistoryUpdateManyWithoutUserNestedInput
+  searchHistoryAsSearcher?: Prisma.SearchHistoryUpdateManyWithoutSearcherNestedInput
+  searchHistoryAsSearchedUser?: Prisma.SearchHistoryUpdateManyWithoutSearchedUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -542,8 +542,8 @@ export type UserUncheckedUpdateInput = {
   following?: Prisma.FollowUncheckedUpdateManyWithoutFollowerNestedInput
   blockedUsers?: Prisma.BlockUncheckedUpdateManyWithoutBlockerNestedInput
   blockedByUsers?: Prisma.BlockUncheckedUpdateManyWithoutBlockedNestedInput
-  ownedSearchHistory?: Prisma.SearchHistoryUncheckedUpdateManyWithoutOwnerNestedInput
-  searchHistoryAppearances?: Prisma.SearchHistoryUncheckedUpdateManyWithoutUserNestedInput
+  searchHistoryAsSearcher?: Prisma.SearchHistoryUncheckedUpdateManyWithoutSearcherNestedInput
+  searchHistoryAsSearchedUser?: Prisma.SearchHistoryUncheckedUpdateManyWithoutSearchedUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -714,34 +714,34 @@ export type DateTimeFieldUpdateOperationsInput = {
   set?: Date | string
 }
 
-export type UserCreateNestedOneWithoutOwnedSearchHistoryInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutOwnedSearchHistoryInput, Prisma.UserUncheckedCreateWithoutOwnedSearchHistoryInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutOwnedSearchHistoryInput
+export type UserCreateNestedOneWithoutSearchHistoryAsSearcherInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSearchHistoryAsSearcherInput, Prisma.UserUncheckedCreateWithoutSearchHistoryAsSearcherInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSearchHistoryAsSearcherInput
   connect?: Prisma.UserWhereUniqueInput
 }
 
-export type UserCreateNestedOneWithoutSearchHistoryAppearancesInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutSearchHistoryAppearancesInput, Prisma.UserUncheckedCreateWithoutSearchHistoryAppearancesInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSearchHistoryAppearancesInput
+export type UserCreateNestedOneWithoutSearchHistoryAsSearchedUserInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSearchHistoryAsSearchedUserInput, Prisma.UserUncheckedCreateWithoutSearchHistoryAsSearchedUserInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSearchHistoryAsSearchedUserInput
   connect?: Prisma.UserWhereUniqueInput
 }
 
-export type UserUpdateOneRequiredWithoutOwnedSearchHistoryNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutOwnedSearchHistoryInput, Prisma.UserUncheckedCreateWithoutOwnedSearchHistoryInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutOwnedSearchHistoryInput
-  upsert?: Prisma.UserUpsertWithoutOwnedSearchHistoryInput
+export type UserUpdateOneRequiredWithoutSearchHistoryAsSearcherNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSearchHistoryAsSearcherInput, Prisma.UserUncheckedCreateWithoutSearchHistoryAsSearcherInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSearchHistoryAsSearcherInput
+  upsert?: Prisma.UserUpsertWithoutSearchHistoryAsSearcherInput
   connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutOwnedSearchHistoryInput, Prisma.UserUpdateWithoutOwnedSearchHistoryInput>, Prisma.UserUncheckedUpdateWithoutOwnedSearchHistoryInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSearchHistoryAsSearcherInput, Prisma.UserUpdateWithoutSearchHistoryAsSearcherInput>, Prisma.UserUncheckedUpdateWithoutSearchHistoryAsSearcherInput>
 }
 
-export type UserUpdateOneWithoutSearchHistoryAppearancesNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutSearchHistoryAppearancesInput, Prisma.UserUncheckedCreateWithoutSearchHistoryAppearancesInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSearchHistoryAppearancesInput
-  upsert?: Prisma.UserUpsertWithoutSearchHistoryAppearancesInput
+export type UserUpdateOneWithoutSearchHistoryAsSearchedUserNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSearchHistoryAsSearchedUserInput, Prisma.UserUncheckedCreateWithoutSearchHistoryAsSearchedUserInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSearchHistoryAsSearchedUserInput
+  upsert?: Prisma.UserUpsertWithoutSearchHistoryAsSearchedUserInput
   disconnect?: Prisma.UserWhereInput | boolean
   delete?: Prisma.UserWhereInput | boolean
   connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSearchHistoryAppearancesInput, Prisma.UserUpdateWithoutSearchHistoryAppearancesInput>, Prisma.UserUncheckedUpdateWithoutSearchHistoryAppearancesInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSearchHistoryAsSearchedUserInput, Prisma.UserUpdateWithoutSearchHistoryAsSearchedUserInput>, Prisma.UserUncheckedUpdateWithoutSearchHistoryAsSearchedUserInput>
 }
 
 export type UserCreateNestedOneWithoutFollowingInput = {
@@ -816,7 +816,7 @@ export type UserUpdateOneWithoutUserVerificationsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutUserVerificationsInput, Prisma.UserUpdateWithoutUserVerificationsInput>, Prisma.UserUncheckedUpdateWithoutUserVerificationsInput>
 }
 
-export type UserCreateWithoutOwnedSearchHistoryInput = {
+export type UserCreateWithoutSearchHistoryAsSearcherInput = {
   id?: string
   email: string
   username: string
@@ -839,10 +839,10 @@ export type UserCreateWithoutOwnedSearchHistoryInput = {
   following?: Prisma.FollowCreateNestedManyWithoutFollowerInput
   blockedUsers?: Prisma.BlockCreateNestedManyWithoutBlockerInput
   blockedByUsers?: Prisma.BlockCreateNestedManyWithoutBlockedInput
-  searchHistoryAppearances?: Prisma.SearchHistoryCreateNestedManyWithoutUserInput
+  searchHistoryAsSearchedUser?: Prisma.SearchHistoryCreateNestedManyWithoutSearchedUserInput
 }
 
-export type UserUncheckedCreateWithoutOwnedSearchHistoryInput = {
+export type UserUncheckedCreateWithoutSearchHistoryAsSearcherInput = {
   id?: string
   email: string
   username: string
@@ -865,15 +865,15 @@ export type UserUncheckedCreateWithoutOwnedSearchHistoryInput = {
   following?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowerInput
   blockedUsers?: Prisma.BlockUncheckedCreateNestedManyWithoutBlockerInput
   blockedByUsers?: Prisma.BlockUncheckedCreateNestedManyWithoutBlockedInput
-  searchHistoryAppearances?: Prisma.SearchHistoryUncheckedCreateNestedManyWithoutUserInput
+  searchHistoryAsSearchedUser?: Prisma.SearchHistoryUncheckedCreateNestedManyWithoutSearchedUserInput
 }
 
-export type UserCreateOrConnectWithoutOwnedSearchHistoryInput = {
+export type UserCreateOrConnectWithoutSearchHistoryAsSearcherInput = {
   where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutOwnedSearchHistoryInput, Prisma.UserUncheckedCreateWithoutOwnedSearchHistoryInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutSearchHistoryAsSearcherInput, Prisma.UserUncheckedCreateWithoutSearchHistoryAsSearcherInput>
 }
 
-export type UserCreateWithoutSearchHistoryAppearancesInput = {
+export type UserCreateWithoutSearchHistoryAsSearchedUserInput = {
   id?: string
   email: string
   username: string
@@ -896,10 +896,10 @@ export type UserCreateWithoutSearchHistoryAppearancesInput = {
   following?: Prisma.FollowCreateNestedManyWithoutFollowerInput
   blockedUsers?: Prisma.BlockCreateNestedManyWithoutBlockerInput
   blockedByUsers?: Prisma.BlockCreateNestedManyWithoutBlockedInput
-  ownedSearchHistory?: Prisma.SearchHistoryCreateNestedManyWithoutOwnerInput
+  searchHistoryAsSearcher?: Prisma.SearchHistoryCreateNestedManyWithoutSearcherInput
 }
 
-export type UserUncheckedCreateWithoutSearchHistoryAppearancesInput = {
+export type UserUncheckedCreateWithoutSearchHistoryAsSearchedUserInput = {
   id?: string
   email: string
   username: string
@@ -922,26 +922,26 @@ export type UserUncheckedCreateWithoutSearchHistoryAppearancesInput = {
   following?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowerInput
   blockedUsers?: Prisma.BlockUncheckedCreateNestedManyWithoutBlockerInput
   blockedByUsers?: Prisma.BlockUncheckedCreateNestedManyWithoutBlockedInput
-  ownedSearchHistory?: Prisma.SearchHistoryUncheckedCreateNestedManyWithoutOwnerInput
+  searchHistoryAsSearcher?: Prisma.SearchHistoryUncheckedCreateNestedManyWithoutSearcherInput
 }
 
-export type UserCreateOrConnectWithoutSearchHistoryAppearancesInput = {
+export type UserCreateOrConnectWithoutSearchHistoryAsSearchedUserInput = {
   where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutSearchHistoryAppearancesInput, Prisma.UserUncheckedCreateWithoutSearchHistoryAppearancesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutSearchHistoryAsSearchedUserInput, Prisma.UserUncheckedCreateWithoutSearchHistoryAsSearchedUserInput>
 }
 
-export type UserUpsertWithoutOwnedSearchHistoryInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutOwnedSearchHistoryInput, Prisma.UserUncheckedUpdateWithoutOwnedSearchHistoryInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutOwnedSearchHistoryInput, Prisma.UserUncheckedCreateWithoutOwnedSearchHistoryInput>
+export type UserUpsertWithoutSearchHistoryAsSearcherInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutSearchHistoryAsSearcherInput, Prisma.UserUncheckedUpdateWithoutSearchHistoryAsSearcherInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutSearchHistoryAsSearcherInput, Prisma.UserUncheckedCreateWithoutSearchHistoryAsSearcherInput>
   where?: Prisma.UserWhereInput
 }
 
-export type UserUpdateToOneWithWhereWithoutOwnedSearchHistoryInput = {
+export type UserUpdateToOneWithWhereWithoutSearchHistoryAsSearcherInput = {
   where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutOwnedSearchHistoryInput, Prisma.UserUncheckedUpdateWithoutOwnedSearchHistoryInput>
+  data: Prisma.XOR<Prisma.UserUpdateWithoutSearchHistoryAsSearcherInput, Prisma.UserUncheckedUpdateWithoutSearchHistoryAsSearcherInput>
 }
 
-export type UserUpdateWithoutOwnedSearchHistoryInput = {
+export type UserUpdateWithoutSearchHistoryAsSearcherInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
@@ -964,10 +964,10 @@ export type UserUpdateWithoutOwnedSearchHistoryInput = {
   following?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
   blockedUsers?: Prisma.BlockUpdateManyWithoutBlockerNestedInput
   blockedByUsers?: Prisma.BlockUpdateManyWithoutBlockedNestedInput
-  searchHistoryAppearances?: Prisma.SearchHistoryUpdateManyWithoutUserNestedInput
+  searchHistoryAsSearchedUser?: Prisma.SearchHistoryUpdateManyWithoutSearchedUserNestedInput
 }
 
-export type UserUncheckedUpdateWithoutOwnedSearchHistoryInput = {
+export type UserUncheckedUpdateWithoutSearchHistoryAsSearcherInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
@@ -990,21 +990,21 @@ export type UserUncheckedUpdateWithoutOwnedSearchHistoryInput = {
   following?: Prisma.FollowUncheckedUpdateManyWithoutFollowerNestedInput
   blockedUsers?: Prisma.BlockUncheckedUpdateManyWithoutBlockerNestedInput
   blockedByUsers?: Prisma.BlockUncheckedUpdateManyWithoutBlockedNestedInput
-  searchHistoryAppearances?: Prisma.SearchHistoryUncheckedUpdateManyWithoutUserNestedInput
+  searchHistoryAsSearchedUser?: Prisma.SearchHistoryUncheckedUpdateManyWithoutSearchedUserNestedInput
 }
 
-export type UserUpsertWithoutSearchHistoryAppearancesInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutSearchHistoryAppearancesInput, Prisma.UserUncheckedUpdateWithoutSearchHistoryAppearancesInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutSearchHistoryAppearancesInput, Prisma.UserUncheckedCreateWithoutSearchHistoryAppearancesInput>
+export type UserUpsertWithoutSearchHistoryAsSearchedUserInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutSearchHistoryAsSearchedUserInput, Prisma.UserUncheckedUpdateWithoutSearchHistoryAsSearchedUserInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutSearchHistoryAsSearchedUserInput, Prisma.UserUncheckedCreateWithoutSearchHistoryAsSearchedUserInput>
   where?: Prisma.UserWhereInput
 }
 
-export type UserUpdateToOneWithWhereWithoutSearchHistoryAppearancesInput = {
+export type UserUpdateToOneWithWhereWithoutSearchHistoryAsSearchedUserInput = {
   where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutSearchHistoryAppearancesInput, Prisma.UserUncheckedUpdateWithoutSearchHistoryAppearancesInput>
+  data: Prisma.XOR<Prisma.UserUpdateWithoutSearchHistoryAsSearchedUserInput, Prisma.UserUncheckedUpdateWithoutSearchHistoryAsSearchedUserInput>
 }
 
-export type UserUpdateWithoutSearchHistoryAppearancesInput = {
+export type UserUpdateWithoutSearchHistoryAsSearchedUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1027,10 +1027,10 @@ export type UserUpdateWithoutSearchHistoryAppearancesInput = {
   following?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
   blockedUsers?: Prisma.BlockUpdateManyWithoutBlockerNestedInput
   blockedByUsers?: Prisma.BlockUpdateManyWithoutBlockedNestedInput
-  ownedSearchHistory?: Prisma.SearchHistoryUpdateManyWithoutOwnerNestedInput
+  searchHistoryAsSearcher?: Prisma.SearchHistoryUpdateManyWithoutSearcherNestedInput
 }
 
-export type UserUncheckedUpdateWithoutSearchHistoryAppearancesInput = {
+export type UserUncheckedUpdateWithoutSearchHistoryAsSearchedUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1053,7 +1053,7 @@ export type UserUncheckedUpdateWithoutSearchHistoryAppearancesInput = {
   following?: Prisma.FollowUncheckedUpdateManyWithoutFollowerNestedInput
   blockedUsers?: Prisma.BlockUncheckedUpdateManyWithoutBlockerNestedInput
   blockedByUsers?: Prisma.BlockUncheckedUpdateManyWithoutBlockedNestedInput
-  ownedSearchHistory?: Prisma.SearchHistoryUncheckedUpdateManyWithoutOwnerNestedInput
+  searchHistoryAsSearcher?: Prisma.SearchHistoryUncheckedUpdateManyWithoutSearcherNestedInput
 }
 
 export type UserCreateWithoutFollowingInput = {
@@ -1078,8 +1078,8 @@ export type UserCreateWithoutFollowingInput = {
   followers?: Prisma.FollowCreateNestedManyWithoutFollowingInput
   blockedUsers?: Prisma.BlockCreateNestedManyWithoutBlockerInput
   blockedByUsers?: Prisma.BlockCreateNestedManyWithoutBlockedInput
-  ownedSearchHistory?: Prisma.SearchHistoryCreateNestedManyWithoutOwnerInput
-  searchHistoryAppearances?: Prisma.SearchHistoryCreateNestedManyWithoutUserInput
+  searchHistoryAsSearcher?: Prisma.SearchHistoryCreateNestedManyWithoutSearcherInput
+  searchHistoryAsSearchedUser?: Prisma.SearchHistoryCreateNestedManyWithoutSearchedUserInput
 }
 
 export type UserUncheckedCreateWithoutFollowingInput = {
@@ -1104,8 +1104,8 @@ export type UserUncheckedCreateWithoutFollowingInput = {
   followers?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowingInput
   blockedUsers?: Prisma.BlockUncheckedCreateNestedManyWithoutBlockerInput
   blockedByUsers?: Prisma.BlockUncheckedCreateNestedManyWithoutBlockedInput
-  ownedSearchHistory?: Prisma.SearchHistoryUncheckedCreateNestedManyWithoutOwnerInput
-  searchHistoryAppearances?: Prisma.SearchHistoryUncheckedCreateNestedManyWithoutUserInput
+  searchHistoryAsSearcher?: Prisma.SearchHistoryUncheckedCreateNestedManyWithoutSearcherInput
+  searchHistoryAsSearchedUser?: Prisma.SearchHistoryUncheckedCreateNestedManyWithoutSearchedUserInput
 }
 
 export type UserCreateOrConnectWithoutFollowingInput = {
@@ -1135,8 +1135,8 @@ export type UserCreateWithoutFollowersInput = {
   following?: Prisma.FollowCreateNestedManyWithoutFollowerInput
   blockedUsers?: Prisma.BlockCreateNestedManyWithoutBlockerInput
   blockedByUsers?: Prisma.BlockCreateNestedManyWithoutBlockedInput
-  ownedSearchHistory?: Prisma.SearchHistoryCreateNestedManyWithoutOwnerInput
-  searchHistoryAppearances?: Prisma.SearchHistoryCreateNestedManyWithoutUserInput
+  searchHistoryAsSearcher?: Prisma.SearchHistoryCreateNestedManyWithoutSearcherInput
+  searchHistoryAsSearchedUser?: Prisma.SearchHistoryCreateNestedManyWithoutSearchedUserInput
 }
 
 export type UserUncheckedCreateWithoutFollowersInput = {
@@ -1161,8 +1161,8 @@ export type UserUncheckedCreateWithoutFollowersInput = {
   following?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowerInput
   blockedUsers?: Prisma.BlockUncheckedCreateNestedManyWithoutBlockerInput
   blockedByUsers?: Prisma.BlockUncheckedCreateNestedManyWithoutBlockedInput
-  ownedSearchHistory?: Prisma.SearchHistoryUncheckedCreateNestedManyWithoutOwnerInput
-  searchHistoryAppearances?: Prisma.SearchHistoryUncheckedCreateNestedManyWithoutUserInput
+  searchHistoryAsSearcher?: Prisma.SearchHistoryUncheckedCreateNestedManyWithoutSearcherInput
+  searchHistoryAsSearchedUser?: Prisma.SearchHistoryUncheckedCreateNestedManyWithoutSearchedUserInput
 }
 
 export type UserCreateOrConnectWithoutFollowersInput = {
@@ -1203,8 +1203,8 @@ export type UserUpdateWithoutFollowingInput = {
   followers?: Prisma.FollowUpdateManyWithoutFollowingNestedInput
   blockedUsers?: Prisma.BlockUpdateManyWithoutBlockerNestedInput
   blockedByUsers?: Prisma.BlockUpdateManyWithoutBlockedNestedInput
-  ownedSearchHistory?: Prisma.SearchHistoryUpdateManyWithoutOwnerNestedInput
-  searchHistoryAppearances?: Prisma.SearchHistoryUpdateManyWithoutUserNestedInput
+  searchHistoryAsSearcher?: Prisma.SearchHistoryUpdateManyWithoutSearcherNestedInput
+  searchHistoryAsSearchedUser?: Prisma.SearchHistoryUpdateManyWithoutSearchedUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutFollowingInput = {
@@ -1229,8 +1229,8 @@ export type UserUncheckedUpdateWithoutFollowingInput = {
   followers?: Prisma.FollowUncheckedUpdateManyWithoutFollowingNestedInput
   blockedUsers?: Prisma.BlockUncheckedUpdateManyWithoutBlockerNestedInput
   blockedByUsers?: Prisma.BlockUncheckedUpdateManyWithoutBlockedNestedInput
-  ownedSearchHistory?: Prisma.SearchHistoryUncheckedUpdateManyWithoutOwnerNestedInput
-  searchHistoryAppearances?: Prisma.SearchHistoryUncheckedUpdateManyWithoutUserNestedInput
+  searchHistoryAsSearcher?: Prisma.SearchHistoryUncheckedUpdateManyWithoutSearcherNestedInput
+  searchHistoryAsSearchedUser?: Prisma.SearchHistoryUncheckedUpdateManyWithoutSearchedUserNestedInput
 }
 
 export type UserUpsertWithoutFollowersInput = {
@@ -1266,8 +1266,8 @@ export type UserUpdateWithoutFollowersInput = {
   following?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
   blockedUsers?: Prisma.BlockUpdateManyWithoutBlockerNestedInput
   blockedByUsers?: Prisma.BlockUpdateManyWithoutBlockedNestedInput
-  ownedSearchHistory?: Prisma.SearchHistoryUpdateManyWithoutOwnerNestedInput
-  searchHistoryAppearances?: Prisma.SearchHistoryUpdateManyWithoutUserNestedInput
+  searchHistoryAsSearcher?: Prisma.SearchHistoryUpdateManyWithoutSearcherNestedInput
+  searchHistoryAsSearchedUser?: Prisma.SearchHistoryUpdateManyWithoutSearchedUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutFollowersInput = {
@@ -1292,8 +1292,8 @@ export type UserUncheckedUpdateWithoutFollowersInput = {
   following?: Prisma.FollowUncheckedUpdateManyWithoutFollowerNestedInput
   blockedUsers?: Prisma.BlockUncheckedUpdateManyWithoutBlockerNestedInput
   blockedByUsers?: Prisma.BlockUncheckedUpdateManyWithoutBlockedNestedInput
-  ownedSearchHistory?: Prisma.SearchHistoryUncheckedUpdateManyWithoutOwnerNestedInput
-  searchHistoryAppearances?: Prisma.SearchHistoryUncheckedUpdateManyWithoutUserNestedInput
+  searchHistoryAsSearcher?: Prisma.SearchHistoryUncheckedUpdateManyWithoutSearcherNestedInput
+  searchHistoryAsSearchedUser?: Prisma.SearchHistoryUncheckedUpdateManyWithoutSearchedUserNestedInput
 }
 
 export type UserCreateWithoutBlockedUsersInput = {
@@ -1318,8 +1318,8 @@ export type UserCreateWithoutBlockedUsersInput = {
   followers?: Prisma.FollowCreateNestedManyWithoutFollowingInput
   following?: Prisma.FollowCreateNestedManyWithoutFollowerInput
   blockedByUsers?: Prisma.BlockCreateNestedManyWithoutBlockedInput
-  ownedSearchHistory?: Prisma.SearchHistoryCreateNestedManyWithoutOwnerInput
-  searchHistoryAppearances?: Prisma.SearchHistoryCreateNestedManyWithoutUserInput
+  searchHistoryAsSearcher?: Prisma.SearchHistoryCreateNestedManyWithoutSearcherInput
+  searchHistoryAsSearchedUser?: Prisma.SearchHistoryCreateNestedManyWithoutSearchedUserInput
 }
 
 export type UserUncheckedCreateWithoutBlockedUsersInput = {
@@ -1344,8 +1344,8 @@ export type UserUncheckedCreateWithoutBlockedUsersInput = {
   followers?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowingInput
   following?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowerInput
   blockedByUsers?: Prisma.BlockUncheckedCreateNestedManyWithoutBlockedInput
-  ownedSearchHistory?: Prisma.SearchHistoryUncheckedCreateNestedManyWithoutOwnerInput
-  searchHistoryAppearances?: Prisma.SearchHistoryUncheckedCreateNestedManyWithoutUserInput
+  searchHistoryAsSearcher?: Prisma.SearchHistoryUncheckedCreateNestedManyWithoutSearcherInput
+  searchHistoryAsSearchedUser?: Prisma.SearchHistoryUncheckedCreateNestedManyWithoutSearchedUserInput
 }
 
 export type UserCreateOrConnectWithoutBlockedUsersInput = {
@@ -1375,8 +1375,8 @@ export type UserCreateWithoutBlockedByUsersInput = {
   followers?: Prisma.FollowCreateNestedManyWithoutFollowingInput
   following?: Prisma.FollowCreateNestedManyWithoutFollowerInput
   blockedUsers?: Prisma.BlockCreateNestedManyWithoutBlockerInput
-  ownedSearchHistory?: Prisma.SearchHistoryCreateNestedManyWithoutOwnerInput
-  searchHistoryAppearances?: Prisma.SearchHistoryCreateNestedManyWithoutUserInput
+  searchHistoryAsSearcher?: Prisma.SearchHistoryCreateNestedManyWithoutSearcherInput
+  searchHistoryAsSearchedUser?: Prisma.SearchHistoryCreateNestedManyWithoutSearchedUserInput
 }
 
 export type UserUncheckedCreateWithoutBlockedByUsersInput = {
@@ -1401,8 +1401,8 @@ export type UserUncheckedCreateWithoutBlockedByUsersInput = {
   followers?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowingInput
   following?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowerInput
   blockedUsers?: Prisma.BlockUncheckedCreateNestedManyWithoutBlockerInput
-  ownedSearchHistory?: Prisma.SearchHistoryUncheckedCreateNestedManyWithoutOwnerInput
-  searchHistoryAppearances?: Prisma.SearchHistoryUncheckedCreateNestedManyWithoutUserInput
+  searchHistoryAsSearcher?: Prisma.SearchHistoryUncheckedCreateNestedManyWithoutSearcherInput
+  searchHistoryAsSearchedUser?: Prisma.SearchHistoryUncheckedCreateNestedManyWithoutSearchedUserInput
 }
 
 export type UserCreateOrConnectWithoutBlockedByUsersInput = {
@@ -1443,8 +1443,8 @@ export type UserUpdateWithoutBlockedUsersInput = {
   followers?: Prisma.FollowUpdateManyWithoutFollowingNestedInput
   following?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
   blockedByUsers?: Prisma.BlockUpdateManyWithoutBlockedNestedInput
-  ownedSearchHistory?: Prisma.SearchHistoryUpdateManyWithoutOwnerNestedInput
-  searchHistoryAppearances?: Prisma.SearchHistoryUpdateManyWithoutUserNestedInput
+  searchHistoryAsSearcher?: Prisma.SearchHistoryUpdateManyWithoutSearcherNestedInput
+  searchHistoryAsSearchedUser?: Prisma.SearchHistoryUpdateManyWithoutSearchedUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutBlockedUsersInput = {
@@ -1469,8 +1469,8 @@ export type UserUncheckedUpdateWithoutBlockedUsersInput = {
   followers?: Prisma.FollowUncheckedUpdateManyWithoutFollowingNestedInput
   following?: Prisma.FollowUncheckedUpdateManyWithoutFollowerNestedInput
   blockedByUsers?: Prisma.BlockUncheckedUpdateManyWithoutBlockedNestedInput
-  ownedSearchHistory?: Prisma.SearchHistoryUncheckedUpdateManyWithoutOwnerNestedInput
-  searchHistoryAppearances?: Prisma.SearchHistoryUncheckedUpdateManyWithoutUserNestedInput
+  searchHistoryAsSearcher?: Prisma.SearchHistoryUncheckedUpdateManyWithoutSearcherNestedInput
+  searchHistoryAsSearchedUser?: Prisma.SearchHistoryUncheckedUpdateManyWithoutSearchedUserNestedInput
 }
 
 export type UserUpsertWithoutBlockedByUsersInput = {
@@ -1506,8 +1506,8 @@ export type UserUpdateWithoutBlockedByUsersInput = {
   followers?: Prisma.FollowUpdateManyWithoutFollowingNestedInput
   following?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
   blockedUsers?: Prisma.BlockUpdateManyWithoutBlockerNestedInput
-  ownedSearchHistory?: Prisma.SearchHistoryUpdateManyWithoutOwnerNestedInput
-  searchHistoryAppearances?: Prisma.SearchHistoryUpdateManyWithoutUserNestedInput
+  searchHistoryAsSearcher?: Prisma.SearchHistoryUpdateManyWithoutSearcherNestedInput
+  searchHistoryAsSearchedUser?: Prisma.SearchHistoryUpdateManyWithoutSearchedUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutBlockedByUsersInput = {
@@ -1532,8 +1532,8 @@ export type UserUncheckedUpdateWithoutBlockedByUsersInput = {
   followers?: Prisma.FollowUncheckedUpdateManyWithoutFollowingNestedInput
   following?: Prisma.FollowUncheckedUpdateManyWithoutFollowerNestedInput
   blockedUsers?: Prisma.BlockUncheckedUpdateManyWithoutBlockerNestedInput
-  ownedSearchHistory?: Prisma.SearchHistoryUncheckedUpdateManyWithoutOwnerNestedInput
-  searchHistoryAppearances?: Prisma.SearchHistoryUncheckedUpdateManyWithoutUserNestedInput
+  searchHistoryAsSearcher?: Prisma.SearchHistoryUncheckedUpdateManyWithoutSearcherNestedInput
+  searchHistoryAsSearchedUser?: Prisma.SearchHistoryUncheckedUpdateManyWithoutSearchedUserNestedInput
 }
 
 export type UserCreateWithoutUserVerificationsInput = {
@@ -1558,8 +1558,8 @@ export type UserCreateWithoutUserVerificationsInput = {
   following?: Prisma.FollowCreateNestedManyWithoutFollowerInput
   blockedUsers?: Prisma.BlockCreateNestedManyWithoutBlockerInput
   blockedByUsers?: Prisma.BlockCreateNestedManyWithoutBlockedInput
-  ownedSearchHistory?: Prisma.SearchHistoryCreateNestedManyWithoutOwnerInput
-  searchHistoryAppearances?: Prisma.SearchHistoryCreateNestedManyWithoutUserInput
+  searchHistoryAsSearcher?: Prisma.SearchHistoryCreateNestedManyWithoutSearcherInput
+  searchHistoryAsSearchedUser?: Prisma.SearchHistoryCreateNestedManyWithoutSearchedUserInput
 }
 
 export type UserUncheckedCreateWithoutUserVerificationsInput = {
@@ -1584,8 +1584,8 @@ export type UserUncheckedCreateWithoutUserVerificationsInput = {
   following?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowerInput
   blockedUsers?: Prisma.BlockUncheckedCreateNestedManyWithoutBlockerInput
   blockedByUsers?: Prisma.BlockUncheckedCreateNestedManyWithoutBlockedInput
-  ownedSearchHistory?: Prisma.SearchHistoryUncheckedCreateNestedManyWithoutOwnerInput
-  searchHistoryAppearances?: Prisma.SearchHistoryUncheckedCreateNestedManyWithoutUserInput
+  searchHistoryAsSearcher?: Prisma.SearchHistoryUncheckedCreateNestedManyWithoutSearcherInput
+  searchHistoryAsSearchedUser?: Prisma.SearchHistoryUncheckedCreateNestedManyWithoutSearchedUserInput
 }
 
 export type UserCreateOrConnectWithoutUserVerificationsInput = {
@@ -1626,8 +1626,8 @@ export type UserUpdateWithoutUserVerificationsInput = {
   following?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
   blockedUsers?: Prisma.BlockUpdateManyWithoutBlockerNestedInput
   blockedByUsers?: Prisma.BlockUpdateManyWithoutBlockedNestedInput
-  ownedSearchHistory?: Prisma.SearchHistoryUpdateManyWithoutOwnerNestedInput
-  searchHistoryAppearances?: Prisma.SearchHistoryUpdateManyWithoutUserNestedInput
+  searchHistoryAsSearcher?: Prisma.SearchHistoryUpdateManyWithoutSearcherNestedInput
+  searchHistoryAsSearchedUser?: Prisma.SearchHistoryUpdateManyWithoutSearchedUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutUserVerificationsInput = {
@@ -1652,8 +1652,8 @@ export type UserUncheckedUpdateWithoutUserVerificationsInput = {
   following?: Prisma.FollowUncheckedUpdateManyWithoutFollowerNestedInput
   blockedUsers?: Prisma.BlockUncheckedUpdateManyWithoutBlockerNestedInput
   blockedByUsers?: Prisma.BlockUncheckedUpdateManyWithoutBlockedNestedInput
-  ownedSearchHistory?: Prisma.SearchHistoryUncheckedUpdateManyWithoutOwnerNestedInput
-  searchHistoryAppearances?: Prisma.SearchHistoryUncheckedUpdateManyWithoutUserNestedInput
+  searchHistoryAsSearcher?: Prisma.SearchHistoryUncheckedUpdateManyWithoutSearcherNestedInput
+  searchHistoryAsSearchedUser?: Prisma.SearchHistoryUncheckedUpdateManyWithoutSearchedUserNestedInput
 }
 
 
@@ -1667,8 +1667,8 @@ export type UserCountOutputType = {
   following: number
   blockedUsers: number
   blockedByUsers: number
-  ownedSearchHistory: number
-  searchHistoryAppearances: number
+  searchHistoryAsSearcher: number
+  searchHistoryAsSearchedUser: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1677,8 +1677,8 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   following?: boolean | UserCountOutputTypeCountFollowingArgs
   blockedUsers?: boolean | UserCountOutputTypeCountBlockedUsersArgs
   blockedByUsers?: boolean | UserCountOutputTypeCountBlockedByUsersArgs
-  ownedSearchHistory?: boolean | UserCountOutputTypeCountOwnedSearchHistoryArgs
-  searchHistoryAppearances?: boolean | UserCountOutputTypeCountSearchHistoryAppearancesArgs
+  searchHistoryAsSearcher?: boolean | UserCountOutputTypeCountSearchHistoryAsSearcherArgs
+  searchHistoryAsSearchedUser?: boolean | UserCountOutputTypeCountSearchHistoryAsSearchedUserArgs
 }
 
 /**
@@ -1729,14 +1729,14 @@ export type UserCountOutputTypeCountBlockedByUsersArgs<ExtArgs extends runtime.T
 /**
  * UserCountOutputType without action
  */
-export type UserCountOutputTypeCountOwnedSearchHistoryArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type UserCountOutputTypeCountSearchHistoryAsSearcherArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.SearchHistoryWhereInput
 }
 
 /**
  * UserCountOutputType without action
  */
-export type UserCountOutputTypeCountSearchHistoryAppearancesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type UserCountOutputTypeCountSearchHistoryAsSearchedUserArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.SearchHistoryWhereInput
 }
 
@@ -1764,8 +1764,8 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   following?: boolean | Prisma.User$followingArgs<ExtArgs>
   blockedUsers?: boolean | Prisma.User$blockedUsersArgs<ExtArgs>
   blockedByUsers?: boolean | Prisma.User$blockedByUsersArgs<ExtArgs>
-  ownedSearchHistory?: boolean | Prisma.User$ownedSearchHistoryArgs<ExtArgs>
-  searchHistoryAppearances?: boolean | Prisma.User$searchHistoryAppearancesArgs<ExtArgs>
+  searchHistoryAsSearcher?: boolean | Prisma.User$searchHistoryAsSearcherArgs<ExtArgs>
+  searchHistoryAsSearchedUser?: boolean | Prisma.User$searchHistoryAsSearchedUserArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -1836,8 +1836,8 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   following?: boolean | Prisma.User$followingArgs<ExtArgs>
   blockedUsers?: boolean | Prisma.User$blockedUsersArgs<ExtArgs>
   blockedByUsers?: boolean | Prisma.User$blockedByUsersArgs<ExtArgs>
-  ownedSearchHistory?: boolean | Prisma.User$ownedSearchHistoryArgs<ExtArgs>
-  searchHistoryAppearances?: boolean | Prisma.User$searchHistoryAppearancesArgs<ExtArgs>
+  searchHistoryAsSearcher?: boolean | Prisma.User$searchHistoryAsSearcherArgs<ExtArgs>
+  searchHistoryAsSearchedUser?: boolean | Prisma.User$searchHistoryAsSearchedUserArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -1851,8 +1851,8 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     following: Prisma.$FollowPayload<ExtArgs>[]
     blockedUsers: Prisma.$BlockPayload<ExtArgs>[]
     blockedByUsers: Prisma.$BlockPayload<ExtArgs>[]
-    ownedSearchHistory: Prisma.$SearchHistoryPayload<ExtArgs>[]
-    searchHistoryAppearances: Prisma.$SearchHistoryPayload<ExtArgs>[]
+    searchHistoryAsSearcher: Prisma.$SearchHistoryPayload<ExtArgs>[]
+    searchHistoryAsSearchedUser: Prisma.$SearchHistoryPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2271,8 +2271,8 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   following<T extends Prisma.User$followingArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$followingArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FollowPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   blockedUsers<T extends Prisma.User$blockedUsersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$blockedUsersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BlockPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   blockedByUsers<T extends Prisma.User$blockedByUsersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$blockedByUsersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BlockPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  ownedSearchHistory<T extends Prisma.User$ownedSearchHistoryArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$ownedSearchHistoryArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SearchHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  searchHistoryAppearances<T extends Prisma.User$searchHistoryAppearancesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$searchHistoryAppearancesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SearchHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  searchHistoryAsSearcher<T extends Prisma.User$searchHistoryAsSearcherArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$searchHistoryAsSearcherArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SearchHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  searchHistoryAsSearchedUser<T extends Prisma.User$searchHistoryAsSearchedUserArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$searchHistoryAsSearchedUserArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SearchHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2832,9 +2832,9 @@ export type User$blockedByUsersArgs<ExtArgs extends runtime.Types.Extensions.Int
 }
 
 /**
- * User.ownedSearchHistory
+ * User.searchHistoryAsSearcher
  */
-export type User$ownedSearchHistoryArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type User$searchHistoryAsSearcherArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
    * Select specific fields to fetch from the SearchHistory
    */
@@ -2856,9 +2856,9 @@ export type User$ownedSearchHistoryArgs<ExtArgs extends runtime.Types.Extensions
 }
 
 /**
- * User.searchHistoryAppearances
+ * User.searchHistoryAsSearchedUser
  */
-export type User$searchHistoryAppearancesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type User$searchHistoryAsSearchedUserArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
    * Select specific fields to fetch from the SearchHistory
    */

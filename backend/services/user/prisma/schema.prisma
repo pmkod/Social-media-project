@@ -30,23 +30,23 @@ model User {
   following                       Follow[]           @relation("UserFollowing")
   blockedUsers                    Block[]            @relation("UserBlocks")
   blockedByUsers                  Block[]            @relation("UserBlockedBy")
-  ownedSearchHistory              SearchHistory[]    @relation("SearchHistoryOwner")
-  searchHistoryAppearances        SearchHistory[]    @relation("SearchHistoryUser")
+  searchHistoryAsSearcher         SearchHistory[]    @relation("SearchHistorySearcher")
+  searchHistoryAsSearchedUser     SearchHistory[]    @relation("SearchHistorySearchedUser")
 
   @@map("user")
 }
 
 model SearchHistory {
-  id        String   @id @default(uuid())
-  ownerId   String   @map("owner_id")
-  text      String?  @db.VarChar(255)
-  userId    String?  @map("user_id")
-  createdAt DateTime @default(now()) @map("created_at")
-  owner     User     @relation("SearchHistoryOwner", fields: [ownerId], references: [id], onDelete: Cascade)
-  user      User?    @relation("SearchHistoryUser", fields: [userId], references: [id], onDelete: Cascade)
+  id             String   @id @default(uuid())
+  searcherId     String   @map("searcher_id")
+  text           String?  @db.VarChar(255)
+  searchedUserId String?  @map("searched_user_id")
+  createdAt      DateTime @default(now()) @map("created_at")
+  searcher       User     @relation("SearchHistorySearcher", fields: [searcherId], references: [id], onDelete: Cascade)
+  searchedUser   User?    @relation("SearchHistorySearchedUser", fields: [searchedUserId], references: [id], onDelete: Cascade)
 
-  @@index([ownerId, createdAt, id])
-  @@index([userId])
+  @@index([searcherId, createdAt, id])
+  @@index([searchedUserId])
   @@map("search_history")
 }
 

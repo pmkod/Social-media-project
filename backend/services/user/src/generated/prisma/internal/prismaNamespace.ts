@@ -917,9 +917,9 @@ export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof User
 
 export const SearchHistoryScalarFieldEnum = {
   id: 'id',
-  ownerId: 'ownerId',
+  searcherId: 'searcherId',
   text: 'text',
-  userId: 'userId',
+  searchedUserId: 'searchedUserId',
   createdAt: 'createdAt'
 } as const
 

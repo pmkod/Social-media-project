@@ -9,8 +9,8 @@ import type { SearchHistoryItem } from "./search.types.ts";
 import type { SearchHistoryResponse } from "./use-search-history.ts";
 
 type CreateSearchHistoryInput =
-	| { text: string; userId?: never }
-	| { text?: never; userId: string };
+	| { text: string; searchedUserId?: never }
+	| { text?: never; searchedUserId: string };
 
 const useCreateSearchHistory = () => {
 	const queryClient = useQueryClient();
@@ -29,8 +29,8 @@ const useCreateSearchHistory = () => {
 					const pages = data.pages.map((page) => ({
 						...page,
 						history: page.history.filter((item) =>
-							historyItem.userId
-								? item.userId !== historyItem.userId
+							historyItem.searchedUserId
+								? item.searchedUserId !== historyItem.searchedUserId
 								: item.text?.toLocaleLowerCase() !==
 									historyItem.text?.toLocaleLowerCase(),
 						),

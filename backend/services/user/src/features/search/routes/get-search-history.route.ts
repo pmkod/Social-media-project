@@ -3,11 +3,15 @@ import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { requireUserAuthentication } from "@/features/authentication/middlewares/require-user-authentication.middleware";
-import type { Prisma } from "@/generated/prisma/client";
+import {
+	emptyProfileMediaFiles,
+	getProfileMediaFilesByUsers,
+} from "@/features/user/services/get-profile-media-files.service";
 import { ProfileMediaFileResponseBody } from "@/features/user/user.validation-schemas";
+import type { Prisma } from "@/generated/prisma/client";
 import { SearchRoutesTag } from "../search.constants";
 
-const SearchHistoryUserResponseBody = z.object({
+const SearchedUserResponseBody = z.object({
 	id: z.string(),
 	username: z.string(),
 	fullName: z.string().nullable(),
@@ -21,15 +25,13 @@ const SearchHistoryResponseBody = z.object({
 		z.object({
 			id: z.string(),
 			text: z.string().nullable(),
-			userId: z.string().nullable(),
+			searchedUserId: z.string().nullable(),
 			createdAt: z.string(),
-			user: SearchHistoryUserResponseBody.nullable(),
+			searchedUser: SearchedUserResponseBody.nullable(),
 		}),
 	),
 	pagination: z.object({
-		nextCursor: z
-			.object({ id: z.string(), createdAt: z.string() })
-			.nullable(),
+		nextCursor: z.object({ id: z.string(), createdAt: z.string() }).nullable(),
 		hasNextPage: z.boolean(),
 		limit: z.number(),
 	}),
@@ -104,19 +106,22 @@ const getSearchHistoryRoute = defineOpenAPIRoute<
 		);
 		const conditions: Prisma.SearchHistoryWhereInput[] = [
 			{
-				OR: [{ userId: null }, { user: { active: true } }],
+				OR: [{ searchedUserId: null }, { searchedUser: { active: true } }],
 			},
 		];
 		if (hiddenUserIds.length > 0) {
 			conditions.push({
-				OR: [{ userId: null }, { userId: { notIn: hiddenUserIds } }],
+				OR: [
+					{ searchedUserId: null },
+					{ searchedUserId: { notIn: hiddenUserIds } },
+				],
 			});
 		}
 		if (cursorCondition) conditions.push(cursorCondition);
 
 		const results = await prisma.searchHistory.findMany({
 			where: {
-				ownerId: authenticatedUser.id,
+				searcherId: authenticatedUser.id,
 				AND: conditions,
 			},
 			orderBy: [{ createdAt: "desc" }, { id: "desc" }],
@@ -124,19 +129,15 @@ const getSearchHistoryRoute = defineOpenAPIRoute<
 			select: {
 				id: true,
 				text: true,
-				userId: true,
+				searchedUserId: true,
 				createdAt: true,
-				user: {
+				searchedUser: {
 					select: {
 						id: true,
 						username: true,
 						fullName: true,
-						lowQualityProfilePictureFile: {
-							select: { id: true, filename: true },
-						},
-						bestQualityProfilePictureFile: {
-							select: { id: true, filename: true },
-						},
+						lowQualityProfilePictureFileId: true,
+						bestQualityProfilePictureFileId: true,
 					},
 				},
 			},
@@ -145,15 +146,20 @@ const getSearchHistoryRoute = defineOpenAPIRoute<
 		const hasNextPage = results.length > limit;
 		const items = hasNextPage ? results.slice(0, limit) : results;
 		const lastItem = items.at(-1);
-		const targetUserIds = items.flatMap((item) =>
-			item.userId ? [item.userId] : [],
+		const searchedUsers = items.flatMap((item) =>
+			item.searchedUser ? [item.searchedUser] : [],
+		);
+		const profileMediaFilesByUserId =
+			await getProfileMediaFilesByUsers(searchedUsers);
+		const searchedUserIds = items.flatMap((item) =>
+			item.searchedUserId ? [item.searchedUserId] : [],
 		);
 		const followedUserIds = new Set(
 			(
 				await prisma.follow.findMany({
 					where: {
 						followerId: authenticatedUser.id,
-						followingId: { in: targetUserIds },
+						followingId: { in: searchedUserIds },
 					},
 					select: { followingId: true },
 				})
@@ -164,11 +170,15 @@ const getSearchHistoryRoute = defineOpenAPIRoute<
 			history: items.map((item) => ({
 				...item,
 				createdAt: item.createdAt.toISOString(),
-				user: item.user
+				searchedUser: item.searchedUser
 					? {
-							...item.user,
+							id: item.searchedUser.id,
+							username: item.searchedUser.username,
+							fullName: item.searchedUser.fullName,
+							...(profileMediaFilesByUserId.get(item.searchedUser.id) ??
+								emptyProfileMediaFiles),
 							isFollowedByAuthenticatedUser: followedUserIds.has(
-								item.user.id,
+								item.searchedUser.id,
 							),
 						}
 					: null,

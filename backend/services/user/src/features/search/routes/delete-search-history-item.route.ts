@@ -27,7 +27,7 @@ const deleteSearchHistoryItemRoute = defineOpenAPIRoute<
 		const { historyId } = c.req.valid("param");
 
 		const result = await prisma.searchHistory.deleteMany({
-			where: { id: historyId, ownerId: authenticatedUser.id },
+			where: { id: historyId, searcherId: authenticatedUser.id },
 		});
 
 		return c.json({

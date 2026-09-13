@@ -3,11 +3,15 @@ import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { requireUserAuthentication } from "@/features/authentication/middlewares/require-user-authentication.middleware";
+import {
+	emptyProfileMediaFiles,
+	getProfileMediaFilesByUsers,
+} from "@/features/user/services/get-profile-media-files.service";
 import { SearchRoutesTag } from "../search.constants";
 
 const CreateSearchHistoryBody = z.object({
 	text: z.string().trim().max(255).optional(),
-	userId: z.string().optional(),
+	searchedUserId: z.string().optional(),
 });
 
 const routeDef = createRoute({
@@ -42,77 +46,82 @@ const createSearchHistoryRoute = defineOpenAPIRoute<
 
 		const body = c.req.valid("json");
 		const text = body.text?.trim() || undefined;
-		const userId = body.userId;
-		if (Boolean(text) === Boolean(userId)) {
+		const searchedUserId = body.searchedUserId;
+		if (Boolean(text) === Boolean(searchedUserId)) {
 			return c.json(
-				{ message: "Provide exactly one of text or userId" },
+				{ message: "Provide exactly one of text or searchedUserId" },
 				HttpStatus.BAD_REQUEST.code,
 			);
 		}
 
-		const targetUser = userId
+		const searchedUserRecord = searchedUserId
 			? await prisma.user.findFirst({
-				where: { id: userId, active: true },
-				select: {
-					id: true,
-					username: true,
-					fullName: true,
-					lowQualityProfilePictureFile: {
-						select: { id: true, filename: true },
+					where: { id: searchedUserId, active: true },
+					select: {
+						id: true,
+						username: true,
+						fullName: true,
+						lowQualityProfilePictureFileId: true,
+						bestQualityProfilePictureFileId: true,
+						followers: {
+							where: { followerId: authenticatedUser.id },
+							select: { id: true },
+							take: 1,
+						},
 					},
-					bestQualityProfilePictureFile: {
-						select: { id: true, filename: true },
-					},
-					followers: {
-						where: { followerId: authenticatedUser.id },
-						select: { id: true },
-						take: 1,
-					},
-				},
-			})
+				})
 			: null;
-		if (userId && !targetUser) {
-				return c.json(
-					{ message: "User not found" },
-					HttpStatus.NOT_FOUND.code,
-				);
+		const searchedUser = searchedUserRecord
+			? {
+					...searchedUserRecord,
+					...((await getProfileMediaFilesByUsers([searchedUserRecord])).get(
+						searchedUserRecord.id,
+					) ?? emptyProfileMediaFiles),
+				}
+			: null;
+		if (searchedUserId && !searchedUser) {
+			return c.json({ message: "User not found" }, HttpStatus.NOT_FOUND.code);
 		}
 
 		const historyItem = await prisma.$transaction(async (transaction) => {
 			await transaction.searchHistory.deleteMany({
 				where: {
-					ownerId: authenticatedUser.id,
+					searcherId: authenticatedUser.id,
 					...(text
 						? { text: { equals: text, mode: "insensitive" } }
-						: { userId }),
+						: { searchedUserId }),
 				},
 			});
 
 			return transaction.searchHistory.create({
 				data: {
-					ownerId: authenticatedUser.id,
-					...(text ? { text } : { userId }),
+					searcherId: authenticatedUser.id,
+					...(text ? { text } : { searchedUserId }),
 				},
 				select: {
 					id: true,
 					text: true,
-					userId: true,
+					searchedUserId: true,
 					createdAt: true,
 				},
 			});
 		});
 
-		const presentedTargetUser = (() => {
-			if (!targetUser) return null;
-			const { followers, ...user } = targetUser;
+		const presentedSearchedUser = (() => {
+			if (!searchedUser) return null;
 			return {
-				...user,
-				isFollowedByAuthenticatedUser: followers.length > 0,
+				id: searchedUser.id,
+				username: searchedUser.username,
+				fullName: searchedUser.fullName,
+				lowQualityProfilePictureFile: searchedUser.lowQualityProfilePictureFile,
+				bestQualityProfilePictureFile:
+					searchedUser.bestQualityProfilePictureFile,
+				isFollowedByAuthenticatedUser: searchedUser.followers.length > 0,
 			};
 		})();
 
 		return c.json(
-			{ ...historyItem, user: presentedTargetUser },
+			{ ...historyItem, searchedUser: presentedSearchedUser },
 			HttpStatus.CREATED.code,
 		);
 	},
