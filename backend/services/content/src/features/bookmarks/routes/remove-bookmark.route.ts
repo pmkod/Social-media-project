@@ -44,22 +44,25 @@ const removeBookmarkRoute = defineOpenAPIRoute<
 		const isBookmarked = await prisma.$transaction(async (tx) => {
 			const bookmark = await tx.bookmark.findUnique({
 				where: { postId_ownerId: { postId, ownerId } },
-				select: { id: true },
+				select: { postId: true },
 			});
 			if (!bookmark) return false;
 
 			await tx.bookmarkCollectionItem.deleteMany({
 				where: {
 					collectionId: bookmarkCollectionId,
-					bookmarkId: bookmark.id,
+					postId,
+					ownerId,
 				},
 			});
 
 			const remainingCollectionItems = await tx.bookmarkCollectionItem.count({
-				where: { bookmarkId: bookmark.id },
+				where: { postId, ownerId },
 			});
 			if (remainingCollectionItems === 0) {
-				await tx.bookmark.delete({ where: { id: bookmark.id } });
+				await tx.bookmark.delete({
+					where: { postId_ownerId: { postId, ownerId } },
+				});
 				return false;
 			}
 

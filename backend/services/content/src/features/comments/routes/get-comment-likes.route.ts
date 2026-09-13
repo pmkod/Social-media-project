@@ -29,14 +29,16 @@ const getCommentLikesRoute = defineOpenAPIRoute({
 			where: { commentId },
 			orderBy: { createdAt: "desc" },
 			select: {
-				id: true,
 				authorId: true,
 				createdAt: true,
 			},
 		});
 		const count = await prisma.commentLike.count({ where: { commentId } });
 
-		return c.json({ count, likes });
+		return c.json({
+			count,
+			likes: likes.map((like) => ({ id: like.authorId, ...like })),
+		});
 	},
 });
 

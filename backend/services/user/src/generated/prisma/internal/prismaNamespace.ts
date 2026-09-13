@@ -937,7 +937,6 @@ export type FileScalarFieldEnum = (typeof FileScalarFieldEnum)[keyof typeof File
 
 
 export const FollowScalarFieldEnum = {
-  id: 'id',
   followerId: 'followerId',
   followingId: 'followingId',
   createdAt: 'createdAt'
@@ -947,7 +946,6 @@ export type FollowScalarFieldEnum = (typeof FollowScalarFieldEnum)[keyof typeof 
 
 
 export const BlockScalarFieldEnum = {
-  id: 'id',
   blockerId: 'blockerId',
   blockedId: 'blockedId',
   createdAt: 'createdAt'

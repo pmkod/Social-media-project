@@ -59,29 +59,27 @@ model File {
 }
 
 model Follow {
-  id          String   @id @default(uuid())
   followerId  String   @map("follower_id")
   followingId String   @map("following_id")
   createdAt   DateTime @default(now()) @map("created_at")
   follower    User     @relation("UserFollowing", fields: [followerId], references: [id], onDelete: Cascade)
   following   User     @relation("UserFollowers", fields: [followingId], references: [id], onDelete: Cascade)
 
-  @@unique([followerId, followingId])
-  @@index([followerId, createdAt])
-  @@index([followingId, createdAt])
+  @@id([followerId, followingId])
+  @@index([followerId, createdAt, followingId])
+  @@index([followingId, createdAt, followerId])
   @@map("follow")
 }
 
 model Block {
-  id        String   @id @default(uuid())
   blockerId String   @map("blocker_id")
   blockedId String   @map("blocked_id")
   createdAt DateTime @default(now()) @map("created_at")
   blocker   User     @relation("UserBlocks", fields: [blockerId], references: [id], onDelete: Cascade)
   blocked   User     @relation("UserBlockedBy", fields: [blockedId], references: [id], onDelete: Cascade)
 
-  @@unique([blockerId, blockedId])
-  @@index([blockerId, createdAt])
+  @@id([blockerId, blockedId])
+  @@index([blockerId, createdAt, blockedId])
   @@index([blockedId])
   @@map("block")
 }

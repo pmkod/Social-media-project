@@ -36,9 +36,9 @@ Toutes les autres colonnes ont au moins un usage dans les requêtes, les répons
 
 | Service | Index | Niveau de confiance | Recommandation |
 |---|---|---|---|
-| Content | `comment_deleted_at_idx` | Fort candidat | Supprimer : aucune requête ne filtre actuellement uniquement sur `deleted_at`. |
-| Chat | `message_sender_id_idx` | Fort candidat | Supprimer si aucune fonctionnalité de recherche par expéditeur n'est prévue. |
-| Report | `report_created_at_idx` | Fort candidat | Supprimer tant qu'il n'existe pas de liste ou de tableau de modération. |
+| Content | `comment_deleted_at_idx` | Fort candidat | Supprimé du schéma et par migration : aucune requête ne filtre actuellement uniquement sur `deleted_at`. |
+| Chat | `message_sender_id_idx` | Fort candidat | Supprimé du schéma et par migration : aucune fonctionnalité ne recherche les messages par expéditeur. |
+| Report | `report_created_at_idx` | Fort candidat | Supprimé du schéma et par migration tant qu'il n'existe pas de liste ou de tableau de modération. |
 | Chat | `message_parent_message_id_idx` | À valider | Le code ne l'utilise pas directement, mais il protège la relation auto-référente et les suppressions physiques éventuelles. |
 
 Les index `PRIMARY KEY` et `UNIQUE` ne sont pas considérés comme inutiles : ils garantissent l'intégrité des données, par exemple l'unicité d'un follow, d'un like ou d'un bookmark.
@@ -106,7 +106,7 @@ La route [`get-comments.route.ts`](backend/services/content/src/features/comment
 
 Les autres opérations sur `deletedAt` recherchent un commentaire par son identifiant primaire. L'index isolé sur `deleted_at` n'a donc pas de consommateur identifié.
 
-**Action proposée :** supprimer cet index via une migration.
+**Action appliquée :** index supprimé du schéma et via migration.
 
 ### 4.2. `chat.message_sender_id_idx`
 
@@ -114,13 +114,13 @@ Le champ `senderId` est sélectionné et comparé dans le code, mais aucune requ
 
 Le compteur de messages non lus utilise plutôt `discussionId`, `createdAt` et `deletedAt`, avec une condition négative sur `senderId`. L'index principal `message_discussion_id_created_at_id_idx` est mieux adapté à cette requête.
 
-**Action proposée :** supprimer `message_sender_id_idx`, sauf si une recherche ou un historique par expéditeur est prévu.
+**Action appliquée :** index supprimé du schéma et via migration. Il pourra être réintroduit si une recherche ou un historique par expéditeur est ajouté.
 
 ### 4.3. `report.report_created_at_idx`
 
 Le service Report ne possède actuellement qu'une route de création. Il n'existe aucune requête de liste, de filtre ou de tri des signalements par date.
 
-**Action proposée :** supprimer cet index jusqu'à la création du back-office. Pour une future modération, un index `(status, created_at)` serait probablement plus utile.
+**Action appliquée :** index supprimé du schéma et via migration. Pour une future modération, un index `(status, created_at)` serait probablement plus utile.
 
 ### 4.4. `chat.message_parent_message_id_idx`
 
@@ -158,7 +158,7 @@ Ce n'est pas un index inutile, mais un point d'optimisation potentiel à surveil
 ## 6. Plan d'action recommandé
 
 1. Supprimer `user_verification.ip` et `user_verification.agent` du schéma et via migration.
-2. Supprimer `comment_deleted_at_idx`, `message_sender_id_idx` et `report_created_at_idx` via migration.
+2. ~~Supprimer `comment_deleted_at_idx`, `message_sender_id_idx` et `report_created_at_idx` via migration.~~ Fait le 13 septembre 2026.
 3. Décider du maintien de `user.file.mime_type`, `user.file.created_at` et `discussion.deleted_at` selon les besoins produit.
 4. Conserver `report.status` et `report.created_at` si une modération est prévue.
 5. Mesurer les index en production après une période représentative avant toute suppression supplémentaire :
@@ -176,4 +176,4 @@ WHERE schemaname = 'public'
 ORDER BY idx_scan ASC, relname, indexrelname;
 ```
 
-Ce rapport documente les constats et recommandations. Aucune modification du schéma ou des bases de données n'a été appliquée.
+Ce rapport documente les constats et recommandations. Les trois suppressions d'index retenues sont présentes dans les schémas et les migrations ; les migrations doivent encore être déployées sur les bases concernées.

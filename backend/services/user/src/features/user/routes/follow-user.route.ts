@@ -52,7 +52,7 @@ const followUserRoute = defineOpenAPIRoute<
 					{ blockerId: userId, blockedId: authenticatedUser.id },
 				],
 			},
-			select: { id: true },
+			select: { blockerId: true },
 		});
 		if (block) {
 			return c.json(
@@ -68,7 +68,7 @@ const followUserRoute = defineOpenAPIRoute<
 					followingId: userId,
 				},
 			},
-			select: { id: true },
+			select: { followerId: true },
 		});
 
 		const updatedTargetUser = existingFollow

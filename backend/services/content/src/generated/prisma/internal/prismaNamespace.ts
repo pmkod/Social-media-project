@@ -1170,7 +1170,6 @@ export type CommentScalarFieldEnum = (typeof CommentScalarFieldEnum)[keyof typeo
 
 
 export const PostLikeScalarFieldEnum = {
-  id: 'id',
   postId: 'postId',
   authorId: 'authorId',
   createdAt: 'createdAt'
@@ -1180,7 +1179,6 @@ export type PostLikeScalarFieldEnum = (typeof PostLikeScalarFieldEnum)[keyof typ
 
 
 export const CommentLikeScalarFieldEnum = {
-  id: 'id',
   commentId: 'commentId',
   authorId: 'authorId',
   createdAt: 'createdAt'
@@ -1190,7 +1188,6 @@ export type CommentLikeScalarFieldEnum = (typeof CommentLikeScalarFieldEnum)[key
 
 
 export const BookmarkScalarFieldEnum = {
-  id: 'id',
   postId: 'postId',
   ownerId: 'ownerId',
   createdAt: 'createdAt'
@@ -1213,7 +1210,8 @@ export type BookmarkCollectionScalarFieldEnum = (typeof BookmarkCollectionScalar
 
 export const BookmarkCollectionItemScalarFieldEnum = {
   collectionId: 'collectionId',
-  bookmarkId: 'bookmarkId',
+  postId: 'postId',
+  ownerId: 'ownerId',
   createdAt: 'createdAt'
 } as const
 

@@ -82,7 +82,6 @@ model Message {
   media          MessageMedia[]
 
   @@index([discussionId, createdAt, id])
-  @@index([senderId])
   @@index([parentMessageId])
   @@map("message")
 }

@@ -64,42 +64,38 @@ model Comment {
 
   @@index([postId, parentId, createdAt])
   @@index([parentId, createdAt])
-  @@index([deletedAt])
   @@map("comment")
 }
 
 model PostLike {
-  id        String   @id @default(uuid())
   postId    String   @map("post_id")
   authorId  String   @map("author_id")
   createdAt DateTime @default(now()) @map("created_at")
   post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
 
-  @@unique([postId, authorId])
+  @@id([postId, authorId])
   @@map("post_like")
 }
 
 model CommentLike {
-  id        String   @id @default(uuid())
   commentId String   @map("comment_id")
   authorId  String   @map("author_id")
   createdAt DateTime @default(now()) @map("created_at")
   comment   Comment  @relation(fields: [commentId], references: [id], onDelete: Cascade)
 
-  @@unique([commentId, authorId])
+  @@id([commentId, authorId])
   @@map("comment_like")
 }
 
 model Bookmark {
-  id              String                   @id @default(uuid())
   postId          String                   @map("post_id")
   ownerId         String                   @map("owner_id")
   createdAt       DateTime                 @default(now()) @map("created_at")
   post            Post                     @relation(fields: [postId], references: [id], onDelete: Cascade)
   collectionItems BookmarkCollectionItem[]
 
-  @@unique([postId, ownerId])
-  @@index([ownerId, createdAt])
+  @@id([postId, ownerId])
+  @@index([ownerId, createdAt, postId])
   @@map("bookmark")
 }
 
@@ -118,13 +114,14 @@ model BookmarkCollection {
 
 model BookmarkCollectionItem {
   collectionId String             @map("collection_id")
-  bookmarkId   String             @map("bookmark_id")
+  postId       String             @map("post_id")
+  ownerId      String             @map("owner_id")
   createdAt    DateTime           @default(now()) @map("created_at")
   collection   BookmarkCollection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
-  bookmark     Bookmark           @relation(fields: [bookmarkId], references: [id], onDelete: Cascade)
+  bookmark     Bookmark           @relation(fields: [postId, ownerId], references: [postId, ownerId], onDelete: Cascade)
 
-  @@id([collectionId, bookmarkId])
-  @@index([collectionId, createdAt])
-  @@index([bookmarkId])
+  @@id([collectionId, postId, ownerId])
+  @@index([collectionId, createdAt, postId])
+  @@index([postId, ownerId])
   @@map("bookmark_collection_item")
 }

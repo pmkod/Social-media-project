@@ -25,21 +25,18 @@ export type AggregateBookmark = {
 }
 
 export type BookmarkMinAggregateOutputType = {
-  id: string | null
   postId: string | null
   ownerId: string | null
   createdAt: Date | null
 }
 
 export type BookmarkMaxAggregateOutputType = {
-  id: string | null
   postId: string | null
   ownerId: string | null
   createdAt: Date | null
 }
 
 export type BookmarkCountAggregateOutputType = {
-  id: number
   postId: number
   ownerId: number
   createdAt: number
@@ -48,21 +45,18 @@ export type BookmarkCountAggregateOutputType = {
 
 
 export type BookmarkMinAggregateInputType = {
-  id?: true
   postId?: true
   ownerId?: true
   createdAt?: true
 }
 
 export type BookmarkMaxAggregateInputType = {
-  id?: true
   postId?: true
   ownerId?: true
   createdAt?: true
 }
 
 export type BookmarkCountAggregateInputType = {
-  id?: true
   postId?: true
   ownerId?: true
   createdAt?: true
@@ -142,7 +136,6 @@ export type BookmarkGroupByArgs<ExtArgs extends runtime.Types.Extensions.Interna
 }
 
 export type BookmarkGroupByOutputType = {
-  id: string
   postId: string
   ownerId: string
   createdAt: Date
@@ -170,7 +163,6 @@ export type BookmarkWhereInput = {
   AND?: Prisma.BookmarkWhereInput | Prisma.BookmarkWhereInput[]
   OR?: Prisma.BookmarkWhereInput[]
   NOT?: Prisma.BookmarkWhereInput | Prisma.BookmarkWhereInput[]
-  id?: Prisma.StringFilter<"Bookmark"> | string
   postId?: Prisma.StringFilter<"Bookmark"> | string
   ownerId?: Prisma.StringFilter<"Bookmark"> | string
   createdAt?: Prisma.DateTimeFilter<"Bookmark"> | Date | string
@@ -179,7 +171,6 @@ export type BookmarkWhereInput = {
 }
 
 export type BookmarkOrderByWithRelationInput = {
-  id?: Prisma.SortOrder
   postId?: Prisma.SortOrder
   ownerId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -188,7 +179,6 @@ export type BookmarkOrderByWithRelationInput = {
 }
 
 export type BookmarkWhereUniqueInput = Prisma.AtLeast<{
-  id?: string
   postId_ownerId?: Prisma.BookmarkPostIdOwnerIdCompoundUniqueInput
   AND?: Prisma.BookmarkWhereInput | Prisma.BookmarkWhereInput[]
   OR?: Prisma.BookmarkWhereInput[]
@@ -198,10 +188,9 @@ export type BookmarkWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"Bookmark"> | Date | string
   post?: Prisma.XOR<Prisma.PostScalarRelationFilter, Prisma.PostWhereInput>
   collectionItems?: Prisma.BookmarkCollectionItemListRelationFilter
-}, "id" | "postId_ownerId">
+}, "postId_ownerId">
 
 export type BookmarkOrderByWithAggregationInput = {
-  id?: Prisma.SortOrder
   postId?: Prisma.SortOrder
   ownerId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -214,14 +203,12 @@ export type BookmarkScalarWhereWithAggregatesInput = {
   AND?: Prisma.BookmarkScalarWhereWithAggregatesInput | Prisma.BookmarkScalarWhereWithAggregatesInput[]
   OR?: Prisma.BookmarkScalarWhereWithAggregatesInput[]
   NOT?: Prisma.BookmarkScalarWhereWithAggregatesInput | Prisma.BookmarkScalarWhereWithAggregatesInput[]
-  id?: Prisma.StringWithAggregatesFilter<"Bookmark"> | string
   postId?: Prisma.StringWithAggregatesFilter<"Bookmark"> | string
   ownerId?: Prisma.StringWithAggregatesFilter<"Bookmark"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Bookmark"> | Date | string
 }
 
 export type BookmarkCreateInput = {
-  id?: string
   ownerId: string
   createdAt?: Date | string
   post: Prisma.PostCreateNestedOneWithoutBookmarksInput
@@ -229,7 +216,6 @@ export type BookmarkCreateInput = {
 }
 
 export type BookmarkUncheckedCreateInput = {
-  id?: string
   postId: string
   ownerId: string
   createdAt?: Date | string
@@ -237,7 +223,6 @@ export type BookmarkUncheckedCreateInput = {
 }
 
 export type BookmarkUpdateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   post?: Prisma.PostUpdateOneRequiredWithoutBookmarksNestedInput
@@ -245,7 +230,6 @@ export type BookmarkUpdateInput = {
 }
 
 export type BookmarkUncheckedUpdateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   postId?: Prisma.StringFieldUpdateOperationsInput | string
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -253,20 +237,17 @@ export type BookmarkUncheckedUpdateInput = {
 }
 
 export type BookmarkCreateManyInput = {
-  id?: string
   postId: string
   ownerId: string
   createdAt?: Date | string
 }
 
 export type BookmarkUpdateManyMutationInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type BookmarkUncheckedUpdateManyInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   postId?: Prisma.StringFieldUpdateOperationsInput | string
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -288,21 +269,18 @@ export type BookmarkPostIdOwnerIdCompoundUniqueInput = {
 }
 
 export type BookmarkCountOrderByAggregateInput = {
-  id?: Prisma.SortOrder
   postId?: Prisma.SortOrder
   ownerId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
 export type BookmarkMaxOrderByAggregateInput = {
-  id?: Prisma.SortOrder
   postId?: Prisma.SortOrder
   ownerId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
 export type BookmarkMinOrderByAggregateInput = {
-  id?: Prisma.SortOrder
   postId?: Prisma.SortOrder
   ownerId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -370,14 +348,12 @@ export type BookmarkUpdateOneRequiredWithoutCollectionItemsNestedInput = {
 }
 
 export type BookmarkCreateWithoutPostInput = {
-  id?: string
   ownerId: string
   createdAt?: Date | string
   collectionItems?: Prisma.BookmarkCollectionItemCreateNestedManyWithoutBookmarkInput
 }
 
 export type BookmarkUncheckedCreateWithoutPostInput = {
-  id?: string
   ownerId: string
   createdAt?: Date | string
   collectionItems?: Prisma.BookmarkCollectionItemUncheckedCreateNestedManyWithoutBookmarkInput
@@ -413,21 +389,18 @@ export type BookmarkScalarWhereInput = {
   AND?: Prisma.BookmarkScalarWhereInput | Prisma.BookmarkScalarWhereInput[]
   OR?: Prisma.BookmarkScalarWhereInput[]
   NOT?: Prisma.BookmarkScalarWhereInput | Prisma.BookmarkScalarWhereInput[]
-  id?: Prisma.StringFilter<"Bookmark"> | string
   postId?: Prisma.StringFilter<"Bookmark"> | string
   ownerId?: Prisma.StringFilter<"Bookmark"> | string
   createdAt?: Prisma.DateTimeFilter<"Bookmark"> | Date | string
 }
 
 export type BookmarkCreateWithoutCollectionItemsInput = {
-  id?: string
   ownerId: string
   createdAt?: Date | string
   post: Prisma.PostCreateNestedOneWithoutBookmarksInput
 }
 
 export type BookmarkUncheckedCreateWithoutCollectionItemsInput = {
-  id?: string
   postId: string
   ownerId: string
   createdAt?: Date | string
@@ -450,41 +423,35 @@ export type BookmarkUpdateToOneWithWhereWithoutCollectionItemsInput = {
 }
 
 export type BookmarkUpdateWithoutCollectionItemsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   post?: Prisma.PostUpdateOneRequiredWithoutBookmarksNestedInput
 }
 
 export type BookmarkUncheckedUpdateWithoutCollectionItemsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   postId?: Prisma.StringFieldUpdateOperationsInput | string
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type BookmarkCreateManyPostInput = {
-  id?: string
   ownerId: string
   createdAt?: Date | string
 }
 
 export type BookmarkUpdateWithoutPostInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   collectionItems?: Prisma.BookmarkCollectionItemUpdateManyWithoutBookmarkNestedInput
 }
 
 export type BookmarkUncheckedUpdateWithoutPostInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   collectionItems?: Prisma.BookmarkCollectionItemUncheckedUpdateManyWithoutBookmarkNestedInput
 }
 
 export type BookmarkUncheckedUpdateManyWithoutPostInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -521,7 +488,6 @@ export type BookmarkCountOutputTypeCountCollectionItemsArgs<ExtArgs extends runt
 
 
 export type BookmarkSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  id?: boolean
   postId?: boolean
   ownerId?: boolean
   createdAt?: boolean
@@ -531,7 +497,6 @@ export type BookmarkSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
 }, ExtArgs["result"]["bookmark"]>
 
 export type BookmarkSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  id?: boolean
   postId?: boolean
   ownerId?: boolean
   createdAt?: boolean
@@ -539,7 +504,6 @@ export type BookmarkSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
 }, ExtArgs["result"]["bookmark"]>
 
 export type BookmarkSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  id?: boolean
   postId?: boolean
   ownerId?: boolean
   createdAt?: boolean
@@ -547,13 +511,12 @@ export type BookmarkSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
 }, ExtArgs["result"]["bookmark"]>
 
 export type BookmarkSelectScalar = {
-  id?: boolean
   postId?: boolean
   ownerId?: boolean
   createdAt?: boolean
 }
 
-export type BookmarkOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "postId" | "ownerId" | "createdAt", ExtArgs["result"]["bookmark"]>
+export type BookmarkOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"postId" | "ownerId" | "createdAt", ExtArgs["result"]["bookmark"]>
 export type BookmarkInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   post?: boolean | Prisma.PostDefaultArgs<ExtArgs>
   collectionItems?: boolean | Prisma.Bookmark$collectionItemsArgs<ExtArgs>
@@ -573,7 +536,6 @@ export type $BookmarkPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     collectionItems: Prisma.$BookmarkCollectionItemPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    id: string
     postId: string
     ownerId: string
     createdAt: Date
@@ -660,8 +622,8 @@ export interface BookmarkDelegate<ExtArgs extends runtime.Types.Extensions.Inter
    * // Get first 10 Bookmarks
    * const bookmarks = await prisma.bookmark.findMany({ take: 10 })
    * 
-   * // Only select the `id`
-   * const bookmarkWithIdOnly = await prisma.bookmark.findMany({ select: { id: true } })
+   * // Only select the `postId`
+   * const bookmarkWithPostIdOnly = await prisma.bookmark.findMany({ select: { postId: true } })
    * 
    */
   findMany<T extends BookmarkFindManyArgs>(args?: Prisma.SelectSubset<T, BookmarkFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BookmarkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
@@ -705,9 +667,9 @@ export interface BookmarkDelegate<ExtArgs extends runtime.Types.Extensions.Inter
    *   ]
    * })
    * 
-   * // Create many Bookmarks and only return the `id`
-   * const bookmarkWithIdOnly = await prisma.bookmark.createManyAndReturn({
-   *   select: { id: true },
+   * // Create many Bookmarks and only return the `postId`
+   * const bookmarkWithPostIdOnly = await prisma.bookmark.createManyAndReturn({
+   *   select: { postId: true },
    *   data: [
    *     // ... provide data here
    *   ]
@@ -796,9 +758,9 @@ export interface BookmarkDelegate<ExtArgs extends runtime.Types.Extensions.Inter
    *   ]
    * })
    * 
-   * // Update zero or more Bookmarks and only return the `id`
-   * const bookmarkWithIdOnly = await prisma.bookmark.updateManyAndReturn({
-   *   select: { id: true },
+   * // Update zero or more Bookmarks and only return the `postId`
+   * const bookmarkWithPostIdOnly = await prisma.bookmark.updateManyAndReturn({
+   *   select: { postId: true },
    *   where: {
    *     // ... provide filter here
    *   },
@@ -1002,7 +964,6 @@ export interface Prisma__BookmarkClient<T, Null = never, ExtArgs extends runtime
  * Fields of the Bookmark model
  */
 export interface BookmarkFieldRefs {
-  readonly id: Prisma.FieldRef<"Bookmark", 'String'>
   readonly postId: Prisma.FieldRef<"Bookmark", 'String'>
   readonly ownerId: Prisma.FieldRef<"Bookmark", 'String'>
   readonly createdAt: Prisma.FieldRef<"Bookmark", 'DateTime'>

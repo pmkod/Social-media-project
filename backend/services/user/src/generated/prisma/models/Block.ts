@@ -25,21 +25,18 @@ export type AggregateBlock = {
 }
 
 export type BlockMinAggregateOutputType = {
-  id: string | null
   blockerId: string | null
   blockedId: string | null
   createdAt: Date | null
 }
 
 export type BlockMaxAggregateOutputType = {
-  id: string | null
   blockerId: string | null
   blockedId: string | null
   createdAt: Date | null
 }
 
 export type BlockCountAggregateOutputType = {
-  id: number
   blockerId: number
   blockedId: number
   createdAt: number
@@ -48,21 +45,18 @@ export type BlockCountAggregateOutputType = {
 
 
 export type BlockMinAggregateInputType = {
-  id?: true
   blockerId?: true
   blockedId?: true
   createdAt?: true
 }
 
 export type BlockMaxAggregateInputType = {
-  id?: true
   blockerId?: true
   blockedId?: true
   createdAt?: true
 }
 
 export type BlockCountAggregateInputType = {
-  id?: true
   blockerId?: true
   blockedId?: true
   createdAt?: true
@@ -142,7 +136,6 @@ export type BlockGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
 }
 
 export type BlockGroupByOutputType = {
-  id: string
   blockerId: string
   blockedId: string
   createdAt: Date
@@ -170,7 +163,6 @@ export type BlockWhereInput = {
   AND?: Prisma.BlockWhereInput | Prisma.BlockWhereInput[]
   OR?: Prisma.BlockWhereInput[]
   NOT?: Prisma.BlockWhereInput | Prisma.BlockWhereInput[]
-  id?: Prisma.StringFilter<"Block"> | string
   blockerId?: Prisma.StringFilter<"Block"> | string
   blockedId?: Prisma.StringFilter<"Block"> | string
   createdAt?: Prisma.DateTimeFilter<"Block"> | Date | string
@@ -179,7 +171,6 @@ export type BlockWhereInput = {
 }
 
 export type BlockOrderByWithRelationInput = {
-  id?: Prisma.SortOrder
   blockerId?: Prisma.SortOrder
   blockedId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -188,7 +179,6 @@ export type BlockOrderByWithRelationInput = {
 }
 
 export type BlockWhereUniqueInput = Prisma.AtLeast<{
-  id?: string
   blockerId_blockedId?: Prisma.BlockBlockerIdBlockedIdCompoundUniqueInput
   AND?: Prisma.BlockWhereInput | Prisma.BlockWhereInput[]
   OR?: Prisma.BlockWhereInput[]
@@ -198,10 +188,9 @@ export type BlockWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"Block"> | Date | string
   blocker?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   blocked?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-}, "id" | "blockerId_blockedId">
+}, "blockerId_blockedId">
 
 export type BlockOrderByWithAggregationInput = {
-  id?: Prisma.SortOrder
   blockerId?: Prisma.SortOrder
   blockedId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -214,54 +203,46 @@ export type BlockScalarWhereWithAggregatesInput = {
   AND?: Prisma.BlockScalarWhereWithAggregatesInput | Prisma.BlockScalarWhereWithAggregatesInput[]
   OR?: Prisma.BlockScalarWhereWithAggregatesInput[]
   NOT?: Prisma.BlockScalarWhereWithAggregatesInput | Prisma.BlockScalarWhereWithAggregatesInput[]
-  id?: Prisma.StringWithAggregatesFilter<"Block"> | string
   blockerId?: Prisma.StringWithAggregatesFilter<"Block"> | string
   blockedId?: Prisma.StringWithAggregatesFilter<"Block"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Block"> | Date | string
 }
 
 export type BlockCreateInput = {
-  id?: string
   createdAt?: Date | string
   blocker: Prisma.UserCreateNestedOneWithoutBlockedUsersInput
   blocked: Prisma.UserCreateNestedOneWithoutBlockedByUsersInput
 }
 
 export type BlockUncheckedCreateInput = {
-  id?: string
   blockerId: string
   blockedId: string
   createdAt?: Date | string
 }
 
 export type BlockUpdateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   blocker?: Prisma.UserUpdateOneRequiredWithoutBlockedUsersNestedInput
   blocked?: Prisma.UserUpdateOneRequiredWithoutBlockedByUsersNestedInput
 }
 
 export type BlockUncheckedUpdateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   blockerId?: Prisma.StringFieldUpdateOperationsInput | string
   blockedId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type BlockCreateManyInput = {
-  id?: string
   blockerId: string
   blockedId: string
   createdAt?: Date | string
 }
 
 export type BlockUpdateManyMutationInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type BlockUncheckedUpdateManyInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   blockerId?: Prisma.StringFieldUpdateOperationsInput | string
   blockedId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -283,21 +264,18 @@ export type BlockBlockerIdBlockedIdCompoundUniqueInput = {
 }
 
 export type BlockCountOrderByAggregateInput = {
-  id?: Prisma.SortOrder
   blockerId?: Prisma.SortOrder
   blockedId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
 export type BlockMaxOrderByAggregateInput = {
-  id?: Prisma.SortOrder
   blockerId?: Prisma.SortOrder
   blockedId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
 export type BlockMinOrderByAggregateInput = {
-  id?: Prisma.SortOrder
   blockerId?: Prisma.SortOrder
   blockedId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -388,13 +366,11 @@ export type BlockUncheckedUpdateManyWithoutBlockedNestedInput = {
 }
 
 export type BlockCreateWithoutBlockerInput = {
-  id?: string
   createdAt?: Date | string
   blocked: Prisma.UserCreateNestedOneWithoutBlockedByUsersInput
 }
 
 export type BlockUncheckedCreateWithoutBlockerInput = {
-  id?: string
   blockedId: string
   createdAt?: Date | string
 }
@@ -410,13 +386,11 @@ export type BlockCreateManyBlockerInputEnvelope = {
 }
 
 export type BlockCreateWithoutBlockedInput = {
-  id?: string
   createdAt?: Date | string
   blocker: Prisma.UserCreateNestedOneWithoutBlockedUsersInput
 }
 
 export type BlockUncheckedCreateWithoutBlockedInput = {
-  id?: string
   blockerId: string
   createdAt?: Date | string
 }
@@ -451,7 +425,6 @@ export type BlockScalarWhereInput = {
   AND?: Prisma.BlockScalarWhereInput | Prisma.BlockScalarWhereInput[]
   OR?: Prisma.BlockScalarWhereInput[]
   NOT?: Prisma.BlockScalarWhereInput | Prisma.BlockScalarWhereInput[]
-  id?: Prisma.StringFilter<"Block"> | string
   blockerId?: Prisma.StringFilter<"Block"> | string
   blockedId?: Prisma.StringFilter<"Block"> | string
   createdAt?: Prisma.DateTimeFilter<"Block"> | Date | string
@@ -474,49 +447,41 @@ export type BlockUpdateManyWithWhereWithoutBlockedInput = {
 }
 
 export type BlockCreateManyBlockerInput = {
-  id?: string
   blockedId: string
   createdAt?: Date | string
 }
 
 export type BlockCreateManyBlockedInput = {
-  id?: string
   blockerId: string
   createdAt?: Date | string
 }
 
 export type BlockUpdateWithoutBlockerInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   blocked?: Prisma.UserUpdateOneRequiredWithoutBlockedByUsersNestedInput
 }
 
 export type BlockUncheckedUpdateWithoutBlockerInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   blockedId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type BlockUncheckedUpdateManyWithoutBlockerInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   blockedId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type BlockUpdateWithoutBlockedInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   blocker?: Prisma.UserUpdateOneRequiredWithoutBlockedUsersNestedInput
 }
 
 export type BlockUncheckedUpdateWithoutBlockedInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   blockerId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type BlockUncheckedUpdateManyWithoutBlockedInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   blockerId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -524,7 +489,6 @@ export type BlockUncheckedUpdateManyWithoutBlockedInput = {
 
 
 export type BlockSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  id?: boolean
   blockerId?: boolean
   blockedId?: boolean
   createdAt?: boolean
@@ -533,7 +497,6 @@ export type BlockSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
 }, ExtArgs["result"]["block"]>
 
 export type BlockSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  id?: boolean
   blockerId?: boolean
   blockedId?: boolean
   createdAt?: boolean
@@ -542,7 +505,6 @@ export type BlockSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
 }, ExtArgs["result"]["block"]>
 
 export type BlockSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  id?: boolean
   blockerId?: boolean
   blockedId?: boolean
   createdAt?: boolean
@@ -551,13 +513,12 @@ export type BlockSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
 }, ExtArgs["result"]["block"]>
 
 export type BlockSelectScalar = {
-  id?: boolean
   blockerId?: boolean
   blockedId?: boolean
   createdAt?: boolean
 }
 
-export type BlockOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "blockerId" | "blockedId" | "createdAt", ExtArgs["result"]["block"]>
+export type BlockOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"blockerId" | "blockedId" | "createdAt", ExtArgs["result"]["block"]>
 export type BlockInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   blocker?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   blocked?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -578,7 +539,6 @@ export type $BlockPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     blocked: Prisma.$UserPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    id: string
     blockerId: string
     blockedId: string
     createdAt: Date
@@ -665,8 +625,8 @@ export interface BlockDelegate<ExtArgs extends runtime.Types.Extensions.Internal
    * // Get first 10 Blocks
    * const blocks = await prisma.block.findMany({ take: 10 })
    * 
-   * // Only select the `id`
-   * const blockWithIdOnly = await prisma.block.findMany({ select: { id: true } })
+   * // Only select the `blockerId`
+   * const blockWithBlockerIdOnly = await prisma.block.findMany({ select: { blockerId: true } })
    * 
    */
   findMany<T extends BlockFindManyArgs>(args?: Prisma.SelectSubset<T, BlockFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BlockPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
@@ -710,9 +670,9 @@ export interface BlockDelegate<ExtArgs extends runtime.Types.Extensions.Internal
    *   ]
    * })
    * 
-   * // Create many Blocks and only return the `id`
-   * const blockWithIdOnly = await prisma.block.createManyAndReturn({
-   *   select: { id: true },
+   * // Create many Blocks and only return the `blockerId`
+   * const blockWithBlockerIdOnly = await prisma.block.createManyAndReturn({
+   *   select: { blockerId: true },
    *   data: [
    *     // ... provide data here
    *   ]
@@ -801,9 +761,9 @@ export interface BlockDelegate<ExtArgs extends runtime.Types.Extensions.Internal
    *   ]
    * })
    * 
-   * // Update zero or more Blocks and only return the `id`
-   * const blockWithIdOnly = await prisma.block.updateManyAndReturn({
-   *   select: { id: true },
+   * // Update zero or more Blocks and only return the `blockerId`
+   * const blockWithBlockerIdOnly = await prisma.block.updateManyAndReturn({
+   *   select: { blockerId: true },
    *   where: {
    *     // ... provide filter here
    *   },
@@ -1007,7 +967,6 @@ export interface Prisma__BlockClient<T, Null = never, ExtArgs extends runtime.Ty
  * Fields of the Block model
  */
 export interface BlockFieldRefs {
-  readonly id: Prisma.FieldRef<"Block", 'String'>
   readonly blockerId: Prisma.FieldRef<"Block", 'String'>
   readonly blockedId: Prisma.FieldRef<"Block", 'String'>
   readonly createdAt: Prisma.FieldRef<"Block", 'DateTime'>

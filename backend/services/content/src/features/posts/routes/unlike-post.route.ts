@@ -55,11 +55,15 @@ const unlikePostRoute = defineOpenAPIRoute<
 			where: {
 				postId_authorId: { postId, authorId: authenticatedUserId },
 			},
-			select: { id: true },
+			select: { postId: true },
 		});
 		if (existingLike) {
 			const [, updatedPost] = await prisma.$transaction([
-				prisma.postLike.delete({ where: { id: existingLike.id } }),
+				prisma.postLike.delete({
+					where: {
+						postId_authorId: { postId, authorId: authenticatedUserId },
+					},
+				}),
 				prisma.post.update({
 					where: { id: postId },
 					data: { likesCount: { decrement: 1 } },

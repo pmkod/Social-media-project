@@ -50,14 +50,16 @@ const getPostLikesRoute = defineOpenAPIRoute<
 			where: { postId },
 			orderBy: { createdAt: "desc" },
 			select: {
-				id: true,
 				authorId: true,
 				createdAt: true,
 			},
 		});
 		const count = await prisma.postLike.count({ where: { postId } });
 
-		return c.json({ count, likes });
+		return c.json({
+			count,
+			likes: likes.map((like) => ({ id: like.authorId, ...like })),
+		});
 	},
 });
 

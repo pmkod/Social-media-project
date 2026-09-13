@@ -38,7 +38,7 @@ const getPublicUserProfile = async (
 							followingId: user.id,
 						},
 					},
-					select: { id: true },
+					select: { followerId: true },
 				})
 			: null,
 		getBlockRelationships(authenticatedUserId, [user.id]),

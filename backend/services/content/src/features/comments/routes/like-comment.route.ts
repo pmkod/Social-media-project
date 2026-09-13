@@ -59,7 +59,7 @@ const likeCommentRoute = defineOpenAPIRoute<
 					authorId: authenticatedUserId,
 				},
 			},
-			select: { id: true },
+			select: { commentId: true },
 		});
 
 		let createdLike = false;

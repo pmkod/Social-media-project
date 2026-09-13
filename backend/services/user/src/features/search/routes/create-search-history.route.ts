@@ -65,7 +65,7 @@ const createSearchHistoryRoute = defineOpenAPIRoute<
 						bestQualityProfilePictureFileId: true,
 						followers: {
 							where: { followerId: authenticatedUser.id },
-							select: { id: true },
+							select: { followerId: true },
 							take: 1,
 						},
 					},

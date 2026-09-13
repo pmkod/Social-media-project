@@ -47,7 +47,7 @@ const getBlockedUsersRoute = defineOpenAPIRoute<
 			? {
 					OR: [
 						{ createdAt: { lt: cursorDate } },
-						{ createdAt: cursorDate, id: { lt: query.cursorId } },
+						{ createdAt: cursorDate, blockedId: { lt: query.cursorId } },
 					],
 				}
 			: undefined;
@@ -58,10 +58,10 @@ const getBlockedUsersRoute = defineOpenAPIRoute<
 				blocked: { active: true },
 				...cursorCondition,
 			},
-			orderBy: [{ createdAt: "desc" }, { id: "desc" }],
+			orderBy: [{ createdAt: "desc" }, { blockedId: "desc" }],
 			take: limit + 1,
 			select: {
-				id: true,
+				blockedId: true,
 				createdAt: true,
 				blocked: {
 					select: {
@@ -103,7 +103,7 @@ const getBlockedUsersRoute = defineOpenAPIRoute<
 				nextCursor:
 					hasNextPage && lastItem
 						? {
-								id: lastItem.id,
+								id: lastItem.blockedId,
 								createdAt: lastItem.createdAt.toISOString(),
 							}
 						: null,

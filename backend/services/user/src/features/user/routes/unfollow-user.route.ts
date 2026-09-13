@@ -47,7 +47,7 @@ const unfollowUserRoute = defineOpenAPIRoute<
 					followingId: userId,
 				},
 			},
-			select: { id: true },
+			select: { followerId: true },
 		});
 
 		if (existingFollow) {

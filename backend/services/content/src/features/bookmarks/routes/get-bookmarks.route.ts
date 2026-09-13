@@ -113,7 +113,7 @@ const getBookmarksRoute = defineOpenAPIRoute<
 			? {
 					OR: [
 						{ createdAt: { lt: cursorDate } },
-						{ createdAt: cursorDate, id: { lt: query.cursorId } },
+						{ createdAt: cursorDate, postId: { lt: query.cursorId } },
 					],
 				}
 			: undefined;
@@ -123,7 +123,7 @@ const getBookmarksRoute = defineOpenAPIRoute<
 						{ createdAt: { lt: cursorDate } },
 						{
 							createdAt: cursorDate,
-							bookmarkId: { lt: query.cursorId },
+							postId: { lt: query.cursorId },
 						},
 					],
 				}
@@ -145,10 +145,10 @@ const getBookmarksRoute = defineOpenAPIRoute<
 								? collectionItemCursorCondition
 								: {}),
 						},
-						orderBy: [{ createdAt: "desc" }, { bookmarkId: "desc" }],
+						orderBy: [{ createdAt: "desc" }, { postId: "desc" }],
 						take: limit + 1,
 						select: {
-							bookmarkId: true,
+							postId: true,
 							createdAt: true,
 							bookmark: {
 								select: { post: { select: bookmarkedPostSelect } },
@@ -156,7 +156,7 @@ const getBookmarksRoute = defineOpenAPIRoute<
 						},
 					})
 				).map((item) => ({
-					cursorId: item.bookmarkId,
+					cursorId: item.postId,
 					cursorCreatedAt: item.createdAt,
 					post: item.bookmark.post,
 				}))
@@ -171,16 +171,16 @@ const getBookmarksRoute = defineOpenAPIRoute<
 									: {},
 							...(bookmarkCursorCondition ? bookmarkCursorCondition : {}),
 						},
-						orderBy: [{ createdAt: "desc" }, { id: "desc" }],
+						orderBy: [{ createdAt: "desc" }, { postId: "desc" }],
 						take: limit + 1,
 						select: {
-							id: true,
+							postId: true,
 							createdAt: true,
 							post: { select: bookmarkedPostSelect },
 						},
 					})
 				).map((bookmark) => ({
-					cursorId: bookmark.id,
+					cursorId: bookmark.postId,
 					cursorCreatedAt: bookmark.createdAt,
 					post: bookmark.post,
 				}));

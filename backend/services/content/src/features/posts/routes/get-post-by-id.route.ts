@@ -95,7 +95,7 @@ const getPostByIdRoute = defineOpenAPIRoute<
 							authorId: authenticatedUserId,
 						},
 					},
-					select: { id: true },
+					select: { postId: true },
 				})
 			: null;
 		const bookmark = authenticatedUserId
@@ -107,8 +107,8 @@ const getPostByIdRoute = defineOpenAPIRoute<
 						},
 					},
 						select: {
-							id: true,
-							collectionItems: { select: { bookmarkId: true } },
+							postId: true,
+							collectionItems: { select: { collectionId: true } },
 						},
 				})
 			: null;

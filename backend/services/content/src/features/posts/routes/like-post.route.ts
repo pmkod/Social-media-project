@@ -55,7 +55,7 @@ const likePostRoute = defineOpenAPIRoute<typeof routeDef, HonoAuthenticatedEnv>(
 				where: {
 					postId_authorId: { postId, authorId: authenticatedUserId },
 				},
-				select: { id: true },
+				select: { postId: true },
 			});
 			let createdLike = false;
 			if (!existingLike) {

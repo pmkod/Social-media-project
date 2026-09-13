@@ -56,23 +56,24 @@ const addBookmarkRoute = defineOpenAPIRoute<
 		}
 
 		await prisma.$transaction(async (tx) => {
-			const savedBookmark = await tx.bookmark.upsert({
+			await tx.bookmark.upsert({
 				where: { postId_ownerId: { postId, ownerId } },
 				create: { postId, ownerId },
 				update: {},
-				select: { id: true, postId: true, ownerId: true, createdAt: true },
 			});
 
 			await tx.bookmarkCollectionItem.upsert({
 				where: {
-					collectionId_bookmarkId: {
+					collectionId_postId_ownerId: {
 						collectionId: bookmarkCollectionId,
-						bookmarkId: savedBookmark.id,
+						postId,
+						ownerId,
 					},
 				},
 				create: {
 					collectionId: bookmarkCollectionId,
-					bookmarkId: savedBookmark.id,
+					postId,
+					ownerId,
 				},
 				update: {},
 			});

@@ -27,7 +27,6 @@ model Report {
   createdAt    DateTime      @default(now()) @map("created_at")
   reason       ReportReason? @relation(fields: [reasonId], references: [id], onDelete: Restrict)
 
-  @@index([createdAt])
   @@map("report")
 }
 

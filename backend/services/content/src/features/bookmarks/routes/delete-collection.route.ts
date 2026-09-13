@@ -41,7 +41,7 @@ const deleteCollectionRoute = defineOpenAPIRoute<
 			const collectionItems = await tx.bookmarkCollectionItem.findMany({
 				where: { collectionId: collection.id },
 				select: {
-					bookmarkId: true,
+					postId: true,
 					bookmark: {
 						select: {
 							postId: true,
@@ -58,7 +58,8 @@ const deleteCollectionRoute = defineOpenAPIRoute<
 			if (collectionItems.length > 0) {
 				await tx.bookmark.deleteMany({
 					where: {
-						id: { in: collectionItems.map((item) => item.bookmarkId) },
+						postId: { in: collectionItems.map((item) => item.postId) },
+						ownerId,
 						collectionItems: { none: {} },
 					},
 				});

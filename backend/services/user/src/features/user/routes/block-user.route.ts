@@ -57,25 +57,26 @@ const blockUserRoute = defineOpenAPIRoute<
 			update: {},
 		});
 
+		const followRelationshipWhere = {
+			OR: [
+				{
+					followerId: authenticatedUser.id,
+					followingId: userId,
+				},
+				{
+					followerId: userId,
+					followingId: authenticatedUser.id,
+				},
+			],
+		};
 		const follows = await prisma.follow.findMany({
-			where: {
-				OR: [
-					{
-						followerId: authenticatedUser.id,
-						followingId: userId,
-					},
-					{
-						followerId: userId,
-						followingId: authenticatedUser.id,
-					},
-				],
-			},
-			select: { id: true, followerId: true },
+			where: followRelationshipWhere,
+			select: { followerId: true },
 		});
 
 		if (follows.length > 0) {
 			await prisma.follow.deleteMany({
-				where: { id: { in: follows.map((follow) => follow.id) } },
+				where: followRelationshipWhere,
 			});
 		}
 

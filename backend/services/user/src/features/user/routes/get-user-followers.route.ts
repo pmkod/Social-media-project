@@ -60,7 +60,7 @@ const getUserFollowersRoute = defineOpenAPIRoute<
 						{ createdAt: { lt: cursorDate } },
 						{
 							createdAt: cursorDate,
-							id: { lt: query.cursorId },
+							followerId: { lt: query.cursorId },
 						},
 					],
 				}
@@ -71,10 +71,10 @@ const getUserFollowersRoute = defineOpenAPIRoute<
 				followingId: userId,
 				...cursorCondition,
 			},
-			orderBy: [{ createdAt: "desc" }, { id: "desc" }],
+			orderBy: [{ createdAt: "desc" }, { followerId: "desc" }],
 			take: limit + 1,
 			select: {
-				id: true,
+				followerId: true,
 				createdAt: true,
 				follower: {
 					select: {
@@ -127,7 +127,7 @@ const getUserFollowersRoute = defineOpenAPIRoute<
 				nextCursor:
 					hasNextPage && lastItem
 						? {
-								id: lastItem.id,
+								id: lastItem.followerId,
 								createdAt: lastItem.createdAt.toISOString(),
 							}
 						: null,
