@@ -43,5 +43,9 @@
 	"auth_verifying": "Vérification…",
 	"auth_verify": "Vérifier",
 	"auth_code_not_received": "Tu n’as pas reçu de code ?",
-	"auth_resend": "Renvoyer"
+	"auth_resend": "Renvoyer",
+	"validation_required": "Ce champ est obligatoire.",
+	"validation_invalid_email": "Saisis une adresse e-mail valide.",
+	"validation_min_length": "Ce champ doit contenir au moins {min} caractères.",
+	"validation_max_length": "Ce champ doit contenir au maximum {max} caractères."
 }
