@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import * as m from "@/paraglide/messages.js";
+import { LanguageSwitcher } from "./language-switcher";
 import { Logo } from "./logo";
 import { ThemeSwitcher } from "./theme-switcher";
 
@@ -19,7 +20,10 @@ export function Footer() {
 				{/* Top level */}
 				<div className="flex items-center justify-between">
 					<Logo />
-					<ThemeSwitcher />
+					<div className="flex items-center gap-2">
+						<LanguageSwitcher />
+						<ThemeSwitcher />
+					</div>
 				</div>
 
 				{/* Bottom level */}
