@@ -6,7 +6,7 @@ import {
 import { httpClient } from "@/core/http-clients/http-client.ts";
 import type { Post } from "@/features/post/common/post.ts";
 import { postListQueryKeys } from "@/features/post/common/post-list.query-keys.ts";
-import { postDetailsQueryKey } from "@/features/post/post-detail/post-detail.query-key.ts";
+import { postDetailsQueryKeys } from "@/features/post/post-detail/post-detail.query-keys.ts";
 import type { BookmarkCollectionsResponse } from "../common/bookmark-collection.ts";
 import { bookmarkCollectionsQueryKeys } from "../common/bookmark-collections.query-keys.ts";
 
@@ -63,7 +63,7 @@ const useDeleteBookmarkCollection = () => {
 			);
 			queryClient.setQueriesData<{ post: Post }>(
 				{
-					queryKey: postDetailsQueryKey.root,
+					queryKey: postDetailsQueryKeys.root,
 					predicate: ({ queryKey }) => queryKey.length === 2,
 				},
 				(data) =>

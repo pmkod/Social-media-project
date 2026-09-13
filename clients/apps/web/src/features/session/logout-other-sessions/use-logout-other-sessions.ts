@@ -14,7 +14,7 @@ const useLogoutOtherSessions = () => {
 				.json<{ disabledCount: number }>(),
 		onSuccess: () => {
 			const currentSessionId = getSessionId();
-			queryClient.setQueryData<Session[]>(activeSessionsQueryKey, (sessions) =>
+			queryClient.setQueryData<Session[]>(activeSessionsQueryKey.build(), (sessions) =>
 				currentSessionId
 					? sessions?.filter((session) => session.id === currentSessionId)
 					: sessions,

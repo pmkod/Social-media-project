@@ -8,7 +8,7 @@ import { userDetailsQueryKeys } from "@/features/user/common/user-details-query-
 import type { UserProfileResponse } from "@/features/user/user-profile/user-profile-response.ts";
 import type { Post } from "../common/post.ts";
 import { postListQueryKeys } from "../common/post-list.query-keys.ts";
-import { postDetailsQueryKey } from "../post-detail/post-detail.query-key.ts";
+import { postDetailsQueryKeys } from "../post-detail/post-detail.query-keys.ts";
 
 type PostListPage = {
 	posts: Post[];
@@ -204,7 +204,7 @@ const useCreatePost = () => {
 					};
 				},
 			);
-			queryClient.setQueryData(postDetailsQueryKey.build(post.id), { post });
+			queryClient.setQueryData(postDetailsQueryKeys.build(post.id), { post });
 			queryClient.setQueriesData<UserProfileResponse>(
 				{ queryKey: userDetailsQueryKeys.root },
 				(data) =>

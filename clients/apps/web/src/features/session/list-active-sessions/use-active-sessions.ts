@@ -5,7 +5,7 @@ import type { Session } from "../common/session.ts";
 
 const useActiveSessions = () =>
 	useQuery({
-		queryKey: activeSessionsQueryKey,
+		queryKey: activeSessionsQueryKey.build(),
 		queryFn: () =>
 			httpClient
 				.get("sessions/active")

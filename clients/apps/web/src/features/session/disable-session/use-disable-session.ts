@@ -12,7 +12,7 @@ const useDisableSession = () => {
 				.patch(`sessions/${sessionId}/disable`)
 				.json<{ session: Session }>(),
 		onSuccess: (_, sessionId) => {
-			queryClient.setQueryData<Session[]>(activeSessionsQueryKey, (sessions) =>
+			queryClient.setQueryData<Session[]>(activeSessionsQueryKey.build(), (sessions) =>
 				sessions?.filter((session) => session.id !== sessionId),
 			);
 		},

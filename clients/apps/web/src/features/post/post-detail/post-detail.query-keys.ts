@@ -1,6 +1,6 @@
 const postDetailsRootQueryKey = ["post-details"];
 
-const postDetailsQueryKey = {
+const postDetailsQueryKeys = {
 	root: postDetailsRootQueryKey,
 	build: (postId: string) => [...postDetailsRootQueryKey, postId],
 	buildComments: (postId: string) => [
@@ -10,4 +10,4 @@ const postDetailsQueryKey = {
 	],
 };
 
-export { postDetailsQueryKey };
+export { postDetailsQueryKeys };

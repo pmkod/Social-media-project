@@ -5,7 +5,7 @@ import {
 } from "@tanstack/react-query";
 import { httpClient } from "@/core/http-clients/http-client.ts";
 import type { Post } from "../common/post.ts";
-import { postDetailsQueryKey } from "../post-detail/post-detail.query-key.ts";
+import { postDetailsQueryKeys } from "../post-detail/post-detail.query-keys.ts";
 import { postListQueryKeys } from "../common/post-list.query-keys.ts";
 
 export type UnlikePostResponse = {
@@ -46,7 +46,7 @@ export const useUnlikePost = () => {
 			);
 
 			queryClient.setQueryData<{ post: Post }>(
-				postDetailsQueryKey.build(postId),
+				postDetailsQueryKeys.build(postId),
 				(oldData) => {
 					return oldData !== undefined
 						? {

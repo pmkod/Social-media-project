@@ -7,7 +7,7 @@ import { toast } from "sonner";
 import { httpClient } from "@/core/http-clients/http-client.ts";
 import type { Post } from "@/features/post/common/post.ts";
 import { postListQueryKeys } from "@/features/post/common/post-list.query-keys.ts";
-import { postDetailsQueryKey } from "@/features/post/post-detail/post-detail.query-key.ts";
+import { postDetailsQueryKeys } from "@/features/post/post-detail/post-detail.query-keys.ts";
 import type { BookmarkCollection } from "./common/bookmark-collection.ts";
 import { bookmarkCollectionsQueryKeys } from "./common/bookmark-collections.query-keys.ts";
 
@@ -56,7 +56,7 @@ const useRemoveBookmark = () => {
 			);
 
 			queryClient.setQueryData<{ post: Post }>(
-				postDetailsQueryKey.build(postId),
+				postDetailsQueryKeys.build(postId),
 				(oldData) =>
 					oldData
 						? {

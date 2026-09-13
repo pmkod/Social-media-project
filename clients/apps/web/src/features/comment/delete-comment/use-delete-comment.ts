@@ -6,7 +6,7 @@ import {
 import { httpClient } from "@/core/http-clients/http-client.ts";
 import type { Post } from "@/features/post/common/post.ts";
 import { postListQueryKeys } from "@/features/post/common/post-list.query-keys.ts";
-import { postDetailsQueryKey } from "@/features/post/post-detail/post-detail.query-key.ts";
+import { postDetailsQueryKeys } from "@/features/post/post-detail/post-detail.query-keys.ts";
 import type { Comment } from "../common/comment.ts";
 import { commentListQueryKeys } from "../common/comment-list.query-keys.ts";
 
@@ -60,7 +60,7 @@ const useDeleteComment = () => {
 					},
 			);
 			queryClient.setQueryData<{ post: Post }>(
-				postDetailsQueryKey.build(comment.postId),
+				postDetailsQueryKeys.build(comment.postId),
 				(data) =>
 					data
 						? {
