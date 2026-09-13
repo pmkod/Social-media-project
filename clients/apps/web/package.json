@@ -10,7 +10,8 @@
 		"build": "vite build",
 		"preview": "vite preview",
 		"test": "bun run i18n:compile && vitest run",
-		"i18n:compile": "paraglide-js compile --project ./project.inlang --outdir ./src/paraglide --strategy cookie preferredLanguage baseLocale --emit-ts-declarations",
+		"i18n:validate": "node ./scripts/validate-i18n.mjs",
+		"i18n:compile": "bun run i18n:validate && paraglide-js compile --project ./project.inlang --outdir ./src/paraglide --strategy cookie preferredLanguage baseLocale --emit-ts-declarations",
 		"format": "biome format",
 		"lint": "biome lint",
 		"check": "biome check"

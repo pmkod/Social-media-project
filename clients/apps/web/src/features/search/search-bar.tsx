@@ -8,6 +8,7 @@ import { UserRowItemListLoader } from "@/features/user/common/components/user-ro
 import type { User } from "@/features/user/common/user.ts";
 import { UserProfileLink } from "@/features/user/common/user-profile-link.tsx";
 import { useSearchUsers } from "@/features/user/search/use-search-users.ts";
+import * as m from "@/paraglide/messages.js";
 import { useClearSearchHistory } from "./use-clear-search-history.ts";
 import { useCreateSearchHistory } from "./use-create-search-history.ts";
 import { useDeleteSearchHistoryItem } from "./use-delete-search-history-item.ts";
@@ -132,8 +133,8 @@ function SearchBar() {
 			<RiSearchLine className="pointer-events-none absolute left-4 top-1/2 size-5 -translate-y-1/2 text-muted-foreground" />
 			<input
 				type="search"
-				placeholder="Search posts and people"
-				aria-label="Search posts and people"
+				placeholder={m.search_placeholder()}
+				aria-label={m.search_placeholder()}
 				className="h-12 w-full rounded-full border border-transparent bg-muted pl-12 pr-5 text-sm text-foreground outline-none transition focus:border-foreground"
 				value={search}
 				maxLength={100}
@@ -195,7 +196,7 @@ function SearchBar() {
 						<>
 							<div className="flex items-center justify-between gap-4 px-5 py-4">
 								<h2 className="text-lg font-semibold text-foreground">
-									Recent
+									{m.search_recent()}
 								</h2>
 								{history.length > 0 ? (
 									<button
@@ -204,7 +205,7 @@ function SearchBar() {
 										onClick={() => clearHistory.mutate()}
 										className="cursor-pointer text-sm font-semibold text-primary transition-opacity hover:opacity-80 disabled:cursor-default disabled:opacity-50"
 									>
-										Clear all
+										{m.search_clear_all()}
 									</button>
 								) : null}
 							</div>
@@ -224,7 +225,7 @@ function SearchBar() {
 								</div>
 							) : history.length === 0 ? (
 								<p className="px-5 pb-6 text-sm text-muted-foreground">
-									No recent searches.
+									{m.search_empty_history()}
 								</p>
 							) : (
 								<div>
@@ -256,7 +257,7 @@ function SearchBar() {
 											)}
 											<button
 												type="button"
-												aria-label="Remove from recent searches"
+												aria-label={m.search_remove_recent()}
 												disabled={deleteHistoryItem.isPending}
 												onClick={() => deleteHistoryItem.mutate(item.id)}
 												className=" absolute right-3 top-1/2 transform -translate-y-1/2 flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-full text-primary transition-colors disabled:cursor-default disabled:opacity-50"
@@ -274,8 +275,8 @@ function SearchBar() {
 											className="w-full cursor-pointer border-t border-border px-5 py-3 text-sm font-semibold text-primary transition-colors hover:bg-accent disabled:cursor-default disabled:opacity-50"
 										>
 											{historyQuery.isFetchingNextPage
-												? "Loading…"
-												: "Show more"}
+												? m.action_loading()
+												: m.action_show_more()}
 										</button>
 									) : null}
 								</div>

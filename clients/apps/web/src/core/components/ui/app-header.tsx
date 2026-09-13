@@ -2,6 +2,7 @@ import { RiArrowLeftLine } from "@remixicon/react";
 import { Link, type LinkProps } from "@tanstack/react-router";
 import type * as React from "react";
 import { cn } from "@/core/lib/utils.ts";
+import * as m from "@/paraglide/messages.js";
 
 function AppHeader({
 	className,
@@ -68,7 +69,7 @@ function AppHeaderGoBackButton({
 	icon,
 	children,
 	className,
-	"aria-label": ariaLabel = "Back",
+	"aria-label": ariaLabel = m.action_back(),
 	onClick,
 	...props
 }: AppHeaderGoBackButtonProps) {
@@ -129,8 +130,8 @@ function AppHeaderTitle({ className, ...props }: React.ComponentProps<"h1">) {
 
 export {
 	AppHeader,
+	AppHeaderGoBackButton,
 	AppHeaderLeftPart,
 	AppHeaderRightPart,
-	AppHeaderGoBackButton,
 	AppHeaderTitle,
 };

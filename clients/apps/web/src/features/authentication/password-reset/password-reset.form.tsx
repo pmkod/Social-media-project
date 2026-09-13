@@ -13,6 +13,7 @@ import {
 } from "@/core/components/ui/field.tsx";
 import { Input } from "@/core/components/ui/input.tsx";
 import { UserValidationSchema } from "@/features/user/common/user.validation-schemas.ts";
+import * as m from "@/paraglide/messages.js";
 import { usePasswordReset } from "./use-password-reset";
 
 const passwordResetSchema = z.object({
@@ -51,10 +52,10 @@ function PasswordResetForm({ onSuccess }: PasswordResetFormProps) {
 		<div className="flex flex-col gap-6">
 			<div className="flex flex-col gap-1">
 				<h2 className="text-2xl font-semibold tracking-tight">
-					Forgot password
+					{m.auth_forgot_password_title()}
 				</h2>
 				<p className="text-sm text-muted-foreground">
-					Enter your email to receive a reset link.
+					{m.auth_password_reset_description()}
 				</p>
 			</div>
 
@@ -76,7 +77,7 @@ function PasswordResetForm({ onSuccess }: PasswordResetFormProps) {
 					<form.Field name="email">
 						{(field) => (
 							<Field data-invalid={!field.state.meta.isValid}>
-								<FieldLabel htmlFor={field.name}>Email</FieldLabel>
+								<FieldLabel htmlFor={field.name}>{m.auth_email()}</FieldLabel>
 								<Input
 									id={field.name}
 									size="lg"
@@ -89,7 +90,7 @@ function PasswordResetForm({ onSuccess }: PasswordResetFormProps) {
 									aria-invalid={!field.state.meta.isValid}
 								/>
 								<FieldDescription>
-									We will send you a reset link.
+									{m.auth_password_reset_hint()}
 								</FieldDescription>
 								<FieldError errors={field.state.meta.errors} />
 							</Field>
@@ -100,19 +101,19 @@ function PasswordResetForm({ onSuccess }: PasswordResetFormProps) {
 				<form.Subscribe selector={(state) => state.isSubmitting}>
 					{(isSubmitting) => (
 						<Button type="submit" size="lg" fullWidth disabled={isSubmitting}>
-							{isSubmitting ? "Sending..." : "Send link"}
+							{isSubmitting ? m.auth_sending() : m.auth_send_link()}
 						</Button>
 					)}
 				</form.Subscribe>
 			</form>
 
 			<p className="text-center text-sm text-muted-foreground">
-				Back to{" "}
+				{m.auth_back_to()}{" "}
 				<Link
 					to="/"
 					className="text-foreground underline underline-offset-3 hover:text-foreground/80"
 				>
-					log in
+					{m.auth_login_link()}
 				</Link>
 			</p>
 		</div>

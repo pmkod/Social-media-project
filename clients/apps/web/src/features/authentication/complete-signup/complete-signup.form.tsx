@@ -11,6 +11,7 @@ import {
 } from "@/core/components/ui/field.tsx";
 import { Input } from "@/core/components/ui/input.tsx";
 import { UserValidationSchema } from "@/features/user/common/user.validation-schemas.ts";
+import * as m from "@/paraglide/messages.js";
 import { useCompleteSignup } from "./use-complete-signup";
 
 const completeSignupSchema = z.object({
@@ -48,10 +49,10 @@ function CompleteSignupForm({ onSuccess }: CompleteSignupFormProps) {
 		<div className="flex flex-col gap-4">
 			<div className="flex flex-col gap-1">
 				<h2 className="text-2xl font-semibold tracking-tight">
-					Choose a username
+					{m.auth_choose_username()}
 				</h2>
 				<p className="text-sm text-muted-foreground">
-					This name will be visible to other users.
+					{m.auth_username_description()}
 				</p>
 			</div>
 
@@ -73,7 +74,9 @@ function CompleteSignupForm({ onSuccess }: CompleteSignupFormProps) {
 					<form.Field name="username">
 						{(field) => (
 							<Field data-invalid={!field.state.meta.isValid}>
-								<FieldLabel htmlFor={field.name}>Username</FieldLabel>
+								<FieldLabel htmlFor={field.name}>
+									{m.auth_username()}
+								</FieldLabel>
 								<Input
 									id={field.name}
 									size="lg"
@@ -94,7 +97,9 @@ function CompleteSignupForm({ onSuccess }: CompleteSignupFormProps) {
 				<form.Subscribe selector={(state) => state.isSubmitting}>
 					{(isSubmitting) => (
 						<Button type="submit" size="lg" fullWidth disabled={isSubmitting}>
-							{isSubmitting ? "Finishing..." : "Complete sign-up"}
+							{isSubmitting
+								? m.auth_finishing_signup()
+								: m.auth_complete_signup()}
 						</Button>
 					)}
 				</form.Subscribe>

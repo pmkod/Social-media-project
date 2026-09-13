@@ -21,6 +21,7 @@ import { BookmarkCollectionItemLoader } from "@/features/bookmark/common/bookmar
 import { BookmarkCollectionModal } from "@/features/bookmark/common/bookmark-collection-modal.tsx";
 import { DeleteBookmarkCollectionAlertDialog } from "@/features/bookmark/delete-bookmark-collection/delete-bookmark-collection-alert-dialog.tsx";
 import { useBookmarkCollections } from "@/features/bookmark/use-bookmark-collections.ts";
+import * as m from "@/paraglide/messages.js";
 
 export const Route = createFileRoute(
 	"/_main/_with-right-aside/bookmark-collections",
@@ -79,7 +80,7 @@ function BookmarkCollectionsPage() {
 		<MainContainer>
 			<AppHeader>
 				<AppHeaderLeftPart>
-					<AppHeaderTitle>Bookmark collections</AppHeaderTitle>
+					<AppHeaderTitle>{m.bookmark_collections_title()}</AppHeaderTitle>
 				</AppHeaderLeftPart>
 				<AppHeaderRightPart>
 					<Button
@@ -88,7 +89,7 @@ function BookmarkCollectionsPage() {
 						onClick={handleOpenCreateCollectionModal}
 					>
 						<RiAddLine className="size-4" />
-						Create collection
+						{m.bookmark_collection_create()}
 					</Button>
 				</AppHeaderRightPart>
 			</AppHeader>
@@ -99,15 +100,15 @@ function BookmarkCollectionsPage() {
 						type="search"
 						value={search}
 						onChange={(event) => setSearch(event.target.value)}
-						placeholder="Search collections"
-						aria-label="Search bookmark collections"
+						placeholder={m.bookmark_collection_search()}
+						aria-label={m.bookmark_collection_search_label()}
 						className="h-11 w-full rounded bg-muted px-4 text-sm text-foreground outline-none transition focus:border focus:border-foreground"
 					/>
 				</div>
 
 				<div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
 					<BookmarkCollectionItem
-						name="All bookmarks"
+						name={m.bookmark_collection_all()}
 						isSelected={false}
 						onClick={() =>
 							void navigate({
@@ -157,13 +158,13 @@ function BookmarkCollectionsPage() {
 						className="mt-4"
 						title={
 							debouncedSearch
-								? "No bookmark collections found"
-								: "No bookmark collections"
+								? m.bookmark_collection_empty_search_title()
+								: m.bookmark_collection_empty_title()
 						}
 						description={
 							debouncedSearch
-								? "Try a different search."
-								: "Create a collection to organize your saved posts."
+								? m.bookmark_collection_empty_search_description()
+								: m.bookmark_collection_empty_description()
 						}
 					/>
 				) : null}

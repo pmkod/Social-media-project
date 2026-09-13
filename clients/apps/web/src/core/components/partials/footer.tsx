@@ -1,17 +1,17 @@
 import { Link } from "@tanstack/react-router";
+import * as m from "@/paraglide/messages.js";
 import { Logo } from "./logo";
 import { ThemeSwitcher } from "./theme-switcher";
 
-const footerLinks = [
-	{ label: "Home", to: "/" },
-	{ label: "Signup", to: "/signup" },
-	{ label: "Privacy policy", to: "/privacy-policy" },
-	{ label: "Terms", to: "/terms-of-service" },
-	{ label: "About", to: "/about" },
-];
-
 export function Footer() {
 	const currentYear = new Date().getFullYear();
+	const footerLinks = [
+		{ label: m.nav_home(), to: "/" },
+		{ label: m.footer_signup(), to: "/signup" },
+		{ label: m.footer_privacy(), to: "/privacy-policy" },
+		{ label: m.footer_terms(), to: "/terms-of-service" },
+		{ label: m.footer_about(), to: "/about" },
+	];
 
 	return (
 		<footer className="border-t border-border px-6 py-8 bg-muted">
@@ -25,7 +25,7 @@ export function Footer() {
 				{/* Bottom level */}
 				<div className="mt-6 flex flex-col items-center justify-between gap-4 sm:flex-row">
 					<p className="text-sm text-muted-foreground">
-						© {currentYear}. All rights reserved.
+						{m.footer_rights({ year: currentYear })}
 					</p>
 					<nav className="flex flex-wrap items-center gap-4 sm:gap-6">
 						{footerLinks.map((link) => (

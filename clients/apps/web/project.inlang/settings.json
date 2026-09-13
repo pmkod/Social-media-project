@@ -7,6 +7,20 @@
 		"https://cdn.jsdelivr.net/npm/@inlang/plugin-m-function-matcher@2.2.6/dist/index.js"
 	],
 	"plugin.inlang.messageFormat": {
-		"pathPattern": "./messages/{locale}.json"
+		"pathPattern": [
+			"./messages/common/{locale}.json",
+			"./messages/authentication/{locale}.json",
+			"./messages/bookmarks/{locale}.json",
+			"./messages/comments/{locale}.json",
+			"./messages/discussions/{locale}.json",
+			"./messages/home/{locale}.json",
+			"./messages/legal/{locale}.json",
+			"./messages/notifications/{locale}.json",
+			"./messages/posts/{locale}.json",
+			"./messages/profile/{locale}.json",
+			"./messages/reports/{locale}.json",
+			"./messages/search/{locale}.json",
+			"./messages/settings/{locale}.json"
+		]
 	}
 }

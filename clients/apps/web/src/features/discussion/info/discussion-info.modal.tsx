@@ -31,6 +31,7 @@ import { ReportModal } from "@/features/report/report.modal.tsx";
 import { BlockUserAlertDialog } from "@/features/user/block-user/block-user-alert-dialog.tsx";
 import { UserAvatar } from "@/features/user/common/components/user-avatar.tsx";
 import { UnblockUserAlertDialog } from "@/features/user/unblock-user/unblock-user-alert-dialog.tsx";
+import * as m from "@/paraglide/messages.js";
 import { DiscussionTypes } from "../common/discussion.constants.ts";
 import type { Discussion, DiscussionMember } from "../common/discussion.ts";
 import {
@@ -90,11 +91,11 @@ function ActionButton({
 	);
 }
 
-const RoleLabels = {
-	OWNER: "Propriétaire",
-	ADMIN: "Administrateur",
-	MEMBER: "Membre",
-} as const;
+const getRoleLabel = (role: DiscussionMember["role"]) => {
+	if (role === "OWNER") return m.discussion_role_owner();
+	if (role === "ADMIN") return m.discussion_role_admin();
+	return m.discussion_role_member();
+};
 
 const canRemoveMember = (
 	currentUserId: string,
@@ -160,7 +161,9 @@ const DiscussionInfoModal = create<DiscussionInfoModalProps>(
 				});
 				setIsBlocked(nextValue);
 				toast.success(
-					nextValue ? "Discussion bloquée" : "Discussion débloquée",
+					nextValue
+						? m.discussion_blocked_success()
+						: m.discussion_unblocked_success(),
 				);
 			} catch {
 				toast.error("L’état de la discussion n’a pas pu être modifié");
@@ -201,9 +204,9 @@ const DiscussionInfoModal = create<DiscussionInfoModalProps>(
 			>
 				<DialogContent size="xl" className="h-[min(48rem,calc(100dvh-2rem))]">
 					<DialogHeader>
-						<DialogTitle>Informations sur la discussion</DialogTitle>
+						<DialogTitle>{m.discussion_information()}</DialogTitle>
 						<DialogDescription className="sr-only">
-							Membres, actions et médias partagés dans cette discussion.
+							{m.discussion_info_description()}
 						</DialogDescription>
 					</DialogHeader>
 					<DialogBody>
@@ -225,26 +228,28 @@ const DiscussionInfoModal = create<DiscussionInfoModalProps>(
 						</section>
 
 						<section
-							aria-label="Actions de la discussion"
+							aria-label={m.discussion_actions_label()}
 							className="flex items-center justify-center px-2 py-2 mx-auto"
 						>
 							{isGroup ? (
 								<>
 									<ActionButton
 										icon={RiUserAddLine}
-										label="Ajouter"
+										label={m.discussion_add()}
 										disabled={!canManageMembers}
 										onClick={openAddMembers}
 									/>
 									<ActionButton
 										icon={RiUserForbidLine}
-										label={isBlocked ? "Débloquer" : "Bloquer"}
+										label={
+											isBlocked ? m.discussion_unblock() : m.discussion_block()
+										}
 										disabled={setDiscussionBlocked.isPending}
 										onClick={() => void toggleDiscussionBlocked()}
 									/>
 									<ActionButton
 										icon={RiLogoutBoxRLine}
-										label="Quitter"
+										label={m.discussion_leave()}
 										destructive
 										onClick={() =>
 											closeThenShow(LeaveDiscussionAlertDialog, {
@@ -259,13 +264,13 @@ const DiscussionInfoModal = create<DiscussionInfoModalProps>(
 								<>
 									<ActionButton
 										icon={RiUserLine}
-										label="Profil"
+										label={m.discussion_profile()}
 										disabled={!otherMember?.user}
 										onClick={() => void openProfile(otherMember)}
 									/>
 									<ActionButton
 										icon={RiFlag2Line}
-										label="Signaler"
+										label={m.discussion_report()}
 										destructive
 										onClick={() =>
 											closeThenShow(ReportModal, {
@@ -277,8 +282,8 @@ const DiscussionInfoModal = create<DiscussionInfoModalProps>(
 										icon={RiUserForbidLine}
 										label={
 											otherMember?.user?.isBlockedByAuthenticatedUser
-												? "Débloquer"
-												: "Bloquer"
+												? m.discussion_unblock()
+												: m.discussion_block()
 										}
 										destructive
 										disabled={!otherMember?.user}
@@ -297,7 +302,7 @@ const DiscussionInfoModal = create<DiscussionInfoModalProps>(
 							)}
 							<ActionButton
 								icon={RiDeleteBinLine}
-								label="Supprimer"
+								label={m.discussion_delete()}
 								destructive
 								onClick={() =>
 									closeThenShow(DeleteDiscussionAlertDialog, {
@@ -312,7 +317,9 @@ const DiscussionInfoModal = create<DiscussionInfoModalProps>(
 							<section className="border-b border-border px-5 py-5">
 								<div className="mb-3 flex items-center justify-between gap-3">
 									<h3 className="font-semibold">
-										Membres · {visibleMembers.length}
+										{m.discussion_members_heading({
+											count: visibleMembers.length,
+										})}
 									</h3>
 									{canManageMembers ? (
 										<Button
@@ -321,7 +328,7 @@ const DiscussionInfoModal = create<DiscussionInfoModalProps>(
 											size="sm"
 											onClick={openAddMembers}
 										>
-											<RiUserAddLine /> Ajouter
+											<RiUserAddLine /> {m.discussion_add()}
 										</Button>
 									) : null}
 								</div>
@@ -337,13 +344,13 @@ const DiscussionInfoModal = create<DiscussionInfoModalProps>(
 													{member.user?.fullName ||
 														(member.user
 															? `@${member.user.username}`
-															: "Utilisateur indisponible")}
+															: m.discussion_unavailable_user())}
 													{member.userId === authenticatedUserId
-														? " (vous)"
+														? m.discussion_you_suffix()
 														: ""}
 												</p>
 												<p className="text-xs text-muted-foreground">
-													{RoleLabels[member.role]}
+													{getRoleLabel(member.role)}
 												</p>
 											</div>
 											{member.user ? (
@@ -352,7 +359,9 @@ const DiscussionInfoModal = create<DiscussionInfoModalProps>(
 													variant="ghost"
 													size="sm"
 													onClick={() => void openProfile(member)}
-													aria-label={`Voir le profil de ${member.user.username}`}
+													aria-label={m.discussion_view_profile({
+														username: member.user.username,
+													})}
 												>
 													<RiUserLine />
 												</IconButton>
@@ -375,7 +384,7 @@ const DiscussionInfoModal = create<DiscussionInfoModalProps>(
 																userId: member.userId,
 																memberName:
 																	member.user?.fullName ||
-																	`@${member.user?.username || "utilisateur"}`,
+																	`@${member.user?.username || m.discussion_unavailable_user()}`,
 																onRemoved: (userId: string) =>
 																	setRemovedMemberIds((current) =>
 																		new Set(current).add(userId),
@@ -383,7 +392,11 @@ const DiscussionInfoModal = create<DiscussionInfoModalProps>(
 															},
 														)
 													}
-													aria-label={`Retirer ${member.user?.username || "ce membre"}`}
+													aria-label={m.discussion_remove_member_label({
+														name:
+															member.user?.username ||
+															m.discussion_role_member(),
+													})}
 												>
 													<RiUserUnfollowLine />
 												</IconButton>
@@ -395,12 +408,14 @@ const DiscussionInfoModal = create<DiscussionInfoModalProps>(
 						) : null}
 
 						<section className="px-5 py-5">
-							<h3 className="mb-3 font-semibold">Médias partagés</h3>
+							<h3 className="mb-3 font-semibold">
+								{m.discussion_shared_media()}
+							</h3>
 							{mediaQuery.isLoading ? (
 								<div
 									role="status"
 									className="grid grid-cols-3 gap-2"
-									aria-label="Chargement des médias"
+									aria-label={m.discussion_loading_media()}
 								>
 									{Array.from({ length: 6 }).map((_, index) => (
 										<div
@@ -423,8 +438,8 @@ const DiscussionInfoModal = create<DiscussionInfoModalProps>(
 								<EmptyBlock
 									bordered={false}
 									className="min-h-40"
-									title="Aucun média partagé"
-									description="Les images, vidéos, audios et fichiers apparaîtront ici."
+									title={m.discussion_no_media_title()}
+									description={m.discussion_no_media_description()}
 								/>
 							) : (
 								<>
@@ -451,7 +466,7 @@ const DiscussionInfoModal = create<DiscussionInfoModalProps>(
 											isLoading={mediaQuery.isFetchingNextPage}
 											onClick={() => void mediaQuery.fetchNextPage()}
 										>
-											Afficher plus
+											{m.discussion_show_more()}
 										</Button>
 									) : null}
 								</>

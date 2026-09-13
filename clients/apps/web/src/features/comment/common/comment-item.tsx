@@ -5,6 +5,7 @@ import { formatCommentCreationDate } from "@/features/post/common/post.utils.ts"
 import { UserAvatar } from "@/features/user/common/components/user-avatar.tsx";
 import { UserProfileLink } from "@/features/user/common/user-profile-link.tsx";
 import { UserProfileHoverCard } from "@/features/user/user-profile/user-profile-hover-card.tsx";
+import * as m from "@/paraglide/messages.js";
 import { useCommentToReplyTo } from "../comment-to-reply-to/use-comment-to-reply-to.ts";
 import { useComments } from "../comments/use-comments.ts";
 import { useLikeComment } from "../like-comment/use-like-comment.ts";
@@ -112,7 +113,7 @@ export function CommentItem({ comment, isReply = false }: CommentItemProps) {
 							isDeleted ? "italic text-muted-foreground" : "text-foreground",
 						)}
 					>
-						{isDeleted ? "Comment deleted" : comment.content}
+						{isDeleted ? m.comment_deleted() : comment.content}
 					</p>
 
 					{!isDeleted ? (
@@ -121,7 +122,7 @@ export function CommentItem({ comment, isReply = false }: CommentItemProps) {
 								type="button"
 								onClick={toggleLike}
 								disabled={likeComment.isPending || unlikeComment.isPending}
-								aria-label={isLiked ? "Unlike comment" : "Like comment"}
+								aria-label={isLiked ? m.comment_unlike() : m.comment_like()}
 								className={cn(
 									"flex items-center gap-1.5 transition-colors p-1.5 cursor-pointer rounded-full hover:bg-accent disabled:opacity-60",
 									isLiked ? "text-rose-500" : "hover:text-rose-500",
@@ -144,7 +145,7 @@ export function CommentItem({ comment, isReply = false }: CommentItemProps) {
 									isSelectedForReply && "text-foreground",
 								)}
 							>
-								<span>Reply</span>
+								<span>{m.comment_reply()}</span>
 							</button>
 						</div>
 					) : null}
@@ -180,7 +181,13 @@ export function CommentItem({ comment, isReply = false }: CommentItemProps) {
 								onClick={fetchMoreReplies}
 								className="text-xs font-semibold text-gray-900 cursor-pointer"
 							>
-								{`View ${repliesThatRemainToBeSeenCount} ${repliesThatRemainToBeSeenCount > 1 ? "replies" : "reply"}`}
+								{repliesThatRemainToBeSeenCount === 1
+									? m.comment_view_reply({
+											count: repliesThatRemainToBeSeenCount,
+										})
+									: m.comment_view_replies({
+											count: repliesThatRemainToBeSeenCount,
+										})}
 							</button>
 						) : (
 							<button
@@ -188,7 +195,7 @@ export function CommentItem({ comment, isReply = false }: CommentItemProps) {
 								onClick={hideReplies}
 								className="text-xs font-semibold text-gray-900 cursor-pointer"
 							>
-								Hide replies
+								{m.comment_hide_replies()}
 							</button>
 						)}
 					</div>

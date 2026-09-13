@@ -11,6 +11,7 @@ import {
 	FieldLabel,
 } from "@/core/components/ui/field.tsx";
 import { Input } from "@/core/components/ui/input.tsx";
+import * as m from "@/paraglide/messages.js";
 import { useCompleteLogin } from "../complete-login/use-complete-login";
 import { useResendUserVerificationCode } from "../resend-user-verification-code/use-resend-user-verification-code";
 import { useUserVerification } from "./use-user-verification";
@@ -71,9 +72,11 @@ function UserVerificationForm({ onSuccess, goal }: UserVerificationFormProps) {
 	return (
 		<div className="flex flex-col gap-6">
 			<div className="flex flex-col gap-1">
-				<h2 className="text-2xl font-semibold tracking-tight">Verification</h2>
+				<h2 className="text-2xl font-semibold tracking-tight">
+					{m.auth_verification_title()}
+				</h2>
 				<p className="text-sm text-muted-foreground">
-					Enter the 6-digit code sent to your email address.
+					{m.auth_verification_description()}
 				</p>
 			</div>
 
@@ -95,7 +98,9 @@ function UserVerificationForm({ onSuccess, goal }: UserVerificationFormProps) {
 					<form.Field name="code">
 						{(field) => (
 							<Field data-invalid={!field.state.meta.isValid}>
-								<FieldLabel htmlFor={field.name}>Verification code</FieldLabel>
+								<FieldLabel htmlFor={field.name}>
+									{m.auth_verification_code()}
+								</FieldLabel>
 								<Input
 									id={field.name}
 									size="lg"
@@ -116,21 +121,21 @@ function UserVerificationForm({ onSuccess, goal }: UserVerificationFormProps) {
 				<form.Subscribe selector={(state) => state.isSubmitting}>
 					{(isSubmitting) => (
 						<Button type="submit" size="lg" fullWidth disabled={isSubmitting}>
-							{isSubmitting ? "Verifying..." : "Verify"}
+							{isSubmitting ? m.auth_verifying() : m.auth_verify()}
 						</Button>
 					)}
 				</form.Subscribe>
 			</form>
 
 			<p className="flex items-center justify-center gap-2 text-center text-sm text-muted-foreground">
-				Didn't receive a code?{" "}
+				{m.auth_code_not_received()}{" "}
 				<button
 					type="button"
 					onClick={resendCode}
 					disabled={resend.isPending}
 					className="inline-flex cursor-pointer items-center gap-1.5 text-foreground underline underline-offset-3 hover:text-foreground/80 disabled:pointer-events-none disabled:opacity-50"
 				>
-					Resend
+					{m.auth_resend()}
 					{resend.isPending ? (
 						<RiLoader4Line className="size-3.5 animate-spin" />
 					) : null}

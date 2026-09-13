@@ -1,6 +1,7 @@
 import { RiDeleteBinLine, RiEdit2Line } from "@remixicon/react";
 import type { MouseEvent } from "react";
 import { cn } from "@/core/lib/utils.ts";
+import * as m from "@/paraglide/messages.js";
 
 type BookmarkCollectionItemProps = {
 	name: string;
@@ -41,7 +42,7 @@ function BookmarkCollectionItem({
 			onClick={onClick}
 			type="button"
 			aria-pressed={isSelected}
-			aria-label={`Open ${name}`}
+			aria-label={m.bookmark_collection_open({ name })}
 		>
 			<p className="text-xl font-semibold text-start">{name}</p>
 
@@ -50,7 +51,7 @@ function BookmarkCollectionItem({
 					{onEdit ? (
 						<button
 							type="button"
-							aria-label={`Edit ${name}`}
+							aria-label={m.bookmark_collection_edit_label({ name })}
 							onClick={handleEdit}
 							className="cursor-pointer rounded-md p-1.5 transition-colors hover:bg-black/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current dark:hover:bg-white/10"
 						>
@@ -60,7 +61,7 @@ function BookmarkCollectionItem({
 					{onDelete ? (
 						<button
 							type="button"
-							aria-label={`Delete ${name}`}
+							aria-label={m.bookmark_collection_delete_label({ name })}
 							onClick={handleDelete}
 							className="cursor-pointer rounded-md p-1.5 transition-colors hover:bg-black/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current dark:hover:bg-white/10"
 						>

@@ -20,6 +20,7 @@ import {
 } from "@/features/user/user-profile/user-profile-tab";
 import { UserProfileView } from "@/features/user/user-profile/user-profile-view";
 import { UserProfileViewLoader } from "@/features/user/user-profile/user-profile-view-loader.tsx";
+import * as m from "@/paraglide/messages.js";
 
 export const Route = createFileRoute("/_main/_with-right-aside/$username")({
 	component: ProfilePage,
@@ -79,11 +80,11 @@ function ProfilePage() {
 							<UserProfileTabList>
 								<UserProfileTabTrigger value="posts">
 									<RiMenu5Line className="size-5" />
-									Posts
+									{m.profile_posts()}
 								</UserProfileTabTrigger>
 								<UserProfileTabTrigger value="likes">
 									<RiHeartLine className="size-5" />
-									Likes
+									{m.profile_likes()}
 								</UserProfileTabTrigger>
 							</UserProfileTabList>
 						) : null}

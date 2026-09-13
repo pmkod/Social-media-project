@@ -1,4 +1,5 @@
 import { Skeleton } from "@/core/components/ui/skeleton.tsx";
+import * as m from "@/paraglide/messages.js";
 
 const loaderIds = [
 	"discussion-loader-1",
@@ -11,7 +12,7 @@ const loaderIds = [
 
 function DiscussionListItemLoader({ count = 6 }: { count?: number }) {
 	return (
-		<div role="status" aria-label="Loading discussions">
+		<div role="status" aria-label={m.discussion_loading()}>
 			{loaderIds.slice(0, count).map((loaderId) => (
 				<div
 					key={loaderId}

@@ -5,9 +5,10 @@ import {
 	AppHeaderLeftPart,
 	AppHeaderTitle,
 } from "@/core/components/ui/app-header";
+import { UserVerificationGoals } from "@/features/authentication/user-verification/user-verification-gloal";
 import { useAuthenticatedUser } from "@/features/user/authenticated-user/use-authenticated-user.ts";
 import { ChangeEmailForm } from "@/features/user/change-email/change-email.form.tsx";
-import { UserVerificationGoals } from "@/features/authentication/user-verification/user-verification-gloal";
+import * as m from "@/paraglide/messages.js";
 
 export const Route = createFileRoute("/_main/settings/change-email")({
 	component: ChangeEmailSettingsPage,
@@ -22,7 +23,7 @@ function ChangeEmailSettingsPage() {
 			<AppHeader>
 				<AppHeaderLeftPart>
 					<AppHeaderGoBackButton to="/settings/account" />
-					<AppHeaderTitle>Change email</AppHeaderTitle>
+					<AppHeaderTitle>{m.settings_change_email_title()}</AppHeaderTitle>
 				</AppHeaderLeftPart>
 			</AppHeader>
 			<div className="mt-8 max-w-xl pl-12">

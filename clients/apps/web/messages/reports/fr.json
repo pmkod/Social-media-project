@@ -1,0 +1,15 @@
+{
+	"$schema": "https://inlang.com/schema/inlang-message-format",
+	"report_title": "Signaler",
+	"report_description": "Pourquoi effectues-tu ce signalement ? Il est privé et ne sera pas communiqué à l’auteur.",
+	"report_other": "Autre",
+	"report_other_description": "Une autre situation qui ne correspond pas aux options proposées.",
+	"report_loading_reasons": "Chargement des motifs de signalement",
+	"report_reason_label": "Motif du signalement",
+	"report_explain_label": "Explique-nous ce qui s’est passé",
+	"report_explain_placeholder": "Décris le problème…",
+	"report_submit": "Envoyer le signalement",
+	"report_success_title": "Signalement envoyé",
+	"report_success_description": "Merci. Nous allons l’examiner et agir s’il enfreint nos règles.",
+	"report_success_recorded": "Ton signalement a été enregistré et sera examiné."
+}

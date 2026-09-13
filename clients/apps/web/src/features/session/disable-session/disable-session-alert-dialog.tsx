@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import { BaseAlertDialog } from "@/core/components/ui/base-alert-dialog.tsx";
 import { create } from "@/core/components/ui/nice-modal.tsx";
 import { deleteSessionCredentials } from "@/core/utils/session.utils.ts";
+import * as m from "@/paraglide/messages.js";
 import type { Session } from "../common/session.ts";
 import { getSessionName } from "../common/session.utils.ts";
 import { useDisableSession } from "./use-disable-session.ts";
@@ -25,15 +26,15 @@ const DisableSessionAlertDialog = create<DisableSessionAlertDialogProps>(
 			<BaseAlertDialog
 				title={
 					isCurrent
-						? "Log out of this session?"
-						: `Log out of ${deviceName !== "Unknown device" ? deviceName : "this session"}?`
+						? m.settings_logout_current_title()
+						: m.settings_logout_device_title({ device: deviceName })
 				}
 				description={
 					isCurrent
-						? "You will be logged out of your account on this device and returned to the sign-in page."
-						: "This device will be signed out and will need to log in again to access your account."
+						? m.settings_logout_current_description()
+						: m.settings_logout_device_description()
 				}
-				confirmText="Log out"
+				confirmText={m.settings_logout()}
 				confirmColorScheme="destructive"
 				onConfirm={async () => {
 					try {
@@ -44,7 +45,7 @@ const DisableSessionAlertDialog = create<DisableSessionAlertDialogProps>(
 							await navigate({ to: "/" });
 							return;
 						}
-						toast.success("Session logged out");
+						toast.success(m.settings_session_logged_out());
 					} catch (error) {
 						toast.error(
 							error instanceof Error

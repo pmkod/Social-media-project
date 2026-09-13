@@ -18,6 +18,7 @@ import { useAuthenticatedUser } from "@/features/user/authenticated-user/use-aut
 import { BlockUserAlertDialog } from "@/features/user/block-user/block-user-alert-dialog.tsx";
 import type { User } from "@/features/user/common/user.ts";
 import { UnblockUserAlertDialog } from "@/features/user/unblock-user/unblock-user-alert-dialog.tsx";
+import * as m from "@/paraglide/messages.js";
 
 type UserProfileActionsDropdownProps = {
 	user: User;
@@ -69,7 +70,7 @@ function UserProfileActionsDropdown({
 					variant={variant}
 					size={size}
 					onClick={(event) => event.stopPropagation()}
-					aria-label="Profile options"
+					aria-label={m.profile_options()}
 				>
 					<RiMoreLine />
 				</IconButton>
@@ -84,7 +85,7 @@ function UserProfileActionsDropdown({
 					}}
 				>
 					<RiFileCopyLine />
-					Copy profile link
+					{m.profile_copy_link()}
 				</DropdownMenuItem>
 				{canManageBlock ? (
 					isBlocked ? (
@@ -96,7 +97,7 @@ function UserProfileActionsDropdown({
 							}
 						>
 							<RiUserAddLine />
-							Unblock user @{user.username}
+							{m.profile_unblock_user({ username: user.username })}
 						</DropdownMenuItem>
 					) : (
 						<DropdownMenuItem
@@ -108,7 +109,7 @@ function UserProfileActionsDropdown({
 							}
 						>
 							<RiUserForbidLine />
-							Block
+							{m.profile_block()}
 						</DropdownMenuItem>
 					)
 				) : null}
@@ -120,7 +121,7 @@ function UserProfileActionsDropdown({
 						}}
 					>
 						<RiFlag2Line />
-						Report account
+						{m.profile_report_account()}
 					</DropdownMenuItem>
 				) : null}
 			</DropdownMenuContent>

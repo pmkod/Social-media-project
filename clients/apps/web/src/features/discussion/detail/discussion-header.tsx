@@ -14,6 +14,7 @@ import {
 import { IconButton } from "@/core/components/ui/icon-button.tsx";
 import NiceModal from "@/core/components/ui/nice-modal.tsx";
 import { ReportModal } from "@/features/report/report.modal.tsx";
+import * as m from "@/paraglide/messages.js";
 import type { Discussion } from "../common/discussion.ts";
 import {
 	getDiscussionSubtitle,
@@ -35,7 +36,7 @@ function DiscussionHeader({
 		<header className="z-10 flex h-18 shrink-0 items-center gap-3 border-b border-border bg-background/95 px-3 backdrop-blur-md sm:px-4">
 			<Link
 				to="/discussions"
-				aria-label="Back to conversations"
+				aria-label={m.discussion_back()}
 				className="inline-flex size-9 shrink-0 items-center justify-center rounded-full text-muted-foreground transition hover:bg-accent hover:text-foreground lg:hidden"
 			>
 				<RiArrowLeftLine className="size-5" />
@@ -61,7 +62,7 @@ function DiscussionHeader({
 						type="button"
 						variant="ghost"
 						size="lg"
-						aria-label="Options de la discussion"
+						aria-label={m.discussion_options()}
 					>
 						<RiMoreLine />
 					</IconButton>
@@ -78,7 +79,7 @@ function DiscussionHeader({
 						}}
 					>
 						<RiInformationLine />
-						Informations sur la discussion
+						{m.discussion_information()}
 					</DropdownMenuItem>
 					<DropdownMenuItem
 						variant="destructive"
@@ -89,7 +90,7 @@ function DiscussionHeader({
 						}}
 					>
 						<RiFlag2Line />
-						Signaler
+						{m.discussion_report()}
 					</DropdownMenuItem>
 				</DropdownMenuContent>
 			</DropdownMenu>

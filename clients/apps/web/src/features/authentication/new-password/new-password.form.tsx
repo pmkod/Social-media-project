@@ -12,8 +12,9 @@ import {
 	FieldLabel,
 } from "@/core/components/ui/field.tsx";
 import { PasswordInput } from "@/core/components/ui/password-input.tsx";
-import { UserValidationSchema } from "@/features/user/common/user.validation-schemas.ts";
 import { authenticatedUserQueryKey } from "@/features/user/authenticated-user/authenticated-user.query-key.ts";
+import { UserValidationSchema } from "@/features/user/common/user.validation-schemas.ts";
+import * as m from "@/paraglide/messages.js";
 import { useNewPassword } from "./use-new-password";
 
 const newPasswordSchema = z
@@ -62,9 +63,11 @@ function NewPasswordForm({ onSuccess }: NewPasswordFormProps) {
 	return (
 		<div className="flex flex-col gap-6">
 			<div className="flex flex-col gap-1">
-				<h2 className="text-2xl font-semibold tracking-tight">New password</h2>
+				<h2 className="text-2xl font-semibold tracking-tight">
+					{m.auth_new_password_title()}
+				</h2>
 				<p className="text-sm text-muted-foreground">
-					Choose a new secure password.
+					{m.auth_new_password_description()}
 				</p>
 			</div>
 
@@ -86,7 +89,9 @@ function NewPasswordForm({ onSuccess }: NewPasswordFormProps) {
 					<form.Field name="password">
 						{(field) => (
 							<Field data-invalid={!field.state.meta.isValid}>
-								<FieldLabel htmlFor={field.name}>New password</FieldLabel>
+								<FieldLabel htmlFor={field.name}>
+									{m.auth_new_password()}
+								</FieldLabel>
 								<PasswordInput
 									id={field.name}
 									size="lg"
@@ -97,7 +102,7 @@ function NewPasswordForm({ onSuccess }: NewPasswordFormProps) {
 									autoComplete="new-password"
 									aria-invalid={!field.state.meta.isValid}
 								/>
-								<FieldDescription>Minimum 8 characters</FieldDescription>
+								<FieldDescription>{m.auth_password_minimum()}</FieldDescription>
 								<FieldError errors={field.state.meta.errors} />
 							</Field>
 						)}
@@ -106,7 +111,9 @@ function NewPasswordForm({ onSuccess }: NewPasswordFormProps) {
 					<form.Field name="confirmPassword">
 						{(field) => (
 							<Field data-invalid={!field.state.meta.isValid}>
-								<FieldLabel htmlFor={field.name}>Confirm password</FieldLabel>
+								<FieldLabel htmlFor={field.name}>
+									{m.auth_confirm_password()}
+								</FieldLabel>
 								<PasswordInput
 									id={field.name}
 									size="lg"
@@ -126,7 +133,7 @@ function NewPasswordForm({ onSuccess }: NewPasswordFormProps) {
 				<form.Subscribe selector={(state) => state.isSubmitting}>
 					{(isSubmitting) => (
 						<Button type="submit" size="lg" fullWidth disabled={isSubmitting}>
-							{isSubmitting ? "Saving..." : "Save password"}
+							{isSubmitting ? m.auth_saving() : m.auth_save_password()}
 						</Button>
 					)}
 				</form.Subscribe>

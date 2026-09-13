@@ -12,6 +12,7 @@ import { PostComments } from "@/features/comment/post-comments.tsx";
 import { PostItemLoader } from "@/features/post/common/components/loaders/post-item-loader.tsx";
 import { PostItem } from "@/features/post/common/post-item.tsx";
 import { usePost } from "@/features/post/post-detail/use-post";
+import * as m from "@/paraglide/messages.js";
 
 export const Route = createFileRoute("/_main/_with-right-aside/posts/$postId")({
 	validateSearch: z.object({ focusComment: z.boolean().optional() }),
@@ -27,7 +28,7 @@ function PostDetailPage() {
 			<AppHeader>
 				<AppHeaderLeftPart>
 					<AppHeaderGoBackButton to="/home" />
-					<AppHeaderTitle>Post</AppHeaderTitle>
+					<AppHeaderTitle>{m.post_detail_title()}</AppHeaderTitle>
 				</AppHeaderLeftPart>
 			</AppHeader>
 			{query.isPending ? (

@@ -14,6 +14,7 @@ import NiceModal from "@/core/components/ui/nice-modal.tsx";
 import { SearchInput } from "@/core/components/ui/search-input.tsx";
 import { useIntersectionObserver } from "@/core/hooks/use-intersection-observer.ts";
 import { useAuthenticatedUser } from "@/features/user/authenticated-user/use-authenticated-user.ts";
+import * as m from "@/paraglide/messages.js";
 import { getDiscussionTitle } from "../common/discussion.utils.ts";
 import { CreateGroupDiscussionModal } from "../create-discussion/create-discussion.modal.tsx";
 import { useDiscussions } from "../hooks/use-discussions.ts";
@@ -72,13 +73,15 @@ function DiscussionList({ selectedDiscussionId }: DiscussionListProps) {
 		<>
 			<header className="bg-background backdrop-blur-md">
 				<div className="flex items-center justify-between gap-3 pl-3 pr-2 h-18">
-					<h1 className="text-xl font-bold tracking-tight">Messages</h1>
+					<h1 className="text-xl font-bold tracking-tight">
+						{m.discussions_title()}
+					</h1>
 
 					<div className="flex">
 						<IconButton
 							type="button"
-							aria-label="Start a new conversation"
-							title="New conversation"
+							aria-label={m.discussion_start_new()}
+							title={m.discussion_new()}
 							variant={"ghost"}
 							onClick={openCreateGroupDiscussionModal}
 						>
@@ -86,8 +89,8 @@ function DiscussionList({ selectedDiscussionId }: DiscussionListProps) {
 						</IconButton>
 						<IconButton
 							type="button"
-							aria-label="Start a new conversation"
-							title="New conversation"
+							aria-label={m.discussion_start_new()}
+							title={m.discussion_new()}
 							variant={"ghost"}
 							onClick={openCreatePrivateDiscussionModal}
 						>
@@ -97,11 +100,11 @@ function DiscussionList({ selectedDiscussionId }: DiscussionListProps) {
 				</div>
 				<div className="px-4 pb-2">
 					<SearchInput
-						label="Search conversations"
+						label={m.discussion_search()}
 						size="lg"
 						value={search}
 						onChange={(event) => setSearch(event.target.value)}
-						placeholder="Search conversations"
+						placeholder={m.discussion_search()}
 					/>
 				</div>
 			</header>
@@ -121,25 +124,24 @@ function DiscussionList({ selectedDiscussionId }: DiscussionListProps) {
 				) : discussions.length === 0 ? (
 					<Empty>
 						<EmptyHeader>
-							<EmptyTitle>No conversations yet</EmptyTitle>
+							<EmptyTitle>{m.discussion_empty_title()}</EmptyTitle>
 							<EmptyDescription>
-								Start a private conversation or create a group to connect with
-								people.
+								{m.discussion_empty_description()}
 							</EmptyDescription>
 						</EmptyHeader>
 						<EmptyContent>
 							<Button type="button" onClick={openCreatePrivateDiscussionModal}>
 								<RiChatNewLine className="size-4" />
-								Start a conversation
+								{m.discussion_start()}
 							</Button>
 						</EmptyContent>
 					</Empty>
 				) : filteredDiscussions.length === 0 ? (
 					<Empty>
 						<EmptyHeader>
-							<EmptyTitle>No matching conversation</EmptyTitle>
+							<EmptyTitle>{m.discussion_no_match_title()}</EmptyTitle>
 							<EmptyDescription>
-								Try another name or clear your search.
+								{m.discussion_no_match_description()}
 							</EmptyDescription>
 						</EmptyHeader>
 					</Empty>

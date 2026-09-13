@@ -1,0 +1,15 @@
+{
+	"$schema": "https://inlang.com/schema/inlang-message-format",
+	"report_title": "Report",
+	"report_description": "Why are you reporting? Your report is private and is not shared with the author.",
+	"report_other": "Other",
+	"report_other_description": "Something else that is not covered by these options.",
+	"report_loading_reasons": "Loading report reasons",
+	"report_reason_label": "Report reason",
+	"report_explain_label": "Tell us what happened",
+	"report_explain_placeholder": "Describe the issue…",
+	"report_submit": "Submit report",
+	"report_success_title": "Report submitted",
+	"report_success_description": "Thank you. We will review it and take action if it violates our rules.",
+	"report_success_recorded": "Your report has been recorded and will be reviewed."
+}

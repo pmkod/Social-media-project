@@ -14,6 +14,7 @@ import { useIntersectionObserver } from "@/core/hooks/use-intersection-observer.
 import { useBookmarks } from "@/features/bookmark/use-bookmarks.ts";
 import { PostListLoader } from "@/features/post/common/components/loaders";
 import { PostItem } from "@/features/post/common/post-item.tsx";
+import * as m from "@/paraglide/messages.js";
 
 const bookmarksSearchParams = z.object({
 	bookmarkCollectionId: z.string().optional(),
@@ -55,7 +56,7 @@ function BookmarksPage() {
 			<AppHeader>
 				<AppHeaderLeftPart>
 					<AppHeaderGoBackButton />
-					<AppHeaderTitle>Bookmarks</AppHeaderTitle>
+					<AppHeaderTitle>{m.bookmarks_title()}</AppHeaderTitle>
 				</AppHeaderLeftPart>
 			</AppHeader>
 
@@ -70,8 +71,8 @@ function BookmarksPage() {
 				/>
 			) : posts.length === 0 ? (
 				<EmptyBlock
-					title="No saved posts"
-					description="Use the bookmark icon below a post to find it here."
+					title={m.bookmarks_empty_title()}
+					description={m.bookmarks_empty_description()}
 					className="h-96"
 				/>
 			) : (

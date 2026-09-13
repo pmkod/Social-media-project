@@ -5,6 +5,7 @@ import { z } from "zod";
 import { Button } from "@/core/components/ui/button.tsx";
 import { useAuthenticatedUser } from "@/features/user/authenticated-user/use-authenticated-user.ts";
 import { UserAvatar } from "@/features/user/common/components/user-avatar.tsx";
+import * as m from "@/paraglide/messages.js";
 import { useCommentToReplyTo } from "../comment-to-reply-to/use-comment-to-reply-to.ts";
 import { useCreateComment } from "./use-create-comment.ts";
 
@@ -99,11 +100,16 @@ function CreateCommentForm({
 		>
 			{parentComment ? (
 				<div className="mb-2 flex items-center justify-between gap-3 text-sm text-muted-foreground">
-					<span>Replying to @{parentComment.author?.username ?? "user"}</span>
+					<span>
+						{m.comment_replying_to({
+							username:
+								parentComment.author?.username ?? m.comment_user_fallback(),
+						})}
+					</span>
 					<button
 						type="button"
 						onClick={clearCommentToReplyTo}
-						aria-label="Cancel reply"
+						aria-label={m.comment_cancel_reply()}
 						className="rounded-full p-1 transition-colors hover:bg-accent hover:text-foreground cursor-pointer"
 					>
 						<RiCloseLine className="size-4" />
@@ -123,8 +129,12 @@ function CreateCommentForm({
 								onBlur={field.handleBlur}
 								placeholder={
 									parentComment
-										? `Reply to @${parentComment.author?.username ?? "user"}...`
-										: "Post your comment..."
+										? m.comment_reply_placeholder({
+												username:
+													parentComment.author?.username ??
+													m.comment_user_fallback(),
+											})
+										: m.comment_placeholder()
 								}
 								disabled={isPending}
 								className="min-h-0 w-full resize-none rounded-lg py-2 font-normal placeholder:font-normal bg-transparent text-base text-foreground placeholder:text-muted-foreground focus-visible:ring-0 ring-0 outline-none disabled:opacity-60"
@@ -134,7 +144,7 @@ function CreateCommentForm({
 				</div>
 				<Button type="submit" disabled={!hasContent || isPending}>
 					<RiSendPlane2Line className="h-4 w-4" />
-					{parentComment ? "Reply" : "Comment"}
+					{parentComment ? m.comment_reply() : m.comment_submit()}
 				</Button>
 			</div>
 

@@ -8,6 +8,7 @@ import {
 } from "@/core/components/ui/app-header";
 import { useTheme } from "@/core/hooks/use-theme.ts";
 import { cn } from "@/core/lib/utils.ts";
+import * as m from "@/paraglide/messages.js";
 
 export const Route = createFileRoute("/_main/settings/theme")({
 	component: ThemeSettingsPage,
@@ -16,9 +17,9 @@ export const Route = createFileRoute("/_main/settings/theme")({
 function ThemeSettingsPage() {
 	const { theme, setTheme, mounted } = useTheme();
 	const themes = [
-		{ id: "light", label: "Light", icon: RiSunLine },
-		{ id: "dark", label: "Dark", icon: RiMoonLine },
-		{ id: "system", label: "System", icon: RiComputerLine },
+		{ id: "light", label: m.theme_light(), icon: RiSunLine },
+		{ id: "dark", label: m.theme_dark(), icon: RiMoonLine },
+		{ id: "system", label: m.theme_system(), icon: RiComputerLine },
 	] as const;
 
 	return (
@@ -26,7 +27,7 @@ function ThemeSettingsPage() {
 			<AppHeader>
 				<AppHeaderLeftPart>
 					<AppHeaderGoBackButton to="/settings" />
-					<AppHeaderTitle>Theme</AppHeaderTitle>
+					<AppHeaderTitle>{m.settings_theme()}</AppHeaderTitle>
 				</AppHeaderLeftPart>
 			</AppHeader>
 			<div className="grid gap-3 sm:grid-cols-3">

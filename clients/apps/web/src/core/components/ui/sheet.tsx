@@ -5,6 +5,7 @@ import { Dialog as SheetPrimitive } from "radix-ui";
 import type * as React from "react";
 
 import { cn } from "@/core/lib/utils.ts";
+import * as m from "@/paraglide/messages.js";
 
 function Sheet({ ...props }: React.ComponentProps<typeof SheetPrimitive.Root>) {
 	return <SheetPrimitive.Root data-slot="sheet" {...props} />;
@@ -77,7 +78,7 @@ function SheetContent({
 				{showCloseButton && (
 					<SheetPrimitive.Close className="absolute top-4 right-4 rounded-xs opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:outline-hidden disabled:pointer-events-none data-[state=open]:bg-secondary">
 						<RiCloseLine className="size-4" />
-						<span className="sr-only">Close</span>
+						<span className="sr-only">{m.action_close()}</span>
 					</SheetPrimitive.Close>
 				)}
 			</SheetPrimitive.Content>

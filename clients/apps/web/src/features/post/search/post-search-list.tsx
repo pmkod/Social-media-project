@@ -4,6 +4,7 @@ import { ExceptionBlock } from "@/core/components/ui/exception-block.tsx";
 import { useIntersectionObserver } from "@/core/hooks/use-intersection-observer.ts";
 import { PostListLoader } from "@/features/post/common/components/loaders";
 import { PostItem } from "@/features/post/common/post-item.tsx";
+import * as m from "@/paraglide/messages.js";
 import { useSearchPosts } from "./use-search-posts.ts";
 
 type PostSearchListProps = {
@@ -31,8 +32,8 @@ function PostSearchList({ query }: PostSearchListProps) {
 	const posts = postsQuery.data?.pages.flatMap((page) => page.posts) ?? [];
 
 	return (
-		<section aria-label="Posts">
-			<h2 className="mb-3 px-1 font-semibold">Posts</h2>
+		<section aria-label={m.search_posts_label()}>
+			<h2 className="mb-3 px-1 font-semibold">{m.search_posts_label()}</h2>
 			{postsQuery.isLoading ? (
 				<PostListLoader />
 			) : postsQuery.isError ? (
@@ -48,11 +49,15 @@ function PostSearchList({ query }: PostSearchListProps) {
 				/>
 			) : posts.length === 0 ? (
 				<EmptyBlock
-					title={hasSearchQuery ? "No posts found" : "No posts yet"}
+					title={
+						hasSearchQuery
+							? m.search_posts_empty_title()
+							: m.search_posts_empty_default_title()
+					}
 					description={
 						hasSearchQuery
-							? `No posts match “${query}”.`
-							: "There are no posts to display yet."
+							? m.search_posts_empty_query({ query })
+							: m.search_posts_empty_default_description()
 					}
 				/>
 			) : (

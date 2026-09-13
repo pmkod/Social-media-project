@@ -1,11 +1,12 @@
 import { Skeleton } from "@/core/components/ui/skeleton.tsx";
+import * as m from "@/paraglide/messages.js";
 
 function UserProfileViewLoader() {
 	return (
 		<section
 			className="overflow-hidden rounded-t-xl border-x border-t"
 			aria-busy="true"
-			aria-label="Loading profile"
+			aria-label={m.profile_loading()}
 		>
 			<div className="h-48 sm:h-56">
 				<Skeleton className="size-full rounded-none" />

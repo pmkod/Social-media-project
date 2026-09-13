@@ -1,0 +1,18 @@
+{
+	"$schema": "https://inlang.com/schema/inlang-message-format",
+	"search_placeholder": "Rechercher des publications et des personnes",
+	"search_recent": "Récent",
+	"search_clear_all": "Tout effacer",
+	"search_empty_history": "Aucune recherche récente.",
+	"search_remove_recent": "Retirer des recherches récentes",
+	"search_people": "Personnes",
+	"search_people_discover": "Personnes à découvrir",
+	"search_no_people_query": "Aucune personne trouvée pour « {query} ».",
+	"search_no_suggestions": "Aucune suggestion pour le moment.",
+	"search_show_more_people": "Afficher plus de personnes",
+	"search_posts_label": "Publications",
+	"search_posts_empty_title": "Aucune publication trouvée",
+	"search_posts_empty_query": "Aucune publication ne correspond à « {query} ».",
+	"search_posts_empty_default_title": "Aucune publication",
+	"search_posts_empty_default_description": "Il n’y a aucune publication à afficher pour le moment."
+}

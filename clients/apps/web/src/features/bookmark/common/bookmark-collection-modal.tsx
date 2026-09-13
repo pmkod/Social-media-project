@@ -20,6 +20,7 @@ import {
 import { Input } from "@/core/components/ui/input.tsx";
 import { create, useModal } from "@/core/components/ui/nice-modal.tsx";
 import { Textarea } from "@/core/components/ui/textarea.tsx";
+import * as m from "@/paraglide/messages.js";
 import { useCreateBookmarkCollection } from "../create-bookmark-collection/use-create-bookmark-collection.ts";
 import { useEditBookmarkCollection } from "../edit-bookmark-collection/use-edit-bookmark-collection.ts";
 import type {
@@ -124,8 +125,8 @@ const BookmarkCollectionModal = create<BookmarkCollectionModalProps>(
 					<DialogHeader>
 						<DialogTitle className="flex items-center gap-2">
 							{isEditing
-								? "Edit bookmark collection"
-								: "Create bookmark collection"}
+								? m.bookmark_collection_edit_title()
+								: m.bookmark_collection_create_title()}
 						</DialogTitle>
 					</DialogHeader>
 
@@ -145,7 +146,9 @@ const BookmarkCollectionModal = create<BookmarkCollectionModalProps>(
 								<form.Field name="name">
 									{(field) => (
 										<Field data-invalid={!field.state.meta.isValid}>
-											<FieldLabel htmlFor={field.name}>Name</FieldLabel>
+											<FieldLabel htmlFor={field.name}>
+												{m.bookmark_collection_name()}
+											</FieldLabel>
 											<Input
 												id={field.name}
 												value={field.state.value}
@@ -153,7 +156,7 @@ const BookmarkCollectionModal = create<BookmarkCollectionModalProps>(
 												onChange={(event) =>
 													field.handleChange(event.target.value)
 												}
-												placeholder="e.g. Read later"
+												placeholder={m.bookmark_collection_name_placeholder()}
 												maxLength={60}
 												autoFocus
 												disabled={mutation.isPending}
@@ -167,7 +170,9 @@ const BookmarkCollectionModal = create<BookmarkCollectionModalProps>(
 								<form.Field name="description">
 									{(field) => (
 										<Field data-invalid={!field.state.meta.isValid}>
-											<FieldLabel htmlFor={field.name}>Description</FieldLabel>
+											<FieldLabel htmlFor={field.name}>
+												{m.bookmark_collection_description()}
+											</FieldLabel>
 											<Textarea
 												id={field.name}
 												value={field.state.value}
@@ -175,7 +180,7 @@ const BookmarkCollectionModal = create<BookmarkCollectionModalProps>(
 												onChange={(event) =>
 													field.handleChange(event.target.value)
 												}
-												placeholder="What will you save here?"
+												placeholder={m.bookmark_collection_description_placeholder()}
 												maxLength={280}
 												rows={3}
 												disabled={mutation.isPending}
@@ -205,7 +210,9 @@ const BookmarkCollectionModal = create<BookmarkCollectionModalProps>(
 										disabled={isSubmitting || mutation.isPending}
 										isLoading={isSubmitting || mutation.isPending}
 									>
-										{isEditing ? "Save changes" : "Create collection"}
+										{isEditing
+											? m.bookmark_collection_save()
+											: m.bookmark_collection_create()}
 									</Button>
 								)}
 							</form.Subscribe>

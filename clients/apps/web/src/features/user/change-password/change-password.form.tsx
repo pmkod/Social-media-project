@@ -13,6 +13,7 @@ import {
 } from "@/core/components/ui/field.tsx";
 import { PasswordInput } from "@/core/components/ui/password-input.tsx";
 import { UserValidationSchema } from "@/features/user/common/user.validation-schemas.ts";
+import * as m from "@/paraglide/messages.js";
 import { useChangePassword } from "./use-change-password.ts";
 
 const changePasswordSchema = z
@@ -45,7 +46,7 @@ function ChangePasswordForm({ onSuccess }: { onSuccess: () => void }) {
 					currentPassword: value.currentPassword,
 					newPassword: value.newPassword,
 				});
-				toast.success("Password updated");
+				toast.success(m.settings_password_updated());
 				onSuccess();
 			} catch (error) {
 				setErrorMessage(
@@ -74,7 +75,9 @@ function ChangePasswordForm({ onSuccess }: { onSuccess: () => void }) {
 				<form.Field name="currentPassword">
 					{(field) => (
 						<Field data-invalid={!field.state.meta.isValid}>
-							<FieldLabel htmlFor={field.name}>Current password</FieldLabel>
+							<FieldLabel htmlFor={field.name}>
+								{m.settings_current_password()}
+							</FieldLabel>
 							<PasswordInput
 								id={field.name}
 								size="lg"
@@ -92,7 +95,9 @@ function ChangePasswordForm({ onSuccess }: { onSuccess: () => void }) {
 				<form.Field name="newPassword">
 					{(field) => (
 						<Field data-invalid={!field.state.meta.isValid}>
-							<FieldLabel htmlFor={field.name}>New password</FieldLabel>
+							<FieldLabel htmlFor={field.name}>
+								{m.settings_new_password()}
+							</FieldLabel>
 							<PasswordInput
 								id={field.name}
 								size="lg"
@@ -102,7 +107,9 @@ function ChangePasswordForm({ onSuccess }: { onSuccess: () => void }) {
 								onChange={(event) => field.handleChange(event.target.value)}
 								autoComplete="new-password"
 							/>
-							<FieldDescription>At least 8 characters</FieldDescription>
+							<FieldDescription>
+								{m.settings_password_minimum()}
+							</FieldDescription>
 							<FieldError errors={field.state.meta.errors} />
 						</Field>
 					)}
@@ -111,7 +118,9 @@ function ChangePasswordForm({ onSuccess }: { onSuccess: () => void }) {
 				<form.Field name="confirmPassword">
 					{(field) => (
 						<Field data-invalid={!field.state.meta.isValid}>
-							<FieldLabel htmlFor={field.name}>Confirm new password</FieldLabel>
+							<FieldLabel htmlFor={field.name}>
+								{m.settings_confirm_password()}
+							</FieldLabel>
 							<PasswordInput
 								id={field.name}
 								size="lg"
@@ -131,7 +140,7 @@ function ChangePasswordForm({ onSuccess }: { onSuccess: () => void }) {
 				<form.Subscribe selector={(state) => state.isSubmitting}>
 					{(isSubmitting) => (
 						<Button type="submit" size="lg" isLoading={isSubmitting}>
-							Save password
+							{m.settings_save_password()}
 						</Button>
 					)}
 				</form.Subscribe>

@@ -1,0 +1,18 @@
+{
+	"$schema": "https://inlang.com/schema/inlang-message-format",
+	"post_media_alt": "Post media",
+	"post_like": "Like post",
+	"post_unlike": "Unlike post",
+	"post_comment": "Comment on post",
+	"post_options": "Post options",
+	"post_copy_link": "Copy post link",
+	"post_report": "Report post",
+	"post_unblock_user": "Unblock user @{username}",
+	"post_block_user": "Block user @{username}",
+	"bookmark_manage": "Manage bookmark collections",
+	"post_detail_title": "Post",
+	"post_empty_user_title": "No posts yet",
+	"post_empty_user_description": "Posts by this user will appear here.",
+	"post_empty_liked_title": "No liked posts",
+	"post_empty_liked_description": "Liked posts will appear here."
+}

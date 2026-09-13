@@ -1,0 +1,18 @@
+{
+	"$schema": "https://inlang.com/schema/inlang-message-format",
+	"search_placeholder": "Search posts and people",
+	"search_recent": "Recent",
+	"search_clear_all": "Clear all",
+	"search_empty_history": "No recent searches.",
+	"search_remove_recent": "Remove from recent searches",
+	"search_people": "People",
+	"search_people_discover": "People to discover",
+	"search_no_people_query": "No people found for “{query}”.",
+	"search_no_suggestions": "No suggestions right now.",
+	"search_show_more_people": "Show more people",
+	"search_posts_label": "Posts",
+	"search_posts_empty_title": "No posts found",
+	"search_posts_empty_query": "No posts match “{query}”.",
+	"search_posts_empty_default_title": "No posts yet",
+	"search_posts_empty_default_description": "There are no posts to display yet."
+}

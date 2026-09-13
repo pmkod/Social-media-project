@@ -4,6 +4,7 @@ import { useId } from "react";
 
 import { Input, type InputProps } from "@/core/components/ui/input.tsx";
 import { cn } from "@/core/lib/utils.ts";
+import * as m from "@/paraglide/messages.js";
 
 const searchInputVariants = cva("rounded-full bg-accent shadow-none", {
 	variants: {
@@ -41,7 +42,7 @@ type SearchInputProps = Omit<InputProps, "size" | "type"> &
 
 function SearchInput({
 	className,
-	label = "Search",
+	label = m.action_search(),
 	size = "default",
 	id,
 	...props

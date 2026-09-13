@@ -6,6 +6,7 @@ import {
 	AppHeaderTitle,
 } from "@/core/components/ui/app-header";
 import { ChangePasswordForm } from "@/features/user/change-password/change-password.form.tsx";
+import * as m from "@/paraglide/messages.js";
 
 export const Route = createFileRoute("/_main/settings/change-password")({
 	component: ChangePasswordSettingsPage,
@@ -19,7 +20,7 @@ function ChangePasswordSettingsPage() {
 			<AppHeader>
 				<AppHeaderLeftPart>
 					<AppHeaderGoBackButton to="/settings/security" />
-					<AppHeaderTitle>Change password</AppHeaderTitle>
+					<AppHeaderTitle>{m.settings_change_password_title()}</AppHeaderTitle>
 				</AppHeaderLeftPart>
 			</AppHeader>
 			<div className="mt-8 max-w-xl pl-12">

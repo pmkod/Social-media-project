@@ -12,6 +12,7 @@ import {
 } from "@/core/components/ui/field.tsx";
 import { Input } from "@/core/components/ui/input.tsx";
 import { UserValidationSchema } from "@/features/user/common/user.validation-schemas.ts";
+import * as m from "@/paraglide/messages.js";
 import { useRequestEmailChange } from "./use-request-email-change.ts";
 
 const emailSchema = z.object({
@@ -61,16 +62,18 @@ function ChangeEmailForm({ currentEmail, onSuccess }: ChangeEmailFormProps) {
 
 			<FieldGroup>
 				<Field>
-					<FieldLabel>Current email</FieldLabel>
+					<FieldLabel>{m.settings_current_email()}</FieldLabel>
 					<p className="rounded bg-muted/70 px-4 py-3 text-sm text-muted-foreground">
-						{currentEmail ?? "Loading..."}
+						{currentEmail ?? m.action_loading()}
 					</p>
 				</Field>
 
 				<form.Field name="newEmail">
 					{(field) => (
 						<Field data-invalid={!field.state.meta.isValid}>
-							<FieldLabel htmlFor={field.name}>New email</FieldLabel>
+							<FieldLabel htmlFor={field.name}>
+								{m.settings_new_email()}
+							</FieldLabel>
 							<Input
 								id={field.name}
 								type="email"
@@ -83,7 +86,7 @@ function ChangeEmailForm({ currentEmail, onSuccess }: ChangeEmailFormProps) {
 								autoComplete="email"
 							/>
 							<FieldDescription>
-								We will send a verification code to this address.
+								{m.settings_email_verification_hint()}
 							</FieldDescription>
 							<FieldError errors={field.state.meta.errors} />
 						</Field>
@@ -95,7 +98,7 @@ function ChangeEmailForm({ currentEmail, onSuccess }: ChangeEmailFormProps) {
 				<form.Subscribe selector={(state) => state.isSubmitting}>
 					{(isSubmitting) => (
 						<Button type="submit" size="lg" isLoading={isSubmitting}>
-							Send verification code
+							{m.settings_send_verification_code()}
 						</Button>
 					)}
 				</form.Subscribe>

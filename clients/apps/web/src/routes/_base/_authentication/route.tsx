@@ -1,4 +1,5 @@
 import { createFileRoute, Outlet } from "@tanstack/react-router";
+import * as m from "@/paraglide/messages.js";
 
 function AuthShowcase() {
 	return (
@@ -6,7 +7,7 @@ function AuthShowcase() {
 			{/* Texte */}
 			<div className="flex flex-col gap-3 text-center lg:text-left">
 				<h1 className="text-3xl font-semibold tracking-tight text-balance sm:text-4xl lg:text-5xl xl:text-6xl text-foreground">
-					A space to share, connect, and find your people.
+					{m.auth_showcase_title()}
 				</h1>
 			</div>
 
@@ -30,7 +31,7 @@ function AuthShowcase() {
 				>
 					<img
 						src="/auth-photo-1.jpg"
-						alt="Everyday moment"
+						alt={m.auth_showcase_image_alt()}
 						style={{
 							width: "100%",
 							height: "100%",
@@ -54,7 +55,7 @@ function AuthShowcase() {
 				>
 					<img
 						src="/auth-photo-2.jpg"
-						alt="Everyday moment"
+						alt={m.auth_showcase_image_alt()}
 						style={{
 							width: "100%",
 							height: "100%",
@@ -80,7 +81,7 @@ function AuthShowcase() {
 				>
 					<img
 						src="/auth-photo-3.jpg"
-						alt="Everyday moment"
+						alt={m.auth_showcase_image_alt()}
 						style={{
 							width: "100%",
 							height: "100%",

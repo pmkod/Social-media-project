@@ -8,6 +8,7 @@ import { httpClient } from "@/core/http-clients/http-client.ts";
 import type { Post } from "@/features/post/common/post.ts";
 import { postListQueryKeys } from "@/features/post/common/post-list.query-keys.ts";
 import { postDetailsQueryKeys } from "@/features/post/post-detail/post-detail.query-keys.ts";
+import * as m from "@/paraglide/messages.js";
 import type { BookmarkCollection } from "./common/bookmark-collection.ts";
 import { bookmarkCollectionsQueryKeys } from "./common/bookmark-collections.query-keys.ts";
 
@@ -34,7 +35,7 @@ const useRemoveBookmark = () => {
 				})
 				.json<RemoveBookmarkResponse>(),
 		onSuccess: (data, { postId, bookmarkCollectionId }) => {
-			toast.success("Post removed from collection");
+			toast.success(m.bookmark_removed_success());
 			const isBookmarked = data.post.isBookmarkedByAuthenticatedUser;
 
 			queryClient.setQueriesData<InfiniteData<{ posts: Post[] }>>(

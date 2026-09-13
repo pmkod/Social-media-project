@@ -11,6 +11,7 @@ import {
 	FieldLabel,
 } from "@/core/components/ui/field.tsx";
 import { Input } from "@/core/components/ui/input.tsx";
+import * as m from "@/paraglide/messages.js";
 import { useResendSettingsUserVerificationCode } from "./use-resend-settings-user-verification-code.ts";
 import { useSettingsUserVerification } from "./use-settings-user-verification.ts";
 
@@ -61,7 +62,7 @@ function SettingsUserVerificationForm({
 		<div className="flex flex-col">
 			<div className="flex flex-col gap-1 mb-2">
 				<p className="text-sm text-muted-foreground">
-					Enter the 6-digit code sent to your email address.
+					{m.auth_verification_description()}
 				</p>
 			</div>
 
@@ -85,7 +86,9 @@ function SettingsUserVerificationForm({
 					<form.Field name="code">
 						{(field) => (
 							<Field data-invalid={!field.state.meta.isValid}>
-								<FieldLabel htmlFor={field.name}>Verification code</FieldLabel>
+								<FieldLabel htmlFor={field.name}>
+									{m.auth_verification_code()}
+								</FieldLabel>
 								<Input
 									id={field.name}
 									size="lg"
@@ -108,20 +111,20 @@ function SettingsUserVerificationForm({
 				<form.Subscribe selector={(state) => state.isSubmitting}>
 					{(isSubmitting) => (
 						<Button type="submit" size="lg" fullWidth isLoading={isSubmitting}>
-							Verify
+							{m.auth_verify()}
 						</Button>
 					)}
 				</form.Subscribe>
 			</form>
 			<p className="flex items-center justify-center gap-2 text-center text-sm text-muted-foreground mt-2">
-				Didn't receive a code?{" "}
+				{m.auth_code_not_received()}{" "}
 				<button
 					type="button"
 					onClick={() => void resendCode()}
 					disabled={resend.isPending}
 					className="inline-flex cursor-pointer items-center gap-1.5 text-foreground underline underline-offset-3 hover:text-foreground/80 disabled:pointer-events-none disabled:opacity-50"
 				>
-					Resend
+					{m.auth_resend()}
 					{resend.isPending ? (
 						<RiLoader4Line className="size-3.5 animate-spin" />
 					) : null}

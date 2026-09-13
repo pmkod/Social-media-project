@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { EmptyBlock } from "@/core/components/ui/empty-block.tsx";
 import { ExceptionBlock } from "@/core/components/ui/exception-block.tsx";
 import { useIntersectionObserver } from "@/core/hooks/use-intersection-observer.ts";
+import * as m from "@/paraglide/messages.js";
 import { PostListLoader } from "../common/components/loaders";
 import { PostItem } from "../common/post-item.tsx";
 import { useUserPosts } from "./use-user-posts.ts";
@@ -47,8 +48,8 @@ export function UserPosts({ userId }: UserPostsProps) {
 		return (
 			<div className="rounded-b-xl border-b border-x overflow-hidden">
 				<EmptyBlock
-					title="No posts yet"
-					description="Posts by this user will appear here."
+					title={m.post_empty_user_title()}
+					description={m.post_empty_user_description()}
 					bordered={false}
 				/>
 			</div>

@@ -1,0 +1,18 @@
+{
+	"$schema": "https://inlang.com/schema/inlang-message-format",
+	"notifications_title": "Notifications",
+	"notifications_empty_title": "No notifications yet",
+	"notifications_empty_description": "New likes, comments, replies, and followers will appear here.",
+	"notification_someone": "Someone",
+	"notification_and_one_other": "and {count} other user",
+	"notification_and_others": "and {count} other users",
+	"notification_follow": "started following you",
+	"notification_post_like": "liked your post",
+	"notification_comment_like": "liked your comment",
+	"notification_post_comment": "commented on your post",
+	"notification_comment_reply": "replied to your comment",
+	"notification_just_now": "Just now",
+	"notification_minutes": "{count} min",
+	"notification_hours": "{count} hr",
+	"notification_days": "{count} d"
+}

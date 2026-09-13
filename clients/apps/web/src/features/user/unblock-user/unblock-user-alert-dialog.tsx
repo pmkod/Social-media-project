@@ -1,6 +1,7 @@
 import { BaseAlertDialog } from "@/core/components/ui/base-alert-dialog.tsx";
 import { create } from "@/core/components/ui/nice-modal.tsx";
 import type { User } from "@/features/user/common/user.ts";
+import * as m from "@/paraglide/messages.js";
 import { useUnblockUser } from "./use-unblock-user.ts";
 
 type UnblockUserAlertDialogProps = {
@@ -13,9 +14,9 @@ const UnblockUserAlertDialog = create<UnblockUserAlertDialogProps>(
 
 		return (
 			<BaseAlertDialog
-				title={`Unblock @${user.username}?`}
-				description="They will be able to view and interact with your content again. Previous follows will not be restored."
-				confirmText="Unblock"
+				title={m.profile_unblock_title({ username: user.username })}
+				description={m.profile_unblock_description()}
+				confirmText={m.discussion_unblock()}
 				onConfirm={() => unblockUser.mutateAsync(user.id).then(() => undefined)}
 			/>
 		);

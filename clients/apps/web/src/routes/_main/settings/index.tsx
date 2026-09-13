@@ -1,11 +1,11 @@
+import { createFileRoute } from "@tanstack/react-router";
 import {
 	AppHeader,
-	AppHeaderGoBackButton,
 	AppHeaderLeftPart,
 	AppHeaderTitle,
 } from "@/core/components/ui/app-header";
 import { EmptyBlock } from "@/core/components/ui/empty-block";
-import { createFileRoute } from "@tanstack/react-router";
+import * as m from "@/paraglide/messages.js";
 
 export const Route = createFileRoute("/_main/settings/")({
 	component: SettingsOverview,
@@ -20,8 +20,8 @@ export function SettingsOverview() {
 				</AppHeaderLeftPart>
 			</AppHeader>
 			<EmptyBlock
-				title="Settings"
-				description="Choose a section to manage your account, security, privacy, appearance, or language preferences."
+				title={m.settings_title()}
+				description={m.settings_overview_description()}
 				bordered={false}
 			/>
 		</div>

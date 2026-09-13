@@ -1,9 +1,9 @@
-import { RiChat1Line } from "@remixicon/react";
 import { useEffect, useMemo, useRef } from "react";
 import { Button } from "@/core/components/ui/button.tsx";
 import { EmptyBlock } from "@/core/components/ui/empty-block.tsx";
 import { ExceptionBlock } from "@/core/components/ui/exception-block.tsx";
 import { Skeleton } from "@/core/components/ui/skeleton.tsx";
+import * as m from "@/paraglide/messages.js";
 import { DiscussionTypes } from "../common/discussion.constants.ts";
 import type { Discussion, Message } from "../common/discussion.ts";
 import {
@@ -102,8 +102,8 @@ function DiscussionBody({
 			) : messages.length === 0 ? (
 				<EmptyBlock
 					bordered={false}
-					title="No messages yet"
-					description="Send the first message to start this conversation."
+					title={m.discussion_no_messages_title()}
+					description={m.discussion_no_messages_description()}
 				/>
 			) : (
 				<div className="mx-auto flex w-full flex-col px-3 py-5 sm:px-5">
@@ -116,7 +116,7 @@ function DiscussionBody({
 								isLoading={messagesQuery.isFetchingNextPage}
 								onClick={() => void loadEarlierMessages()}
 							>
-								Load earlier messages
+								{m.discussion_load_earlier()}
 							</Button>
 						</div>
 					) : null}

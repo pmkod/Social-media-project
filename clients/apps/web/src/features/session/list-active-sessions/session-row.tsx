@@ -4,12 +4,10 @@ import {
 	RiSmartphoneLine,
 } from "@remixicon/react";
 import { Button } from "@/core/components/ui/button.tsx";
+import * as m from "@/paraglide/messages.js";
+import { getLocale } from "@/paraglide/runtime.js";
 import type { Session } from "../common/session.ts";
 import { getSessionName } from "../common/session.utils.ts";
-
-const relativeTimeFormatter = new Intl.RelativeTimeFormat(undefined, {
-	numeric: "always",
-});
 
 const relativeTimeUnits = [
 	{ unit: "year" as const, milliseconds: 365 * 24 * 60 * 60 * 1000 },
@@ -31,7 +29,10 @@ function formatSessionTime(createdAt: string) {
 		) ?? smallestRelativeTimeUnit;
 	const value = Math.max(1, Math.floor(elapsed / milliseconds));
 
-	return relativeTimeFormatter.format(-value, unit);
+	return new Intl.RelativeTimeFormat(getLocale(), { numeric: "always" }).format(
+		-value,
+		unit,
+	);
 }
 
 function isMobileSession(session: Session) {
@@ -51,7 +52,7 @@ function SessionRow({
 	const DeviceIcon = isMobileSession(session)
 		? RiSmartphoneLine
 		: RiComputerLine;
-	const userAgent = session.userAgent ?? "User agent unavailable";
+	const userAgent = session.userAgent ?? m.settings_user_agent_unavailable();
 
 	return (
 		<div className="flex items-start gap-3 py-4">
@@ -69,7 +70,9 @@ function SessionRow({
 					<p className="font-medium leading-tight">{getSessionName(session)}</p>
 					-{" "}
 					<p className="text-xs text-muted-foreground">
-						Created {formatSessionTime(session.createdAt)}
+						{m.settings_session_created({
+							date: formatSessionTime(session.createdAt),
+						})}
 					</p>
 				</div>
 
@@ -77,7 +80,9 @@ function SessionRow({
 					className="mt-1 line-clamp-2 break-all text-xs leading-relaxed text-muted-foreground"
 					title={session.userAgent ?? undefined}
 				>
-					<span className="font-medium text-foreground/70">User agent:</span>{" "}
+					<span className="font-medium text-foreground/70">
+						{m.settings_user_agent()}
+					</span>{" "}
 					{userAgent}
 				</p>
 			</div>
@@ -87,12 +92,12 @@ function SessionRow({
 				colorScheme="destructive"
 				size="sm"
 				className="mt-1"
-				aria-label="Log out of this session"
-				title="Log out of this session"
+				aria-label={m.settings_logout_session()}
+				title={m.settings_logout_session()}
 				onClick={onDisable}
 			>
 				<RiLogoutBoxLine />
-				<span className="hidden sm:inline">Log out</span>
+				<span className="hidden sm:inline">{m.settings_logout()}</span>
 			</Button>
 		</div>
 	);

@@ -2,6 +2,7 @@ import { Button } from "@/core/components/ui/button.tsx";
 import { ExceptionBlock } from "@/core/components/ui/exception-block.tsx";
 import { UserRowItem } from "@/features/user/common/components/user-row-item.tsx";
 import { UserRowItemListLoader } from "@/features/user/common/components/user-row-item-list-loader.tsx";
+import * as m from "@/paraglide/messages.js";
 import { useFollowSuggestions } from "../follow-suggestions/use-follow-suggestions.ts";
 import { useSearchUsers } from "./use-search-users.ts";
 
@@ -20,7 +21,7 @@ function UserSearchList({ query }: UserSearchListProps) {
 	return (
 		<section className="mb-6 overflow-hidden rounded-xl border border-border bg-background">
 			<h2 className="border-b px-4 py-3 font-semibold">
-				{hasQuery ? "People" : "People to discover"}
+				{hasQuery ? m.search_people() : m.search_people_discover()}
 			</h2>
 			{usersQuery.isLoading ? (
 				<UserRowItemListLoader count={5} />
@@ -35,8 +36,8 @@ function UserSearchList({ query }: UserSearchListProps) {
 			) : users.length === 0 ? (
 				<p className="px-6 py-5 text-sm text-muted-foreground">
 					{hasQuery
-						? `No people found for “${query}”.`
-						: "No suggestions right now."}
+						? m.search_no_people_query({ query })
+						: m.search_no_suggestions()}
 				</p>
 			) : (
 				<>
@@ -51,7 +52,7 @@ function UserSearchList({ query }: UserSearchListProps) {
 								isLoading={usersQuery.isFetchingNextPage}
 								onClick={() => void usersQuery.fetchNextPage()}
 							>
-								Show more people
+								{m.search_show_more_people()}
 							</Button>
 						</div>
 					) : null}

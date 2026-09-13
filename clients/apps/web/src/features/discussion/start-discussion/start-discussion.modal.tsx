@@ -18,6 +18,7 @@ import { UserAvatar } from "@/features/user/common/components/user-avatar.tsx";
 import { UserRowItemListLoader } from "@/features/user/common/components/user-row-item-list-loader.tsx";
 import type { User } from "@/features/user/common/user.ts";
 import { useSearchUsers } from "@/features/user/search/use-search-users.ts";
+import * as m from "@/paraglide/messages.js";
 import { DiscussionTypes } from "../common/discussion.constants.ts";
 import { useCreateDiscussion } from "../hooks/use-create-discussion.ts";
 
@@ -68,18 +69,18 @@ const CreatePrivateDiscussionModal = create(() => {
 		>
 			<DialogContent size="xl">
 				<DialogHeader>
-					<DialogTitle>New message</DialogTitle>
+					<DialogTitle>{m.discussion_new_message()}</DialogTitle>
 				</DialogHeader>
 
 				<DialogBody>
 					<div className="flex min-h-0 flex-col h-[min(42rem,calc(100dvh-20rem))]">
 						<div className="shrink-0 px-5 py-4">
 							<SearchInput
-								label="Search people"
+								label={m.discussion_search_people()}
 								size="lg"
 								value={query}
 								onChange={(event) => setQuery(event.target.value)}
-								placeholder="Search by name or username"
+								placeholder={m.discussion_search_people_placeholder()}
 								autoFocus
 								disabled={createDiscussion.isPending}
 							/>
@@ -103,10 +104,10 @@ const CreatePrivateDiscussionModal = create(() => {
 									<div className="text-center">
 										<RiUserSearchLine className="mx-auto size-7 text-muted-foreground" />
 										<p className="mt-3 text-sm font-medium">
-											Find someone to message
+											{m.discussion_find_person()}
 										</p>
 										<p className="mt-1 text-xs text-muted-foreground">
-											Enter at least two characters to search.
+											{m.discussion_search_minimum()}
 										</p>
 									</div>
 								</div>
@@ -125,8 +126,10 @@ const CreatePrivateDiscussionModal = create(() => {
 								<EmptyBlock
 									bordered={false}
 									className="min-h-56"
-									title="No people found"
-									description={`No account matches “${debouncedQuery}”.`}
+									title={m.discussion_no_people_title()}
+									description={m.discussion_no_account_match({
+										query: debouncedQuery,
+									})}
 								/>
 							) : (
 								<div className="divide-y divide-border/70">
@@ -153,7 +156,7 @@ const CreatePrivateDiscussionModal = create(() => {
 													</p>
 													<p className="truncate text-xs text-muted-foreground">
 														{isBlocked
-															? "Messaging unavailable"
+															? m.discussion_messaging_unavailable()
 															: `@${user.username}`}
 													</p>
 												</div>

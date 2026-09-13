@@ -17,6 +17,7 @@ import { DisableSessionAlertDialog } from "@/features/session/disable-session/di
 import { SessionRow } from "@/features/session/list-active-sessions/session-row";
 import { useActiveSessions } from "@/features/session/list-active-sessions/use-active-sessions.ts";
 import { LogoutOtherSessionsAlertDialog } from "@/features/session/logout-other-sessions/logout-other-sessions-alert-dialog.tsx";
+import * as m from "@/paraglide/messages.js";
 
 export const Route = createFileRoute("/_main/settings/sessions")({
 	component: SessionsSettingsPage,
@@ -45,7 +46,7 @@ function SessionsSettingsPage() {
 			<AppHeader>
 				<AppHeaderLeftPart>
 					<AppHeaderGoBackButton to="/settings/security" />
-					<AppHeaderTitle>Sessions</AppHeaderTitle>
+					<AppHeaderTitle>{m.settings_sessions()}</AppHeaderTitle>
 				</AppHeaderLeftPart>
 			</AppHeader>
 
@@ -77,19 +78,18 @@ function SessionsSettingsPage() {
 				/>
 			) : sessions.length === 0 ? (
 				<EmptyBlock
-					title="No active session"
-					description="No active device was found for this account."
+					title={m.settings_no_active_session_title()}
+					description={m.settings_no_active_session_description()}
 				/>
 			) : (
 				<div className="space-y-6">
 					<section>
 						<div className="space-y-1">
 							<h2 className="text-lg font-bold tracking-tight">
-								Current active session
+								{m.settings_current_session()}
 							</h2>
 							<p className="text-sm leading-relaxed text-muted-foreground sm:text-base">
-								You&apos;re logged into this account on this device and are
-								currently using it.
+								{m.settings_current_session_description()}
 							</p>
 						</div>
 						{currentSession ? (
@@ -100,7 +100,7 @@ function SessionsSettingsPage() {
 							/>
 						) : (
 							<p className="border-t border-border px-5 py-5 text-sm text-muted-foreground sm:px-6">
-								This device&apos;s active session could not be identified.
+								{m.settings_current_session_unknown()}
 							</p>
 						)}
 					</section>
@@ -110,11 +110,10 @@ function SessionsSettingsPage() {
 						<div className="space-y-4">
 							<div className="space-y-1">
 								<h2 className="text-lg font-bold tracking-tight">
-									Other sessions
+									{m.settings_other_sessions()}
 								</h2>
 								<p className="text-sm leading-relaxed text-muted-foreground sm:text-base">
-									You&apos;re logged into this account on these devices and
-									aren&apos;t currently using them.
+									{m.settings_other_sessions_description()}
 								</p>
 							</div>
 							<Button
@@ -128,7 +127,7 @@ function SessionsSettingsPage() {
 								}}
 							>
 								<RiLogoutBoxLine className="size-4" />
-								Log out of all other sessions
+								{m.settings_logout_other_sessions()}
 							</Button>
 						</div>
 						{otherSessions.length > 0 ? (
@@ -144,7 +143,7 @@ function SessionsSettingsPage() {
 							</div>
 						) : (
 							<p className="border-t border-border px-5 py-5 text-sm text-muted-foreground sm:px-6">
-								No other active sessions were found.
+								{m.settings_no_other_sessions()}
 							</p>
 						)}
 					</section>

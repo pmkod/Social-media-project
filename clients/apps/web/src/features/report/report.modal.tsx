@@ -28,6 +28,7 @@ import { Textarea } from "@/core/components/ui/textarea.tsx";
 import { ReportReasonItem } from "@/features/report-reason/common/report-reason-item.tsx";
 import { ReportReasonItemLoader } from "@/features/report-reason/common/report-reason-item-loader.tsx";
 import { useReportReasons } from "@/features/report-reason/use-report-reasons.ts";
+import * as m from "@/paraglide/messages.js";
 import type { Comment } from "../comment/index.ts";
 import type { Post } from "../post/common/post.ts";
 import type { User } from "../user/common/user.ts";
@@ -118,8 +119,8 @@ const ReportModal = create<ReportModalProps>(
 				...reasons,
 				{
 					id: OtherReasonId,
-					name: "Other",
-					description: "Something else that is not covered by these options.",
+					name: m.report_other(),
+					description: m.report_other_description(),
 				},
 			];
 		}, [reportReasonsQuery.data?.reportReasons]);
@@ -138,11 +139,8 @@ const ReportModal = create<ReportModalProps>(
 			>
 				<DialogContent size="lg">
 					<DialogHeader>
-						<DialogTitle>Report </DialogTitle>
-						<DialogDescription>
-							Why are you reporting ? Your report is private and is not shared
-							with the author.
-						</DialogDescription>
+						<DialogTitle>{m.report_title()}</DialogTitle>
+						<DialogDescription>{m.report_description()}</DialogDescription>
 					</DialogHeader>
 
 					<form
@@ -159,7 +157,7 @@ const ReportModal = create<ReportModalProps>(
 						<DialogBody className="px-0 py-0">
 							{reportReasonsQuery.isLoading ? (
 								<output className="block">
-									<span className="sr-only">Loading report reasons</span>
+									<span className="sr-only">{m.report_loading_reasons()}</span>
 									{Array.from({ length: 5 }).map((_, index) => (
 										<ReportReasonItemLoader
 											// biome-ignore lint/suspicious/noArrayIndexKey: Static loading placeholders.
@@ -189,8 +187,13 @@ const ReportModal = create<ReportModalProps>(
 								<form.Field name="reasonId">
 									{(field) => (
 										<Field data-invalid={!field.state.meta.isValid}>
-											<FieldLabel className="sr-only">Report reason</FieldLabel>
-											<div role="radiogroup" aria-label="Report reason">
+											<FieldLabel className="sr-only">
+												{m.report_reason_label()}
+											</FieldLabel>
+											<div
+												role="radiogroup"
+												aria-label={m.report_reason_label()}
+											>
 												{reportReasons.map((reason) => (
 													<ReportReasonItem
 														key={reason.id}
@@ -221,7 +224,7 @@ const ReportModal = create<ReportModalProps>(
 										{(field) => (
 											<Field data-invalid={!field.state.meta.isValid}>
 												<FieldLabel htmlFor={field.name}>
-													Tell us what happened
+													{m.report_explain_label()}
 												</FieldLabel>
 												<Textarea
 													id={field.name}
@@ -230,7 +233,7 @@ const ReportModal = create<ReportModalProps>(
 													onChange={(event) =>
 														field.handleChange(event.target.value)
 													}
-													placeholder="Describe the issue…"
+													placeholder={m.report_explain_placeholder()}
 													maxLength={280}
 													rows={4}
 													disabled={createReport.isPending}
@@ -255,7 +258,7 @@ const ReportModal = create<ReportModalProps>(
 								onClick={close}
 								disabled={createReport.isPending}
 							>
-								Cancel
+								{m.action_cancel()}
 							</Button>
 							<form.Subscribe selector={(state) => state.isSubmitting}>
 								{(isSubmitting) => (
@@ -270,7 +273,7 @@ const ReportModal = create<ReportModalProps>(
 										}
 										isLoading={isSubmitting || createReport.isPending}
 									>
-										Submit report
+										{m.report_submit()}
 									</Button>
 								)}
 							</form.Subscribe>

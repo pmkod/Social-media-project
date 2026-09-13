@@ -8,6 +8,7 @@ import {
 } from "@/core/components/ui/avatar.tsx";
 import { cn } from "@/core/lib/utils.ts";
 import { buildImageUrl } from "@/features/post/post-media.functions.ts";
+import * as m from "@/paraglide/messages.js";
 import type { User } from "../user.ts";
 
 function getInitials(name?: string | null): string {
@@ -47,7 +48,7 @@ function UserAvatar({
 			{lowQualityProfilePictureFileUrl ? (
 				<AvatarImage
 					src={lowQualityProfilePictureFileUrl}
-					alt={fullName || "User avatar"}
+					alt={fullName || m.user_avatar_alt()}
 				/>
 			) : null}
 			<AvatarFallback>

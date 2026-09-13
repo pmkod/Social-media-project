@@ -15,6 +15,7 @@ import { NotificationListItemLoader } from "@/features/notification/list/notific
 import { useNotifications } from "@/features/notification/list/use-notifications.ts";
 import { useMarkNotificationsSeen } from "@/features/notification/mark-notifications-seen/use-mark-notifications-seen.ts";
 import { useAuthenticatedUser } from "@/features/user/authenticated-user/use-authenticated-user.ts";
+import * as m from "@/paraglide/messages.js";
 
 export const Route = createFileRoute("/_main/_with-right-aside/notifications")({
 	component: NotificationsPage,
@@ -68,7 +69,7 @@ function NotificationsPage() {
 		<MainContainer>
 			<AppHeader>
 				<AppHeaderLeftPart>
-					<AppHeaderTitle>Notifications</AppHeaderTitle>
+					<AppHeaderTitle>{m.notifications_title()}</AppHeaderTitle>
 				</AppHeaderLeftPart>
 			</AppHeader>
 			<div className="border rounded-2xl overflow-hidden">
@@ -84,8 +85,8 @@ function NotificationsPage() {
 					/>
 				) : notifications.length === 0 ? (
 					<EmptyBlock
-						title="No notifications yet"
-						description="New likes, comments, replies, and followers will appear here."
+						title={m.notifications_empty_title()}
+						description={m.notifications_empty_description()}
 						bordered={false}
 						className="min-h-96"
 					/>

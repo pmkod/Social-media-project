@@ -1,4 +1,5 @@
 import { useState } from "react";
+import * as m from "@/paraglide/messages.js";
 import {
 	AlertDialog,
 	AlertDialogAction,
@@ -54,7 +55,9 @@ const BaseAlertDialog = ({
 					<AlertDialogDescription>{description}</AlertDialogDescription>
 				</AlertDialogHeader>
 				<AlertDialogFooter>
-					<AlertDialogCancel disabled={isConfirming}>Cancel</AlertDialogCancel>
+					<AlertDialogCancel disabled={isConfirming}>
+						{m.action_cancel()}
+					</AlertDialogCancel>
 					<AlertDialogAction
 						colorScheme={confirmColorScheme}
 						disabled={isConfirming}
@@ -63,7 +66,7 @@ const BaseAlertDialog = ({
 							void handleConfirm();
 						}}
 					>
-						{isConfirming ? "Please wait…" : confirmText}
+						{isConfirming ? m.action_please_wait() : confirmText}
 					</AlertDialogAction>
 				</AlertDialogFooter>
 			</AlertDialogContent>

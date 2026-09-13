@@ -8,6 +8,7 @@ import { Link } from "@tanstack/react-router";
 import { cn } from "@/core/lib/utils.ts";
 import { UserAvatar } from "@/features/user/common/components/user-avatar.tsx";
 import { UserProfileHoverCard } from "@/features/user/user-profile/user-profile-hover-card.tsx";
+import * as m from "@/paraglide/messages.js";
 import { NotificationEventTypes } from "../common/notification.constants.ts";
 import type {
 	NotificationEventType,
@@ -18,12 +19,16 @@ import {
 	getNotificationPostId,
 } from "../common/notification.utils.ts";
 
-const notificationCopy: Record<NotificationEventType, string> = {
-	[NotificationEventTypes.FOLLOW]: "started following you",
-	[NotificationEventTypes.POST_LIKE]: "liked your post",
-	[NotificationEventTypes.COMMENT_LIKE]: "liked your comment",
-	[NotificationEventTypes.POST_COMMENT]: "commented on your post",
-	[NotificationEventTypes.COMMENT_REPLY]: "replied to your comment",
+const getNotificationCopy = (eventType: NotificationEventType) => {
+	if (eventType === NotificationEventTypes.FOLLOW)
+		return m.notification_follow();
+	if (eventType === NotificationEventTypes.POST_LIKE)
+		return m.notification_post_like();
+	if (eventType === NotificationEventTypes.COMMENT_LIKE)
+		return m.notification_comment_like();
+	if (eventType === NotificationEventTypes.POST_COMMENT)
+		return m.notification_post_comment();
+	return m.notification_comment_reply();
 };
 
 function NotificationIcon({ eventType }: { eventType: NotificationEventType }) {
@@ -54,17 +59,21 @@ function NotificationInitiator({
 		notification.initiator?.fullName ||
 		(notification.initiator
 			? `@${notification.initiator.username}`
-			: "Someone");
+			: m.notification_someone());
 	const othersCount = Math.max(0, notification.initiatorCount - 1);
 
 	return (
 		<span>
 			<span className="font-semibold text-foreground">{initiatorLabel}</span>
 			{othersCount > 0
-				? ` and ${othersCount} other ${othersCount === 1 ? "user" : "users"}`
+				? ` ${
+						othersCount === 1
+							? m.notification_and_one_other({ count: othersCount })
+							: m.notification_and_others({ count: othersCount })
+					}`
 				: ""}{" "}
 			<span className="text-muted-foreground">
-				{notificationCopy[notification.eventType]}
+				{getNotificationCopy(notification.eventType)}
 			</span>
 		</span>
 	);

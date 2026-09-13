@@ -28,6 +28,7 @@ import { UserAvatar } from "@/features/user/common/components/user-avatar.tsx";
 import { UserRowItemListLoader } from "@/features/user/common/components/user-row-item-list-loader.tsx";
 import type { User } from "@/features/user/common/user.ts";
 import { useSearchUsers } from "@/features/user/search/use-search-users.ts";
+import * as m from "@/paraglide/messages.js";
 import { DiscussionTypes } from "../common/discussion.constants.ts";
 import { useCreateDiscussion } from "../hooks/use-create-discussion.ts";
 
@@ -108,10 +109,10 @@ const CreateGroupDiscussionModal = create(() => {
 				<DialogHeader>
 					<DialogTitle className="flex items-center gap-2">
 						<RiGroupLine className="size-5 text-primary" />
-						Create a group
+						{m.discussion_create_group()}
 					</DialogTitle>
 					<DialogDescription>
-						Give your group a name and choose at least two people.
+						{m.discussion_create_group_description()}
 					</DialogDescription>
 				</DialogHeader>
 
@@ -125,7 +126,9 @@ const CreateGroupDiscussionModal = create(() => {
 					<DialogBody className="min-h-0 overflow-y-auto">
 						<div className="shrink-0 space-y-4 px-5 py-4">
 							<label htmlFor={groupNameId} className="block space-y-1.5">
-								<span className="text-sm font-medium">Group name</span>
+								<span className="text-sm font-medium">
+									{m.discussion_group_name()}
+								</span>
 								<Input
 									id={groupNameId}
 									value={name}
@@ -133,7 +136,7 @@ const CreateGroupDiscussionModal = create(() => {
 										setName(event.target.value);
 										if (createDiscussion.isError) createDiscussion.reset();
 									}}
-									placeholder="e.g. Product design team"
+									placeholder={m.discussion_group_name_placeholder()}
 									maxLength={100}
 									disabled={createDiscussion.isPending}
 									autoFocus
@@ -142,7 +145,9 @@ const CreateGroupDiscussionModal = create(() => {
 
 							<label htmlFor={groupDescriptionId} className="block space-y-1.5">
 								<div className="flex items-center justify-between gap-3">
-									<span className="text-sm font-medium">Description</span>
+									<span className="text-sm font-medium">
+										{m.discussion_group_description()}
+									</span>
 									<span className="text-xs text-muted-foreground">
 										{description.length}/500
 									</span>
@@ -151,7 +156,7 @@ const CreateGroupDiscussionModal = create(() => {
 									id={groupDescriptionId}
 									value={description}
 									onChange={(event) => setDescription(event.target.value)}
-									placeholder="What is this group about? (optional)"
+									placeholder={m.discussion_group_description_placeholder()}
 									maxLength={500}
 									rows={2}
 									className="min-h-16 resize-none"
@@ -162,7 +167,9 @@ const CreateGroupDiscussionModal = create(() => {
 							{selectedUsers.length > 0 ? (
 								<div>
 									<p className="mb-2 text-xs font-medium text-muted-foreground">
-										Selected · {selectedUsers.length}
+										{m.discussion_selected_count({
+											count: selectedUsers.length,
+										})}
 									</p>
 									<div className="flex gap-2 overflow-x-auto pb-1">
 										{selectedUsers.map((user) => (
@@ -177,7 +184,9 @@ const CreateGroupDiscussionModal = create(() => {
 												<button
 													type="button"
 													onClick={() => toggleUser(user)}
-													aria-label={`Remove ${user.fullName || user.username}`}
+													aria-label={m.discussion_remove_person({
+														name: user.fullName || user.username,
+													})}
 													className="inline-flex size-5 items-center justify-center rounded-full text-muted-foreground transition hover:bg-accent hover:text-foreground"
 												>
 													<RiCloseLine className="size-3.5" />
@@ -191,15 +200,15 @@ const CreateGroupDiscussionModal = create(() => {
 
 						<div className="flex min-h-0 flex-1 flex-col border-t border-border">
 							<p className="shrink-0 px-5 pt-4 text-sm font-semibold">
-								Add people
+								{m.discussion_add_people()}
 							</p>
 							<div className="shrink-0 px-5 py-4">
 								<SearchInput
-									label="Search people"
+									label={m.discussion_search_people()}
 									size="lg"
 									value={memberQuery}
 									onChange={(event) => setMemberQuery(event.target.value)}
-									placeholder="Search by name or username"
+									placeholder={m.discussion_search_people_placeholder()}
 									disabled={createDiscussion.isPending}
 								/>
 							</div>
@@ -210,10 +219,10 @@ const CreateGroupDiscussionModal = create(() => {
 										<div className="text-center">
 											<RiUserSearchLine className="mx-auto size-7 text-muted-foreground" />
 											<p className="mt-3 text-sm font-medium">
-												Find someone to message
+												{m.discussion_find_person()}
 											</p>
 											<p className="mt-1 text-xs text-muted-foreground">
-												Enter at least two characters to search.
+												{m.discussion_search_minimum()}
 											</p>
 										</div>
 									</div>
@@ -232,8 +241,10 @@ const CreateGroupDiscussionModal = create(() => {
 									<EmptyBlock
 										bordered={false}
 										className="min-h-56"
-										title="No people found"
-										description={`No account matches “${deferredMemberQuery}”.`}
+										title={m.discussion_no_people_title()}
+										description={m.discussion_no_account_match({
+											query: deferredMemberQuery,
+										})}
 									/>
 								) : (
 									<div className="divide-y divide-border/70">
@@ -265,7 +276,7 @@ const CreateGroupDiscussionModal = create(() => {
 														</p>
 														<p className="truncate text-xs text-muted-foreground">
 															{isBlocked
-																? "Messaging unavailable"
+																? m.discussion_messaging_unavailable()
 																: `@${user.username}`}
 														</p>
 													</div>
@@ -287,7 +298,7 @@ const CreateGroupDiscussionModal = create(() => {
 													isLoading={usersQuery.isFetchingNextPage}
 													onClick={() => void usersQuery.fetchNextPage()}
 												>
-													Show more people
+													{m.discussion_show_more_people()}
 												</Button>
 											</div>
 										) : null}
@@ -312,15 +323,21 @@ const CreateGroupDiscussionModal = create(() => {
 					<DialogFooter>
 						<p className="mr-auto text-xs text-muted-foreground">
 							{selectedUsers.length < 2
-								? `${2 - selectedUsers.length} more ${2 - selectedUsers.length === 1 ? "person" : "people"} required`
-								: `${selectedUsers.length} people selected`}
+								? 2 - selectedUsers.length === 1
+									? m.discussion_people_required_one({
+											count: 2 - selectedUsers.length,
+										})
+									: m.discussion_people_required_many({
+											count: 2 - selectedUsers.length,
+										})
+								: m.discussion_people_selected({ count: selectedUsers.length })}
 						</p>
 						<Button
 							type="submit"
 							disabled={!name.trim() || selectedUsers.length < 2}
 							isLoading={createDiscussion.isPending}
 						>
-							Create group
+							{m.discussion_create_group()}
 						</Button>
 					</DialogFooter>
 				</form>

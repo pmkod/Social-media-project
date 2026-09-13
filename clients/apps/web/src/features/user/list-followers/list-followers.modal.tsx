@@ -12,6 +12,7 @@ import { create, useModal } from "@/core/components/ui/nice-modal.tsx";
 import { useIntersectionObserver } from "@/core/hooks/use-intersection-observer.ts";
 import { UserRowItem } from "@/features/user/common/components/user-row-item.tsx";
 import { UserRowItemListLoader } from "@/features/user/common/components/user-row-item-list-loader.tsx";
+import * as m from "@/paraglide/messages.js";
 import { useListFollowers } from "./use-list-followers.ts";
 
 type ListFollowersModalProps = {
@@ -57,7 +58,7 @@ const ListFollowersModal = create(({ userId }: ListFollowersModalProps) => {
 		<Dialog open={modal.visible} onOpenChange={handleOpenChange}>
 			<DialogContent size="lg">
 				<DialogHeader>
-					<DialogTitle>Followers</DialogTitle>
+					<DialogTitle>{m.followers()}</DialogTitle>
 				</DialogHeader>
 				<DialogBody ref={setScrollContainer}>
 					<div className="h-150">
@@ -73,8 +74,8 @@ const ListFollowersModal = create(({ userId }: ListFollowersModalProps) => {
 							/>
 						) : users.length === 0 ? (
 							<EmptyBlock
-								title="No followers"
-								description="Followers will appear here once this profile has them."
+								title={m.profile_followers_empty_title()}
+								description={m.profile_followers_empty_description()}
 								bordered={false}
 							/>
 						) : (

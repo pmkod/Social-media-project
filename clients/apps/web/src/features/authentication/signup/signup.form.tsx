@@ -13,6 +13,7 @@ import {
 import { Input } from "@/core/components/ui/input.tsx";
 import { PasswordInput } from "@/core/components/ui/password-input.tsx";
 import { UserValidationSchema } from "@/features/user/common/user.validation-schemas.ts";
+import * as m from "@/paraglide/messages.js";
 import { useSignup } from "./use-signup";
 
 const signupSchema = z.object({
@@ -61,10 +62,10 @@ function SignupForm({ onSuccess }: SignupFormProps) {
 		<div className="flex flex-col gap-4">
 			<div className="flex flex-col gap-1">
 				<h2 className="text-2xl font-semibold tracking-tight">
-					Create an account
+					{m.auth_signup_title()}
 				</h2>
 				<p className="text-sm text-muted-foreground">
-					Join us in just a few seconds.
+					{m.auth_signup_description()}
 				</p>
 			</div>
 
@@ -86,12 +87,14 @@ function SignupForm({ onSuccess }: SignupFormProps) {
 					<form.Field name="fullName">
 						{(field) => (
 							<Field data-invalid={!field.state.meta.isValid}>
-								<FieldLabel htmlFor={field.name}>Full name</FieldLabel>
+								<FieldLabel htmlFor={field.name}>
+									{m.auth_full_name()}
+								</FieldLabel>
 								<Input
 									id={field.name}
 									size="lg"
 									type="text"
-									placeholder="John Doe"
+									placeholder={m.auth_full_name_placeholder()}
 									value={field.state.value}
 									onBlur={field.handleBlur}
 									onChange={(e) => field.handleChange(e.target.value)}
@@ -106,7 +109,7 @@ function SignupForm({ onSuccess }: SignupFormProps) {
 					<form.Field name="email">
 						{(field) => (
 							<Field data-invalid={!field.state.meta.isValid}>
-								<FieldLabel htmlFor={field.name}>Email</FieldLabel>
+								<FieldLabel htmlFor={field.name}>{m.auth_email()}</FieldLabel>
 								<Input
 									id={field.name}
 									size="lg"
@@ -126,7 +129,9 @@ function SignupForm({ onSuccess }: SignupFormProps) {
 					<form.Field name="password">
 						{(field) => (
 							<Field data-invalid={!field.state.meta.isValid}>
-								<FieldLabel htmlFor={field.name}>Password</FieldLabel>
+								<FieldLabel htmlFor={field.name}>
+									{m.auth_password()}
+								</FieldLabel>
 								<PasswordInput
 									id={field.name}
 									size="lg"
@@ -146,19 +151,21 @@ function SignupForm({ onSuccess }: SignupFormProps) {
 				<form.Subscribe selector={(state) => state.isSubmitting}>
 					{(isSubmitting) => (
 						<Button type="submit" size="lg" fullWidth disabled={isSubmitting}>
-							{isSubmitting ? "Creating..." : "Create an account"}
+							{isSubmitting
+								? m.auth_creating_account()
+								: m.auth_create_account()}
 						</Button>
 					)}
 				</form.Subscribe>
 			</form>
 
 			<p className="text-center text-sm text-muted-foreground">
-				Already have an account?{" "}
+				{m.auth_existing_account()}{" "}
 				<Link
 					to="/"
 					className="text-foreground underline underline-offset-3 hover:text-foreground/80"
 				>
-					Log in
+					{m.auth_login_title()}
 				</Link>
 			</p>
 		</div>

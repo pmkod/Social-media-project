@@ -1,6 +1,7 @@
 import { BaseAlertDialog } from "@/core/components/ui/base-alert-dialog.tsx";
 import { create } from "@/core/components/ui/nice-modal.tsx";
 import type { User } from "@/features/user/common/user.ts";
+import * as m from "@/paraglide/messages.js";
 import { useBlockUser } from "./use-block-user.ts";
 
 type BlockUserAlertDialogProps = {
@@ -12,9 +13,9 @@ const BlockUserAlertDialog = create<BlockUserAlertDialogProps>(({ user }) => {
 
 	return (
 		<BaseAlertDialog
-			title={`Block @${user.username}?`}
-			description="You will no longer see each other's content. If either of you follows the other, those follows will be removed."
-			confirmText="Block"
+			title={m.profile_block_title({ username: user.username })}
+			description={m.profile_block_description()}
+			confirmText={m.profile_block()}
 			confirmColorScheme="destructive"
 			onConfirm={() => blockUser.mutateAsync(user.id).then(() => undefined)}
 		/>

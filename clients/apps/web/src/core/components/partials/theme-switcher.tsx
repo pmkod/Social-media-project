@@ -8,6 +8,7 @@ import {
 	SelectValue,
 } from "@/core/components/ui/select";
 import { type Theme, useTheme } from "@/core/hooks/use-theme";
+import * as m from "@/paraglide/messages.js";
 
 type ThemeSwitcherProps = {
 	className?: string;
@@ -40,7 +41,7 @@ export function ThemeSwitcher({
 				variant="outline"
 				size="icon-sm"
 				onClick={() => setTheme(isDark ? "light" : "dark")}
-				aria-label="Toggle theme"
+				aria-label={m.theme_toggle()}
 				className={className}
 			>
 				{isDark ? (
@@ -58,20 +59,20 @@ export function ThemeSwitcher({
 				size="sm"
 				className={`w-[125px] cursor-pointer border-border bg-background hover:bg-accent transition-colors ${className}`}
 			>
-				<SelectValue placeholder="Theme" />
+				<SelectValue placeholder={m.settings_theme()} />
 			</SelectTrigger>
 			<SelectContent align="end">
 				<SelectItem value="light">
 					<RiSunLine className="size-4" />
-					<span>Light</span>
+					<span>{m.theme_light()}</span>
 				</SelectItem>
 				<SelectItem value="dark">
 					<RiMoonLine className="size-4" />
-					<span>Dark</span>
+					<span>{m.theme_dark()}</span>
 				</SelectItem>
 				<SelectItem value="system">
 					<RiComputerLine className="size-4" />
-					<span>System</span>
+					<span>{m.theme_system()}</span>
 				</SelectItem>
 			</SelectContent>
 		</Select>

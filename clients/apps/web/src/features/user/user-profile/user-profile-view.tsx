@@ -1,6 +1,5 @@
 import { RiCalendar2Line } from "@remixicon/react";
 import { Button } from "@/core/components/ui/button";
-
 import NiceModal from "@/core/components/ui/nice-modal.tsx";
 import { buildImageUrl } from "@/features/post/post-media.functions";
 import { UserAvatar } from "@/features/user/common/components/user-avatar.tsx";
@@ -11,14 +10,10 @@ import { ListFollowingModal } from "@/features/user/list-following/list-followin
 import { UnblockUserAlertDialog } from "@/features/user/unblock-user/unblock-user-alert-dialog.tsx";
 import { UserProfileActionsDropdown } from "@/features/user/user-profile/user-profile-actions-dropdown.tsx";
 import { UserProfileStatItem } from "@/features/user/user-profile/user-profile-stat-item";
+import * as m from "@/paraglide/messages.js";
+import { getLocale } from "@/paraglide/runtime.js";
 import { useAuthenticatedUser } from "../authenticated-user/use-authenticated-user";
 import type { User } from "../common/user";
-
-const numberFormatter = new Intl.NumberFormat("en-US", { notation: "compact" });
-const joinedDateFormatter = new Intl.DateTimeFormat("en-US", {
-	month: "long",
-	year: "numeric",
-});
 
 type UserProfileViewProps = {
 	user: User;
@@ -27,6 +22,14 @@ type UserProfileViewProps = {
 function UserProfileView({ user }: UserProfileViewProps) {
 	const { data } = useAuthenticatedUser();
 	const authenticatedUser = data?.user;
+	const locale = getLocale();
+	const numberFormatter = new Intl.NumberFormat(locale, {
+		notation: "compact",
+	});
+	const joinedDateFormatter = new Intl.DateTimeFormat(locale, {
+		month: "long",
+		year: "numeric",
+	});
 
 	const joinedDate = user.createdAt
 		? joinedDateFormatter.format(new Date(user.createdAt))
@@ -45,7 +48,7 @@ function UserProfileView({ user }: UserProfileViewProps) {
 				{coverPictureSrc ? (
 					<img
 						src={coverPictureSrc}
-						alt={`${user.fullName}'s cover`}
+						alt={m.profile_cover_alt({ name: user.fullName })}
 						className="h-full w-full object-cover"
 					/>
 				) : null}
@@ -70,7 +73,7 @@ function UserProfileView({ user }: UserProfileViewProps) {
 									})
 								}
 							>
-								Unblock
+								{m.discussion_unblock()}
 							</Button>
 						) : null}
 						{isOwnProfile ? (
@@ -79,7 +82,7 @@ function UserProfileView({ user }: UserProfileViewProps) {
 								size="lg"
 								onClick={() => void NiceModal.show(EditProfileModal, { user })}
 							>
-								Edit profile
+								{m.profile_edit()}
 							</Button>
 						) : !user.hasBlockedAuthenticatedInUser &&
 							!user.isBlockedByAuthenticatedUser ? (
@@ -107,7 +110,7 @@ function UserProfileView({ user }: UserProfileViewProps) {
 							<div className="mt-4 flex flex-wrap gap-x-4 gap-y-2 text-sm text-muted-foreground">
 								<span className="flex items-center gap-1.5">
 									<RiCalendar2Line className="size-4" />
-									Joined {joinedDate}
+									{m.profile_joined({ date: joinedDate })}
 								</span>
 							</div>
 						) : null}
@@ -115,11 +118,11 @@ function UserProfileView({ user }: UserProfileViewProps) {
 						<div className="mt-4 flex flex-wrap gap-5 text-base text-muted-foreground">
 							<UserProfileStatItem
 								value={numberFormatter.format(user.postCount ?? 0)}
-								label="Posts"
+								label={m.profile_posts()}
 							/>
 							<UserProfileStatItem
 								value={numberFormatter.format(user.followersCount ?? 0)}
-								label="Followers"
+								label={m.followers()}
 								onClick={() =>
 									NiceModal.show(ListFollowersModal, {
 										userId: user.id,
@@ -128,7 +131,7 @@ function UserProfileView({ user }: UserProfileViewProps) {
 							/>
 							<UserProfileStatItem
 								value={numberFormatter.format(user.followingCount ?? 0)}
-								label="Following"
+								label={m.following_count()}
 								onClick={() =>
 									NiceModal.show(ListFollowingModal, {
 										userId: user.id,
@@ -142,4 +145,5 @@ function UserProfileView({ user }: UserProfileViewProps) {
 		</section>
 	);
 }
+
 export { UserProfileView };

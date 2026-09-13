@@ -3,6 +3,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { Dialog as DialogPrimitive } from "radix-ui";
 import type * as React from "react";
 import { cn } from "@/core/lib/utils.ts";
+import * as m from "@/paraglide/messages.js";
 
 const dialogContentVariants = cva(
 	"fixed top-1/2 left-1/2 z-50 flex max-h-[min(calc(100dvh-2rem),48rem)] min-h-0 w-full max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 flex-col gap-4 overflow-hidden rounded-2xl border border-border bg-background p-4 shadow-2xl duration-200 outline-none data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95",
@@ -78,7 +79,7 @@ function DialogContent({
 							className="absolute top-2 right-3 rounded-full cursor-pointer p-2 transition-colors hover:bg-gray-100"
 						>
 							<RiCloseLine className="size-7" />
-							<span className="sr-only">Close</span>
+							<span className="sr-only">{m.action_close()}</span>
 						</button>
 					</DialogPrimitive.Close>
 				) : null}

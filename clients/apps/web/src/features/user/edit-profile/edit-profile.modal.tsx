@@ -30,6 +30,7 @@ import { Textarea } from "@/core/components/ui/textarea.tsx";
 import { cn } from "@/core/lib/utils.ts";
 import { buildImageUrl } from "@/features/post/post-media.functions.ts";
 import type { User } from "@/features/user/common/user.ts";
+import * as m from "@/paraglide/messages.js";
 import { useUpdateProfile } from "./use-update-profile.ts";
 
 const ACCEPTED_IMAGE_TYPES = [
@@ -228,7 +229,7 @@ const EditProfileModal = create(({ user }: EditProfileModalProps) => {
 		>
 			<DialogContent size="xl">
 				<DialogHeader>
-					<DialogTitle>Edit profile</DialogTitle>
+					<DialogTitle>{m.profile_edit_title()}</DialogTitle>
 					<DialogDescription />
 				</DialogHeader>
 
@@ -251,13 +252,13 @@ const EditProfileModal = create(({ user }: EditProfileModalProps) => {
 											data-invalid={!field.state.meta.isValid}
 										>
 											<FieldLabel className="sr-only" htmlFor={field.name}>
-												Cover photo
+												{m.profile_cover_photo()}
 											</FieldLabel>
 											<div className="relative aspect-[2.8] overflow-hidden rounded-xl border border-border bg-muted">
 												{coverPreviewUrl ? (
 													<img
 														src={coverPreviewUrl}
-														alt="Cover preview"
+														alt={m.profile_cover_preview()}
 														className="size-full object-cover"
 													/>
 												) : (
@@ -267,7 +268,7 @@ const EditProfileModal = create(({ user }: EditProfileModalProps) => {
 												)}
 												<div className="absolute inset-0 flex items-center justify-center gap-2">
 													<PhotoActionButton
-														label="Modifier la photo de couverture"
+														label={m.profile_cover_change()}
 														disabled={updateProfileMutation.isPending}
 														onClick={() =>
 															document.getElementById(field.name)?.click()
@@ -276,7 +277,7 @@ const EditProfileModal = create(({ user }: EditProfileModalProps) => {
 														<RiEdit2Line />
 													</PhotoActionButton>
 													<PhotoActionButton
-														label="Supprimer la photo de couverture"
+														label={m.profile_cover_remove()}
 														disabled={
 															!coverPreviewUrl ||
 															updateProfileMutation.isPending
@@ -319,14 +320,14 @@ const EditProfileModal = create(({ user }: EditProfileModalProps) => {
 											data-invalid={!field.state.meta.isValid}
 										>
 											<FieldLabel className="sr-only" htmlFor={field.name}>
-												Profile photo
+												{m.profile_photo()}
 											</FieldLabel>
 											<div className="relative size-24 shrink-0 sm:size-28">
 												<div className="flex size-full items-center justify-center overflow-hidden rounded-full border-4 border-background bg-muted shadow-lg">
 													{profilePreviewUrl ? (
 														<img
 															src={profilePreviewUrl}
-															alt="Profile preview"
+															alt={m.profile_preview()}
 															className="size-full object-cover"
 														/>
 													) : (
@@ -335,7 +336,7 @@ const EditProfileModal = create(({ user }: EditProfileModalProps) => {
 												</div>
 												<div className="absolute inset-0 flex items-center justify-center gap-1">
 													<PhotoActionButton
-														label="Modifier la photo de profil"
+														label={m.profile_photo_change()}
 														disabled={updateProfileMutation.isPending}
 														onClick={() =>
 															document.getElementById(field.name)?.click()
@@ -344,7 +345,7 @@ const EditProfileModal = create(({ user }: EditProfileModalProps) => {
 														<RiEdit2Line />
 													</PhotoActionButton>
 													<PhotoActionButton
-														label="Supprimer la photo de profil"
+														label={m.profile_photo_remove()}
 														disabled={
 															!profilePreviewUrl ||
 															updateProfileMutation.isPending
@@ -384,7 +385,9 @@ const EditProfileModal = create(({ user }: EditProfileModalProps) => {
 							<form.Field name="username">
 								{(field) => (
 									<Field data-invalid={!field.state.meta.isValid}>
-										<FieldLabel htmlFor={field.name}>Username</FieldLabel>
+										<FieldLabel htmlFor={field.name}>
+											{m.profile_username()}
+										</FieldLabel>
 										<Input
 											id={field.name}
 											value={field.state.value}
@@ -405,7 +408,9 @@ const EditProfileModal = create(({ user }: EditProfileModalProps) => {
 							<form.Field name="fullName">
 								{(field) => (
 									<Field data-invalid={!field.state.meta.isValid}>
-										<FieldLabel htmlFor={field.name}>Full name</FieldLabel>
+										<FieldLabel htmlFor={field.name}>
+											{m.profile_full_name()}
+										</FieldLabel>
 										<Input
 											id={field.name}
 											value={field.state.value}
@@ -426,7 +431,9 @@ const EditProfileModal = create(({ user }: EditProfileModalProps) => {
 							<form.Field name="bio">
 								{(field) => (
 									<Field data-invalid={!field.state.meta.isValid}>
-										<FieldLabel htmlFor={field.name}>Bio</FieldLabel>
+										<FieldLabel htmlFor={field.name}>
+											{m.profile_bio()}
+										</FieldLabel>
 										<Textarea
 											id={field.name}
 											value={field.state.value}
@@ -457,7 +464,7 @@ const EditProfileModal = create(({ user }: EditProfileModalProps) => {
 
 					<DialogFooter className="border-t border-border px-5 py-4">
 						<Button type="button" variant="outline" onClick={close}>
-							Cancel
+							{m.action_cancel()}
 						</Button>
 						<form.Subscribe selector={(state) => state.isSubmitting}>
 							{(isSubmitting) => (
@@ -466,7 +473,7 @@ const EditProfileModal = create(({ user }: EditProfileModalProps) => {
 									disabled={isSubmitting || updateProfileMutation.isPending}
 									isLoading={isSubmitting || updateProfileMutation.isPending}
 								>
-									Save changes
+									{m.profile_save()}
 								</Button>
 							)}
 						</form.Subscribe>

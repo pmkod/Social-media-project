@@ -22,6 +22,7 @@ import NiceModal, {
 import { Skeleton } from "@/core/components/ui/skeleton.tsx";
 import { useDebounceValue } from "@/core/hooks/use-debounce-value.ts";
 import { useIntersectionObserver } from "@/core/hooks/use-intersection-observer.ts";
+import * as m from "@/paraglide/messages.js";
 import { useAddBookmark } from "../use-add-bookmark.ts";
 import { useBookmarkCollections } from "../use-bookmark-collections.ts";
 import { useRemoveBookmark } from "../use-remove-bookmark.ts";
@@ -118,10 +119,13 @@ const BookmarkCollectionPickerModal =
 					if (!open) close();
 				}}
 			>
-				<DialogContent size="md" aria-label="Bookmark collections">
+				<DialogContent
+					size="md"
+					aria-label={m.bookmark_collection_dialog_label()}
+				>
 					<DialogHeader className="pr-14">
 						<div className="flex items-center justify-between gap-3">
-							<DialogTitle>Manage bookmark collections</DialogTitle>
+							<DialogTitle>{m.bookmark_collection_manage()}</DialogTitle>
 						</div>
 					</DialogHeader>
 
@@ -132,8 +136,8 @@ const BookmarkCollectionPickerModal =
 									type="search"
 									value={search}
 									onChange={(event) => setSearch(event.target.value)}
-									placeholder="Search collections"
-									aria-label="Search bookmark collections"
+									placeholder={m.bookmark_collection_search()}
+									aria-label={m.bookmark_collection_search_label()}
 									className="h-8 min-w-0 flex-1 rounded bg-muted px-3 text-sm text-foreground outline-none transition focus:border focus:border-foreground"
 								/>
 								<Button
@@ -142,7 +146,7 @@ const BookmarkCollectionPickerModal =
 									onClick={handleCreateCollection}
 								>
 									<RiAddLine className="size-6" />
-									New collection
+									{m.bookmark_collection_new()}
 								</Button>
 							</div>
 							{collectionsQuery.isLoading ? (
@@ -172,13 +176,13 @@ const BookmarkCollectionPickerModal =
 									className="px-6 py-8"
 									title={
 										debouncedSearch
-											? "No bookmark collections found"
-											: "No collections yet"
+											? m.bookmark_collection_empty_search_title()
+											: m.bookmark_collection_empty_picker_title()
 									}
 									description={
 										debouncedSearch
-											? "Try a different search."
-											: "Create a collection to organize your saved posts."
+											? m.bookmark_collection_empty_search_description()
+											: m.bookmark_collection_empty_description()
 									}
 								/>
 							) : (
@@ -194,7 +198,15 @@ const BookmarkCollectionPickerModal =
 												onClick={() => void handleToggleCollection(collection)}
 												disabled={isLoading}
 												className="group flex min-h-14 w-full cursor-pointer items-center justify-between gap-3 px-6 text-left transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-default disabled:opacity-60"
-												aria-label={`${collection.isPostInCollection ? "Remove from" : "Save to"} ${collection.name}`}
+												aria-label={
+													collection.isPostInCollection
+														? m.bookmark_collection_remove_from({
+																name: collection.name,
+															})
+														: m.bookmark_collection_save_to({
+																name: collection.name,
+															})
+												}
 												aria-pressed={collection.isPostInCollection}
 											>
 												<span className="min-w-0 truncate text-base font-semibold">

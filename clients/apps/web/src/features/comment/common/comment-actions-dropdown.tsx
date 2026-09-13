@@ -20,6 +20,7 @@ import { useAuthenticatedUser } from "@/features/user/authenticated-user/use-aut
 import { BlockUserAlertDialog } from "@/features/user/block-user/block-user-alert-dialog.tsx";
 import type { User } from "@/features/user/common/user.ts";
 import { UnblockUserAlertDialog } from "@/features/user/unblock-user/unblock-user-alert-dialog.tsx";
+import * as m from "@/paraglide/messages.js";
 import type { Comment } from "./comment";
 
 type CommentActionsDropdownProps = {
@@ -55,7 +56,7 @@ function CommentActionsDropdown({
 					variant={variant}
 					size={size}
 					onClick={(event) => event.stopPropagation()}
-					aria-label="Comment options"
+					aria-label={m.comment_options()}
 				>
 					<RiMoreLine />
 				</IconButton>
@@ -72,7 +73,7 @@ function CommentActionsDropdown({
 						}}
 					>
 						<RiDeleteBinLine />
-						Delete comment
+						{m.comment_delete()}
 					</DropdownMenuItem>
 				) : null}
 				{canDelete && (canReport || canManageBlock) ? (
@@ -86,7 +87,7 @@ function CommentActionsDropdown({
 						}}
 					>
 						<RiFlag2Line />
-						Report comment
+						{m.comment_report()}
 					</DropdownMenuItem>
 				) : null}
 				{canReport && canManageBlock ? <DropdownMenuSeparator /> : null}
@@ -98,7 +99,7 @@ function CommentActionsDropdown({
 							}}
 						>
 							<RiUserAddLine />
-							Unblock user @{user.username}
+							{m.profile_unblock_user({ username: user.username })}
 						</DropdownMenuItem>
 					) : (
 						<DropdownMenuItem
@@ -108,7 +109,7 @@ function CommentActionsDropdown({
 							}}
 						>
 							<RiUserForbidLine />
-							Block user @{user.username}
+							{m.profile_block_user({ username: user.username })}
 						</DropdownMenuItem>
 					)
 				) : null}

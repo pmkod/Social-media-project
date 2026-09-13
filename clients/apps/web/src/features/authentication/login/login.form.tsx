@@ -13,6 +13,7 @@ import {
 import { Input } from "@/core/components/ui/input.tsx";
 import { PasswordInput } from "@/core/components/ui/password-input.tsx";
 import { UserValidationSchema } from "@/features/user/common/user.validation-schemas.ts";
+import * as m from "@/paraglide/messages.js";
 import { useLogin } from "./use-login";
 
 const loginSchema = z.object({
@@ -57,9 +58,11 @@ function LoginForm({ onSuccess }: LoginFormProps) {
 	return (
 		<div className="flex flex-col gap-4">
 			<div className="flex flex-col gap-1">
-				<h2 className="text-2xl font-semibold tracking-tight">Log in</h2>
+				<h2 className="text-2xl font-semibold tracking-tight">
+					{m.auth_login_title()}
+				</h2>
 				<p className="text-sm text-muted-foreground">
-					Enter your credentials to access your account.
+					{m.auth_login_description()}
 				</p>
 			</div>
 
@@ -81,12 +84,14 @@ function LoginForm({ onSuccess }: LoginFormProps) {
 					<form.Field name="emailOrUsername">
 						{(field) => (
 							<Field data-invalid={!field.state.meta.isValid}>
-								<FieldLabel htmlFor={field.name}>Email or username</FieldLabel>
+								<FieldLabel htmlFor={field.name}>
+									{m.auth_email_or_username()}
+								</FieldLabel>
 								<Input
 									id={field.name}
 									size="lg"
 									type="text"
-									placeholder="Email or username"
+									placeholder={m.auth_email_or_username()}
 									value={field.state.value}
 									onBlur={field.handleBlur}
 									onChange={(e) => field.handleChange(e.target.value)}
@@ -102,12 +107,14 @@ function LoginForm({ onSuccess }: LoginFormProps) {
 						{(field) => (
 							<Field data-invalid={!field.state.meta.isValid}>
 								<div className="flex items-center justify-between">
-									<FieldLabel htmlFor={field.name}>Password</FieldLabel>
+									<FieldLabel htmlFor={field.name}>
+										{m.auth_password()}
+									</FieldLabel>
 									<Link
 										to="/password-reset"
 										className="text-xs text-muted-foreground hover:text-foreground underline underline-offset-3"
 									>
-										Forgot password?
+										{m.auth_forgot_password_link()}
 									</Link>
 								</div>
 								<PasswordInput
@@ -129,19 +136,19 @@ function LoginForm({ onSuccess }: LoginFormProps) {
 				<form.Subscribe selector={(state) => state.isSubmitting}>
 					{(isSubmitting) => (
 						<Button type="submit" size={"lg"} fullWidth disabled={isSubmitting}>
-							{isSubmitting ? "Logging in..." : "Log in"}
+							{isSubmitting ? m.auth_logging_in() : m.auth_login_title()}
 						</Button>
 					)}
 				</form.Subscribe>
 			</form>
 
 			<p className="text-center text-sm text-muted-foreground">
-				Not signed up yet?{" "}
+				{m.auth_no_account()}{" "}
 				<Link
 					to="/signup"
 					className="text-foreground underline underline-offset-3 hover:text-foreground/80"
 				>
-					Sign up
+					{m.auth_signup_link()}
 				</Link>
 			</p>
 		</div>

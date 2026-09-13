@@ -7,6 +7,7 @@ import {
 	AppHeaderTitle,
 } from "@/core/components/ui/app-header";
 import { SettingRowItem } from "@/features/setting/common/setting-row-item.tsx";
+import * as m from "@/paraglide/messages.js";
 
 export const Route = createFileRoute("/_main/settings/privacy")({
 	component: PrivacySettingsPage,
@@ -18,21 +19,21 @@ function PrivacySettingsPage() {
 			<AppHeader>
 				<AppHeaderLeftPart>
 					<AppHeaderGoBackButton />
-					<AppHeaderTitle>Additional resources</AppHeaderTitle>
+					<AppHeaderTitle>{m.settings_resources()}</AppHeaderTitle>
 				</AppHeaderLeftPart>
 			</AppHeader>
 			<div className="space-y-1">
 				<SettingRowItem
 					icon={RiFileShieldLine}
-					title="Privacy policy"
-					description="Learn how we collect, use, and protect your data."
+					title={m.footer_privacy()}
+					description={m.settings_resources_privacy_description()}
 					href="/privacy-policy"
 					isExternal
 				/>
 				<SettingRowItem
 					icon={RiFileTextLine}
-					title="Terms of service"
-					description="Review the terms for using Goodspace."
+					title={m.settings_resources_terms()}
+					description={m.settings_resources_terms_description()}
 					href="/terms-of-service"
 					isExternal
 				/>

@@ -2,6 +2,7 @@ import { RiReplyLine } from "@remixicon/react";
 import NiceModal from "@/core/components/ui/nice-modal.tsx";
 import { cn } from "@/core/lib/utils.ts";
 import { UserAvatar } from "@/features/user/common/components/user-avatar.tsx";
+import * as m from "@/paraglide/messages.js";
 import type { Message } from "../common/discussion.ts";
 import { formatMessageTime } from "../common/discussion.utils.ts";
 import {
@@ -51,9 +52,11 @@ function MessageItem({
 				>
 					<p className="line-clamp-2">
 						{message.parentMessage.isDeleted
-							? "Original message deleted"
+							? m.discussion_original_deleted()
 							: message.parentMessage.content ||
-								(message.parentMessage.hasMedia ? "Média" : "Message")}
+								(message.parentMessage.hasMedia
+									? m.discussion_media()
+									: m.discussion_message())}
 					</p>
 				</div>
 			) : null}
@@ -82,7 +85,7 @@ function MessageItem({
 			) : null}
 			{message.isDeleted || message.content ? (
 				<p className="whitespace-pre-wrap break-words">
-					{message.isDeleted ? "Message deleted" : message.content}
+					{message.isDeleted ? m.discussion_message_deleted() : message.content}
 				</p>
 			) : null}
 			<div
@@ -91,7 +94,9 @@ function MessageItem({
 					isOwn ? "text-primary-foreground/70" : "text-muted-foreground",
 				)}
 			>
-				{message.editedAt && !message.isDeleted ? <span>Edited</span> : null}
+				{message.editedAt && !message.isDeleted ? (
+					<span>{m.discussion_edited()}</span>
+				) : null}
 				<span>{formatMessageTime(message.createdAt)}</span>
 			</div>
 		</div>
@@ -101,7 +106,7 @@ function MessageItem({
 		<button
 			type="button"
 			onClick={() => onReply(message)}
-			aria-label="Reply to message"
+			aria-label={m.discussion_reply()}
 			className="inline-flex size-8 shrink-0 items-center justify-center rounded-full text-muted-foreground opacity-100 transition hover:bg-accent hover:text-foreground focus-visible:opacity-100 sm:opacity-0 sm:group-hover:opacity-100"
 		>
 			<RiReplyLine className="size-4" />

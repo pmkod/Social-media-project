@@ -13,6 +13,7 @@ import { authenticatedUserQueryKey } from "@/features/user/authenticated-user/au
 import type { UseAuthenticatedUserQueryData } from "@/features/user/authenticated-user/types/use-authenticated-user-query-data.ts";
 import { useCompleteEmailChange } from "@/features/user/change-email/use-complete-email-change.ts";
 import { SettingsUserVerificationForm } from "@/features/user/settings-user-verification/settings-user-verification.form.tsx";
+import * as m from "@/paraglide/messages.js";
 
 const settingsUserVerificationSearchSchema = z.object({
 	goal: z.enum([UserVerificationGoals.emailChange]),
@@ -36,7 +37,7 @@ function SettingsUserVerificationPage() {
 				authenticatedUserQueryKey,
 				(data) => (data ? { ...data, user: { ...data.user, email } } : data),
 			);
-			toast.success("Email address updated");
+			toast.success(m.settings_email_updated());
 			await navigate({ to: "/settings/account" });
 		}
 	};
@@ -46,7 +47,7 @@ function SettingsUserVerificationPage() {
 			<AppHeader>
 				<AppHeaderLeftPart>
 					<AppHeaderGoBackButton to="/settings/change-email" />
-					<AppHeaderTitle>Verify email change</AppHeaderTitle>
+					<AppHeaderTitle>{m.settings_verify_email_change()}</AppHeaderTitle>
 				</AppHeaderLeftPart>
 			</AppHeader>
 			<div className="max-w-xl pl-12">

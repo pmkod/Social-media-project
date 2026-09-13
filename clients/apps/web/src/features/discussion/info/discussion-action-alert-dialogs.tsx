@@ -2,6 +2,7 @@ import { useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { BaseAlertDialog } from "@/core/components/ui/base-alert-dialog.tsx";
 import { create } from "@/core/components/ui/nice-modal.tsx";
+import * as m from "@/paraglide/messages.js";
 import {
 	useDeleteDiscussion,
 	useLeaveDiscussion,
@@ -19,9 +20,9 @@ const DeleteDiscussionAlertDialog = create<DiscussionActionProps>(
 		const navigate = useNavigate();
 		return (
 			<BaseAlertDialog
-				title={`Supprimer « ${title} » ?`}
-				description="La discussion sera retirée de votre liste. Elle pourra réapparaître si un nouveau message est envoyé."
-				confirmText="Supprimer"
+				title={m.discussion_delete_title({ title })}
+				description={m.discussion_delete_description()}
+				confirmText={m.discussion_delete()}
 				confirmColorScheme="destructive"
 				onConfirm={async () => {
 					try {
@@ -44,9 +45,9 @@ const LeaveDiscussionAlertDialog = create<
 	const navigate = useNavigate();
 	return (
 		<BaseAlertDialog
-			title={`Quitter « ${title} » ?`}
-			description="Vous ne recevrez plus les nouveaux messages et la discussion sera retirée de votre liste."
-			confirmText="Quitter"
+			title={m.discussion_leave_title({ title })}
+			description={m.discussion_leave_description()}
+			confirmText={m.discussion_leave()}
 			confirmColorScheme="destructive"
 			onConfirm={async () => {
 				try {
@@ -70,9 +71,9 @@ const RemoveDiscussionMemberAlertDialog = create<{
 	const removeMember = useRemoveDiscussionMember();
 	return (
 		<BaseAlertDialog
-			title={`Retirer ${memberName} ?`}
-			description="Cette personne ne pourra plus consulter les nouveaux messages du groupe."
-			confirmText="Retirer"
+			title={m.discussion_remove_member_title({ name: memberName })}
+			description={m.discussion_remove_member_description()}
+			confirmText={m.discussion_remove()}
 			confirmColorScheme="destructive"
 			onConfirm={async () => {
 				try {

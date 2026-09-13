@@ -10,6 +10,7 @@ import {
 	CreateCommentForm,
 	useComments,
 } from "@/features/comment";
+import * as m from "@/paraglide/messages.js";
 
 export function PostComments({
 	postId,
@@ -42,7 +43,7 @@ export function PostComments({
 	const comments = query.data?.pages.flatMap((page) => page.data) ?? [];
 	return (
 		<section
-			aria-label="Comments"
+			aria-label={m.comments_section_label()}
 			className={cn(
 				"overflow-hidden rounded-b-xl border-x border-b",
 				layout === "panel" &&
@@ -76,8 +77,8 @@ export function PostComments({
 				) : comments.length === 0 ? (
 					<EmptyBlock
 						bordered={false}
-						title="No comments yet"
-						description="Be the first to share your thoughts."
+						title={m.comments_empty_title()}
+						description={m.comments_empty_description()}
 					/>
 				) : (
 					comments.map((comment) => (
@@ -93,7 +94,7 @@ export function PostComments({
 						>
 							{query.isFetchNextPageError
 								? "Retry loading comments"
-								: "More comments"}
+								: m.comments_more()}
 						</Button>
 					</div>
 				) : null}

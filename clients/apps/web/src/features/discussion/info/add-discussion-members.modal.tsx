@@ -21,6 +21,7 @@ import { UserAvatar } from "@/features/user/common/components/user-avatar.tsx";
 import { UserRowItemListLoader } from "@/features/user/common/components/user-row-item-list-loader.tsx";
 import type { User } from "@/features/user/common/user.ts";
 import { useSearchUsers } from "@/features/user/search/use-search-users.ts";
+import * as m from "@/paraglide/messages.js";
 import type { Discussion } from "../common/discussion.ts";
 import { useAddDiscussionMembers } from "../hooks/use-discussion-actions.ts";
 
@@ -69,8 +70,8 @@ const AddDiscussionMembersModal = create<AddDiscussionMembersModalProps>(
 				});
 				toast.success(
 					selectedUsers.length === 1
-						? "Membre ajouté"
-						: `${selectedUsers.length} membres ajoutés`,
+						? m.discussion_members_added_one()
+						: m.discussion_members_added_many({ count: selectedUsers.length }),
 				);
 				onAdded?.(selectedUsers);
 				modal.resolve();
@@ -91,20 +92,22 @@ const AddDiscussionMembersModal = create<AddDiscussionMembersModalProps>(
 					<DialogHeader>
 						<DialogTitle className="flex items-center gap-2">
 							<RiUserAddLine className="size-5 text-primary" />
-							Ajouter des membres
+							{m.discussion_add_members_title()}
 						</DialogTitle>
 						<DialogDescription>
-							Recherchez les personnes à ajouter à « {discussion.name} ».
+							{m.discussion_add_members_description({
+								name: discussion.name || m.discussion_untitled_group(),
+							})}
 						</DialogDescription>
 					</DialogHeader>
 					<DialogBody className="flex min-h-0 flex-col">
 						<div className="shrink-0 px-5 py-4">
 							<SearchInput
-								label="Rechercher des personnes"
+								label={m.discussion_search_people()}
 								size="lg"
 								value={query}
 								onChange={(event) => setQuery(event.target.value)}
-								placeholder="Nom ou nom d’utilisateur"
+								placeholder={m.discussion_search_people_placeholder()}
 								autoFocus
 								disabled={addMembers.isPending}
 							/>
@@ -115,10 +118,10 @@ const AddDiscussionMembersModal = create<AddDiscussionMembersModalProps>(
 									<div>
 										<RiUserSearchLine className="mx-auto size-7 text-muted-foreground" />
 										<p className="mt-3 text-sm font-medium">
-											Rechercher une personne
+											{m.discussion_search_person()}
 										</p>
 										<p className="mt-1 text-xs text-muted-foreground">
-											Saisissez au moins deux caractères.
+											{m.discussion_search_minimum()}
 										</p>
 									</div>
 								</div>
@@ -137,8 +140,8 @@ const AddDiscussionMembersModal = create<AddDiscussionMembersModalProps>(
 								<EmptyBlock
 									bordered={false}
 									className="min-h-56"
-									title="Aucune personne disponible"
-									description="Les comptes trouvés font peut-être déjà partie du groupe."
+									title={m.discussion_no_person_available_title()}
+									description={m.discussion_no_person_available_description()}
 								/>
 							) : (
 								<div className="divide-y divide-border/70">
@@ -167,7 +170,7 @@ const AddDiscussionMembersModal = create<AddDiscussionMembersModalProps>(
 													</p>
 													<p className="truncate text-xs text-muted-foreground">
 														{isBlocked
-															? "Ajout indisponible"
+															? m.discussion_adding_unavailable()
 															: `@${user.username}`}
 													</p>
 												</div>
@@ -190,7 +193,7 @@ const AddDiscussionMembersModal = create<AddDiscussionMembersModalProps>(
 							onClick={close}
 							disabled={addMembers.isPending}
 						>
-							Annuler
+							{m.action_cancel()}
 						</Button>
 						<Button
 							type="button"
@@ -198,7 +201,9 @@ const AddDiscussionMembersModal = create<AddDiscussionMembersModalProps>(
 							disabled={selectedUsers.length === 0}
 							isLoading={addMembers.isPending}
 						>
-							Ajouter{selectedUsers.length ? ` (${selectedUsers.length})` : ""}
+							{selectedUsers.length
+								? m.discussion_add_selected({ count: selectedUsers.length })
+								: m.discussion_add()}
 						</Button>
 					</DialogFooter>
 				</DialogContent>

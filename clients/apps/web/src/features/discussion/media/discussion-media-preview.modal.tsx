@@ -14,6 +14,7 @@ import {
 import { IconButton } from "@/core/components/ui/icon-button.tsx";
 import { create, useModal } from "@/core/components/ui/nice-modal.tsx";
 import { cn } from "@/core/lib/utils.ts";
+import * as m from "@/paraglide/messages.js";
 import type { MessageMedia } from "../common/discussion.ts";
 
 type DiscussionMediaPreviewModalProps = {
@@ -24,12 +25,12 @@ type DiscussionMediaPreviewModalProps = {
 const getMediaLabel = (media: MessageMedia) =>
 	media.fileName ||
 	(media.type === "IMAGE"
-		? "Image"
+		? m.discussion_media_image()
 		: media.type === "VIDEO"
-			? "Vidéo"
+			? m.discussion_media_video()
 			: media.type === "AUDIO"
-				? "Audio"
-				: "Fichier");
+				? m.discussion_media_audio()
+				: m.discussion_media_file());
 
 function DiscussionMediaTile({
 	media,
@@ -68,7 +69,7 @@ function DiscussionMediaTile({
 		<button
 			type="button"
 			onClick={onClick}
-			aria-label={`Ouvrir ${getMediaLabel(media)}`}
+			aria-label={m.discussion_media_open({ name: getMediaLabel(media) })}
 			className={cn(
 				"relative aspect-square overflow-hidden rounded-xl border border-border bg-muted transition hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
 				className,
@@ -112,7 +113,7 @@ const DiscussionMediaPreviewModal = create<DiscussionMediaPreviewModalProps>(
 				<DialogContent size="xl" className="h-[min(48rem,calc(100dvh-2rem))]">
 					<DialogHeader>
 						<DialogTitle className="pr-10">
-							{item ? getMediaLabel(item) : "Média"}
+							{item ? getMediaLabel(item) : m.discussion_media()}
 						</DialogTitle>
 					</DialogHeader>
 					<DialogBody className="relative flex items-center justify-center bg-black/95 p-4">
@@ -146,11 +147,13 @@ const DiscussionMediaPreviewModal = create<DiscussionMediaPreviewModalProps>(
 									rel="noreferrer"
 									className="rounded-xl bg-background px-5 py-3 font-medium text-foreground"
 								>
-									Ouvrir {getMediaLabel(item)}
+									{m.discussion_media_open({ name: getMediaLabel(item) })}
 								</a>
 							)
 						) : (
-							<p className="text-sm text-white/70">Média indisponible</p>
+							<p className="text-sm text-white/70">
+								{m.discussion_media_unavailable()}
+							</p>
 						)}
 
 						{items.length > 1 ? (
@@ -160,7 +163,7 @@ const DiscussionMediaPreviewModal = create<DiscussionMediaPreviewModalProps>(
 									variant="secondary"
 									disabled={index === 0}
 									onClick={() => setIndex((current) => current - 1)}
-									aria-label="Média précédent"
+									aria-label={m.discussion_media_previous()}
 									className="absolute left-3 rounded-full"
 								>
 									<RiArrowLeftSLine />
@@ -170,7 +173,7 @@ const DiscussionMediaPreviewModal = create<DiscussionMediaPreviewModalProps>(
 									variant="secondary"
 									disabled={index === items.length - 1}
 									onClick={() => setIndex((current) => current + 1)}
-									aria-label="Média suivant"
+									aria-label={m.discussion_media_next()}
 									className="absolute right-3 rounded-full"
 								>
 									<RiArrowRightSLine />

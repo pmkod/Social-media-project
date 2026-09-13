@@ -1,3 +1,5 @@
+import * as m from "@/paraglide/messages.js";
+import { getLocale } from "@/paraglide/runtime.js";
 import { NotificationEventTypes } from "./notification.constants.ts";
 import type { NotificationGroup, NotificationRecord } from "./notification.ts";
 
@@ -129,27 +131,27 @@ export function formatNotificationCreationDate(
 
 	// Handling future dates or barely created items
 	if (diffInSeconds < 60) {
-		return "Just now";
+		return m.notification_just_now();
 	}
 
 	const diffInMinutes = Math.floor(diffInSeconds / 60);
 	if (diffInMinutes < 60) {
-		return `${diffInMinutes} min`;
+		return m.notification_minutes({ count: diffInMinutes });
 	}
 
 	const diffInHours = Math.floor(diffInMinutes / 60);
 	if (diffInHours < 24) {
-		return `${diffInHours} hr`;
+		return m.notification_hours({ count: diffInHours });
 	}
 
 	const diffInDays = Math.floor(diffInHours / 24);
 	if (diffInDays < 7) {
-		return `${diffInDays} d`;
+		return m.notification_days({ count: diffInDays });
 	}
 
 	// For older posts
 	const isCurrentYear = date.getFullYear() === now.getFullYear();
-	return date.toLocaleDateString("en-US", {
+	return date.toLocaleDateString(getLocale(), {
 		day: "numeric",
 		month: "short",
 		year: isCurrentYear ? undefined : "numeric",
