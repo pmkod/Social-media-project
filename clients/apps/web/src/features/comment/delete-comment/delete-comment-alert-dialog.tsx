@@ -18,7 +18,7 @@ const DeleteCommentAlertDialog = create<DeleteCommentAlertDialogProps>(
 				confirmText="Delete comment"
 				confirmColorScheme="destructive"
 				onConfirm={() =>
-					deleteComment.mutateAsync(comment.id).then(() => undefined)
+					deleteComment.mutateAsync(comment).then(() => undefined)
 				}
 			/>
 		);

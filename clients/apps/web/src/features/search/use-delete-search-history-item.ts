@@ -1,6 +1,11 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+	type InfiniteData,
+	useMutation,
+	useQueryClient,
+} from "@tanstack/react-query";
 import { httpClient } from "@/core/http-clients/http-client.ts";
 import { searchQueryKeys } from "./search.query-keys.ts";
+import type { SearchHistoryResponse } from "./search.types.ts";
 
 const useDeleteSearchHistoryItem = () => {
 	const queryClient = useQueryClient();
@@ -10,10 +15,18 @@ const useDeleteSearchHistoryItem = () => {
 			httpClient
 				.delete(`search/history/${historyId}`)
 				.json<{ message: string }>(),
-		onSuccess: () => {
-			queryClient.invalidateQueries({
-				queryKey: searchQueryKeys.historyRoot,
-			});
+		onSuccess: (_, historyId) => {
+			queryClient.setQueriesData<InfiniteData<SearchHistoryResponse>>(
+				{ queryKey: searchQueryKeys.historyRoot },
+				(data) =>
+					data && {
+						...data,
+						pages: data.pages.map((page) => ({
+							...page,
+							history: page.history.filter((item) => item.id !== historyId),
+						})),
+					},
+			);
 		},
 	});
 };

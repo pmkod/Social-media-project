@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { httpClient } from "@/core/http-clients/http-client.ts";
-import { discussionQueryKeys } from "../common/discussion.query-keys.ts";
+import { upsertDiscussionInCache } from "../common/discussion-cache.ts";
 import type {
 	CreateDiscussionResponse,
 	DiscussionType,
@@ -22,12 +22,7 @@ const useCreateDiscussion = () => {
 				.post("discussions", { json: input })
 				.json<CreateDiscussionResponse>(),
 		onSuccess: ({ discussion }) => {
-			queryClient.setQueryData(discussionQueryKeys.detail(discussion.id), {
-				discussion,
-			});
-			void queryClient.invalidateQueries({
-				queryKey: discussionQueryKeys.root,
-			});
+			upsertDiscussionInCache(queryClient, discussion);
 		},
 	});
 };

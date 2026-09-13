@@ -37,10 +37,18 @@ const deleteCollectionRoute = defineOpenAPIRoute<
 			);
 		}
 
-		await prisma.$transaction(async (tx) => {
+		const unbookmarkedPostIds = await prisma.$transaction(async (tx) => {
 			const collectionItems = await tx.bookmarkCollectionItem.findMany({
 				where: { collectionId: collection.id },
-				select: { bookmarkId: true },
+				select: {
+					bookmarkId: true,
+					bookmark: {
+						select: {
+							postId: true,
+							_count: { select: { collectionItems: true } },
+						},
+					},
+				},
 			});
 
 			await tx.bookmarkCollection.delete({
@@ -55,9 +63,16 @@ const deleteCollectionRoute = defineOpenAPIRoute<
 					},
 				});
 			}
+
+			return collectionItems
+				.filter((item) => item.bookmark._count.collectionItems === 1)
+				.map((item) => item.bookmark.postId);
 		});
 
-		return c.json({ message: "Collection deleted successfully" });
+		return c.json({
+			message: "Collection deleted successfully",
+			unbookmarkedPostIds,
+		});
 	},
 });
 

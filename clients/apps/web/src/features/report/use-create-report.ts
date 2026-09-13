@@ -1,6 +1,5 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { httpClient } from "@/core/http-clients/http-client.ts";
-import { reportQueryKeys } from "./common/report.query-keys.ts";
 import type { CreateReportResponse } from "./common/report.ts";
 
 type CreateReportInput = {
@@ -13,14 +12,9 @@ type CreateReportInput = {
 };
 
 const useCreateReport = () => {
-	const queryClient = useQueryClient();
-
 	return useMutation({
 		mutationFn: (input: CreateReportInput) =>
 			httpClient.post("reports", { json: input }).json<CreateReportResponse>(),
-		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: reportQueryKeys.root });
-		},
 	});
 };
 

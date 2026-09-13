@@ -11,8 +11,10 @@ const useDisableSession = () => {
 			httpClient
 				.patch(`sessions/${sessionId}/disable`)
 				.json<{ session: Session }>(),
-		onSuccess: async () => {
-			await queryClient.invalidateQueries({ queryKey: activeSessionsQueryKey });
+		onSuccess: (_, sessionId) => {
+			queryClient.setQueryData<Session[]>(activeSessionsQueryKey, (sessions) =>
+				sessions?.filter((session) => session.id !== sessionId),
+			);
 		},
 	});
 };

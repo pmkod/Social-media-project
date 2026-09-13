@@ -50,17 +50,32 @@ const createSearchHistoryRoute = defineOpenAPIRoute<
 			);
 		}
 
-		if (userId) {
-			const targetUser = await prisma.user.findFirst({
+		const targetUser = userId
+			? await prisma.user.findFirst({
 				where: { id: userId, active: true },
-				select: { id: true },
-			});
-			if (!targetUser) {
+				select: {
+					id: true,
+					username: true,
+					fullName: true,
+					lowQualityProfilePictureFile: {
+						select: { id: true, filename: true },
+					},
+					bestQualityProfilePictureFile: {
+						select: { id: true, filename: true },
+					},
+					followers: {
+						where: { followerId: authenticatedUser.id },
+						select: { id: true },
+						take: 1,
+					},
+				},
+			})
+			: null;
+		if (userId && !targetUser) {
 				return c.json(
 					{ message: "User not found" },
 					HttpStatus.NOT_FOUND.code,
 				);
-			}
 		}
 
 		const historyItem = await prisma.$transaction(async (transaction) => {
@@ -87,8 +102,16 @@ const createSearchHistoryRoute = defineOpenAPIRoute<
 			});
 		});
 
+		const presentedTargetUser = targetUser
+			? {
+					...targetUser,
+					followers: undefined,
+					isFollowedByAuthenticatedUser: targetUser.followers.length > 0,
+				}
+			: null;
+
 		return c.json(
-			{ ...historyItem, user: null },
+			{ ...historyItem, user: presentedTargetUser },
 			HttpStatus.CREATED.code,
 		);
 	},

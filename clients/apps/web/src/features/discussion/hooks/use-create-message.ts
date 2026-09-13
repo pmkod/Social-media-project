@@ -4,10 +4,10 @@ import {
 	useQueryClient,
 } from "@tanstack/react-query";
 import { httpClient } from "@/core/http-clients/http-client.ts";
+import { updateDiscussionInCache } from "../common/discussion-cache.ts";
 import { discussionQueryKeys } from "../common/discussion.query-keys.ts";
 import type {
 	CreateMessageResponse,
-	DiscussionResponse,
 	MessagesResponse,
 } from "../common/discussion.ts";
 
@@ -51,24 +51,17 @@ const useCreateMessage = () => {
 					};
 				},
 			);
-			queryClient.setQueryData<DiscussionResponse>(
-				discussionQueryKeys.detail(discussionId),
-				(data) =>
-					data
-						? {
-								...data,
-								discussion: {
-									...data.discussion,
-									isStarted: true,
-									lastMessage: message,
-									lastActivityAt: message.createdAt,
-								},
-							}
-						: data,
+			updateDiscussionInCache(
+				queryClient,
+				discussionId,
+				(discussion) => ({
+					...discussion,
+					isStarted: true,
+					lastMessage: message,
+					lastActivityAt: message.createdAt,
+				}),
+				{ moveToFront: true },
 			);
-			void queryClient.invalidateQueries({
-				queryKey: discussionQueryKeys.root,
-			});
 		},
 	});
 };

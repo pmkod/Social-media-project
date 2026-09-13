@@ -1,30 +1,25 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { httpClient } from "@/core/http-clients/http-client.ts";
-import { discussionQueryKeys } from "../common/discussion.query-keys.ts";
-
-const useInvalidateDiscussion = () => {
-	const queryClient = useQueryClient();
-	return (discussionId: string) => {
-		void queryClient.invalidateQueries({ queryKey: discussionQueryKeys.root });
-		void queryClient.invalidateQueries({
-			queryKey: discussionQueryKeys.detail(discussionId),
-		});
-	};
-};
+import type { User } from "@/features/user/common/user.ts";
+import {
+	removeDiscussionFromCache,
+	updateDiscussionInCache,
+} from "../common/discussion-cache.ts";
 
 const useDeleteDiscussion = () => {
-	const invalidateDiscussion = useInvalidateDiscussion();
+	const queryClient = useQueryClient();
 	return useMutation({
 		mutationFn: (discussionId: string) =>
 			httpClient
 				.delete(`discussions/${discussionId}`)
 				.json<{ message: string }>(),
-		onSuccess: (_, discussionId) => invalidateDiscussion(discussionId),
+		onSuccess: (_, discussionId) =>
+			removeDiscussionFromCache(queryClient, discussionId),
 	});
 };
 
 const useLeaveDiscussion = () => {
-	const invalidateDiscussion = useInvalidateDiscussion();
+	const queryClient = useQueryClient();
 	return useMutation({
 		mutationFn: ({
 			discussionId,
@@ -36,12 +31,13 @@ const useLeaveDiscussion = () => {
 			httpClient
 				.delete(`discussions/${discussionId}/members/${userId}`)
 				.json<{ message: string; userId: string }>(),
-		onSuccess: (_, { discussionId }) => invalidateDiscussion(discussionId),
+		onSuccess: (_, { discussionId }) =>
+			removeDiscussionFromCache(queryClient, discussionId),
 	});
 };
 
 const useRemoveDiscussionMember = () => {
-	const invalidateDiscussion = useInvalidateDiscussion();
+	const queryClient = useQueryClient();
 	return useMutation({
 		mutationFn: ({
 			discussionId,
@@ -53,12 +49,17 @@ const useRemoveDiscussionMember = () => {
 			httpClient
 				.delete(`discussions/${discussionId}/members/${userId}`)
 				.json<{ message: string; userId: string }>(),
-		onSuccess: (_, { discussionId }) => invalidateDiscussion(discussionId),
+		onSuccess: (_, { discussionId, userId }) => {
+			updateDiscussionInCache(queryClient, discussionId, (discussion) => ({
+				...discussion,
+				members: discussion.members.filter((member) => member.userId !== userId),
+			}));
+		},
 	});
 };
 
 const useSetDiscussionBlocked = () => {
-	const invalidateDiscussion = useInvalidateDiscussion();
+	const queryClient = useQueryClient();
 	return useMutation({
 		mutationFn: ({
 			discussionId,
@@ -74,24 +75,53 @@ const useSetDiscussionBlocked = () => {
 					json: { isBlocked },
 				})
 				.json<{ member: { isBlocked: boolean } }>(),
-		onSuccess: (_, { discussionId }) => invalidateDiscussion(discussionId),
+		onSuccess: ({ member }, { discussionId }) => {
+			updateDiscussionInCache(queryClient, discussionId, (discussion) => ({
+				...discussion,
+				currentUserIsBlocked: member.isBlocked,
+			}));
+		},
 	});
 };
 
 const useAddDiscussionMembers = () => {
-	const invalidateDiscussion = useInvalidateDiscussion();
+	const queryClient = useQueryClient();
 	return useMutation({
 		mutationFn: ({
 			discussionId,
-			userIds,
+			users,
 		}: {
 			discussionId: string;
-			userIds: string[];
+			users: User[];
 		}) =>
 			httpClient
-				.post(`discussions/${discussionId}/members`, { json: { userIds } })
+				.post(`discussions/${discussionId}/members`, {
+					json: { userIds: users.map((user) => user.id) },
+				})
 				.json<{ addedUserIds: string[]; addedCount: number }>(),
-		onSuccess: (_, { discussionId }) => invalidateDiscussion(discussionId),
+		onSuccess: ({ addedUserIds }, { discussionId, users }) => {
+			const addedUserIdsSet = new Set(addedUserIds);
+			const now = new Date().toISOString();
+			updateDiscussionInCache(queryClient, discussionId, (discussion) => ({
+				...discussion,
+				members: [
+					...discussion.members,
+					...users
+						.filter(
+							(user) =>
+								addedUserIdsSet.has(user.id) &&
+								!discussion.members.some((member) => member.userId === user.id),
+						)
+						.map((user) => ({
+							userId: user.id,
+							role: "MEMBER" as const,
+							joinedAt: now,
+							lastReadAt: now,
+							user,
+						})),
+				],
+			}));
+		},
 	});
 };
 

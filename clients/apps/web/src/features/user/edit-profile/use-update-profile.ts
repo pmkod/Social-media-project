@@ -4,6 +4,7 @@ import { authenticatedUserQueryKey } from "@/features/user/authenticated-user/au
 import type { UseAuthenticatedUserQueryData } from "@/features/user/authenticated-user/types/use-authenticated-user-query-data.ts";
 import type { User } from "@/features/user/common/user.ts";
 import { userDetailsQueryKeys } from "@/features/user/common/user-details-query-keys.ts";
+import type { UserProfileResponse } from "@/features/user/user-profile/user-profile-response.ts";
 
 type UpdateProfileInput = {
 	username: string;
@@ -60,10 +61,17 @@ const useUpdateProfile = () => {
 							}
 						: currentData,
 			);
-			void queryClient.invalidateQueries({
-				queryKey: userDetailsQueryKeys.byUsername(updatedUser.username),
-				exact: true,
-			});
+			queryClient.setQueriesData<UserProfileResponse>(
+				{ queryKey: userDetailsQueryKeys.root },
+				(data) =>
+					data?.user.id === updatedUser.id
+						? { ...data, user: { ...data.user, ...updatedUser } }
+						: data,
+			);
+			queryClient.setQueryData<UserProfileResponse>(
+				userDetailsQueryKeys.byUsername(updatedUser.username),
+				{ user: updatedUser },
+			);
 		},
 	});
 };

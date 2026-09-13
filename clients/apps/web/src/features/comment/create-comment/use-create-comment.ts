@@ -1,9 +1,11 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { httpClient } from "@/core/http-clients/http-client.ts";
-import { postListQueryKeys } from "@/features/post/common/post-list.query-keys.ts";
-import { postDetailsQueryKey } from "@/features/post/post-detail/post-detail.query-key.ts";
+import { updatePostInCache } from "@/features/post/common/post-cache.ts";
+import {
+	prependCommentToCache,
+	updateCommentInCache,
+} from "../common/comment-cache.ts";
 import type { Comment } from "../common/comment.ts";
-import { commentListQueryKeys } from "../common/comment-list.query-keys.ts";
 
 type CreateCommentInput = {
 	postId: string;
@@ -41,19 +43,17 @@ const useCreateComment = () => {
 	return useMutation({
 		mutationFn: createComment,
 		onSuccess: (comment) => {
-			queryClient.invalidateQueries({
-				queryKey: postDetailsQueryKey.build(comment.postId),
-			});
-			queryClient.invalidateQueries({
-				queryKey: commentListQueryKeys.build({ postId: comment.postId }),
-			});
+			updatePostInCache(queryClient, comment.postId, (post) => ({
+				...post,
+				commentsCount: (post.commentsCount ?? 0) + 1,
+			}));
+			prependCommentToCache(queryClient, comment);
+
 			if (comment.parentId) {
-				queryClient.invalidateQueries({
-					queryKey: commentListQueryKeys.build({
-						postId: comment.postId,
-						parentCommentId: comment.parentId,
-					}),
-				});
+				updateCommentInCache(queryClient, comment.parentId, (parent) => ({
+					...parent,
+					repliesCount: (parent.repliesCount ?? 0) + 1,
+				}));
 			}
 		},
 	});

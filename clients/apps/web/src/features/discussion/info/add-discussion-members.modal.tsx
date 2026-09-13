@@ -65,7 +65,7 @@ const AddDiscussionMembersModal = create<AddDiscussionMembersModalProps>(
 			try {
 				await addMembers.mutateAsync({
 					discussionId: discussion.id,
-					userIds: selectedUsers.map((user) => user.id),
+					users: selectedUsers,
 				});
 				toast.success(
 					selectedUsers.length === 1
