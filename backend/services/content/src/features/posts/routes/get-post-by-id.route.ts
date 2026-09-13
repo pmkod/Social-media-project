@@ -4,6 +4,10 @@ import { prisma } from "@/core/databases";
 import { userServiceClient } from "@/core/services/user-service.client";
 import type { HonoEnv } from "@/core/types/hono-env";
 import { PostsRoutesTag } from "../posts.constants";
+import {
+	hydratePostMediaFiles,
+	postMediaWithFileIdsSelect,
+} from "../services/post-media-files.service";
 
 const routeDef = createRoute({
 	method: "get",
@@ -42,31 +46,7 @@ const getPostByIdRoute = defineOpenAPIRoute<
 				createdAt: true,
 				updatedAt: true,
 				medias: {
-					select: {
-						id: true,
-						postId: true,
-						position: true,
-						mediaType: true,
-						createdAt: true,
-						lowQualityFileId: true,
-						lowQualityFile: {
-							select: {
-								id: true,
-								mimeType: true,
-								filename: true,
-								createdAt: true,
-							},
-						},
-						highQualityFileId: true,
-						highQualityFile: {
-							select: {
-								id: true,
-								mimeType: true,
-								filename: true,
-								createdAt: true,
-							},
-						},
-					},
+					select: postMediaWithFileIdsSelect,
 					orderBy: { position: "asc" },
 				},
 			},
@@ -75,6 +55,7 @@ const getPostByIdRoute = defineOpenAPIRoute<
 		if (!post) {
 			return c.json({ message: "Post not found" }, HttpStatus.NOT_FOUND.code);
 		}
+		const [hydratedPost] = await hydratePostMediaFiles([post]);
 
 		const authenticatedUser = c.get("authenticatedUser");
 		const authenticatedUserId = authenticatedUser?.id;
@@ -120,7 +101,7 @@ const getPostByIdRoute = defineOpenAPIRoute<
 
 		return c.json({
 			post: {
-				...post,
+				...hydratedPost,
 				isLikedByAuthenticatedUser: Boolean(like),
 				isBookmarkedByAuthenticatedUser: Boolean(
 					bookmark?.collectionItems.length,

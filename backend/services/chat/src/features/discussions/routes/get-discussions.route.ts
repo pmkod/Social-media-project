@@ -6,9 +6,9 @@ import { requireUserAuthentication } from "@/features/authentication/middlewares
 import { HTTPException } from "hono/http-exception";
 import { DiscussionsRoutesTag } from "../discussions.constants";
 import {
+	buildDiscussionResponses,
 	discussionDetailsInclude,
-	presentDiscussions,
-} from "../discussions.presenter";
+} from "../discussions.service";
 
 const routeDef = createRoute({
 	method: "get",
@@ -85,7 +85,7 @@ const getDiscussionsRoute = defineOpenAPIRoute<
 		const pageDiscussions = hasNextPage
 			? discussions.slice(0, limit)
 			: discussions;
-		const presentedDiscussions = await presentDiscussions(
+		const presentedDiscussions = await buildDiscussionResponses(
 			pageDiscussions,
 			authenticatedUser.id,
 		);

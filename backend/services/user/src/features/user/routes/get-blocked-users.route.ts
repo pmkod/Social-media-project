@@ -4,6 +4,7 @@ import { prisma } from "@/core/databases";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { requireUserAuthentication } from "@/features/authentication/middlewares/require-user-authentication.middleware";
 import type { Prisma } from "@/generated/prisma/client";
+import { hydrateProfileMediaFiles } from "../services/get-profile-media-files.service";
 import { UserRoutesTag } from "../user.constants";
 
 const routeDef = createRoute({
@@ -69,18 +70,10 @@ const getBlockedUsersRoute = defineOpenAPIRoute<
 						username: true,
 						fullName: true,
 						bio: true,
-						lowQualityProfilePictureFile: {
-							select: { id: true, filename: true },
-						},
-						bestQualityProfilePictureFile: {
-							select: { id: true, filename: true },
-						},
-						lowQualityCoverPictureFile: {
-							select: { id: true, filename: true },
-						},
-						bestQualityCoverPictureFile: {
-							select: { id: true, filename: true },
-						},
+						lowQualityProfilePictureFileId: true,
+						bestQualityProfilePictureFileId: true,
+						lowQualityCoverPictureFileId: true,
+						bestQualityCoverPictureFileId: true,
 						followersCount: true,
 						followingCount: true,
 						createdAt: true,
@@ -92,10 +85,13 @@ const getBlockedUsersRoute = defineOpenAPIRoute<
 		const hasNextPage = blocks.length > limit;
 		const items = hasNextPage ? blocks.slice(0, limit) : blocks;
 		const lastItem = items.at(-1);
+		const hydratedUsers = await hydrateProfileMediaFiles(
+			items.map((item) => item.blocked),
+		);
 
 		return c.json({
-			users: items.map((item) => ({
-				...item.blocked,
+			users: hydratedUsers.map((user) => ({
+				...user,
 				isFollowedByAuthenticatedUser: false,
 				isBlockedByAuthenticatedUser: true,
 			})),

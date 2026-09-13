@@ -54,7 +54,7 @@ Schéma : [`backend/services/user/prisma/schema.prisma`](backend/services/user/p
 - **`user_verification.ip`** : aucune création, lecture ou mise à jour ne renseigne cette colonne.
 - **`user_verification.agent`** : même constat. Les informations de requête sont transmises au service de session, mais ne sont pas persistées dans `user_verification`.
 
-Migration recommandée :
+**Action appliquée :** colonnes supprimées du schéma et via migration.
 
 ```sql
 ALTER TABLE "user_verification"
@@ -134,6 +134,8 @@ Les index suivants sont justifiés par les requêtes existantes :
 
 - pagination et tri par `createdAt + id` ;
 - listes de followers, following et utilisateurs bloqués ;
+- historique de recherche par utilisateur ciblé et suppression en cascade ;
+- motifs de signalement actifs triés par nom ;
 - recherches d'appartenance pour les likes, follows, bookmarks et collections ;
 - recherche et regroupement des notifications ;
 - relations entre collections, bookmarks, messages et médias ;
@@ -157,7 +159,7 @@ Ce n'est pas un index inutile, mais un point d'optimisation potentiel à surveil
 
 ## 6. Plan d'action recommandé
 
-1. Supprimer `user_verification.ip` et `user_verification.agent` du schéma et via migration.
+1. ~~Supprimer `user_verification.ip` et `user_verification.agent` du schéma et via migration.~~ Fait le 13 septembre 2026.
 2. ~~Supprimer `comment_deleted_at_idx`, `message_sender_id_idx` et `report_created_at_idx` via migration.~~ Fait le 13 septembre 2026.
 3. Décider du maintien de `user.file.mime_type`, `user.file.created_at` et `discussion.deleted_at` selon les besoins produit.
 4. Conserver `report.status` et `report.created_at` si une modération est prévue.
@@ -176,4 +178,4 @@ WHERE schemaname = 'public'
 ORDER BY idx_scan ASC, relname, indexrelname;
 ```
 
-Ce rapport documente les constats et recommandations. Les trois suppressions d'index retenues sont présentes dans les schémas et les migrations ; les migrations doivent encore être déployées sur les bases concernées.
+Ce rapport documente les constats et recommandations. Les suppressions retenues sont présentes dans les schémas et les migrations, et toutes les migrations ont été appliquées aux bases locales le 13 septembre 2026.

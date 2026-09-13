@@ -3,6 +3,7 @@ import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
 import type { HonoEnv } from "@/core/types/hono-env";
 import { getBlockRelationships } from "../services/get-block-relationships.service";
+import { hydrateProfileMediaFiles } from "../services/get-profile-media-files.service";
 import { UserRoutesTag } from "../user.constants";
 
 const GetUsersBatchRequestBody = z.object({
@@ -59,10 +60,10 @@ const getUsersBatchRoute = defineOpenAPIRoute<
 				username: true,
 				fullName: true,
 				bio: true,
-				lowQualityProfilePictureFile: { select: { id: true, filename: true } },
-				bestQualityProfilePictureFile: { select: { id: true, filename: true } },
-				lowQualityCoverPictureFile: { select: { id: true, filename: true } },
-				bestQualityCoverPictureFile: { select: { id: true, filename: true } },
+				lowQualityProfilePictureFileId: true,
+				bestQualityProfilePictureFileId: true,
+				lowQualityCoverPictureFileId: true,
+				bestQualityCoverPictureFileId: true,
 				postCount: true,
 				followersCount: true,
 				followingCount: true,
@@ -75,9 +76,10 @@ const getUsersBatchRoute = defineOpenAPIRoute<
 			authenticatedUserId,
 			users.map((user) => user.id),
 		);
+		const hydratedUsers = await hydrateProfileMediaFiles(users);
 
 		return c.json(
-			users.map((user) => ({
+			hydratedUsers.map((user) => ({
 				...user,
 				isBlockedByAuthenticatedUser:
 					blockRelationships.blockedByAuthenticatedUserIds.has(user.id),

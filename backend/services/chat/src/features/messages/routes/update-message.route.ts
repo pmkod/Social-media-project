@@ -8,9 +8,9 @@ import { getActiveMembership } from "@/features/discussions/discussions.service"
 import { HTTPException } from "hono/http-exception";
 import { MessagesRoutesTag } from "../messages.constants";
 import {
+	buildMessageResponse,
 	messageDetailsSelect,
-	presentMessage,
-} from "../messages.presenter";
+} from "../messages.service";
 import {
 	MessageIdParams,
 	UpdateMessageRequestBody,
@@ -88,7 +88,7 @@ const updateMessageRoute = defineOpenAPIRoute<
 			],
 			authenticatedUserId,
 		);
-		return c.json({ message: presentMessage(message, usersMap) });
+		return c.json({ message: buildMessageResponse(message, usersMap) });
 	},
 });
 

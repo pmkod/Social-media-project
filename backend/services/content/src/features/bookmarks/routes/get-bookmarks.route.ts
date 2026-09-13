@@ -4,6 +4,10 @@ import { prisma } from "@/core/databases";
 import { userServiceClient } from "@/core/services/user-service.client";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { requireUserAuthentication } from "@/features/authentication/middlewares/require-user-authentication.middleware";
+import {
+	hydratePostMediaFiles,
+	postMediaWithFileIdsSelect,
+} from "@/features/posts/services/post-media-files.service";
 import type { Prisma } from "@/generated/prisma/client";
 import { BookmarksRoutesTag } from "../bookmarks.constants";
 
@@ -36,31 +40,7 @@ const bookmarkedPostSelect = {
 	createdAt: true,
 	updatedAt: true,
 	medias: {
-		select: {
-			id: true,
-			postId: true,
-			position: true,
-			mediaType: true,
-			createdAt: true,
-			lowQualityFileId: true,
-			lowQualityFile: {
-				select: {
-					id: true,
-					mimeType: true,
-					filename: true,
-					createdAt: true,
-				},
-			},
-			highQualityFileId: true,
-			highQualityFile: {
-				select: {
-					id: true,
-					mimeType: true,
-					filename: true,
-					createdAt: true,
-				},
-			},
-		},
+		select: postMediaWithFileIdsSelect,
 		orderBy: { position: "asc" },
 	},
 } satisfies Prisma.PostSelect;
@@ -189,6 +169,9 @@ const getBookmarksRoute = defineOpenAPIRoute<
 		const items = hasNextPage
 			? bookmarkEntries.slice(0, limit)
 			: bookmarkEntries;
+		const hydratedPosts = await hydratePostMediaFiles(
+			items.map(({ post }) => post),
+		);
 		const lastItem = items.at(-1);
 		const nextCursor =
 			hasNextPage && lastItem
@@ -220,7 +203,7 @@ const getBookmarksRoute = defineOpenAPIRoute<
 				: new Set<string>();
 
 		return c.json({
-			posts: items.map(({ post }) => ({
+			posts: hydratedPosts.map((post) => ({
 				...post,
 				isLikedByAuthenticatedUser: likedPostIds.has(post.id),
 				isBookmarkedByAuthenticatedUser: true,

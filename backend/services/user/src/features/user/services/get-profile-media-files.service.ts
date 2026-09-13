@@ -8,6 +8,8 @@ type UserProfileMediaFileIds = {
 	bestQualityCoverPictureFileId?: string | null;
 };
 
+type ProfileMediaFileIdKey = Exclude<keyof UserProfileMediaFileIds, "id">;
+
 type ProfileMediaFiles = {
 	lowQualityProfilePictureFile: { id: string; filename: string } | null;
 	bestQualityProfilePictureFile: { id: string; filename: string } | null;
@@ -67,4 +69,29 @@ const getProfileMediaFilesByUsers = async (
 	);
 };
 
-export { emptyProfileMediaFiles, getProfileMediaFilesByUsers };
+const hydrateProfileMediaFiles = async <T extends UserProfileMediaFileIds>(
+	users: T[],
+): Promise<Array<Omit<T, ProfileMediaFileIdKey> & ProfileMediaFiles>> => {
+	const mediaFilesByUserId = await getProfileMediaFilesByUsers(users);
+
+	return users.map((user) => {
+		const {
+			lowQualityProfilePictureFileId: _lowQualityProfilePictureFileId,
+			bestQualityProfilePictureFileId: _bestQualityProfilePictureFileId,
+			lowQualityCoverPictureFileId: _lowQualityCoverPictureFileId,
+			bestQualityCoverPictureFileId: _bestQualityCoverPictureFileId,
+			...userWithoutMediaFileIds
+		} = user;
+
+		return {
+			...userWithoutMediaFileIds,
+			...(mediaFilesByUserId.get(user.id) ?? emptyProfileMediaFiles),
+		};
+	});
+};
+
+export {
+	emptyProfileMediaFiles,
+	getProfileMediaFilesByUsers,
+	hydrateProfileMediaFiles,
+};

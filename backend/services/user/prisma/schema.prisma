@@ -46,6 +46,7 @@ model SearchHistory {
   searchedUser   User?    @relation("SearchHistorySearchedUser", fields: [searchedUserId], references: [id], onDelete: Cascade)
 
   @@index([searcherId, createdAt, id])
+  @@index([searchedUserId])
   @@map("search_history")
 }
 
@@ -98,8 +99,6 @@ model UserVerification {
   numberOfFailedAttempts        Int       @default(0) @map("number_of_failed_attempts")
   numberOfCodeTransfersViaEmail Int       @default(0) @map("number_of_code_transfers_via_email")
   userId                        String?   @map("user_id")
-  ip                            String?
-  agent                         String?
   createdAt                     DateTime  @default(now()) @map("created_at")
   user                          User?     @relation(fields: [userId], references: [id])
 

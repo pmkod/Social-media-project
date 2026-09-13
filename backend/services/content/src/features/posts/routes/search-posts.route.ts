@@ -4,6 +4,10 @@ import { prisma } from "@/core/databases";
 import { userServiceClient } from "@/core/services/user-service.client";
 import type { HonoEnv } from "@/core/types/hono-env";
 import { PostsRoutesTag } from "../posts.constants";
+import {
+	hydratePostMediaFiles,
+	postMediaWithFileIdsSelect,
+} from "../services/post-media-files.service";
 
 const routeDef = createRoute({
 	method: "get",
@@ -85,31 +89,7 @@ const searchPostsRoute = defineOpenAPIRoute<
 				createdAt: true,
 				updatedAt: true,
 				medias: {
-					select: {
-						id: true,
-						postId: true,
-						position: true,
-						mediaType: true,
-						createdAt: true,
-						lowQualityFileId: true,
-						lowQualityFile: {
-							select: {
-								id: true,
-								mimeType: true,
-								filename: true,
-								createdAt: true,
-							},
-						},
-						highQualityFileId: true,
-						highQualityFile: {
-							select: {
-								id: true,
-								mimeType: true,
-								filename: true,
-								createdAt: true,
-							},
-						},
-					},
+					select: postMediaWithFileIdsSelect,
 					orderBy: { position: "asc" },
 				},
 			},
@@ -118,6 +98,7 @@ const searchPostsRoute = defineOpenAPIRoute<
 		const hasNextPage = posts.length > limit;
 		const items = hasNextPage ? posts.slice(0, limit) : posts;
 		const lastItem = items.at(-1);
+		const hydratedItems = await hydratePostMediaFiles(items);
 		const nextCursor =
 			hasNextPage && lastItem
 				? { id: lastItem.id, createdAt: lastItem.createdAt.toISOString() }
@@ -161,7 +142,7 @@ const searchPostsRoute = defineOpenAPIRoute<
 				: new Set<string>();
 
 		return c.json({
-			posts: items.map((post) => ({
+			posts: hydratedItems.map((post) => ({
 				...post,
 				isLikedByAuthenticatedUser: likedPostIds.has(post.id),
 				isBookmarkedByAuthenticatedUser: bookmarkedPostIds.has(post.id),

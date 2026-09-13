@@ -3,6 +3,7 @@ import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
 import type { HonoEnv } from "@/core/types/hono-env";
 import type { Prisma } from "@/generated/prisma/client";
+import { hydrateProfileMediaFiles } from "../services/get-profile-media-files.service";
 import { UserRoutesTag } from "../user.constants";
 import { ProfileMediaFileResponseBody } from "../user.validation-schemas";
 
@@ -149,18 +150,15 @@ const searchUsersRoute = defineOpenAPIRoute<
 				fullName: true,
 				followersCount: true,
 				createdAt: true,
-				lowQualityProfilePictureFile: {
-					select: { id: true, filename: true },
-				},
-				bestQualityProfilePictureFile: {
-					select: { id: true, filename: true },
-				},
+				lowQualityProfilePictureFileId: true,
+				bestQualityProfilePictureFileId: true,
 			},
 		});
 
 		const hasNextPage = candidates.length > limit;
 		const items = hasNextPage ? candidates.slice(0, limit) : candidates;
 		const lastItem = items.at(-1);
+		const hydratedUsers = await hydrateProfileMediaFiles(items);
 		const followedUserIds = authenticatedUserId
 			? new Set(
 					(
@@ -176,7 +174,7 @@ const searchUsersRoute = defineOpenAPIRoute<
 			: new Set<string>();
 
 		return c.json({
-			users: items.map(({ followersCount, createdAt, ...user }) => ({
+			users: hydratedUsers.map(({ followersCount, createdAt, ...user }) => ({
 				...user,
 				isFollowedByAuthenticatedUser: followedUserIds.has(user.id),
 			})),

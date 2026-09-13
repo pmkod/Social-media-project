@@ -9,7 +9,7 @@ Les données sont créées :
 - soit **directement en base de données** via les clients Prisma des services (mode par défaut) ;
 - soit via **les endpoints publics de l'API Gateway** (mode `USE_API=true`).
 
-Les avatars et médias des posts sont générés sous forme de SVG. Par défaut ils sont encodés en **data URI inline** dans la base. Il est possible de les écrire sur disque en définissant `MEDIA_OUTPUT_DIR`.
+Les utilitaires de génération d’avatars et de médias SVG restent disponibles. Le bootstrap principal crée actuellement des posts textuels, conformément au stockage des médias géré par le service Content.
 
 > Les utilisateurs factices sont créés directement en base et enrichis avec les champs de profil (`bio`) — ils ne passent pas par le flux d'inscription.
 

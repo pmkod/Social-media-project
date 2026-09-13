@@ -3,6 +3,7 @@ import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
 import type { HonoEnv } from "@/core/types/hono-env";
 import type { Prisma } from "@/generated/prisma/client";
+import { hydrateProfileMediaFiles } from "../services/get-profile-media-files.service";
 import { UserRoutesTag } from "../user.constants";
 
 const routeDef = createRoute({
@@ -82,12 +83,8 @@ const getUserFollowingRoute = defineOpenAPIRoute<
 						id: true,
 						username: true,
 						fullName: true,
-						lowQualityProfilePictureFile: {
-							select: { id: true, filename: true },
-						},
-						bestQualityProfilePictureFile: {
-							select: { id: true, filename: true },
-						},
+						lowQualityProfilePictureFileId: true,
+						bestQualityProfilePictureFileId: true,
 						createdAt: true,
 					},
 				},
@@ -98,6 +95,9 @@ const getUserFollowingRoute = defineOpenAPIRoute<
 		const items = hasNextPage ? connections.slice(0, limit) : connections;
 		const lastItem = items.at(-1);
 		const listedUserIds = items.map((connection) => connection.following.id);
+		const hydratedUsers = await hydrateProfileMediaFiles(
+			items.map((connection) => connection.following),
+		);
 
 		const idsOfUsersAuthenticatedUserFollow: string[] = [];
 
@@ -114,11 +114,11 @@ const getUserFollowingRoute = defineOpenAPIRoute<
 			);
 		}
 
-		const usersToSend = items.map((connection) => ({
-			...connection.following,
+		const usersToSend = hydratedUsers.map((user) => ({
+			...user,
 			isFollowedByAuthenticatedUser:
 				idsOfUsersAuthenticatedUserFollow.length > 0
-					? idsOfUsersAuthenticatedUserFollow.includes(connection.following.id)
+					? idsOfUsersAuthenticatedUserFollow.includes(user.id)
 					: false,
 		}));
 

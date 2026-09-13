@@ -4,6 +4,10 @@ import { prisma } from "@/core/databases";
 import { deleteFile, setFile } from "@/core/services/storage.service";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { requireUserAuthentication } from "@/features/authentication/middlewares/require-user-authentication.middleware";
+import {
+	getProfileMediaFilesByUsers,
+	hydrateProfileMediaFiles,
+} from "../services/get-profile-media-files.service";
 import { compressProfileMediaFile } from "../services/profile-media-compression.service";
 import { UserRoutesTag } from "../user.constants";
 import { UpdateProfileValidationSchema } from "../user.validation-schemas";
@@ -86,18 +90,11 @@ const updateProfileRoute = defineOpenAPIRoute<
 		const previousUser = await prisma.user.findUniqueOrThrow({
 			where: { id: authenticatedUser.id },
 			select: {
-				lowQualityProfilePictureFile: {
-					select: { id: true, filename: true },
-				},
-				bestQualityProfilePictureFile: {
-					select: { id: true, filename: true },
-				},
-				lowQualityCoverPictureFile: {
-					select: { id: true, filename: true },
-				},
-				bestQualityCoverPictureFile: {
-					select: { id: true, filename: true },
-				},
+				id: true,
+				lowQualityProfilePictureFileId: true,
+				bestQualityProfilePictureFileId: true,
+				lowQualityCoverPictureFileId: true,
+				bestQualityCoverPictureFileId: true,
 			},
 		});
 
@@ -208,32 +205,28 @@ const updateProfileRoute = defineOpenAPIRoute<
 				bio: bio?.trim() || null,
 				...(profilePictureFiles
 					? {
-							lowQualityProfilePictureFile: {
-								connect: { id: profilePictureFiles.lowQualityFile.id },
-							},
-							bestQualityProfilePictureFile: {
-								connect: { id: profilePictureFiles.bestQualityFile.id },
-							},
+							lowQualityProfilePictureFileId:
+								profilePictureFiles.lowQualityFile.id,
+							bestQualityProfilePictureFileId:
+								profilePictureFiles.bestQualityFile.id,
 						}
 					: shouldRemoveProfilePicture
 						? {
-								lowQualityProfilePictureFile: { disconnect: true },
-								bestQualityProfilePictureFile: { disconnect: true },
+								lowQualityProfilePictureFileId: null,
+								bestQualityProfilePictureFileId: null,
 							}
 						: {}),
 				...(coverPictureFiles
 					? {
-							lowQualityCoverPictureFile: {
-								connect: { id: coverPictureFiles.lowQualityFile.id },
-							},
-							bestQualityCoverPictureFile: {
-								connect: { id: coverPictureFiles.bestQualityFile.id },
-							},
+							lowQualityCoverPictureFileId:
+								coverPictureFiles.lowQualityFile.id,
+							bestQualityCoverPictureFileId:
+								coverPictureFiles.bestQualityFile.id,
 						}
 					: shouldRemoveCoverPicture
 						? {
-								lowQualityCoverPictureFile: { disconnect: true },
-								bestQualityCoverPictureFile: { disconnect: true },
+								lowQualityCoverPictureFileId: null,
+								bestQualityCoverPictureFileId: null,
 							}
 						: {}),
 			},
@@ -243,10 +236,10 @@ const updateProfileRoute = defineOpenAPIRoute<
 				username: true,
 				fullName: true,
 				bio: true,
-				lowQualityProfilePictureFile: { select: { id: true, filename: true } },
-				bestQualityProfilePictureFile: { select: { id: true, filename: true } },
-				lowQualityCoverPictureFile: { select: { id: true, filename: true } },
-				bestQualityCoverPictureFile: { select: { id: true, filename: true } },
+				lowQualityProfilePictureFileId: true,
+				bestQualityProfilePictureFileId: true,
+				lowQualityCoverPictureFileId: true,
+				bestQualityCoverPictureFileId: true,
 				postCount: true,
 				followersCount: true,
 				followingCount: true,
@@ -254,42 +247,46 @@ const updateProfileRoute = defineOpenAPIRoute<
 				updatedAt: true,
 			},
 		});
+		const previousMediaFiles = (
+			await getProfileMediaFilesByUsers([previousUser])
+		).get(previousUser.id);
+		const [hydratedUpdatedUser] = await hydrateProfileMediaFiles([updatedUser]);
 
 		const previousFileNames = [
 			profilePictureFiles || shouldRemoveProfilePicture
-				? previousUser.lowQualityProfilePictureFile?.filename
+				? previousMediaFiles?.lowQualityProfilePictureFile?.filename
 				: null,
 			profilePictureFiles || shouldRemoveProfilePicture
-				? previousUser.bestQualityProfilePictureFile?.filename
+				? previousMediaFiles?.bestQualityProfilePictureFile?.filename
 				: null,
 			coverPictureFiles || shouldRemoveCoverPicture
-				? previousUser.lowQualityCoverPictureFile?.filename
+				? previousMediaFiles?.lowQualityCoverPictureFile?.filename
 				: null,
 			coverPictureFiles || shouldRemoveCoverPicture
-				? previousUser.bestQualityCoverPictureFile?.filename
+				? previousMediaFiles?.bestQualityCoverPictureFile?.filename
 				: null,
 		];
 		await removeStoredFiles(previousFileNames);
 
 		const previousFileIds = [
 			profilePictureFiles || shouldRemoveProfilePicture
-				? previousUser.lowQualityProfilePictureFile?.id
+				? previousUser.lowQualityProfilePictureFileId
 				: null,
 			profilePictureFiles || shouldRemoveProfilePicture
-				? previousUser.bestQualityProfilePictureFile?.id
+				? previousUser.bestQualityProfilePictureFileId
 				: null,
 			coverPictureFiles || shouldRemoveCoverPicture
-				? previousUser.lowQualityCoverPictureFile?.id
+				? previousUser.lowQualityCoverPictureFileId
 				: null,
 			coverPictureFiles || shouldRemoveCoverPicture
-				? previousUser.bestQualityCoverPictureFile?.id
+				? previousUser.bestQualityCoverPictureFileId
 				: null,
 		].filter((id): id is string => Boolean(id));
 		if (previousFileIds.length > 0) {
 			await prisma.file.deleteMany({ where: { id: { in: previousFileIds } } });
 		}
 
-		return c.json({ user: updatedUser });
+		return c.json({ user: hydratedUpdatedUser });
 	},
 });
 

@@ -1,7 +1,7 @@
 import { Config } from "../config";
 import { logger } from "./logger";
 
-type CreatePostBody = { text: string; mediaUrls?: string[] };
+type CreatePostBody = { text: string };
 type CreateCommentBody = { content: string };
 
 type SessionCredentials = { sessionId: string; sessionToken: string };
@@ -83,10 +83,13 @@ const cleanupApiSessions = async () => {
 };
 
 const createPostViaApi = async (userId: string, body: CreatePostBody): Promise<{ id: string }> => {
-  return apiFetch<{ id: string }>("/posts", userId, {
+  const formData = new FormData();
+  formData.append("text", body.text);
+  const response = await apiFetch<{ post: { id: string } }>("/posts", userId, {
     method: "POST",
-    body: JSON.stringify(body),
+    body: formData,
   });
+  return response.post;
 };
 
 const createCommentViaApi = async (userId: string, postId: string, body: CreateCommentBody): Promise<{ id: string }> => {

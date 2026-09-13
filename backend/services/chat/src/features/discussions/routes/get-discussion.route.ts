@@ -6,10 +6,10 @@ import { requireUserAuthentication } from "@/features/authentication/middlewares
 import { HTTPException } from "hono/http-exception";
 import { DiscussionsRoutesTag } from "../discussions.constants";
 import {
+	buildDiscussionResponses,
 	discussionDetailsInclude,
-	presentDiscussions,
-} from "../discussions.presenter";
-import { getActiveMembership } from "../discussions.service";
+	getActiveMembership,
+} from "../discussions.service";
 import { DiscussionIdParams } from "../discussions.validation-schemas";
 
 const routeDef = createRoute({
@@ -43,7 +43,7 @@ const getDiscussionRoute = defineOpenAPIRoute<
 			throw new HTTPException(404, { message: "Discussion not found" });
 		}
 
-		const [presentedDiscussion] = await presentDiscussions(
+		const [presentedDiscussion] = await buildDiscussionResponses(
 			[discussion],
 			authenticatedUserId,
 		);

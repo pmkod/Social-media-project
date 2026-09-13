@@ -5,10 +5,10 @@ import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { requireUserAuthentication } from "@/features/authentication/middlewares/require-user-authentication.middleware";
 import { DiscussionsRoutesTag } from "../discussions.constants";
 import {
+	buildDiscussionResponses,
 	discussionDetailsInclude,
-	presentDiscussions,
-} from "../discussions.presenter";
-import { requireGroupManager } from "../discussions.service";
+	requireGroupManager,
+} from "../discussions.service";
 import {
 	DiscussionIdParams,
 	UpdateDiscussionRequestBody,
@@ -55,7 +55,7 @@ const updateDiscussionRoute = defineOpenAPIRoute<
 			},
 			include: discussionDetailsInclude,
 		});
-		const [presentedDiscussion] = await presentDiscussions(
+		const [presentedDiscussion] = await buildDiscussionResponses(
 			[discussion],
 			authenticatedUserId,
 		);

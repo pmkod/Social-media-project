@@ -13,6 +13,7 @@ import { CreatePostRequestBody } from "../posts.validation-schemas";
 import { deleteFile } from "@/core/services/storage.service";
 import type { Prisma } from "@/generated/prisma/client";
 import { compressPostMediaFile } from "../services/post-media-compression.service";
+import { hydratePostMediaFiles } from "../services/post-media-files.service";
 import { setPostMediaFile } from "../services/post-media-storage.service";
 
 const routeDef = createRoute({
@@ -56,9 +57,14 @@ const createPostRoute = defineOpenAPIRoute<
 		);
 		const postId = crypto.randomUUID();
 		const uploadedFiles: string[] = [];
-		let postToSend;
+		let createdPost;
 		try {
-			const mediaRecords: Prisma.PostMediaCreateWithoutPostInput[] = [];
+			const mediaRecords: Array<{
+				position: number;
+				mediaType: string;
+				lowQualityFile: { filename: string; mimeType: string };
+				highQualityFile: { filename: string; mimeType: string };
+			}> = [];
 			for (const [index, media] of medias.entries()) {
 				const isVideo = media.type.startsWith("video/");
 				const lowQualityFile = isVideo
@@ -85,27 +91,46 @@ const createPostRoute = defineOpenAPIRoute<
 					position: index + 1,
 					mediaType: isVideo ? PostMediaTypes.VIDEO : PostMediaTypes.IMAGE,
 					lowQualityFile: {
-						create: { filename: lowFilename, mimeType: lowQualityFile.type },
+						filename: lowFilename,
+						mimeType: lowQualityFile.type,
 					},
 					highQualityFile: {
-						create: { filename: highFilename, mimeType: media.type },
+						filename: highFilename,
+						mimeType: media.type,
 					},
 				});
 			}
-			// Publish only once every media upload succeeds. Nested writes are atomic.
-			postToSend = await prisma.post.create({
-				data: {
-					id: postId,
-					authorId: authenticatedUserId,
-					text,
-					medias: { create: mediaRecords },
-				},
-				include: {
-					medias: {
-						include: { lowQualityFile: true, highQualityFile: true },
-						orderBy: { position: "asc" },
+			// Publish only once every media upload succeeds. Database writes stay atomic.
+			createdPost = await prisma.$transaction(async (transaction) => {
+				const mediasWithFileIds: Prisma.PostMediaCreateWithoutPostInput[] = [];
+				for (const mediaRecord of mediaRecords) {
+					const lowQualityFile = await transaction.file.create({
+						data: mediaRecord.lowQualityFile,
+						select: { id: true },
+					});
+					const highQualityFile = await transaction.file.create({
+						data: mediaRecord.highQualityFile,
+						select: { id: true },
+					});
+					mediasWithFileIds.push({
+						position: mediaRecord.position,
+						mediaType: mediaRecord.mediaType,
+						lowQualityFileId: lowQualityFile.id,
+						highQualityFileId: highQualityFile.id,
+					});
+				}
+
+				return transaction.post.create({
+					data: {
+						id: postId,
+						authorId: authenticatedUserId,
+						text,
+						medias: { create: mediasWithFileIds },
 					},
-				},
+					include: {
+						medias: { orderBy: { position: "asc" } },
+					},
+				});
 			});
 		} catch (error) {
 			await Promise.allSettled(
@@ -113,6 +138,7 @@ const createPostRoute = defineOpenAPIRoute<
 			);
 			throw error;
 		}
+		const [postToSend] = await hydratePostMediaFiles([createdPost]);
 		await userServiceClient.adjustPostCount(authenticatedUserId, 1);
 
 		return c.json(

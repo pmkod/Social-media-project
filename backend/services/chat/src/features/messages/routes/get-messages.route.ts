@@ -8,9 +8,9 @@ import { getActiveMembership } from "@/features/discussions/discussions.service"
 import { HTTPException } from "hono/http-exception";
 import { MessagesRoutesTag } from "../messages.constants";
 import {
+	buildMessageResponse,
 	messageDetailsSelect,
-	presentMessage,
-} from "../messages.presenter";
+} from "../messages.service";
 
 const routeDef = createRoute({
 	method: "get",
@@ -84,7 +84,7 @@ const getMessagesRoute = defineOpenAPIRoute<
 
 		return c.json({
 			messages: pageMessages.map((message) =>
-				presentMessage(message, usersMap),
+				buildMessageResponse(message, usersMap),
 			),
 			pagination: {
 				limit,

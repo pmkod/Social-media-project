@@ -42,11 +42,11 @@ const resetDatabases = async () => {
   const content = getContentPrisma();
 
   await content.$executeRawUnsafe(
-    `TRUNCATE TABLE "comment_like", "comment", "post_like", "post" RESTART IDENTITY CASCADE;`,
+    `TRUNCATE TABLE "bookmark_collection_item", "bookmark_collection", "bookmark", "comment_like", "comment", "post_like", "post_media", "file", "post" RESTART IDENTITY CASCADE;`,
   );
 
   await user.$executeRawUnsafe(
-    `TRUNCATE TABLE "user_verification", "refresh_token", "user" RESTART IDENTITY CASCADE;`,
+    `TRUNCATE TABLE "user_verification", "search_history", "follow", "block", "file", "user" RESTART IDENTITY CASCADE;`,
   );
 };
 

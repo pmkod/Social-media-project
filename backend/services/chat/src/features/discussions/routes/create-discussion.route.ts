@@ -9,9 +9,9 @@ import { HTTPException } from "hono/http-exception";
 import { DiscussionsRoutesTag } from "../discussions.constants";
 import { uniqueOtherUserIds } from "../discussions.functions";
 import {
+	buildDiscussionResponses,
 	discussionDetailsInclude,
-	presentDiscussions,
-} from "../discussions.presenter";
+} from "../discussions.service";
 import { CreateDiscussionRequestBody } from "../discussions.validation-schemas";
 
 const routeDef = createRoute({
@@ -196,7 +196,7 @@ const createDiscussionRoute = defineOpenAPIRoute<
 				authenticatedMembership.isDeleted = false;
 				authenticatedMembership.isBlocked = false;
 			}
-			const [presentedDiscussion] = await presentDiscussions(
+			const [presentedDiscussion] = await buildDiscussionResponses(
 				[privateDiscussionResult.discussion],
 				authenticatedUserId,
 			);
@@ -235,7 +235,7 @@ const createDiscussionRoute = defineOpenAPIRoute<
 			},
 			include: discussionDetailsInclude,
 		});
-		const [presentedDiscussion] = await presentDiscussions(
+		const [presentedDiscussion] = await buildDiscussionResponses(
 			[discussion],
 			authenticatedUserId,
 		);

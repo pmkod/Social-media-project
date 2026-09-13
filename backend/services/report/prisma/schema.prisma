@@ -38,5 +38,6 @@ model ReportReason {
   active      Boolean  @default(true)
   reports     Report[]
 
+  @@index([active, name])
   @@map("report_reason")
 }

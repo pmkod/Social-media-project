@@ -41,7 +41,7 @@ type MessageDetails = Prisma.MessageGetPayload<{
 	select: typeof messageDetailsSelect;
 }>;
 
-const presentMessage = (
+const buildMessageResponse = (
 	message: MessageDetails,
 	usersMap: Map<string, UserProfileDto>,
 ) => {
@@ -75,5 +75,5 @@ const presentMessage = (
 	};
 };
 
-export { messageDetailsSelect, presentMessage };
+export { buildMessageResponse, messageDetailsSelect };
 export type { MessageDetails };

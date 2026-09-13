@@ -968,8 +968,6 @@ export const UserVerificationScalarFieldEnum = {
   numberOfFailedAttempts: 'numberOfFailedAttempts',
   numberOfCodeTransfersViaEmail: 'numberOfCodeTransfersViaEmail',
   userId: 'userId',
-  ip: 'ip',
-  agent: 'agent',
   createdAt: 'createdAt'
 } as const
 

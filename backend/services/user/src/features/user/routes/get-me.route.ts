@@ -3,6 +3,7 @@ import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { requireUserAuthentication } from "@/features/authentication/middlewares/require-user-authentication.middleware";
+import { hydrateProfileMediaFiles } from "../services/get-profile-media-files.service";
 import { UserRoutesTag } from "../user.constants";
 
 const routeDef = createRoute({
@@ -32,18 +33,19 @@ const getMeRoute = defineOpenAPIRoute<typeof routeDef, HonoAuthenticatedEnv>({
 				fullName: true,
 				unseenNotificationsCount: true,
 				createdAt: true,
-				lowQualityProfilePictureFile: { select: { id: true, filename: true } },
-				bestQualityProfilePictureFile: { select: { id: true, filename: true } },
+				lowQualityProfilePictureFileId: true,
+				bestQualityProfilePictureFileId: true,
 			},
 		});
 
 		if (!user) {
 			throw new Error("User not found");
 		}
+		const [hydratedUser] = await hydrateProfileMediaFiles([user]);
 
 		return c.json(
 			{
-				user,
+				user: hydratedUser,
 			},
 			HttpStatus.OK.code,
 		);

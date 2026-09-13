@@ -1,6 +1,7 @@
 import { prisma } from "@/core/databases";
 import type { Prisma } from "@/generated/prisma/client";
 import { getBlockRelationships } from "./get-block-relationships.service";
+import { hydrateProfileMediaFiles } from "./get-profile-media-files.service";
 
 const publicUserProfileSelect = {} satisfies Prisma.UserSelect;
 
@@ -15,10 +16,10 @@ const getPublicUserProfile = async (
 			username: true,
 			fullName: true,
 			bio: true,
-			lowQualityProfilePictureFile: { select: { id: true, filename: true } },
-			bestQualityProfilePictureFile: { select: { id: true, filename: true } },
-			lowQualityCoverPictureFile: { select: { id: true, filename: true } },
-			bestQualityCoverPictureFile: { select: { id: true, filename: true } },
+			lowQualityProfilePictureFileId: true,
+			bestQualityProfilePictureFileId: true,
+			lowQualityCoverPictureFileId: true,
+			bestQualityCoverPictureFileId: true,
 			postCount: true,
 			followersCount: true,
 			followingCount: true,
@@ -27,8 +28,9 @@ const getPublicUserProfile = async (
 	});
 
 	if (!user) return null;
+	const [hydratedUser] = await hydrateProfileMediaFiles([user]);
 
-	const isOwnProfile = authenticatedUserId === user.id;
+	const isOwnProfile = authenticatedUserId === hydratedUser.id;
 	const [follow, blockRelationships] = await Promise.all([
 		authenticatedUserId && !isOwnProfile
 			? prisma.follow.findUnique({
@@ -41,19 +43,19 @@ const getPublicUserProfile = async (
 					select: { followerId: true },
 				})
 			: null,
-		getBlockRelationships(authenticatedUserId, [user.id]),
+		getBlockRelationships(authenticatedUserId, [hydratedUser.id]),
 	]);
 	const isBlockedByAuthenticatedUser =
-		blockRelationships.blockedByAuthenticatedUserIds.has(user.id);
+		blockRelationships.blockedByAuthenticatedUserIds.has(hydratedUser.id);
 	const hasBlockedAuthenticatedInUser =
-		blockRelationships.hasBlockedAuthenticatedUserIds.has(user.id);
+		blockRelationships.hasBlockedAuthenticatedUserIds.has(hydratedUser.id);
 	const visibleUser = hasBlockedAuthenticatedInUser
 		? {
-				...user,
+				...hydratedUser,
 				bio: null,
 				createdAt: null,
 			}
-		: user;
+		: hydratedUser;
 
 	return {
 		...visibleUser,
