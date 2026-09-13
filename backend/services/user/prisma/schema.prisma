@@ -46,7 +46,6 @@ model SearchHistory {
   searchedUser   User?    @relation("SearchHistorySearchedUser", fields: [searchedUserId], references: [id], onDelete: Cascade)
 
   @@index([searcherId, createdAt, id])
-  @@index([searchedUserId])
   @@map("search_history")
 }
 
