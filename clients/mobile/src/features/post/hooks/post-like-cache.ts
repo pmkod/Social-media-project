@@ -1,7 +1,8 @@
 import type { InfiniteData, QueryClient } from '@tanstack/react-query';
 
+import type { FeedResponse } from '@/features/post/hooks/use-following-feed';
 import { postListQueryKeys } from '@/features/post/post.query-keys';
-import type { FeedResponse, Post } from '@/features/post/post.types';
+import type { Post } from '@/features/post/post.types';
 
 export function updatePostLikeCache(queryClient: QueryClient, updatedPost: Post, liked: boolean) {
   queryClient.setQueriesData<InfiniteData<FeedResponse>>(

@@ -1,5 +1,5 @@
 import { API_BASE_URL } from '@/core/config/api.config';
-import type { PostMediaAsset } from '@/features/post/post.types';
+import type { PostMediaAsset } from '@/features/post/hooks/use-create-post';
 import { Platform } from 'react-native';
 
 export function createPostFormData(text: string, medias: PostMediaAsset[]) {

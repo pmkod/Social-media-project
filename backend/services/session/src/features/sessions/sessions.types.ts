@@ -8,10 +8,4 @@ type Session = {
 	createdAt: string;
 };
 
-type StoredSession = Session & {
-	tokenHash: string;
-};
-
-type CreateSessionInput = Pick<Session, "userId" | "ipAddress" | "userAgent">;
-
-export type { CreateSessionInput, Session, StoredSession };
+export type { Session };

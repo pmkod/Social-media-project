@@ -4,10 +4,20 @@ import {
 	useQueryClient,
 } from "@tanstack/react-query";
 import { httpClient } from "@/core/http-clients/http-client.ts";
-import type { PostListPage } from "@/features/post/common/post-cache.ts";
+import type { Post } from "@/features/post/common/post.ts";
 import { postListQueryKeys } from "@/features/post/common/post-list.query-keys.ts";
+import { postDetailsQueryKey } from "@/features/post/post-detail/post-detail.query-key.ts";
 import type { BookmarkCollectionsResponse } from "../common/bookmark-collection.ts";
 import { bookmarkCollectionsQueryKeys } from "../common/bookmark-collections.query-keys.ts";
+
+type PostListPage = {
+	posts: Post[];
+	pagination: {
+		limit: number;
+		hasNextPage: boolean;
+		nextCursor: { id: string; createdAt: string } | null;
+	};
+};
 
 const useDeleteBookmarkCollection = () => {
 	const queryClient = useQueryClient();
@@ -50,6 +60,22 @@ const useDeleteBookmarkCollection = () => {
 							),
 						})),
 					},
+			);
+			queryClient.setQueriesData<{ post: Post }>(
+				{
+					queryKey: postDetailsQueryKey.root,
+					predicate: ({ queryKey }) => queryKey.length === 2,
+				},
+				(data) =>
+					data && unbookmarkedPostIdsSet.has(data.post.id)
+						? {
+								...data,
+								post: {
+									...data.post,
+									isBookmarkedByAuthenticatedUser: false,
+								},
+							}
+						: data,
 			);
 
 			queryClient.setQueryData<InfiniteData<PostListPage>>(

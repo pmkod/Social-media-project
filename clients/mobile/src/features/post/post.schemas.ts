@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import type { PostMediaAsset } from '@/features/post/post.types';
+import type { PostMediaAsset } from '@/features/post/hooks/use-create-post';
 
 export const createPostSchema = z.object({
   text: z

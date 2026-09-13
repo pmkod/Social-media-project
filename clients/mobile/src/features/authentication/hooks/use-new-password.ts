@@ -1,8 +1,12 @@
 import { useMutation } from '@tanstack/react-query';
 
-import type { AuthenticatedResponse } from '@/core/auth/auth.types';
+import type { AuthSession } from '@/core/auth/auth.types';
 import { baseHttpClient } from '@/core/http-clients/http-client';
 import { requireVerification } from '@/features/authentication/auth.utils';
+
+type NewPasswordResponse = {
+  session: AuthSession;
+};
 
 export function useNewPassword() {
   return useMutation({
@@ -12,7 +16,7 @@ export function useNewPassword() {
         .post('authentication/new-password', {
           json: { userVerification: verification, newPassword },
         })
-        .json<AuthenticatedResponse>();
+        .json<NewPasswordResponse>();
     },
   });
 }

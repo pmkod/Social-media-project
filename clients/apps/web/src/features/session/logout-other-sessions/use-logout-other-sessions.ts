@@ -15,7 +15,9 @@ const useLogoutOtherSessions = () => {
 		onSuccess: () => {
 			const currentSessionId = getSessionId();
 			queryClient.setQueryData<Session[]>(activeSessionsQueryKey, (sessions) =>
-				sessions?.filter((session) => session.id === currentSessionId),
+				currentSessionId
+					? sessions?.filter((session) => session.id === currentSessionId)
+					: sessions,
 			);
 		},
 	});

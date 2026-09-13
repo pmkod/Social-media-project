@@ -102,13 +102,14 @@ const createSearchHistoryRoute = defineOpenAPIRoute<
 			});
 		});
 
-		const presentedTargetUser = targetUser
-			? {
-					...targetUser,
-					followers: undefined,
-					isFollowedByAuthenticatedUser: targetUser.followers.length > 0,
-				}
-			: null;
+		const presentedTargetUser = (() => {
+			if (!targetUser) return null;
+			const { followers, ...user } = targetUser;
+			return {
+				...user,
+				isFollowedByAuthenticatedUser: followers.length > 0,
+			};
+		})();
 
 		return c.json(
 			{ ...historyItem, user: presentedTargetUser },

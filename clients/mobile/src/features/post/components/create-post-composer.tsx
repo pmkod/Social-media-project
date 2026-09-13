@@ -14,7 +14,7 @@ import { useSession } from '@/core/auth/session-context';
 import { UserAvatar } from '@/features/post/components/user-avatar';
 import { useCreatePost } from '@/features/post/hooks/use-create-post';
 import { createPostSchema } from '@/features/post/post.schemas';
-import type { PostMediaAsset } from '@/features/post/post.types';
+import type { PostMediaAsset } from '@/features/post/hooks/use-create-post';
 
 const MAX_MEDIA_COUNT = 4;
 

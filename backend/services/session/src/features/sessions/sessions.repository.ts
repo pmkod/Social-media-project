@@ -5,11 +5,13 @@ import {
 	hashSessionToken,
 	sessionTokenMatchesHash,
 } from "./sessions.functions";
-import type {
-	CreateSessionInput,
-	Session,
-	StoredSession,
-} from "./sessions.types";
+import type { Session } from "./sessions.types";
+
+type StoredSession = Session & {
+	tokenHash: string;
+};
+
+type CreateSessionInput = Pick<Session, "userId" | "ipAddress" | "userAgent">;
 
 const sessionKey = (sessionId: string) =>
 	`${Configurations.redis.keyPrefix}:session:${sessionId}`;

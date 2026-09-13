@@ -4,10 +4,11 @@ import {
 	useQueryClient,
 } from "@tanstack/react-query";
 import { httpClient } from "@/core/http-clients/http-client.ts";
-import { updateDiscussionInCache } from "../common/discussion-cache.ts";
 import { discussionQueryKeys } from "../common/discussion.query-keys.ts";
 import type {
 	CreateMessageResponse,
+	DiscussionResponse,
+	DiscussionsResponse,
 	MessagesResponse,
 } from "../common/discussion.ts";
 
@@ -51,16 +52,83 @@ const useCreateMessage = () => {
 					};
 				},
 			);
-			updateDiscussionInCache(
-				queryClient,
-				discussionId,
-				(discussion) => ({
-					...discussion,
-					isStarted: true,
-					lastMessage: message,
-					lastActivityAt: message.createdAt,
-				}),
-				{ moveToFront: true },
+			queryClient.setQueryData<DiscussionResponse>(
+				discussionQueryKeys.detail(discussionId),
+				(data) =>
+					data
+						? {
+								...data,
+								discussion: {
+									...data.discussion,
+									isStarted: true,
+									lastMessage: message,
+									lastActivityAt: message.createdAt,
+								},
+							}
+						: data,
+			);
+			queryClient.setQueriesData<InfiniteData<DiscussionsResponse>>(
+				{ queryKey: discussionQueryKeys.listsRoot },
+				(data) => {
+					if (!data?.pages.length) return data;
+
+					const previousDiscussions = data.pages.flatMap(
+						(page) => page.discussions,
+					);
+					const discussion = previousDiscussions.find(
+						(item) => item.id === discussionId,
+					);
+					if (!discussion) return data;
+
+					const discussions = [
+						{
+							...discussion,
+							isStarted: true,
+							lastMessage: message,
+							lastActivityAt: message.createdAt,
+						},
+						...previousDiscussions.filter((item) => item.id !== discussionId),
+					];
+					const capacity = data.pages.reduce(
+						(total, page) => total + page.pagination.limit,
+						0,
+					);
+					const serverHasMore = Boolean(
+						data.pages.at(-1)?.pagination.hasNextPage,
+					);
+					const retainedDiscussions = discussions.slice(0, capacity);
+					let offset = 0;
+
+					return {
+						...data,
+						pages: data.pages.map((page, index) => {
+							const pageDiscussions = retainedDiscussions.slice(
+								offset,
+								offset + page.pagination.limit,
+							);
+							offset += page.pagination.limit;
+							const lastDiscussion = pageDiscussions.at(-1);
+							const hasNextPage =
+								index < data.pages.length - 1 || serverHasMore;
+
+							return {
+								...page,
+								discussions: pageDiscussions,
+								pagination: {
+									...page.pagination,
+									hasNextPage,
+									nextCursor:
+										hasNextPage && lastDiscussion
+											? {
+													activityAt: lastDiscussion.lastActivityAt,
+													id: lastDiscussion.id,
+												}
+											: null,
+								},
+							};
+						}),
+					};
+				},
 			);
 		},
 	});

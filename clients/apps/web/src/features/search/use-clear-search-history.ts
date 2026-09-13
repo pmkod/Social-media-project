@@ -5,7 +5,7 @@ import {
 } from "@tanstack/react-query";
 import { httpClient } from "@/core/http-clients/http-client.ts";
 import { searchQueryKeys } from "./search.query-keys.ts";
-import type { SearchHistoryResponse } from "./search.types.ts";
+import type { SearchHistoryResponse } from "./use-search-history.ts";
 
 const useClearSearchHistory = () => {
 	const queryClient = useQueryClient();

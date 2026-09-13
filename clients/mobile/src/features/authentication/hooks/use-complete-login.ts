@@ -1,8 +1,12 @@
 import { useMutation } from '@tanstack/react-query';
 
-import type { AuthenticatedResponse } from '@/core/auth/auth.types';
+import type { AuthSession } from '@/core/auth/auth.types';
 import { baseHttpClient } from '@/core/http-clients/http-client';
 import { requireVerification } from '@/features/authentication/auth.utils';
+
+type CompleteLoginResponse = {
+  session: AuthSession;
+};
 
 export function useCompleteLogin() {
   return useMutation({
@@ -12,7 +16,7 @@ export function useCompleteLogin() {
         .post('authentication/complete-login', {
           json: { userVerification: verification },
         })
-        .json<AuthenticatedResponse>();
+        .json<CompleteLoginResponse>();
     },
   });
 }

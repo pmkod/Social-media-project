@@ -8,11 +8,11 @@ import {
 	AppHeaderLeftPart,
 	AppHeaderTitle,
 } from "@/core/components/ui/app-header.tsx";
+import { UserVerificationGoals } from "@/features/authentication/user-verification/user-verification-gloal";
 import { authenticatedUserQueryKey } from "@/features/user/authenticated-user/authenticated-user.query-key.ts";
 import type { UseAuthenticatedUserQueryData } from "@/features/user/authenticated-user/types/use-authenticated-user-query-data.ts";
 import { useCompleteEmailChange } from "@/features/user/change-email/use-complete-email-change.ts";
 import { SettingsUserVerificationForm } from "@/features/user/settings-user-verification/settings-user-verification.form.tsx";
-import { UserVerificationGoals } from "@/features/authentication/user-verification/user-verification-gloal";
 
 const settingsUserVerificationSearchSchema = z.object({
 	goal: z.enum([UserVerificationGoals.emailChange]),
@@ -34,8 +34,7 @@ function SettingsUserVerificationPage() {
 			const { email } = await completeEmailChange.mutateAsync();
 			queryClient.setQueryData<UseAuthenticatedUserQueryData>(
 				authenticatedUserQueryKey,
-				(data) =>
-					data ? { ...data, user: { ...data.user, email } } : data,
+				(data) => (data ? { ...data, user: { ...data.user, email } } : data),
 			);
 			toast.success("Email address updated");
 			await navigate({ to: "/settings/account" });

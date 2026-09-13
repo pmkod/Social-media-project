@@ -2,7 +2,21 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 
 import { httpClient } from "@/core/http-clients/http-client";
 import { postListQueryKeys } from "@/features/post/post.query-keys";
-import type { FeedCursor, FeedResponse } from "@/features/post/post.types";
+import type { Post } from "@/features/post/post.types";
+
+type FeedCursor = {
+	id: string;
+	createdAt: string;
+};
+
+export type FeedResponse = {
+	posts: Post[];
+	pagination: {
+		nextCursor: FeedCursor | null;
+		hasNextPage: boolean;
+		limit: number;
+	};
+};
 
 async function fetchFollowingFeedPage(pageParam?: FeedCursor | null) {
 	const searchParams = new URLSearchParams({ limit: "10", type: "POST" });

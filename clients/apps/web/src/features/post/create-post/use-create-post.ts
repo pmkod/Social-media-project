@@ -6,13 +6,18 @@ import {
 import { httpClient } from "@/core/http-clients/http-client.ts";
 import { userDetailsQueryKeys } from "@/features/user/common/user-details-query-keys.ts";
 import type { UserProfileResponse } from "@/features/user/user-profile/user-profile-response.ts";
-import {
-	prependPostToInfiniteData,
-	type PostListPage,
-} from "../common/post-cache.ts";
 import type { Post } from "../common/post.ts";
 import { postListQueryKeys } from "../common/post-list.query-keys.ts";
 import { postDetailsQueryKey } from "../post-detail/post-detail.query-key.ts";
+
+type PostListPage = {
+	posts: Post[];
+	pagination: {
+		limit: number;
+		hasNextPage: boolean;
+		nextCursor: { id: string; createdAt: string } | null;
+	};
+};
 
 type CreatePostInput = {
 	text: string;
@@ -53,11 +58,97 @@ const useCreatePost = () => {
 		onSuccess: (post) => {
 			queryClient.setQueryData<InfiniteData<PostListPage>>(
 				postListQueryKeys.feedFollowing(),
-				(data) => prependPostToInfiniteData(data, post),
+				(data) => {
+					if (!data?.pages.length) return data;
+					const posts = [
+						post,
+						...data.pages
+							.flatMap((page) => page.posts)
+							.filter((item) => item.id !== post.id),
+					];
+					const capacity = data.pages.reduce(
+						(total, page) => total + page.pagination.limit,
+						0,
+					);
+					const serverHasMore =
+						Boolean(data.pages.at(-1)?.pagination.hasNextPage) ||
+						posts.length > capacity;
+					const retainedPosts = posts.slice(0, capacity);
+					let offset = 0;
+
+					return {
+						...data,
+						pages: data.pages.map((page, index) => {
+							const pagePosts = retainedPosts.slice(
+								offset,
+								offset + page.pagination.limit,
+							);
+							offset += page.pagination.limit;
+							const lastPost = pagePosts.at(-1);
+							const hasNextPage =
+								index < data.pages.length - 1 || serverHasMore;
+							return {
+								...page,
+								posts: pagePosts,
+								pagination: {
+									...page.pagination,
+									hasNextPage,
+									nextCursor:
+										hasNextPage && lastPost
+											? { id: lastPost.id, createdAt: lastPost.createdAt }
+											: null,
+								},
+							};
+						}),
+					};
+				},
 			);
 			queryClient.setQueryData<InfiniteData<PostListPage>>(
 				postListQueryKeys.userPosts(post.author.id),
-				(data) => prependPostToInfiniteData(data, post),
+				(data) => {
+					if (!data?.pages.length) return data;
+					const posts = [
+						post,
+						...data.pages
+							.flatMap((page) => page.posts)
+							.filter((item) => item.id !== post.id),
+					];
+					const capacity = data.pages.reduce(
+						(total, page) => total + page.pagination.limit,
+						0,
+					);
+					const serverHasMore =
+						Boolean(data.pages.at(-1)?.pagination.hasNextPage) ||
+						posts.length > capacity;
+					const retainedPosts = posts.slice(0, capacity);
+					let offset = 0;
+
+					return {
+						...data,
+						pages: data.pages.map((page, index) => {
+							const pagePosts = retainedPosts.slice(
+								offset,
+								offset + page.pagination.limit,
+							);
+							offset += page.pagination.limit;
+							const lastPost = pagePosts.at(-1);
+							const hasNextPage =
+								index < data.pages.length - 1 || serverHasMore;
+							return {
+								...page,
+								posts: pagePosts,
+								pagination: {
+									...page.pagination,
+									hasNextPage,
+									nextCursor:
+										hasNextPage && lastPost
+											? { id: lastPost.id, createdAt: lastPost.createdAt }
+											: null,
+								},
+							};
+						}),
+					};
+				},
 			);
 			queryClient.setQueriesData<InfiniteData<PostListPage>>(
 				{
@@ -68,7 +159,50 @@ const useCreatePost = () => {
 						return (post.text ?? "").toLocaleLowerCase().includes(query);
 					},
 				},
-				(data) => prependPostToInfiniteData(data, post),
+				(data) => {
+					if (!data?.pages.length) return data;
+					const posts = [
+						post,
+						...data.pages
+							.flatMap((page) => page.posts)
+							.filter((item) => item.id !== post.id),
+					];
+					const capacity = data.pages.reduce(
+						(total, page) => total + page.pagination.limit,
+						0,
+					);
+					const serverHasMore =
+						Boolean(data.pages.at(-1)?.pagination.hasNextPage) ||
+						posts.length > capacity;
+					const retainedPosts = posts.slice(0, capacity);
+					let offset = 0;
+
+					return {
+						...data,
+						pages: data.pages.map((page, index) => {
+							const pagePosts = retainedPosts.slice(
+								offset,
+								offset + page.pagination.limit,
+							);
+							offset += page.pagination.limit;
+							const lastPost = pagePosts.at(-1);
+							const hasNextPage =
+								index < data.pages.length - 1 || serverHasMore;
+							return {
+								...page,
+								posts: pagePosts,
+								pagination: {
+									...page.pagination,
+									hasNextPage,
+									nextCursor:
+										hasNextPage && lastPost
+											? { id: lastPost.id, createdAt: lastPost.createdAt }
+											: null,
+								},
+							};
+						}),
+					};
+				},
 			);
 			queryClient.setQueryData(postDetailsQueryKey.build(post.id), { post });
 			queryClient.setQueriesData<UserProfileResponse>(

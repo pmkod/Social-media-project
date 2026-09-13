@@ -5,11 +5,9 @@ export type AuthUser = {
   fullName: string | null;
 };
 
-export type AuthenticatedResponse = {
-	session: {
-		id: string;
-		token: string;
-	};
+export type AuthSession = {
+  id: string;
+  token: string;
 };
 
 export type VerificationGoal = 'login' | 'signup' | 'password_reset';

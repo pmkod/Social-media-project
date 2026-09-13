@@ -5,11 +5,12 @@ import {
 } from "@tanstack/react-query";
 import { httpClient } from "@/core/http-clients/http-client.ts";
 import { searchQueryKeys } from "./search.query-keys.ts";
-import type {
-	CreateSearchHistoryInput,
-	SearchHistoryItem,
-	SearchHistoryResponse,
-} from "./search.types.ts";
+import type { SearchHistoryItem } from "./search.types.ts";
+import type { SearchHistoryResponse } from "./use-search-history.ts";
+
+type CreateSearchHistoryInput =
+	| { text: string; userId?: never }
+	| { text?: never; userId: string };
 
 const useCreateSearchHistory = () => {
 	const queryClient = useQueryClient();

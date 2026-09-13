@@ -1,9 +1,18 @@
 import { type InfiniteData, useMutation, useQueryClient } from '@tanstack/react-query';
+import type { ImagePickerAsset } from 'expo-image-picker';
 
 import { httpClient } from '@/core/http-clients/http-client';
+import type { FeedResponse } from '@/features/post/hooks/use-following-feed';
 import { postListQueryKeys } from '@/features/post/post.query-keys';
 import { createPostFormData } from '@/features/post/post.service';
-import type { FeedResponse, Post, PostMediaAsset } from '@/features/post/post.types';
+import type { Post } from '@/features/post/post.types';
+
+export type PostMediaAsset = Pick<
+  ImagePickerAsset,
+  'assetId' | 'fileName' | 'mimeType' | 'type' | 'uri'
+> & {
+  file?: File;
+};
 
 type CreatePostInput = {
   text: string;

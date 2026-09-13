@@ -1,10 +1,21 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { httpClient } from "@/core/http-clients/http-client.ts";
 import { searchQueryKeys } from "./search.query-keys.ts";
-import type {
-	SearchHistoryCursor,
-	SearchHistoryResponse,
-} from "./search.types.ts";
+import type { SearchHistoryItem } from "./search.types.ts";
+
+type SearchHistoryCursor = {
+	id: string;
+	createdAt: string;
+};
+
+type SearchHistoryResponse = {
+	history: SearchHistoryItem[];
+	pagination: {
+		nextCursor: SearchHistoryCursor | null;
+		hasNextPage: boolean;
+		limit: number;
+	};
+};
 
 const useSearchHistory = (limit = 20, enabled = true) =>
 	useInfiniteQuery({
@@ -25,4 +36,5 @@ const useSearchHistory = (limit = 20, enabled = true) =>
 		getNextPageParam: (lastPage) => lastPage.pagination.nextCursor ?? undefined,
 	});
 
+export type { SearchHistoryResponse };
 export { useSearchHistory };

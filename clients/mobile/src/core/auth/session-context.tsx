@@ -1,4 +1,4 @@
-import type { AuthenticatedResponse, AuthUser } from '@/core/auth/auth.types';
+import type { AuthSession, AuthUser } from '@/core/auth/auth.types';
 import { useQueryClient } from '@tanstack/react-query';
 import { httpClient } from '@/core/http-clients/http-client';
 import {
@@ -15,7 +15,7 @@ type SessionContextValue = {
   isAuthenticated: boolean;
   isLoading: boolean;
   user: AuthUser | null;
-  completeAuthentication: (response: AuthenticatedResponse) => Promise<void>;
+  completeAuthentication: (response: { session: AuthSession }) => Promise<void>;
   signOut: () => Promise<void>;
 };
 
