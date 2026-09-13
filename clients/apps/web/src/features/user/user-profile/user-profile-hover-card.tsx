@@ -11,12 +11,9 @@ import { useAuthenticatedUser } from "@/features/user/authenticated-user/use-aut
 import { UserAvatar } from "@/features/user/common/components/user-avatar.tsx";
 import { FollowButton } from "@/features/user/common/follow-button.tsx";
 import { useUserProfile } from "@/features/user/user-profile/use-user-profile.ts";
+import { m } from "@/paraglide/messages.js";
+import { getLocale } from "@/paraglide/runtime.js";
 import type { User } from "../common/user.ts";
-
-const numberFormatter = new Intl.NumberFormat("en-US", {
-	notation: "compact",
-	maximumFractionDigits: 1,
-});
 
 type UserProfilePreviewLoaderProps = {
 	className?: string;
@@ -68,7 +65,7 @@ function UserProfileHoverCard({ user, children }: UserProfileHoverCardProps) {
 					<UserProfilePreviewLoader />
 				) : profileQuery.isError ? (
 					<ExceptionBlock
-						title="Unable to load profile"
+						title={m.profile_load_error()}
 						onRefresh={profileQuery.refetch}
 						bordered={false}
 					/>
@@ -86,6 +83,10 @@ type UserProfilePreviewProps = {
 
 function UserProfilePreview({ user }: UserProfilePreviewProps) {
 	const { data } = useAuthenticatedUser();
+	const numberFormatter = new Intl.NumberFormat(getLocale(), {
+		notation: "compact",
+		maximumFractionDigits: 1,
+	});
 	const authenticatedUser = data?.user;
 	const isOwnProfile = Boolean(
 		authenticatedUser?.id && user.id && authenticatedUser.id === user.id,
@@ -126,13 +127,13 @@ function UserProfilePreview({ user }: UserProfilePreviewProps) {
 					<strong className="text-foreground">
 						{numberFormatter.format(user.followingCount ?? 0)}
 					</strong>{" "}
-					Following
+					{m.following_count()}
 				</span>
 				<span>
 					<strong className="text-foreground">
 						{numberFormatter.format(user.followersCount ?? 0)}
 					</strong>{" "}
-					Followers
+					{m.followers()}
 				</span>
 			</div>
 		</div>

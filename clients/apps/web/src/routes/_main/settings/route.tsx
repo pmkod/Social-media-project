@@ -17,6 +17,7 @@ import {
 	SettingRowItem,
 	type SettingsPath,
 } from "@/features/setting/common/setting-row-item.tsx";
+import { m } from "@/paraglide/messages.js";
 
 export const Route = createFileRoute("/_main/settings")({
 	component: SettingsLayout,
@@ -31,48 +32,47 @@ type SettingsSection = {
 	activePaths?: readonly SettingsPath[];
 };
 
-const settingsSections: SettingsSection[] = [
-	{
-		id: "account",
-		label: "Account",
-		description: "Manage your email address",
-		path: "/settings/account",
-		icon: RiUserSettingsLine,
-		activePaths: ["/settings/change-email", "/settings/user-verification"],
-	},
-	{
-		id: "security",
-		label: "Security",
-		description: "Keep your account secure",
-		path: "/settings/security",
-		icon: RiShieldKeyholeLine,
-		activePaths: ["/settings/change-password", "/settings/sessions"],
-	},
-	{
-		id: "privacy",
-		label: "Additional resources",
-		description: "Read our privacy policy and terms",
-		path: "/settings/privacy",
-		icon: RiFileShieldLine,
-	},
-	{
-		id: "theme",
-		label: "Theme",
-		description: "Choose how Goodspace looks",
-		path: "/settings/theme",
-		icon: RiPaletteLine,
-	},
-	{
-		id: "language",
-		label: "Language",
-		description: "Choose your display language",
-		path: "/settings/language",
-		icon: RiTranslate2,
-	},
-];
-
 function SettingsLayout() {
 	const location = useLocation();
+	const settingsSections: SettingsSection[] = [
+		{
+			id: "account",
+			label: m.settings_account(),
+			description: m.settings_account_description(),
+			path: "/settings/account",
+			icon: RiUserSettingsLine,
+			activePaths: ["/settings/change-email", "/settings/user-verification"],
+		},
+		{
+			id: "security",
+			label: m.settings_security(),
+			description: m.settings_security_description(),
+			path: "/settings/security",
+			icon: RiShieldKeyholeLine,
+			activePaths: ["/settings/change-password", "/settings/sessions"],
+		},
+		{
+			id: "privacy",
+			label: m.settings_resources(),
+			description: m.settings_resources_description(),
+			path: "/settings/privacy",
+			icon: RiFileShieldLine,
+		},
+		{
+			id: "theme",
+			label: m.settings_theme(),
+			description: m.settings_theme_description(),
+			path: "/settings/theme",
+			icon: RiPaletteLine,
+		},
+		{
+			id: "language",
+			label: m.settings_language(),
+			description: m.settings_language_description(),
+			path: "/settings/language",
+			icon: RiTranslate2,
+		},
+	];
 	const isOverview =
 		location.pathname === "/settings" || location.pathname === "/settings/";
 
@@ -84,11 +84,11 @@ function SettingsLayout() {
 				>
 					<AppHeader>
 						<AppHeaderLeftPart>
-							<AppHeaderTitle>Settings</AppHeaderTitle>
+							<AppHeaderTitle>{m.settings_title()}</AppHeaderTitle>
 						</AppHeaderLeftPart>
 					</AppHeader>
 
-					<nav className="space-y-1" aria-label="Settings sections">
+					<nav className="space-y-1" aria-label={m.settings_sections_label()}>
 						{settingsSections.map((section) => {
 							const isSelected =
 								location.pathname === section.path ||

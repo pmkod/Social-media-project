@@ -14,6 +14,7 @@ import { Logo } from "@/core/components/partials/logo";
 import { Button } from "@/core/components/ui/button.tsx";
 import { AuthenticatedUserDropdown } from "@/features/user/authenticated-user/authenticated-user.dropdown.tsx";
 import { useAuthenticatedUser } from "@/features/user/authenticated-user/use-authenticated-user.ts";
+import { m } from "@/paraglide/messages.js";
 
 type SidebarLinkProps = {
 	to: string;
@@ -65,31 +66,39 @@ export function Sidebar() {
 
 				{/* Navigation Links */}
 				<nav className="space-y-1">
-					<SidebarLink to="/home" icon={RiHome5Line} label="Home" />
-					<SidebarLink to="/search" icon={RiSearchLine} label="Search" />
+					<SidebarLink to="/home" icon={RiHome5Line} label={m.nav_home()} />
+					<SidebarLink
+						to="/search"
+						icon={RiSearchLine}
+						label={m.nav_search()}
+					/>
 					<SidebarLink
 						to="/notifications"
 						icon={RiNotification3Line}
-						label="Notifications"
+						label={m.nav_notifications()}
 						badgeCount={data?.user.unseenNotificationsCount}
 					/>
 					<SidebarLink
 						to="/discussions"
 						icon={RiChat3Line}
-						label="Discussions"
+						label={m.nav_discussions()}
 					/>
 					<SidebarLink
 						to="/bookmark-collections"
 						icon={RiBookmarkLine}
-						label="Bookmarks"
+						label={m.nav_bookmarks()}
 					/>
-					<SidebarLink to="/settings" icon={RiSettings3Line} label="Settings" />
+					<SidebarLink
+						to="/settings"
+						icon={RiSettings3Line}
+						label={m.nav_settings()}
+					/>
 					{data ? (
 						<SidebarLink
 							to="/$username"
 							params={{ username: `@${data.user.username}` }}
 							icon={RiUserLine}
-							label="Profile"
+							label={m.nav_profile()}
 						/>
 					) : null}
 				</nav>
@@ -101,12 +110,12 @@ export function Sidebar() {
 						size="lg"
 						fullWidth
 						type="button"
-						title="Post"
+						title={m.action_post()}
 						className="px-0 has-[>svg]:px-0 lg:px-6 lg:has-[>svg]:px-6"
 						onClick={() => {}}
 					>
 						<RiAddLine className="size-5 lg:hidden" aria-hidden="true" />
-						<span className="sr-only lg:not-sr-only">Post</span>
+						<span className="sr-only lg:not-sr-only">{m.action_post()}</span>
 					</Button>
 				</div>
 				<div className="pt-4 lg:px-2">

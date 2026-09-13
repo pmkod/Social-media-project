@@ -10,6 +10,7 @@ import {
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import NiceModal from "@/core/components/ui/nice-modal.tsx";
 import { Toaster } from "@/core/components/ui/sonner.tsx";
+import { getLocale, getTextDirection } from "@/paraglide/runtime.js";
 import TanStackQueryDevtools from "../core/integrations/tanstack-query/devtools";
 import appCss from "../styles.css?url";
 
@@ -45,7 +46,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 	const { queryClient } = Route.useRouteContext();
 
 	return (
-		<html lang="en" suppressHydrationWarning>
+		<html lang={getLocale()} dir={getTextDirection()} suppressHydrationWarning>
 			<head>
 				<HeadContent />
 				<script

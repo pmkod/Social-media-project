@@ -1,5 +1,6 @@
 import { RiBookmarkFill, RiBookmarkLine } from "@remixicon/react";
 import NiceModal from "@/core/components/ui/nice-modal.tsx";
+import { m } from "@/paraglide/messages.js";
 import { BookmarkCollectionPickerModal } from "./bookmark-collection-picker-modal.tsx";
 
 type BookmarkButtonProps = {
@@ -21,7 +22,7 @@ function BookmarkButton({ postId, isBookmarked }: BookmarkButtonProps) {
 		<button
 			type="button"
 			onClick={handleClick}
-			aria-label="Manage bookmark collections"
+			aria-label={m.bookmark_manage()}
 			className={`group flex cursor-pointer items-center gap-1.5 rounded-full p-2 transition-colors hover:bg-accent disabled:cursor-default disabled:opacity-60 ${
 				isBookmarked ? "text-amber-500" : "hover:text-amber-500"
 			}`}

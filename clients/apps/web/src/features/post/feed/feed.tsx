@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { EmptyBlock } from "@/core/components/ui/empty-block.tsx";
 import { ExceptionBlock } from "@/core/components/ui/exception-block.tsx";
 import { useIntersectionObserver } from "@/core/hooks/use-intersection-observer.ts";
+import { m } from "@/paraglide/messages.js";
 import { PostListLoader } from "../common/components/loaders";
 import { PostItem } from "../common/post-item";
 import { useFollowingFeed } from "./use-following-feed";
@@ -37,15 +38,15 @@ export function Feed() {
 				<PostListLoader />
 			) : isError ? (
 				<ExceptionBlock
-					title="Unable to load feed"
-					description="An error occurred while loading posts."
+					title={m.feed_load_error_title()}
+					description={m.feed_load_error_description()}
 					onRefresh={() => void refetch()}
 					isRefetching={isRefetching}
 				/>
 			) : allPosts.length === 0 ? (
 				<EmptyBlock
-					title="No posts yet"
-					description="Follow users to see their posts in your feed."
+					title={m.feed_empty_title()}
+					description={m.feed_empty_description()}
 				/>
 			) : (
 				/* Feed Posts */

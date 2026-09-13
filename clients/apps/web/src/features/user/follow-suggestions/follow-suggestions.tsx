@@ -8,6 +8,7 @@ import { EmptyBlock } from "@/core/components/ui/empty-block.tsx";
 import { ExceptionBlock } from "@/core/components/ui/exception-block.tsx";
 import { UserRowItem } from "@/features/user/common/components/user-row-item.tsx";
 import { UserRowItemListLoader } from "@/features/user/common/components/user-row-item-list-loader.tsx";
+import { m } from "@/paraglide/messages.js";
 import { useFollowSuggestions } from "./use-follow-suggestions.ts";
 
 function FollowSuggestions() {
@@ -19,15 +20,15 @@ function FollowSuggestions() {
 		<aside className="hidden 2xl:block w-100 pt-4 h-screen sticky top-0 overflow-y-auto">
 			<Card>
 				<CardHeader>
-					<CardTitle>Who to follow</CardTitle>
+					<CardTitle>{m.suggestions_title()}</CardTitle>
 				</CardHeader>
 				<CardContent paddingZero>
 					{isLoading ? (
 						<UserRowItemListLoader className="pb-4" />
 					) : isError ? (
 						<ExceptionBlock
-							title="Unable to load suggestions"
-							description="An error occurred while loading profiles to follow."
+							title={m.suggestions_load_error_title()}
+							description={m.suggestions_load_error_description()}
 							onRefresh={() => refetch()}
 							isRefetching={isRefetching}
 							bordered={false}
@@ -35,8 +36,8 @@ function FollowSuggestions() {
 						/>
 					) : users.length === 0 ? (
 						<EmptyBlock
-							title="No suggestions"
-							description="No suggestions right now"
+							title={m.suggestions_empty_title()}
+							description={m.suggestions_empty_description()}
 							onRefresh={() => refetch()}
 							isRefetching={isRefetching}
 							bordered={false}

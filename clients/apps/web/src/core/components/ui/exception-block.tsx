@@ -10,6 +10,7 @@ import {
 	ExceptionTitle,
 } from "@/core/components/ui/exception.tsx";
 import { cn } from "@/core/lib/utils.ts";
+import { m } from "@/paraglide/messages.js";
 
 type ExceptionBlockProps = {
 	title?: React.ReactNode;
@@ -50,7 +51,7 @@ function ExceptionBlock({
 						onClick={() => void onRefresh()}
 					>
 						{!isRefetching ? <RiRefreshLine /> : null}
-						Refresh
+						{m.action_refresh()}
 					</Button>
 				</ExceptionContent>
 			) : null}

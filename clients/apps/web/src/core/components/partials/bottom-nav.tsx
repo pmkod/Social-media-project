@@ -8,6 +8,7 @@ import {
 } from "@remixicon/react";
 import { Link } from "@tanstack/react-router";
 import { useAuthenticatedUser } from "@/features/user/authenticated-user/use-authenticated-user.ts";
+import { m } from "@/paraglide/messages.js";
 
 export function BottomNav() {
 	const { data } = useAuthenticatedUser();
@@ -17,6 +18,7 @@ export function BottomNav() {
 		<nav className="md:hidden fixed bottom-0 left-0 right-0 border-t border-border bg-background/90 backdrop-blur-md flex justify-around p-2 z-40">
 			<Link
 				to="/home"
+				aria-label={m.nav_home()}
 				className="p-2 text-muted-foreground hover:text-sky-500 transition-colors"
 				activeProps={{ className: "text-sky-500" }}
 			>
@@ -24,6 +26,7 @@ export function BottomNav() {
 			</Link>
 			<Link
 				to="/search"
+				aria-label={m.nav_search()}
 				className="p-2 text-muted-foreground hover:text-sky-500 transition-colors"
 				activeProps={{ className: "text-sky-500" }}
 			>
@@ -31,6 +34,7 @@ export function BottomNav() {
 			</Link>
 			<Link
 				to="/notifications"
+				aria-label={m.nav_notifications()}
 				className="relative p-2 text-muted-foreground hover:text-sky-500 transition-colors"
 				activeProps={{ className: "text-sky-500" }}
 			>
@@ -43,6 +47,7 @@ export function BottomNav() {
 			</Link>
 			<Link
 				to="/discussions"
+				aria-label={m.nav_discussions()}
 				className="p-2 text-muted-foreground hover:text-sky-500 transition-colors"
 				activeProps={{ className: "text-sky-500" }}
 			>
@@ -50,6 +55,7 @@ export function BottomNav() {
 			</Link>
 			<Link
 				to="/bookmark-collections"
+				aria-label={m.nav_bookmarks()}
 				className="p-2 text-muted-foreground hover:text-sky-500 transition-colors"
 				activeProps={{ className: "text-sky-500" }}
 			>
@@ -57,7 +63,7 @@ export function BottomNav() {
 			</Link>
 			<Link
 				to="/settings"
-				aria-label="Settings"
+				aria-label={m.nav_settings()}
 				className="p-2 text-muted-foreground hover:text-sky-500 transition-colors"
 				activeProps={{ className: "text-sky-500" }}
 			>

@@ -10,6 +10,7 @@ import {
 } from "@/core/components/ui/dropdown-menu.tsx";
 import { cn } from "@/core/lib/utils.ts";
 import { useLogout } from "@/features/authentication/logout/use-logout.ts";
+import { m } from "@/paraglide/messages.js";
 import { UserAvatar } from "../common/components/user-avatar.tsx";
 import {
 	authenticatedUserQueryKey,
@@ -52,7 +53,7 @@ function AuthenticatedUserDropdown({
 						compactBelowLaptop &&
 							"justify-center gap-0 lg:justify-start lg:gap-3",
 					)}
-					aria-label="Ouvrir le menu du profil"
+					aria-label={m.profile_menu_open()}
 				>
 					<UserAvatar user={authenticatedUser} size="default" />
 					<div
@@ -74,13 +75,13 @@ function AuthenticatedUserDropdown({
 				<DropdownMenuItem asChild>
 					<Link to="/$username" params={profileParams}>
 						<RiUserLine />
-						Profile
+						{m.nav_profile()}
 					</Link>
 				</DropdownMenuItem>
 				<DropdownMenuItem asChild>
 					<Link to="/settings">
 						<RiSettings3Line />
-						Settings
+						{m.nav_settings()}
 					</Link>
 				</DropdownMenuItem>
 				<DropdownMenuSeparator />
@@ -92,7 +93,7 @@ function AuthenticatedUserDropdown({
 					}}
 				>
 					<RiLogoutBoxLine />
-					{logout.isPending ? "Déconnexion..." : "Se déconnecter"}
+					{logout.isPending ? m.profile_logging_out() : m.profile_logout()}
 				</DropdownMenuItem>
 			</DropdownMenuContent>
 		</DropdownMenu>

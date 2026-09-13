@@ -1,6 +1,7 @@
 import { RiLoader4Line } from "@remixicon/react";
 import { type ComponentProps, useState } from "react";
 import { Button } from "@/core/components/ui/button.tsx";
+import { m } from "@/paraglide/messages.js";
 import { useFollowUser } from "../follow-user/use-follow-user.ts";
 import { useUnfollowUser } from "../unfollow-user/use-unfollow-user.ts";
 import type { User } from "./user.ts";
@@ -83,11 +84,11 @@ function FollowButton({ user, size = "sm" }: FollowButtonProps) {
 			{isMutationPending ? (
 				<RiLoader4Line className="size-4 animate-spin" />
 			) : showUnfollow ? (
-				"Unfollow"
+				m.unfollow()
 			) : user.isFollowedByAuthenticatedUser ? (
-				"Following"
+				m.following()
 			) : (
-				"Follow"
+				m.follow()
 			)}
 		</Button>
 	);

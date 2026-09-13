@@ -10,6 +10,7 @@ import {
 	EmptyTitle,
 } from "@/core/components/ui/empty.tsx";
 import { cn } from "@/core/lib/utils.ts";
+import { m } from "@/paraglide/messages.js";
 
 type EmptyBlockProps = {
 	title: React.ReactNode;
@@ -50,7 +51,7 @@ function EmptyBlock({
 						onClick={() => void onRefresh()}
 					>
 						{!isRefetching ? <RiRefreshLine /> : null}
-						Refresh
+						{m.action_refresh()}
 					</Button>
 				</EmptyContent>
 			) : null}

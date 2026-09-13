@@ -1,3 +1,4 @@
+import { paraglideVitePlugin } from "@inlang/paraglide-js";
 import babel from "@rolldown/plugin-babel";
 import tailwindcss from "@tailwindcss/vite";
 import { devtools } from "@tanstack/devtools-vite";
@@ -9,6 +10,14 @@ import { defineConfig } from "vite";
 const config = defineConfig({
 	resolve: { tsconfigPaths: true },
 	plugins: [
+		paraglideVitePlugin({
+			project: "./project.inlang",
+			outdir: "./src/paraglide",
+			outputStructure: "message-modules",
+			emitTsDeclarations: true,
+			cookieName: "PARAGLIDE_LOCALE",
+			strategy: ["cookie", "preferredLanguage", "baseLocale"],
+		}),
 		devtools(),
 		nitro({ rollupConfig: { external: [/^@sentry\//] } }),
 		tailwindcss(),

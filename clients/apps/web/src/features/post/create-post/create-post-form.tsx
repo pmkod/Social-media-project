@@ -13,6 +13,7 @@ import { useSelectFiles } from "@/core/hooks/use-select-files.ts";
 import { cn } from "@/core/lib/utils.ts";
 import { useAuthenticatedUser } from "@/features/user/authenticated-user/use-authenticated-user.ts";
 import { UserAvatar } from "@/features/user/common/components/user-avatar.tsx";
+import { m } from "@/paraglide/messages.js";
 import {
 	createPostSchema,
 	POST_MAX_FILE_SIZE,
@@ -59,7 +60,7 @@ function CreatePostForm({ onSuccess, onBusyChange }: CreatePostFormProps = {}) {
 								"message" in error.data &&
 								typeof error.data.message === "string"
 								? error.data.message
-								: "Unable to publish. Please try again. Your draft has been kept.",
+								: m.composer_publish_error(),
 						),
 					onSuccess: () => {
 						form.reset();
@@ -115,15 +116,15 @@ function CreatePostForm({ onSuccess, onBusyChange }: CreatePostFormProps = {}) {
 						file.size > POST_MAX_FILE_SIZE,
 				)
 			) {
-				throw new Error("Choose a supported file up to 20 MB.");
+				throw new Error(m.composer_invalid_media());
 			}
 			const currentMedias = form.getFieldValue("medias");
 			if (selectedFiles.length > maxMedia - currentMedias.length)
-				throw new Error(`You can attach up to ${maxMedia} files.`);
+				throw new Error(m.composer_too_many_files({ maxMedia }));
 			form.setFieldValue("medias", [...currentMedias, ...selectedFiles]);
 		} catch (error) {
 			setError(
-				error instanceof Error ? error.message : "Unable to read this file.",
+				error instanceof Error ? error.message : m.composer_read_error(),
 			);
 		} finally {
 			setIsValidatingMedia(false);
@@ -172,9 +173,9 @@ function CreatePostForm({ onSuccess, onBusyChange }: CreatePostFormProps = {}) {
 								value={field.state.value}
 								onChange={(e) => field.handleChange(e.target.value)}
 								onBlur={field.handleBlur}
-								aria-label="Post text"
+								aria-label={m.composer_text_label()}
 								maxLength={5000}
-								placeholder="What's happening?"
+								placeholder={m.composer_placeholder()}
 								rows={3}
 								disabled={isBusy}
 								className="min-h-0 w-full resize-none font-normal placeholder:font-normal border-0 bg-transparent px-0 py-0 text-xl text-foreground placeholder:text-muted-foreground focus-visible:ring-0 ring-0 outline-none disabled:opacity-60"
@@ -195,7 +196,9 @@ function CreatePostForm({ onSuccess, onBusyChange }: CreatePostFormProps = {}) {
 										type="button"
 										onClick={() => handleOpenPreviewModal(index)}
 										className="h-full w-full text-left border-0 p-0 cursor-pointer block relative"
-										aria-label={`Media preview ${index + 1}`}
+										aria-label={m.composer_media_preview({
+											index: index + 1,
+										})}
 									>
 										{item.type === "video" ? (
 											<div className="relative h-full w-full">
@@ -209,13 +212,15 @@ function CreatePostForm({ onSuccess, onBusyChange }: CreatePostFormProps = {}) {
 												/>
 												<div className="absolute bottom-2 left-2 flex items-center gap-1 rounded-full bg-black/60 px-2 py-0.5 text-xs text-white">
 													<RiPlayFill className="h-3 w-3 fill-current" />
-													<span>Video</span>
+													<span>{m.composer_video()}</span>
 												</div>
 											</div>
 										) : (
 											<img
 												src={item.url}
-												alt={`Preview ${index + 1}`}
+												alt={m.composer_image_preview({
+													index: index + 1,
+												})}
 												className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-200"
 											/>
 										)}
@@ -225,7 +230,7 @@ function CreatePostForm({ onSuccess, onBusyChange }: CreatePostFormProps = {}) {
 										onClick={() => handleRemoveFile(index)}
 										disabled={isBusy}
 										className="absolute top-1.5 right-1.5 p-1 rounded-full bg-black/70 text-white hover:bg-black transition-colors disabled:opacity-50 z-10 cursor-pointer flex items-center justify-center"
-										aria-label="Remove media"
+										aria-label={m.composer_remove_media()}
 									>
 										<RiCloseLine className="h-3.5 w-3.5" />
 									</button>
@@ -250,7 +255,9 @@ function CreatePostForm({ onSuccess, onBusyChange }: CreatePostFormProps = {}) {
 						disabled={isBusy || isMaxMediaReached}
 					>
 						<RiImageLine className="h-4 w-4" />
-						{isValidatingMedia ? "Checking…" : "Media"}
+						{isValidatingMedia
+							? m.composer_checking_media()
+							: m.composer_media()}
 					</Button>
 					{(medias || []).length > 0 ? (
 						<span className="text-xs text-muted-foreground font-medium">
@@ -261,7 +268,7 @@ function CreatePostForm({ onSuccess, onBusyChange }: CreatePostFormProps = {}) {
 
 				<Button type="submit" disabled={!hasContent || isBusy}>
 					<RiSendPlane2Line className="h-4 w-4" />
-					<span>{isPending ? "Publishing…" : "Post"}</span>
+					<span>{isPending ? m.composer_publishing() : m.action_post()}</span>
 				</Button>
 			</div>
 		</form>

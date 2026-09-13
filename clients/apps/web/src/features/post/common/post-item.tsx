@@ -13,6 +13,7 @@ import { BookmarkButton } from "@/features/bookmark/common/bookmark-button.tsx";
 import { UserAvatar } from "@/features/user/common/components/user-avatar.tsx";
 import { UserProfileLink } from "@/features/user/common/user-profile-link.tsx";
 import { UserProfileHoverCard } from "@/features/user/user-profile/user-profile-hover-card.tsx";
+import { m } from "@/paraglide/messages.js";
 import { useLikePost } from "../like-post/use-like-post.ts";
 import { buildImageUrl, buildVideoUrl } from "../post-media.functions.ts";
 import { useUnlikePost } from "../unlike-post/use-unlike-post.ts";
@@ -72,7 +73,7 @@ function MediaElement({
 			/>
 		);
 	}
-	return <img src={item.url} alt="Post media" className={className} />;
+	return <img src={item.url} alt={m.post_media_alt()} className={className} />;
 }
 
 function PostMediaGrid({ media }: { media: RenderMediaItem[] }) {
@@ -170,7 +171,7 @@ function PostMediaSlider({ media }: { media: RenderMediaItem[] }) {
 						scrollBy(-1);
 					}}
 					className="absolute left-2 top-1/2 -translate-y-1/2 p-1.5 rounded-full bg-black/50 text-white hover:bg-black/70 transition-colors z-10"
-					aria-label="Previous media"
+					aria-label={m.media_previous()}
 				>
 					<RiArrowLeftSLine className="h-4 w-4" />
 				</button>
@@ -184,7 +185,7 @@ function PostMediaSlider({ media }: { media: RenderMediaItem[] }) {
 						scrollBy(1);
 					}}
 					className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded-full bg-black/50 text-white hover:bg-black/70 transition-colors z-10"
-					aria-label="Next media"
+					aria-label={m.media_next()}
 				>
 					<RiArrowRightSLine className="h-4 w-4" />
 				</button>
@@ -284,6 +285,7 @@ function StandardPostItem({
 							<button
 								type="button"
 								onClick={handleLike}
+								aria-label={isLiked ? m.post_unlike() : m.post_like()}
 								className={`cursor-pointer flex items-center gap-1.5 transition-colors group -ml-2 p-2 rounded-full hover:bg-accent ${
 									isLiked ? "text-rose-500" : "hover:text-rose-500"
 								}`}
@@ -303,7 +305,7 @@ function StandardPostItem({
 								search={{ focusComment: true }}
 								onClick={(e) => e.stopPropagation()}
 								className="flex items-center gap-1.5 transition-colors group -ml-2 p-2 rounded-full hover:bg-accent hover:text-sky-500"
-								aria-label="Comment on post"
+								aria-label={m.post_comment()}
 							>
 								<RiChat3Line className="size-6" />
 								<span className="text-base font-light">{commentsCount}</span>

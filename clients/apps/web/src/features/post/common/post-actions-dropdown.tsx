@@ -19,6 +19,7 @@ import { useAuthenticatedUser } from "@/features/user/authenticated-user/use-aut
 import { BlockUserAlertDialog } from "@/features/user/block-user/block-user-alert-dialog.tsx";
 import type { User } from "@/features/user/common/user.ts";
 import { UnblockUserAlertDialog } from "@/features/user/unblock-user/unblock-user-alert-dialog.tsx";
+import { m } from "@/paraglide/messages.js";
 import type { Post } from "./post";
 
 type PostActionsDropdownProps = {
@@ -76,7 +77,7 @@ function PostActionsDropdown({
 					variant={variant}
 					size={size}
 					onClick={(event) => event.stopPropagation()}
-					aria-label="Post options"
+					aria-label={m.post_options()}
 					className="rounded-full"
 				>
 					<RiMoreLine />
@@ -92,7 +93,7 @@ function PostActionsDropdown({
 					}}
 				>
 					<RiFileCopyLine />
-					Copy post link
+					{m.post_copy_link()}
 				</DropdownMenuItem>
 				{canReport ? (
 					<>
@@ -104,7 +105,7 @@ function PostActionsDropdown({
 							}}
 						>
 							<RiFlag2Line />
-							Report post
+							{m.post_report()}
 						</DropdownMenuItem>
 					</>
 				) : null}
@@ -120,7 +121,7 @@ function PostActionsDropdown({
 								}
 							>
 								<RiUserAddLine />
-								Unblock user @{user.username}
+								{m.post_unblock_user({ username: user.username })}
 							</DropdownMenuItem>
 						</>
 					) : (
@@ -135,7 +136,7 @@ function PostActionsDropdown({
 								}
 							>
 								<RiUserForbidLine />
-								Block user @{user.username}
+								{m.post_block_user({ username: user.username })}
 							</DropdownMenuItem>
 						</>
 					)

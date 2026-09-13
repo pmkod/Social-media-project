@@ -5,6 +5,7 @@ import {
 } from "@remixicon/react";
 import { useCallback, useEffect, useState } from "react";
 import { create, useModal } from "@/core/components/ui/nice-modal.tsx";
+import { m } from "@/paraglide/messages.js";
 
 type MediaItem = {
 	url: string;
@@ -57,7 +58,7 @@ const MediaPreviewModal = create(
 					type="button"
 					onClick={() => modal.remove()}
 					className="absolute top-4 right-4 z-50 p-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors cursor-pointer"
-					aria-label="Close preview"
+					aria-label={m.preview_close()}
 				>
 					<RiCloseLine className="h-6 w-6" />
 				</button>
@@ -68,7 +69,7 @@ const MediaPreviewModal = create(
 						type="button"
 						onClick={handlePrev}
 						className="absolute left-4 top-1/2 -translate-y-1/2 z-50 p-3 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors cursor-pointer"
-						aria-label="Previous media"
+						aria-label={m.media_previous()}
 					>
 						<RiArrowLeftSLine className="h-6 w-6" />
 					</button>
@@ -87,7 +88,10 @@ const MediaPreviewModal = create(
 					) : (
 						<img
 							src={currentMedia.url}
-							alt={currentMedia.name || `Preview ${currentIndex + 1}`}
+							alt={
+								currentMedia.name ||
+								m.composer_image_preview({ index: currentIndex + 1 })
+							}
 							className="max-h-[80vh] max-w-full rounded-lg object-contain shadow-2xl"
 						/>
 					)}
@@ -106,7 +110,7 @@ const MediaPreviewModal = create(
 						type="button"
 						onClick={handleNext}
 						className="absolute right-4 top-1/2 -translate-y-1/2 z-50 p-3 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors cursor-pointer"
-						aria-label="Next media"
+						aria-label={m.media_next()}
 					>
 						<RiArrowRightSLine className="h-6 w-6" />
 					</button>
