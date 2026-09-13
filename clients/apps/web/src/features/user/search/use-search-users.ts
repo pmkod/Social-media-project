@@ -6,7 +6,6 @@ import { userListQueryKeys } from "../common/user-list.query-keys.ts";
 type SearchUsersCursor = {
 	id: string;
 	createdAt: string;
-	followersCount: number;
 };
 
 type SearchUsersResponse = {
@@ -45,10 +44,6 @@ const useSearchUsers = ({
 			if (pageParam) {
 				searchParams.set("cursorId", pageParam.id);
 				searchParams.set("cursorCreatedAt", pageParam.createdAt);
-				searchParams.set(
-					"cursorFollowersCount",
-					String(pageParam.followersCount),
-				);
 			}
 
 			return httpClient

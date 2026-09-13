@@ -24,7 +24,6 @@ const FollowSuggestionsResponseBody = z.object({
 			.object({
 				id: z.string(),
 				createdAt: z.string(),
-				followersCount: z.number(),
 			})
 			.nullable(),
 		hasNextPage: z.boolean(),
@@ -39,12 +38,16 @@ const routeDef = createRoute({
 	tags: [UserRoutesTag],
 	middleware: [requireUserAuthentication],
 	request: {
-		query: z.object({
-			cursorId: z.string().optional(),
-			cursorCreatedAt: z.string().optional(),
-			cursorFollowersCount: z.string().optional(),
-			limit: z.string().optional().default("10"),
-		}),
+		query: z
+			.object({
+				cursorId: z.string().min(1).optional(),
+				cursorCreatedAt: z.string().datetime().optional(),
+				limit: z.string().optional().default("10"),
+			})
+			.refine(
+				(query) => Boolean(query.cursorCreatedAt) === Boolean(query.cursorId),
+				{ message: "cursorCreatedAt and cursorId must be provided together" },
+			),
 	},
 	responses: {
 		[HttpStatus.OK.code]: {
@@ -74,28 +77,15 @@ const getFollowSuggestionsRoute = defineOpenAPIRoute<
 		const cursorDate = query.cursorCreatedAt
 			? new Date(query.cursorCreatedAt)
 			: null;
-		const cursorFollowersCount = query.cursorFollowersCount
-			? Number.parseInt(query.cursorFollowersCount, 10)
-			: null;
 		const hasValidCursor =
 			cursorDate !== null &&
 			!Number.isNaN(cursorDate.getTime()) &&
-			cursorFollowersCount !== null &&
-			!Number.isNaN(cursorFollowersCount) &&
 			Boolean(query.cursorId);
 		const cursorCondition: Prisma.UserWhereInput | undefined = hasValidCursor
 			? {
 					OR: [
-						{ followersCount: { lt: cursorFollowersCount } },
-						{
-							followersCount: cursorFollowersCount,
-							createdAt: { lt: cursorDate },
-						},
-						{
-							followersCount: cursorFollowersCount,
-							createdAt: cursorDate,
-							id: { lt: query.cursorId },
-						},
+						{ createdAt: { lt: cursorDate } },
+						{ createdAt: cursorDate, id: { lt: query.cursorId } },
 					],
 				}
 			: undefined;
@@ -134,17 +124,12 @@ const getFollowSuggestionsRoute = defineOpenAPIRoute<
 				active: true,
 				...cursorCondition,
 			},
-			orderBy: [
-				{ followersCount: "desc" },
-				{ createdAt: "desc" },
-				{ id: "desc" },
-			],
+			orderBy: [{ createdAt: "desc" }, { id: "desc" }],
 			take: limit + 1,
 			select: {
 				id: true,
 				username: true,
 				fullName: true,
-				followersCount: true,
 				createdAt: true,
 				lowQualityProfilePictureFileId: true,
 				bestQualityProfilePictureFileId: true,
@@ -156,7 +141,7 @@ const getFollowSuggestionsRoute = defineOpenAPIRoute<
 		const lastUser = usersToSend.at(-1);
 		const hydratedUsers = await hydrateProfileMediaFiles(usersToSend);
 
-		const users = hydratedUsers.map(({ followersCount, createdAt, ...user }) => ({
+		const users = hydratedUsers.map(({ createdAt, ...user }) => ({
 			...user,
 			isFollowedByAuthenticatedUser: false,
 		}));
@@ -170,7 +155,6 @@ const getFollowSuggestionsRoute = defineOpenAPIRoute<
 							? {
 									id: lastUser.id,
 									createdAt: lastUser.createdAt.toISOString(),
-									followersCount: lastUser.followersCount,
 								}
 							: null,
 					hasNextPage,

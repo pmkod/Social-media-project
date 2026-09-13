@@ -23,7 +23,6 @@ const SearchUsersResponseBody = z.object({
 			.object({
 				id: z.string(),
 				createdAt: z.string(),
-				followersCount: z.number(),
 			})
 			.nullable(),
 		hasNextPage: z.boolean(),
@@ -37,13 +36,17 @@ const routeDef = createRoute({
 	summary: "Search users with cursor pagination",
 	tags: [UserRoutesTag],
 	request: {
-		query: z.object({
-			q: z.string().trim().min(1).max(100),
-			cursorId: z.string().optional(),
-			cursorCreatedAt: z.string().optional(),
-			cursorFollowersCount: z.string().optional(),
-			limit: z.string().optional().default("5"),
-		}),
+		query: z
+			.object({
+				q: z.string().trim().min(1).max(100),
+				cursorId: z.string().min(1).optional(),
+				cursorCreatedAt: z.string().datetime().optional(),
+				limit: z.string().optional().default("5"),
+			})
+			.refine(
+				(query) => Boolean(query.cursorCreatedAt) === Boolean(query.cursorId),
+				{ message: "cursorCreatedAt and cursorId must be provided together" },
+			),
 	},
 	responses: {
 		[HttpStatus.OK.code]: {
@@ -98,28 +101,15 @@ const searchUsersRoute = defineOpenAPIRoute<
 		const cursorDate = query.cursorCreatedAt
 			? new Date(query.cursorCreatedAt)
 			: null;
-		const cursorFollowersCount = query.cursorFollowersCount
-			? Number.parseInt(query.cursorFollowersCount, 10)
-			: null;
 		const hasValidCursor =
 			cursorDate !== null &&
 			!Number.isNaN(cursorDate.getTime()) &&
-			cursorFollowersCount !== null &&
-			!Number.isNaN(cursorFollowersCount) &&
 			Boolean(query.cursorId);
 		const cursorCondition: Prisma.UserWhereInput | undefined = hasValidCursor
 			? {
 					OR: [
-						{ followersCount: { lt: cursorFollowersCount } },
-						{
-							followersCount: cursorFollowersCount,
-							createdAt: { lt: cursorDate },
-						},
-						{
-							followersCount: cursorFollowersCount,
-							createdAt: cursorDate,
-							id: { lt: query.cursorId },
-						},
+						{ createdAt: { lt: cursorDate } },
+						{ createdAt: cursorDate, id: { lt: query.cursorId } },
 					],
 				}
 			: undefined;
@@ -138,17 +128,12 @@ const searchUsersRoute = defineOpenAPIRoute<
 					...(cursorCondition ? [cursorCondition] : []),
 				],
 			},
-			orderBy: [
-				{ followersCount: "desc" },
-				{ createdAt: "desc" },
-				{ id: "desc" },
-			],
+			orderBy: [{ createdAt: "desc" }, { id: "desc" }],
 			take: limit + 1,
 			select: {
 				id: true,
 				username: true,
 				fullName: true,
-				followersCount: true,
 				createdAt: true,
 				lowQualityProfilePictureFileId: true,
 				bestQualityProfilePictureFileId: true,
@@ -174,18 +159,17 @@ const searchUsersRoute = defineOpenAPIRoute<
 			: new Set<string>();
 
 		return c.json({
-			users: hydratedUsers.map(({ followersCount, createdAt, ...user }) => ({
+			users: hydratedUsers.map(({ createdAt, ...user }) => ({
 				...user,
 				isFollowedByAuthenticatedUser: followedUserIds.has(user.id),
 			})),
 			pagination: {
 				nextCursor:
 					hasNextPage && lastItem
-						? {
-								id: lastItem.id,
-								createdAt: lastItem.createdAt.toISOString(),
-								followersCount: lastItem.followersCount,
-							}
+							? {
+									id: lastItem.id,
+									createdAt: lastItem.createdAt.toISOString(),
+								}
 						: null,
 				hasNextPage,
 				limit,

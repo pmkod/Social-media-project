@@ -12,13 +12,18 @@ const routeDef = createRoute({
 	tags: [BookmarksRoutesTag],
 	middleware: [requireUserAuthentication],
 	request: {
-		query: z.object({
-			postId: z.string().optional(),
-			cursorId: z.string().optional(),
-			cursorCreatedAt: z.string().optional(),
-			limit: z.string().optional().default("10"),
-			q: z.string().optional(),
-		}),
+		query: z
+			.object({
+				postId: z.string().optional(),
+				cursorId: z.string().min(1).optional(),
+				cursorCreatedAt: z.string().datetime().optional(),
+				limit: z.string().optional().default("10"),
+				q: z.string().optional(),
+			})
+			.refine(
+				(query) => Boolean(query.cursorCreatedAt) === Boolean(query.cursorId),
+				{ message: "cursorCreatedAt and cursorId must be provided together" },
+			),
 	},
 	responses: {
 		[HttpStatus.OK.code]: { description: "Bookmark collections" },

@@ -15,12 +15,17 @@ const routeDef = createRoute({
 	summary: "Get following feed with cursor pagination and counts",
 	tags: [PostsRoutesTag],
 	request: {
-		query: z.object({
-			authorId: z.string().optional(),
-			cursorId: z.string().optional(),
-			cursorCreatedAt: z.string().optional(),
-			limit: z.string().optional().default("10"),
-		}),
+		query: z
+			.object({
+				authorId: z.string().optional(),
+				cursorId: z.string().min(1).optional(),
+				cursorCreatedAt: z.string().datetime().optional(),
+				limit: z.string().optional().default("10"),
+			})
+			.refine(
+				(query) => Boolean(query.cursorCreatedAt) === Boolean(query.cursorId),
+				{ message: "cursorCreatedAt and cursorId must be provided together" },
+			),
 	},
 	responses: {
 		[HttpStatus.OK.code]: {

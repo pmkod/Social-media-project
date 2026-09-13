@@ -13,11 +13,16 @@ const routeDef = createRoute({
 	tags: [NotificationsRoutesTag],
 	middleware: [requireUserAuthentication],
 	request: {
-		query: z.object({
-			limit: z.coerce.number().int().min(1).max(50).optional().default(25),
-			cursorCreatedAt: z.string().datetime().optional(),
-			cursorId: z.string().optional(),
-		}),
+		query: z
+			.object({
+				limit: z.coerce.number().int().min(1).max(50).optional().default(25),
+				cursorCreatedAt: z.string().datetime().optional(),
+				cursorId: z.string().min(1).optional(),
+			})
+			.refine(
+				(query) => Boolean(query.cursorCreatedAt) === Boolean(query.cursorId),
+				{ message: "cursorCreatedAt and cursorId must be provided together" },
+			),
 	},
 	responses: {
 		[HttpStatus.OK.code]: { description: "Notifications" },

@@ -33,6 +33,7 @@ model User {
   searchHistoryAsSearcher         SearchHistory[]    @relation("SearchHistorySearcher")
   searchHistoryAsSearchedUser     SearchHistory[]    @relation("SearchHistorySearchedUser")
 
+  @@index([createdAt, id])
   @@map("user")
 }
 

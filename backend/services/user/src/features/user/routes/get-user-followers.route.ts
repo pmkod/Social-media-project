@@ -13,11 +13,16 @@ const routeDef = createRoute({
 	tags: [UserRoutesTag],
 	request: {
 		params: z.object({ userId: z.string() }),
-		query: z.object({
-			cursorId: z.string().optional(),
-			cursorCreatedAt: z.string().optional(),
-			limit: z.coerce.number().positive().optional().default(20),
-		}),
+		query: z
+			.object({
+				cursorId: z.string().min(1).optional(),
+				cursorCreatedAt: z.string().datetime().optional(),
+				limit: z.coerce.number().positive().optional().default(20),
+			})
+			.refine(
+				(query) => Boolean(query.cursorCreatedAt) === Boolean(query.cursorId),
+				{ message: "cursorCreatedAt and cursorId must be provided together" },
+			),
 	},
 	responses: {
 		[HttpStatus.OK.code]: { description: "User followers" },

@@ -6,7 +6,6 @@ import { userListQueryKeys } from "../common/user-list.query-keys.ts";
 type FollowSuggestionsCursor = {
 	id: string;
 	createdAt: string;
-	followersCount: number;
 };
 
 type FollowSuggestionsResponse = {
@@ -32,10 +31,6 @@ const useFollowSuggestions = ({
 			if (pageParam) {
 				searchParams.set("cursorId", pageParam.id);
 				searchParams.set("cursorCreatedAt", pageParam.createdAt);
-				searchParams.set(
-					"cursorFollowersCount",
-					String(pageParam.followersCount),
-				);
 			}
 
 			return httpClient
