@@ -33,7 +33,7 @@ model Report {
 
 model ReportReason {
   id          String   @id @default(uuid())
-  name        String   @unique @db.VarChar(100)
+  name        String   @db.VarChar(100)
   description String?  @db.VarChar(500)
   createdAt   DateTime @default(now()) @map("created_at")
   active      Boolean  @default(true)

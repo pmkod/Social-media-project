@@ -48,7 +48,6 @@ model Discussion {
 }
 
 model DiscussionMember {
-  id           String               @id @default(uuid())
   discussionId String               @map("discussion_id")
   userId       String               @map("user_id")
   role         DiscussionMemberRole @default(MEMBER)
@@ -60,7 +59,7 @@ model DiscussionMember {
 
   discussion Discussion @relation(fields: [discussionId], references: [id], onDelete: Cascade)
 
-  @@unique([discussionId, userId])
+  @@id([discussionId, userId])
   @@index([userId, hasLeft, isDeleted, discussionId])
   @@map("discussion_member")
 }

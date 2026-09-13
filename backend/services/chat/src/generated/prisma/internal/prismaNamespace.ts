@@ -760,7 +760,6 @@ export type DiscussionScalarFieldEnum = (typeof DiscussionScalarFieldEnum)[keyof
 
 
 export const DiscussionMemberScalarFieldEnum = {
-  id: 'id',
   discussionId: 'discussionId',
   userId: 'userId',
   role: 'role',

@@ -31,21 +31,17 @@ model PostMedia {
   position          Int      @default(1)
   mediaType         String   @map("media_type") @db.VarChar(50)
   createdAt         DateTime @default(now()) @map("created_at")
-  lowQualityFileId  String?  @unique @map("low_quality_file_id")
-  lowQualityFile    File?    @relation("PostMediaLowQuality", fields: [lowQualityFileId], references: [id], onDelete: SetNull)
-  highQualityFileId String?  @unique @map("high_quality_file_id")
-  highQualityFile   File?    @relation("PostMediaHighQuality", fields: [highQualityFileId], references: [id], onDelete: SetNull)
+  lowQualityFileId  String?  @map("low_quality_file_id")
+  highQualityFileId String?  @map("high_quality_file_id")
 
   @@map("post_media")
 }
 
 model File {
-  id                   String     @id @default(uuid())
-  mimeType             String?    @map("mime_type") @db.VarChar(50)
-  filename             String     @db.VarChar(255)
-  createdAt            DateTime   @default(now()) @map("created_at")
-  lowQualityPostMedia  PostMedia? @relation("PostMediaLowQuality")
-  highQualityPostMedia PostMedia? @relation("PostMediaHighQuality")
+  id        String   @id @default(uuid())
+  mimeType  String?  @map("mime_type") @db.VarChar(50)
+  filename  String   @db.VarChar(255)
+  createdAt DateTime @default(now()) @map("created_at")
 
   @@map("file")
 }
@@ -116,20 +112,18 @@ model BookmarkCollection {
   updatedAt   DateTime                 @updatedAt @map("updated_at")
   items       BookmarkCollectionItem[]
 
-  @@unique([ownerId, name])
   @@index([ownerId, createdAt])
   @@map("bookmark_collection")
 }
 
 model BookmarkCollectionItem {
-  id           String             @id @default(uuid())
   collectionId String             @map("collection_id")
   bookmarkId   String             @map("bookmark_id")
   createdAt    DateTime           @default(now()) @map("created_at")
   collection   BookmarkCollection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
   bookmark     Bookmark           @relation(fields: [bookmarkId], references: [id], onDelete: Cascade)
 
-  @@unique([collectionId, bookmarkId])
+  @@id([collectionId, bookmarkId])
   @@index([collectionId, createdAt])
   @@index([bookmarkId])
   @@map("bookmark_collection_item")

@@ -73,11 +73,16 @@ const removeDiscussionMemberRoute = defineOpenAPIRoute<
 						hasLeft: false,
 					},
 					orderBy: [{ role: "asc" }, { joinedAt: "asc" }],
-					select: { id: true },
+					select: { discussionId: true, userId: true },
 				});
 				if (successor) {
 					await tx.discussionMember.update({
-						where: { id: successor.id },
+						where: {
+							discussionId_userId: {
+								discussionId: successor.discussionId,
+								userId: successor.userId,
+							},
+						},
 						data: { role: "OWNER" },
 					});
 				}

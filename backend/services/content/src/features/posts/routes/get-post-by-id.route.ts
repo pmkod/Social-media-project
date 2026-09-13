@@ -106,10 +106,10 @@ const getPostByIdRoute = defineOpenAPIRoute<
 							ownerId: authenticatedUserId,
 						},
 					},
-					select: {
-						id: true,
-						collectionItems: { select: { id: true } },
-					},
+						select: {
+							id: true,
+							collectionItems: { select: { bookmarkId: true } },
+						},
 				})
 			: null;
 		const authorsMap = await userServiceClient.fetchAuthorsBatch(

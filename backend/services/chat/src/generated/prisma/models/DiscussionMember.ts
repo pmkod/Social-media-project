@@ -25,7 +25,6 @@ export type AggregateDiscussionMember = {
 }
 
 export type DiscussionMemberMinAggregateOutputType = {
-  id: string | null
   discussionId: string | null
   userId: string | null
   role: $Enums.DiscussionMemberRole | null
@@ -37,7 +36,6 @@ export type DiscussionMemberMinAggregateOutputType = {
 }
 
 export type DiscussionMemberMaxAggregateOutputType = {
-  id: string | null
   discussionId: string | null
   userId: string | null
   role: $Enums.DiscussionMemberRole | null
@@ -49,7 +47,6 @@ export type DiscussionMemberMaxAggregateOutputType = {
 }
 
 export type DiscussionMemberCountAggregateOutputType = {
-  id: number
   discussionId: number
   userId: number
   role: number
@@ -63,7 +60,6 @@ export type DiscussionMemberCountAggregateOutputType = {
 
 
 export type DiscussionMemberMinAggregateInputType = {
-  id?: true
   discussionId?: true
   userId?: true
   role?: true
@@ -75,7 +71,6 @@ export type DiscussionMemberMinAggregateInputType = {
 }
 
 export type DiscussionMemberMaxAggregateInputType = {
-  id?: true
   discussionId?: true
   userId?: true
   role?: true
@@ -87,7 +82,6 @@ export type DiscussionMemberMaxAggregateInputType = {
 }
 
 export type DiscussionMemberCountAggregateInputType = {
-  id?: true
   discussionId?: true
   userId?: true
   role?: true
@@ -172,7 +166,6 @@ export type DiscussionMemberGroupByArgs<ExtArgs extends runtime.Types.Extensions
 }
 
 export type DiscussionMemberGroupByOutputType = {
-  id: string
   discussionId: string
   userId: string
   role: $Enums.DiscussionMemberRole
@@ -205,7 +198,6 @@ export type DiscussionMemberWhereInput = {
   AND?: Prisma.DiscussionMemberWhereInput | Prisma.DiscussionMemberWhereInput[]
   OR?: Prisma.DiscussionMemberWhereInput[]
   NOT?: Prisma.DiscussionMemberWhereInput | Prisma.DiscussionMemberWhereInput[]
-  id?: Prisma.StringFilter<"DiscussionMember"> | string
   discussionId?: Prisma.StringFilter<"DiscussionMember"> | string
   userId?: Prisma.StringFilter<"DiscussionMember"> | string
   role?: Prisma.EnumDiscussionMemberRoleFilter<"DiscussionMember"> | $Enums.DiscussionMemberRole
@@ -218,7 +210,6 @@ export type DiscussionMemberWhereInput = {
 }
 
 export type DiscussionMemberOrderByWithRelationInput = {
-  id?: Prisma.SortOrder
   discussionId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   role?: Prisma.SortOrder
@@ -231,7 +222,6 @@ export type DiscussionMemberOrderByWithRelationInput = {
 }
 
 export type DiscussionMemberWhereUniqueInput = Prisma.AtLeast<{
-  id?: string
   discussionId_userId?: Prisma.DiscussionMemberDiscussionIdUserIdCompoundUniqueInput
   AND?: Prisma.DiscussionMemberWhereInput | Prisma.DiscussionMemberWhereInput[]
   OR?: Prisma.DiscussionMemberWhereInput[]
@@ -245,10 +235,9 @@ export type DiscussionMemberWhereUniqueInput = Prisma.AtLeast<{
   isDeleted?: Prisma.BoolFilter<"DiscussionMember"> | boolean
   isBlocked?: Prisma.BoolFilter<"DiscussionMember"> | boolean
   discussion?: Prisma.XOR<Prisma.DiscussionScalarRelationFilter, Prisma.DiscussionWhereInput>
-}, "id" | "discussionId_userId">
+}, "discussionId_userId">
 
 export type DiscussionMemberOrderByWithAggregationInput = {
-  id?: Prisma.SortOrder
   discussionId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   role?: Prisma.SortOrder
@@ -266,7 +255,6 @@ export type DiscussionMemberScalarWhereWithAggregatesInput = {
   AND?: Prisma.DiscussionMemberScalarWhereWithAggregatesInput | Prisma.DiscussionMemberScalarWhereWithAggregatesInput[]
   OR?: Prisma.DiscussionMemberScalarWhereWithAggregatesInput[]
   NOT?: Prisma.DiscussionMemberScalarWhereWithAggregatesInput | Prisma.DiscussionMemberScalarWhereWithAggregatesInput[]
-  id?: Prisma.StringWithAggregatesFilter<"DiscussionMember"> | string
   discussionId?: Prisma.StringWithAggregatesFilter<"DiscussionMember"> | string
   userId?: Prisma.StringWithAggregatesFilter<"DiscussionMember"> | string
   role?: Prisma.EnumDiscussionMemberRoleWithAggregatesFilter<"DiscussionMember"> | $Enums.DiscussionMemberRole
@@ -278,7 +266,6 @@ export type DiscussionMemberScalarWhereWithAggregatesInput = {
 }
 
 export type DiscussionMemberCreateInput = {
-  id?: string
   userId: string
   role?: $Enums.DiscussionMemberRole
   joinedAt?: Date | string
@@ -290,7 +277,6 @@ export type DiscussionMemberCreateInput = {
 }
 
 export type DiscussionMemberUncheckedCreateInput = {
-  id?: string
   discussionId: string
   userId: string
   role?: $Enums.DiscussionMemberRole
@@ -302,7 +288,6 @@ export type DiscussionMemberUncheckedCreateInput = {
 }
 
 export type DiscussionMemberUpdateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumDiscussionMemberRoleFieldUpdateOperationsInput | $Enums.DiscussionMemberRole
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -314,7 +299,6 @@ export type DiscussionMemberUpdateInput = {
 }
 
 export type DiscussionMemberUncheckedUpdateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   discussionId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumDiscussionMemberRoleFieldUpdateOperationsInput | $Enums.DiscussionMemberRole
@@ -326,7 +310,6 @@ export type DiscussionMemberUncheckedUpdateInput = {
 }
 
 export type DiscussionMemberCreateManyInput = {
-  id?: string
   discussionId: string
   userId: string
   role?: $Enums.DiscussionMemberRole
@@ -338,7 +321,6 @@ export type DiscussionMemberCreateManyInput = {
 }
 
 export type DiscussionMemberUpdateManyMutationInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumDiscussionMemberRoleFieldUpdateOperationsInput | $Enums.DiscussionMemberRole
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -349,7 +331,6 @@ export type DiscussionMemberUpdateManyMutationInput = {
 }
 
 export type DiscussionMemberUncheckedUpdateManyInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   discussionId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumDiscussionMemberRoleFieldUpdateOperationsInput | $Enums.DiscussionMemberRole
@@ -376,7 +357,6 @@ export type DiscussionMemberDiscussionIdUserIdCompoundUniqueInput = {
 }
 
 export type DiscussionMemberCountOrderByAggregateInput = {
-  id?: Prisma.SortOrder
   discussionId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   role?: Prisma.SortOrder
@@ -388,7 +368,6 @@ export type DiscussionMemberCountOrderByAggregateInput = {
 }
 
 export type DiscussionMemberMaxOrderByAggregateInput = {
-  id?: Prisma.SortOrder
   discussionId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   role?: Prisma.SortOrder
@@ -400,7 +379,6 @@ export type DiscussionMemberMaxOrderByAggregateInput = {
 }
 
 export type DiscussionMemberMinOrderByAggregateInput = {
-  id?: Prisma.SortOrder
   discussionId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   role?: Prisma.SortOrder
@@ -458,7 +436,6 @@ export type EnumDiscussionMemberRoleFieldUpdateOperationsInput = {
 }
 
 export type DiscussionMemberCreateWithoutDiscussionInput = {
-  id?: string
   userId: string
   role?: $Enums.DiscussionMemberRole
   joinedAt?: Date | string
@@ -469,7 +446,6 @@ export type DiscussionMemberCreateWithoutDiscussionInput = {
 }
 
 export type DiscussionMemberUncheckedCreateWithoutDiscussionInput = {
-  id?: string
   userId: string
   role?: $Enums.DiscussionMemberRole
   joinedAt?: Date | string
@@ -509,7 +485,6 @@ export type DiscussionMemberScalarWhereInput = {
   AND?: Prisma.DiscussionMemberScalarWhereInput | Prisma.DiscussionMemberScalarWhereInput[]
   OR?: Prisma.DiscussionMemberScalarWhereInput[]
   NOT?: Prisma.DiscussionMemberScalarWhereInput | Prisma.DiscussionMemberScalarWhereInput[]
-  id?: Prisma.StringFilter<"DiscussionMember"> | string
   discussionId?: Prisma.StringFilter<"DiscussionMember"> | string
   userId?: Prisma.StringFilter<"DiscussionMember"> | string
   role?: Prisma.EnumDiscussionMemberRoleFilter<"DiscussionMember"> | $Enums.DiscussionMemberRole
@@ -521,7 +496,6 @@ export type DiscussionMemberScalarWhereInput = {
 }
 
 export type DiscussionMemberCreateManyDiscussionInput = {
-  id?: string
   userId: string
   role?: $Enums.DiscussionMemberRole
   joinedAt?: Date | string
@@ -532,7 +506,6 @@ export type DiscussionMemberCreateManyDiscussionInput = {
 }
 
 export type DiscussionMemberUpdateWithoutDiscussionInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumDiscussionMemberRoleFieldUpdateOperationsInput | $Enums.DiscussionMemberRole
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -543,7 +516,6 @@ export type DiscussionMemberUpdateWithoutDiscussionInput = {
 }
 
 export type DiscussionMemberUncheckedUpdateWithoutDiscussionInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumDiscussionMemberRoleFieldUpdateOperationsInput | $Enums.DiscussionMemberRole
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -554,7 +526,6 @@ export type DiscussionMemberUncheckedUpdateWithoutDiscussionInput = {
 }
 
 export type DiscussionMemberUncheckedUpdateManyWithoutDiscussionInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.EnumDiscussionMemberRoleFieldUpdateOperationsInput | $Enums.DiscussionMemberRole
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -567,7 +538,6 @@ export type DiscussionMemberUncheckedUpdateManyWithoutDiscussionInput = {
 
 
 export type DiscussionMemberSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  id?: boolean
   discussionId?: boolean
   userId?: boolean
   role?: boolean
@@ -580,7 +550,6 @@ export type DiscussionMemberSelect<ExtArgs extends runtime.Types.Extensions.Inte
 }, ExtArgs["result"]["discussionMember"]>
 
 export type DiscussionMemberSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  id?: boolean
   discussionId?: boolean
   userId?: boolean
   role?: boolean
@@ -593,7 +562,6 @@ export type DiscussionMemberSelectCreateManyAndReturn<ExtArgs extends runtime.Ty
 }, ExtArgs["result"]["discussionMember"]>
 
 export type DiscussionMemberSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  id?: boolean
   discussionId?: boolean
   userId?: boolean
   role?: boolean
@@ -606,7 +574,6 @@ export type DiscussionMemberSelectUpdateManyAndReturn<ExtArgs extends runtime.Ty
 }, ExtArgs["result"]["discussionMember"]>
 
 export type DiscussionMemberSelectScalar = {
-  id?: boolean
   discussionId?: boolean
   userId?: boolean
   role?: boolean
@@ -617,7 +584,7 @@ export type DiscussionMemberSelectScalar = {
   isBlocked?: boolean
 }
 
-export type DiscussionMemberOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "discussionId" | "userId" | "role" | "joinedAt" | "lastReadAt" | "hasLeft" | "isDeleted" | "isBlocked", ExtArgs["result"]["discussionMember"]>
+export type DiscussionMemberOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"discussionId" | "userId" | "role" | "joinedAt" | "lastReadAt" | "hasLeft" | "isDeleted" | "isBlocked", ExtArgs["result"]["discussionMember"]>
 export type DiscussionMemberInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   discussion?: boolean | Prisma.DiscussionDefaultArgs<ExtArgs>
 }
@@ -634,7 +601,6 @@ export type $DiscussionMemberPayload<ExtArgs extends runtime.Types.Extensions.In
     discussion: Prisma.$DiscussionPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    id: string
     discussionId: string
     userId: string
     role: $Enums.DiscussionMemberRole
@@ -726,8 +692,8 @@ export interface DiscussionMemberDelegate<ExtArgs extends runtime.Types.Extensio
    * // Get first 10 DiscussionMembers
    * const discussionMembers = await prisma.discussionMember.findMany({ take: 10 })
    * 
-   * // Only select the `id`
-   * const discussionMemberWithIdOnly = await prisma.discussionMember.findMany({ select: { id: true } })
+   * // Only select the `discussionId`
+   * const discussionMemberWithDiscussionIdOnly = await prisma.discussionMember.findMany({ select: { discussionId: true } })
    * 
    */
   findMany<T extends DiscussionMemberFindManyArgs>(args?: Prisma.SelectSubset<T, DiscussionMemberFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DiscussionMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
@@ -771,9 +737,9 @@ export interface DiscussionMemberDelegate<ExtArgs extends runtime.Types.Extensio
    *   ]
    * })
    * 
-   * // Create many DiscussionMembers and only return the `id`
-   * const discussionMemberWithIdOnly = await prisma.discussionMember.createManyAndReturn({
-   *   select: { id: true },
+   * // Create many DiscussionMembers and only return the `discussionId`
+   * const discussionMemberWithDiscussionIdOnly = await prisma.discussionMember.createManyAndReturn({
+   *   select: { discussionId: true },
    *   data: [
    *     // ... provide data here
    *   ]
@@ -862,9 +828,9 @@ export interface DiscussionMemberDelegate<ExtArgs extends runtime.Types.Extensio
    *   ]
    * })
    * 
-   * // Update zero or more DiscussionMembers and only return the `id`
-   * const discussionMemberWithIdOnly = await prisma.discussionMember.updateManyAndReturn({
-   *   select: { id: true },
+   * // Update zero or more DiscussionMembers and only return the `discussionId`
+   * const discussionMemberWithDiscussionIdOnly = await prisma.discussionMember.updateManyAndReturn({
+   *   select: { discussionId: true },
    *   where: {
    *     // ... provide filter here
    *   },
@@ -1067,7 +1033,6 @@ export interface Prisma__DiscussionMemberClient<T, Null = never, ExtArgs extends
  * Fields of the DiscussionMember model
  */
 export interface DiscussionMemberFieldRefs {
-  readonly id: Prisma.FieldRef<"DiscussionMember", 'String'>
   readonly discussionId: Prisma.FieldRef<"DiscussionMember", 'String'>
   readonly userId: Prisma.FieldRef<"DiscussionMember", 'String'>
   readonly role: Prisma.FieldRef<"DiscussionMember", 'DiscussionMemberRole'>

@@ -205,7 +205,6 @@ export type BookmarkCollectionOrderByWithRelationInput = {
 
 export type BookmarkCollectionWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  ownerId_name?: Prisma.BookmarkCollectionOwnerIdNameCompoundUniqueInput
   AND?: Prisma.BookmarkCollectionWhereInput | Prisma.BookmarkCollectionWhereInput[]
   OR?: Prisma.BookmarkCollectionWhereInput[]
   NOT?: Prisma.BookmarkCollectionWhereInput | Prisma.BookmarkCollectionWhereInput[]
@@ -215,7 +214,7 @@ export type BookmarkCollectionWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"BookmarkCollection"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"BookmarkCollection"> | Date | string
   items?: Prisma.BookmarkCollectionItemListRelationFilter
-}, "id" | "ownerId_name">
+}, "id">
 
 export type BookmarkCollectionOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -306,11 +305,6 @@ export type BookmarkCollectionUncheckedUpdateManyInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type BookmarkCollectionOwnerIdNameCompoundUniqueInput = {
-  ownerId: string
-  name: string
 }
 
 export type BookmarkCollectionCountOrderByAggregateInput = {

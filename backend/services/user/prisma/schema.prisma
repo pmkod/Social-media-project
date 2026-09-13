@@ -14,14 +14,10 @@ model User {
   password                        String
   fullName                        String?            @map("full_name")
   bio                             String?
-  lowQualityProfilePictureFileId  String?            @unique @map("low_quality_profile_picture_file_id")
-  lowQualityProfilePictureFile    File?              @relation("UserLowQualityProfilePicture", fields: [lowQualityProfilePictureFileId], references: [id], onDelete: SetNull)
-  bestQualityProfilePictureFileId String?            @unique @map("best_quality_profile_picture_file_id")
-  bestQualityProfilePictureFile   File?              @relation("UserBestQualityProfilePicture", fields: [bestQualityProfilePictureFileId], references: [id], onDelete: SetNull)
-  lowQualityCoverPictureFileId    String?            @unique @map("low_quality_cover_picture_file_id")
-  lowQualityCoverPictureFile      File?              @relation("UserLowQualityCoverPicture", fields: [lowQualityCoverPictureFileId], references: [id], onDelete: SetNull)
-  bestQualityCoverPictureFileId   String?            @unique @map("best_quality_cover_picture_file_id")
-  bestQualityCoverPictureFile     File?              @relation("UserBestQualityCoverPicture", fields: [bestQualityCoverPictureFileId], references: [id], onDelete: SetNull)
+  lowQualityProfilePictureFileId  String?            @map("low_quality_profile_picture_file_id")
+  bestQualityProfilePictureFileId String?            @map("best_quality_profile_picture_file_id")
+  lowQualityCoverPictureFileId    String?            @map("low_quality_cover_picture_file_id")
+  bestQualityCoverPictureFileId   String?            @map("best_quality_cover_picture_file_id")
   postCount                       Int                @default(0) @map("post_count")
   followersCount                  Int                @default(0) @map("followers_count")
   followingCount                  Int                @default(0) @map("following_count")
@@ -55,14 +51,10 @@ model SearchHistory {
 }
 
 model File {
-  id                            String   @id @default(uuid())
-  mimeType                      String?  @map("mime_type") @db.VarChar(50)
-  filename                      String   @db.VarChar(255)
-  createdAt                     DateTime @default(now()) @map("created_at")
-  lowQualityProfilePictureUser  User?    @relation("UserLowQualityProfilePicture")
-  bestQualityProfilePictureUser User?    @relation("UserBestQualityProfilePicture")
-  lowQualityCoverPictureUser    User?    @relation("UserLowQualityCoverPicture")
-  bestQualityCoverPictureUser   User?    @relation("UserBestQualityCoverPicture")
+  id        String   @id @default(uuid())
+  mimeType  String?  @map("mime_type") @db.VarChar(50)
+  filename  String   @db.VarChar(255)
+  createdAt DateTime @default(now()) @map("created_at")
 
   @@map("file")
 }
@@ -91,7 +83,7 @@ model Block {
 
   @@unique([blockerId, blockedId])
   @@index([blockerId, createdAt])
-  @@index([blockedId, createdAt])
+  @@index([blockedId])
   @@map("block")
 }
 

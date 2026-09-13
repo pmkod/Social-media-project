@@ -1212,7 +1212,6 @@ export type BookmarkCollectionScalarFieldEnum = (typeof BookmarkCollectionScalar
 
 
 export const BookmarkCollectionItemScalarFieldEnum = {
-  id: 'id',
   collectionId: 'collectionId',
   bookmarkId: 'bookmarkId',
   createdAt: 'createdAt'

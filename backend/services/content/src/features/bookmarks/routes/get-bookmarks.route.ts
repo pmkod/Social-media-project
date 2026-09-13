@@ -109,11 +109,22 @@ const getBookmarksRoute = defineOpenAPIRoute<
 			cursorDate !== null &&
 			!Number.isNaN(cursorDate.getTime()) &&
 			query.cursorId;
-		const cursorCondition = hasValidCursor
+		const bookmarkCursorCondition = hasValidCursor
 			? {
 					OR: [
 						{ createdAt: { lt: cursorDate } },
 						{ createdAt: cursorDate, id: { lt: query.cursorId } },
+					],
+				}
+			: undefined;
+		const collectionItemCursorCondition = hasValidCursor
+			? {
+					OR: [
+						{ createdAt: { lt: cursorDate } },
+						{
+							createdAt: cursorDate,
+							bookmarkId: { lt: query.cursorId },
+						},
 					],
 				}
 			: undefined;
@@ -126,16 +137,18 @@ const getBookmarksRoute = defineOpenAPIRoute<
 							bookmark: {
 								ownerId,
 								post:
-									hiddenUserIds.length > 0
-										? { authorId: { notIn: hiddenUserIds } }
+								hiddenUserIds.length > 0
+									? { authorId: { notIn: hiddenUserIds } }
 										: {},
 							},
-							...(cursorCondition ? cursorCondition : {}),
+							...(collectionItemCursorCondition
+								? collectionItemCursorCondition
+								: {}),
 						},
-						orderBy: [{ createdAt: "desc" }, { id: "desc" }],
+						orderBy: [{ createdAt: "desc" }, { bookmarkId: "desc" }],
 						take: limit + 1,
 						select: {
-							id: true,
+							bookmarkId: true,
 							createdAt: true,
 							bookmark: {
 								select: { post: { select: bookmarkedPostSelect } },
@@ -143,7 +156,7 @@ const getBookmarksRoute = defineOpenAPIRoute<
 						},
 					})
 				).map((item) => ({
-					cursorId: item.id,
+					cursorId: item.bookmarkId,
 					cursorCreatedAt: item.createdAt,
 					post: item.bookmark.post,
 				}))
@@ -156,7 +169,7 @@ const getBookmarksRoute = defineOpenAPIRoute<
 								hiddenUserIds.length > 0
 									? { authorId: { notIn: hiddenUserIds } }
 									: {},
-							...(cursorCondition ? cursorCondition : {}),
+							...(bookmarkCursorCondition ? bookmarkCursorCondition : {}),
 						},
 						orderBy: [{ createdAt: "desc" }, { id: "desc" }],
 						take: limit + 1,

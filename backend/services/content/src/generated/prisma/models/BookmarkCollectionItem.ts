@@ -25,21 +25,18 @@ export type AggregateBookmarkCollectionItem = {
 }
 
 export type BookmarkCollectionItemMinAggregateOutputType = {
-  id: string | null
   collectionId: string | null
   bookmarkId: string | null
   createdAt: Date | null
 }
 
 export type BookmarkCollectionItemMaxAggregateOutputType = {
-  id: string | null
   collectionId: string | null
   bookmarkId: string | null
   createdAt: Date | null
 }
 
 export type BookmarkCollectionItemCountAggregateOutputType = {
-  id: number
   collectionId: number
   bookmarkId: number
   createdAt: number
@@ -48,21 +45,18 @@ export type BookmarkCollectionItemCountAggregateOutputType = {
 
 
 export type BookmarkCollectionItemMinAggregateInputType = {
-  id?: true
   collectionId?: true
   bookmarkId?: true
   createdAt?: true
 }
 
 export type BookmarkCollectionItemMaxAggregateInputType = {
-  id?: true
   collectionId?: true
   bookmarkId?: true
   createdAt?: true
 }
 
 export type BookmarkCollectionItemCountAggregateInputType = {
-  id?: true
   collectionId?: true
   bookmarkId?: true
   createdAt?: true
@@ -142,7 +136,6 @@ export type BookmarkCollectionItemGroupByArgs<ExtArgs extends runtime.Types.Exte
 }
 
 export type BookmarkCollectionItemGroupByOutputType = {
-  id: string
   collectionId: string
   bookmarkId: string
   createdAt: Date
@@ -170,7 +163,6 @@ export type BookmarkCollectionItemWhereInput = {
   AND?: Prisma.BookmarkCollectionItemWhereInput | Prisma.BookmarkCollectionItemWhereInput[]
   OR?: Prisma.BookmarkCollectionItemWhereInput[]
   NOT?: Prisma.BookmarkCollectionItemWhereInput | Prisma.BookmarkCollectionItemWhereInput[]
-  id?: Prisma.StringFilter<"BookmarkCollectionItem"> | string
   collectionId?: Prisma.StringFilter<"BookmarkCollectionItem"> | string
   bookmarkId?: Prisma.StringFilter<"BookmarkCollectionItem"> | string
   createdAt?: Prisma.DateTimeFilter<"BookmarkCollectionItem"> | Date | string
@@ -179,7 +171,6 @@ export type BookmarkCollectionItemWhereInput = {
 }
 
 export type BookmarkCollectionItemOrderByWithRelationInput = {
-  id?: Prisma.SortOrder
   collectionId?: Prisma.SortOrder
   bookmarkId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -188,7 +179,6 @@ export type BookmarkCollectionItemOrderByWithRelationInput = {
 }
 
 export type BookmarkCollectionItemWhereUniqueInput = Prisma.AtLeast<{
-  id?: string
   collectionId_bookmarkId?: Prisma.BookmarkCollectionItemCollectionIdBookmarkIdCompoundUniqueInput
   AND?: Prisma.BookmarkCollectionItemWhereInput | Prisma.BookmarkCollectionItemWhereInput[]
   OR?: Prisma.BookmarkCollectionItemWhereInput[]
@@ -198,10 +188,9 @@ export type BookmarkCollectionItemWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"BookmarkCollectionItem"> | Date | string
   collection?: Prisma.XOR<Prisma.BookmarkCollectionScalarRelationFilter, Prisma.BookmarkCollectionWhereInput>
   bookmark?: Prisma.XOR<Prisma.BookmarkScalarRelationFilter, Prisma.BookmarkWhereInput>
-}, "id" | "collectionId_bookmarkId">
+}, "collectionId_bookmarkId">
 
 export type BookmarkCollectionItemOrderByWithAggregationInput = {
-  id?: Prisma.SortOrder
   collectionId?: Prisma.SortOrder
   bookmarkId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -214,54 +203,46 @@ export type BookmarkCollectionItemScalarWhereWithAggregatesInput = {
   AND?: Prisma.BookmarkCollectionItemScalarWhereWithAggregatesInput | Prisma.BookmarkCollectionItemScalarWhereWithAggregatesInput[]
   OR?: Prisma.BookmarkCollectionItemScalarWhereWithAggregatesInput[]
   NOT?: Prisma.BookmarkCollectionItemScalarWhereWithAggregatesInput | Prisma.BookmarkCollectionItemScalarWhereWithAggregatesInput[]
-  id?: Prisma.StringWithAggregatesFilter<"BookmarkCollectionItem"> | string
   collectionId?: Prisma.StringWithAggregatesFilter<"BookmarkCollectionItem"> | string
   bookmarkId?: Prisma.StringWithAggregatesFilter<"BookmarkCollectionItem"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"BookmarkCollectionItem"> | Date | string
 }
 
 export type BookmarkCollectionItemCreateInput = {
-  id?: string
   createdAt?: Date | string
   collection: Prisma.BookmarkCollectionCreateNestedOneWithoutItemsInput
   bookmark: Prisma.BookmarkCreateNestedOneWithoutCollectionItemsInput
 }
 
 export type BookmarkCollectionItemUncheckedCreateInput = {
-  id?: string
   collectionId: string
   bookmarkId: string
   createdAt?: Date | string
 }
 
 export type BookmarkCollectionItemUpdateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   collection?: Prisma.BookmarkCollectionUpdateOneRequiredWithoutItemsNestedInput
   bookmark?: Prisma.BookmarkUpdateOneRequiredWithoutCollectionItemsNestedInput
 }
 
 export type BookmarkCollectionItemUncheckedUpdateInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   collectionId?: Prisma.StringFieldUpdateOperationsInput | string
   bookmarkId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type BookmarkCollectionItemCreateManyInput = {
-  id?: string
   collectionId: string
   bookmarkId: string
   createdAt?: Date | string
 }
 
 export type BookmarkCollectionItemUpdateManyMutationInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type BookmarkCollectionItemUncheckedUpdateManyInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   collectionId?: Prisma.StringFieldUpdateOperationsInput | string
   bookmarkId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -283,21 +264,18 @@ export type BookmarkCollectionItemCollectionIdBookmarkIdCompoundUniqueInput = {
 }
 
 export type BookmarkCollectionItemCountOrderByAggregateInput = {
-  id?: Prisma.SortOrder
   collectionId?: Prisma.SortOrder
   bookmarkId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
 export type BookmarkCollectionItemMaxOrderByAggregateInput = {
-  id?: Prisma.SortOrder
   collectionId?: Prisma.SortOrder
   bookmarkId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
 export type BookmarkCollectionItemMinOrderByAggregateInput = {
-  id?: Prisma.SortOrder
   collectionId?: Prisma.SortOrder
   bookmarkId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -388,13 +366,11 @@ export type BookmarkCollectionItemUncheckedUpdateManyWithoutCollectionNestedInpu
 }
 
 export type BookmarkCollectionItemCreateWithoutBookmarkInput = {
-  id?: string
   createdAt?: Date | string
   collection: Prisma.BookmarkCollectionCreateNestedOneWithoutItemsInput
 }
 
 export type BookmarkCollectionItemUncheckedCreateWithoutBookmarkInput = {
-  id?: string
   collectionId: string
   createdAt?: Date | string
 }
@@ -429,20 +405,17 @@ export type BookmarkCollectionItemScalarWhereInput = {
   AND?: Prisma.BookmarkCollectionItemScalarWhereInput | Prisma.BookmarkCollectionItemScalarWhereInput[]
   OR?: Prisma.BookmarkCollectionItemScalarWhereInput[]
   NOT?: Prisma.BookmarkCollectionItemScalarWhereInput | Prisma.BookmarkCollectionItemScalarWhereInput[]
-  id?: Prisma.StringFilter<"BookmarkCollectionItem"> | string
   collectionId?: Prisma.StringFilter<"BookmarkCollectionItem"> | string
   bookmarkId?: Prisma.StringFilter<"BookmarkCollectionItem"> | string
   createdAt?: Prisma.DateTimeFilter<"BookmarkCollectionItem"> | Date | string
 }
 
 export type BookmarkCollectionItemCreateWithoutCollectionInput = {
-  id?: string
   createdAt?: Date | string
   bookmark: Prisma.BookmarkCreateNestedOneWithoutCollectionItemsInput
 }
 
 export type BookmarkCollectionItemUncheckedCreateWithoutCollectionInput = {
-  id?: string
   bookmarkId: string
   createdAt?: Date | string
 }
@@ -474,49 +447,41 @@ export type BookmarkCollectionItemUpdateManyWithWhereWithoutCollectionInput = {
 }
 
 export type BookmarkCollectionItemCreateManyBookmarkInput = {
-  id?: string
   collectionId: string
   createdAt?: Date | string
 }
 
 export type BookmarkCollectionItemUpdateWithoutBookmarkInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   collection?: Prisma.BookmarkCollectionUpdateOneRequiredWithoutItemsNestedInput
 }
 
 export type BookmarkCollectionItemUncheckedUpdateWithoutBookmarkInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   collectionId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type BookmarkCollectionItemUncheckedUpdateManyWithoutBookmarkInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   collectionId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type BookmarkCollectionItemCreateManyCollectionInput = {
-  id?: string
   bookmarkId: string
   createdAt?: Date | string
 }
 
 export type BookmarkCollectionItemUpdateWithoutCollectionInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   bookmark?: Prisma.BookmarkUpdateOneRequiredWithoutCollectionItemsNestedInput
 }
 
 export type BookmarkCollectionItemUncheckedUpdateWithoutCollectionInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   bookmarkId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type BookmarkCollectionItemUncheckedUpdateManyWithoutCollectionInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
   bookmarkId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -524,7 +489,6 @@ export type BookmarkCollectionItemUncheckedUpdateManyWithoutCollectionInput = {
 
 
 export type BookmarkCollectionItemSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  id?: boolean
   collectionId?: boolean
   bookmarkId?: boolean
   createdAt?: boolean
@@ -533,7 +497,6 @@ export type BookmarkCollectionItemSelect<ExtArgs extends runtime.Types.Extension
 }, ExtArgs["result"]["bookmarkCollectionItem"]>
 
 export type BookmarkCollectionItemSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  id?: boolean
   collectionId?: boolean
   bookmarkId?: boolean
   createdAt?: boolean
@@ -542,7 +505,6 @@ export type BookmarkCollectionItemSelectCreateManyAndReturn<ExtArgs extends runt
 }, ExtArgs["result"]["bookmarkCollectionItem"]>
 
 export type BookmarkCollectionItemSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
-  id?: boolean
   collectionId?: boolean
   bookmarkId?: boolean
   createdAt?: boolean
@@ -551,13 +513,12 @@ export type BookmarkCollectionItemSelectUpdateManyAndReturn<ExtArgs extends runt
 }, ExtArgs["result"]["bookmarkCollectionItem"]>
 
 export type BookmarkCollectionItemSelectScalar = {
-  id?: boolean
   collectionId?: boolean
   bookmarkId?: boolean
   createdAt?: boolean
 }
 
-export type BookmarkCollectionItemOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "collectionId" | "bookmarkId" | "createdAt", ExtArgs["result"]["bookmarkCollectionItem"]>
+export type BookmarkCollectionItemOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"collectionId" | "bookmarkId" | "createdAt", ExtArgs["result"]["bookmarkCollectionItem"]>
 export type BookmarkCollectionItemInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   collection?: boolean | Prisma.BookmarkCollectionDefaultArgs<ExtArgs>
   bookmark?: boolean | Prisma.BookmarkDefaultArgs<ExtArgs>
@@ -578,7 +539,6 @@ export type $BookmarkCollectionItemPayload<ExtArgs extends runtime.Types.Extensi
     bookmark: Prisma.$BookmarkPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    id: string
     collectionId: string
     bookmarkId: string
     createdAt: Date
@@ -665,8 +625,8 @@ export interface BookmarkCollectionItemDelegate<ExtArgs extends runtime.Types.Ex
    * // Get first 10 BookmarkCollectionItems
    * const bookmarkCollectionItems = await prisma.bookmarkCollectionItem.findMany({ take: 10 })
    * 
-   * // Only select the `id`
-   * const bookmarkCollectionItemWithIdOnly = await prisma.bookmarkCollectionItem.findMany({ select: { id: true } })
+   * // Only select the `collectionId`
+   * const bookmarkCollectionItemWithCollectionIdOnly = await prisma.bookmarkCollectionItem.findMany({ select: { collectionId: true } })
    * 
    */
   findMany<T extends BookmarkCollectionItemFindManyArgs>(args?: Prisma.SelectSubset<T, BookmarkCollectionItemFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BookmarkCollectionItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
@@ -710,9 +670,9 @@ export interface BookmarkCollectionItemDelegate<ExtArgs extends runtime.Types.Ex
    *   ]
    * })
    * 
-   * // Create many BookmarkCollectionItems and only return the `id`
-   * const bookmarkCollectionItemWithIdOnly = await prisma.bookmarkCollectionItem.createManyAndReturn({
-   *   select: { id: true },
+   * // Create many BookmarkCollectionItems and only return the `collectionId`
+   * const bookmarkCollectionItemWithCollectionIdOnly = await prisma.bookmarkCollectionItem.createManyAndReturn({
+   *   select: { collectionId: true },
    *   data: [
    *     // ... provide data here
    *   ]
@@ -801,9 +761,9 @@ export interface BookmarkCollectionItemDelegate<ExtArgs extends runtime.Types.Ex
    *   ]
    * })
    * 
-   * // Update zero or more BookmarkCollectionItems and only return the `id`
-   * const bookmarkCollectionItemWithIdOnly = await prisma.bookmarkCollectionItem.updateManyAndReturn({
-   *   select: { id: true },
+   * // Update zero or more BookmarkCollectionItems and only return the `collectionId`
+   * const bookmarkCollectionItemWithCollectionIdOnly = await prisma.bookmarkCollectionItem.updateManyAndReturn({
+   *   select: { collectionId: true },
    *   where: {
    *     // ... provide filter here
    *   },
@@ -1007,7 +967,6 @@ export interface Prisma__BookmarkCollectionItemClient<T, Null = never, ExtArgs e
  * Fields of the BookmarkCollectionItem model
  */
 export interface BookmarkCollectionItemFieldRefs {
-  readonly id: Prisma.FieldRef<"BookmarkCollectionItem", 'String'>
   readonly collectionId: Prisma.FieldRef<"BookmarkCollectionItem", 'String'>
   readonly bookmarkId: Prisma.FieldRef<"BookmarkCollectionItem", 'String'>
   readonly createdAt: Prisma.FieldRef<"BookmarkCollectionItem", 'DateTime'>
