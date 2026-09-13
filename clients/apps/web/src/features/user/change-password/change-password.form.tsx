@@ -18,12 +18,16 @@ import { useChangePassword } from "./use-change-password.ts";
 
 const changePasswordSchema = z
 	.object({
-		currentPassword: z.string().min(1, "Enter your current password."),
+		currentPassword: z.string().min(1, {
+			error: () => m.validation_required(),
+		}),
 		newPassword: UserValidationSchema.shape.password,
-		confirmPassword: z.string().min(1, "Confirm your new password."),
+		confirmPassword: z.string().min(1, {
+			error: () => m.validation_required(),
+		}),
 	})
 	.refine((value) => value.newPassword === value.confirmPassword, {
-		message: "Passwords do not match.",
+		error: () => m.validation_password_mismatch(),
 		path: ["confirmPassword"],
 	});
 

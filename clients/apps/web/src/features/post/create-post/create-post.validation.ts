@@ -1,4 +1,5 @@
 import { z } from "zod";
+import * as m from "@/paraglide/messages.js";
 
 export const POST_MEDIA_MIME_TYPES = [
 	"image/jpeg",
@@ -22,7 +23,9 @@ export const createPostSchema = z
 							file.size > 0 &&
 							file.size <= POST_MAX_FILE_SIZE &&
 							POST_MEDIA_MIME_TYPES.includes(file.type),
-						"Choose a supported image or video up to 20 MB.",
+						{
+							error: () => m.validation_post_media_invalid(),
+						},
 					),
 			)
 			.max(4),
@@ -32,7 +35,7 @@ export const createPostSchema = z
 			ctx.addIssue({
 				code: "custom",
 				path: ["text"],
-				message: "Add text or a media file.",
+				message: m.validation_post_content_required(),
 			});
 		}
 	});

@@ -47,5 +47,14 @@
 	"validation_required": "This field is required.",
 	"validation_invalid_email": "Enter a valid email address.",
 	"validation_min_length": "This field must contain at least {min} characters.",
-	"validation_max_length": "This field must contain no more than {max} characters."
+	"validation_max_length": "This field must contain no more than {max} characters.",
+	"validation_password_mismatch": "Passwords do not match.",
+	"validation_verification_code_length": "The code must contain exactly 6 digits.",
+	"validation_verification_code_digits_only": "The code must contain digits only.",
+	"validation_verification_code_format": "Enter the 6-digit code.",
+	"validation_comment_required": "Comment cannot be empty.",
+	"validation_report_reason_required": "Select a reason.",
+	"validation_report_explain_required": "Tell us what happened.",
+	"validation_post_media_invalid": "Choose a supported image or video up to 20 MB.",
+	"validation_post_content_required": "Add text or a media file."
 }

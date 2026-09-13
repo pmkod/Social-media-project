@@ -5,8 +5,12 @@ const UserValidationSchema = z.object({
 	id: z.string(),
 	username: z
 		.string()
-		.min(3, "Username must be at least 3 characters long")
-		.max(50, "Username must be no more than 50 characters long"),
+		.min(3, {
+			error: (issue) => m.validation_min_length({ min: Number(issue.minimum) }),
+		})
+		.max(50, {
+			error: (issue) => m.validation_max_length({ max: Number(issue.maximum) }),
+		}),
 	fullName: z
 		.string({
 			error: () => m.validation_required(),

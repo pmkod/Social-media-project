@@ -41,11 +41,15 @@ const bookmarkCollectionSchema = z.object({
 	name: z
 		.string()
 		.trim()
-		.min(1, "Collection name is required")
-		.max(60, "Collection name must be 60 characters or less"),
-	description: z
-		.string()
-		.max(280, "Description must be 280 characters or less"),
+		.min(1, {
+			error: () => m.validation_required(),
+		})
+		.max(60, {
+			error: (issue) => m.validation_max_length({ max: Number(issue.maximum) }),
+		}),
+	description: z.string().max(280, {
+		error: (issue) => m.validation_max_length({ max: Number(issue.maximum) }),
+	}),
 });
 
 const BookmarkCollectionModal = create<BookmarkCollectionModalProps>(

@@ -47,5 +47,14 @@
 	"validation_required": "Ce champ est obligatoire.",
 	"validation_invalid_email": "Saisis une adresse e-mail valide.",
 	"validation_min_length": "Ce champ doit contenir au moins {min} caractères.",
-	"validation_max_length": "Ce champ doit contenir au maximum {max} caractères."
+	"validation_max_length": "Ce champ doit contenir au maximum {max} caractères.",
+	"validation_password_mismatch": "Les mots de passe ne correspondent pas.",
+	"validation_verification_code_length": "Le code doit contenir exactement 6 chiffres.",
+	"validation_verification_code_digits_only": "Le code ne doit contenir que des chiffres.",
+	"validation_verification_code_format": "Saisis le code à 6 chiffres.",
+	"validation_comment_required": "Le commentaire ne peut pas être vide.",
+	"validation_report_reason_required": "Sélectionne un motif.",
+	"validation_report_explain_required": "Explique-nous ce qui s'est passé.",
+	"validation_post_media_invalid": "Choisis une image ou vidéo prise en charge de 20 Mo max.",
+	"validation_post_content_required": "Ajoute du texte ou un fichier média."
 }

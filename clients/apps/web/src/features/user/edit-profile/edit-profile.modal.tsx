@@ -56,14 +56,24 @@ const editProfileSchema = z.object({
 	username: z
 		.string()
 		.trim()
-		.min(3, "Username must contain at least 3 characters.")
-		.max(50, "Username cannot contain more than 50 characters."),
+		.min(3, {
+			error: (issue) => m.validation_min_length({ min: Number(issue.minimum) }),
+		})
+		.max(50, {
+			error: (issue) => m.validation_max_length({ max: Number(issue.maximum) }),
+		}),
 	fullName: z
 		.string()
 		.trim()
-		.min(1, "Full name is required.")
-		.max(100, "Full name cannot contain more than 100 characters."),
-	bio: z.string().max(280, "Bio cannot contain more than 280 characters."),
+		.min(1, {
+			error: () => m.validation_required(),
+		})
+		.max(100, {
+			error: (issue) => m.validation_max_length({ max: Number(issue.maximum) }),
+		}),
+	bio: z.string().max(280, {
+		error: (issue) => m.validation_max_length({ max: Number(issue.maximum) }),
+	}),
 	profilePicture: profilePictureSchema,
 	coverPicture: coverPictureSchema,
 	removeProfilePicture: z.boolean(),

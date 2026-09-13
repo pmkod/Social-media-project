@@ -11,7 +11,7 @@ import { useCreateComment } from "./use-create-comment.ts";
 
 const createCommentSchema = z.object({
 	content: z.string().refine((value) => value.trim().length > 0, {
-		message: "Comment cannot be empty",
+		error: () => m.validation_comment_required(),
 	}),
 });
 

@@ -16,7 +16,9 @@ import { useResendSettingsUserVerificationCode } from "./use-resend-settings-use
 import { useSettingsUserVerification } from "./use-settings-user-verification.ts";
 
 const verificationSchema = z.object({
-	code: z.string().regex(/^\d{6}$/, "Enter the 6-digit code."),
+	code: z.string().regex(/^\d{6}$/, {
+		error: () => m.validation_verification_code_format(),
+	}),
 });
 
 type SettingsUserVerificationFormProps = {

@@ -21,9 +21,11 @@ import type { UserVerificationGoalType } from "./user-verification-goal.type";
 const verificationSchema = z.object({
 	code: z
 		.string()
-		.length(6, "The code must contain exactly 6 digits.")
+		.length(6, {
+			error: () => m.validation_verification_code_length(),
+		})
 		.refine((val) => val.split("").every((c) => c >= "0" && c <= "9"), {
-			message: "The code must contain digits only.",
+			error: () => m.validation_verification_code_digits_only(),
 		}),
 });
 

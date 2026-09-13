@@ -20,10 +20,12 @@ import { useNewPassword } from "./use-new-password";
 const newPasswordSchema = z
 	.object({
 		password: UserValidationSchema.shape.password,
-		confirmPassword: z.string().min(1, "Please confirm your password."),
+		confirmPassword: z.string().min(1, {
+			error: () => m.validation_required(),
+		}),
 	})
 	.refine((data) => data.password === data.confirmPassword, {
-		message: "Passwords do not match.",
+		error: () => m.validation_password_mismatch(),
 		path: ["confirmPassword"],
 	});
 

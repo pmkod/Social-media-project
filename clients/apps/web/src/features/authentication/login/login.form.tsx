@@ -17,7 +17,9 @@ import * as m from "@/paraglide/messages.js";
 import { useLogin } from "./use-login";
 
 const loginSchema = z.object({
-	emailOrUsername: z.string().min(1, "Email or username is required"),
+	emailOrUsername: z.string().min(1, {
+		error: () => m.validation_required(),
+	}),
 	password: UserValidationSchema.shape.password,
 });
 

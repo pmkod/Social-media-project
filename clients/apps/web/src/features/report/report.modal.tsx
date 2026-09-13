@@ -51,17 +51,19 @@ const OtherReasonId = "__other_report_reason__";
 
 const reportSchema = z
 	.object({
-		reasonId: z.string().min(1, "Select a reason."),
-		reasonText: z
-			.string()
-			.max(280, "The custom reason must be 280 characters or less."),
+		reasonId: z.string().min(1, {
+			error: () => m.validation_report_reason_required(),
+		}),
+		reasonText: z.string().max(280, {
+			error: (issue) => m.validation_max_length({ max: Number(issue.maximum) }),
+		}),
 	})
 	.superRefine((value, context) => {
 		if (value.reasonId === OtherReasonId && !value.reasonText.trim()) {
 			context.addIssue({
 				code: "custom",
 				path: ["reasonText"],
-				message: "Tell us what happened.",
+				message: m.validation_report_explain_required(),
 			});
 		}
 	});
