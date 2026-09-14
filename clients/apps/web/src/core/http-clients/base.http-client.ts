@@ -14,17 +14,13 @@ const baseHttpClient = ky.create({
 						| undefined;
 					const errorCode = errorResponse?.error?.code;
 
-					const errorCodeExistAsLanguageKey = errorCode
-						? Object.keys(m).includes(errorCode)
-						: false;
-
-					console.log(errorCodeExistAsLanguageKey);
-					console.log(errorCode);
-					console.log(Object.keys(m));
+					const isLanguageKey = (key: string): key is keyof typeof m =>
+						key in m;
 
 					error.message =
-						errorCodeExistAsLanguageKey && errorCode
-							? (m[errorCode]?.() ?? m.exception_something_went_wrong())
+						errorCode && isLanguageKey(errorCode)
+							? ((m[errorCode] as () => string)?.() ??
+								m.exception_something_went_wrong())
 							: m.exception_something_went_wrong();
 				} else {
 					error.message = m.exception_something_went_wrong();
