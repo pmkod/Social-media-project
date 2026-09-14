@@ -1,5 +1,6 @@
 import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
+import { Exception } from "@/core/exceptions/exception";
 import { getS3File } from "@/core/services/storage.service";
 import { parseVideoRange } from "../video-range";
 import { MediaRoutesTag } from "../media.constants";
@@ -67,7 +68,9 @@ const getVideoRoute = defineOpenAPIRoute({
 			});
 			if (partial.status !== 206 || !partial.body) {
 				await partial.body?.cancel();
-				throw new Error("Unable to stream the requested video range");
+				throw new Exception({
+					message: "Unable to stream the requested video range",
+				});
 			}
 
 			return c.body(partial.body, 206, {

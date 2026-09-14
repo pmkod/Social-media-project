@@ -1,4 +1,5 @@
 import { prisma } from "@/core/databases";
+import { Exception } from "@/core/exceptions/exception";
 
 type VerifyParams = {
 	id: string;
@@ -17,11 +18,13 @@ const verifyIfUserVerificationCompleted = async ({ id, token, goal }: VerifyPara
 	});
 
 	if (!userVerification) {
-		throw new Error("Verification process invalid or expired");
+		throw new Exception({ message: "Verification process invalid or expired" });
 	}
 
 	if (!userVerification.verifiedAt) {
-		throw new Error("User verification code has not been validated yet");
+		throw new Exception({
+			message: "User verification code has not been validated yet",
+		});
 	}
 
 	return userVerification;

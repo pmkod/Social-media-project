@@ -1,6 +1,7 @@
 import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
+import { Exception } from "@/core/exceptions/exception";
 import type { HonoEnv } from "@/core/types/hono-env";
 import type { Prisma } from "@/generated/prisma/client";
 import { hydrateProfileMediaFiles } from "../services/get-profile-media-files.service";
@@ -47,7 +48,7 @@ const getUserFollowersRoute = defineOpenAPIRoute<
 		});
 
 		if (!userExists) {
-			throw Error("User not found");
+			throw new Exception({ message: "User not found" });
 		}
 
 		const authenticatedUser = c.get("authenticatedUser");

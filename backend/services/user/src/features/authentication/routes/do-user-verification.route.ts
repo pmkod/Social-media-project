@@ -1,6 +1,7 @@
 import { createRoute, defineOpenAPIRoute } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
+import { Exception } from "@/core/exceptions/exception";
 import {
 	AuthenticationRoutesTag,
 	MAXIMUM_NUMBER_OF_FAILED_ATTEMPTS,
@@ -44,11 +45,13 @@ const doUserVerificationRoute = defineOpenAPIRoute({
 		});
 
 		if (!verificationInDb) {
-			throw new Error("Verification attempt not found or expired");
+			throw new Exception({
+				message: "Verification attempt not found or expired",
+			});
 		}
 
 		if (isUserVerificationExpired(verificationInDb)) {
-			throw new Error("Verification attempt has expired");
+			throw new Exception({ message: "Verification attempt has expired" });
 		}
 
 		if (
@@ -59,9 +62,9 @@ const doUserVerificationRoute = defineOpenAPIRoute({
 				where: { id: verificationInDb.id },
 				data: { disabledAt: new Date() },
 			});
-			throw new Error(
-				`Vous avez atteint le nombre maximal de tentatives (${MAXIMUM_NUMBER_OF_FAILED_ATTEMPTS}).`,
-			);
+			throw new Exception({
+				message: `Vous avez atteint le nombre maximal de tentatives (${MAXIMUM_NUMBER_OF_FAILED_ATTEMPTS}).`,
+			});
 		}
 
 		const isCodeValid = await compareUserVerificationCodeToHash({
@@ -74,7 +77,9 @@ const doUserVerificationRoute = defineOpenAPIRoute({
 				where: { id: verificationInDb.id },
 				data: { numberOfFailedAttempts: { increment: 1 } },
 			});
-			throw new Error("Invalid verification code. Please try again.");
+			throw new Exception({
+				message: "Invalid verification code. Please try again.",
+			});
 		}
 
 		await prisma.userVerification.update({

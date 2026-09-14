@@ -1,6 +1,7 @@
 import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
+import { Exception } from "@/core/exceptions/exception";
 import {
 	NotificationEventTypes,
 	NotificationGroupKeyBuilder,
@@ -44,7 +45,7 @@ const unlikeCommentRoute = defineOpenAPIRoute<
 		});
 
 		if (!comment) {
-			throw new Error("Comment not found");
+			throw new Exception({ message: "Comment not found" });
 		}
 
 		const deleted = await prisma.commentLike.deleteMany({

@@ -1,6 +1,7 @@
 import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
+import { Exception } from "@/core/exceptions/exception";
 import {
 	NotificationEventTypes,
 	NotificationGroupKeyBuilder,
@@ -43,7 +44,7 @@ const likePostRoute = defineOpenAPIRoute<typeof routeDef, HonoAuthenticatedEnv>(
 			});
 
 			if (!post) {
-				throw new Error("Post not found");
+				throw new Exception({ message: "Post not found" });
 			}
 
 			let postToSend: Pick<Post, "id" | "likesCount"> | null = {

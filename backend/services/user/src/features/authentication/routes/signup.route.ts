@@ -1,6 +1,7 @@
 import { createRoute, defineOpenAPIRoute } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
+import { Exception } from "@/core/exceptions/exception";
 import { sendMail } from "@/core/services/mail.service";
 import {
 	AuthenticationRoutesTag,
@@ -43,7 +44,9 @@ const signupRoute = defineOpenAPIRoute({
 			where: { email },
 		});
 		if (existingUser !== null) {
-			throw new Error("An account with this email address already exists.");
+			throw new Exception({
+				message: "An account with this email address already exists.",
+			});
 		}
 
 		const code = generateUserVerificationCode();

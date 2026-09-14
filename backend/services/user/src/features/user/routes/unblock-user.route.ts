@@ -1,6 +1,7 @@
 import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
+import { Exception } from "@/core/exceptions/exception";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { requireUserAuthentication } from "@/features/authentication/middlewares/require-user-authentication.middleware";
 import { UserRoutesTag } from "../user.constants";
@@ -31,7 +32,7 @@ const unblockUserRoute = defineOpenAPIRoute<
 			where: { id: userId },
 		});
 		if (!targetUser) {
-			throw Error("User not found");
+			throw new Exception({ message: "User not found" });
 		}
 
 		await prisma.block.deleteMany({

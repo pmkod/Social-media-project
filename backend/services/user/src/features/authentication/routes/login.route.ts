@@ -1,6 +1,7 @@
 import { createRoute, defineOpenAPIRoute } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
+import { Exception } from "@/core/exceptions/exception";
 import { sendMail } from "@/core/services/mail.service";
 import {
 	AuthenticationRoutesTag,
@@ -47,7 +48,9 @@ const loginRoute = defineOpenAPIRoute({
 		});
 
 		if (!user) {
-			throw new Error("Invalid email/username or password. Please try again");
+			throw new Exception({
+				message: "Invalid email/username or password. Please try again",
+			});
 		}
 
 		const isPasswordValid = await comparePasswordToHash({
@@ -56,7 +59,9 @@ const loginRoute = defineOpenAPIRoute({
 		});
 
 		if (!isPasswordValid) {
-			throw new Error("Invalid email/username or password. Please try again");
+			throw new Exception({
+				message: "Invalid email/username or password. Please try again",
+			});
 		}
 
 		const code = generateUserVerificationCode();

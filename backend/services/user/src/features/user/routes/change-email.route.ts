@@ -1,6 +1,7 @@
 import { createRoute, defineOpenAPIRoute } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
+import { Exception } from "@/core/exceptions/exception";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { UserVerificationGoals } from "@/features/authentication/authentication.constants";
 import { isUserVerificationExpired } from "@/features/authentication/authentication.functions";
@@ -44,16 +45,16 @@ const changeEmailRoute = defineOpenAPIRoute<
 		});
 
 		if (isUserVerificationExpired(verificationInDb)) {
-			throw new Error("Verification attempt has expired");
+			throw new Exception({ message: "Verification attempt has expired" });
 		}
 		if (
 			verificationInDb.userId !== authenticatedUser.id ||
 			!verificationInDb.email
 		) {
-			throw new Error("Invalid verification data");
+			throw new Exception({ message: "Invalid verification data" });
 		}
 		if (verificationInDb.goalAchievedAt) {
-			throw new Error("This verification has already been used");
+			throw new Exception({ message: "This verification has already been used" });
 		}
 
 		const existingUser = await prisma.user.findFirst({

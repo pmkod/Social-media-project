@@ -1,6 +1,7 @@
 import { createRoute, defineOpenAPIRoute } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
+import { Exception } from "@/core/exceptions/exception";
 import { userServiceClient } from "@/core/services/user-service.client";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { requireUserAuthentication } from "@/features/authentication/middlewares/require-user-authentication.middleware";
@@ -95,7 +96,8 @@ const createDiscussionRoute = defineOpenAPIRoute<
 
 		if (data.type === "PRIVATE") {
 			const otherUserId = memberIds[0];
-			if (!otherUserId) throw new Error("Private discussion member missing");
+			if (!otherUserId)
+				throw new Exception({ message: "Private discussion member missing" });
 			let privateDiscussionResult:
 				| {
 						created: boolean;
@@ -177,7 +179,9 @@ const createDiscussionRoute = defineOpenAPIRoute<
 			}
 
 			if (!privateDiscussionResult) {
-				throw new Error("Unable to create the private discussion");
+				throw new Exception({
+					message: "Unable to create the private discussion",
+				});
 			}
 			await prisma.discussionMember.update({
 				where: {

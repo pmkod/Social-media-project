@@ -1,6 +1,7 @@
 import { createRoute, defineOpenAPIRoute } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
+import { Exception } from "@/core/exceptions/exception";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { requireUserAuthentication } from "@/features/authentication/middlewares/require-user-authentication.middleware";
 import { HTTPException } from "hono/http-exception";
@@ -58,7 +59,7 @@ const updateDiscussionMemberRoute = defineOpenAPIRoute<
 			return c.json({ member });
 		}
 
-		if (!role) throw new Error("Member role missing");
+		if (!role) throw new Exception({ message: "Member role missing" });
 		if (
 			actorMembership.discussion.type !== "GROUP" ||
 			actorMembership.role !== "OWNER"

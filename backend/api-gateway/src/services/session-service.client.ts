@@ -36,7 +36,7 @@ class SessionServiceClient {
 		}
 
 		if (response.status === 401 || response.status === 404) {
-			throw new UnauthorizedException("Invalid or inactive session");
+			throw new UnauthorizedException();
 		}
 		if (!response.ok) {
 			throw new HTTPException(503, {

@@ -1,6 +1,7 @@
 import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
+import { Exception } from "@/core/exceptions/exception";
 import { notificationServiceClient } from "@/core/services/notification-service.client";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { requireUserAuthentication } from "@/features/authentication/middlewares/require-user-authentication.middleware";
@@ -39,11 +40,13 @@ const deleteCommentRoute = defineOpenAPIRoute<
 		});
 
 		if (!comment) {
-			throw new Error("Comment not found");
+			throw new Exception({ message: "Comment not found" });
 		}
 
 		if (comment.authorId !== authenticatedUserId) {
-			throw new Error("You are not authorized to delete this comment");
+			throw new Exception({
+				message: "You are not authorized to delete this comment",
+			});
 		}
 		if (comment.deletedAt) {
 			return c.json({ message: "Comment already deleted" });

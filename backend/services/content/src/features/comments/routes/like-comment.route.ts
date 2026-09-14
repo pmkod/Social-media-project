@@ -1,6 +1,7 @@
 import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
+import { Exception } from "@/core/exceptions/exception";
 import {
 	NotificationEventTypes,
 	NotificationGroupKeyBuilder,
@@ -49,7 +50,7 @@ const likeCommentRoute = defineOpenAPIRoute<
 		});
 
 		if (!comment || comment.deletedAt) {
-			throw new Error("Comment not found");
+			throw new Exception({ message: "Comment not found" });
 		}
 
 		const existingLike = await prisma.commentLike.findUnique({

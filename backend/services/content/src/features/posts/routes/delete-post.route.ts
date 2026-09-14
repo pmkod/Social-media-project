@@ -1,6 +1,7 @@
 import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
+import { Exception } from "@/core/exceptions/exception";
 import { notificationServiceClient } from "@/core/services/notification-service.client";
 import { userServiceClient } from "@/core/services/user-service.client";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
@@ -40,11 +41,13 @@ const deletePostRoute = defineOpenAPIRoute<
 		});
 
 		if (!existingPost) {
-			throw new Error("Post not found");
+			throw new Exception({ message: "Post not found" });
 		}
 
 		if (existingPost.authorId !== authenticatedUserId) {
-			throw new Error("You are not authorized to delete this post");
+			throw new Exception({
+				message: "You are not authorized to delete this post",
+			});
 		}
 
 		await prisma.post.delete({

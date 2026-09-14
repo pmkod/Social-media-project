@@ -1,5 +1,6 @@
 import { HTTPException } from "hono/http-exception";
 import { Configurations } from "../configurations";
+import { Exception } from "../exceptions/exception";
 
 type UserProfileFileDto = {
 	id: string;
@@ -40,7 +41,9 @@ class UserServiceClient {
 		});
 
 		if (!response.ok) {
-			throw new Error(`User service responded with status ${response.status}`);
+			throw new Exception({
+				message: `User service responded with status ${response.status}`,
+			});
 		}
 
 		return (await response.json()) as UserProfileDto[];

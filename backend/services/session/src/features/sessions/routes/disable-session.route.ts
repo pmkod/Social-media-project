@@ -1,6 +1,7 @@
 import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
+import { Exception } from "@/core/exceptions/exception";
 import { requireUserAuthentication } from "@/features/authentication/middlewares/require-user-authentication.middleware";
 import { HTTPException } from "hono/http-exception";
 import { SessionsRoutesTag } from "../sessions.constants";
@@ -45,7 +46,7 @@ const disableSessionRoute = defineOpenAPIRoute<
 			});
 		}
 		const session = await sessionRepository.disableSession(sessionId);
-		if (!session) throw new Error("Unable to disable session");
+		if (!session) throw new Exception({ message: "Unable to disable session" });
 
 		return c.json({ session });
 	},
