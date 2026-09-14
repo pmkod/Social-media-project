@@ -1,4 +1,7 @@
-import { createFileRoute, Outlet } from "@tanstack/react-router";
+import { createFileRoute, Outlet, useNavigate } from "@tanstack/react-router";
+import { useEffect } from "react";
+import { FullPageLoader } from "@/core/components/ui/full-page-loader.tsx";
+import { useAuthenticatedUser } from "@/features/user/authenticated-user/use-authenticated-user.ts";
 import * as m from "@/paraglide/messages.js";
 
 function AuthShowcase() {
@@ -101,6 +104,20 @@ export const Route = createFileRoute("/_base/_authentication")({
 });
 
 function RouteComponent() {
+	const authenticatedUserQuery = useAuthenticatedUser();
+	const navigate = useNavigate();
+
+	useEffect(() => {
+		if (authenticatedUserQuery.data) {
+			navigate({
+				to: "/home",
+			});
+		}
+	}, [authenticatedUserQuery.data, navigate]);
+
+	if (authenticatedUserQuery.isPending || authenticatedUserQuery.isSuccess)
+		return <FullPageLoader />;
+
 	return (
 		<div className="flex w-full flex-1 flex-col">
 			<main className="flex flex-1  justify-center px-6 py-8 lg:py-10">
