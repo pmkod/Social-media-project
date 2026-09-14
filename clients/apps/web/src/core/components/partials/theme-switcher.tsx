@@ -57,7 +57,7 @@ export function ThemeSwitcher({
 		<Select value={theme} onValueChange={(value) => setTheme(value as Theme)}>
 			<SelectTrigger
 				size="sm"
-				className={`w-[125px] cursor-pointer border-border bg-background hover:bg-accent transition-colors ${className}`}
+				className={`cursor-pointer border-border bg-background transition-colors hover:bg-accent ${className}`}
 			>
 				<SelectValue placeholder={m.settings_theme()} />
 			</SelectTrigger>

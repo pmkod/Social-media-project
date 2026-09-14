@@ -28,9 +28,12 @@ export function LanguageSwitcher({ className = "" }: LanguageSwitcherProps) {
 			<SelectTrigger
 				size="sm"
 				aria-label={m.settings_language()}
-				className={`w-[125px] cursor-pointer border-border bg-background transition-colors hover:bg-accent ${className}`}
+				className={`cursor-pointer border-border bg-background transition-colors hover:bg-accent ${className}`}
 			>
-				<SelectValue placeholder={m.settings_language()} />
+				<SelectValue placeholder={m.settings_language()}>
+					<RiGlobalLine className="size-4" />
+					<span lang={currentLocale}>{currentLocale.toUpperCase()}</span>
+				</SelectValue>
 			</SelectTrigger>
 			<SelectContent align="end">
 				{languages.map((language) => (
