@@ -80,7 +80,7 @@ function SettingsLayout() {
 		<main className="min-h-screen min-w-0 flex-1 bg-background">
 			<div className="lg:grid lg:grid-cols-[25rem_minmax(0,1fr)]">
 				<section
-					className={`h-screen ${!isOverview ? "hidden lg:block " : ""}`}
+					className={`h-screen px-4 ${!isOverview ? "hidden lg:block " : ""}`}
 				>
 					<AppHeader>
 						<AppHeaderLeftPart>
@@ -109,7 +109,10 @@ function SettingsLayout() {
 				</section>
 
 				<section
-					className={cn("min-w-0 px-10", isOverview && "hidden lg:block")}
+					className={cn(
+						"min-w-0 px-4 lg:px-10",
+						isOverview && "hidden lg:block",
+					)}
 				>
 					<Outlet />
 				</section>
