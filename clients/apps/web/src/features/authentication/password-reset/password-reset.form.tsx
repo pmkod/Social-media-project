@@ -12,6 +12,7 @@ import {
 	FieldLabel,
 } from "@/core/components/ui/field.tsx";
 import { Input } from "@/core/components/ui/input.tsx";
+import { getExceptionMessage } from "@/core/exceptions/translate-exception-code.ts";
 import { UserValidationSchema } from "@/features/user/common/user.validation-schemas.ts";
 import * as m from "@/paraglide/messages.js";
 import { usePasswordReset } from "./use-password-reset";
@@ -42,8 +43,8 @@ function PasswordResetForm({ onSuccess }: PasswordResetFormProps) {
 			try {
 				await passwordReset.mutateAsync({ email: value.email });
 				onSuccess();
-			} catch (error: any) {
-				setErrorMessage(error.message);
+			} catch (error) {
+				setErrorMessage(getExceptionMessage(error));
 			}
 		},
 	});

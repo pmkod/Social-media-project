@@ -1,5 +1,5 @@
-import { HTTPException } from "hono/http-exception";
 import { Configurations } from "../configurations";
+import { HttpStatus } from "../constants/http-status";
 import { Exception } from "../exceptions/exception";
 
 type UserProfileFileDto = {
@@ -43,6 +43,7 @@ class UserServiceClient {
 		if (!response.ok) {
 			throw new Exception({
 				message: `User service responded with status ${response.status}`,
+				status: HttpStatus.SERVICE_UNAVAILABLE.code,
 			});
 		}
 
@@ -85,8 +86,9 @@ class UserServiceClient {
 			return new Map(users.map((user) => [user.id, user]));
 		} catch (error) {
 			console.error("[UserServiceClient] Failed to validate chat users:", error);
-			throw new HTTPException(503, {
+			throw new Exception({
 				message: "User service is temporarily unavailable",
+				status: HttpStatus.SERVICE_UNAVAILABLE.code,
 			});
 		}
 	}

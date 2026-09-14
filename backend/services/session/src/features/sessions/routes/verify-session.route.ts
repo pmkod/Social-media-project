@@ -1,6 +1,6 @@
 import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
-import { HTTPException } from "hono/http-exception";
+import { Exception } from "@/core/exceptions/exception";
 import { SessionsRoutesTag } from "../sessions.constants";
 import { sessionRepository } from "../sessions.repository";
 import {
@@ -41,8 +41,9 @@ const verifySessionRoute = defineOpenAPIRoute({
 		const { id, token } = c.req.valid("json");
 		const session = await sessionRepository.verifySession(id, token);
 		if (!session) {
-			throw new HTTPException(HttpStatus.UNAUTHORIZED.code, {
+			throw new Exception({
 				message: "Invalid or inactive session",
+				status: HttpStatus.UNAUTHORIZED.code,
 			});
 		}
 

@@ -8,6 +8,7 @@ import {
 } from "@/core/components/ui/app-header.tsx";
 import { ExceptionBlock } from "@/core/components/ui/exception-block";
 import { MainContainer } from "@/core/components/ui/main-container";
+import { getExceptionMessage } from "@/core/exceptions/translate-exception-code.ts";
 import { UserLikedPosts } from "@/features/post/user-liked-posts/user-liked-posts";
 import { UserPosts } from "@/features/post/user-posts/user-posts";
 import { useUserProfile } from "@/features/user/user-profile/use-user-profile.ts";
@@ -52,7 +53,7 @@ function ProfilePage() {
 			) : profileQuery.isError ? (
 				<ExceptionBlock
 					title="This account doesn't exist"
-					description="Check the username and try again."
+					description={getExceptionMessage(profileQuery.error)}
 				/>
 			) : null}
 			<div className="border-b rounded-b-xl overflow-hidden">

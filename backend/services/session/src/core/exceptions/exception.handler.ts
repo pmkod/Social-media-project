@@ -1,20 +1,43 @@
 import type { ErrorHandler } from "hono";
 import { HTTPException } from "hono/http-exception";
+import { HttpStatus } from "../constants/http-status";
+import { ExceptionCodes } from "./exception.codes";
 import { Exception } from "./exception";
 
 const exceptionHandler: ErrorHandler = (error, c) => {
-	if (error instanceof HTTPException) {
-		return c.json({ message: error.message }, error.status);
-	}
 	if (error instanceof Exception) {
 		return c.json(
-			{ message: error.message || "Something went wrong" },
-			error.code ?? 500,
+			{
+				error: {
+					message: error.message || "Something went wrong",
+					code: error.code || ExceptionCodes.something_went_wrong,
+				},
+			},
+			error.status ?? HttpStatus.INTERNAL_SERVER_ERROR.code,
+		);
+	}
+	if (error instanceof HTTPException) {
+		return c.json(
+			{
+				error: {
+					message: error.message || "Something went wrong",
+					code: ExceptionCodes.something_went_wrong,
+				},
+			},
+			error.status,
 		);
 	}
 
 	console.error("[SESSION SERVICE ERROR]", error);
-	return c.json({ message: "Something went wrong" }, 500);
+	return c.json(
+		{
+			error: {
+				message: "Something went wrong",
+				code: ExceptionCodes.something_went_wrong,
+			},
+		},
+		HttpStatus.INTERNAL_SERVER_ERROR.code,
+	);
 };
 
 export { exceptionHandler };

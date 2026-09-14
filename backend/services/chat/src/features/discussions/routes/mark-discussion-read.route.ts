@@ -1,9 +1,9 @@
 import { createRoute, defineOpenAPIRoute } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
+import { Exception } from "@/core/exceptions/exception";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { requireUserAuthentication } from "@/features/authentication/middlewares/require-user-authentication.middleware";
-import { HTTPException } from "hono/http-exception";
 import { DiscussionsRoutesTag } from "../discussions.constants";
 import {
 	getActiveMembership,
@@ -52,8 +52,9 @@ const markDiscussionReadRoute = defineOpenAPIRoute<
 				select: { createdAt: true },
 			});
 			if (!message) {
-				throw new HTTPException(404, {
+				throw new Exception({
 					message: "Message not found in this discussion",
+					status: HttpStatus.NOT_FOUND.code,
 				});
 			}
 			readAt = message.createdAt;

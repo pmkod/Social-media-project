@@ -11,6 +11,7 @@ import {
 	FieldLabel,
 } from "@/core/components/ui/field.tsx";
 import { Input } from "@/core/components/ui/input.tsx";
+import { getExceptionMessage } from "@/core/exceptions/translate-exception-code.ts";
 import * as m from "@/paraglide/messages.js";
 import { useCompleteLogin } from "../complete-login/use-complete-login";
 import { useResendUserVerificationCode } from "../resend-user-verification-code/use-resend-user-verification-code";
@@ -45,8 +46,8 @@ function UserVerificationForm({ onSuccess, goal }: UserVerificationFormProps) {
 		clearErrorMessage();
 		try {
 			await resend.mutateAsync();
-		} catch (error: any) {
-			setErrorMessage(error.message);
+		} catch (error) {
+			setErrorMessage(getExceptionMessage(error));
 		}
 	};
 
@@ -65,8 +66,8 @@ function UserVerificationForm({ onSuccess, goal }: UserVerificationFormProps) {
 					await completeLogin.mutateAsync();
 				}
 				await onSuccess();
-			} catch (error: any) {
-				setErrorMessage(error.message);
+			} catch (error) {
+				setErrorMessage(getExceptionMessage(error));
 			}
 		},
 	});

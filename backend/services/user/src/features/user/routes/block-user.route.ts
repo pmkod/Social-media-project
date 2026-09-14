@@ -1,6 +1,7 @@
 import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
+import { ExceptionCodes } from "@/core/exceptions/exception.codes";
 import { Exception } from "@/core/exceptions/exception";
 import {
 	NotificationEventTypes,
@@ -35,7 +36,11 @@ const blockUserRoute = defineOpenAPIRoute<
 		const authenticatedUser = c.get("authenticatedUser");
 
 		if (userId === authenticatedUser.id) {
-			throw new Exception({ message: "You cannot block yourself" });
+			throw new Exception({
+				code: ExceptionCodes.cannot_block_yourself,
+				message: "You cannot block yourself",
+				status: HttpStatus.BAD_REQUEST.code,
+			});
 		}
 
 		const targetUser = await prisma.user.findFirst({
@@ -44,7 +49,11 @@ const blockUserRoute = defineOpenAPIRoute<
 		});
 
 		if (!targetUser) {
-			throw new Exception({ message: "User not found" });
+			throw new Exception({
+				code: ExceptionCodes.user_not_found,
+				message: "User not found",
+				status: HttpStatus.NOT_FOUND.code,
+			});
 		}
 
 		await prisma.block.upsert({

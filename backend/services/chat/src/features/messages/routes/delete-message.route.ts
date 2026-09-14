@@ -1,10 +1,11 @@
 import { createRoute, defineOpenAPIRoute } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
+import { ExceptionCodes } from "@/core/exceptions/exception.codes";
+import { Exception } from "@/core/exceptions/exception";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { requireUserAuthentication } from "@/features/authentication/middlewares/require-user-authentication.middleware";
 import { getActiveMembership } from "@/features/discussions/discussions.service";
-import { HTTPException } from "hono/http-exception";
 import { MessagesRoutesTag } from "../messages.constants";
 import { MessageIdParams } from "../messages.validation-schemas";
 
@@ -35,12 +36,18 @@ const deleteMessageRoute = defineOpenAPIRoute<
 			select: { discussionId: true, senderId: true, deletedAt: true },
 		});
 		if (!message) {
-			throw new HTTPException(404, { message: "Message not found" });
+			throw new Exception({
+				code: ExceptionCodes.message_not_found,
+				message: "Message not found",
+				status: HttpStatus.NOT_FOUND.code,
+			});
 		}
 		await getActiveMembership(message.discussionId, authenticatedUserId);
 		if (message.senderId !== authenticatedUserId) {
-			throw new HTTPException(403, {
+			throw new Exception({
+				code: ExceptionCodes.sender_required_to_delete_message,
 				message: "Only the sender can delete this message",
+				status: HttpStatus.FORBIDDEN.code,
 			});
 		}
 		if (!message.deletedAt) {

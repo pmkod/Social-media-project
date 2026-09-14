@@ -1,0 +1,40 @@
+const ExceptionCodes = {
+	something_went_wrong: "something_went_wrong",
+	unauthorized: "unauthorized",
+	discussion_not_found: "discussion_not_found",
+	group_operation_required: "group_operation_required",
+	group_manager_required: "group_manager_required",
+	invalid_private_discussion_members: "invalid_private_discussion_members",
+	insufficient_group_members: "insufficient_group_members",
+	group_name_required: "group_name_required",
+	private_discussion_details_forbidden: "private_discussion_details_forbidden",
+	users_not_found: "users_not_found",
+	blocked_user_in_discussion: "blocked_user_in_discussion",
+	private_discussion_member_missing: "private_discussion_member_missing",
+	private_discussion_creation_failed: "private_discussion_creation_failed",
+	no_new_member: "no_new_member",
+	blocked_user_in_group: "blocked_user_in_group",
+	member_cannot_leave_private_discussion:
+		"member_cannot_leave_private_discussion",
+	group_member_not_found: "group_member_not_found",
+	group_owner_cannot_be_removed: "group_owner_cannot_be_removed",
+	owner_required_to_remove_admin: "owner_required_to_remove_admin",
+	own_blocked_state_only: "own_blocked_state_only",
+	group_owner_required_to_change_roles:
+		"group_owner_required_to_change_roles",
+	owner_cannot_change_own_role: "owner_cannot_change_own_role",
+	owner_role_change_forbidden: "owner_role_change_forbidden",
+	member_role_missing: "member_role_missing",
+	message_not_found: "message_not_found",
+	sender_required_to_delete_message: "sender_required_to_delete_message",
+	discussion_blocked: "discussion_blocked",
+	private_discussion_recipient_missing:
+		"private_discussion_recipient_missing",
+	recipient_not_found: "recipient_not_found",
+	blocked_relationship: "blocked_relationship",
+	parent_message_not_found: "parent_message_not_found",
+	sender_required_to_edit_message: "sender_required_to_edit_message",
+	deleted_message_edit_forbidden: "deleted_message_edit_forbidden",
+} as const;
+
+export { ExceptionCodes };

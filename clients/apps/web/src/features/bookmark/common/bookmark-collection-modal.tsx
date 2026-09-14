@@ -1,5 +1,4 @@
 import { useForm } from "@tanstack/react-form";
-import { isHTTPError } from "ky";
 import { z } from "zod";
 import { Button } from "@/core/components/ui/button.tsx";
 import {
@@ -20,6 +19,7 @@ import {
 import { Input } from "@/core/components/ui/input.tsx";
 import { create, useModal } from "@/core/components/ui/nice-modal.tsx";
 import { Textarea } from "@/core/components/ui/textarea.tsx";
+import { getExceptionMessage } from "@/core/exceptions/translate-exception-code.ts";
 import * as m from "@/paraglide/messages.js";
 import { useCreateBookmarkCollection } from "../create-bookmark-collection/use-create-bookmark-collection.ts";
 import { useEditBookmarkCollection } from "../edit-bookmark-collection/use-edit-bookmark-collection.ts";
@@ -59,15 +59,9 @@ const BookmarkCollectionModal = create<BookmarkCollectionModalProps>(
 		const editCollection = useEditBookmarkCollection();
 		const isEditing = Boolean(collection);
 		const mutation = isEditing ? editCollection : createCollection;
-		const mutationErrorMessage =
-			mutation.isError &&
-			isHTTPError(mutation.error) &&
-			typeof mutation.error.data === "object" &&
-			mutation.error.data !== null &&
-			"message" in mutation.error.data &&
-			typeof mutation.error.data.message === "string"
-				? mutation.error.data.message
-				: "Unable to save this collection. Please try again.";
+		const mutationErrorMessage = mutation.isError
+			? getExceptionMessage(mutation.error)
+			: m.exception_something_went_wrong();
 
 		const close = () => {
 			modal.resolve();

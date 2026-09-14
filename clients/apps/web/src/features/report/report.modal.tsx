@@ -25,6 +25,7 @@ import NiceModal, {
 	useModal,
 } from "@/core/components/ui/nice-modal.tsx";
 import { Textarea } from "@/core/components/ui/textarea.tsx";
+import { getExceptionMessage } from "@/core/exceptions/translate-exception-code.ts";
 import { ReportReasonItem } from "@/features/report-reason/common/report-reason-item.tsx";
 import { ReportReasonItemLoader } from "@/features/report-reason/common/report-reason-item-loader.tsx";
 import { useReportReasons } from "@/features/report-reason/use-report-reasons.ts";
@@ -102,10 +103,7 @@ const ReportModal = create<ReportModalProps>(
 					void NiceModal.show(ReportSuccessModal);
 				} catch (error) {
 					toast.error("Report could not be sent", {
-						description:
-							error instanceof Error && error.message
-								? error.message
-								: "Please check your connection and try again.",
+						description: getExceptionMessage(error),
 					});
 				}
 			},
@@ -170,7 +168,7 @@ const ReportModal = create<ReportModalProps>(
 							) : reportReasonsQuery.isError ? (
 								<ExceptionBlock
 									title="Report reasons could not be loaded"
-									description="Check your connection and try again."
+									description={getExceptionMessage(reportReasonsQuery.error)}
 									onRefresh={() => reportReasonsQuery.refetch()}
 									isRefetching={reportReasonsQuery.isRefetching}
 									bordered={false}

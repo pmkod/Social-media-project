@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Field, FieldDescription, FieldError, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { Text } from '@/components/ui/text';
+import { getExceptionMessage } from '@/core/exceptions/translate-exception-code';
 import {
   authenticationFields,
   passwordResetSchema,
@@ -34,7 +35,7 @@ export default function PasswordResetScreen() {
           setInfo('If an account exists for this email, reset instructions have been sent.');
         }
       } catch (caughtError) {
-        setError(caughtError instanceof Error ? caughtError.message : 'Unable to request reset.');
+        setError(getExceptionMessage(caughtError));
       }
     },
   });

@@ -1,7 +1,9 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { Configurations } from "./configurations";
+import { HttpStatus } from "./constants/http-status";
 import { exceptionHandler } from "./exceptions/exception.handler";
+import { Exception } from "./exceptions/exception";
 import { findRoute } from "./router";
 import { verifyAuthorizationHeader } from "./middleware/verify-authorization-header";
 import { sendTo } from "./send";
@@ -17,7 +19,10 @@ app.use("*", async (c) => {
 	const route = findRoute(c.req.path);
 
 	if (!route) {
-		return c.json({ message: "Route not found in API Gateway" }, 404);
+		throw new Exception({
+			message: "Route not found in API Gateway",
+			status: HttpStatus.NOT_FOUND.code,
+		});
 	}
 
 	const authorizationHeader = c.req.header("Authorization");

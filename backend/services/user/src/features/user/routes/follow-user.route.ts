@@ -1,6 +1,8 @@
 import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
+import { ExceptionCodes } from "@/core/exceptions/exception.codes";
+import { Exception } from "@/core/exceptions/exception";
 import {
 	NotificationEventTypes,
 	NotificationGroupKeyBuilder,
@@ -32,10 +34,11 @@ const followUserRoute = defineOpenAPIRoute<
 		const { id: userId } = c.req.valid("param");
 
 		if (userId === authenticatedUser.id) {
-			return c.json(
-				{ message: "You cannot follow yourself" },
-				HttpStatus.BAD_REQUEST.code,
-			);
+			throw new Exception({
+				code: ExceptionCodes.cannot_follow_yourself,
+				message: "You cannot follow yourself",
+				status: HttpStatus.BAD_REQUEST.code,
+			});
 		}
 
 		const targetUser = await prisma.user.findFirst({
@@ -43,7 +46,11 @@ const followUserRoute = defineOpenAPIRoute<
 			select: { id: true },
 		});
 		if (targetUser === null) {
-			return c.json({ message: "User not found" }, HttpStatus.NOT_FOUND.code);
+			throw new Exception({
+				code: ExceptionCodes.user_not_found,
+				message: "User not found",
+				status: HttpStatus.NOT_FOUND.code,
+			});
 		}
 		const block = await prisma.block.findFirst({
 			where: {
@@ -55,10 +62,11 @@ const followUserRoute = defineOpenAPIRoute<
 			select: { blockerId: true },
 		});
 		if (block) {
-			return c.json(
-				{ message: "You cannot follow a user involved in a block" },
-				HttpStatus.BAD_REQUEST.code,
-			);
+			throw new Exception({
+				code: ExceptionCodes.cannot_follow_blocked_user,
+				message: "You cannot follow a user involved in a block",
+				status: HttpStatus.BAD_REQUEST.code,
+			});
 		}
 
 		const existingFollow = await prisma.follow.findUnique({

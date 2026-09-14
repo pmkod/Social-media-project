@@ -8,6 +8,7 @@ import {
 import { EmptyBlock } from "@/core/components/ui/empty-block.tsx";
 import { ExceptionBlock } from "@/core/components/ui/exception-block.tsx";
 import { MainContainer } from "@/core/components/ui/main-container.tsx";
+import { getExceptionMessage } from "@/core/exceptions/translate-exception-code.ts";
 import { useIntersectionObserver } from "@/core/hooks/use-intersection-observer.ts";
 import { groupNotifications } from "@/features/notification/common/notification.utils.ts";
 import { NotificationItem } from "@/features/notification/list/notification-item.tsx";
@@ -24,6 +25,7 @@ export const Route = createFileRoute("/_main/_with-right-aside/notifications")({
 function NotificationsPage() {
 	const {
 		data,
+		error,
 		fetchNextPage,
 		hasNextPage,
 		isError,
@@ -78,7 +80,7 @@ function NotificationsPage() {
 				) : isError ? (
 					<ExceptionBlock
 						title="Unable to load notifications"
-						description="An error occurred while loading your notifications."
+						description={getExceptionMessage(error)}
 						onRefresh={() => void refetch()}
 						isRefetching={isRefetching}
 						bordered={false}

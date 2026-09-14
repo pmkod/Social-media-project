@@ -1,6 +1,7 @@
 import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
+import { ExceptionCodes } from "@/core/exceptions/exception.codes";
 import { Exception } from "@/core/exceptions/exception";
 import {
 	NotificationEventTypes,
@@ -56,7 +57,11 @@ const createCommentRoute = defineOpenAPIRoute<
 		});
 
 		if (!post) {
-			throw new Exception({ message: "Post not found" });
+			throw new Exception({
+				code: ExceptionCodes.post_not_found,
+				message: "Post not found",
+				status: HttpStatus.NOT_FOUND.code,
+			});
 		}
 		if (
 			await userServiceClient.hasBlockRelationship(
@@ -64,7 +69,11 @@ const createCommentRoute = defineOpenAPIRoute<
 				post.authorId,
 			)
 		) {
-			throw new Exception({ message: "Post not found" });
+			throw new Exception({
+				code: ExceptionCodes.post_not_found,
+				message: "Post not found",
+				status: HttpStatus.NOT_FOUND.code,
+			});
 		}
 
 		let parentComment: {
@@ -89,7 +98,11 @@ const createCommentRoute = defineOpenAPIRoute<
 				parentComment.postId !== postId ||
 				parentComment.deletedAt
 			) {
-				throw new Exception({ message: "Parent comment not found" });
+				throw new Exception({
+					code: ExceptionCodes.parent_comment_not_found,
+					message: "Parent comment not found",
+					status: HttpStatus.NOT_FOUND.code,
+				});
 			}
 		}
 

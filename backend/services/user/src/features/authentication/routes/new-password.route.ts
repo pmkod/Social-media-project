@@ -1,6 +1,7 @@
 import { createRoute, defineOpenAPIRoute } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
+import { ExceptionCodes } from "@/core/exceptions/exception.codes";
 import { Exception } from "@/core/exceptions/exception";
 import { getRequestClientMetadata } from "@/core/functions/request.functions";
 import { sessionServiceClient } from "@/core/services/session-service.client";
@@ -52,11 +53,18 @@ const newPasswordRoute = defineOpenAPIRoute({
 		});
 
 		if (isUserVerificationExpired(verificationInDb)) {
-			throw new Exception({ message: "Verification attempt has expired" });
+			throw new Exception({
+				code: ExceptionCodes.verification_expired,
+				message: "Verification attempt has expired",
+				status: HttpStatus.BAD_REQUEST.code,
+			});
 		}
 
 		if (!verificationInDb.userId) {
-			throw new Exception({ message: "User ID missing from verification" });
+			throw new Exception({
+				message: "User ID missing from verification",
+				status: HttpStatus.INTERNAL_SERVER_ERROR.code,
+			});
 		}
 
 		const hashedPassword = await hashPassword(newPassword);

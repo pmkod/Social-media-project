@@ -1,6 +1,7 @@
 import { createRoute, defineOpenAPIRoute } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
+import { ExceptionCodes } from "@/core/exceptions/exception.codes";
 import { Exception } from "@/core/exceptions/exception";
 import { getRequestClientMetadata } from "@/core/functions/request.functions";
 import { sessionServiceClient } from "@/core/services/session-service.client";
@@ -49,11 +50,19 @@ const completeSignupRoute = defineOpenAPIRoute({
 		});
 
 		if (isUserVerificationExpired(verificationInDb)) {
-			throw new Exception({ message: "Verification attempt has expired" });
+			throw new Exception({
+				code: ExceptionCodes.verification_expired,
+				message: "Verification attempt has expired",
+				status: HttpStatus.BAD_REQUEST.code,
+			});
 		}
 
 		if (!verificationInDb.email || !verificationInDb.password) {
-			throw new Exception({ message: "Invalid verification data" });
+			throw new Exception({
+				code: ExceptionCodes.invalid_verification_data,
+				message: "Invalid verification data",
+				status: HttpStatus.BAD_REQUEST.code,
+			});
 		}
 
 		const existingUsernameUser = await prisma.user.findFirst({
@@ -61,7 +70,9 @@ const completeSignupRoute = defineOpenAPIRoute({
 		});
 		if (existingUsernameUser !== null) {
 			throw new Exception({
+				code: ExceptionCodes.username_already_exists,
 				message: "An account with this username already exists",
+				status: HttpStatus.CONFLICT.code,
 			});
 		}
 

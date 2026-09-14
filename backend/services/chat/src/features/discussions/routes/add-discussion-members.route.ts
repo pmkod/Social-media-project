@@ -1,10 +1,11 @@
 import { createRoute, defineOpenAPIRoute } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
+import { ExceptionCodes } from "@/core/exceptions/exception.codes";
+import { Exception } from "@/core/exceptions/exception";
 import { userServiceClient } from "@/core/services/user-service.client";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { requireUserAuthentication } from "@/features/authentication/middlewares/require-user-authentication.middleware";
-import { HTTPException } from "hono/http-exception";
 import { DiscussionMembersRoutesTag } from "../discussions.constants";
 import { uniqueOtherUserIds } from "../discussions.functions";
 import { requireGroupManager } from "../discussions.service";
@@ -46,7 +47,11 @@ const addDiscussionMembersRoute = defineOpenAPIRoute<
 
 		const uniqueUserIds = uniqueOtherUserIds(userIds, authenticatedUserId);
 		if (uniqueUserIds.length === 0) {
-			throw new HTTPException(400, { message: "No new member was provided" });
+			throw new Exception({
+				code: ExceptionCodes.no_new_member,
+				message: "No new member was provided",
+				status: HttpStatus.BAD_REQUEST.code,
+			});
 		}
 		const usersMap = await userServiceClient.fetchUsersBatchOrThrow(
 			uniqueUserIds,
@@ -56,8 +61,10 @@ const addDiscussionMembersRoute = defineOpenAPIRoute<
 			(userId) => !usersMap.has(userId),
 		);
 		if (missingUserIds.length > 0) {
-			throw new HTTPException(404, {
+			throw new Exception({
+				code: ExceptionCodes.users_not_found,
 				message: `Users not found: ${missingUserIds.join(", ")}`,
+				status: HttpStatus.NOT_FOUND.code,
 			});
 		}
 		const blockedUser = uniqueUserIds.find((userId) => {
@@ -68,8 +75,10 @@ const addDiscussionMembersRoute = defineOpenAPIRoute<
 			);
 		});
 		if (blockedUser) {
-			throw new HTTPException(403, {
+			throw new Exception({
+				code: ExceptionCodes.blocked_user_in_group,
 				message: "A group cannot include a blocked user",
+				status: HttpStatus.FORBIDDEN.code,
 			});
 		}
 

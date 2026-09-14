@@ -1,11 +1,12 @@
 import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
+import { ExceptionCodes } from "@/core/exceptions/exception.codes";
+import { Exception } from "@/core/exceptions/exception";
 import { userServiceClient } from "@/core/services/user-service.client";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { requireUserAuthentication } from "@/features/authentication/middlewares/require-user-authentication.middleware";
 import { getActiveMembership } from "@/features/discussions/discussions.service";
-import { HTTPException } from "hono/http-exception";
 import { MessagesRoutesTag } from "../messages.constants";
 import {
 	buildMessageResponse,
@@ -48,8 +49,10 @@ const createMessageRoute = defineOpenAPIRoute<
 			authenticatedUserId,
 		);
 		if (membership.isBlocked) {
-			throw new HTTPException(403, {
+			throw new Exception({
+				code: ExceptionCodes.discussion_blocked,
 				message: "This discussion is blocked",
+				status: HttpStatus.FORBIDDEN.code,
 			});
 		}
 
@@ -63,8 +66,10 @@ const createMessageRoute = defineOpenAPIRoute<
 				select: { userId: true },
 			});
 			if (!recipient) {
-				throw new HTTPException(409, {
+				throw new Exception({
+					code: ExceptionCodes.private_discussion_recipient_missing,
 					message: "The private discussion has no recipient",
+					status: HttpStatus.CONFLICT.code,
 				});
 			}
 			const usersMap = await userServiceClient.fetchUsersBatchOrThrow(
@@ -73,14 +78,20 @@ const createMessageRoute = defineOpenAPIRoute<
 			);
 			const recipientProfile = usersMap.get(recipient.userId);
 			if (!recipientProfile) {
-				throw new HTTPException(404, { message: "Recipient not found" });
+				throw new Exception({
+					code: ExceptionCodes.recipient_not_found,
+					message: "Recipient not found",
+					status: HttpStatus.NOT_FOUND.code,
+				});
 			}
 			if (
 				recipientProfile.isBlockedByAuthenticatedUser ||
 				recipientProfile.hasBlockedAuthenticatedInUser
 			) {
-				throw new HTTPException(403, {
+				throw new Exception({
+					code: ExceptionCodes.blocked_relationship,
 					message: "Messages cannot be sent across a blocked relationship",
+					status: HttpStatus.FORBIDDEN.code,
 				});
 			}
 		}
@@ -95,8 +106,10 @@ const createMessageRoute = defineOpenAPIRoute<
 				select: { id: true },
 			});
 			if (!parentMessage) {
-				throw new HTTPException(404, {
+				throw new Exception({
+					code: ExceptionCodes.parent_message_not_found,
 					message: "Parent message not found in this discussion",
+					status: HttpStatus.NOT_FOUND.code,
 				});
 			}
 		}

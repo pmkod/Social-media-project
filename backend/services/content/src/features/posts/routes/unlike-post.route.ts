@@ -1,6 +1,7 @@
 import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
+import { ExceptionCodes } from "@/core/exceptions/exception.codes";
 import { Exception } from "@/core/exceptions/exception";
 import {
 	NotificationEventTypes,
@@ -46,7 +47,11 @@ const unlikePostRoute = defineOpenAPIRoute<
 		});
 
 		if (!post) {
-			throw new Exception({ message: "Post not found" });
+			throw new Exception({
+				code: ExceptionCodes.post_not_found,
+				message: "Post not found",
+				status: HttpStatus.NOT_FOUND.code,
+			});
 		}
 		let postToSend: Pick<Post, "id" | "likesCount"> | null = {
 			id: post.id,

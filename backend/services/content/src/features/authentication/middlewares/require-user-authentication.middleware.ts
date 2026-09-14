@@ -1,4 +1,7 @@
 import type { Context, Next } from "hono";
+import { HttpStatus } from "@/core/constants/http-status";
+import { ExceptionCodes } from "@/core/exceptions/exception.codes";
+import { Exception } from "@/core/exceptions/exception";
 import type { HonoEnv } from "@/core/types/hono-env";
 
 const requireUserAuthentication = async (
@@ -8,7 +11,11 @@ const requireUserAuthentication = async (
 	const authenticatedUser = c.get("authenticatedUser");
 
 	if (!authenticatedUser) {
-		return c.json({ message: "Unauthorized" }, 401);
+		throw new Exception({
+			code: ExceptionCodes.unauthorized,
+			message: "Unauthorized",
+			status: HttpStatus.UNAUTHORIZED.code,
+		});
 	}
 
 	return await next();

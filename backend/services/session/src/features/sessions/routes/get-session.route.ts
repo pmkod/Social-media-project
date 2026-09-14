@@ -1,8 +1,9 @@
 import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
+import { ExceptionCodes } from "@/core/exceptions/exception.codes";
+import { Exception } from "@/core/exceptions/exception";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { requireUserAuthentication } from "@/features/authentication/middlewares/require-user-authentication.middleware";
-import { HTTPException } from "hono/http-exception";
 import { SessionsRoutesTag } from "../sessions.constants";
 import { sessionRepository } from "../sessions.repository";
 import {
@@ -40,8 +41,10 @@ const getSessionRoute = defineOpenAPIRoute<
 		const { sessionId } = c.req.valid("param");
 		const session = await sessionRepository.getSession(sessionId);
 		if (!session || session.userId !== authenticatedUser.id) {
-			throw new HTTPException(HttpStatus.NOT_FOUND.code, {
+			throw new Exception({
+				code: ExceptionCodes.session_not_found,
 				message: "Session not found",
+				status: HttpStatus.NOT_FOUND.code,
 			});
 		}
 

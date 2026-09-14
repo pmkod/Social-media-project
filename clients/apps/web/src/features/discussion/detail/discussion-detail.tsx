@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { ExceptionBlock } from "@/core/components/ui/exception-block.tsx";
+import { getExceptionMessage } from "@/core/exceptions/translate-exception-code.ts";
 import { useAuthenticatedUser } from "@/features/user/authenticated-user/use-authenticated-user.ts";
 import type { Message } from "../common/discussion.ts";
 import { useDiscussion } from "../hooks/use-discussion.ts";
@@ -37,7 +38,7 @@ function DiscussionDetail({ discussionId }: { discussionId: string }) {
 					bordered={false}
 					className="min-h-72"
 					title="Conversation unavailable"
-					description="This conversation could not be found or you no longer have access to it."
+					description={getExceptionMessage(discussionQuery.error)}
 					onRefresh={() => void discussionQuery.refetch()}
 					isRefetching={discussionQuery.isRefetching}
 				/>

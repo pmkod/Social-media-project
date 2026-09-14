@@ -1,9 +1,10 @@
 import { createRoute, defineOpenAPIRoute } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
+import { ExceptionCodes } from "@/core/exceptions/exception.codes";
+import { Exception } from "@/core/exceptions/exception";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { requireUserAuthentication } from "@/features/authentication/middlewares/require-user-authentication.middleware";
-import { HTTPException } from "hono/http-exception";
 import { DiscussionsRoutesTag } from "../discussions.constants";
 import {
 	buildDiscussionResponses,
@@ -40,7 +41,11 @@ const getDiscussionRoute = defineOpenAPIRoute<
 			include: discussionDetailsInclude,
 		});
 		if (!discussion) {
-			throw new HTTPException(404, { message: "Discussion not found" });
+			throw new Exception({
+				code: ExceptionCodes.discussion_not_found,
+				message: "Discussion not found",
+				status: HttpStatus.NOT_FOUND.code,
+			});
 		}
 
 		const [presentedDiscussion] = await buildDiscussionResponses(

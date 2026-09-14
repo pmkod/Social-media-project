@@ -1,5 +1,7 @@
 import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
+import { ExceptionCodes } from "@/core/exceptions/exception.codes";
+import { Exception } from "@/core/exceptions/exception";
 import type { HonoEnv } from "@/core/types/hono-env";
 import { getPublicUserProfile } from "../services/get-public-user-profile.service";
 import { UserRoutesTag } from "../user.constants";
@@ -36,7 +38,11 @@ const getUserByIdRoute = defineOpenAPIRoute<
 		);
 
 		if (!user) {
-			return c.json({ message: "User not found" }, HttpStatus.NOT_FOUND.code);
+			throw new Exception({
+				code: ExceptionCodes.user_not_found,
+				message: "User not found",
+				status: HttpStatus.NOT_FOUND.code,
+			});
 		}
 
 		return c.json(user);

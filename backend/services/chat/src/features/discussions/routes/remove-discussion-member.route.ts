@@ -1,9 +1,10 @@
 import { createRoute, defineOpenAPIRoute } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
+import { ExceptionCodes } from "@/core/exceptions/exception.codes";
+import { Exception } from "@/core/exceptions/exception";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { requireUserAuthentication } from "@/features/authentication/middlewares/require-user-authentication.middleware";
-import { HTTPException } from "hono/http-exception";
 import { DiscussionMembersRoutesTag } from "../discussions.constants";
 import {
 	getActiveMembership,
@@ -38,28 +39,38 @@ const removeDiscussionMemberRoute = defineOpenAPIRoute<
 			: await requireGroupManager(discussionId, authenticatedUserId);
 
 		if (actorMembership.discussion.type !== "GROUP") {
-			throw new HTTPException(400, {
+			throw new Exception({
+				code: ExceptionCodes.member_cannot_leave_private_discussion,
 				message: "Members cannot leave a private discussion",
+				status: HttpStatus.BAD_REQUEST.code,
 			});
 		}
 		const targetMembership = await prisma.discussionMember.findUnique({
 			where: { discussionId_userId: { discussionId, userId } },
 		});
 		if (!targetMembership || targetMembership.hasLeft) {
-			throw new HTTPException(404, { message: "Group member not found" });
+			throw new Exception({
+				code: ExceptionCodes.group_member_not_found,
+				message: "Group member not found",
+				status: HttpStatus.NOT_FOUND.code,
+			});
 		}
 		if (!isLeaving) {
 			if (targetMembership.role === "OWNER") {
-				throw new HTTPException(403, {
+				throw new Exception({
+					code: ExceptionCodes.group_owner_cannot_be_removed,
 					message: "The group owner cannot be removed",
+					status: HttpStatus.FORBIDDEN.code,
 				});
 			}
 			if (
 				targetMembership.role === "ADMIN" &&
 				actorMembership.role !== "OWNER"
 			) {
-				throw new HTTPException(403, {
+				throw new Exception({
+					code: ExceptionCodes.owner_required_to_remove_admin,
 					message: "Only the owner can remove an administrator",
+					status: HttpStatus.FORBIDDEN.code,
 				});
 			}
 		}

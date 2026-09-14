@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Text } from '@/components/ui/text';
 import { clearVerification } from '@/core/auth/auth.storage';
 import { useSession } from '@/core/auth/session-context';
+import { getExceptionMessage } from '@/core/exceptions/translate-exception-code';
 import { isVerificationGoal } from '@/features/authentication/auth.utils';
 import {
   authenticationFields,
@@ -53,7 +54,7 @@ export default function VerificationScreen() {
           router.replace('/new-password');
         }
       } catch (caughtError) {
-        setError(caughtError instanceof Error ? caughtError.message : 'Unable to verify code.');
+        setError(getExceptionMessage(caughtError));
       }
     },
   });
@@ -65,7 +66,7 @@ export default function VerificationScreen() {
       await resendVerificationCode.mutateAsync();
       setInfo('A new verification code was sent to your email.');
     } catch (caughtError) {
-      setError(caughtError instanceof Error ? caughtError.message : 'Unable to resend code.');
+      setError(getExceptionMessage(caughtError));
     }
   };
 

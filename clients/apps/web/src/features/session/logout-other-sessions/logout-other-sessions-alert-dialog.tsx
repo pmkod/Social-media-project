@@ -1,6 +1,7 @@
 import { toast } from "sonner";
 import { BaseAlertDialog } from "@/core/components/ui/base-alert-dialog.tsx";
 import { create } from "@/core/components/ui/nice-modal.tsx";
+import { getExceptionMessage } from "@/core/exceptions/translate-exception-code.ts";
 import * as m from "@/paraglide/messages.js";
 import { useLogoutOtherSessions } from "./use-logout-other-sessions.ts";
 
@@ -22,11 +23,7 @@ const LogoutOtherSessionsAlertDialog = create(() => {
 							: m.settings_sessions_logged_out({ count: disabledCount }),
 					);
 				} catch (error) {
-					toast.error(
-						error instanceof Error
-							? error.message
-							: "Unable to log out of other sessions",
-					);
+					toast.error(getExceptionMessage(error));
 					throw error;
 				}
 			}}

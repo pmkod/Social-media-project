@@ -9,6 +9,7 @@ import {
 import { EmptyBlock } from "@/core/components/ui/empty-block.tsx";
 import { ExceptionBlock } from "@/core/components/ui/exception-block.tsx";
 import { create, useModal } from "@/core/components/ui/nice-modal.tsx";
+import { getExceptionMessage } from "@/core/exceptions/translate-exception-code.ts";
 import { useIntersectionObserver } from "@/core/hooks/use-intersection-observer.ts";
 import { UserRowItem } from "@/features/user/common/components/user-row-item.tsx";
 import { UserRowItemListLoader } from "@/features/user/common/components/user-row-item-list-loader.tsx";
@@ -67,7 +68,7 @@ const ListFollowersModal = create(({ userId }: ListFollowersModalProps) => {
 						) : query.isError ? (
 							<ExceptionBlock
 								title="Unable to load followers"
-								description="An error occurred while loading the followers list."
+								description={getExceptionMessage(query.error)}
 								onRefresh={handleRefetch}
 								isRefetching={query.isRefetching}
 								bordered={false}

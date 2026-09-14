@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { Button } from "@/core/components/ui/button.tsx";
 import { EmptyBlock } from "@/core/components/ui/empty-block.tsx";
 import { ExceptionBlock } from "@/core/components/ui/exception-block.tsx";
+import { getExceptionMessage } from "@/core/exceptions/translate-exception-code.ts";
 import { useIntersectionObserver } from "@/core/hooks/use-intersection-observer.ts";
 import { cn } from "@/core/lib/utils.ts";
 import {
@@ -70,7 +71,7 @@ export function PostComments({
 					<ExceptionBlock
 						bordered={false}
 						title="Unable to load comments"
-						description="Please try again."
+						description={getExceptionMessage(query.error)}
 						onRefresh={() => void query.refetch()}
 						isRefetching={query.isRefetching}
 					/>

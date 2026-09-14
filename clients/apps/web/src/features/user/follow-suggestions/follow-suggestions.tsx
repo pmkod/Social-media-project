@@ -6,13 +6,14 @@ import {
 } from "@/core/components/ui/card.tsx";
 import { EmptyBlock } from "@/core/components/ui/empty-block.tsx";
 import { ExceptionBlock } from "@/core/components/ui/exception-block.tsx";
+import { getExceptionMessage } from "@/core/exceptions/translate-exception-code.ts";
 import { UserRowItem } from "@/features/user/common/components/user-row-item.tsx";
 import { UserRowItemListLoader } from "@/features/user/common/components/user-row-item-list-loader.tsx";
 import { m } from "@/paraglide/messages.js";
 import { useFollowSuggestions } from "./use-follow-suggestions.ts";
 
 function FollowSuggestions() {
-	const { data, isLoading, isError, refetch, isRefetching } =
+	const { data, error, isLoading, isError, refetch, isRefetching } =
 		useFollowSuggestions();
 	const users = data?.pages.flatMap((page) => page.users) ?? [];
 
@@ -28,7 +29,7 @@ function FollowSuggestions() {
 					) : isError ? (
 						<ExceptionBlock
 							title={m.suggestions_load_error_title()}
-							description={m.suggestions_load_error_description()}
+							description={getExceptionMessage(error)}
 							onRefresh={() => refetch()}
 							isRefetching={isRefetching}
 							bordered={false}

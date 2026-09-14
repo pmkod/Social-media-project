@@ -12,6 +12,7 @@ import {
 	FieldLabel,
 } from "@/core/components/ui/field.tsx";
 import { PasswordInput } from "@/core/components/ui/password-input.tsx";
+import { getExceptionMessage } from "@/core/exceptions/translate-exception-code.ts";
 import { UserValidationSchema } from "@/features/user/common/user.validation-schemas.ts";
 import * as m from "@/paraglide/messages.js";
 import { useChangePassword } from "./use-change-password.ts";
@@ -53,9 +54,7 @@ function ChangePasswordForm({ onSuccess }: { onSuccess: () => void }) {
 				toast.success(m.settings_password_updated());
 				onSuccess();
 			} catch (error) {
-				setErrorMessage(
-					error instanceof Error ? error.message : "Unable to update password",
-				);
+				setErrorMessage(getExceptionMessage(error));
 			}
 		},
 	});

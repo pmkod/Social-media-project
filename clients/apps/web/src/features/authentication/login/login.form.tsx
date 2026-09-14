@@ -12,6 +12,7 @@ import {
 } from "@/core/components/ui/field.tsx";
 import { Input } from "@/core/components/ui/input.tsx";
 import { PasswordInput } from "@/core/components/ui/password-input.tsx";
+import { getExceptionMessage } from "@/core/exceptions/translate-exception-code.ts";
 import { UserValidationSchema } from "@/features/user/common/user.validation-schemas.ts";
 import * as m from "@/paraglide/messages.js";
 import { useLogin } from "./use-login";
@@ -51,8 +52,8 @@ function LoginForm({ onSuccess }: LoginFormProps) {
 					password: value.password,
 				});
 				onSuccess();
-			} catch (error: any) {
-				setErrorMessage(error.message);
+			} catch (error) {
+				setErrorMessage(getExceptionMessage(error));
 			}
 		},
 	});

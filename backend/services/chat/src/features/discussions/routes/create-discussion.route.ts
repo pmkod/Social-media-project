@@ -1,12 +1,12 @@
 import { createRoute, defineOpenAPIRoute } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
+import { ExceptionCodes } from "@/core/exceptions/exception.codes";
 import { Exception } from "@/core/exceptions/exception";
 import { userServiceClient } from "@/core/services/user-service.client";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { requireUserAuthentication } from "@/features/authentication/middlewares/require-user-authentication.middleware";
 import { Prisma } from "@/generated/prisma/client";
-import { HTTPException } from "hono/http-exception";
 import { DiscussionsRoutesTag } from "../discussions.constants";
 import { uniqueOtherUserIds } from "../discussions.functions";
 import {
@@ -51,23 +51,31 @@ const createDiscussionRoute = defineOpenAPIRoute<
 		);
 
 		if (data.type === "PRIVATE" && memberIds.length !== 1) {
-			throw new HTTPException(400, {
+			throw new Exception({
+				code: ExceptionCodes.invalid_private_discussion_members,
 				message: "A private discussion requires exactly one other member",
+				status: HttpStatus.BAD_REQUEST.code,
 			});
 		}
 		if (data.type === "GROUP" && memberIds.length < 2) {
-			throw new HTTPException(400, {
+			throw new Exception({
+				code: ExceptionCodes.insufficient_group_members,
 				message: "A group discussion requires at least two other members",
+				status: HttpStatus.BAD_REQUEST.code,
 			});
 		}
 		if (data.type === "GROUP" && !data.name) {
-			throw new HTTPException(400, {
+			throw new Exception({
+				code: ExceptionCodes.group_name_required,
 				message: "A group discussion requires a name",
+				status: HttpStatus.BAD_REQUEST.code,
 			});
 		}
 		if (data.type === "PRIVATE" && (data.name || data.description)) {
-			throw new HTTPException(400, {
+			throw new Exception({
+				code: ExceptionCodes.private_discussion_details_forbidden,
 				message: "Private discussions cannot have a name or description",
+				status: HttpStatus.BAD_REQUEST.code,
 			});
 		}
 
@@ -77,8 +85,10 @@ const createDiscussionRoute = defineOpenAPIRoute<
 		);
 		const missingUserIds = memberIds.filter((userId) => !usersMap.has(userId));
 		if (missingUserIds.length > 0) {
-			throw new HTTPException(404, {
+			throw new Exception({
+				code: ExceptionCodes.users_not_found,
 				message: `Users not found: ${missingUserIds.join(", ")}`,
+				status: HttpStatus.NOT_FOUND.code,
 			});
 		}
 		const blockedUser = memberIds.find((userId) => {
@@ -89,15 +99,21 @@ const createDiscussionRoute = defineOpenAPIRoute<
 			);
 		});
 		if (blockedUser) {
-			throw new HTTPException(403, {
+			throw new Exception({
+				code: ExceptionCodes.blocked_user_in_discussion,
 				message: "A discussion cannot include a blocked user",
+				status: HttpStatus.FORBIDDEN.code,
 			});
 		}
 
 		if (data.type === "PRIVATE") {
 			const otherUserId = memberIds[0];
 			if (!otherUserId)
-				throw new Exception({ message: "Private discussion member missing" });
+				throw new Exception({
+					code: ExceptionCodes.private_discussion_member_missing,
+					message: "Private discussion member missing",
+					status: HttpStatus.INTERNAL_SERVER_ERROR.code,
+				});
 			let privateDiscussionResult:
 				| {
 						created: boolean;
@@ -180,7 +196,9 @@ const createDiscussionRoute = defineOpenAPIRoute<
 
 			if (!privateDiscussionResult) {
 				throw new Exception({
+					code: ExceptionCodes.private_discussion_creation_failed,
 					message: "Unable to create the private discussion",
+					status: HttpStatus.INTERNAL_SERVER_ERROR.code,
 				});
 			}
 			await prisma.discussionMember.update({

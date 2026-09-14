@@ -1,6 +1,8 @@
 import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
+import { ExceptionCodes } from "@/core/exceptions/exception.codes";
+import { Exception } from "@/core/exceptions/exception";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { requireUserAuthentication } from "@/features/authentication/middlewares/require-user-authentication.middleware";
 import {
@@ -48,10 +50,10 @@ const createSearchHistoryRoute = defineOpenAPIRoute<
 		const text = body.text?.trim() || undefined;
 		const searchedUserId = body.searchedUserId;
 		if (Boolean(text) === Boolean(searchedUserId)) {
-			return c.json(
-				{ message: "Provide exactly one of text or searchedUserId" },
-				HttpStatus.BAD_REQUEST.code,
-			);
+			throw new Exception({
+				message: "Provide exactly one of text or searchedUserId",
+				status: HttpStatus.BAD_REQUEST.code,
+			});
 		}
 
 		const searchedUserRecord = searchedUserId
@@ -80,7 +82,11 @@ const createSearchHistoryRoute = defineOpenAPIRoute<
 				}
 			: null;
 		if (searchedUserId && !searchedUser) {
-			return c.json({ message: "User not found" }, HttpStatus.NOT_FOUND.code);
+			throw new Exception({
+				code: ExceptionCodes.user_not_found,
+				message: "User not found",
+				status: HttpStatus.NOT_FOUND.code,
+			});
 		}
 
 		const historyItem = await prisma.$transaction(async (transaction) => {

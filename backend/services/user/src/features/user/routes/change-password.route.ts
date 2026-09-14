@@ -1,6 +1,7 @@
 import { createRoute, defineOpenAPIRoute } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
+import { ExceptionCodes } from "@/core/exceptions/exception.codes";
 import { Exception } from "@/core/exceptions/exception";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import {
@@ -44,7 +45,11 @@ const changePasswordRoute = defineOpenAPIRoute<
 		});
 
 		if (!user) {
-			throw new Exception({ message: "User not found" });
+			throw new Exception({
+				code: ExceptionCodes.user_not_found,
+				message: "User not found",
+				status: HttpStatus.NOT_FOUND.code,
+			});
 		}
 
 		const isCurrentPasswordValid = await comparePasswordToHash({
@@ -52,7 +57,11 @@ const changePasswordRoute = defineOpenAPIRoute<
 			hash: user.password,
 		});
 		if (!isCurrentPasswordValid) {
-			throw new Exception({ message: "Current password is incorrect" });
+			throw new Exception({
+				code: ExceptionCodes.current_password_incorrect,
+				message: "Current password is incorrect",
+				status: HttpStatus.BAD_REQUEST.code,
+			});
 		}
 
 		const passwordHash = await hashPassword(newPassword);

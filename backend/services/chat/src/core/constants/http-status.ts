@@ -7,6 +7,7 @@ const HttpStatus = {
 	NOT_FOUND: { code: 404, message: "Not Found" },
 	CONFLICT: { code: 409, message: "Conflict" },
 	INTERNAL_SERVER_ERROR: { code: 500, message: "Internal Server Error" },
+	SERVICE_UNAVAILABLE: { code: 503, message: "Service Unavailable" },
 } as const;
 
 export { HttpStatus };

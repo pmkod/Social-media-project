@@ -1,6 +1,8 @@
 import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
+import { ExceptionCodes } from "@/core/exceptions/exception.codes";
+import { Exception } from "@/core/exceptions/exception";
 import {
 	NotificationEventTypes,
 	NotificationGroupKeyBuilder,
@@ -37,7 +39,11 @@ const unfollowUserRoute = defineOpenAPIRoute<
 		});
 
 		if (!targetUser) {
-			return c.json({ message: "User not found" }, HttpStatus.NOT_FOUND.code);
+			throw new Exception({
+				code: ExceptionCodes.user_not_found,
+				message: "User not found",
+				status: HttpStatus.NOT_FOUND.code,
+			});
 		}
 
 		const existingFollow = await prisma.follow.findUnique({

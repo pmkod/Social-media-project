@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { EmptyBlock } from "@/core/components/ui/empty-block.tsx";
 import { ExceptionBlock } from "@/core/components/ui/exception-block.tsx";
+import { getExceptionMessage } from "@/core/exceptions/translate-exception-code.ts";
 import { useIntersectionObserver } from "@/core/hooks/use-intersection-observer.ts";
 import { m } from "@/paraglide/messages.js";
 import { PostListLoader } from "../common/components/loaders";
@@ -10,6 +11,7 @@ import { useFollowingFeed } from "./use-following-feed";
 export function Feed() {
 	const {
 		data,
+		error,
 		fetchNextPage,
 		hasNextPage,
 		isFetching,
@@ -39,7 +41,7 @@ export function Feed() {
 			) : isError ? (
 				<ExceptionBlock
 					title={m.feed_load_error_title()}
-					description={m.feed_load_error_description()}
+					description={getExceptionMessage(error)}
 					onRefresh={() => void refetch()}
 					isRefetching={isRefetching}
 				/>

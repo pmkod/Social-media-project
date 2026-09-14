@@ -12,6 +12,7 @@ import {
 	FieldLabel,
 } from "@/core/components/ui/field.tsx";
 import { PasswordInput } from "@/core/components/ui/password-input.tsx";
+import { getExceptionMessage } from "@/core/exceptions/translate-exception-code.ts";
 import { authenticatedUserQueryKey } from "@/features/user/authenticated-user/authenticated-user.query-key.ts";
 import { UserValidationSchema } from "@/features/user/common/user.validation-schemas.ts";
 import * as m from "@/paraglide/messages.js";
@@ -56,8 +57,8 @@ function NewPasswordForm({ onSuccess }: NewPasswordFormProps) {
 				await queryClient.fetchQuery({ queryKey: authenticatedUserQueryKey });
 
 				onSuccess();
-			} catch (error: any) {
-				setErrorMessage(error.message);
+			} catch (error) {
+				setErrorMessage(getExceptionMessage(error));
 			}
 		},
 	});

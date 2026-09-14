@@ -1,9 +1,9 @@
 import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
+import { Exception } from "@/core/exceptions/exception";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { requireUserAuthentication } from "@/features/authentication/middlewares/require-user-authentication.middleware";
-import { HTTPException } from "hono/http-exception";
 import { DiscussionsRoutesTag } from "../discussions.constants";
 import {
 	buildDiscussionResponses,
@@ -37,8 +37,9 @@ const getDiscussionsRoute = defineOpenAPIRoute<
 		const authenticatedUser = c.get("authenticatedUser");
 		const { limit, cursorActivityAt, cursorId } = c.req.valid("query");
 		if (Boolean(cursorActivityAt) !== Boolean(cursorId)) {
-			throw new HTTPException(400, {
+			throw new Exception({
 				message: "cursorActivityAt and cursorId must be provided together",
+				status: HttpStatus.BAD_REQUEST.code,
 			});
 		}
 		const cursorDate = cursorActivityAt ? new Date(cursorActivityAt) : null;

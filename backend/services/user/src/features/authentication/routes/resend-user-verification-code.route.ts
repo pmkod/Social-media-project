@@ -1,6 +1,7 @@
 import { createRoute, defineOpenAPIRoute } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
+import { ExceptionCodes } from "@/core/exceptions/exception.codes";
 import { Exception } from "@/core/exceptions/exception";
 import { sendMail } from "@/core/services/mail.service";
 import {
@@ -48,12 +49,18 @@ const resendUserVerificationCodeRoute = defineOpenAPIRoute({
 
 		if (!verificationInDb || !verificationInDb.email) {
 			throw new Exception({
+				code: ExceptionCodes.verification_not_found_or_expired,
 				message: "Verification attempt not found or expired",
+				status: HttpStatus.BAD_REQUEST.code,
 			});
 		}
 
 		if (isUserVerificationExpired(verificationInDb)) {
-			throw new Exception({ message: "Verification attempt has expired" });
+			throw new Exception({
+				code: ExceptionCodes.verification_expired,
+				message: "Verification attempt has expired",
+				status: HttpStatus.BAD_REQUEST.code,
+			});
 		}
 
 		if (
@@ -61,7 +68,9 @@ const resendUserVerificationCodeRoute = defineOpenAPIRoute({
 			MAXIMUM_NUMBER_OF_CODE_TRANSFERS_VIA_EMAIL
 		) {
 			throw new Exception({
+				code: ExceptionCodes.verification_code_resends_limit_reached,
 				message: `Vous avez atteint le nombre maximal de renvois de code (${MAXIMUM_NUMBER_OF_CODE_TRANSFERS_VIA_EMAIL}).`,
+				status: HttpStatus.TOO_MANY_REQUESTS.code,
 			});
 		}
 

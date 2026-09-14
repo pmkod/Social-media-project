@@ -1,17 +1,20 @@
 import type { ContentfulStatusCode } from "hono/utils/http-status";
 
 type ExceptionOptions = {
-	code?: ContentfulStatusCode;
+	code?: string;
 	message?: string;
+	status?: ContentfulStatusCode;
 };
 
 class Exception extends Error {
-	readonly code?: ContentfulStatusCode;
+	readonly code?: string;
+	readonly status?: ContentfulStatusCode;
 
-	constructor({ code, message }: ExceptionOptions = {}) {
+	constructor({ code, message, status }: ExceptionOptions = {}) {
 		super(message);
 		this.name = "Exception";
 		this.code = code;
+		this.status = status;
 	}
 }
 

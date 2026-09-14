@@ -3,6 +3,7 @@ import { useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { BaseAlertDialog } from "@/core/components/ui/base-alert-dialog.tsx";
 import { create } from "@/core/components/ui/nice-modal.tsx";
+import { getExceptionMessage } from "@/core/exceptions/translate-exception-code.ts";
 import { deleteSessionCredentials } from "@/core/utils/session.utils.ts";
 import * as m from "@/paraglide/messages.js";
 import type { Session } from "../common/session.ts";
@@ -47,11 +48,7 @@ const DisableSessionAlertDialog = create<DisableSessionAlertDialogProps>(
 						}
 						toast.success(m.settings_session_logged_out());
 					} catch (error) {
-						toast.error(
-							error instanceof Error
-								? error.message
-								: "Unable to log out of session",
-						);
+						toast.error(getExceptionMessage(error));
 						throw error;
 					}
 				}}

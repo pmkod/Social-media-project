@@ -1,9 +1,9 @@
 import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
-import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
+import { ExceptionCodes } from "@/core/exceptions/exception.codes";
 import { Exception } from "@/core/exceptions/exception";
+import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { requireUserAuthentication } from "@/features/authentication/middlewares/require-user-authentication.middleware";
-import { HTTPException } from "hono/http-exception";
 import { SessionsRoutesTag } from "../sessions.constants";
 import { sessionRepository } from "../sessions.repository";
 import {
@@ -41,12 +41,19 @@ const disableSessionRoute = defineOpenAPIRoute<
 		const { sessionId } = c.req.valid("param");
 		const existingSession = await sessionRepository.getSession(sessionId);
 		if (!existingSession || existingSession.userId !== authenticatedUser.id) {
-			throw new HTTPException(HttpStatus.NOT_FOUND.code, {
+			throw new Exception({
+				code: ExceptionCodes.session_not_found,
 				message: "Session not found",
+				status: HttpStatus.NOT_FOUND.code,
 			});
 		}
 		const session = await sessionRepository.disableSession(sessionId);
-		if (!session) throw new Exception({ message: "Unable to disable session" });
+		if (!session)
+			throw new Exception({
+				code: ExceptionCodes.session_disable_failed,
+				message: "Unable to disable session",
+				status: HttpStatus.INTERNAL_SERVER_ERROR.code,
+			});
 
 		return c.json({ session });
 	},

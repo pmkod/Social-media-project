@@ -1,5 +1,6 @@
 import { Configurations } from "@/core/configurations";
-import { HTTPException } from "hono/http-exception";
+import { HttpStatus } from "@/core/constants/http-status";
+import { Exception } from "@/core/exceptions/exception";
 
 type Session = {
 	id: string;
@@ -28,21 +29,24 @@ class SessionServiceClient {
 				body: JSON.stringify(input),
 			});
 		} catch (_error) {
-			throw new HTTPException(503, {
+			throw new Exception({
 				message: "Session service is temporarily unavailable",
+				status: HttpStatus.SERVICE_UNAVAILABLE.code,
 			});
 		}
 
 		if (!response.ok) {
-			throw new HTTPException(503, {
+			throw new Exception({
 				message: "Session service could not create the session",
+				status: HttpStatus.SERVICE_UNAVAILABLE.code,
 			});
 		}
 
 		const data = (await response.json()) as { session?: Partial<Session> };
 		if (!data.session?.id || !data.session.token) {
-			throw new HTTPException(503, {
+			throw new Exception({
 				message: "Session service returned an invalid response",
+				status: HttpStatus.SERVICE_UNAVAILABLE.code,
 			});
 		}
 
@@ -60,14 +64,16 @@ class SessionServiceClient {
 				},
 			});
 		} catch (_error) {
-			throw new HTTPException(503, {
+			throw new Exception({
 				message: "Session service is temporarily unavailable",
+				status: HttpStatus.SERVICE_UNAVAILABLE.code,
 			});
 		}
 
 		if (!response.ok) {
-			throw new HTTPException(503, {
+			throw new Exception({
 				message: "Session service could not disable the session",
+				status: HttpStatus.SERVICE_UNAVAILABLE.code,
 			});
 		}
 	}

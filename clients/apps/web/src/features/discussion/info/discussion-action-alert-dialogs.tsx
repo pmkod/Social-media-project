@@ -2,6 +2,7 @@ import { useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { BaseAlertDialog } from "@/core/components/ui/base-alert-dialog.tsx";
 import { create } from "@/core/components/ui/nice-modal.tsx";
+import { getExceptionMessage } from "@/core/exceptions/translate-exception-code.ts";
 import * as m from "@/paraglide/messages.js";
 import {
 	useDeleteDiscussion,
@@ -29,7 +30,7 @@ const DeleteDiscussionAlertDialog = create<DiscussionActionProps>(
 						await deleteDiscussion.mutateAsync(discussionId);
 						await navigate({ to: "/discussions" });
 					} catch (error) {
-						toast.error("La discussion n’a pas pu être supprimée");
+						toast.error(getExceptionMessage(error));
 						throw error;
 					}
 				}}
@@ -54,7 +55,7 @@ const LeaveDiscussionAlertDialog = create<
 					await leaveDiscussion.mutateAsync({ discussionId, userId });
 					await navigate({ to: "/discussions" });
 				} catch (error) {
-					toast.error("Vous n’avez pas pu quitter la discussion");
+					toast.error(getExceptionMessage(error));
 					throw error;
 				}
 			}}
@@ -80,7 +81,7 @@ const RemoveDiscussionMemberAlertDialog = create<{
 					await removeMember.mutateAsync({ discussionId, userId });
 					onRemoved?.(userId);
 				} catch (error) {
-					toast.error("Ce membre n’a pas pu être retiré");
+					toast.error(getExceptionMessage(error));
 					throw error;
 				}
 			}}

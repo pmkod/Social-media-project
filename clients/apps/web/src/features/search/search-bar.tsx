@@ -2,6 +2,7 @@ import { RiCloseLine, RiSearchLine } from "@remixicon/react";
 import { useNavigate, useSearch } from "@tanstack/react-router";
 import type { ChangeEvent } from "react";
 import { useEffect, useRef, useState } from "react";
+import { getExceptionMessage } from "@/core/exceptions/translate-exception-code.ts";
 import { useDebounceValue } from "@/core/hooks/use-debounce-value.ts";
 import { UserAvatar } from "@/features/user/common/components/user-avatar.tsx";
 import { UserRowItemListLoader } from "@/features/user/common/components/user-row-item-list-loader.tsx";
@@ -177,7 +178,7 @@ function SearchBar() {
 									<UserRowItemListLoader count={3} />
 								) : usersQuery.isError ? (
 									<p className="px-5 py-4 text-sm text-muted-foreground">
-										Unable to load people.
+										{getExceptionMessage(usersQuery.error)}
 									</p>
 								) : users.length === 0 ? null : (
 									users
@@ -214,13 +215,13 @@ function SearchBar() {
 								<UserRowItemListLoader count={4} />
 							) : historyQuery.isError ? (
 								<div className="px-5 pb-5 text-sm text-muted-foreground">
-									<p>Unable to load recent searches.</p>
+									<p>{getExceptionMessage(historyQuery.error)}</p>
 									<button
 										type="button"
 										onClick={() => void historyQuery.refetch()}
 										className="mt-2 cursor-pointer font-semibold text-primary"
 									>
-										Try again
+										{m.action_refresh()}
 									</button>
 								</div>
 							) : history.length === 0 ? (

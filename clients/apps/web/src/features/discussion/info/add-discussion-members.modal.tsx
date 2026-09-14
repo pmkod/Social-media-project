@@ -15,6 +15,7 @@ import { EmptyBlock } from "@/core/components/ui/empty-block.tsx";
 import { ExceptionBlock } from "@/core/components/ui/exception-block.tsx";
 import { create, useModal } from "@/core/components/ui/nice-modal.tsx";
 import { SearchInput } from "@/core/components/ui/search-input.tsx";
+import { getExceptionMessage } from "@/core/exceptions/translate-exception-code.ts";
 import { useDebounceValue } from "@/core/hooks/use-debounce-value.ts";
 import { cn } from "@/core/lib/utils.ts";
 import { UserAvatar } from "@/features/user/common/components/user-avatar.tsx";
@@ -76,8 +77,8 @@ const AddDiscussionMembersModal = create<AddDiscussionMembersModalProps>(
 				onAdded?.(selectedUsers);
 				modal.resolve();
 				modal.remove();
-			} catch {
-				toast.error("Les membres n’ont pas pu être ajoutés");
+			} catch (error) {
+				toast.error(getExceptionMessage(error));
 			}
 		};
 
@@ -132,7 +133,7 @@ const AddDiscussionMembersModal = create<AddDiscussionMembersModalProps>(
 									bordered={false}
 									className="min-h-56"
 									title="Recherche indisponible"
-									description="Réessayez dans quelques instants."
+									description={getExceptionMessage(usersQuery.error)}
 									onRefresh={() => void usersQuery.refetch()}
 									isRefetching={usersQuery.isRefetching}
 								/>

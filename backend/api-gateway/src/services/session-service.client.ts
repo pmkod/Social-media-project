@@ -1,5 +1,6 @@
-import { HTTPException } from "hono/http-exception";
 import { Configurations } from "../configurations";
+import { HttpStatus } from "../constants/http-status";
+import { Exception } from "../exceptions/exception";
 import { UnauthorizedException } from "../exceptions/unauthorized.exception";
 import type { AuthenticatedUser } from "../types/authenticated-user";
 
@@ -30,17 +31,22 @@ class SessionServiceClient {
 				body: JSON.stringify({ id: sessionId, token: sessionToken }),
 			});
 		} catch (_error) {
-			throw new HTTPException(503, {
+			throw new Exception({
 				message: "Authentication service is temporarily unavailable",
+				status: HttpStatus.SERVICE_UNAVAILABLE.code,
 			});
 		}
 
-		if (response.status === 401 || response.status === 404) {
+		if (
+			response.status === HttpStatus.UNAUTHORIZED.code ||
+			response.status === HttpStatus.NOT_FOUND.code
+		) {
 			throw new UnauthorizedException();
 		}
 		if (!response.ok) {
-			throw new HTTPException(503, {
+			throw new Exception({
 				message: "Authentication service is temporarily unavailable",
+				status: HttpStatus.SERVICE_UNAVAILABLE.code,
 			});
 		}
 
@@ -51,8 +57,9 @@ class SessionServiceClient {
 			data.session.active !== true ||
 			data.session.id !== sessionId
 		) {
-			throw new HTTPException(503, {
+			throw new Exception({
 				message: "Authentication service returned an invalid response",
+				status: HttpStatus.SERVICE_UNAVAILABLE.code,
 			});
 		}
 

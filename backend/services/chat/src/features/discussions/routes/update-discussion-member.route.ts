@@ -1,10 +1,10 @@
 import { createRoute, defineOpenAPIRoute } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
+import { ExceptionCodes } from "@/core/exceptions/exception.codes";
 import { Exception } from "@/core/exceptions/exception";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { requireUserAuthentication } from "@/features/authentication/middlewares/require-user-authentication.middleware";
-import { HTTPException } from "hono/http-exception";
 import { DiscussionMembersRoutesTag } from "../discussions.constants";
 import { getActiveMembership } from "../discussions.service";
 import {
@@ -47,8 +47,10 @@ const updateDiscussionMemberRoute = defineOpenAPIRoute<
 		);
 		if (isBlocked !== undefined) {
 			if (userId !== authenticatedUserId) {
-				throw new HTTPException(403, {
+				throw new Exception({
+					code: ExceptionCodes.own_blocked_state_only,
 					message: "Members can only change their own blocked state",
+					status: HttpStatus.FORBIDDEN.code,
 				});
 			}
 			const member = await prisma.discussionMember.update({
@@ -59,18 +61,27 @@ const updateDiscussionMemberRoute = defineOpenAPIRoute<
 			return c.json({ member });
 		}
 
-		if (!role) throw new Exception({ message: "Member role missing" });
+		if (!role)
+			throw new Exception({
+				code: ExceptionCodes.member_role_missing,
+				message: "Member role missing",
+				status: HttpStatus.BAD_REQUEST.code,
+			});
 		if (
 			actorMembership.discussion.type !== "GROUP" ||
 			actorMembership.role !== "OWNER"
 		) {
-			throw new HTTPException(403, {
+			throw new Exception({
+				code: ExceptionCodes.group_owner_required_to_change_roles,
 				message: "Only the group owner can change member roles",
+				status: HttpStatus.FORBIDDEN.code,
 			});
 		}
 		if (userId === authenticatedUserId) {
-			throw new HTTPException(400, {
+			throw new Exception({
+				code: ExceptionCodes.owner_cannot_change_own_role,
 				message: "The owner cannot change their own role",
+				status: HttpStatus.BAD_REQUEST.code,
 			});
 		}
 
@@ -78,11 +89,17 @@ const updateDiscussionMemberRoute = defineOpenAPIRoute<
 			where: { discussionId_userId: { discussionId, userId } },
 		});
 		if (!targetMembership || targetMembership.hasLeft) {
-			throw new HTTPException(404, { message: "Group member not found" });
+			throw new Exception({
+				code: ExceptionCodes.group_member_not_found,
+				message: "Group member not found",
+				status: HttpStatus.NOT_FOUND.code,
+			});
 		}
 		if (targetMembership.role === "OWNER") {
-			throw new HTTPException(409, {
+			throw new Exception({
+				code: ExceptionCodes.owner_role_change_forbidden,
 				message: "The owner role cannot be changed here",
+				status: HttpStatus.CONFLICT.code,
 			});
 		}
 

@@ -9,6 +9,7 @@ import { PasswordInput } from '@/components/ui/password-input';
 import { Text } from '@/components/ui/text';
 import { clearVerification } from '@/core/auth/auth.storage';
 import { useSession } from '@/core/auth/session-context';
+import { getExceptionMessage } from '@/core/exceptions/translate-exception-code';
 import {
   authenticationFields,
   newPasswordSchema,
@@ -33,7 +34,7 @@ export default function NewPasswordScreen() {
         await completeAuthentication(response);
         router.replace('/home');
       } catch (caughtError) {
-        setError(caughtError instanceof Error ? caughtError.message : 'Unable to update password.');
+        setError(getExceptionMessage(caughtError));
       }
     },
   });

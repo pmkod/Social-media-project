@@ -6,6 +6,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { BrandLogo } from '@/components/brand-logo';
 import { Icon } from '@/components/ui/icon';
 import { Text } from '@/components/ui/text';
+import { getExceptionMessage } from '@/core/exceptions/translate-exception-code';
 import { CreatePostComposer } from '@/features/post/components/create-post-composer';
 import { PostCard } from '@/features/post/components/post-card';
 import { useFollowingFeed } from '@/features/post/hooks/use-following-feed';
@@ -61,7 +62,7 @@ export default function HomeScreen() {
             <View className="items-center gap-3 px-8 py-16">
               <Text className="text-center text-xl font-bold">We couldn’t load your feed</Text>
               <Text className="text-muted-foreground text-center leading-5">
-                {feed.error instanceof Error ? feed.error.message : 'Please try again.'}
+                {getExceptionMessage(feed.error)}
               </Text>
               <Pressable
                 className="mt-2 flex-row items-center gap-2 rounded-full border border-border px-4 py-2.5"

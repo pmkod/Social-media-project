@@ -8,6 +8,7 @@ import { Field, FieldError, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { PasswordInput } from '@/components/ui/password-input';
 import { Text } from '@/components/ui/text';
+import { getExceptionMessage } from '@/core/exceptions/translate-exception-code';
 import {
   authenticationFields,
   loginSchema,
@@ -33,7 +34,7 @@ export default function LoginScreen() {
         if (!verification) throw new Error('Unable to start verification.');
         router.push({ pathname: '/verify', params: { goal: 'login' } });
       } catch (caughtError) {
-        setError(caughtError instanceof Error ? caughtError.message : 'Unable to log in.');
+        setError(getExceptionMessage(caughtError));
       }
     },
   });

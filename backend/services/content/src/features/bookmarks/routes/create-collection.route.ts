@@ -1,6 +1,8 @@
 import { createRoute, defineOpenAPIRoute } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
+import { ExceptionCodes } from "@/core/exceptions/exception.codes";
+import { Exception } from "@/core/exceptions/exception";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { requireUserAuthentication } from "@/features/authentication/middlewares/require-user-authentication.middleware";
 import { Prisma } from "@/generated/prisma/client";
@@ -51,10 +53,11 @@ const createCollectionRoute = defineOpenAPIRoute<
 				error instanceof Prisma.PrismaClientKnownRequestError &&
 				error.code === "P2002"
 			) {
-				return c.json(
-					{ message: "A collection with this name already exists" },
-					HttpStatus.CONFLICT.code,
-				);
+				throw new Exception({
+					code: ExceptionCodes.collection_name_already_exists,
+					message: "A collection with this name already exists",
+					status: HttpStatus.CONFLICT.code,
+				});
 			}
 			throw error;
 		}

@@ -1,11 +1,13 @@
+import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
+import { ExceptionCodes } from "@/core/exceptions/exception.codes";
+import { Exception } from "@/core/exceptions/exception";
 import { userServiceClient } from "@/core/services/user-service.client";
 import {
 	buildMessageResponse,
 	messageDetailsSelect,
 } from "@/features/messages/messages.service";
 import { Prisma } from "@/generated/prisma/client";
-import { HTTPException } from "hono/http-exception";
 
 const discussionDetailsInclude = {
 	members: {
@@ -34,7 +36,11 @@ const getActiveMembership = async (
 		membership.isDeleted ||
 		membership.discussion.deletedAt
 	) {
-		throw new HTTPException(404, { message: "Discussion not found" });
+		throw new Exception({
+			code: ExceptionCodes.discussion_not_found,
+			message: "Discussion not found",
+			status: HttpStatus.NOT_FOUND.code,
+		});
 	}
 
 	return membership;
@@ -46,13 +52,17 @@ const requireGroupManager = async (
 ) => {
 	const membership = await getActiveMembership(discussionId, userId);
 	if (membership.discussion.type !== "GROUP") {
-		throw new HTTPException(400, {
+		throw new Exception({
+			code: ExceptionCodes.group_operation_required,
 			message: "This operation is only available for group discussions",
+			status: HttpStatus.BAD_REQUEST.code,
 		});
 	}
 	if (membership.role !== "OWNER" && membership.role !== "ADMIN") {
-		throw new HTTPException(403, {
+		throw new Exception({
+			code: ExceptionCodes.group_manager_required,
 			message: "Group manager permissions are required",
+			status: HttpStatus.FORBIDDEN.code,
 		});
 	}
 

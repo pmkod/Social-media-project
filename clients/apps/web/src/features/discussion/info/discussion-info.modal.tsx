@@ -26,6 +26,7 @@ import NiceModal, {
 	create,
 	useModal,
 } from "@/core/components/ui/nice-modal.tsx";
+import { getExceptionMessage } from "@/core/exceptions/translate-exception-code.ts";
 import { cn } from "@/core/lib/utils.ts";
 import { ReportModal } from "@/features/report/report.modal.tsx";
 import { BlockUserAlertDialog } from "@/features/user/block-user/block-user-alert-dialog.tsx";
@@ -165,8 +166,8 @@ const DiscussionInfoModal = create<DiscussionInfoModalProps>(
 						? m.discussion_blocked_success()
 						: m.discussion_unblocked_success(),
 				);
-			} catch {
-				toast.error("L’état de la discussion n’a pas pu être modifié");
+			} catch (error) {
+				toast.error(getExceptionMessage(error));
 			}
 		};
 		const openAddMembers = () => {
@@ -430,7 +431,7 @@ const DiscussionInfoModal = create<DiscussionInfoModalProps>(
 									bordered={false}
 									className="min-h-48"
 									title="Médias indisponibles"
-									description="Les médias de cette discussion n’ont pas pu être chargés."
+									description={getExceptionMessage(mediaQuery.error)}
 									onRefresh={() => void mediaQuery.refetch()}
 									isRefetching={mediaQuery.isRefetching}
 								/>

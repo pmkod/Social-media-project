@@ -1,5 +1,6 @@
 import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
+import { Exception } from "@/core/exceptions/exception";
 import { getS3File } from "@/core/services/storage.service";
 import { MediaRoutesTag } from "../media.constants";
 
@@ -31,10 +32,10 @@ const getImageRoute = defineOpenAPIRoute({
 		const s3File = getS3File({ fileName });
 		const exists = await s3File.exists();
 		if (!exists) {
-			return c.json(
-				{ error: "Image not found" },
-				HttpStatus.NOT_FOUND.code,
-			);
+			throw new Exception({
+				message: "Image not found",
+				status: HttpStatus.NOT_FOUND.code,
+			});
 		}
 
 		const ext = fileName.split(".").pop()?.toLowerCase();

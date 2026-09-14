@@ -1,6 +1,8 @@
 import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
+import { ExceptionCodes } from "@/core/exceptions/exception.codes";
+import { Exception } from "@/core/exceptions/exception";
 import { UserRoutesTag } from "../user.constants";
 
 const routeDef = createRoute({
@@ -33,7 +35,11 @@ const updatePostCountRoute = defineOpenAPIRoute({
 			select: { postCount: true },
 		});
 		if (!user) {
-			return c.json({ message: "User not found" }, HttpStatus.NOT_FOUND.code);
+			throw new Exception({
+				code: ExceptionCodes.user_not_found,
+				message: "User not found",
+				status: HttpStatus.NOT_FOUND.code,
+			});
 		}
 
 		const updatedUser = await prisma.user.update({

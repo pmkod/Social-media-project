@@ -1,6 +1,7 @@
 import { createRoute, defineOpenAPIRoute } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
+import { ExceptionCodes } from "@/core/exceptions/exception.codes";
 import { Exception } from "@/core/exceptions/exception";
 import { sendMail } from "@/core/services/mail.service";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
@@ -48,10 +49,18 @@ const requestEmailChangeRoute = defineOpenAPIRoute<
 		});
 
 		if (!user) {
-			throw new Exception({ message: "User not found" });
+			throw new Exception({
+				code: ExceptionCodes.user_not_found,
+				message: "User not found",
+				status: HttpStatus.NOT_FOUND.code,
+			});
 		}
 		if (user.email.toLowerCase() === newEmail) {
-			throw new Exception({ message: "This is already your email address" });
+			throw new Exception({
+				code: ExceptionCodes.email_unchanged,
+				message: "This is already your email address",
+				status: HttpStatus.BAD_REQUEST.code,
+			});
 		}
 
 		const existingUser = await prisma.user.findFirst({
@@ -59,10 +68,11 @@ const requestEmailChangeRoute = defineOpenAPIRoute<
 			select: { id: true },
 		});
 		if (existingUser) {
-			return c.json(
-				{ message: "An account with this email address already exists" },
-				HttpStatus.CONFLICT.code,
-			);
+			throw new Exception({
+				code: ExceptionCodes.email_already_exists,
+				message: "An account with this email address already exists",
+				status: HttpStatus.CONFLICT.code,
+			});
 		}
 
 		const code = generateUserVerificationCode();

@@ -1,6 +1,7 @@
 import ky, { isHTTPError } from 'ky';
 
 import { API_BASE_URL } from '@/core/config/api.config';
+import { getExceptionMessage } from '@/core/exceptions/translate-exception-code';
 
 const baseHttpClient = ky.create({
   baseUrl: API_BASE_URL,
@@ -9,14 +10,8 @@ const baseHttpClient = ky.create({
   hooks: {
     beforeError: [
       ({ error }) => {
-        if (
-          isHTTPError(error) &&
-          typeof error.data === 'object' &&
-          error.data !== null &&
-          'message' in error.data &&
-          typeof error.data.message === 'string'
-        ) {
-          error.message = error.data.message;
+        if (isHTTPError(error)) {
+          error.message = getExceptionMessage(error);
         }
 
         return error;

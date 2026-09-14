@@ -1,11 +1,11 @@
 import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
+import { Exception } from "@/core/exceptions/exception";
 import { userServiceClient } from "@/core/services/user-service.client";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { requireUserAuthentication } from "@/features/authentication/middlewares/require-user-authentication.middleware";
 import { getActiveMembership } from "@/features/discussions/discussions.service";
-import { HTTPException } from "hono/http-exception";
 import { MessagesRoutesTag } from "../messages.constants";
 import {
 	buildMessageResponse,
@@ -44,8 +44,9 @@ const getMessagesRoute = defineOpenAPIRoute<
 		await getActiveMembership(discussionId, authenticatedUserId);
 
 		if (Boolean(cursorCreatedAt) !== Boolean(cursorId)) {
-			throw new HTTPException(400, {
+			throw new Exception({
 				message: "cursorCreatedAt and cursorId must be provided together",
+				status: HttpStatus.BAD_REQUEST.code,
 			});
 		}
 		const cursorDate = cursorCreatedAt ? new Date(cursorCreatedAt) : null;

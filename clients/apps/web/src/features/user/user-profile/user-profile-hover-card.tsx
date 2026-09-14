@@ -6,6 +6,7 @@ import {
 	HoverCardTrigger,
 } from "@/core/components/ui/hover-card.tsx";
 import { Skeleton } from "@/core/components/ui/skeleton.tsx";
+import { getExceptionMessage } from "@/core/exceptions/translate-exception-code.ts";
 import { cn } from "@/core/lib/utils.ts";
 import { useAuthenticatedUser } from "@/features/user/authenticated-user/use-authenticated-user.ts";
 import { UserAvatar } from "@/features/user/common/components/user-avatar.tsx";
@@ -66,6 +67,7 @@ function UserProfileHoverCard({ user, children }: UserProfileHoverCardProps) {
 				) : profileQuery.isError ? (
 					<ExceptionBlock
 						title={m.profile_load_error()}
+						description={getExceptionMessage(profileQuery.error)}
 						onRefresh={profileQuery.refetch}
 						bordered={false}
 					/>

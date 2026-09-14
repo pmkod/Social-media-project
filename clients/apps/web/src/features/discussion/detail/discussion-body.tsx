@@ -3,6 +3,7 @@ import { Button } from "@/core/components/ui/button.tsx";
 import { EmptyBlock } from "@/core/components/ui/empty-block.tsx";
 import { ExceptionBlock } from "@/core/components/ui/exception-block.tsx";
 import { Skeleton } from "@/core/components/ui/skeleton.tsx";
+import { getExceptionMessage } from "@/core/exceptions/translate-exception-code.ts";
 import * as m from "@/paraglide/messages.js";
 import { DiscussionTypes } from "../common/discussion.constants.ts";
 import type { Discussion, Message } from "../common/discussion.ts";
@@ -95,7 +96,7 @@ function DiscussionBody({
 					bordered={false}
 					className="h-full min-h-72"
 					title="Unable to load messages"
-					description="The messages in this conversation could not be loaded."
+					description={getExceptionMessage(messagesQuery.error)}
 					onRefresh={() => void messagesQuery.refetch()}
 					isRefetching={messagesQuery.isRefetching}
 				/>

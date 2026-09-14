@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Text } from '@/components/ui/text';
 import { clearVerification } from '@/core/auth/auth.storage';
 import { useSession } from '@/core/auth/session-context';
+import { getExceptionMessage } from '@/core/exceptions/translate-exception-code';
 import {
   authenticationFields,
   completeSignupSchema,
@@ -30,7 +31,7 @@ export default function CompleteSignupScreen() {
         await clearVerification();
         await completeAuthentication(response);
       } catch (caughtError) {
-        setError(caughtError instanceof Error ? caughtError.message : 'Unable to save username.');
+        setError(getExceptionMessage(caughtError));
       }
     },
   });

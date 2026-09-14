@@ -1,6 +1,8 @@
 import { createRoute, defineOpenAPIRoute } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
+import { ExceptionCodes } from "@/core/exceptions/exception.codes";
+import { Exception } from "@/core/exceptions/exception";
 import { deleteFile, setFile } from "@/core/services/storage.service";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { requireUserAuthentication } from "@/features/authentication/middlewares/require-user-authentication.middleware";
@@ -99,10 +101,11 @@ const updateProfileRoute = defineOpenAPIRoute<
 		});
 
 		if (existingUsernameUser) {
-			return c.json(
-				{ message: "This username is already taken" },
-				HttpStatus.CONFLICT.code,
-			);
+			throw new Exception({
+				code: ExceptionCodes.username_already_exists,
+				message: "This username is already taken",
+				status: HttpStatus.CONFLICT.code,
+			});
 		}
 
 		const timestamp = Date.now();

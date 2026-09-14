@@ -1,11 +1,12 @@
 import { createRoute, defineOpenAPIRoute } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
+import { ExceptionCodes } from "@/core/exceptions/exception.codes";
+import { Exception } from "@/core/exceptions/exception";
 import { userServiceClient } from "@/core/services/user-service.client";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { requireUserAuthentication } from "@/features/authentication/middlewares/require-user-authentication.middleware";
 import { getActiveMembership } from "@/features/discussions/discussions.service";
-import { HTTPException } from "hono/http-exception";
 import { MessagesRoutesTag } from "../messages.constants";
 import {
 	buildMessageResponse,
@@ -56,20 +57,28 @@ const updateMessageRoute = defineOpenAPIRoute<
 			},
 		});
 		if (!existingMessage) {
-			throw new HTTPException(404, { message: "Message not found" });
+			throw new Exception({
+				code: ExceptionCodes.message_not_found,
+				message: "Message not found",
+				status: HttpStatus.NOT_FOUND.code,
+			});
 		}
 		await getActiveMembership(
 			existingMessage.discussionId,
 			authenticatedUserId,
 		);
 		if (existingMessage.senderId !== authenticatedUserId) {
-			throw new HTTPException(403, {
+			throw new Exception({
+				code: ExceptionCodes.sender_required_to_edit_message,
 				message: "Only the sender can edit this message",
+				status: HttpStatus.FORBIDDEN.code,
 			});
 		}
 		if (existingMessage.deletedAt) {
-			throw new HTTPException(409, {
+			throw new Exception({
+				code: ExceptionCodes.deleted_message_edit_forbidden,
 				message: "A deleted message cannot be edited",
+				status: HttpStatus.CONFLICT.code,
 			});
 		}
 

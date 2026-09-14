@@ -1,5 +1,6 @@
 import ky, { isHTTPError } from "ky";
 import { ApiConfig } from "@/core/configs/api.config.ts";
+import { getExceptionMessage } from "@/core/exceptions/translate-exception-code.ts";
 
 const baseHttpClient = ky.create({
 	baseUrl: ApiConfig.baseUrl,
@@ -8,13 +9,7 @@ const baseHttpClient = ky.create({
 		beforeError: [
 			({ request, options, error }) => {
 				if (isHTTPError(error)) {
-					if (
-						typeof error.data === "object" &&
-						error.data !== null &&
-						"message" in error.data
-					) {
-						error.message = (error.data.message as string) || "";
-					}
+					error.message = getExceptionMessage(error);
 				}
 
 				console.log(`Request to ${request.url} failed`, options.context);

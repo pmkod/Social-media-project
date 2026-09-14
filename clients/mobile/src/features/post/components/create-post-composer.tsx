@@ -11,6 +11,7 @@ import { Icon } from '@/components/ui/icon';
 import { Text } from '@/components/ui/text';
 import { Textarea } from '@/components/ui/textarea';
 import { useSession } from '@/core/auth/session-context';
+import { getExceptionMessage } from '@/core/exceptions/translate-exception-code';
 import { UserAvatar } from '@/features/post/components/user-avatar';
 import { useCreatePost } from '@/features/post/hooks/use-create-post';
 import { createPostSchema } from '@/features/post/post.schemas';
@@ -34,7 +35,7 @@ export function CreatePostComposer() {
         await createPost.mutateAsync({ text: value.text.trim(), medias: value.medias });
         form.reset();
       } catch (caughtError) {
-        setError(caughtError instanceof Error ? caughtError.message : 'Unable to publish this post.');
+        setError(getExceptionMessage(caughtError));
       }
     },
   });

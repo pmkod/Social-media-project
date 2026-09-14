@@ -1,6 +1,7 @@
 import { createRoute, defineOpenAPIRoute } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
+import { ExceptionCodes } from "@/core/exceptions/exception.codes";
 import { Exception } from "@/core/exceptions/exception";
 import { sendMail } from "@/core/services/mail.service";
 import {
@@ -49,7 +50,9 @@ const loginRoute = defineOpenAPIRoute({
 
 		if (!user) {
 			throw new Exception({
+				code: ExceptionCodes.incorrect_email_or_password,
 				message: "Invalid email/username or password. Please try again",
+				status: HttpStatus.BAD_REQUEST.code,
 			});
 		}
 
@@ -60,7 +63,9 @@ const loginRoute = defineOpenAPIRoute({
 
 		if (!isPasswordValid) {
 			throw new Exception({
+				code: ExceptionCodes.incorrect_email_or_password,
 				message: "Invalid email/username or password. Please try again",
+				status: HttpStatus.BAD_REQUEST.code,
 			});
 		}
 

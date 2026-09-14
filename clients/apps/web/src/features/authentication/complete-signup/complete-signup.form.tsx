@@ -10,6 +10,7 @@ import {
 	FieldLabel,
 } from "@/core/components/ui/field.tsx";
 import { Input } from "@/core/components/ui/input.tsx";
+import { getExceptionMessage } from "@/core/exceptions/translate-exception-code.ts";
 import { UserValidationSchema } from "@/features/user/common/user.validation-schemas.ts";
 import * as m from "@/paraglide/messages.js";
 import { useCompleteSignup } from "./use-complete-signup";
@@ -39,8 +40,8 @@ function CompleteSignupForm({ onSuccess }: CompleteSignupFormProps) {
 			try {
 				await completeSignup.mutateAsync({ username: value.username });
 				onSuccess();
-			} catch (error: any) {
-				setErrorMessage(error.message);
+			} catch (error) {
+				setErrorMessage(getExceptionMessage(error));
 			}
 		},
 	});

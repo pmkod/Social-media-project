@@ -8,6 +8,7 @@ import { Field, FieldDescription, FieldError, FieldLabel } from '@/components/ui
 import { Input } from '@/components/ui/input';
 import { PasswordInput } from '@/components/ui/password-input';
 import { Text } from '@/components/ui/text';
+import { getExceptionMessage } from '@/core/exceptions/translate-exception-code';
 import {
   authenticationFields,
   signupSchema,
@@ -34,7 +35,7 @@ export default function SignupScreen() {
         if (!verification) throw new Error('Unable to start verification.');
         router.push({ pathname: '/verify', params: { goal: 'signup' } });
       } catch (caughtError) {
-        setError(caughtError instanceof Error ? caughtError.message : 'Unable to create account.');
+        setError(getExceptionMessage(caughtError));
       }
     },
   });

@@ -5,10 +5,10 @@ import {
 	RiSendPlane2Line,
 } from "@remixicon/react";
 import { useForm, useSelector } from "@tanstack/react-form";
-import { isHTTPError } from "ky";
 import { useEffect, useMemo, useState } from "react";
 import { Button } from "@/core/components/ui/button.tsx";
 import NiceModal from "@/core/components/ui/nice-modal.tsx";
+import { getExceptionMessage } from "@/core/exceptions/translate-exception-code.ts";
 import { useSelectFiles } from "@/core/hooks/use-select-files.ts";
 import { cn } from "@/core/lib/utils.ts";
 import { useAuthenticatedUser } from "@/features/user/authenticated-user/use-authenticated-user.ts";
@@ -52,16 +52,7 @@ function CreatePostForm({ onSuccess, onBusyChange }: CreatePostFormProps = {}) {
 					medias: value.medias,
 				},
 				{
-					onError: (error) =>
-						setError(
-							isHTTPError(error) &&
-								typeof error.data === "object" &&
-								error.data !== null &&
-								"message" in error.data &&
-								typeof error.data.message === "string"
-								? error.data.message
-								: m.composer_publish_error(),
-						),
+					onError: (error) => setError(getExceptionMessage(error)),
 					onSuccess: () => {
 						form.reset();
 						onSuccess?.();

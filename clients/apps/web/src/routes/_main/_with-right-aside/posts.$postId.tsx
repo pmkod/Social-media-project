@@ -8,6 +8,7 @@ import {
 } from "@/core/components/ui/app-header";
 import { ExceptionBlock } from "@/core/components/ui/exception-block.tsx";
 import { MainContainer } from "@/core/components/ui/main-container.tsx";
+import { getExceptionMessage } from "@/core/exceptions/translate-exception-code.ts";
 import { PostComments } from "@/features/comment/post-comments.tsx";
 import { PostItemLoader } from "@/features/post/common/components/loaders/post-item-loader.tsx";
 import { PostItem } from "@/features/post/common/post-item.tsx";
@@ -47,7 +48,7 @@ function PostDetailPage() {
 			) : (
 				<ExceptionBlock
 					title="Unable to load post"
-					description="The post could not be found or failed to load."
+					description={getExceptionMessage(query.error)}
 					onRefresh={() => void query.refetch()}
 					isRefetching={query.isRefetching}
 					className="h-120"
