@@ -19,7 +19,6 @@ import {
 import { Input } from "@/core/components/ui/input.tsx";
 import { create, useModal } from "@/core/components/ui/nice-modal.tsx";
 import { Textarea } from "@/core/components/ui/textarea.tsx";
-import { getExceptionMessage } from "@/core/exceptions/translate-exception-code.ts";
 import * as m from "@/paraglide/messages.js";
 import { useCreateBookmarkCollection } from "../create-bookmark-collection/use-create-bookmark-collection.ts";
 import { useEditBookmarkCollection } from "../edit-bookmark-collection/use-edit-bookmark-collection.ts";
@@ -60,7 +59,7 @@ const BookmarkCollectionModal = create<BookmarkCollectionModalProps>(
 		const isEditing = Boolean(collection);
 		const mutation = isEditing ? editCollection : createCollection;
 		const mutationErrorMessage = mutation.isError
-			? getExceptionMessage(mutation.error)
+			? (mutation.error as Error)?.message
 			: m.exception_something_went_wrong();
 
 		const close = () => {

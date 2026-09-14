@@ -11,7 +11,7 @@ import {
 	FieldLabel,
 } from "@/core/components/ui/field.tsx";
 import { Input } from "@/core/components/ui/input.tsx";
-import { getExceptionMessage } from "@/core/exceptions/translate-exception-code.ts";
+
 import { UserValidationSchema } from "@/features/user/common/user.validation-schemas.ts";
 import * as m from "@/paraglide/messages.js";
 import { useRequestEmailChange } from "./use-request-email-change.ts";
@@ -39,7 +39,7 @@ function ChangeEmailForm({ currentEmail, onSuccess }: ChangeEmailFormProps) {
 				await requestEmailChange.mutateAsync(value.newEmail);
 				await onSuccess();
 			} catch (error) {
-				setErrorMessage(getExceptionMessage(error));
+				setErrorMessage((error as Error).message);
 			}
 		},
 	});

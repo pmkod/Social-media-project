@@ -8,7 +8,6 @@ import { useForm, useSelector } from "@tanstack/react-form";
 import { useEffect, useMemo, useState } from "react";
 import { Button } from "@/core/components/ui/button.tsx";
 import NiceModal from "@/core/components/ui/nice-modal.tsx";
-import { getExceptionMessage } from "@/core/exceptions/translate-exception-code.ts";
 import { useSelectFiles } from "@/core/hooks/use-select-files.ts";
 import { cn } from "@/core/lib/utils.ts";
 import { useAuthenticatedUser } from "@/features/user/authenticated-user/use-authenticated-user.ts";
@@ -52,7 +51,7 @@ function CreatePostForm({ onSuccess, onBusyChange }: CreatePostFormProps = {}) {
 					medias: value.medias,
 				},
 				{
-					onError: (error) => setError(getExceptionMessage(error)),
+					onError: (error) => setError((error as Error).message),
 					onSuccess: () => {
 						form.reset();
 						onSuccess?.();

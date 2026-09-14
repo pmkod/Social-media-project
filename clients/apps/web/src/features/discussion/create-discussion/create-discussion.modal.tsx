@@ -22,7 +22,6 @@ import { Input } from "@/core/components/ui/input.tsx";
 import { create, useModal } from "@/core/components/ui/nice-modal.tsx";
 import { SearchInput } from "@/core/components/ui/search-input.tsx";
 import { Textarea } from "@/core/components/ui/textarea.tsx";
-import { getExceptionMessage } from "@/core/exceptions/translate-exception-code.ts";
 import { cn } from "@/core/lib/utils.ts";
 import { useAuthenticatedUser } from "@/features/user/authenticated-user/use-authenticated-user.ts";
 import { UserAvatar } from "@/features/user/common/components/user-avatar.tsx";
@@ -234,7 +233,7 @@ const CreateGroupDiscussionModal = create(() => {
 										bordered={false}
 										className="min-h-56"
 										title="Unable to search people"
-										description={getExceptionMessage(usersQuery.error)}
+										description={(usersQuery.error as Error)?.message}
 										onRefresh={() => void usersQuery.refetch()}
 										isRefetching={usersQuery.isRefetching}
 									/>
@@ -314,7 +313,7 @@ const CreateGroupDiscussionModal = create(() => {
 							className="shrink-0 border-t border-border px-5 py-3 text-sm text-destructive"
 							role="alert"
 						>
-							{getExceptionMessage(createDiscussion.error)}
+							{(createDiscussion.error as Error)?.message}
 						</p>
 					) : null}
 

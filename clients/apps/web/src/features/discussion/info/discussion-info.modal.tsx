@@ -26,7 +26,6 @@ import NiceModal, {
 	create,
 	useModal,
 } from "@/core/components/ui/nice-modal.tsx";
-import { getExceptionMessage } from "@/core/exceptions/translate-exception-code.ts";
 import { cn } from "@/core/lib/utils.ts";
 import { ReportModal } from "@/features/report/report.modal.tsx";
 import { BlockUserAlertDialog } from "@/features/user/block-user/block-user-alert-dialog.tsx";
@@ -167,7 +166,7 @@ const DiscussionInfoModal = create<DiscussionInfoModalProps>(
 						: m.discussion_unblocked_success(),
 				);
 			} catch (error) {
-				toast.error(getExceptionMessage(error));
+				toast.error((error as Error).message);
 			}
 		};
 		const openAddMembers = () => {
@@ -431,7 +430,7 @@ const DiscussionInfoModal = create<DiscussionInfoModalProps>(
 									bordered={false}
 									className="min-h-48"
 									title="Médias indisponibles"
-									description={getExceptionMessage(mediaQuery.error)}
+									description={(mediaQuery.error as Error)?.message}
 									onRefresh={() => void mediaQuery.refetch()}
 									isRefetching={mediaQuery.isRefetching}
 								/>

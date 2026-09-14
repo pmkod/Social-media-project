@@ -11,7 +11,7 @@ import {
 	FieldLabel,
 } from "@/core/components/ui/field.tsx";
 import { Input } from "@/core/components/ui/input.tsx";
-import { getExceptionMessage } from "@/core/exceptions/translate-exception-code.ts";
+
 import * as m from "@/paraglide/messages.js";
 import { useResendSettingsUserVerificationCode } from "./use-resend-settings-user-verification-code.ts";
 import { useSettingsUserVerification } from "./use-settings-user-verification.ts";
@@ -39,7 +39,7 @@ function SettingsUserVerificationForm({
 		try {
 			await resend.mutateAsync();
 		} catch (error) {
-			setErrorMessage(getExceptionMessage(error));
+			setErrorMessage((error as Error).message);
 		}
 	};
 
@@ -52,7 +52,7 @@ function SettingsUserVerificationForm({
 				await settingsUserVerification.mutateAsync({ code: value.code });
 				await onSuccess();
 			} catch (error) {
-				setErrorMessage(getExceptionMessage(error));
+				setErrorMessage((error as Error).message);
 			}
 		},
 	});

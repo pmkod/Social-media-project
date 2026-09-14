@@ -11,7 +11,6 @@ import { EmptyBlock } from "@/core/components/ui/empty-block.tsx";
 import { ExceptionBlock } from "@/core/components/ui/exception-block.tsx";
 import NiceModal from "@/core/components/ui/nice-modal.tsx";
 import { Skeleton } from "@/core/components/ui/skeleton.tsx";
-import { getExceptionMessage } from "@/core/exceptions/translate-exception-code.ts";
 import { getSessionId } from "@/core/utils/session.utils.ts";
 import type { Session } from "@/features/session/common/session.ts";
 import { DisableSessionAlertDialog } from "@/features/session/disable-session/disable-session-alert-dialog.tsx";
@@ -73,7 +72,7 @@ function SessionsSettingsPage() {
 			) : activeSessions.isError ? (
 				<ExceptionBlock
 					title="Sessions unavailable"
-					description={getExceptionMessage(activeSessions.error)}
+					description={(activeSessions.error as Error)?.message}
 					onRefresh={() => void activeSessions.refetch()}
 					isRefetching={activeSessions.isRefetching}
 				/>

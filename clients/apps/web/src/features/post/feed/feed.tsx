@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { EmptyBlock } from "@/core/components/ui/empty-block.tsx";
 import { ExceptionBlock } from "@/core/components/ui/exception-block.tsx";
-import { getExceptionMessage } from "@/core/exceptions/translate-exception-code.ts";
 import { useIntersectionObserver } from "@/core/hooks/use-intersection-observer.ts";
 import { m } from "@/paraglide/messages.js";
 import { PostListLoader } from "../common/components/loaders";
@@ -41,7 +40,7 @@ export function Feed() {
 			) : isError ? (
 				<ExceptionBlock
 					title={m.feed_load_error_title()}
-					description={getExceptionMessage(error)}
+					description={(error as Error).message}
 					onRefresh={() => void refetch()}
 					isRefetching={isRefetching}
 				/>

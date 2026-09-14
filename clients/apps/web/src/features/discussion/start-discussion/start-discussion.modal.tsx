@@ -13,7 +13,6 @@ import { EmptyBlock } from "@/core/components/ui/empty-block.tsx";
 import { ExceptionBlock } from "@/core/components/ui/exception-block.tsx";
 import { create, useModal } from "@/core/components/ui/nice-modal.tsx";
 import { SearchInput } from "@/core/components/ui/search-input.tsx";
-import { getExceptionMessage } from "@/core/exceptions/translate-exception-code.ts";
 import { useDebounceValue } from "@/core/hooks/use-debounce-value.ts";
 import { UserAvatar } from "@/features/user/common/components/user-avatar.tsx";
 import { UserRowItemListLoader } from "@/features/user/common/components/user-row-item-list-loader.tsx";
@@ -92,7 +91,7 @@ const CreatePrivateDiscussionModal = create(() => {
 								<div className="px-5 my-3">
 									<Alert colorScheme={"destructive"}>
 										<AlertDescription>
-											{getExceptionMessage(createDiscussion.error)}
+											{(createDiscussion.error as Error)?.message}
 										</AlertDescription>
 									</Alert>
 								</div>
@@ -116,7 +115,7 @@ const CreatePrivateDiscussionModal = create(() => {
 									bordered={false}
 									className="min-h-56"
 									title="Unable to search people"
-									description={getExceptionMessage(usersQuery.error)}
+									description={(usersQuery.error as Error)?.message}
 									onRefresh={() => void usersQuery.refetch()}
 									isRefetching={usersQuery.isRefetching}
 								/>

@@ -1,6 +1,5 @@
 import { Button } from "@/core/components/ui/button.tsx";
 import { ExceptionBlock } from "@/core/components/ui/exception-block.tsx";
-import { getExceptionMessage } from "@/core/exceptions/translate-exception-code.ts";
 import { UserRowItem } from "@/features/user/common/components/user-row-item.tsx";
 import { UserRowItemListLoader } from "@/features/user/common/components/user-row-item-list-loader.tsx";
 import * as m from "@/paraglide/messages.js";
@@ -30,7 +29,7 @@ function UserSearchList({ query }: UserSearchListProps) {
 				<ExceptionBlock
 					bordered={false}
 					title="Unable to load people"
-					description={getExceptionMessage(usersQuery.error)}
+					description={(usersQuery.error as Error)?.message}
 					onRefresh={() => void usersQuery.refetch()}
 					isRefetching={usersQuery.isRefetching}
 				/>

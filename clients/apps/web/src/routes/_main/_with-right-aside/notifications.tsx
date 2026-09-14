@@ -8,7 +8,6 @@ import {
 import { EmptyBlock } from "@/core/components/ui/empty-block.tsx";
 import { ExceptionBlock } from "@/core/components/ui/exception-block.tsx";
 import { MainContainer } from "@/core/components/ui/main-container.tsx";
-import { getExceptionMessage } from "@/core/exceptions/translate-exception-code.ts";
 import { useIntersectionObserver } from "@/core/hooks/use-intersection-observer.ts";
 import { groupNotifications } from "@/features/notification/common/notification.utils.ts";
 import { NotificationItem } from "@/features/notification/list/notification-item.tsx";
@@ -80,7 +79,7 @@ function NotificationsPage() {
 				) : isError ? (
 					<ExceptionBlock
 						title="Unable to load notifications"
-						description={getExceptionMessage(error)}
+						description={(error as Error).message}
 						onRefresh={() => void refetch()}
 						isRefetching={isRefetching}
 						bordered={false}

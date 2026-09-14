@@ -27,7 +27,7 @@ import {
 import { Input } from "@/core/components/ui/input.tsx";
 import { create, useModal } from "@/core/components/ui/nice-modal.tsx";
 import { Textarea } from "@/core/components/ui/textarea.tsx";
-import { getExceptionMessage } from "@/core/exceptions/translate-exception-code.ts";
+
 import { cn } from "@/core/lib/utils.ts";
 import { buildImageUrl } from "@/features/post/post-media.functions.ts";
 import type { User } from "@/features/user/common/user.ts";
@@ -166,7 +166,7 @@ const EditProfileModal = create(({ user }: EditProfileModalProps) => {
 					params: { username: `@${updatedUser.username}` },
 				});
 			} catch (error) {
-				setErrorMessage(getExceptionMessage(error));
+				setErrorMessage((error as Error).message);
 			}
 		},
 	});

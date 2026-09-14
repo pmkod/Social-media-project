@@ -12,7 +12,6 @@ import { EmptyBlock } from "@/core/components/ui/empty-block.tsx";
 import { ExceptionBlock } from "@/core/components/ui/exception-block.tsx";
 import { MainContainer } from "@/core/components/ui/main-container.tsx";
 import NiceModal from "@/core/components/ui/nice-modal.tsx";
-import { getExceptionMessage } from "@/core/exceptions/translate-exception-code.ts";
 import { useDebounceValue } from "@/core/hooks/use-debounce-value.ts";
 import { useIntersectionObserver } from "@/core/hooks/use-intersection-observer.ts";
 import { BOOKMARK_COLLECTIONS_PAGE_LIMIT } from "@/features/bookmark/common/bookmark-collection.constants.ts";
@@ -150,7 +149,7 @@ function BookmarkCollectionsPage() {
 					<ExceptionBlock
 						className="mt-4"
 						title="Unable to load your collections"
-						description={getExceptionMessage(collectionsQuery.error)}
+						description={(collectionsQuery.error as Error)?.message}
 						onRefresh={() => void collectionsQuery.refetch()}
 						isRefetching={collectionsQuery.isRefetching}
 					/>

@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { EmptyBlock } from "@/core/components/ui/empty-block.tsx";
 import { ExceptionBlock } from "@/core/components/ui/exception-block.tsx";
-import { getExceptionMessage } from "@/core/exceptions/translate-exception-code.ts";
 import { useIntersectionObserver } from "@/core/hooks/use-intersection-observer.ts";
 import { PostListLoader } from "@/features/post/common/components/loaders";
 import { PostItem } from "@/features/post/common/post-item.tsx";
@@ -40,7 +39,7 @@ function PostSearchList({ query }: PostSearchListProps) {
 			) : postsQuery.isError ? (
 				<ExceptionBlock
 					title="Unable to load posts"
-					description={getExceptionMessage(postsQuery.error)}
+					description={(postsQuery.error as Error)?.message}
 					onRefresh={() => void postsQuery.refetch()}
 					isRefetching={postsQuery.isRefetching}
 				/>

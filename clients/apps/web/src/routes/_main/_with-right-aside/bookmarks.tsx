@@ -10,7 +10,6 @@ import {
 import { EmptyBlock } from "@/core/components/ui/empty-block.tsx";
 import { ExceptionBlock } from "@/core/components/ui/exception-block.tsx";
 import { MainContainer } from "@/core/components/ui/main-container.tsx";
-import { getExceptionMessage } from "@/core/exceptions/translate-exception-code.ts";
 import { useIntersectionObserver } from "@/core/hooks/use-intersection-observer.ts";
 import { useBookmarks } from "@/features/bookmark/use-bookmarks.ts";
 import { PostListLoader } from "@/features/post/common/components/loaders";
@@ -66,7 +65,7 @@ function BookmarksPage() {
 			) : bookmarksQuery.isError ? (
 				<ExceptionBlock
 					title="Unable to load your bookmarks"
-					description={getExceptionMessage(bookmarksQuery.error)}
+					description={(bookmarksQuery.error as Error)?.message}
 					onRefresh={() => void bookmarksQuery.refetch()}
 					isRefetching={bookmarksQuery.isRefetching}
 				/>

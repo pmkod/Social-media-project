@@ -1,7 +1,6 @@
 import { RiCloseLine, RiSendPlane2Fill } from "@remixicon/react";
 import { useEffect, useRef, useState } from "react";
 import { IconButton } from "@/core/components/ui/icon-button.tsx";
-import { getExceptionMessage } from "@/core/exceptions/translate-exception-code.ts";
 import * as m from "@/paraglide/messages.js";
 import type { Message } from "../common/discussion.ts";
 import { useCreateMessage } from "../hooks/use-create-message.ts";
@@ -118,7 +117,7 @@ function DiscussionFooter({
 					</form>
 					{createMessage.isError ? (
 						<p className="mt-2 px-1 text-xs text-destructive" role="alert">
-							{getExceptionMessage(createMessage.error)}
+							{(createMessage.error as Error)?.message}
 						</p>
 					) : null}
 				</div>

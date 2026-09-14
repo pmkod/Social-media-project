@@ -6,7 +6,6 @@ import {
 } from "@/core/components/ui/card.tsx";
 import { EmptyBlock } from "@/core/components/ui/empty-block.tsx";
 import { ExceptionBlock } from "@/core/components/ui/exception-block.tsx";
-import { getExceptionMessage } from "@/core/exceptions/translate-exception-code.ts";
 import { UserRowItem } from "@/features/user/common/components/user-row-item.tsx";
 import { UserRowItemListLoader } from "@/features/user/common/components/user-row-item-list-loader.tsx";
 import { m } from "@/paraglide/messages.js";
@@ -29,7 +28,7 @@ function FollowSuggestions() {
 					) : isError ? (
 						<ExceptionBlock
 							title={m.suggestions_load_error_title()}
-							description={getExceptionMessage(error)}
+							description={(error as Error).message}
 							onRefresh={() => refetch()}
 							isRefetching={isRefetching}
 							bordered={false}

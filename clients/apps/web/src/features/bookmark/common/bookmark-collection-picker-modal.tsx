@@ -20,7 +20,6 @@ import NiceModal, {
 	useModal,
 } from "@/core/components/ui/nice-modal.tsx";
 import { Skeleton } from "@/core/components/ui/skeleton.tsx";
-import { getExceptionMessage } from "@/core/exceptions/translate-exception-code.ts";
 import { useDebounceValue } from "@/core/hooks/use-debounce-value.ts";
 import { useIntersectionObserver } from "@/core/hooks/use-intersection-observer.ts";
 import * as m from "@/paraglide/messages.js";
@@ -167,7 +166,7 @@ const BookmarkCollectionPickerModal =
 									bordered={false}
 									className="px-6 py-8"
 									title="Unable to load collections"
-									description={getExceptionMessage(collectionsQuery.error)}
+									description={(collectionsQuery.error as Error)?.message}
 									onRefresh={() => void collectionsQuery.refetch()}
 									isRefetching={collectionsQuery.isRefetching}
 								/>

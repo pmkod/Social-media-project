@@ -12,7 +12,6 @@ import { ExceptionBlock } from "@/core/components/ui/exception-block.tsx";
 import { IconButton } from "@/core/components/ui/icon-button.tsx";
 import NiceModal from "@/core/components/ui/nice-modal.tsx";
 import { SearchInput } from "@/core/components/ui/search-input.tsx";
-import { getExceptionMessage } from "@/core/exceptions/translate-exception-code.ts";
 import { useIntersectionObserver } from "@/core/hooks/use-intersection-observer.ts";
 import { useAuthenticatedUser } from "@/features/user/authenticated-user/use-authenticated-user.ts";
 import * as m from "@/paraglide/messages.js";
@@ -118,7 +117,7 @@ function DiscussionList({ selectedDiscussionId }: DiscussionListProps) {
 						bordered={false}
 						className="h-full min-h-72"
 						title="Unable to load conversations"
-						description={getExceptionMessage(discussionsQuery.error)}
+						description={(discussionsQuery.error as Error)?.message}
 						onRefresh={() => void discussionsQuery.refetch()}
 						isRefetching={discussionsQuery.isRefetching}
 					/>

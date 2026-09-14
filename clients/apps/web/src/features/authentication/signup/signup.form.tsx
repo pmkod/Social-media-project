@@ -12,7 +12,7 @@ import {
 } from "@/core/components/ui/field.tsx";
 import { Input } from "@/core/components/ui/input.tsx";
 import { PasswordInput } from "@/core/components/ui/password-input.tsx";
-import { getExceptionMessage } from "@/core/exceptions/translate-exception-code.ts";
+
 import { UserValidationSchema } from "@/features/user/common/user.validation-schemas.ts";
 import * as m from "@/paraglide/messages.js";
 import { useSignup } from "./use-signup";
@@ -54,7 +54,7 @@ function SignupForm({ onSuccess }: SignupFormProps) {
 				});
 				onSuccess();
 			} catch (error) {
-				setErrorMessage(getExceptionMessage(error));
+				setErrorMessage((error as Error).message);
 			}
 		},
 	});

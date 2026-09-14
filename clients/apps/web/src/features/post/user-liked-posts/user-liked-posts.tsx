@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { EmptyBlock } from "@/core/components/ui/empty-block.tsx";
 import { ExceptionBlock } from "@/core/components/ui/exception-block.tsx";
-import { getExceptionMessage } from "@/core/exceptions/translate-exception-code.ts";
 import { useIntersectionObserver } from "@/core/hooks/use-intersection-observer.ts";
 import * as m from "@/paraglide/messages.js";
 import { PostListLoader } from "../common/components/loaders";
@@ -36,7 +35,7 @@ export function UserLikedPosts({ userId }: UserLikedPostsProps) {
 		return (
 			<ExceptionBlock
 				title="Unable to load liked posts"
-				description={getExceptionMessage(query.error)}
+				description={(query.error as Error)?.message}
 				onRefresh={() => void query.refetch()}
 				isRefetching={query.isRefetching}
 				bordered={false}
