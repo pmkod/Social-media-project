@@ -5,8 +5,8 @@ import { Logo } from "./logo";
 
 export function Header() {
 	return (
-		<header className="w-full">
-			<div className="mx-auto flex max-w-screen-2xl items-center justify-between px-6 py-4">
+		<header className="w-full px-6">
+			<div className="mx-auto flex max-w-screen-2xl items-center justify-between py-4">
 				{/* Logo */}
 				<Link to="/">
 					<Logo />

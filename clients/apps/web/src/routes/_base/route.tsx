@@ -8,9 +8,9 @@ export const Route = createFileRoute("/_base")({
 
 function RouteComponent() {
 	return (
-		<div className="flex min-h-screen flex-col">
+		<div className="flex flex-col">
 			<Header />
-			<div className="min-h-180 flex items-center">
+			<div className="min-h-150 lg:min-h-180">
 				<Outlet />
 			</div>
 			<Footer />

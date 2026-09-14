@@ -6,7 +6,7 @@ function AuthShowcase() {
 		<div className="flex h-full w-full flex-col justify-center gap-6 lg:gap-12">
 			{/* Texte */}
 			<div className="flex flex-col gap-3 text-center lg:text-left">
-				<h1 className="text-3xl font-semibold tracking-tight text-balance sm:text-4xl lg:text-5xl xl:text-6xl text-foreground">
+				<h1 className="text-4xl font-semibold tracking-tight text-balance sm:text-4xl lg:text-5xl xl:text-6xl text-foreground">
 					{m.auth_showcase_title()}
 				</h1>
 			</div>
@@ -103,10 +103,10 @@ export const Route = createFileRoute("/_base/_authentication")({
 function RouteComponent() {
 	return (
 		<div className="flex w-full flex-1 flex-col">
-			<main className="flex flex-1 items-center justify-center px-4 py-8 sm:px-6 lg:py-10">
+			<main className="flex flex-1  justify-center px-6 py-8 lg:py-10">
 				<div className="flex w-full max-w-7xl flex-col items-center justify-center gap-8 lg:flex-row lg:justify-between lg:gap-12 relative">
 					{/* Showcase — text visible on mobile & desktop, trio of images hidden on mobile */}
-					<div className="w-full lg:flex-1 max-w-xl">
+					<div className="w-full hidden lg:block lg:flex-1 max-w-xl">
 						<AuthShowcase />
 					</div>
 
