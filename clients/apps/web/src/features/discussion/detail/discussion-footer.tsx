@@ -1,7 +1,14 @@
-import { RiCloseLine, RiSendPlane2Fill } from "@remixicon/react";
+import {
+	RiCloseLine,
+	RiEmotionHappyLine,
+	RiSendPlane2Fill,
+} from "@remixicon/react";
 import { useEffect, useRef, useState } from "react";
+import { EmojiPickerPopover } from "@/core/components/ui/emoji-picker.tsx";
 import { IconButton } from "@/core/components/ui/icon-button.tsx";
+import { insertTextAtSelection } from "@/core/lib/text-selection.ts";
 import * as m from "@/paraglide/messages.js";
+import { MESSAGE_MAX_LENGTH } from "../common/discussion.constants.ts";
 import type { Message } from "../common/discussion.ts";
 import { useCreateMessage } from "../hooks/use-create-message.ts";
 
@@ -44,6 +51,28 @@ function DiscussionFooter({
 		}
 	};
 
+	const handleEmojiSelect = (emoji: string) => {
+		const textarea = textareaRef.current;
+		const insertion = insertTextAtSelection(
+			content,
+			emoji,
+			{
+				start: textarea?.selectionStart,
+				end: textarea?.selectionEnd,
+			},
+			MESSAGE_MAX_LENGTH,
+		);
+
+		if (!insertion) return;
+
+		setContent(insertion.value);
+		if (createMessage.isError) createMessage.reset();
+		requestAnimationFrame(() => {
+			textarea?.focus();
+			textarea?.setSelectionRange(insertion.caret, insertion.caret);
+		});
+	};
+
 	return (
 		<footer className="shrink-0 border-t border-border bg-background px-3 py-3 sm:px-4">
 			{isBlocked ? (
@@ -80,6 +109,22 @@ function DiscussionFooter({
 						}}
 						className="flex items-end gap-2"
 					>
+						<EmojiPickerPopover
+							onEmojiSelect={handleEmojiSelect}
+							align="start"
+							side="top"
+						>
+							<IconButton
+								type="button"
+								variant="ghost"
+								size="lg"
+								className="rounded-full"
+								disabled={createMessage.isPending}
+								aria-label={m.emoji_picker_trigger()}
+							>
+								<RiEmotionHappyLine />
+							</IconButton>
+						</EmojiPickerPopover>
 						<textarea
 							ref={textareaRef}
 							value={content}
@@ -98,7 +143,7 @@ function DiscussionFooter({
 								}
 							}}
 							rows={1}
-							maxLength={4000}
+							maxLength={MESSAGE_MAX_LENGTH}
 							disabled={createMessage.isPending}
 							placeholder={m.discussion_write_message()}
 							aria-label={m.discussion_message()}

@@ -3,4 +3,6 @@ const DiscussionTypes = {
 	GROUP: "GROUP",
 } as const;
 
-export { DiscussionTypes };
+const MESSAGE_MAX_LENGTH = 4000;
+
+export { DiscussionTypes, MESSAGE_MAX_LENGTH };

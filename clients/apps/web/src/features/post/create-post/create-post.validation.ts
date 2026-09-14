@@ -10,10 +10,11 @@ export const POST_MEDIA_MIME_TYPES = [
 	"video/ogg",
 ];
 export const POST_MAX_FILE_SIZE = 20_000_000;
+export const POST_MAX_TEXT_LENGTH = 5000;
 
 export const createPostSchema = z
 	.object({
-		text: z.string().trim().max(5000),
+		text: z.string().trim().max(POST_MAX_TEXT_LENGTH),
 		medias: z
 			.array(
 				z

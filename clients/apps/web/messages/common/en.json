@@ -29,6 +29,10 @@
 	"theme_system": "System",
 	"password_show": "Show password",
 	"password_hide": "Hide password",
+	"emoji_picker_trigger": "Emoji",
+	"emoji_picker_search": "Search emojis",
+	"emoji_picker_loading": "Loading emojis…",
+	"emoji_picker_empty": "No emoji found.",
 	"user_avatar_alt": "User avatar",
 	"exception_something_went_wrong": "Something went wrong",
 	"exception_unauthorized": "Your session has expired. Please sign in again."

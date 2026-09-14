@@ -1,14 +1,17 @@
 import {
 	RiCloseLine,
+	RiEmotionHappyLine,
 	RiImageLine,
 	RiPlayFill,
 	RiSendPlane2Line,
 } from "@remixicon/react";
 import { useForm, useSelector } from "@tanstack/react-form";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "@/core/components/ui/button.tsx";
+import { EmojiPickerPopover } from "@/core/components/ui/emoji-picker.tsx";
 import NiceModal from "@/core/components/ui/nice-modal.tsx";
 import { useSelectFiles } from "@/core/hooks/use-select-files.ts";
+import { insertTextAtSelection } from "@/core/lib/text-selection.ts";
 import { cn } from "@/core/lib/utils.ts";
 import { useAuthenticatedUser } from "@/features/user/authenticated-user/use-authenticated-user.ts";
 import { UserAvatar } from "@/features/user/common/components/user-avatar.tsx";
@@ -16,6 +19,7 @@ import { m } from "@/paraglide/messages.js";
 import {
 	createPostSchema,
 	POST_MAX_FILE_SIZE,
+	POST_MAX_TEXT_LENGTH,
 	POST_MEDIA_MIME_TYPES,
 } from "./create-post.validation.ts";
 import { MediaPreviewModal } from "./media-preview.modal.tsx";
@@ -32,6 +36,7 @@ function CreatePostForm({ onSuccess, onBusyChange }: CreatePostFormProps = {}) {
 	const { data: authenticatedUser } = useAuthenticatedUser();
 	const [error, setError] = useState<string | null>(null);
 	const [isValidatingMedia, setIsValidatingMedia] = useState(false);
+	const textareaRef = useRef<HTMLTextAreaElement>(null);
 
 	const form = useForm({
 		defaultValues: {
@@ -129,6 +134,27 @@ function CreatePostForm({ onSuccess, onBusyChange }: CreatePostFormProps = {}) {
 		);
 	};
 
+	const handleEmojiSelect = (emoji: string) => {
+		const textarea = textareaRef.current;
+		const insertion = insertTextAtSelection(
+			form.getFieldValue("text"),
+			emoji,
+			{
+				start: textarea?.selectionStart,
+				end: textarea?.selectionEnd,
+			},
+			POST_MAX_TEXT_LENGTH,
+		);
+
+		if (!insertion) return;
+
+		form.setFieldValue("text", insertion.value);
+		requestAnimationFrame(() => {
+			textarea?.focus();
+			textarea?.setSelectionRange(insertion.caret, insertion.caret);
+		});
+	};
+
 	const handleOpenPreviewModal = (index: number) => {
 		const items = mediaPreviews.map((p) => ({
 			url: p.url,
@@ -160,11 +186,12 @@ function CreatePostForm({ onSuccess, onBusyChange }: CreatePostFormProps = {}) {
 					<form.Field name="text">
 						{(field) => (
 							<textarea
+								ref={textareaRef}
 								value={field.state.value}
 								onChange={(e) => field.handleChange(e.target.value)}
 								onBlur={field.handleBlur}
 								aria-label={m.composer_text_label()}
-								maxLength={5000}
+								maxLength={POST_MAX_TEXT_LENGTH}
 								placeholder={m.composer_placeholder()}
 								rows={3}
 								disabled={isBusy}
@@ -238,6 +265,17 @@ function CreatePostForm({ onSuccess, onBusyChange }: CreatePostFormProps = {}) {
 			) : null}
 			<div className="mt-3 flex items-center justify-between pt-3 border-t border-border">
 				<div className="flex items-center gap-2">
+					<EmojiPickerPopover onEmojiSelect={handleEmojiSelect}>
+						<Button
+							type="button"
+							variant="ghost"
+							disabled={isBusy}
+							aria-label={m.emoji_picker_trigger()}
+						>
+							<RiEmotionHappyLine className="h-4 w-4" />
+							{m.emoji_picker_trigger()}
+						</Button>
+					</EmojiPickerPopover>
 					<Button
 						type="button"
 						variant="ghost"
