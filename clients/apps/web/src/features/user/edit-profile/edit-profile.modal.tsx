@@ -30,6 +30,7 @@ import { Textarea } from "@/core/components/ui/textarea.tsx";
 import { cn } from "@/core/lib/utils.ts";
 import { buildImageUrl } from "@/features/post/post-media.functions.ts";
 import type { User } from "@/features/user/common/user.ts";
+import { UserValidationSchema } from "@/features/user/common/user.validation-schemas.ts";
 import * as m from "@/paraglide/messages.js";
 import { useUpdateProfile } from "./use-update-profile.ts";
 
@@ -53,24 +54,8 @@ const coverPictureSchema = z
 	.or(z.undefined());
 
 const editProfileSchema = z.object({
-	username: z
-		.string()
-		.trim()
-		.min(3, {
-			error: (issue) => m.validation_min_length({ min: Number(issue.minimum) }),
-		})
-		.max(50, {
-			error: (issue) => m.validation_max_length({ max: Number(issue.maximum) }),
-		}),
-	fullName: z
-		.string()
-		.trim()
-		.min(1, {
-			error: () => m.validation_required(),
-		})
-		.max(100, {
-			error: (issue) => m.validation_max_length({ max: Number(issue.maximum) }),
-		}),
+	username: UserValidationSchema.shape.username,
+	fullName: UserValidationSchema.shape.fullName,
 	bio: z.string().max(280, {
 		error: (issue) => m.validation_max_length({ max: Number(issue.maximum) }),
 	}),
