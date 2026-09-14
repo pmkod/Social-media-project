@@ -14,7 +14,7 @@ export function Footer() {
 	];
 
 	return (
-		<footer className="border-t border-border px-6 py-8 bg-muted">
+		<footer className="border-t border-border px-6 py-8">
 			<div className="mx-auto max-w-7xl">
 				{/* Top level */}
 				<div className="flex items-center justify-between">
