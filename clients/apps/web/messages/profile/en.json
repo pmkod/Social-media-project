@@ -41,5 +41,14 @@
 	"profile_followers_empty_title": "No followers",
 	"profile_followers_empty_description": "Followers will appear here once this profile has them.",
 	"profile_following_empty_title": "No following users",
-	"profile_following_empty_description": "Following users will appear here once this profile follows them."
+	"profile_following_empty_description": "Following users will appear here once this profile follows them.",
+	"exception_blocked_relationship": "You cannot interact with this user because one of you has blocked the other.",
+	"exception_blocked_user_in_group": "A blocked user cannot be added to this group.",
+	"exception_cannot_block_yourself": "You cannot block yourself.",
+	"exception_cannot_follow_blocked_user": "You cannot follow this user because one of you has blocked the other.",
+	"exception_cannot_follow_yourself": "You cannot follow yourself.",
+	"exception_own_blocked_state_only": "You can only change your own blocked status.",
+	"exception_user_not_found": "User not found.",
+	"exception_users_not_found": "One or more users could not be found.",
+	"exception_recipient_not_found": "Recipient not found."
 }

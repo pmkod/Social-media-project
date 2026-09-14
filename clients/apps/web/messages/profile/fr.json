@@ -41,5 +41,14 @@
 	"profile_followers_empty_title": "Aucun abonné",
 	"profile_followers_empty_description": "Les abonnés de ce profil apparaîtront ici.",
 	"profile_following_empty_title": "Aucun abonnement",
-	"profile_following_empty_description": "Les personnes suivies par ce profil apparaîtront ici."
+	"profile_following_empty_description": "Les personnes suivies par ce profil apparaîtront ici.",
+	"exception_blocked_relationship": "Vous ne pouvez pas interagir avec cet utilisateur, car l'un de vous a bloqué l'autre.",
+	"exception_blocked_user_in_group": "Un utilisateur bloqué ne peut pas être ajouté à ce groupe.",
+	"exception_cannot_block_yourself": "Vous ne pouvez pas vous bloquer vous-même.",
+	"exception_cannot_follow_blocked_user": "Vous ne pouvez pas suivre cet utilisateur, car l'un de vous a bloqué l'autre.",
+	"exception_cannot_follow_yourself": "Vous ne pouvez pas vous suivre vous-même.",
+	"exception_own_blocked_state_only": "Vous pouvez uniquement modifier votre propre statut de blocage.",
+	"exception_user_not_found": "Utilisateur introuvable.",
+	"exception_users_not_found": "Un ou plusieurs utilisateurs sont introuvables.",
+	"exception_recipient_not_found": "Destinataire introuvable."
 }

@@ -14,5 +14,7 @@
 	"post_empty_user_title": "No posts yet",
 	"post_empty_user_description": "Posts by this user will appear here.",
 	"post_empty_liked_title": "No liked posts",
-	"post_empty_liked_description": "Liked posts will appear here."
+	"post_empty_liked_description": "Liked posts will appear here.",
+	"exception_post_not_found": "Post not found.",
+	"exception_cannot_delete_post": "You cannot delete this post."
 }

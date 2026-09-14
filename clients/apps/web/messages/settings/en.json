@@ -68,5 +68,8 @@
 	"settings_resources_terms": "Terms of service",
 	"settings_resources_terms_description": "Review the terms for using Goodspace.",
 	"settings_verify_email_change": "Verify email change",
-	"settings_email_updated": "Email address updated"
+	"settings_email_updated": "Email address updated",
+	"exception_current_password_incorrect": "The current password is incorrect.",
+	"exception_session_disable_failed": "The session could not be signed out.",
+	"exception_session_not_found": "Session not found."
 }

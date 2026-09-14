@@ -30,5 +30,7 @@
 	"theme_system": "Système",
 	"password_show": "Afficher le mot de passe",
 	"password_hide": "Masquer le mot de passe",
-	"user_avatar_alt": "Avatar de l’utilisateur"
+	"user_avatar_alt": "Avatar de l’utilisateur",
+	"exception_something_went_wrong": "Une erreur est survenue",
+	"exception_unauthorized": "Votre session a expiré. Veuillez vous reconnecter."
 }

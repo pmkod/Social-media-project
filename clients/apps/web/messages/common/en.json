@@ -30,5 +30,7 @@
 	"theme_system": "System",
 	"password_show": "Show password",
 	"password_hide": "Hide password",
-	"user_avatar_alt": "User avatar"
+	"user_avatar_alt": "User avatar",
+	"exception_something_went_wrong": "Something went wrong",
+	"exception_unauthorized": "Your session has expired. Please sign in again."
 }

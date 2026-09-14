@@ -21,5 +21,8 @@
 	"comment_placeholder": "Post your comment…",
 	"comment_submit": "Comment",
 	"comment_delete_title": "Delete comment?",
-	"comment_delete_description": "The comment text will be replaced with “Comment deleted”. Existing replies will remain visible."
+	"comment_delete_description": "The comment text will be replaced with \"Comment deleted\". Existing replies will remain visible.",
+	"exception_comment_not_found": "Comment not found.",
+	"exception_cannot_delete_comment": "You cannot delete this comment.",
+	"exception_parent_comment_not_found": "Parent comment not found."
 }

@@ -14,5 +14,7 @@
 	"post_empty_user_title": "Aucune publication",
 	"post_empty_user_description": "Les publications de cette personne apparaîtront ici.",
 	"post_empty_liked_title": "Aucune publication aimée",
-	"post_empty_liked_description": "Les publications aimées apparaîtront ici."
+	"post_empty_liked_description": "Les publications aimées apparaîtront ici.",
+	"exception_post_not_found": "Publication introuvable.",
+	"exception_cannot_delete_post": "Vous ne pouvez pas supprimer cette publication."
 }

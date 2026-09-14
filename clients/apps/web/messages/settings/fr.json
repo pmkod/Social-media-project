@@ -68,5 +68,8 @@
 	"settings_resources_terms": "Conditions d’utilisation",
 	"settings_resources_terms_description": "Consulte les conditions d’utilisation de Goodspace.",
 	"settings_verify_email_change": "Vérifier la modification de l’e-mail",
-	"settings_email_updated": "Adresse e-mail mise à jour"
+	"settings_email_updated": "Adresse e-mail mise à jour",
+	"exception_current_password_incorrect": "Le mot de passe actuel est incorrect.",
+	"exception_session_disable_failed": "La session n'a pas pu être déconnectée.",
+	"exception_session_not_found": "Session introuvable."
 }

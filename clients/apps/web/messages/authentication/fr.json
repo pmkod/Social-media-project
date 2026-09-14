@@ -56,5 +56,17 @@
 	"validation_report_reason_required": "Sélectionne un motif.",
 	"validation_report_explain_required": "Explique-nous ce qui s'est passé.",
 	"validation_post_media_invalid": "Choisis une image ou vidéo prise en charge de 20 Mo max.",
-	"validation_post_content_required": "Ajoute du texte ou un fichier média."
+	"validation_post_content_required": "Ajoute du texte ou un fichier média.",
+	"exception_email_already_exists": "Un compte utilise déjà cette adresse e-mail.",
+	"exception_email_unchanged": "La nouvelle adresse e-mail doit être différente.",
+	"exception_incorrect_email_or_password": "Adresse e-mail ou mot de passe incorrect.",
+	"exception_invalid_verification_code": "Le code de vérification est invalide.",
+	"exception_invalid_verification_data": "La demande de vérification est invalide.",
+	"exception_username_already_exists": "Ce nom d'utilisateur est déjà utilisé.",
+	"exception_verification_already_used": "Cette demande de vérification a déjà été utilisée.",
+	"exception_verification_attempts_limit_reached": "Trop de tentatives de vérification. Veuillez demander un nouveau code.",
+	"exception_verification_code_resends_limit_reached": "La limite de renvoi du code de vérification a été atteinte.",
+	"exception_verification_expired": "La demande de vérification a expiré.",
+	"exception_verification_not_completed": "La vérification n'est pas terminée.",
+	"exception_verification_not_found_or_expired": "La demande de vérification est introuvable ou a expiré."
 }

@@ -32,5 +32,7 @@
 	"bookmark_collection_delete_description": "Cette collection sera supprimée. Les publications présentes dans d’autres collections resteront enregistrées.",
 	"bookmark_collection_delete_confirm": "Supprimer la collection",
 	"bookmark_added_success": "Publication ajoutée à la collection",
-	"bookmark_removed_success": "Publication retirée de la collection"
+	"bookmark_removed_success": "Publication retirée de la collection",
+	"exception_collection_name_already_exists": "Une collection portant ce nom existe déjà.",
+	"exception_collection_not_found": "Collection introuvable."
 }

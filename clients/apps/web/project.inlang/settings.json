@@ -9,7 +9,6 @@
 	"plugin.inlang.messageFormat": {
 		"pathPattern": [
 			"./messages/common/{locale}.json",
-			"./messages/exceptions/{locale}.json",
 			"./messages/authentication/{locale}.json",
 			"./messages/bookmarks/{locale}.json",
 			"./messages/comments/{locale}.json",
