@@ -13,7 +13,7 @@ function PostListLoader({
 	roundedTopOnFirstItem = true,
 }: PostListLoaderProps) {
 	return (
-		<div className={cn("divide-y divide-border", className)}>
+		<div className={cn("md:divide-y md:divide-border", className)}>
 			{Array.from({ length: count }).map((_, index) => (
 				<PostItemLoader
 					// biome-ignore lint/suspicious/noArrayIndexKey: Static array for skeleton loading placeholders

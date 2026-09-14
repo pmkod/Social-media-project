@@ -42,6 +42,7 @@ function PostSearchList({ query }: PostSearchListProps) {
 					description={(postsQuery.error as Error)?.message}
 					onRefresh={() => void postsQuery.refetch()}
 					isRefetching={postsQuery.isRefetching}
+					className="border-0 md:border"
 				/>
 			) : posts.length === 0 ? (
 				<EmptyBlock
@@ -55,6 +56,7 @@ function PostSearchList({ query }: PostSearchListProps) {
 							? m.search_posts_empty_query({ query })
 							: m.search_posts_empty_default_description()
 					}
+					className="border-0 md:border"
 				/>
 			) : (
 				<div>

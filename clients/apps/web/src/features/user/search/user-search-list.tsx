@@ -19,7 +19,7 @@ function UserSearchList({ query }: UserSearchListProps) {
 	const users = usersQuery.data?.pages.flatMap((page) => page.users) ?? [];
 
 	return (
-		<section className="mb-6 overflow-hidden rounded-xl border border-border bg-background">
+		<section className="mb-6 overflow-hidden bg-background md:rounded-xl md:border md:border-border">
 			<h2 className="border-b px-4 py-3 font-semibold">
 				{hasQuery ? m.search_people() : m.search_people_discover()}
 			</h2>

@@ -45,9 +45,9 @@ export function PostComments({
 		<section
 			aria-label={m.comments_section_label()}
 			className={cn(
-				"overflow-hidden rounded-b-xl border-x border-b",
+				"overflow-hidden md:rounded-b-xl md:border-x md:border-b",
 				layout === "panel" &&
-					"flex min-h-0 flex-1 flex-col rounded-none border-0",
+					"flex min-h-0 flex-1 flex-col rounded-none border-0 md:rounded-none md:border-0",
 			)}
 		>
 			<div

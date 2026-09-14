@@ -226,8 +226,8 @@ function StandardPostItem({
 			// search={{ focusComment: true }}
 			// onClick={(e) => e.stopPropagation()}
 			className={cn(
-				"block border-x border-t last:border-b last:rounded-b-xl border-border p-4 hover:bg-accent transition-colors cursor-pointer",
-				roundedTopOnFirstItem ? "first:rounded-t-xl" : "",
+				"block border-border p-4 transition-colors hover:bg-accent cursor-pointer md:border-x md:border-t md:last:border-b md:last:rounded-b-xl",
+				roundedTopOnFirstItem ? "md:first:rounded-t-xl" : "",
 			)}
 		>
 			<div className="flex items-start gap-3">

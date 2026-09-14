@@ -43,11 +43,13 @@ export function Feed() {
 					description={(error as Error).message}
 					onRefresh={() => void refetch()}
 					isRefetching={isRefetching}
+					className="border-0 md:border"
 				/>
 			) : allPosts.length === 0 ? (
 				<EmptyBlock
 					title={m.feed_empty_title()}
 					description={m.feed_empty_description()}
+					className="border-0 md:border"
 				/>
 			) : (
 				/* Feed Posts */

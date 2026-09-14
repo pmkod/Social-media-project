@@ -73,7 +73,7 @@ function NotificationsPage() {
 					<AppHeaderTitle>{m.notifications_title()}</AppHeaderTitle>
 				</AppHeaderLeftPart>
 			</AppHeader>
-			<div className="border rounded-2xl overflow-hidden">
+			<div className="overflow-hidden md:rounded-2xl md:border md:border-border">
 				{isLoading ? (
 					<NotificationListItemLoader />
 				) : isError ? (

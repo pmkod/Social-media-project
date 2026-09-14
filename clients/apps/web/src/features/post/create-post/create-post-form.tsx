@@ -177,7 +177,7 @@ function CreatePostForm({ onSuccess, onBusyChange }: CreatePostFormProps = {}) {
 				e.stopPropagation();
 				form.handleSubmit();
 			}}
-			className="pb-4 px-4 pt-6 border border-border rounded-xl"
+			className="px-4 pt-6 pb-4 md:rounded-xl md:border md:border-border"
 		>
 			<div className="flex gap-3">
 				<UserAvatar user={authenticatedUser?.user} size="lg" />

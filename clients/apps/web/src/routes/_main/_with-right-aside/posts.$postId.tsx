@@ -50,7 +50,7 @@ function PostDetailPage() {
 					description={(query.error as Error)?.message}
 					onRefresh={() => void query.refetch()}
 					isRefetching={query.isRefetching}
-					className="h-120"
+					className="h-120 border-0 md:border"
 				/>
 			)}
 		</MainContainer>
