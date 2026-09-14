@@ -10,8 +10,7 @@ export function Footer() {
 		{ label: m.nav_home(), to: "/" },
 		{ label: m.footer_signup(), to: "/signup" },
 		{ label: m.footer_privacy(), to: "/privacy-policy" },
-		{ label: m.footer_terms(), to: "/terms-of-service" },
-		{ label: m.footer_about(), to: "/about" },
+		{ label: m.footer_terms(), to: "/terms" },
 	];
 
 	return (

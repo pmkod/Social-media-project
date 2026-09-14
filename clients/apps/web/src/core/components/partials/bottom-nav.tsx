@@ -1,10 +1,9 @@
 import {
-	RiBookmarkLine,
 	RiChat3Line,
 	RiHome5Line,
 	RiNotification3Line,
 	RiSearchLine,
-	RiSettings3Line,
+	RiUserLine,
 } from "@remixicon/react";
 import { Link } from "@tanstack/react-router";
 import { useAuthenticatedUser } from "@/features/user/authenticated-user/use-authenticated-user.ts";
@@ -53,22 +52,17 @@ export function BottomNav() {
 			>
 				<RiChat3Line className="h-6 w-6" />
 			</Link>
-			<Link
-				to="/bookmark-collections"
-				aria-label={m.nav_bookmarks()}
-				className="p-2 text-muted-foreground hover:text-sky-500 transition-colors"
-				activeProps={{ className: "text-sky-500" }}
-			>
-				<RiBookmarkLine className="h-6 w-6" />
-			</Link>
-			<Link
-				to="/settings"
-				aria-label={m.nav_settings()}
-				className="p-2 text-muted-foreground hover:text-sky-500 transition-colors"
-				activeProps={{ className: "text-sky-500" }}
-			>
-				<RiSettings3Line className="h-6 w-6" />
-			</Link>
+			{data ? (
+				<Link
+					to="/$username"
+					params={{ username: `@${data.user.username}` }}
+					aria-label={m.nav_profile()}
+					className="p-2 text-muted-foreground hover:text-sky-500 transition-colors"
+					activeProps={{ className: "text-sky-500" }}
+				>
+					<RiUserLine className="h-6 w-6" />
+				</Link>
+			) : null}
 		</nav>
 	);
 }

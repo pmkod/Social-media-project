@@ -12,9 +12,8 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as BaseRouteRouteImport } from './routes/_base/route'
 import { Route as MainRouteRouteImport } from './routes/_main/route'
 import { Route as BaseAuthenticationRouteRouteImport } from './routes/_base/_authentication/route'
-import { Route as BaseAboutRouteImport } from './routes/_base/about'
 import { Route as BasePrivacyPolicyRouteImport } from './routes/_base/privacy-policy'
-import { Route as BaseTermsOfServiceRouteImport } from './routes/_base/terms-of-service'
+import { Route as BaseTermsRouteImport } from './routes/_base/terms'
 import { Route as MainWithRightAsideRouteRouteImport } from './routes/_main/_with-right-aside/route'
 import { Route as MainDiscussionsRouteRouteImport } from './routes/_main/discussions/route'
 import { Route as MainSettingsRouteRouteImport } from './routes/_main/settings/route'
@@ -56,19 +55,14 @@ const BaseAuthenticationRouteRoute = BaseAuthenticationRouteRouteImport.update({
   id: '/_authentication',
   getParentRoute: () => BaseRouteRoute,
 } as any)
-const BaseAboutRoute = BaseAboutRouteImport.update({
-  id: '/about',
-  path: '/about',
-  getParentRoute: () => BaseRouteRoute,
-} as any)
 const BasePrivacyPolicyRoute = BasePrivacyPolicyRouteImport.update({
   id: '/privacy-policy',
   path: '/privacy-policy',
   getParentRoute: () => BaseRouteRoute,
 } as any)
-const BaseTermsOfServiceRoute = BaseTermsOfServiceRouteImport.update({
-  id: '/terms-of-service',
-  path: '/terms-of-service',
+const BaseTermsRoute = BaseTermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
   getParentRoute: () => BaseRouteRoute,
 } as any)
 const MainWithRightAsideRouteRoute = MainWithRightAsideRouteRouteImport.update({
@@ -229,9 +223,8 @@ export interface FileRoutesByFullPath {
   '/': typeof BaseAuthenticationIndexRoute
   '/discussions': typeof MainDiscussionsRouteRouteWithChildren
   '/settings': typeof MainSettingsRouteRouteWithChildren
-  '/about': typeof BaseAboutRoute
   '/privacy-policy': typeof BasePrivacyPolicyRoute
-  '/terms-of-service': typeof BaseTermsOfServiceRoute
+  '/terms': typeof BaseTermsRoute
   '/complete-signup': typeof BaseAuthenticationCompleteSignupRoute
   '/new-password': typeof BaseAuthenticationNewPasswordRoute
   '/password-reset': typeof BaseAuthenticationPasswordResetRoute
@@ -259,9 +252,8 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof BaseAuthenticationIndexRoute
-  '/about': typeof BaseAboutRoute
   '/privacy-policy': typeof BasePrivacyPolicyRoute
-  '/terms-of-service': typeof BaseTermsOfServiceRoute
+  '/terms': typeof BaseTermsRoute
   '/complete-signup': typeof BaseAuthenticationCompleteSignupRoute
   '/new-password': typeof BaseAuthenticationNewPasswordRoute
   '/password-reset': typeof BaseAuthenticationPasswordResetRoute
@@ -295,9 +287,8 @@ export interface FileRoutesById {
   '/_main/_with-right-aside': typeof MainWithRightAsideRouteRouteWithChildren
   '/_main/discussions': typeof MainDiscussionsRouteRouteWithChildren
   '/_main/settings': typeof MainSettingsRouteRouteWithChildren
-  '/_base/about': typeof BaseAboutRoute
   '/_base/privacy-policy': typeof BasePrivacyPolicyRoute
-  '/_base/terms-of-service': typeof BaseTermsOfServiceRoute
+  '/_base/terms': typeof BaseTermsRoute
   '/_base/_authentication/complete-signup': typeof BaseAuthenticationCompleteSignupRoute
   '/_base/_authentication/new-password': typeof BaseAuthenticationNewPasswordRoute
   '/_base/_authentication/password-reset': typeof BaseAuthenticationPasswordResetRoute
@@ -330,9 +321,8 @@ export interface FileRouteTypes {
     | '/'
     | '/discussions'
     | '/settings'
-    | '/about'
     | '/privacy-policy'
-    | '/terms-of-service'
+    | '/terms'
     | '/complete-signup'
     | '/new-password'
     | '/password-reset'
@@ -360,9 +350,8 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/about'
     | '/privacy-policy'
-    | '/terms-of-service'
+    | '/terms'
     | '/complete-signup'
     | '/new-password'
     | '/password-reset'
@@ -395,9 +384,8 @@ export interface FileRouteTypes {
     | '/_main/_with-right-aside'
     | '/_main/discussions'
     | '/_main/settings'
-    | '/_base/about'
     | '/_base/privacy-policy'
-    | '/_base/terms-of-service'
+    | '/_base/terms'
     | '/_base/_authentication/complete-signup'
     | '/_base/_authentication/new-password'
     | '/_base/_authentication/password-reset'
@@ -453,13 +441,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BaseAuthenticationRouteRouteImport
       parentRoute: typeof BaseRouteRoute
     }
-    '/_base/about': {
-      id: '/_base/about'
-      path: '/about'
-      fullPath: '/about'
-      preLoaderRoute: typeof BaseAboutRouteImport
-      parentRoute: typeof BaseRouteRoute
-    }
     '/_base/privacy-policy': {
       id: '/_base/privacy-policy'
       path: '/privacy-policy'
@@ -467,11 +448,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BasePrivacyPolicyRouteImport
       parentRoute: typeof BaseRouteRoute
     }
-    '/_base/terms-of-service': {
-      id: '/_base/terms-of-service'
-      path: '/terms-of-service'
-      fullPath: '/terms-of-service'
-      preLoaderRoute: typeof BaseTermsOfServiceRouteImport
+    '/_base/terms': {
+      id: '/_base/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof BaseTermsRouteImport
       parentRoute: typeof BaseRouteRoute
     }
     '/_main/_with-right-aside': {
@@ -701,16 +682,14 @@ const BaseAuthenticationRouteRouteWithChildren =
 
 interface BaseRouteRouteChildren {
   BaseAuthenticationRouteRoute: typeof BaseAuthenticationRouteRouteWithChildren
-  BaseAboutRoute: typeof BaseAboutRoute
   BasePrivacyPolicyRoute: typeof BasePrivacyPolicyRoute
-  BaseTermsOfServiceRoute: typeof BaseTermsOfServiceRoute
+  BaseTermsRoute: typeof BaseTermsRoute
 }
 
 const BaseRouteRouteChildren: BaseRouteRouteChildren = {
   BaseAuthenticationRouteRoute: BaseAuthenticationRouteRouteWithChildren,
-  BaseAboutRoute: BaseAboutRoute,
   BasePrivacyPolicyRoute: BasePrivacyPolicyRoute,
-  BaseTermsOfServiceRoute: BaseTermsOfServiceRoute,
+  BaseTermsRoute: BaseTermsRoute,
 }
 
 const BaseRouteRouteWithChildren = BaseRouteRoute._addFileChildren(

@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import * as m from "@/paraglide/messages.js";
 
-export const Route = createFileRoute("/_base/terms-of-service")({
+export const Route = createFileRoute("/_base/terms")({
 	component: TermsOfServicePage,
 });
 

@@ -13,7 +13,7 @@ Ce document recense les surfaces utilisateur trouvées dans les clients web et m
 - Tester aussi le mode paysage, le zoom navigateur à 200 %, les textes longs, les listes vides/chargées/en erreur et l'ouverture du clavier sur les formulaires.
 - Pour les modales : vérifier le scroll interne, le verrouillage du scroll de la page, le focus, la fermeture, les boutons fixes et les zones sûres en hauteur réduite.
 
-## Pages web — publiques et authentification (9)
+## Pages web — publiques et authentification (8)
 
 | 320 | 390–430 | 768 | ≥ 1024 | Page | Route | Source |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -23,9 +23,8 @@ Ce document recense les surfaces utilisateur trouvées dans les clients web et m
 | [ ] | [ ] | [ ] | [ ] | Demande de réinitialisation du mot de passe | `/password-reset` | [password-reset.tsx](clients/apps/web/src/routes/_base/_authentication/password-reset.tsx) |
 | [ ] | [ ] | [ ] | [ ] | Nouveau mot de passe | `/new-password` | [new-password.tsx](clients/apps/web/src/routes/_base/_authentication/new-password.tsx) |
 | [ ] | [ ] | [ ] | [ ] | Vérification utilisateur | `/user-verification` | [user-verification.tsx](clients/apps/web/src/routes/_base/_authentication/user-verification.tsx) |
-| [ ] | [ ] | [ ] | [ ] | À propos | `/about` | [about.tsx](clients/apps/web/src/routes/_base/about.tsx) |
 | [ ] | [ ] | [ ] | [ ] | Politique de confidentialité | `/privacy-policy` | [privacy-policy.tsx](clients/apps/web/src/routes/_base/privacy-policy.tsx) |
-| [ ] | [ ] | [ ] | [ ] | Conditions d'utilisation | `/terms-of-service` | [terms-of-service.tsx](clients/apps/web/src/routes/_base/terms-of-service.tsx) |
+| [ ] | [ ] | [ ] | [ ] | Conditions d'utilisation | `/terms` | [terms.tsx](clients/apps/web/src/routes/_base/terms.tsx) |
 
 ## Pages web — application authentifiée (19)
 

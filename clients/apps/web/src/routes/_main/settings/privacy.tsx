@@ -34,7 +34,7 @@ function PrivacySettingsPage() {
 					icon={RiFileTextLine}
 					title={m.settings_resources_terms()}
 					description={m.settings_resources_terms_description()}
-					href="/terms-of-service"
+					href="/terms"
 					isExternal
 				/>
 			</div>
