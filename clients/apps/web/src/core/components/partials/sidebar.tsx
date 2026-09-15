@@ -12,6 +12,8 @@ import {
 import { Link } from "@tanstack/react-router";
 import { Logo } from "@/core/components/partials/logo";
 import { Button } from "@/core/components/ui/button.tsx";
+import NiceModal from "@/core/components/ui/nice-modal.tsx";
+import { CreatePostModal } from "@/features/post/create-post/create-post.modal.tsx";
 import { AuthenticatedUserDropdown } from "@/features/user/authenticated-user/authenticated-user.dropdown.tsx";
 import { useAuthenticatedUser } from "@/features/user/authenticated-user/use-authenticated-user.ts";
 import { m } from "@/paraglide/messages.js";
@@ -57,7 +59,7 @@ export function Sidebar() {
 	const { data } = useAuthenticatedUser();
 
 	return (
-		<aside className="sticky top-0 flex h-screen w-20 shrink-0 flex-col justify-between px-2 py-4 lg:w-84 lg:p-4">
+		<aside className="sticky top-0 flex h-screen w-[4.5rem] shrink-0 flex-col justify-between px-1.5 py-4 lg:w-84 lg:p-4">
 			<div className="space-y-6">
 				{/* Logo at Top */}
 				<div className="py-2 text-center lg:px-3 lg:text-left">
@@ -112,7 +114,7 @@ export function Sidebar() {
 						type="button"
 						title={m.action_post()}
 						className="px-0 has-[>svg]:px-0 lg:px-6 lg:has-[>svg]:px-6"
-						onClick={() => {}}
+						onClick={() => void NiceModal.show(CreatePostModal)}
 					>
 						<RiAddLine className="size-5 lg:hidden" aria-hidden="true" />
 						<span className="sr-only lg:not-sr-only">{m.action_post()}</span>

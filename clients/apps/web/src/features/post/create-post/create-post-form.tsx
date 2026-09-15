@@ -28,9 +28,14 @@ import { useCreatePost } from "./use-create-post";
 type CreatePostFormProps = {
 	onSuccess?: () => void;
 	onBusyChange?: (busy: boolean) => void;
+	className?: string;
 };
 
-function CreatePostForm({ onSuccess, onBusyChange }: CreatePostFormProps = {}) {
+function CreatePostForm({
+	onSuccess,
+	onBusyChange,
+	className,
+}: CreatePostFormProps = {}) {
 	const { mutate, isPending } = useCreatePost();
 	const { selectFiles } = useSelectFiles();
 	const { data: authenticatedUser } = useAuthenticatedUser();
@@ -177,7 +182,10 @@ function CreatePostForm({ onSuccess, onBusyChange }: CreatePostFormProps = {}) {
 				e.stopPropagation();
 				form.handleSubmit();
 			}}
-			className="px-4 pt-6 pb-4 md:rounded-xl md:border md:border-border"
+			className={cn(
+				"px-4 pt-6 pb-4 md:rounded-xl md:border md:border-border",
+				className,
+			)}
 		>
 			<div className="flex gap-3">
 				<UserAvatar user={authenticatedUser?.user} size="lg" />
@@ -263,8 +271,8 @@ function CreatePostForm({ onSuccess, onBusyChange }: CreatePostFormProps = {}) {
 					{error}
 				</p>
 			) : null}
-			<div className="mt-3 flex items-center justify-between pt-3 border-t border-border">
-				<div className="flex items-center gap-2">
+			<div className="mt-3 flex flex-wrap items-center justify-between gap-2 border-t border-border pt-3">
+				<div className="flex min-w-0 flex-wrap items-center gap-2">
 					<EmojiPickerPopover onEmojiSelect={handleEmojiSelect}>
 						<Button
 							type="button"
