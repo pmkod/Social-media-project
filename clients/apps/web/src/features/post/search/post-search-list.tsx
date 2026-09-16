@@ -33,7 +33,7 @@ function PostSearchList({ query }: PostSearchListProps) {
 
 	return (
 		<section aria-label={m.search_posts_label()}>
-			<h2 className="mb-3 px-1 font-semibold">{m.search_posts_label()}</h2>
+			{/* <h2 className="mb-3 px-1 font-semibold">{m.search_posts_label()}</h2> */}
 			{postsQuery.isLoading ? (
 				<PostListLoader />
 			) : postsQuery.isError ? (

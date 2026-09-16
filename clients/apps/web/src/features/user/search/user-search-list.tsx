@@ -20,9 +20,9 @@ function UserSearchList({ query }: UserSearchListProps) {
 
 	return (
 		<section className="mb-6 overflow-hidden bg-background md:rounded-xl md:border md:border-border">
-			<h2 className="border-b px-4 py-3 font-semibold">
+			{/* <h2 className="border-b px-5 py-3 font-semibold">
 				{hasQuery ? m.search_people() : m.search_people_discover()}
-			</h2>
+			</h2> */}
 			{usersQuery.isLoading ? (
 				<UserRowItemListLoader count={5} />
 			) : usersQuery.isError ? (
@@ -45,7 +45,7 @@ function UserSearchList({ query }: UserSearchListProps) {
 						<UserRowItem key={user.id} user={user} />
 					))}
 					{usersQuery.hasNextPage ? (
-						<div className="border-t border-border p-2 flex justify-center">
+						<div className="p-2 flex justify-center">
 							<Button
 								type="button"
 								variant="ghost"

@@ -20,7 +20,7 @@ function SearchPage() {
 
 	return (
 		<MainContainer>
-			<div className="py-5 sticky top-0 bg-background z-40">
+			<div className="py-5 px-5 md:px-0 sticky top-0 bg-background z-40">
 				<SearchBar />
 			</div>
 

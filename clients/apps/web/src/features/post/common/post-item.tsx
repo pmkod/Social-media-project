@@ -194,10 +194,7 @@ function PostMediaSlider({ media }: { media: RenderMediaItem[] }) {
 	);
 }
 
-function StandardPostItem({
-	post,
-	roundedTopOnFirstItem = true,
-}: PostItemProps) {
+function PostItem({ post, roundedTopOnFirstItem = true }: PostItemProps) {
 	const isLiked = post.isLikedByAuthenticatedUser ?? false;
 	const likesCount = post.likesCount ?? 0;
 	const isBookmarked = post.isBookmarkedByAuthenticatedUser ?? false;
@@ -226,7 +223,7 @@ function StandardPostItem({
 			// search={{ focusComment: true }}
 			// onClick={(e) => e.stopPropagation()}
 			className={cn(
-				"block border-border p-4 transition-colors hover:bg-accent cursor-pointer md:border-x md:border-t md:last:border-b md:last:rounded-b-xl",
+				"block border-border p-4 transition-colors hover:bg-accent cursor-pointer md:border-x border-t md:last:border-b md:last:rounded-b-xl",
 				roundedTopOnFirstItem ? "md:first:rounded-t-xl" : "",
 			)}
 		>
@@ -323,6 +320,4 @@ function StandardPostItem({
 	);
 }
 
-export function PostItem(props: PostItemProps) {
-	return <StandardPostItem {...props} />;
-}
+export { PostItem };
