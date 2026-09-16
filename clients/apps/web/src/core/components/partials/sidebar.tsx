@@ -122,7 +122,7 @@ export function Sidebar() {
 							<span className="sr-only lg:not-sr-only">{m.action_post()}</span>
 						</Button>
 					</div>
-					<div className=" lg:hidden">
+					<div className="flex items-center justify-center lg:hidden">
 						<IconButton
 							size="lg"
 							type="button"
