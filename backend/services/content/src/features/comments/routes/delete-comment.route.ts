@@ -1,8 +1,6 @@
 import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
-import { ExceptionCodes } from "@/core/exceptions/exception.codes";
-import { Exception } from "@/core/exceptions/exception";
 import { notificationServiceClient } from "@/core/services/notification-service.client";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { requireUserAuthentication } from "@/features/authentication/middlewares/require-user-authentication.middleware";
@@ -36,49 +34,17 @@ const deleteCommentRoute = defineOpenAPIRoute<
 
 		const { id } = c.req.valid("param");
 
-		const comment = await prisma.comment.findUnique({
-			where: { id },
+		const comment = await prisma.comment.update({
+			where: { id, authorId: authenticatedUserId, exists: true },
+			data: { exists: false },
 		});
 
-		if (!comment) {
-			throw new Exception({
-				code: ExceptionCodes.comment_not_found,
-				message: "Comment not found",
-				status: HttpStatus.NOT_FOUND.code,
-			});
-		}
-
-		if (comment.authorId !== authenticatedUserId) {
-			throw new Exception({
-				code: ExceptionCodes.cannot_delete_comment,
-				message: "You are not authorized to delete this comment",
-				status: HttpStatus.FORBIDDEN.code,
-			});
-		}
-		if (!comment.exists) {
-			return c.json({ message: "Comment already deleted" });
-		}
-
-		const wasDeleted = await prisma.$transaction(async (transaction) => {
-			const result = await transaction.comment.updateMany({
-				where: { id, exists: true },
-				data: { exists: false },
-			});
-
-			// A duplicated or concurrent request must not decrement the counter twice.
-			if (result.count === 0) return false;
-
-			await transaction.post.update({
-				where: { id: comment.postId, exists: true },
-				data: { commentsCount: { decrement: 1 } },
-			});
-
-			return true;
+		await prisma.post.update({
+			where: { id: comment.postId, exists: true },
+			data: { commentsCount: { decrement: 1 } },
 		});
 
-		if (wasDeleted) {
-			await notificationServiceClient.removeNotificationsForComment(comment.id);
-		}
+		await notificationServiceClient.removeNotificationsForComment(comment.id);
 
 		return c.json({ message: "Comment deleted successfully" });
 	},
