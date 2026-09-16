@@ -47,8 +47,9 @@ Les services `user` et `content` appellent ce point d’entrée via leur `notifi
 | Bloquer un utilisateur | `POST /users/{id}/block` | Le blocage supprime les relations de suivi existantes dans les deux directions. | Les notifications `FOLLOW` associées à chaque relation supprimée : une pour le suivi de l’utilisateur authentifié vers la cible et une pour le suivi inverse, si elles existent. | `recipientId + initiatorId + groupKey` (`targetId` nul) |
 | Retirer son like d’un post | `DELETE /posts/{postId}/likes` | Un like existant est supprimé. | La notification `POST_LIKE` correspondant à ce like. | `targetId` du post + `initiatorId` + `groupKey` |
 | Retirer son like d’un commentaire | `DELETE /comments/{commentId}/likes` | Un like existant est supprimé. | La notification `COMMENT_LIKE` correspondant à ce like. | `targetId` du commentaire + `initiatorId` + `groupKey` |
-| Supprimer un commentaire | `DELETE /comments/{id}` | Le commentaire n’est pas déjà supprimé et est marqué comme supprimé. | Toutes les notifications liées au commentaire, notamment `POST_COMMENT`, `COMMENT_REPLY` et `COMMENT_LIKE`. | `targetId` ou `groupKey` du commentaire |
-| Supprimer un post | `DELETE /posts/{id}` | Le post est supprimé par son auteur. | Toutes les notifications associées au post : likes, commentaires et réponses, via `targetId` et `groupKey`. | `targetId` ou `groupKey` du post |
+| Supprimer un commentaire | `DELETE /comments/{id}` | Le commentaire n’est pas déjà supprimé et est marqué comme supprimé. | Uniquement sa notification de création (`POST_COMMENT` ou `COMMENT_REPLY`). Les notifications de likes et des réponses restent conservées. | `targetId` du commentaire |
+
+La suppression d’un post avec `DELETE /posts/{id}` ne supprime aucune notification existante.
 
 ### Points d’entrée internes de suppression
 
@@ -70,8 +71,9 @@ Suppression par commentaire :
 
 - `POST /internal/notifications/remove-by-comment`
 - Reçoit `commentId`.
-- Supprime les notifications dont le `targetId` correspond au commentaire ou dont le `groupKey` correspond à ses réponses.
-- Décrémente le compteur non vu de chaque destinataire du nombre de notifications supprimées qui n’étaient pas vues.
+- Supprime uniquement la notification `POST_COMMENT` ou `COMMENT_REPLY` dont le `targetId` correspond au commentaire.
+- Conserve les notifications de likes du commentaire et les notifications de ses réponses.
+- Décrémente le compteur non vu du destinataire uniquement si la notification supprimée n’était pas vue.
 
 ## Fichiers appelants
 
@@ -89,7 +91,7 @@ Suppression par commentaire :
 - Suppression d’un `COMMENT_LIKE` : `backend/services/content/src/features/comments/routes/unlike-comment.route.ts`
 - Création d’un `POST_COMMENT` ou `COMMENT_REPLY` : `backend/services/content/src/features/comments/routes/create-comment.route.ts`
 - Suppression de la notification d’un commentaire : `backend/services/content/src/features/comments/routes/delete-comment.route.ts`
-- Suppression de toutes les notifications d’un post : `backend/services/content/src/features/posts/routes/delete-post.route.ts`
+- Suppression d’un post sans suppression de ses notifications : `backend/services/content/src/features/posts/routes/delete-post.route.ts`
 
 ## À ne pas confondre avec une suppression
 

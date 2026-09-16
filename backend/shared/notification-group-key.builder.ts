@@ -13,7 +13,6 @@ const NotificationGroupKeyBuilder = {
 		`${NotificationEventTypes.POST_COMMENT}:${postId}`,
 	buildCommentReply: (parentCommentId: string, postId: string): string =>
 		`${buildCommentReplyGroupKeyPrefix(parentCommentId)}${postId}`,
-	buildCommentReplyPrefix: buildCommentReplyGroupKeyPrefix,
 };
 
 export { NotificationGroupKeyBuilder };

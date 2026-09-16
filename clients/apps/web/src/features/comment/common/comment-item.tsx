@@ -179,7 +179,7 @@ export function CommentItem({ comment, isReply = false }: CommentItemProps) {
 							<button
 								type="button"
 								onClick={fetchMoreReplies}
-								className="text-xs font-semibold text-gray-900 cursor-pointer"
+								className="text-xs font-semibold text-foreground cursor-pointer"
 							>
 								{repliesThatRemainToBeSeenCount === 1
 									? m.comment_view_reply({
@@ -193,7 +193,7 @@ export function CommentItem({ comment, isReply = false }: CommentItemProps) {
 							<button
 								type="button"
 								onClick={hideReplies}
-								className="text-xs font-semibold text-gray-900 cursor-pointer"
+								className="text-xs font-semibold text-foreground cursor-pointer"
 							>
 								{m.comment_hide_replies()}
 							</button>

@@ -2,13 +2,13 @@ import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
 import { userServiceClient } from "@/core/services/user-service.client";
-import { NotificationGroupKeyBuilder } from "../../../../../../shared/notification-group-key.builder";
+import { NotificationEventTypes } from "../../../../../../shared/notification.constants";
 import { NotificationsRoutesTag } from "../notifications.constants";
 
 const routeDef = createRoute({
 	method: "post",
 	path: "/internal/notifications/remove-by-comment",
-	summary: "Remove notifications that point to a deleted comment",
+	summary: "Remove the creation notification for a deleted comment",
 	tags: [NotificationsRoutesTag],
 	request: {
 		body: {
@@ -20,7 +20,7 @@ const routeDef = createRoute({
 		},
 	},
 	responses: {
-		[HttpStatus.OK.code]: { description: "Comment notifications removed" },
+		[HttpStatus.OK.code]: { description: "Comment notification removed" },
 	},
 });
 
@@ -28,25 +28,23 @@ const removeCommentNotificationsRoute = defineOpenAPIRoute({
 	route: routeDef,
 	handler: async (c) => {
 		const { commentId } = c.req.valid("json");
-		const commentNotificationsWhere = {
-			OR: [
-				{ targetId: commentId },
-				{
-					groupKey: {
-						startsWith:
-							NotificationGroupKeyBuilder.buildCommentReplyPrefix(commentId),
-					},
-				},
-			],
+		const commentNotificationWhere = {
+			targetId: commentId,
+			eventType: {
+				in: [
+					NotificationEventTypes.POST_COMMENT,
+					NotificationEventTypes.COMMENT_REPLY,
+				],
+			},
 		};
 		const notifications = await prisma.notification.findMany({
-			where: commentNotificationsWhere,
+			where: commentNotificationWhere,
 			select: { recipientId: true, isSeen: true },
 		});
 		if (notifications.length === 0) return c.json({ removedCount: 0 });
 
 		await prisma.notification.deleteMany({
-			where: commentNotificationsWhere,
+			where: commentNotificationWhere,
 		});
 		const unseenCountsByRecipient = new Map<string, number>();
 		for (const notification of notifications) {

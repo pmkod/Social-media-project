@@ -94,7 +94,7 @@ class NotificationServiceClient {
 		}
 	}
 
-	async removeNotificationsForComment(commentId: string): Promise<void> {
+	async removeNotificationForComment(commentId: string): Promise<void> {
 		try {
 			const response = await fetch(
 				`${this.baseUrl}/internal/notifications/remove-by-comment`,
@@ -106,12 +106,12 @@ class NotificationServiceClient {
 			);
 			if (!response.ok) {
 				console.error(
-					`[NotificationServiceClient] Failed to remove comment notifications, status: ${response.status}`,
+					`[NotificationServiceClient] Failed to remove comment notification, status: ${response.status}`,
 				);
 			}
 		} catch (error) {
 			console.error(
-				"[NotificationServiceClient] Failed to remove comment notifications:",
+				"[NotificationServiceClient] Failed to remove comment notification:",
 				error,
 			);
 		}

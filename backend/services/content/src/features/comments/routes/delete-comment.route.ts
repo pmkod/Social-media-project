@@ -44,7 +44,7 @@ const deleteCommentRoute = defineOpenAPIRoute<
 			data: { commentsCount: { decrement: 1 } },
 		});
 
-		await notificationServiceClient.removeNotificationsForComment(comment.id);
+		await notificationServiceClient.removeNotificationForComment(comment.id);
 
 		return c.json({ message: "Comment deleted successfully" });
 	},
