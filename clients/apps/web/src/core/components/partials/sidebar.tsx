@@ -17,6 +17,7 @@ import { CreatePostModal } from "@/features/post/create-post/create-post.modal.t
 import { AuthenticatedUserDropdown } from "@/features/user/authenticated-user/authenticated-user.dropdown.tsx";
 import { useAuthenticatedUser } from "@/features/user/authenticated-user/use-authenticated-user.ts";
 import { m } from "@/paraglide/messages.js";
+import { IconButton } from "../ui/icon-button";
 
 type SidebarLinkProps = {
 	to: string;
@@ -39,7 +40,7 @@ function SidebarLink({
 			params={params}
 			aria-label={label}
 			title={label}
-			className="relative flex items-center justify-center rounded-md px-2 py-2 font-normal text-muted-foreground transition-colors hover:bg-accent lg:justify-start lg:gap-4 lg:px-4"
+			className="relative flex items-center justify-center rounded-md w-max md:w-full mx-auto px-3 py-3 font-normal text-muted-foreground transition-colors hover:bg-accent lg:justify-start lg:gap-4 lg:px-4"
 			activeProps={{
 				className: "text-primary font-semibold",
 			}}
@@ -108,17 +109,29 @@ export function Sidebar() {
 			<div>
 				{/* User Profile / Logout Section at Bottom */}
 				<div className="pb-3 lg:px-2">
-					<Button
-						size="lg"
-						fullWidth
-						type="button"
-						title={m.action_post()}
-						className="px-0 has-[>svg]:px-0 lg:px-6 lg:has-[>svg]:px-6"
-						onClick={() => void NiceModal.show(CreatePostModal)}
-					>
-						<RiAddLine className="size-5 lg:hidden" aria-hidden="true" />
-						<span className="sr-only lg:not-sr-only">{m.action_post()}</span>
-					</Button>
+					<div className="hidden lg:block">
+						<Button
+							size="lg"
+							fullWidth
+							type="button"
+							title={m.action_post()}
+							className="px-0 has-[>svg]:px-0 lg:px-6 lg:has-[>svg]:px-6"
+							onClick={() => void NiceModal.show(CreatePostModal)}
+						>
+							<RiAddLine className="size-5 lg:hidden" aria-hidden="true" />
+							<span className="sr-only lg:not-sr-only">{m.action_post()}</span>
+						</Button>
+					</div>
+					<div className=" lg:hidden">
+						<IconButton
+							size="lg"
+							type="button"
+							title={m.action_post()}
+							onClick={() => void NiceModal.show(CreatePostModal)}
+						>
+							<RiAddLine className="size-5" aria-hidden="true" />
+						</IconButton>
+					</div>
 				</div>
 				<div className="pt-4 lg:px-2">
 					<AuthenticatedUserDropdown compactBelowLaptop />

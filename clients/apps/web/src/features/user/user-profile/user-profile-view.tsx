@@ -104,7 +104,7 @@ function UserProfileView({ user }: UserProfileViewProps) {
 				) : null}
 			</div>
 
-			<div className="px-8 pb-3">
+			<div className="px-4 md:px-5 pb-3">
 				<div className="flex items-start justify-between">
 					<div className="-mt-20 shrink-0 border-4 border-background rounded-full bg-background">
 						{profilePictureFullUrl ? (
