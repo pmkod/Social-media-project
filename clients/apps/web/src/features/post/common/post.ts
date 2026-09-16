@@ -22,6 +22,7 @@ export type PostMediaItem = {
 
 export type Post = {
 	id: string;
+	exists?: boolean;
 	author: User;
 	text?: string;
 	content?: string;

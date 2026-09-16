@@ -18,10 +18,11 @@ let globalCommentIndex = 0;
 
 const seedComments = async (users: SeededUser[], posts: SeededPost[]): Promise<SeededComment[]> => {
   const prisma = getContentPrisma();
-  const existingCommentCount = await prisma.comment.count();
+  const existingCommentCount = await prisma.comment.count({ where: { exists: true } });
   if (existingCommentCount > 0) {
     logger.warn(`Comment table already contains ${existingCommentCount} rows. Skipping comment seeding.`);
     return prisma.comment.findMany({
+      where: { exists: true, post: { exists: true } },
       select: { id: true, postId: true, authorId: true, content: true },
     });
   }

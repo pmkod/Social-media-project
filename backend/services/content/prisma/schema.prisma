@@ -11,6 +11,7 @@ model Post {
   id            String      @id @default(uuid())
   authorId      String      @map("author_id")
   text          String      @map("content")
+  exists        Boolean     @default(true)
   likesCount    Int         @default(0) @map("likes_count")
   commentsCount Int         @default(0) @map("comments_count")
   createdAt     DateTime    @default(now()) @map("created_at")
@@ -21,6 +22,7 @@ model Post {
   bookmarks     Bookmark[]
 
   @@index([createdAt, id])
+  @@index([exists, createdAt, id])
   @@map("post")
 }
 
@@ -52,9 +54,9 @@ model Comment {
   authorId     String        @map("author_id")
   parentId     String?       @map("parent_id")
   content      String
+  exists       Boolean       @default(true)
   likesCount   Int           @default(0) @map("likes_count")
   repliesCount Int           @default(0) @map("replies_count")
-  deletedAt    DateTime?     @map("deleted_at")
   createdAt    DateTime      @default(now()) @map("created_at")
   updatedAt    DateTime      @updatedAt @map("updated_at")
   post         Post          @relation(fields: [postId], references: [id], onDelete: Cascade)

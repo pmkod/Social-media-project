@@ -1,4 +1,5 @@
 import { prisma } from "@/core/databases";
+import { uniqueValues } from "@/core/functions/collection.functions";
 import type { Prisma } from "@/generated/prisma/client";
 
 const postMediaWithFileIdsSelect = {
@@ -18,16 +19,16 @@ type PostMediaWithFileIds = Prisma.PostMediaGetPayload<{
 const hydratePostMediaFiles = async <
 	TPost extends { medias: PostMediaWithFileIds[] },
 >(posts: TPost[]) => {
-	const fileIds = Array.from(
-		new Set(
-			posts.flatMap((post) =>
+	const fileIds = uniqueValues(
+		posts
+			.flatMap((post) =>
 				post.medias.flatMap((media) => [
 					media.lowQualityFileId,
 					media.highQualityFileId,
 				]),
-			),
-		),
-	).filter((fileId): fileId is string => Boolean(fileId));
+			)
+			.filter((fileId): fileId is string => Boolean(fileId)),
+	);
 
 	const files =
 		fileIds.length > 0

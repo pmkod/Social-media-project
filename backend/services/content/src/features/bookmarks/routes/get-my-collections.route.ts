@@ -79,7 +79,11 @@ const getMyCollectionsRoute = defineOpenAPIRoute<
 				description: true,
 				createdAt: true,
 				updatedAt: true,
-				_count: { select: { items: true } },
+				_count: {
+					select: {
+						items: { where: { bookmark: { post: { exists: true } } } },
+					},
+				},
 			},
 		});
 		const hasNextPage = collections.length > limit;
@@ -90,29 +94,27 @@ const getMyCollectionsRoute = defineOpenAPIRoute<
 				? { id: lastItem.id, createdAt: lastItem.createdAt.toISOString() }
 				: null;
 		const collectionIds = items.map((collection) => collection.id);
-		const selectedCollectionIds =
+		const selectedCollectionIds: string[] =
 			query.postId && collectionIds.length > 0
-				? new Set(
-						(
-							await prisma.bookmarkCollectionItem.findMany({
-								where: {
-									collectionId: { in: collectionIds },
-									bookmark: {
-										postId: query.postId,
-										ownerId: authenticatedUser.id,
-									},
+				? (
+						await prisma.bookmarkCollectionItem.findMany({
+							where: {
+								collectionId: { in: collectionIds },
+								bookmark: {
+									postId: query.postId,
+									ownerId: authenticatedUser.id,
 								},
-								select: { collectionId: true },
-							})
-						).map((item) => item.collectionId),
-					)
-				: new Set<string>();
+							},
+							select: { collectionId: true },
+						})
+					).map((item) => item.collectionId)
+				: [];
 
 		return c.json({
 			bookmarkCollections: items.map(({ _count, ...collection }) => ({
 				...collection,
 				bookmarksCount: _count.items,
-				isPostInCollection: selectedCollectionIds.has(collection.id),
+				isPostInCollection: selectedCollectionIds.includes(collection.id),
 			})),
 			pagination: { nextCursor, hasNextPage, limit },
 		});

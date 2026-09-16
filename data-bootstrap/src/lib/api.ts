@@ -67,7 +67,7 @@ const apiFetch = async <T>(path: string, userId: string, options: RequestInit = 
 };
 
 const cleanupApiSessions = async () => {
-  const entries = Array.from(sessionCredentialsByUserId.entries());
+	const entries = [...sessionCredentialsByUserId.entries()];
   await Promise.allSettled(
     entries.map(async ([_userId, credentialsPromise]) => {
       const { sessionId, sessionToken } = await credentialsPromise;

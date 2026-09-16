@@ -1,6 +1,7 @@
 import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
+import { uniqueValues } from "@/core/functions/collection.functions";
 import { userServiceClient } from "@/core/services/user-service.client";
 import type { HonoEnv } from "@/core/types/hono-env";
 import { PostsRoutesTag } from "../posts.constants";
@@ -52,12 +53,10 @@ const getFeedFollowingRoute = defineOpenAPIRoute<
 		const blockRelationships = authenticatedUserId
 			? await userServiceClient.fetchBlockRelationshipIds(authenticatedUserId)
 			: { blockedUserIds: [], blockedByUserIds: [] };
-		const hiddenUserIds = Array.from(
-			new Set([
-				...blockRelationships.blockedUserIds,
-				...blockRelationships.blockedByUserIds,
-			]),
-		);
+		const hiddenUserIds = uniqueValues([
+			...blockRelationships.blockedUserIds,
+			...blockRelationships.blockedByUserIds,
+		]);
 
 		let targetAuthorIds: string[] | undefined;
 		if (query.authorId) {
@@ -107,6 +106,7 @@ const getFeedFollowingRoute = defineOpenAPIRoute<
 
 		const posts = await prisma.post.findMany({
 			where: {
+				exists: true,
 				authorId: { in: targetAuthorIds },
 				...(cursorCondition ? cursorCondition : {}),
 			},
@@ -116,6 +116,7 @@ const getFeedFollowingRoute = defineOpenAPIRoute<
 				id: true,
 				authorId: true,
 				text: true,
+				exists: true,
 				likesCount: true,
 				commentsCount: true,
 				createdAt: true,
@@ -137,47 +138,43 @@ const getFeedFollowingRoute = defineOpenAPIRoute<
 				: null;
 
 		const postIds = items.map((post) => post.id);
-		const authorIds = Array.from(new Set(items.map((post) => post.authorId)));
+		const authorIds = uniqueValues(items.map((post) => post.authorId));
 
 		const authorsMap = await userServiceClient.fetchAuthorsBatch(
 			authorIds,
 			authenticatedUserId,
 		);
-		const likedPostIds =
+		const likedPostIds: string[] =
 			authenticatedUserId && postIds.length > 0
-				? new Set(
-						(
-							await prisma.postLike.findMany({
-								where: {
-									authorId: authenticatedUserId,
-									postId: { in: postIds },
-								},
-								select: { postId: true },
-							})
-						).map((like) => like.postId),
-					)
-				: new Set<string>();
-		const bookmarkedPostIds =
+				? (
+						await prisma.postLike.findMany({
+							where: {
+								authorId: authenticatedUserId,
+								postId: { in: postIds },
+							},
+							select: { postId: true },
+						})
+					).map((like) => like.postId)
+				: [];
+		const bookmarkedPostIds: string[] =
 			authenticatedUserId && postIds.length > 0
-				? new Set(
-						(
-							await prisma.bookmark.findMany({
-								where: {
-									ownerId: authenticatedUserId,
-									postId: { in: postIds },
-									collectionItems: { some: {} },
-								},
-								select: { postId: true },
-							})
-						).map((bookmark) => bookmark.postId),
-					)
-				: new Set<string>();
+				? (
+						await prisma.bookmark.findMany({
+							where: {
+								ownerId: authenticatedUserId,
+								postId: { in: postIds },
+								collectionItems: { some: {} },
+							},
+							select: { postId: true },
+						})
+					).map((bookmark) => bookmark.postId)
+				: [];
 
 		return c.json({
 			posts: hydratedItems.map((post) => ({
 				...post,
-				isLikedByAuthenticatedUser: likedPostIds.has(post.id),
-				isBookmarkedByAuthenticatedUser: bookmarkedPostIds.has(post.id),
+				isLikedByAuthenticatedUser: likedPostIds.includes(post.id),
+				isBookmarkedByAuthenticatedUser: bookmarkedPostIds.includes(post.id),
 				author: authorsMap.get(post.authorId) ?? null,
 			})),
 			pagination: { nextCursor, hasNextPage, limit },

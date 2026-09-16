@@ -3,10 +3,12 @@ import {
 	useMutation,
 	useQueryClient,
 } from "@tanstack/react-query";
+import { toast } from "sonner";
 import { httpClient } from "@/core/http-clients/http-client.ts";
 import type { Post } from "@/features/post/common/post.ts";
 import { postListQueryKeys } from "@/features/post/common/post-list.query-keys.ts";
 import { postDetailsQueryKeys } from "@/features/post/post-detail/post-detail.query-keys.ts";
+import * as m from "@/paraglide/messages.js";
 import type { Comment } from "../common/comment.ts";
 import { commentListQueryKeys } from "../common/comment-list.query-keys.ts";
 
@@ -32,9 +34,9 @@ const useDeleteComment = () => {
 									? {
 											...cachedComment,
 											content: "",
+											exists: false,
 											isDeleted: true,
 											isLikedByAuthenticatedUser: false,
-											likesCount: 0,
 										}
 									: cachedComment,
 							),
@@ -75,6 +77,10 @@ const useDeleteComment = () => {
 							}
 						: data,
 			);
+			toast.success(m.comment_delete_success());
+		},
+		onError: (error) => {
+			toast.error(error.message || m.comment_delete_error());
 		},
 	});
 };

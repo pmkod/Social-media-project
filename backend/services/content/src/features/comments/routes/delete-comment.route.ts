@@ -55,22 +55,30 @@ const deleteCommentRoute = defineOpenAPIRoute<
 				status: HttpStatus.FORBIDDEN.code,
 			});
 		}
-		if (comment.deletedAt) {
+		if (!comment.exists) {
 			return c.json({ message: "Comment already deleted" });
 		}
 
-		await prisma.$transaction([
-			prisma.comment.update({
-				where: { id },
-				data: { deletedAt: new Date(), likesCount: 0 },
-			}),
-			prisma.commentLike.deleteMany({ where: { commentId: id } }),
-			prisma.post.update({
-				where: { id: comment.postId },
+		const wasDeleted = await prisma.$transaction(async (transaction) => {
+			const result = await transaction.comment.updateMany({
+				where: { id, exists: true },
+				data: { exists: false },
+			});
+
+			// A duplicated or concurrent request must not decrement the counter twice.
+			if (result.count === 0) return false;
+
+			await transaction.post.update({
+				where: { id: comment.postId, exists: true },
 				data: { commentsCount: { decrement: 1 } },
-			}),
-		]);
-		await notificationServiceClient.removeNotificationsForComment(comment.id);
+			});
+
+			return true;
+		});
+
+		if (wasDeleted) {
+			await notificationServiceClient.removeNotificationsForComment(comment.id);
+		}
 
 		return c.json({ message: "Comment deleted successfully" });
 	},

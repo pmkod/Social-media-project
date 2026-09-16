@@ -1,6 +1,7 @@
 import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
+import { uniqueValues } from "@/core/functions/collection.functions";
 import { ExceptionCodes } from "@/core/exceptions/exception.codes";
 import { Exception } from "@/core/exceptions/exception";
 import { userServiceClient } from "@/core/services/user-service.client";
@@ -42,6 +43,7 @@ const bookmarkedPostSelect = {
 	id: true,
 	authorId: true,
 	text: true,
+	exists: true,
 	likesCount: true,
 	commentsCount: true,
 	createdAt: true,
@@ -83,12 +85,10 @@ const getBookmarksRoute = defineOpenAPIRoute<
 
 		const blockRelationships =
 			await userServiceClient.fetchBlockRelationshipIds(ownerId);
-		const hiddenUserIds = Array.from(
-			new Set([
-				...blockRelationships.blockedUserIds,
-				...blockRelationships.blockedByUserIds,
-			]),
-		);
+		const hiddenUserIds = uniqueValues([
+			...blockRelationships.blockedUserIds,
+			...blockRelationships.blockedByUserIds,
+		]);
 
 		const cursorDate = query.cursorCreatedAt
 			? new Date(query.cursorCreatedAt)
@@ -124,10 +124,12 @@ const getBookmarksRoute = defineOpenAPIRoute<
 							collectionId: query.bookmarkCollectionId,
 							bookmark: {
 								ownerId,
-								post:
-								hiddenUserIds.length > 0
-									? { authorId: { notIn: hiddenUserIds } }
-										: {},
+								post: {
+									exists: true,
+									...(hiddenUserIds.length > 0
+										? { authorId: { notIn: hiddenUserIds } }
+										: {}),
+								},
 							},
 							...(collectionItemCursorCondition
 								? collectionItemCursorCondition
@@ -153,10 +155,12 @@ const getBookmarksRoute = defineOpenAPIRoute<
 						where: {
 							ownerId,
 							collectionItems: { some: {} },
-							post:
-								hiddenUserIds.length > 0
+							post: {
+								exists: true,
+								...(hiddenUserIds.length > 0
 									? { authorId: { notIn: hiddenUserIds } }
-									: {},
+									: {}),
+							},
 							...(bookmarkCursorCondition ? bookmarkCursorCondition : {}),
 						},
 						orderBy: [{ createdAt: "desc" }, { postId: "desc" }],
@@ -190,30 +194,26 @@ const getBookmarksRoute = defineOpenAPIRoute<
 				: null;
 
 		const postIds = items.map(({ post }) => post.id);
-		const authorIds = Array.from(
-			new Set(items.map(({ post }) => post.authorId)),
-		);
+		const authorIds = uniqueValues(items.map(({ post }) => post.authorId));
 
 		const authorsMap = await userServiceClient.fetchAuthorsBatch(
 			authorIds,
 			ownerId,
 		);
-		const likedPostIds =
+		const likedPostIds: string[] =
 			postIds.length > 0
-				? new Set(
-						(
-							await prisma.postLike.findMany({
-								where: { authorId: ownerId, postId: { in: postIds } },
-								select: { postId: true },
-							})
-						).map((like) => like.postId),
-					)
-				: new Set<string>();
+				? (
+						await prisma.postLike.findMany({
+							where: { authorId: ownerId, postId: { in: postIds } },
+							select: { postId: true },
+						})
+					).map((like) => like.postId)
+				: [];
 
 		return c.json({
 			posts: hydratedPosts.map((post) => ({
 				...post,
-				isLikedByAuthenticatedUser: likedPostIds.has(post.id),
+				isLikedByAuthenticatedUser: likedPostIds.includes(post.id),
 				isBookmarkedByAuthenticatedUser: true,
 				author: authorsMap.get(post.authorId) ?? null,
 			})),

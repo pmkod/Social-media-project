@@ -1,6 +1,7 @@
 import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
+import { uniqueValues } from "@/core/functions/collection.functions";
 import { userServiceClient } from "@/core/services/user-service.client";
 import type { HonoEnv } from "@/core/types/hono-env";
 import { CommentsRoutesTag } from "../comments.constants";
@@ -38,8 +39,8 @@ const getCommentsRoute = defineOpenAPIRoute<
 		const skip = (page - 1) * limit;
 		const authenticatedUser = c.get("authenticatedUser");
 		const authenticatedUserId = authenticatedUser?.id;
-		const post = await prisma.post.findUnique({
-			where: { id: postId },
+		const post = await prisma.post.findFirst({
+			where: { id: postId, exists: true },
 			select: { authorId: true },
 		});
 		if (
@@ -74,21 +75,21 @@ const getCommentsRoute = defineOpenAPIRoute<
 				content: true,
 				likesCount: true,
 				repliesCount: true,
+				exists: true,
 				createdAt: true,
 				updatedAt: true,
-				deletedAt: true,
 			},
 		});
 		const total = await prisma.comment.count({ where: commentsWhere });
 
-		const authorIds = Array.from(
-			new Set(comments.map((comment) => comment.authorId).filter(Boolean)),
+		const authorIds = uniqueValues(
+			comments.map((comment) => comment.authorId).filter(Boolean),
 		);
 		const authorsMap = await userServiceClient.fetchAuthorsBatch(
 			authorIds,
 			authenticatedUserId,
 		);
-		const likedCommentIds = new Set<string>();
+		const likedCommentIds: string[] = [];
 		if (authenticatedUserId && comments.length > 0) {
 			const likes = await prisma.commentLike.findMany({
 				where: {
@@ -97,17 +98,17 @@ const getCommentsRoute = defineOpenAPIRoute<
 				},
 				select: { commentId: true },
 			});
-			for (const like of likes) likedCommentIds.add(like.commentId);
+			for (const like of likes) likedCommentIds.push(like.commentId);
 		}
 
 		const enrichedComments = comments.map((comment) => {
-			const isDeleted = Boolean(comment.deletedAt);
+			const isDeleted = !comment.exists;
 			return {
 				...comment,
 				content: isDeleted ? "" : comment.content,
 				isDeleted,
 				isLikedByAuthenticatedUser:
-					!isDeleted && likedCommentIds.has(comment.id),
+					!isDeleted && likedCommentIds.includes(comment.id),
 				author: authorsMap.get(comment.authorId) ?? null,
 			};
 		});

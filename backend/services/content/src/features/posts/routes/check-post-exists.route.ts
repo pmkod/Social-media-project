@@ -23,10 +23,10 @@ const checkPostExistsRoute = defineOpenAPIRoute({
 		const { id } = c.req.valid("param");
 		const post = await prisma.post.findUnique({
 			where: { id },
-			select: { id: true },
+			select: { id: true, exists: true },
 		});
 
-		if (!post) {
+		if (!post?.exists) {
 			return c.json({ exists: false }, HttpStatus.NOT_FOUND.code);
 		}
 

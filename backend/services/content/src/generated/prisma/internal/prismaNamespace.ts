@@ -1121,6 +1121,7 @@ export const PostScalarFieldEnum = {
   id: 'id',
   authorId: 'authorId',
   text: 'text',
+  exists: 'exists',
   likesCount: 'likesCount',
   commentsCount: 'commentsCount',
   createdAt: 'createdAt',
@@ -1159,9 +1160,9 @@ export const CommentScalarFieldEnum = {
   authorId: 'authorId',
   parentId: 'parentId',
   content: 'content',
+  exists: 'exists',
   likesCount: 'likesCount',
   repliesCount: 'repliesCount',
-  deletedAt: 'deletedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -1260,6 +1261,13 @@ export type StringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 
  */
 export type ListStringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'String[]'>
     
+
+
+/**
+ * Reference to a field of type 'Boolean'
+ */
+export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+
 
 
 /**
@@ -1484,4 +1492,3 @@ export type PrismaAction =
  * `PrismaClient` proxy available in interactive transactions.
  */
 export type TransactionClient = Omit<DefaultPrismaClient, runtime.ITXClientDenyList>
-

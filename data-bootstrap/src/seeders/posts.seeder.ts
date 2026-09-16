@@ -42,10 +42,11 @@ const createSinglePost = async (user: SeededUser): Promise<SeededPost> => {
 
 const seedPosts = async (users: SeededUser[]): Promise<SeededPost[]> => {
   const prisma = getContentPrisma();
-  const existingPostCount = await prisma.post.count();
+  const existingPostCount = await prisma.post.count({ where: { exists: true } });
   if (existingPostCount > 0) {
     logger.warn(`Post table already contains ${existingPostCount} rows. Skipping post seeding.`);
     const posts = await prisma.post.findMany({
+      where: { exists: true },
       select: { id: true, authorId: true, text: true },
     });
     return posts.map((post) => ({

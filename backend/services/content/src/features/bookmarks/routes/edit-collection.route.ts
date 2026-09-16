@@ -64,7 +64,11 @@ const editCollectionRoute = defineOpenAPIRoute<
 					description: true,
 					createdAt: true,
 					updatedAt: true,
-					_count: { select: { items: true } },
+					_count: {
+						select: {
+							items: { where: { bookmark: { post: { exists: true } } } },
+						},
+					},
 				},
 			});
 

@@ -40,8 +40,8 @@ const unlikeCommentRoute = defineOpenAPIRoute<
 
 		const { commentId } = c.req.valid("param");
 
-		const comment = await prisma.comment.findUnique({
-			where: { id: commentId },
+		const comment = await prisma.comment.findFirst({
+			where: { id: commentId, exists: true, post: { exists: true } },
 			select: { id: true, authorId: true, postId: true },
 		});
 
@@ -62,7 +62,7 @@ const unlikeCommentRoute = defineOpenAPIRoute<
 
 		if (deleted.count > 0) {
 			await prisma.comment.update({
-				where: { id: commentId },
+				where: { id: commentId, exists: true },
 				data: {
 					likesCount: {
 						decrement: 1,
@@ -82,7 +82,7 @@ const unlikeCommentRoute = defineOpenAPIRoute<
 		}
 
 		const { likesCount } = await prisma.comment.findUniqueOrThrow({
-			where: { id: commentId },
+			where: { id: commentId, exists: true },
 			select: { likesCount: true },
 		});
 

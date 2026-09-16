@@ -1,6 +1,7 @@
 import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
+import { uniqueValues } from "@/core/functions/collection.functions";
 import { userServiceClient } from "@/core/services/user-service.client";
 import type { HonoEnv } from "@/core/types/hono-env";
 import { PostsRoutesTag } from "../posts.constants";
@@ -50,12 +51,10 @@ const getUserLikedPostsRoute = defineOpenAPIRoute<
 		const blockRelationships = authenticatedUserId
 			? await userServiceClient.fetchBlockRelationshipIds(authenticatedUserId)
 			: { blockedUserIds: [], blockedByUserIds: [] };
-		const hiddenUserIds = Array.from(
-			new Set([
-				...blockRelationships.blockedUserIds,
-				...blockRelationships.blockedByUserIds,
-			]),
-		);
+		const hiddenUserIds = uniqueValues([
+			...blockRelationships.blockedUserIds,
+			...blockRelationships.blockedByUserIds,
+		]);
 
 		if (hiddenUserIds.includes(userId)) {
 			return c.json({
@@ -82,6 +81,7 @@ const getUserLikedPostsRoute = defineOpenAPIRoute<
 
 		const posts = await prisma.post.findMany({
 			where: {
+				exists: true,
 				postLikes: { some: { authorId: userId } },
 				...(hiddenUserIds.length > 0
 					? { authorId: { notIn: hiddenUserIds } }
@@ -94,6 +94,7 @@ const getUserLikedPostsRoute = defineOpenAPIRoute<
 				id: true,
 				authorId: true,
 				text: true,
+				exists: true,
 				likesCount: true,
 				commentsCount: true,
 				createdAt: true,
@@ -115,7 +116,7 @@ const getUserLikedPostsRoute = defineOpenAPIRoute<
 				: null;
 
 		const postIds = items.map((post) => post.id);
-		const authorIds = Array.from(new Set(items.map((post) => post.authorId)));
+		const authorIds = uniqueValues(items.map((post) => post.authorId));
 		const isSameUser = Boolean(
 			authenticatedUserId && authenticatedUserId === userId,
 		);
@@ -124,43 +125,39 @@ const getUserLikedPostsRoute = defineOpenAPIRoute<
 			authorIds,
 			authenticatedUserId,
 		);
-		const likedPostIds =
+		const likedPostIds: string[] =
 			authenticatedUserId && postIds.length > 0
 				? isSameUser
-					? new Set(postIds)
-					: new Set(
-							(
-								await prisma.postLike.findMany({
-									where: {
-										authorId: authenticatedUserId,
-										postId: { in: postIds },
-									},
-									select: { postId: true },
-								})
-							).map((like) => like.postId),
-						)
-				: new Set<string>();
-		const bookmarkedPostIds =
-			authenticatedUserId && postIds.length > 0
-				? new Set(
-						(
-							await prisma.bookmark.findMany({
+					? postIds
+					: (
+							await prisma.postLike.findMany({
 								where: {
-									ownerId: authenticatedUserId,
+									authorId: authenticatedUserId,
 									postId: { in: postIds },
-									collectionItems: { some: {} },
 								},
 								select: { postId: true },
 							})
-						).map((bookmark) => bookmark.postId),
-					)
-				: new Set<string>();
+						).map((like) => like.postId)
+				: [];
+		const bookmarkedPostIds: string[] =
+			authenticatedUserId && postIds.length > 0
+				? (
+						await prisma.bookmark.findMany({
+							where: {
+								ownerId: authenticatedUserId,
+								postId: { in: postIds },
+								collectionItems: { some: {} },
+							},
+							select: { postId: true },
+						})
+					).map((bookmark) => bookmark.postId)
+				: [];
 
 		return c.json({
 			posts: hydratedItems.map((post) => ({
 				...post,
-				isLikedByAuthenticatedUser: likedPostIds.has(post.id),
-				isBookmarkedByAuthenticatedUser: bookmarkedPostIds.has(post.id),
+				isLikedByAuthenticatedUser: likedPostIds.includes(post.id),
+				isBookmarkedByAuthenticatedUser: bookmarkedPostIds.includes(post.id),
 				author: authorsMap.get(post.authorId) ?? null,
 			})),
 			pagination: { nextCursor, hasNextPage, limit },

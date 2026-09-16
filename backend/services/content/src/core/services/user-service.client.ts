@@ -1,4 +1,5 @@
 import { Configurations } from "../configurations";
+import { uniqueValues } from "../functions/collection.functions";
 
 type UserProfileFileDto = {
 	id: string;
@@ -42,11 +43,9 @@ export class UserServiceClient {
 		userIds: string[],
 		authenticatedUserId?: string,
 	): Promise<Map<string, UserProfileDto>> {
-		const uniqueIds = Array.from(
-			new Set(
-				userIds.filter((id): id is string =>
-					Boolean(id && typeof id === "string"),
-				),
+		const uniqueIds = uniqueValues(
+			userIds.filter((id): id is string =>
+				Boolean(id && typeof id === "string"),
 			),
 		);
 

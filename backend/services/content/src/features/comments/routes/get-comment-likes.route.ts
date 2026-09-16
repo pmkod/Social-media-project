@@ -24,6 +24,11 @@ const getCommentLikesRoute = defineOpenAPIRoute({
 	route: routeDef,
 	handler: async (c) => {
 		const { commentId } = c.req.valid("param");
+		const comment = await prisma.comment.findFirst({
+			where: { id: commentId, exists: true, post: { exists: true } },
+			select: { id: true },
+		});
+		if (!comment) return c.json({ count: 0, likes: [] });
 
 		const likes = await prisma.commentLike.findMany({
 			where: { commentId },

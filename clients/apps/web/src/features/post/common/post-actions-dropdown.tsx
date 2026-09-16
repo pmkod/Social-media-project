@@ -1,4 +1,5 @@
 import {
+	RiDeleteBinLine,
 	RiFileCopyLine,
 	RiFlag2Line,
 	RiMoreLine,
@@ -14,6 +15,7 @@ import {
 } from "@/core/components/ui/dropdown-menu.tsx";
 import { IconButton } from "@/core/components/ui/icon-button.tsx";
 import NiceModal from "@/core/components/ui/nice-modal.tsx";
+import { DeletePostAlertDialog } from "@/features/post/delete-post/delete-post-alert-dialog.tsx";
 import { ReportModal } from "@/features/report/report.modal.tsx";
 import { useAuthenticatedUser } from "@/features/user/authenticated-user/use-authenticated-user.ts";
 import { BlockUserAlertDialog } from "@/features/user/block-user/block-user-alert-dialog.tsx";
@@ -60,10 +62,11 @@ function PostActionsDropdown({
 	const { data } = useAuthenticatedUser();
 	const authenticatedUser = data?.user;
 
-	const isOwnProfile = Boolean(
+	const isOwnPost = Boolean(
 		authenticatedUser?.id && user.id && authenticatedUser.id === user.id,
 	);
-	const canManageBlock = Boolean(user.id && !isOwnProfile);
+	const canDelete = isOwnPost;
+	const canManageBlock = Boolean(user.id && !isOwnPost);
 	const canReport = Boolean(
 		authenticatedUser?.id && (!user.id || authenticatedUser.id !== user.id),
 	);
@@ -95,6 +98,20 @@ function PostActionsDropdown({
 					<RiFileCopyLine />
 					{m.post_copy_link()}
 				</DropdownMenuItem>
+				{canDelete ? (
+					<>
+						<DropdownMenuSeparator />
+						<DropdownMenuItem
+							variant="destructive"
+							onSelect={() => {
+								void NiceModal.show(DeletePostAlertDialog, { post });
+							}}
+						>
+							<RiDeleteBinLine />
+							{m.post_delete()}
+						</DropdownMenuItem>
+					</>
+				) : null}
 				{canReport ? (
 					<>
 						<DropdownMenuSeparator />

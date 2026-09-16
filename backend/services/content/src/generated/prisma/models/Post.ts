@@ -40,6 +40,7 @@ export type PostMinAggregateOutputType = {
   id: string | null
   authorId: string | null
   text: string | null
+  exists: boolean | null
   likesCount: number | null
   commentsCount: number | null
   createdAt: Date | null
@@ -50,6 +51,7 @@ export type PostMaxAggregateOutputType = {
   id: string | null
   authorId: string | null
   text: string | null
+  exists: boolean | null
   likesCount: number | null
   commentsCount: number | null
   createdAt: Date | null
@@ -60,6 +62,7 @@ export type PostCountAggregateOutputType = {
   id: number
   authorId: number
   text: number
+  exists: number
   likesCount: number
   commentsCount: number
   createdAt: number
@@ -82,6 +85,7 @@ export type PostMinAggregateInputType = {
   id?: true
   authorId?: true
   text?: true
+  exists?: true
   likesCount?: true
   commentsCount?: true
   createdAt?: true
@@ -92,6 +96,7 @@ export type PostMaxAggregateInputType = {
   id?: true
   authorId?: true
   text?: true
+  exists?: true
   likesCount?: true
   commentsCount?: true
   createdAt?: true
@@ -102,6 +107,7 @@ export type PostCountAggregateInputType = {
   id?: true
   authorId?: true
   text?: true
+  exists?: true
   likesCount?: true
   commentsCount?: true
   createdAt?: true
@@ -199,6 +205,7 @@ export type PostGroupByOutputType = {
   id: string
   authorId: string
   text: string
+  exists: boolean
   likesCount: number
   commentsCount: number
   createdAt: Date
@@ -232,6 +239,7 @@ export type PostWhereInput = {
   id?: Prisma.StringFilter<"Post"> | string
   authorId?: Prisma.StringFilter<"Post"> | string
   text?: Prisma.StringFilter<"Post"> | string
+  exists?: Prisma.BoolFilter<"Post"> | boolean
   likesCount?: Prisma.IntFilter<"Post"> | number
   commentsCount?: Prisma.IntFilter<"Post"> | number
   createdAt?: Prisma.DateTimeFilter<"Post"> | Date | string
@@ -246,6 +254,7 @@ export type PostOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   authorId?: Prisma.SortOrder
   text?: Prisma.SortOrder
+  exists?: Prisma.SortOrder
   likesCount?: Prisma.SortOrder
   commentsCount?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -263,6 +272,7 @@ export type PostWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.PostWhereInput | Prisma.PostWhereInput[]
   authorId?: Prisma.StringFilter<"Post"> | string
   text?: Prisma.StringFilter<"Post"> | string
+  exists?: Prisma.BoolFilter<"Post"> | boolean
   likesCount?: Prisma.IntFilter<"Post"> | number
   commentsCount?: Prisma.IntFilter<"Post"> | number
   createdAt?: Prisma.DateTimeFilter<"Post"> | Date | string
@@ -277,6 +287,7 @@ export type PostOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   authorId?: Prisma.SortOrder
   text?: Prisma.SortOrder
+  exists?: Prisma.SortOrder
   likesCount?: Prisma.SortOrder
   commentsCount?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -295,6 +306,7 @@ export type PostScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"Post"> | string
   authorId?: Prisma.StringWithAggregatesFilter<"Post"> | string
   text?: Prisma.StringWithAggregatesFilter<"Post"> | string
+  exists?: Prisma.BoolWithAggregatesFilter<"Post"> | boolean
   likesCount?: Prisma.IntWithAggregatesFilter<"Post"> | number
   commentsCount?: Prisma.IntWithAggregatesFilter<"Post"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Post"> | Date | string
@@ -305,6 +317,7 @@ export type PostCreateInput = {
   id?: string
   authorId: string
   text: string
+  exists?: boolean
   likesCount?: number
   commentsCount?: number
   createdAt?: Date | string
@@ -319,6 +332,7 @@ export type PostUncheckedCreateInput = {
   id?: string
   authorId: string
   text: string
+  exists?: boolean
   likesCount?: number
   commentsCount?: number
   createdAt?: Date | string
@@ -333,6 +347,7 @@ export type PostUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
   text?: Prisma.StringFieldUpdateOperationsInput | string
+  exists?: Prisma.BoolFieldUpdateOperationsInput | boolean
   likesCount?: Prisma.IntFieldUpdateOperationsInput | number
   commentsCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -347,6 +362,7 @@ export type PostUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
   text?: Prisma.StringFieldUpdateOperationsInput | string
+  exists?: Prisma.BoolFieldUpdateOperationsInput | boolean
   likesCount?: Prisma.IntFieldUpdateOperationsInput | number
   commentsCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -361,6 +377,7 @@ export type PostCreateManyInput = {
   id?: string
   authorId: string
   text: string
+  exists?: boolean
   likesCount?: number
   commentsCount?: number
   createdAt?: Date | string
@@ -371,6 +388,7 @@ export type PostUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
   text?: Prisma.StringFieldUpdateOperationsInput | string
+  exists?: Prisma.BoolFieldUpdateOperationsInput | boolean
   likesCount?: Prisma.IntFieldUpdateOperationsInput | number
   commentsCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -381,6 +399,7 @@ export type PostUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
   text?: Prisma.StringFieldUpdateOperationsInput | string
+  exists?: Prisma.BoolFieldUpdateOperationsInput | boolean
   likesCount?: Prisma.IntFieldUpdateOperationsInput | number
   commentsCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -391,6 +410,7 @@ export type PostCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   authorId?: Prisma.SortOrder
   text?: Prisma.SortOrder
+  exists?: Prisma.SortOrder
   likesCount?: Prisma.SortOrder
   commentsCount?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -406,6 +426,7 @@ export type PostMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   authorId?: Prisma.SortOrder
   text?: Prisma.SortOrder
+  exists?: Prisma.SortOrder
   likesCount?: Prisma.SortOrder
   commentsCount?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -416,6 +437,7 @@ export type PostMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   authorId?: Prisma.SortOrder
   text?: Prisma.SortOrder
+  exists?: Prisma.SortOrder
   likesCount?: Prisma.SortOrder
   commentsCount?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -434,6 +456,10 @@ export type PostScalarRelationFilter = {
 
 export type StringFieldUpdateOperationsInput = {
   set?: string
+}
+
+export type BoolFieldUpdateOperationsInput = {
+  set?: boolean
 }
 
 export type IntFieldUpdateOperationsInput = {
@@ -508,6 +534,7 @@ export type PostCreateWithoutMediasInput = {
   id?: string
   authorId: string
   text: string
+  exists?: boolean
   likesCount?: number
   commentsCount?: number
   createdAt?: Date | string
@@ -521,6 +548,7 @@ export type PostUncheckedCreateWithoutMediasInput = {
   id?: string
   authorId: string
   text: string
+  exists?: boolean
   likesCount?: number
   commentsCount?: number
   createdAt?: Date | string
@@ -550,6 +578,7 @@ export type PostUpdateWithoutMediasInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
   text?: Prisma.StringFieldUpdateOperationsInput | string
+  exists?: Prisma.BoolFieldUpdateOperationsInput | boolean
   likesCount?: Prisma.IntFieldUpdateOperationsInput | number
   commentsCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -563,6 +592,7 @@ export type PostUncheckedUpdateWithoutMediasInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
   text?: Prisma.StringFieldUpdateOperationsInput | string
+  exists?: Prisma.BoolFieldUpdateOperationsInput | boolean
   likesCount?: Prisma.IntFieldUpdateOperationsInput | number
   commentsCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -576,6 +606,7 @@ export type PostCreateWithoutCommentsInput = {
   id?: string
   authorId: string
   text: string
+  exists?: boolean
   likesCount?: number
   commentsCount?: number
   createdAt?: Date | string
@@ -589,6 +620,7 @@ export type PostUncheckedCreateWithoutCommentsInput = {
   id?: string
   authorId: string
   text: string
+  exists?: boolean
   likesCount?: number
   commentsCount?: number
   createdAt?: Date | string
@@ -618,6 +650,7 @@ export type PostUpdateWithoutCommentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
   text?: Prisma.StringFieldUpdateOperationsInput | string
+  exists?: Prisma.BoolFieldUpdateOperationsInput | boolean
   likesCount?: Prisma.IntFieldUpdateOperationsInput | number
   commentsCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -631,6 +664,7 @@ export type PostUncheckedUpdateWithoutCommentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
   text?: Prisma.StringFieldUpdateOperationsInput | string
+  exists?: Prisma.BoolFieldUpdateOperationsInput | boolean
   likesCount?: Prisma.IntFieldUpdateOperationsInput | number
   commentsCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -644,6 +678,7 @@ export type PostCreateWithoutPostLikesInput = {
   id?: string
   authorId: string
   text: string
+  exists?: boolean
   likesCount?: number
   commentsCount?: number
   createdAt?: Date | string
@@ -657,6 +692,7 @@ export type PostUncheckedCreateWithoutPostLikesInput = {
   id?: string
   authorId: string
   text: string
+  exists?: boolean
   likesCount?: number
   commentsCount?: number
   createdAt?: Date | string
@@ -686,6 +722,7 @@ export type PostUpdateWithoutPostLikesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
   text?: Prisma.StringFieldUpdateOperationsInput | string
+  exists?: Prisma.BoolFieldUpdateOperationsInput | boolean
   likesCount?: Prisma.IntFieldUpdateOperationsInput | number
   commentsCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -699,6 +736,7 @@ export type PostUncheckedUpdateWithoutPostLikesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
   text?: Prisma.StringFieldUpdateOperationsInput | string
+  exists?: Prisma.BoolFieldUpdateOperationsInput | boolean
   likesCount?: Prisma.IntFieldUpdateOperationsInput | number
   commentsCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -712,6 +750,7 @@ export type PostCreateWithoutBookmarksInput = {
   id?: string
   authorId: string
   text: string
+  exists?: boolean
   likesCount?: number
   commentsCount?: number
   createdAt?: Date | string
@@ -725,6 +764,7 @@ export type PostUncheckedCreateWithoutBookmarksInput = {
   id?: string
   authorId: string
   text: string
+  exists?: boolean
   likesCount?: number
   commentsCount?: number
   createdAt?: Date | string
@@ -754,6 +794,7 @@ export type PostUpdateWithoutBookmarksInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
   text?: Prisma.StringFieldUpdateOperationsInput | string
+  exists?: Prisma.BoolFieldUpdateOperationsInput | boolean
   likesCount?: Prisma.IntFieldUpdateOperationsInput | number
   commentsCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -767,6 +808,7 @@ export type PostUncheckedUpdateWithoutBookmarksInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
   text?: Prisma.StringFieldUpdateOperationsInput | string
+  exists?: Prisma.BoolFieldUpdateOperationsInput | boolean
   likesCount?: Prisma.IntFieldUpdateOperationsInput | number
   commentsCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -838,6 +880,7 @@ export type PostSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   id?: boolean
   authorId?: boolean
   text?: boolean
+  exists?: boolean
   likesCount?: boolean
   commentsCount?: boolean
   createdAt?: boolean
@@ -853,6 +896,7 @@ export type PostSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   id?: boolean
   authorId?: boolean
   text?: boolean
+  exists?: boolean
   likesCount?: boolean
   commentsCount?: boolean
   createdAt?: boolean
@@ -863,6 +907,7 @@ export type PostSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   id?: boolean
   authorId?: boolean
   text?: boolean
+  exists?: boolean
   likesCount?: boolean
   commentsCount?: boolean
   createdAt?: boolean
@@ -873,13 +918,14 @@ export type PostSelectScalar = {
   id?: boolean
   authorId?: boolean
   text?: boolean
+  exists?: boolean
   likesCount?: boolean
   commentsCount?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type PostOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "authorId" | "text" | "likesCount" | "commentsCount" | "createdAt" | "updatedAt", ExtArgs["result"]["post"]>
+export type PostOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "authorId" | "text" | "exists" | "likesCount" | "commentsCount" | "createdAt" | "updatedAt", ExtArgs["result"]["post"]>
 export type PostInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   medias?: boolean | Prisma.Post$mediasArgs<ExtArgs>
   comments?: boolean | Prisma.Post$commentsArgs<ExtArgs>
@@ -902,6 +948,7 @@ export type $PostPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     id: string
     authorId: string
     text: string
+    exists: boolean
     likesCount: number
     commentsCount: number
     createdAt: Date
@@ -1336,6 +1383,7 @@ export interface PostFieldRefs {
   readonly id: Prisma.FieldRef<"Post", 'String'>
   readonly authorId: Prisma.FieldRef<"Post", 'String'>
   readonly text: Prisma.FieldRef<"Post", 'String'>
+  readonly exists: Prisma.FieldRef<"Post", 'Boolean'>
   readonly likesCount: Prisma.FieldRef<"Post", 'Int'>
   readonly commentsCount: Prisma.FieldRef<"Post", 'Int'>
   readonly createdAt: Prisma.FieldRef<"Post", 'DateTime'>

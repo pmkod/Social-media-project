@@ -12,17 +12,21 @@ function PostListLoader({
 	className,
 	roundedTopOnFirstItem = true,
 }: PostListLoaderProps) {
+	const loaders = [];
+	for (let index = 0; index < count; index += 1) {
+		loaders.push(
+			<PostItemLoader
+				key={index}
+				hasMedia={index === 0}
+				contentLines={index === 0 ? 1 : (index % 2) + 1}
+				roundedTopOnFirstItem={roundedTopOnFirstItem}
+			/>,
+		);
+	}
+
 	return (
 		<div className={cn("md:divide-y md:divide-border", className)}>
-			{Array.from({ length: count }).map((_, index) => (
-				<PostItemLoader
-					// biome-ignore lint/suspicious/noArrayIndexKey: Static array for skeleton loading placeholders
-					key={index}
-					hasMedia={index === 0}
-					contentLines={index === 0 ? 1 : (index % 2) + 1}
-					roundedTopOnFirstItem={roundedTopOnFirstItem}
-				/>
-			))}
+			{loaders}
 		</div>
 	);
 }

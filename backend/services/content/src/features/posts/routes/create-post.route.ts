@@ -59,12 +59,12 @@ const createPostRoute = defineOpenAPIRoute<
 		const uploadedFiles: string[] = [];
 		let createdPost;
 		try {
-			const mediaRecords: Array<{
+			const mediaRecords: {
 				position: number;
 				mediaType: string;
 				lowQualityFile: { filename: string; mimeType: string };
 				highQualityFile: { filename: string; mimeType: string };
-			}> = [];
+			}[] = [];
 			for (const [index, media] of medias.entries()) {
 				const isVideo = media.type.startsWith("video/");
 				const lowQualityFile = isVideo

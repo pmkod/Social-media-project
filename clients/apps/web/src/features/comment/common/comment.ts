@@ -7,6 +7,7 @@ export type Comment = {
 	parentId?: string | null;
 	author: User;
 	content: string;
+	exists?: boolean;
 	createdAt: string;
 	updatedAt?: string;
 	likesCount?: number;

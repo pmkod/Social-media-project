@@ -39,6 +39,10 @@ const deletePostRoute = defineOpenAPIRoute<
 
 		const existingPost = await prisma.post.findUnique({
 			where: { id },
+			select: {
+				authorId: true,
+				exists: true,
+			},
 		});
 
 		if (!existingPost) {
@@ -57,9 +61,19 @@ const deletePostRoute = defineOpenAPIRoute<
 			});
 		}
 
-		await prisma.post.delete({
-			where: { id },
+		if (!existingPost.exists) {
+			return c.json({ message: "Post already deleted" });
+		}
+
+		const result = await prisma.post.updateMany({
+			where: { id, authorId: authenticatedUserId, exists: true },
+			data: { exists: false },
 		});
+
+		if (result.count === 0) {
+			return c.json({ message: "Post already deleted" });
+		}
+
 		await userServiceClient.adjustPostCount(authenticatedUserId, -1);
 		await notificationServiceClient.removeNotificationsForPost(id);
 

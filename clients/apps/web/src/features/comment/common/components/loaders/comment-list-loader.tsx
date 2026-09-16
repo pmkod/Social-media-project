@@ -12,17 +12,19 @@ function CommentListLoader({
 	className,
 	compact = false,
 }: CommentListLoaderProps) {
+	const loaders = [];
+	for (let index = 0; index < count; index += 1) {
+		loaders.push(
+			<CommentItemLoader
+				key={index}
+				compact={compact}
+				contentLines={(index % 2) + 1}
+			/>,
+		);
+	}
+
 	return (
-		<div className={cn("divide-y divide-border", className)}>
-			{Array.from({ length: count }).map((_, index) => (
-				<CommentItemLoader
-					// biome-ignore lint/suspicious/noArrayIndexKey: Static array for skeleton loading placeholders
-					key={index}
-					compact={compact}
-					contentLines={(index % 2) + 1}
-				/>
-			))}
-		</div>
+		<div className={cn("divide-y divide-border", className)}>{loaders}</div>
 	);
 }
 

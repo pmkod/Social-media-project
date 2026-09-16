@@ -51,8 +51,8 @@ const createCommentRoute = defineOpenAPIRoute<
 
 		const { postId, parentCommentId, content } = c.req.valid("form");
 
-		const post = await prisma.post.findUnique({
-			where: { id: postId },
+		const post = await prisma.post.findFirst({
+			where: { id: postId, exists: true },
 			select: { id: true, authorId: true, text: true },
 		});
 
@@ -80,24 +80,20 @@ const createCommentRoute = defineOpenAPIRoute<
 			id: string;
 			authorId: string;
 			postId: string;
-			deletedAt: Date | null;
+			exists: boolean;
 		} | null = null;
 		if (parentCommentId) {
-			parentComment = await prisma.comment.findUnique({
-				where: { id: parentCommentId },
+			parentComment = await prisma.comment.findFirst({
+				where: { id: parentCommentId, postId, exists: true },
 				select: {
 					id: true,
 					authorId: true,
 					postId: true,
-					deletedAt: true,
+					exists: true,
 				},
 			});
 
-			if (
-				!parentComment ||
-				parentComment.postId !== postId ||
-				parentComment.deletedAt
-			) {
+			if (!parentComment) {
 				throw new Exception({
 					code: ExceptionCodes.parent_comment_not_found,
 					message: "Parent comment not found",
@@ -118,12 +114,12 @@ const createCommentRoute = defineOpenAPIRoute<
 				select: { id: true },
 			});
 			await tx.post.update({
-				where: { id: postId },
+				where: { id: postId, exists: true },
 				data: { commentsCount: { increment: 1 } },
 			});
 			if (parentComment) {
 				await tx.comment.update({
-					where: { id: parentComment.id },
+					where: { id: parentComment.id, exists: true },
 					data: { repliesCount: { increment: 1 } },
 				});
 			}
@@ -156,9 +152,9 @@ const createCommentRoute = defineOpenAPIRoute<
 				content: true,
 				likesCount: true,
 				repliesCount: true,
+				exists: true,
 				createdAt: true,
 				updatedAt: true,
-				deletedAt: true,
 			},
 		});
 

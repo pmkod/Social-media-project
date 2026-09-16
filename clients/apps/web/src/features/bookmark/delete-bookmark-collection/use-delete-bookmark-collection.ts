@@ -42,7 +42,6 @@ const useDeleteBookmarkCollection = () => {
 					},
 			);
 
-			const unbookmarkedPostIdsSet = new Set(unbookmarkedPostIds);
 			queryClient.setQueriesData<InfiniteData<PostListPage>>(
 				{ queryKey: postListQueryKeys.root },
 				(data) =>
@@ -51,7 +50,7 @@ const useDeleteBookmarkCollection = () => {
 						pages: data.pages.map((page) => ({
 							...page,
 							posts: page.posts.map((post) =>
-								unbookmarkedPostIdsSet.has(post.id)
+								unbookmarkedPostIds.includes(post.id)
 									? {
 											...post,
 											isBookmarkedByAuthenticatedUser: false,
@@ -67,7 +66,7 @@ const useDeleteBookmarkCollection = () => {
 					predicate: ({ queryKey }) => queryKey.length === 2,
 				},
 				(data) =>
-					data && unbookmarkedPostIdsSet.has(data.post.id)
+					data && unbookmarkedPostIds.includes(data.post.id)
 						? {
 								...data,
 								post: {
@@ -86,7 +85,7 @@ const useDeleteBookmarkCollection = () => {
 						pages: data.pages.map((page) => ({
 							...page,
 							posts: page.posts.filter(
-								(post) => !unbookmarkedPostIdsSet.has(post.id),
+								(post) => !unbookmarkedPostIds.includes(post.id),
 							),
 						})),
 					},

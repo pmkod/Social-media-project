@@ -39,8 +39,8 @@ const likePostRoute = defineOpenAPIRoute<typeof routeDef, HonoAuthenticatedEnv>(
 
 			const { postId } = c.req.valid("param");
 
-			const post = await prisma.post.findUnique({
-				where: { id: postId },
+			const post = await prisma.post.findFirst({
+				where: { id: postId, exists: true },
 				select: { id: true, authorId: true, likesCount: true },
 			});
 
@@ -71,7 +71,7 @@ const likePostRoute = defineOpenAPIRoute<typeof routeDef, HonoAuthenticatedEnv>(
 							data: { postId, authorId: authenticatedUserId },
 						}),
 						prisma.post.update({
-							where: { id: postId },
+							where: { id: postId, exists: true },
 							data: { likesCount: { increment: 1 } },
 							select: { id: true, likesCount: true },
 						}),
@@ -79,8 +79,8 @@ const likePostRoute = defineOpenAPIRoute<typeof routeDef, HonoAuthenticatedEnv>(
 					postToSend = updatedPost;
 					createdLike = true;
 				} catch (_error) {
-					postToSend = await prisma.post.findUnique({
-						where: { id: postId },
+					postToSend = await prisma.post.findFirst({
+						where: { id: postId, exists: true },
 						select: { id: true, likesCount: true },
 					});
 				}

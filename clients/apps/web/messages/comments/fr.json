@@ -22,6 +22,8 @@
 	"comment_submit": "Commenter",
 	"comment_delete_title": "Supprimer le commentaire ?",
 	"comment_delete_description": "Le texte sera remplacé par « Commentaire supprimé ». Les réponses existantes resteront visibles.",
+	"comment_delete_success": "Commentaire supprimé.",
+	"comment_delete_error": "Impossible de supprimer le commentaire.",
 	"exception_comment_not_found": "Commentaire introuvable.",
 	"exception_cannot_delete_comment": "Vous ne pouvez pas supprimer ce commentaire.",
 	"exception_parent_comment_not_found": "Commentaire parent introuvable."

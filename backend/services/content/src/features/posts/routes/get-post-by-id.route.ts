@@ -37,12 +37,13 @@ const getPostByIdRoute = defineOpenAPIRoute<
 	handler: async (c) => {
 		const { id } = c.req.valid("param");
 
-		const post = await prisma.post.findUnique({
-			where: { id },
+		const post = await prisma.post.findFirst({
+			where: { id, exists: true },
 			select: {
 				id: true,
 				authorId: true,
 				text: true,
+				exists: true,
 				likesCount: true,
 				commentsCount: true,
 				createdAt: true,

@@ -31,8 +31,8 @@ const getPostLikesRoute = defineOpenAPIRoute<
 		const { postId } = c.req.valid("param");
 		const authenticatedUser = c.get("authenticatedUser");
 		const authenticatedUserId = authenticatedUser?.id;
-		const post = await prisma.post.findUnique({
-			where: { id: postId },
+		const post = await prisma.post.findFirst({
+			where: { id: postId, exists: true },
 			select: { authorId: true },
 		});
 		if (

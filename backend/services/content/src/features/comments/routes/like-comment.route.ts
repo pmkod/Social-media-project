@@ -40,17 +40,16 @@ const likeCommentRoute = defineOpenAPIRoute<
 
 		const { commentId } = c.req.valid("param");
 
-		const comment = await prisma.comment.findUnique({
-			where: { id: commentId },
+		const comment = await prisma.comment.findFirst({
+			where: { id: commentId, exists: true, post: { exists: true } },
 			select: {
 				id: true,
 				authorId: true,
 				postId: true,
-				deletedAt: true,
 			},
 		});
 
-		if (!comment || comment.deletedAt) {
+		if (!comment) {
 			throw new Exception({
 				code: ExceptionCodes.comment_not_found,
 				message: "Comment not found",
@@ -79,7 +78,7 @@ const likeCommentRoute = defineOpenAPIRoute<
 						},
 					}),
 					prisma.comment.update({
-						where: { id: commentId },
+						where: { id: commentId, exists: true },
 						data: { likesCount: { increment: 1 } },
 					}),
 				]);
@@ -103,7 +102,7 @@ const likeCommentRoute = defineOpenAPIRoute<
 		}
 
 		const { likesCount } = await prisma.comment.findUniqueOrThrow({
-			where: { id: commentId },
+			where: { id: commentId, exists: true },
 			select: { likesCount: true },
 		});
 
