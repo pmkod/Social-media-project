@@ -34,7 +34,7 @@ function PostDetailPage() {
 			{query.isPending ? (
 				<PostItemLoader hasMedia />
 			) : query.isSuccess ? (
-				<>
+				<div>
 					<PostItem post={query.data.post} />
 					<div>
 						<PostComments
@@ -43,7 +43,7 @@ function PostDetailPage() {
 							autoFocus={focusComment}
 						/>
 					</div>
-				</>
+				</div>
 			) : (
 				<ExceptionBlock
 					title="Unable to load post"

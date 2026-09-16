@@ -64,7 +64,15 @@ function NotificationInitiator({
 
 	return (
 		<span>
-			<span className="font-semibold text-foreground">{initiatorLabel}</span>
+			{notification.initiator ? (
+				<UserProfileHoverCard user={notification.initiator}>
+					<span className="font-semibold text-foreground">
+						{initiatorLabel}
+					</span>
+				</UserProfileHoverCard>
+			) : (
+				<span className="font-semibold text-foreground">{initiatorLabel}</span>
+			)}
 			{othersCount > 0
 				? ` ${
 						othersCount === 1
@@ -99,17 +107,10 @@ function NotificationItem({ notification }: NotificationItemProps) {
 				<div className="flex items-center gap-2 text-sm">
 					{notification.initiator ? (
 						<>
-							<UserProfileHoverCard user={notification.initiator}>
-								<UserAvatar
-									user={notification.initiator ?? undefined}
-									size="sm"
-								/>
-							</UserProfileHoverCard>
-							<UserProfileHoverCard user={notification.initiator}>
-								<div>
-									<NotificationInitiator notification={notification} />
-								</div>
-							</UserProfileHoverCard>
+							<UserAvatar user={notification.initiator} size="sm" />
+							<div>
+								<NotificationInitiator notification={notification} />
+							</div>
 						</>
 					) : null}
 				</div>

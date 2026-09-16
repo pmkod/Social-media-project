@@ -10,6 +10,7 @@ import { cn } from "@/core/lib/utils.ts";
 import { useAuthenticatedUser } from "@/features/user/authenticated-user/use-authenticated-user.ts";
 import { UserAvatar } from "@/features/user/common/components/user-avatar.tsx";
 import { FollowButton } from "@/features/user/common/follow-button.tsx";
+import { UserProfileLink } from "@/features/user/common/user-profile-link.tsx";
 import { useUserProfile } from "@/features/user/user-profile/use-user-profile.ts";
 import { m } from "@/paraglide/messages.js";
 import { getLocale } from "@/paraglide/runtime.js";
@@ -96,9 +97,13 @@ function UserProfilePreview({ user }: UserProfilePreviewProps) {
 	return (
 		<div>
 			<div className="flex items-start justify-between gap-3">
-				<div className="shrink-0">
+				<UserProfileLink
+					user={user}
+					className="shrink-0 rounded-full"
+					onClick={(event) => event.stopPropagation()}
+				>
 					<UserAvatar user={user} size="xl" />
-				</div>
+				</UserProfileLink>
 
 				{isOwnProfile ? null : !user.isBlockedByAuthenticatedUser &&
 					!user.hasBlockedAuthenticatedInUser ? (
@@ -107,12 +112,16 @@ function UserProfilePreview({ user }: UserProfilePreviewProps) {
 			</div>
 
 			<div className="mt-3">
-				<div className="block min-w-0 hover:underline">
+				<UserProfileLink
+					user={user}
+					className="block min-w-0 hover:underline"
+					onClick={(event) => event.stopPropagation()}
+				>
 					<p className="truncate font-bold text-foreground">{user.fullName}</p>
 					<p className="truncate text-sm text-muted-foreground">
 						@{user.username}
 					</p>
-				</div>
+				</UserProfileLink>
 			</div>
 
 			{!user.isBlockedByAuthenticatedUser &&
