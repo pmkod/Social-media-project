@@ -9,6 +9,9 @@ import type { Post } from "@/features/post/common/post.ts";
 import { postListQueryKeys } from "@/features/post/common/post-list.query-keys.ts";
 import { postDetailsQueryKeys } from "@/features/post/post-detail/post-detail.query-keys.ts";
 import * as m from "@/paraglide/messages.js";
+import { commentDetailsQueryKeys } from "../comment-detail/comment-detail.query-keys.ts";
+import type { CommentDetailResponse } from "../comment-detail/comment-detail.ts";
+import { updateCommentInDetail } from "../comment-detail/comment-detail.ts";
 import type { Comment } from "../common/comment.ts";
 import { commentListQueryKeys } from "../common/comment-list.query-keys.ts";
 
@@ -22,6 +25,18 @@ const useDeleteComment = () => {
 		mutationFn: (comment: Comment) =>
 			httpClient.delete(`comments/${comment.id}`).json<{ message: string }>(),
 		onSuccess: (_, comment) => {
+			queryClient.setQueriesData<CommentDetailResponse>(
+				{ queryKey: commentDetailsQueryKeys.root },
+				(data) =>
+					data &&
+					updateCommentInDetail(data, comment.id, (cachedComment) => ({
+						...cachedComment,
+						content: "",
+						exists: false,
+						isDeleted: true,
+						isLikedByAuthenticatedUser: false,
+					})),
+			);
 			queryClient.setQueriesData<InfiniteData<CommentListPage>>(
 				{ queryKey: commentListQueryKeys.root },
 				(data) =>

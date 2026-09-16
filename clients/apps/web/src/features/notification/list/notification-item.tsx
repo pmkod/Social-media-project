@@ -16,6 +16,7 @@ import type {
 } from "../common/notification.ts";
 import {
 	formatNotificationCreationDate,
+	getNotificationCommentId,
 	getNotificationPostId,
 } from "../common/notification.utils.ts";
 
@@ -93,6 +94,7 @@ type NotificationItemProps = {
 
 function NotificationItem({ notification }: NotificationItemProps) {
 	const postId = getNotificationPostId(notification);
+	const commentId = getNotificationCommentId(notification);
 	const content = (
 		<div
 			className={cn(
@@ -136,6 +138,18 @@ function NotificationItem({ notification }: NotificationItemProps) {
 				<Link
 					to="/$username"
 					params={{ username: `@${notification.initiator.username}` }}
+				>
+					{content}
+				</Link>
+			</div>
+		);
+	}
+	if (postId && commentId) {
+		return (
+			<div>
+				<Link
+					to="/posts/$postId/comments/$commentId"
+					params={{ postId, commentId }}
 				>
 					{content}
 				</Link>

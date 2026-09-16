@@ -48,6 +48,19 @@ function getNotificationPostId(
 	return null;
 }
 
+function getNotificationCommentId(
+	notification: Pick<NotificationGroup, "eventType" | "targetId">,
+): string | null {
+	if (
+		notification.eventType === NotificationEventTypes.POST_COMMENT ||
+		notification.eventType === NotificationEventTypes.COMMENT_REPLY
+	) {
+		return notification.targetId;
+	}
+
+	return null;
+}
+
 function groupNotifications(
 	notifications: NotificationRecord[],
 ): NotificationGroup[] {
@@ -158,4 +171,4 @@ export function formatNotificationCreationDate(
 	});
 }
 
-export { getNotificationPostId, groupNotifications };
+export { getNotificationCommentId, getNotificationPostId, groupNotifications };

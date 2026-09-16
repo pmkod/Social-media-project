@@ -42,6 +42,7 @@ import { Route as MainSettingsSessionsRouteImport } from './routes/_main/setting
 import { Route as MainSettingsThemeRouteImport } from './routes/_main/settings/theme'
 import { Route as MainSettingsUserVerificationRouteImport } from './routes/_main/settings/user-verification'
 import { Route as MainWithRightAsidePostsPostIdRouteImport } from './routes/_main/_with-right-aside/posts.$postId'
+import { Route as MainWithRightAsidePostsPostIdCommentsCommentIdRouteImport } from './routes/_main/_with-right-aside/posts_.$postId.comments.$commentId'
 
 const BaseRouteRoute = BaseRouteRouteImport.update({
   id: '/_base',
@@ -218,6 +219,12 @@ const MainWithRightAsidePostsPostIdRoute =
     path: '/posts/$postId',
     getParentRoute: () => MainWithRightAsideRouteRoute,
   } as any)
+const MainWithRightAsidePostsPostIdCommentsCommentIdRoute =
+  MainWithRightAsidePostsPostIdCommentsCommentIdRouteImport.update({
+    id: '/posts_/$postId/comments/$commentId',
+    path: '/posts/$postId/comments/$commentId',
+    getParentRoute: () => MainWithRightAsideRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof BaseAuthenticationIndexRoute
@@ -249,6 +256,7 @@ export interface FileRoutesByFullPath {
   '/discussions/': typeof MainDiscussionsIndexRoute
   '/settings/': typeof MainSettingsIndexRoute
   '/posts/$postId': typeof MainWithRightAsidePostsPostIdRoute
+  '/posts/$postId/comments/$commentId': typeof MainWithRightAsidePostsPostIdCommentsCommentIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof BaseAuthenticationIndexRoute
@@ -278,6 +286,7 @@ export interface FileRoutesByTo {
   '/discussions': typeof MainDiscussionsIndexRoute
   '/settings': typeof MainSettingsIndexRoute
   '/posts/$postId': typeof MainWithRightAsidePostsPostIdRoute
+  '/posts/$postId/comments/$commentId': typeof MainWithRightAsidePostsPostIdCommentsCommentIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -314,6 +323,7 @@ export interface FileRoutesById {
   '/_main/discussions/': typeof MainDiscussionsIndexRoute
   '/_main/settings/': typeof MainSettingsIndexRoute
   '/_main/_with-right-aside/posts/$postId': typeof MainWithRightAsidePostsPostIdRoute
+  '/_main/_with-right-aside/posts_/$postId/comments/$commentId': typeof MainWithRightAsidePostsPostIdCommentsCommentIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -347,6 +357,7 @@ export interface FileRouteTypes {
     | '/discussions/'
     | '/settings/'
     | '/posts/$postId'
+    | '/posts/$postId/comments/$commentId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -376,6 +387,7 @@ export interface FileRouteTypes {
     | '/discussions'
     | '/settings'
     | '/posts/$postId'
+    | '/posts/$postId/comments/$commentId'
   id:
     | '__root__'
     | '/_base'
@@ -411,6 +423,7 @@ export interface FileRouteTypes {
     | '/_main/discussions/'
     | '/_main/settings/'
     | '/_main/_with-right-aside/posts/$postId'
+    | '/_main/_with-right-aside/posts_/$postId/comments/$commentId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -651,6 +664,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MainWithRightAsidePostsPostIdRouteImport
       parentRoute: typeof MainWithRightAsideRouteRoute
     }
+    '/_main/_with-right-aside/posts_/$postId/comments/$commentId': {
+      id: '/_main/_with-right-aside/posts_/$postId/comments/$commentId'
+      path: '/posts/$postId/comments/$commentId'
+      fullPath: '/posts/$postId/comments/$commentId'
+      preLoaderRoute: typeof MainWithRightAsidePostsPostIdCommentsCommentIdRouteImport
+      parentRoute: typeof MainWithRightAsideRouteRoute
+    }
   }
 }
 
@@ -704,6 +724,7 @@ interface MainWithRightAsideRouteRouteChildren {
   MainWithRightAsideNotificationsRoute: typeof MainWithRightAsideNotificationsRoute
   MainWithRightAsideSearchRoute: typeof MainWithRightAsideSearchRoute
   MainWithRightAsidePostsPostIdRoute: typeof MainWithRightAsidePostsPostIdRoute
+  MainWithRightAsidePostsPostIdCommentsCommentIdRoute: typeof MainWithRightAsidePostsPostIdCommentsCommentIdRoute
 }
 
 const MainWithRightAsideRouteRouteChildren: MainWithRightAsideRouteRouteChildren =
@@ -716,6 +737,8 @@ const MainWithRightAsideRouteRouteChildren: MainWithRightAsideRouteRouteChildren
     MainWithRightAsideNotificationsRoute: MainWithRightAsideNotificationsRoute,
     MainWithRightAsideSearchRoute: MainWithRightAsideSearchRoute,
     MainWithRightAsidePostsPostIdRoute: MainWithRightAsidePostsPostIdRoute,
+    MainWithRightAsidePostsPostIdCommentsCommentIdRoute:
+      MainWithRightAsidePostsPostIdCommentsCommentIdRoute,
   }
 
 const MainWithRightAsideRouteRouteWithChildren =

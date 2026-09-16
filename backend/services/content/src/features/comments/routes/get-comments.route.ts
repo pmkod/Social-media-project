@@ -1,10 +1,13 @@
 import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
-import { uniqueValues } from "@/core/functions/collection.functions";
 import { userServiceClient } from "@/core/services/user-service.client";
 import type { HonoEnv } from "@/core/types/hono-env";
 import { CommentsRoutesTag } from "../comments.constants";
+import {
+	commentPresentationSelect,
+	hydrateComments,
+} from "../services/comment-presentation.service";
 
 const routeDef = createRoute({
 	method: "get",
@@ -67,51 +70,13 @@ const getCommentsRoute = defineOpenAPIRoute<
 			orderBy: { createdAt: "desc" },
 			skip,
 			take: limit,
-			select: {
-				id: true,
-				postId: true,
-				authorId: true,
-				parentId: true,
-				content: true,
-				likesCount: true,
-				repliesCount: true,
-				exists: true,
-				createdAt: true,
-				updatedAt: true,
-			},
+			select: commentPresentationSelect,
 		});
 		const total = await prisma.comment.count({ where: commentsWhere });
-
-		const authorIds = uniqueValues(
-			comments.map((comment) => comment.authorId).filter(Boolean),
-		);
-		const authorsMap = await userServiceClient.fetchAuthorsBatch(
-			authorIds,
+		const enrichedComments = await hydrateComments(
+			comments,
 			authenticatedUserId,
 		);
-		const likedCommentIds: string[] = [];
-		if (authenticatedUserId && comments.length > 0) {
-			const likes = await prisma.commentLike.findMany({
-				where: {
-					authorId: authenticatedUserId,
-					commentId: { in: comments.map((comment) => comment.id) },
-				},
-				select: { commentId: true },
-			});
-			for (const like of likes) likedCommentIds.push(like.commentId);
-		}
-
-		const enrichedComments = comments.map((comment) => {
-			const isDeleted = !comment.exists;
-			return {
-				...comment,
-				content: isDeleted ? "" : comment.content,
-				isDeleted,
-				isLikedByAuthenticatedUser:
-					!isDeleted && likedCommentIds.includes(comment.id),
-				author: authorsMap.get(comment.authorId) ?? null,
-			};
-		});
 
 		return c.json({
 			data: enrichedComments,

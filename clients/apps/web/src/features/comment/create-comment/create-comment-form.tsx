@@ -7,6 +7,7 @@ import { useAuthenticatedUser } from "@/features/user/authenticated-user/use-aut
 import { UserAvatar } from "@/features/user/common/components/user-avatar.tsx";
 import * as m from "@/paraglide/messages.js";
 import { useCommentToReplyTo } from "../comment-to-reply-to/use-comment-to-reply-to.ts";
+import type { Comment } from "../common/comment.ts";
 import { useCreateComment } from "./use-create-comment.ts";
 
 const createCommentSchema = z.object({
@@ -19,19 +20,23 @@ type CreateCommentFormProps = {
 	postId: string;
 	onSuccess?: () => void;
 	autoFocus?: boolean;
+	replyTo?: Comment;
 };
 
 function CreateCommentForm({
 	postId,
 	onSuccess,
 	autoFocus,
+	replyTo,
 }: CreateCommentFormProps) {
 	const createComment = useCreateComment();
 	const { commentToReplyTo, clearCommentToReplyTo } = useCommentToReplyTo();
 	const { data } = useAuthenticatedUser();
 	const authenticatedUser = data?.user;
-	const parentComment =
+	const selectedParentComment =
 		commentToReplyTo?.postId === postId ? commentToReplyTo : null;
+	const defaultParentComment = replyTo?.postId === postId ? replyTo : null;
+	const parentComment = selectedParentComment ?? defaultParentComment;
 
 	const isPending = createComment.isPending;
 	const textareaRef = useRef<HTMLTextAreaElement>(null);

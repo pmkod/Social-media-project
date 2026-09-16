@@ -1,6 +1,9 @@
 import { describe, expect, it } from "vitest";
 import { NotificationEventTypes } from "./notification.constants.ts";
-import { getNotificationPostId } from "./notification.utils.ts";
+import {
+	getNotificationCommentId,
+	getNotificationPostId,
+} from "./notification.utils.ts";
 
 describe("getNotificationPostId", () => {
 	it("gets the post id from a post comment notification", () => {
@@ -55,6 +58,41 @@ describe("getNotificationPostId", () => {
 			getNotificationPostId({
 				eventType: NotificationEventTypes.FOLLOW,
 				groupKey: "FOLLOW",
+				targetId: null,
+			}),
+		).toBeNull();
+	});
+});
+
+describe("getNotificationCommentId", () => {
+	it("gets the new comment id from a post comment notification", () => {
+		expect(
+			getNotificationCommentId({
+				eventType: NotificationEventTypes.POST_COMMENT,
+				targetId: "comment-1",
+			}),
+		).toBe("comment-1");
+	});
+
+	it("gets the reply id from a comment reply notification", () => {
+		expect(
+			getNotificationCommentId({
+				eventType: NotificationEventTypes.COMMENT_REPLY,
+				targetId: "comment-2",
+			}),
+		).toBe("comment-2");
+	});
+
+	it("does not return a comment id for unrelated notifications", () => {
+		expect(
+			getNotificationCommentId({
+				eventType: NotificationEventTypes.COMMENT_LIKE,
+				targetId: "comment-1",
+			}),
+		).toBeNull();
+		expect(
+			getNotificationCommentId({
+				eventType: NotificationEventTypes.FOLLOW,
 				targetId: null,
 			}),
 		).toBeNull();

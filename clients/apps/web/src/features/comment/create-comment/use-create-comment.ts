@@ -7,6 +7,9 @@ import { httpClient } from "@/core/http-clients/http-client.ts";
 import type { Post } from "@/features/post/common/post.ts";
 import { postListQueryKeys } from "@/features/post/common/post-list.query-keys.ts";
 import { postDetailsQueryKeys } from "@/features/post/post-detail/post-detail.query-keys.ts";
+import { commentDetailsQueryKeys } from "../comment-detail/comment-detail.query-keys.ts";
+import type { CommentDetailResponse } from "../comment-detail/comment-detail.ts";
+import { updateCommentInDetail } from "../comment-detail/comment-detail.ts";
 import type { Comment } from "../common/comment.ts";
 import { commentListQueryKeys } from "../common/comment-list.query-keys.ts";
 
@@ -122,7 +125,17 @@ const useCreateComment = () => {
 				},
 			);
 
-			if (comment.parentId) {
+			const parentCommentId = comment.parentId;
+			if (parentCommentId) {
+				queryClient.setQueriesData<CommentDetailResponse>(
+					{ queryKey: commentDetailsQueryKeys.root },
+					(data) =>
+						data &&
+						updateCommentInDetail(data, parentCommentId, (parent) => ({
+							...parent,
+							repliesCount: (parent.repliesCount ?? 0) + 1,
+						})),
+				);
 				queryClient.setQueriesData<InfiniteData<CommentListPage>>(
 					{ queryKey: commentListQueryKeys.root },
 					(data) =>
@@ -131,7 +144,7 @@ const useCreateComment = () => {
 							pages: data.pages.map((page) => ({
 								...page,
 								data: page.data.map((parent) =>
-									parent.id === comment.parentId
+									parent.id === parentCommentId
 										? {
 												...parent,
 												repliesCount: (parent.repliesCount ?? 0) + 1,

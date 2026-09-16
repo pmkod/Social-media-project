@@ -1,3 +1,7 @@
+export * from "./comment-detail/comment-detail.query-keys.ts";
+export * from "./comment-detail/comment-detail.ts";
+export * from "./comment-detail/comment-thread.tsx";
+export * from "./comment-detail/use-comment-detail.ts";
 export * from "./comment-to-reply-to/use-comment-to-reply-to.ts";
 export * from "./comments/use-comments.ts";
 export * from "./common/comment.ts";

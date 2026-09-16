@@ -17,9 +17,18 @@ import { CommentItemLoader } from "./components/loaders/comment-item-loader.tsx"
 type CommentItemProps = {
 	comment: Comment;
 	isReply?: boolean;
+	showReplies?: boolean;
+	showReplyAction?: boolean;
+	threadConnector?: boolean;
 };
 
-export function CommentItem({ comment, isReply = false }: CommentItemProps) {
+export function CommentItem({
+	comment,
+	isReply = false,
+	showReplies = true,
+	showReplyAction = true,
+	threadConnector = false,
+}: CommentItemProps) {
 	const [areRepliesExpanded, setAreRepliesExpanded] = useState(false);
 	const { commentToReplyTo, setCommentToReplyTo } = useCommentToReplyTo();
 	const likeComment = useLikeComment();
@@ -28,7 +37,7 @@ export function CommentItem({ comment, isReply = false }: CommentItemProps) {
 	const repliesQuery = useComments({
 		postId: comment.postId,
 		parentCommentId: comment.id ?? undefined,
-		enabled: areRepliesExpanded,
+		enabled: showReplies && areRepliesExpanded,
 	});
 
 	const fetchMoreReplies = () => {
@@ -64,8 +73,17 @@ export function CommentItem({ comment, isReply = false }: CommentItemProps) {
 
 	return (
 		<div
-			className={` ${isReply ? "" : "border-b border-border last:border-b-0"}`}
+			className={cn(
+				"relative",
+				!isReply && "border-b border-border last:border-b-0",
+			)}
 		>
+			{threadConnector ? (
+				<span
+					aria-hidden="true"
+					className="absolute top-14 -bottom-4 left-9 w-px bg-border"
+				/>
+			) : null}
 			<article
 				className={cn(
 					"flex items-start gap-3 px-4 pt-4",
@@ -136,17 +154,19 @@ export function CommentItem({ comment, isReply = false }: CommentItemProps) {
 								<span className="font-light">{comment.likesCount ?? 0}</span>
 							</button>
 
-							<button
-								type="button"
-								onClick={() => setCommentToReplyTo(comment)}
-								aria-pressed={isSelectedForReply}
-								className={cn(
-									"flex items-center gap-1.5 p-1.5 rounded-full hover:bg-accent hover:text-foreground cursor-pointer transition-colors",
-									isSelectedForReply && "text-foreground",
-								)}
-							>
-								<span>{m.comment_reply()}</span>
-							</button>
+							{showReplyAction ? (
+								<button
+									type="button"
+									onClick={() => setCommentToReplyTo(comment)}
+									aria-pressed={isSelectedForReply}
+									className={cn(
+										"flex items-center gap-1.5 p-1.5 rounded-full hover:bg-accent hover:text-foreground cursor-pointer transition-colors",
+										isSelectedForReply && "text-foreground",
+									)}
+								>
+									<span>{m.comment_reply()}</span>
+								</button>
+							) : null}
 						</div>
 					) : null}
 				</div>
@@ -173,7 +193,7 @@ export function CommentItem({ comment, isReply = false }: CommentItemProps) {
 					) : null}
 				</div>
 
-				{repliesCount > 0 ? (
+				{showReplies && repliesCount > 0 ? (
 					<div className={`${isReply ? "pl-17" : "pl-0"}`}>
 						{repliesThatRemainToBeSeenCount > 0 ? (
 							<button
