@@ -1,5 +1,6 @@
 import { RiCalendar2Line } from "@remixicon/react";
 import { Button } from "@/core/components/ui/button";
+import { MediaPreviewModal } from "@/core/components/ui/media-preview-modal.tsx";
 import NiceModal from "@/core/components/ui/nice-modal.tsx";
 import { buildImageUrl } from "@/features/post/post-media.functions";
 import { UserAvatar } from "@/features/user/common/components/user-avatar.tsx";
@@ -37,27 +38,87 @@ function UserProfileView({ user }: UserProfileViewProps) {
 
 	const isOwnProfile = authenticatedUser?.id === user.id;
 
+	const coverPictureFullUrl =
+		buildImageUrl(
+			user.bestQualityCoverPictureFile?.filename ??
+				user.lowQualityCoverPictureFile?.filename,
+		) || null;
+
 	const coverPictureSrc =
 		buildImageUrl(
 			user.lowQualityCoverPictureFile?.filename ??
 				user.bestQualityCoverPictureFile?.filename,
 		) || null;
+
+	const profilePictureFullUrl =
+		buildImageUrl(
+			user.bestQualityProfilePictureFile?.filename ??
+				user.lowQualityProfilePictureFile?.filename,
+		) || null;
+
+	const handleOpenCoverPicture = () => {
+		const url = coverPictureFullUrl ?? coverPictureSrc;
+		if (!url) return;
+		void NiceModal.show(MediaPreviewModal, {
+			items: [
+				{
+					url,
+					type: "image",
+					name: m.profile_cover_preview(),
+				},
+			],
+			initialIndex: 0,
+		});
+	};
+
+	const handleOpenProfilePicture = () => {
+		if (!profilePictureFullUrl) return;
+		void NiceModal.show(MediaPreviewModal, {
+			items: [
+				{
+					url: profilePictureFullUrl,
+					type: "image",
+					name: user.fullName,
+				},
+			],
+			initialIndex: 0,
+		});
+	};
+
 	return (
 		<section className="border-x border-t rounded-t-xl overflow-hidden">
-			<div className="h-48 sm:h-56">
+			<div className="h-48 sm:h-56 bg-muted">
 				{coverPictureSrc ? (
-					<img
-						src={coverPictureSrc}
-						alt={m.profile_cover_alt({ name: user.fullName })}
-						className="h-full w-full object-cover"
-					/>
+					<button
+						type="button"
+						onClick={handleOpenCoverPicture}
+						className="block h-full w-full cursor-pointer overflow-hidden text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+						aria-label={m.profile_cover_preview()}
+					>
+						<img
+							src={coverPictureSrc}
+							alt={m.profile_cover_alt({ name: user.fullName })}
+							className="h-full w-full object-cover"
+						/>
+					</button>
 				) : null}
 			</div>
 
 			<div className="px-8 pb-3">
 				<div className="flex items-start justify-between">
-					<div className="-mt-20 border-4 border-background rounded-full">
-						<UserAvatar user={user} size="4xl" />
+					<div className="-mt-20 shrink-0 border-4 border-background rounded-full bg-background">
+						{profilePictureFullUrl ? (
+							<button
+								type="button"
+								onClick={handleOpenProfilePicture}
+								className="block rounded-full cursor-pointer overflow-hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+								aria-label={m.profile_preview()}
+							>
+								<UserAvatar user={user} size="4xl" />
+							</button>
+						) : (
+							<UserAvatar user={user} size="4xl" />
+						)}
 					</div>
 
 					<div className="flex items-center gap-2 pt-3">
