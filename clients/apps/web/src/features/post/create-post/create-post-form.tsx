@@ -22,8 +22,8 @@ import {
 	POST_MAX_TEXT_LENGTH,
 	POST_MEDIA_MIME_TYPES,
 } from "./create-post.validation.ts";
-import { MediaPreviewModal } from "./media-preview.modal.tsx";
 import { useCreatePost } from "./use-create-post";
+import { MediaPreviewModal } from "@/core/components/ui/media-preview-modal.tsx";
 
 type CreatePostFormProps = {
 	onSuccess?: () => void;
