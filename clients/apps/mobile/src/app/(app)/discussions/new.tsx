@@ -8,6 +8,7 @@ import {
 	ActivityIndicator,
 } from "react-native";
 import { useRouter } from "expo-router";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { ArrowLeft, Search as SearchIcon, X } from "lucide-react-native";
 import { useSearchUsers } from "@/features/user/search/use-search-users";
 import { useFollowSuggestions } from "@/features/user/follow-suggestions/use-follow-suggestions";
@@ -19,6 +20,14 @@ export default function NewDiscussionScreen() {
 	const router = useRouter();
 	const [query, setQuery] = useState("");
 	const [selectedUser, setSelectedUser] = useState<User | null>(null);
+
+	const handleBack = () => {
+		if (router.canGoBack()) {
+			router.back();
+		} else {
+			router.replace("/(app)/home" as any);
+		}
+	};
 
 	const trimmedQuery = query.trim();
 	const hasQuery = trimmedQuery.length > 0;
@@ -47,11 +56,11 @@ export default function NewDiscussionScreen() {
 	};
 
 	return (
-		<View className="flex-1 bg-[#09090b]">
+		<SafeAreaView edges={["top", "bottom"]} className="flex-1 bg-[#09090b]">
 			{/* Top Navbar */}
 			<View className="flex-row items-center border-b border-[#27272a] px-4 py-3.5">
 				<Pressable
-					onPress={() => router.back()}
+					onPress={handleBack}
 					className="p-1 -ml-1 rounded-full active:bg-[#18181b]"
 				>
 					<ArrowLeft size={22} color="#fafafa" />
@@ -132,6 +141,6 @@ export default function NewDiscussionScreen() {
 					)
 				}
 			/>
-		</View>
+		</SafeAreaView>
 	);
 }

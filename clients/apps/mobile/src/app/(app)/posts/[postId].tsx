@@ -10,6 +10,7 @@ import {
 	Platform,
 } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { ArrowLeft, Send } from "lucide-react-native";
 import { usePost } from "@/features/post/post-detail/use-post";
 import { PostItem } from "@/features/post/common/post-item";
@@ -28,6 +29,14 @@ export default function PostDetailScreen() {
 	const user = authData?.user;
 
 	const [commentText, setCommentText] = useState("");
+
+	const handleBack = () => {
+		if (router.canGoBack()) {
+			router.back();
+		} else {
+			router.replace("/(app)/home" as any);
+		}
+	};
 
 	const {
 		data: postData,
@@ -77,10 +86,10 @@ export default function PostDetailScreen() {
 
 	if (isPostError || !post) {
 		return (
-			<View className="flex-1 bg-[#09090b]">
+			<SafeAreaView edges={["top", "bottom"]} className="flex-1 bg-[#09090b]">
 				<View className="flex-row items-center border-b border-[#27272a] px-4 py-3.5">
 					<Pressable
-						onPress={() => router.back()}
+						onPress={handleBack}
 						className="p-1 -ml-1 rounded-full active:bg-[#18181b]"
 					>
 						<ArrowLeft size={22} color="#fafafa" />
@@ -94,34 +103,35 @@ export default function PostDetailScreen() {
 						onRefresh={refetchPost}
 					/>
 				</View>
-			</View>
+			</SafeAreaView>
 		);
 	}
 
 	return (
-		<KeyboardAvoidingView
-			behavior={Platform.OS === "ios" ? "padding" : undefined}
-			className="flex-1 bg-[#09090b]"
-		>
-			{/* Top Bar */}
-			<View className="flex-row items-center border-b border-[#27272a] px-4 py-3.5">
-				<Pressable
-					onPress={() => router.back()}
-					className="p-1 -ml-1 rounded-full active:bg-[#18181b]"
-				>
-					<ArrowLeft size={22} color="#fafafa" />
-				</Pressable>
-				<Text className="ml-3 text-base font-bold text-foreground">Post</Text>
-			</View>
+		<SafeAreaView edges={["top", "bottom"]} className="flex-1 bg-[#09090b]">
+			<KeyboardAvoidingView
+				behavior={Platform.OS === "ios" ? "padding" : undefined}
+				className="flex-1 bg-[#09090b]"
+			>
+				{/* Top Bar */}
+				<View className="flex-row items-center border-b border-[#27272a] px-4 py-3.5">
+					<Pressable
+						onPress={handleBack}
+						className="p-1 -ml-1 rounded-full active:bg-[#18181b]"
+					>
+						<ArrowLeft size={22} color="#fafafa" />
+					</Pressable>
+					<Text className="ml-3 text-base font-bold text-foreground">Post</Text>
+				</View>
 
-			{/* Post and Comments FlatList */}
-			<FlatList
-				data={comments}
-				keyExtractor={(item) => item.id}
-				renderItem={({ item }) => <CommentItem comment={item} />}
-				ListHeaderComponent={
-					<View>
-						<PostItem post={post} onDeleted={() => router.back()} />
+				{/* Post and Comments FlatList */}
+				<FlatList
+					data={comments}
+					keyExtractor={(item) => item.id}
+					renderItem={({ item }) => <CommentItem comment={item} />}
+					ListHeaderComponent={
+						<View>
+							<PostItem post={post} onDeleted={handleBack} />
 						<View className="border-b border-[#27272a] bg-[#18181b]/30 px-4 py-2.5">
 							<Text className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
 								Comments ({post.commentsCount ?? comments.length})
@@ -190,6 +200,7 @@ export default function PostDetailScreen() {
 					)}
 				</Pressable>
 			</View>
-		</KeyboardAvoidingView>
+			</KeyboardAvoidingView>
+		</SafeAreaView>
 	);
 }

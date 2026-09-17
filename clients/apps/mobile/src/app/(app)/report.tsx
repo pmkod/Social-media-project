@@ -10,6 +10,7 @@ import {
 	Platform,
 } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { ArrowLeft, CheckCircle2, ShieldAlert } from "lucide-react-native";
 import { useReportReasons } from "@/features/report-reason/use-report-reasons";
 import { useCreateReport } from "@/features/report/use-create-report";
@@ -32,6 +33,14 @@ export default function ReportScreen() {
 	const createReport = useCreateReport();
 
 	const reasons = reasonsData?.reasons ?? [];
+
+	const handleBack = () => {
+		if (router.canGoBack()) {
+			router.back();
+		} else {
+			router.replace("/(app)/home" as any);
+		}
+	};
 
 	const handleSubmit = async () => {
 		if (!selectedReasonId && !reasonText.trim()) {
@@ -56,21 +65,22 @@ export default function ReportScreen() {
 	};
 
 	return (
-		<KeyboardAvoidingView
-			behavior={Platform.OS === "ios" ? "padding" : undefined}
-			className="flex-1 bg-[#09090b]"
-		>
-			<View className="flex-row items-center border-b border-[#27272a] px-4 py-3.5">
-				<Pressable
-					onPress={() => router.back()}
-					className="p-1 -ml-1 rounded-full active:bg-[#18181b]"
-				>
-					<ArrowLeft size={22} color="#fafafa" />
-				</Pressable>
-				<Text className="ml-3 text-base font-bold text-foreground">
-					Report
-				</Text>
-			</View>
+		<SafeAreaView edges={["top", "bottom"]} className="flex-1 bg-[#09090b]">
+			<KeyboardAvoidingView
+				behavior={Platform.OS === "ios" ? "padding" : undefined}
+				className="flex-1 bg-[#09090b]"
+			>
+				<View className="flex-row items-center border-b border-[#27272a] px-4 py-3.5">
+					<Pressable
+						onPress={handleBack}
+						className="p-1 -ml-1 rounded-full active:bg-[#18181b]"
+					>
+						<ArrowLeft size={22} color="#fafafa" />
+					</Pressable>
+					<Text className="ml-3 text-base font-bold text-foreground">
+						Report
+					</Text>
+				</View>
 
 			<ScrollView className="flex-1 p-4" keyboardShouldPersistTaps="handled">
 				{isSuccess ? (
@@ -83,7 +93,7 @@ export default function ReportScreen() {
 							Your report has been submitted. We review reports carefully to keep our community safe.
 						</Text>
 						<Pressable
-							onPress={() => router.back()}
+							onPress={handleBack}
 							className="mt-6 rounded-full bg-primary px-8 py-2.5 active:opacity-80"
 						>
 							<Text className="text-sm font-bold text-white">Done</Text>
@@ -183,6 +193,7 @@ export default function ReportScreen() {
 					</View>
 				)}
 			</ScrollView>
-		</KeyboardAvoidingView>
+			</KeyboardAvoidingView>
+		</SafeAreaView>
 	);
 }

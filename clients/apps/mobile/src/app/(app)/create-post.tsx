@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
+import { SafeAreaView } from "react-native-safe-area-context";
 import * as ImagePicker from "expo-image-picker";
 import { ArrowLeft, Image as ImageIcon, X } from "lucide-react-native";
 import { useAuthenticatedUser } from "@/features/user/authenticated-user/use-authenticated-user";
@@ -62,6 +63,14 @@ export default function CreatePostScreen() {
 		setSelectedImages((prev) => prev.filter((_, i) => i !== index));
 	};
 
+	const handleBack = () => {
+		if (router.canGoBack()) {
+			router.back();
+		} else {
+			router.replace("/(app)/home" as any);
+		}
+	};
+
 	const handleSubmit = async () => {
 		const trimmedText = text.trim();
 		if (!trimmedText && selectedImages.length === 0) {
@@ -75,7 +84,7 @@ export default function CreatePostScreen() {
 				text: trimmedText,
 				medias: selectedImages,
 			});
-			router.back();
+			handleBack();
 		} catch (err: any) {
 			setError(err?.message || "Failed to create post. Please try again.");
 		}
@@ -84,21 +93,22 @@ export default function CreatePostScreen() {
 	const canSubmit = (text.trim().length > 0 || selectedImages.length > 0) && !createPost.isPending;
 
 	return (
-		<KeyboardAvoidingView
-			behavior={Platform.OS === "ios" ? "padding" : undefined}
-			className="flex-1 bg-[#09090b]"
-		>
-			{/* Top Navigation Bar */}
-			<View className="flex-row items-center justify-between border-b border-[#27272a] px-4 py-3.5">
-				<Pressable
-					onPress={() => router.back()}
-					disabled={createPost.isPending}
-					className="p-1 -ml-1 rounded-full active:bg-[#18181b]"
-				>
-					<ArrowLeft size={22} color="#fafafa" />
-				</Pressable>
+		<SafeAreaView edges={["top", "bottom"]} className="flex-1 bg-[#09090b]">
+			<KeyboardAvoidingView
+				behavior={Platform.OS === "ios" ? "padding" : undefined}
+				className="flex-1 bg-[#09090b]"
+			>
+				{/* Top Navigation Bar */}
+				<View className="flex-row items-center justify-between border-b border-[#27272a] px-4 py-3.5">
+					<Pressable
+						onPress={handleBack}
+						disabled={createPost.isPending}
+						className="p-1 -ml-1 rounded-full active:bg-[#18181b]"
+					>
+						<ArrowLeft size={22} color="#fafafa" />
+					</Pressable>
 
-				<Text className="text-base font-bold text-foreground">Create Post</Text>
+					<Text className="text-base font-bold text-foreground">Create Post</Text>
 
 				<Pressable
 					onPress={handleSubmit}
@@ -191,6 +201,7 @@ export default function CreatePostScreen() {
 					{text.length}/500
 				</Text>
 			</View>
-		</KeyboardAvoidingView>
+			</KeyboardAvoidingView>
+		</SafeAreaView>
 	);
 }

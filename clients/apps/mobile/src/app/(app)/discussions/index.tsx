@@ -8,7 +8,8 @@ import {
 	RefreshControl,
 } from "react-native";
 import { useRouter } from "expo-router";
-import { Plus, MessageSquare } from "lucide-react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { Plus, MessageSquare, ArrowLeft } from "lucide-react-native";
 import { useDiscussions } from "@/features/discussion/hooks/use-discussions";
 import { useAuthenticatedUser } from "@/features/user/authenticated-user/use-authenticated-user";
 import { UserAvatar } from "@/features/user/common/components/user-avatar";
@@ -20,6 +21,14 @@ export default function DiscussionsListScreen() {
 	const router = useRouter();
 	const { data: authData } = useAuthenticatedUser();
 	const me = authData?.user;
+
+	const handleBack = () => {
+		if (router.canGoBack()) {
+			router.back();
+		} else {
+			router.replace("/(app)/home" as any);
+		}
+	};
 
 	const {
 		data,
@@ -92,10 +101,18 @@ export default function DiscussionsListScreen() {
 	};
 
 	return (
-		<View className="flex-1 bg-[#09090b]">
+		<SafeAreaView edges={["top", "bottom"]} className="flex-1 bg-[#09090b]">
 			{/* Top Navbar */}
 			<View className="flex-row items-center justify-between border-b border-[#27272a] px-4 py-3.5">
-				<Text className="text-lg font-bold text-foreground">Messages</Text>
+				<View className="flex-row items-center gap-3">
+					<Pressable
+						onPress={handleBack}
+						className="p-1 -ml-1 rounded-full active:bg-[#18181b]"
+					>
+						<ArrowLeft size={22} color="#fafafa" />
+					</Pressable>
+					<Text className="text-lg font-bold text-foreground">Messages</Text>
+				</View>
 				<Pressable
 					onPress={() => router.push("/(app)/discussions/new" as any)}
 					className="p-1 -mr-1 rounded-full active:bg-[#18181b]"
@@ -160,6 +177,6 @@ export default function DiscussionsListScreen() {
 			>
 				<Plus size={26} color="#ffffff" />
 			</Pressable>
-		</View>
+		</SafeAreaView>
 	);
 }

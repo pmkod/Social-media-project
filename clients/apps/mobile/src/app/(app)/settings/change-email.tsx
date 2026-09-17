@@ -10,6 +10,7 @@ import {
 	ScrollView,
 } from "react-native";
 import { useRouter } from "expo-router";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -32,6 +33,14 @@ export default function ChangeEmailScreen() {
 	const router = useRouter();
 	const { data: authData } = useAuthenticatedUser();
 	const user = authData?.user;
+
+	const handleBack = () => {
+		if (router.canGoBack()) {
+			router.back();
+		} else {
+			router.replace("/(app)/home" as any);
+		}
+	};
 
 	const requestEmailChange = useRequestEmailChange();
 	const [serverError, setServerError] = useState<string | null>(null);
@@ -61,21 +70,22 @@ export default function ChangeEmailScreen() {
 	};
 
 	return (
-		<KeyboardAvoidingView
-			behavior={Platform.OS === "ios" ? "padding" : undefined}
-			className="flex-1 bg-[#09090b]"
-		>
-			<View className="flex-row items-center border-b border-[#27272a] px-4 py-3.5">
-				<Pressable
-					onPress={() => router.back()}
-					className="p-1 -ml-1 rounded-full active:bg-[#18181b]"
-				>
-					<ArrowLeft size={22} color="#fafafa" />
-				</Pressable>
-				<Text className="ml-3 text-base font-bold text-foreground">
-					Change Email
-				</Text>
-			</View>
+		<SafeAreaView edges={["top", "bottom"]} className="flex-1 bg-[#09090b]">
+			<KeyboardAvoidingView
+				behavior={Platform.OS === "ios" ? "padding" : undefined}
+				className="flex-1 bg-[#09090b]"
+			>
+				<View className="flex-row items-center border-b border-[#27272a] px-4 py-3.5">
+					<Pressable
+						onPress={handleBack}
+						className="p-1 -ml-1 rounded-full active:bg-[#18181b]"
+					>
+						<ArrowLeft size={22} color="#fafafa" />
+					</Pressable>
+					<Text className="ml-3 text-base font-bold text-foreground">
+						Change Email
+					</Text>
+				</View>
 
 			<ScrollView className="flex-1 p-4" keyboardShouldPersistTaps="handled">
 				<View className="mb-4 rounded-xl border border-[#27272a] bg-[#18181b] p-4">
@@ -138,6 +148,7 @@ export default function ChangeEmailScreen() {
 					</Pressable>
 				</View>
 			</ScrollView>
-		</KeyboardAvoidingView>
+			</KeyboardAvoidingView>
+		</SafeAreaView>
 	);
 }

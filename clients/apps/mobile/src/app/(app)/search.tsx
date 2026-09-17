@@ -8,6 +8,7 @@ import {
 	ActivityIndicator,
 	ScrollView,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { Search as SearchIcon, X, Clock, Trash2 } from "lucide-react-native";
 import { cn } from "@/core/lib/utils";
 import { useSearchUsers } from "@/features/user/search/use-search-users";
@@ -54,7 +55,7 @@ export default function SearchScreen() {
 	};
 
 	return (
-		<View className="flex-1 bg-[#09090b]">
+		<SafeAreaView edges={["top"]} className="flex-1 bg-[#09090b]">
 			{/* Search Header Input */}
 			<View className="border-b border-[#27272a] bg-[#09090b] px-4 py-3">
 				<View className="flex-row items-center rounded-full border border-[#27272a] bg-[#18181b] px-3.5 py-2">
@@ -220,6 +221,6 @@ export default function SearchScreen() {
 					</View>
 				</ScrollView>
 			)}
-		</View>
+		</SafeAreaView>
 	);
 }

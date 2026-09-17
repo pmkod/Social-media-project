@@ -8,6 +8,7 @@ import {
 	RefreshControl,
 } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { ArrowLeft, FolderPlus } from "lucide-react-native";
 import { useBookmarks } from "@/features/bookmark/use-bookmarks";
 import { PostItem } from "@/features/post/common/post-item";
@@ -19,6 +20,14 @@ export default function BookmarksScreen() {
 		collectionId?: string;
 		collectionName?: string;
 	}>();
+
+	const handleBack = () => {
+		if (router.canGoBack()) {
+			router.back();
+		} else {
+			router.replace("/(app)/home" as any);
+		}
+	};
 
 	const {
 		data,
@@ -33,11 +42,11 @@ export default function BookmarksScreen() {
 	const posts = data?.pages.flatMap((page) => page.posts) ?? [];
 
 	return (
-		<View className="flex-1 bg-[#09090b]">
+		<SafeAreaView edges={["top", "bottom"]} className="flex-1 bg-[#09090b]">
 			<View className="flex-row items-center justify-between border-b border-[#27272a] px-4 py-3.5">
 				<View className="flex-row items-center">
 					<Pressable
-						onPress={() => router.back()}
+						onPress={handleBack}
 						className="p-1 -ml-1 rounded-full active:bg-[#18181b]"
 					>
 						<ArrowLeft size={22} color="#fafafa" />
@@ -109,6 +118,6 @@ export default function BookmarksScreen() {
 					) : null
 				}
 			/>
-		</View>
+		</SafeAreaView>
 	);
 }

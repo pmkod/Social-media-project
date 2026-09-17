@@ -19,12 +19,8 @@ export const EXCEPTION_MESSAGES: Record<string, string> = {
 	user_not_found: "User not found.",
 };
 
-const normalizedBaseUrl = ApiConfig.baseUrl.endsWith("/")
-	? ApiConfig.baseUrl
-	: `${ApiConfig.baseUrl}/`;
-
 const baseHttpClient = ky.create({
-	baseUrl: normalizedBaseUrl,
+	prefix: ApiConfig.baseUrl,
 	retry: { limit: 1 },
 	hooks: {
 		beforeError: [

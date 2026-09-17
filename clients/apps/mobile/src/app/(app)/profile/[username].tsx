@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { Image } from "expo-image";
 import { useLocalSearchParams, useRouter } from "expo-router";
+import { SafeAreaView } from "react-native-safe-area-context";
 import {
 	ArrowLeft,
 	Calendar,
@@ -37,6 +38,14 @@ export default function UserProfileScreen() {
 	const { username } = useLocalSearchParams<{ username: string }>();
 	const { data: authData } = useAuthenticatedUser();
 	const authenticatedUser = authData?.user;
+
+	const handleBack = () => {
+		if (router.canGoBack()) {
+			router.back();
+		} else {
+			router.replace("/(app)/home" as any);
+		}
+	};
 
 	const [activeTab, setActiveTab] = useState<"posts" | "likes">("posts");
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -91,10 +100,10 @@ export default function UserProfileScreen() {
 
 	if (isProfileError || !user) {
 		return (
-			<View className="flex-1 bg-[#09090b]">
+			<SafeAreaView edges={["top", "bottom"]} className="flex-1 bg-[#09090b]">
 				<View className="flex-row items-center border-b border-[#27272a] px-4 py-3.5">
 					<Pressable
-						onPress={() => router.back()}
+						onPress={handleBack}
 						className="p-1 -ml-1 rounded-full active:bg-[#18181b]"
 					>
 						<ArrowLeft size={22} color="#fafafa" />
@@ -108,7 +117,7 @@ export default function UserProfileScreen() {
 						onRefresh={refetchProfile}
 					/>
 				</View>
-			</View>
+			</SafeAreaView>
 		);
 	}
 
@@ -298,11 +307,11 @@ export default function UserProfileScreen() {
 	);
 
 	return (
-		<View className="flex-1 bg-[#09090b]">
+		<SafeAreaView edges={["top", "bottom"]} className="flex-1 bg-[#09090b]">
 			{/* Top Navbar */}
 			<View className="flex-row items-center border-b border-[#27272a] px-4 py-3 bg-[#09090b]">
 				<Pressable
-					onPress={() => router.back()}
+					onPress={handleBack}
 					className="p-1 -ml-1 rounded-full active:bg-[#18181b]"
 				>
 					<ArrowLeft size={22} color="#fafafa" />
@@ -443,6 +452,6 @@ export default function UserProfileScreen() {
 				user={user}
 				onUnblocked={() => refetchProfile()}
 			/>
-		</View>
+		</SafeAreaView>
 	);
 }

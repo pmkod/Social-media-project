@@ -8,6 +8,7 @@ import {
 	RefreshControl,
 } from "react-native";
 import { useRouter } from "expo-router";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { ArrowLeft, Smartphone, Laptop, Trash2, LogOut } from "lucide-react-native";
 import { useActiveSessions } from "@/features/session/list-active-sessions/use-active-sessions";
 import { DisableSessionAlertDialog } from "@/features/session/disable-session/disable-session-alert-dialog";
@@ -17,6 +18,15 @@ import type { Session } from "@/features/session/common/session";
 
 export default function SessionsScreen() {
 	const router = useRouter();
+
+	const handleBack = () => {
+		if (router.canGoBack()) {
+			router.back();
+		} else {
+			router.replace("/(app)/home" as any);
+		}
+	};
+
 	const { data: sessions, isLoading, refetch, isRefetching } = useActiveSessions();
 
 	const [sessionToDisable, setSessionToDisable] = useState<Session | null>(null);
@@ -26,11 +36,11 @@ export default function SessionsScreen() {
 	const otherSessionsCount = (sessions?.length ?? 0) - 1;
 
 	return (
-		<View className="flex-1 bg-[#09090b]">
+		<SafeAreaView edges={["top", "bottom"]} className="flex-1 bg-[#09090b]">
 			<View className="flex-row items-center justify-between border-b border-[#27272a] px-4 py-3.5">
 				<View className="flex-row items-center">
 					<Pressable
-						onPress={() => router.back()}
+						onPress={handleBack}
 						className="p-1 -ml-1 rounded-full active:bg-[#18181b]"
 					>
 						<ArrowLeft size={22} color="#fafafa" />
@@ -139,6 +149,6 @@ export default function SessionsScreen() {
 				onOpenChange={setIsLogoutOthersOpen}
 				onSuccess={() => refetch()}
 			/>
-		</View>
+		</SafeAreaView>
 	);
 }

@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -109,6 +110,14 @@ export default function EditProfileScreen() {
 		}
 	};
 
+	const handleBack = () => {
+		if (router.canGoBack()) {
+			router.back();
+		} else {
+			router.replace("/(app)/home" as any);
+		}
+	};
+
 	const onSubmit = async (values: EditProfileFormData) => {
 		setSubmitError(null);
 		try {
@@ -119,7 +128,7 @@ export default function EditProfileScreen() {
 				profilePicture,
 				coverPicture,
 			});
-			router.back();
+			handleBack();
 		} catch (err: any) {
 			setSubmitError(err?.message || "Failed to update profile.");
 		}
@@ -133,19 +142,20 @@ export default function EditProfileScreen() {
 		);
 
 	return (
-		<KeyboardAvoidingView
-			behavior={Platform.OS === "ios" ? "padding" : undefined}
-			className="flex-1 bg-[#09090b]"
-		>
-			{/* Top Navbar */}
-			<View className="flex-row items-center justify-between border-b border-[#27272a] px-4 py-3.5">
-				<Pressable
-					onPress={() => router.back()}
-					className="p-1 -ml-1 rounded-full active:bg-[#18181b]"
-				>
-					<ArrowLeft size={22} color="#fafafa" />
-				</Pressable>
-				<Text className="text-base font-bold text-foreground">Edit Profile</Text>
+		<SafeAreaView edges={["top", "bottom"]} className="flex-1 bg-[#09090b]">
+			<KeyboardAvoidingView
+				behavior={Platform.OS === "ios" ? "padding" : undefined}
+				className="flex-1 bg-[#09090b]"
+			>
+				{/* Top Navbar */}
+				<View className="flex-row items-center justify-between border-b border-[#27272a] px-4 py-3.5">
+					<Pressable
+						onPress={handleBack}
+						className="p-1 -ml-1 rounded-full active:bg-[#18181b]"
+					>
+						<ArrowLeft size={22} color="#fafafa" />
+					</Pressable>
+					<Text className="text-base font-bold text-foreground">Edit Profile</Text>
 				<Pressable
 					onPress={handleSubmit(onSubmit)}
 					disabled={updateProfile.isPending}
@@ -295,6 +305,7 @@ export default function EditProfileScreen() {
 					</View>
 				</View>
 			</ScrollView>
-		</KeyboardAvoidingView>
+			</KeyboardAvoidingView>
+		</SafeAreaView>
 	);
 }

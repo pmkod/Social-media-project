@@ -7,6 +7,7 @@ import {
 	ActivityIndicator,
 	RefreshControl,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import { Heart, MessageCircle, UserPlus } from "lucide-react-native";
 import { cn } from "@/core/lib/utils";
@@ -111,7 +112,7 @@ export default function NotificationsScreen() {
 	};
 
 	return (
-		<View className="flex-1 bg-[#09090b]">
+		<SafeAreaView edges={["top"]} className="flex-1 bg-[#09090b]">
 			<View className="border-b border-[#27272a] px-4 py-3.5">
 				<Text className="text-lg font-bold text-foreground">Notifications</Text>
 			</View>
@@ -156,6 +157,6 @@ export default function NotificationsScreen() {
 					) : null
 				}
 			/>
-		</View>
+		</SafeAreaView>
 	);
 }

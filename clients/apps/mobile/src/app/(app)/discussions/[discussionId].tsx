@@ -10,6 +10,7 @@ import {
 	Platform,
 } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { ArrowLeft, Send } from "lucide-react-native";
 import { useDiscussion } from "@/features/discussion/hooks/use-discussion";
 import { useMessages } from "@/features/discussion/hooks/use-messages";
@@ -24,6 +25,14 @@ export default function DiscussionDetailScreen() {
 	const { discussionId } = useLocalSearchParams<{ discussionId: string }>();
 	const { data: authData } = useAuthenticatedUser();
 	const me = authData?.user;
+
+	const handleBack = () => {
+		if (router.canGoBack()) {
+			router.back();
+		} else {
+			router.replace("/(app)/home" as any);
+		}
+	};
 
 	const [inputText, setInputText] = useState("");
 
@@ -106,18 +115,19 @@ export default function DiscussionDetailScreen() {
 	};
 
 	return (
-		<KeyboardAvoidingView
-			behavior={Platform.OS === "ios" ? "padding" : undefined}
-			className="flex-1 bg-[#09090b]"
-		>
-			{/* Chat Header */}
-			<View className="flex-row items-center border-b border-[#27272a] px-4 py-3 bg-[#09090b]">
-				<Pressable
-					onPress={() => router.back()}
-					className="p-1 -ml-1 rounded-full active:bg-[#18181b]"
-				>
-					<ArrowLeft size={22} color="#fafafa" />
-				</Pressable>
+		<SafeAreaView edges={["top", "bottom"]} className="flex-1 bg-[#09090b]">
+			<KeyboardAvoidingView
+				behavior={Platform.OS === "ios" ? "padding" : undefined}
+				className="flex-1 bg-[#09090b]"
+			>
+				{/* Chat Header */}
+				<View className="flex-row items-center border-b border-[#27272a] px-4 py-3 bg-[#09090b]">
+					<Pressable
+						onPress={handleBack}
+						className="p-1 -ml-1 rounded-full active:bg-[#18181b]"
+					>
+						<ArrowLeft size={22} color="#fafafa" />
+					</Pressable>
 
 				<Pressable
 					onPress={() => {
@@ -202,6 +212,7 @@ export default function DiscussionDetailScreen() {
 					)}
 				</Pressable>
 			</View>
-		</KeyboardAvoidingView>
+			</KeyboardAvoidingView>
+		</SafeAreaView>
 	);
 }

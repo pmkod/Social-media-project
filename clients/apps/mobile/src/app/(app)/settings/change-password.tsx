@@ -9,6 +9,7 @@ import {
 	ScrollView,
 } from "react-native";
 import { useRouter } from "expo-router";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -35,6 +36,14 @@ type ChangePasswordFormData = z.infer<typeof changePasswordSchema>;
 export default function ChangePasswordScreen() {
 	const router = useRouter();
 	const changePassword = useChangePassword();
+
+	const handleBack = () => {
+		if (router.canGoBack()) {
+			router.back();
+		} else {
+			router.replace("/(app)/home" as any);
+		}
+	};
 
 	const [isSuccess, setIsSuccess] = useState(false);
 	const [serverError, setServerError] = useState<string | null>(null);
@@ -68,21 +77,22 @@ export default function ChangePasswordScreen() {
 	};
 
 	return (
-		<KeyboardAvoidingView
-			behavior={Platform.OS === "ios" ? "padding" : undefined}
-			className="flex-1 bg-[#09090b]"
-		>
-			<View className="flex-row items-center border-b border-[#27272a] px-4 py-3.5">
-				<Pressable
-					onPress={() => router.back()}
-					className="p-1 -ml-1 rounded-full active:bg-[#18181b]"
-				>
-					<ArrowLeft size={22} color="#fafafa" />
-				</Pressable>
-				<Text className="ml-3 text-base font-bold text-foreground">
-					Change Password
-				</Text>
-			</View>
+		<SafeAreaView edges={["top", "bottom"]} className="flex-1 bg-[#09090b]">
+			<KeyboardAvoidingView
+				behavior={Platform.OS === "ios" ? "padding" : undefined}
+				className="flex-1 bg-[#09090b]"
+			>
+				<View className="flex-row items-center border-b border-[#27272a] px-4 py-3.5">
+					<Pressable
+						onPress={handleBack}
+						className="p-1 -ml-1 rounded-full active:bg-[#18181b]"
+					>
+						<ArrowLeft size={22} color="#fafafa" />
+					</Pressable>
+					<Text className="ml-3 text-base font-bold text-foreground">
+						Change Password
+					</Text>
+				</View>
 
 			<ScrollView className="flex-1 p-4" keyboardShouldPersistTaps="handled">
 				{isSuccess ? (
@@ -95,7 +105,7 @@ export default function ChangePasswordScreen() {
 							Your password has been successfully updated.
 						</Text>
 						<Pressable
-							onPress={() => router.back()}
+							onPress={handleBack}
 							className="mt-5 rounded-full bg-primary px-6 py-2 active:opacity-80"
 						>
 							<Text className="text-xs font-bold text-white">Done</Text>
@@ -200,6 +210,7 @@ export default function ChangePasswordScreen() {
 					</View>
 				)}
 			</ScrollView>
-		</KeyboardAvoidingView>
+			</KeyboardAvoidingView>
+		</SafeAreaView>
 	);
 }

@@ -8,6 +8,7 @@ import {
 	RefreshControl,
 } from "react-native";
 import { useRouter } from "expo-router";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { ArrowLeft, Plus, Folder, Trash2 } from "lucide-react-native";
 import { useBookmarkCollections } from "@/features/bookmark/use-bookmark-collections";
 import { DeleteBookmarkCollectionAlertDialog } from "@/features/bookmark/delete-bookmark-collection/delete-bookmark-collection-alert-dialog";
@@ -16,6 +17,15 @@ import type { BookmarkCollection } from "@/features/bookmark/common/bookmark-col
 
 export default function BookmarkCollectionsScreen() {
 	const router = useRouter();
+
+	const handleBack = () => {
+		if (router.canGoBack()) {
+			router.back();
+		} else {
+			router.replace("/(app)/home" as any);
+		}
+	};
+
 	const {
 		data,
 		isLoading,
@@ -34,11 +44,11 @@ export default function BookmarkCollectionsScreen() {
 		data?.pages.flatMap((page) => page.bookmarkCollections) ?? [];
 
 	return (
-		<View className="flex-1 bg-[#09090b]">
+		<SafeAreaView edges={["top", "bottom"]} className="flex-1 bg-[#09090b]">
 			<View className="flex-row items-center justify-between border-b border-[#27272a] px-4 py-3.5">
 				<View className="flex-row items-center">
 					<Pressable
-						onPress={() => router.back()}
+						onPress={handleBack}
 						className="p-1 -ml-1 rounded-full active:bg-[#18181b]"
 					>
 						<ArrowLeft size={22} color="#fafafa" />
@@ -148,6 +158,6 @@ export default function BookmarkCollectionsScreen() {
 					}}
 				/>
 			)}
-		</View>
+		</SafeAreaView>
 	);
 }

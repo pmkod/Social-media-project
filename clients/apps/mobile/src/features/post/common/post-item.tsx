@@ -26,6 +26,7 @@ import { useUnlikePost } from "../unlike-post/use-unlike-post";
 import { useAddBookmark } from "@/features/bookmark/use-add-bookmark";
 import { useRemoveBookmark } from "@/features/bookmark/use-remove-bookmark";
 import { DeletePostAlertDialog } from "../delete-post/delete-post-alert-dialog";
+import { BookmarkCollectionPickerModal } from "@/features/bookmark/common/components/bookmark-collection-picker-modal";
 import { buildImageUrl, buildVideoUrl } from "../post-media.functions";
 import { formatPostCreationDate } from "./post.utils";
 import type { Post } from "./post";
@@ -45,11 +46,10 @@ export function PostItem({ post, onDeleted }: PostItemProps) {
 
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 	const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+	const [isBookmarkPickerOpen, setIsBookmarkPickerOpen] = useState(false);
 
 	const likePost = useLikePost();
 	const unlikePost = useUnlikePost();
-	const addBookmark = useAddBookmark();
-	const removeBookmark = useRemoveBookmark();
 
 	const isLiked = post.isLikedByAuthenticatedUser ?? false;
 	const likesCount = post.likesCount ?? 0;
@@ -65,11 +65,7 @@ export function PostItem({ post, onDeleted }: PostItemProps) {
 	};
 
 	const handleBookmarkToggle = () => {
-		if (isBookmarked) {
-			removeBookmark.mutate({ postId: post.id });
-		} else {
-			addBookmark.mutate({ postId: post.id });
-		}
+		setIsBookmarkPickerOpen(true);
 	};
 
 	const medias = post.medias || [];
@@ -284,6 +280,13 @@ export function PostItem({ post, onDeleted }: PostItemProps) {
 				onOpenChange={setIsDeleteDialogOpen}
 				post={post}
 				onDeleted={onDeleted}
+			/>
+
+			{/* Bookmark Collection Picker Modal */}
+			<BookmarkCollectionPickerModal
+				postId={post.id}
+				open={isBookmarkPickerOpen}
+				onOpenChange={setIsBookmarkPickerOpen}
 			/>
 		</View>
 	);

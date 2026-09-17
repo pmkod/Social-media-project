@@ -9,6 +9,7 @@ import {
 	Platform,
 } from "react-native";
 import { useRouter } from "expo-router";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -31,6 +32,14 @@ export default function NewBookmarkCollectionScreen() {
 	const createCollection = useCreateBookmarkCollection();
 	const [error, setError] = useState<string | null>(null);
 
+	const handleBack = () => {
+		if (router.canGoBack()) {
+			router.back();
+		} else {
+			router.replace("/(app)/home" as any);
+		}
+	};
+
 	const {
 		control,
 		handleSubmit,
@@ -50,24 +59,25 @@ export default function NewBookmarkCollectionScreen() {
 				name: values.name,
 				description: values.description || undefined,
 			});
-			router.back();
+			handleBack();
 		} catch (err: any) {
 			setError(err?.message || "Failed to create collection.");
 		}
 	};
 
 	return (
-		<KeyboardAvoidingView
-			behavior={Platform.OS === "ios" ? "padding" : undefined}
-			className="flex-1 bg-[#09090b]"
-		>
-			<View className="flex-row items-center justify-between border-b border-[#27272a] px-4 py-3.5">
-				<Pressable
-					onPress={() => router.back()}
-					className="p-1 -ml-1 rounded-full active:bg-[#18181b]"
-				>
-					<ArrowLeft size={22} color="#fafafa" />
-				</Pressable>
+		<SafeAreaView edges={["top", "bottom"]} className="flex-1 bg-[#09090b]">
+			<KeyboardAvoidingView
+				behavior={Platform.OS === "ios" ? "padding" : undefined}
+				className="flex-1 bg-[#09090b]"
+			>
+				<View className="flex-row items-center justify-between border-b border-[#27272a] px-4 py-3.5">
+					<Pressable
+						onPress={handleBack}
+						className="p-1 -ml-1 rounded-full active:bg-[#18181b]"
+					>
+						<ArrowLeft size={22} color="#fafafa" />
+					</Pressable>
 				<Text className="text-base font-bold text-foreground">
 					New Collection
 				</Text>
@@ -144,7 +154,8 @@ export default function NewBookmarkCollectionScreen() {
 						</Text>
 					) : null}
 				</View>
-			</View>
-		</KeyboardAvoidingView>
+				</View>
+			</KeyboardAvoidingView>
+		</SafeAreaView>
 	);
 }

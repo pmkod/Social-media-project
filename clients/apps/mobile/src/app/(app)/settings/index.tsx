@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, Pressable, ScrollView } from "react-native";
 import { useRouter } from "expo-router";
+import { SafeAreaView } from "react-native-safe-area-context";
 import {
 	ArrowLeft,
 	Shield,
@@ -19,6 +20,14 @@ export default function SettingsIndexScreen() {
 	const { data: authData } = useAuthenticatedUser();
 	const user = authData?.user;
 	const logout = useLogout();
+
+	const handleBack = () => {
+		if (router.canGoBack()) {
+			router.back();
+		} else {
+			router.replace("/(app)/home" as any);
+		}
+	};
 
 	const [isLogoutDialogOpen, setIsLogoutDialogOpen] = useState(false);
 
@@ -44,10 +53,10 @@ export default function SettingsIndexScreen() {
 	];
 
 	return (
-		<View className="flex-1 bg-[#09090b]">
+		<SafeAreaView edges={["top", "bottom"]} className="flex-1 bg-[#09090b]">
 			<View className="flex-row items-center border-b border-[#27272a] px-4 py-3.5">
 				<Pressable
-					onPress={() => router.back()}
+					onPress={handleBack}
 					className="p-1 -ml-1 rounded-full active:bg-[#18181b]"
 				>
 					<ArrowLeft size={22} color="#fafafa" />
@@ -123,6 +132,6 @@ export default function SettingsIndexScreen() {
 					router.replace("/(auth)/login" as any);
 				}}
 			/>
-		</View>
+		</SafeAreaView>
 	);
 }

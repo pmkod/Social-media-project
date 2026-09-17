@@ -7,6 +7,7 @@ import {
 	ActivityIndicator,
 	RefreshControl,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import {
@@ -215,7 +216,7 @@ export default function MyProfileScreen() {
 	);
 
 	return (
-		<View className="flex-1 bg-[#09090b]">
+		<SafeAreaView edges={["top"]} className="flex-1 bg-[#09090b]">
 			{/* Top Navbar */}
 			<View className="flex-row items-center justify-between border-b border-[#27272a] px-4 py-3 bg-[#09090b]">
 				<View>
@@ -290,6 +291,6 @@ export default function MyProfileScreen() {
 					) : null
 				}
 			/>
-		</View>
+		</SafeAreaView>
 	);
 }
