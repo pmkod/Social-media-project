@@ -22,7 +22,7 @@ import {
 	POST_MAX_TEXT_LENGTH,
 	POST_MEDIA_MIME_TYPES,
 } from "./create-post.validation.ts";
-import { useCreatePost } from "./use-create-post";
+import { useCreatePost } from "./use-create-post.ts";
 import { MediaPreviewModal } from "@/core/components/ui/media-preview-modal.tsx";
 
 type CreatePostFormProps = {

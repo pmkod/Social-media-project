@@ -3,7 +3,7 @@ import { EmptyBlock } from "@/core/components/ui/empty-block.tsx";
 import { ExceptionBlock } from "@/core/components/ui/exception-block.tsx";
 import { useIntersectionObserver } from "@/core/hooks/use-intersection-observer.ts";
 import * as m from "@/paraglide/messages.js";
-import { PostListLoader } from "../common/components/loaders";
+import { PostListLoader } from "../common/components/loaders/index.ts";
 import { PostItem } from "../common/post-item.tsx";
 import { useUserLikedPosts } from "./use-user-liked-posts.ts";
 
