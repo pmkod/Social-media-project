@@ -4,5 +4,9 @@
 	"workspaces": [
 		"packages/*",
 		"apps/*"
-	]
+	],
+	"devDependencies": {
+		"tailwindcss": "^3.4.17",
+		"jiti": "^2.7.0"
+	}
 }
