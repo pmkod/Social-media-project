@@ -1,14 +1,11 @@
 export const UserVerificationGoals = {
-	login: "LOGIN",
-	signup: "SIGNUP",
-	passwordReset: "PASSWORD_RESET",
+	login: "login",
+	signup: "signup",
+	passwordReset: "password_reset",
+	emailChange: "email_change",
 } as const;
 
-export const UserVerificationGoalsValues = [
-	UserVerificationGoals.login,
-	UserVerificationGoals.signup,
-	UserVerificationGoals.passwordReset,
-] as const;
+export const UserVerificationGoalsValues = Object.values(UserVerificationGoals);
 
 export type UserVerificationGoalType =
 	(typeof UserVerificationGoals)[keyof typeof UserVerificationGoals];
