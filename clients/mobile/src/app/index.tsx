@@ -1,61 +1,76 @@
 import * as React from "react";
-import { View } from "react-native";
+import { ScrollView, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { router } from "expo-router";
+import { Logo } from "@/core/components/partials/logo";
 import { Button } from "@/core/components/ui/button";
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardFooter,
-	CardHeader,
-	CardTitle,
-} from "@/core/components/ui/card";
-import { Input } from "@/core/components/ui/input";
-import { Text } from "@/core/components/ui/text";
+import { FullPageLoader } from "@/core/components/ui/full-page-loader";
+import { AuthShowcaseCards } from "@/features/authentication/showcase/auth-showcase-cards";
+import { useAuthenticatedUser } from "@/features/user/authenticated-user/use-authenticated-user";
 
 export default function Index() {
-	const [name, setName] = React.useState("");
-	const [submitted, setSubmitted] = React.useState(false);
+	const authenticatedUserQuery = useAuthenticatedUser();
+
+	React.useEffect(() => {
+		if (authenticatedUserQuery.data) {
+			router.replace("/home");
+		}
+	}, [authenticatedUserQuery.data]);
+
+	if (authenticatedUserQuery.isLoading) {
+		return <FullPageLoader />;
+	}
 
 	return (
-		<View className="flex-1 items-center justify-center bg-background p-4">
-			<Card className="w-full max-w-sm">
-				<CardHeader>
-					<CardTitle>React Native Reusables</CardTitle>
-					<CardDescription>
-						L'équivalent de shadcn/ui pour React Native est prêt !
-					</CardDescription>
-				</CardHeader>
-				<CardContent className="gap-4">
-					<View className="gap-2">
-						<Text className="text-sm font-medium">Votre nom</Text>
-						<Input
-							placeholder="Ex: Alexandre"
-							value={name}
-							onChangeText={setName}
-						/>
-					</View>
-					{submitted && name.trim().length > 0 && (
-						<Text className="text-sm text-primary">
-							Bienvenue, {name} ! Vos composants shadcn fonctionnent
-							parfaitement.
+		<SafeAreaView className="flex-1 bg-background">
+			<ScrollView
+				contentContainerStyle={{
+					flexGrow: 1,
+					justifyContent: "space-between",
+					paddingHorizontal: 24,
+					paddingTop: 16,
+					paddingBottom: 24,
+				}}
+				showsVerticalScrollIndicator={false}
+			>
+				{/* Top Section: Logo + Web Headline */}
+				<View className="flex-col gap-6 pt-2">
+					<Logo size="lg" />
+					<Text className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground leading-[1.2]">
+						A space to share, connect, and find your people.
+					</Text>
+				</View>
+
+				{/* Middle Section: Trio of showcase cards */}
+				<View className="my-auto py-2">
+					<AuthShowcaseCards />
+				</View>
+
+				{/* Bottom Section: Action Buttons */}
+				<View className="flex-col gap-3 pt-4">
+					<Button
+						variant="default"
+						size="lg"
+						className="w-full bg-primary h-12 rounded-xl flex-row items-center justify-center shadow-md shadow-primary/20"
+						onPress={() => router.push("/login")}
+					>
+						<Text className="font-semibold text-base text-primary-foreground">
+							Log in
 						</Text>
-					)}
-				</CardContent>
-				<CardFooter className="justify-end gap-2">
+					</Button>
+
 					<Button
 						variant="outline"
-						onPress={() => {
-							setName("");
-							setSubmitted(false);
-						}}
+						size="lg"
+						className="w-full border-border bg-card h-12 rounded-xl flex-row items-center justify-center"
+						onPress={() => router.push("/signup")}
 					>
-						<Text>Effacer</Text>
+						<Text className="font-semibold text-base text-foreground">
+							Sign up
+						</Text>
 					</Button>
-					<Button onPress={() => setSubmitted(true)}>
-						<Text>Valider</Text>
-					</Button>
-				</CardFooter>
-			</Card>
-		</View>
+				</View>
+			</ScrollView>
+		</SafeAreaView>
 	);
 }
