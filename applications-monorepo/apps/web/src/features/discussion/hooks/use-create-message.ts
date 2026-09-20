@@ -14,7 +14,8 @@ import type {
 
 type CreateMessageInput = {
 	discussionId: string;
-	content: string;
+	content?: string;
+	images?: File[];
 	parentMessageId?: string;
 };
 
@@ -22,10 +23,24 @@ const useCreateMessage = () => {
 	const queryClient = useQueryClient();
 
 	return useMutation({
-		mutationFn: ({ discussionId, ...input }: CreateMessageInput) =>
-			httpClient
-				.post(`discussions/${discussionId}/messages`, { json: input })
-				.json<CreateMessageResponse>(),
+		mutationFn: ({
+			discussionId,
+			content,
+			images,
+			parentMessageId,
+		}: CreateMessageInput) => {
+			const formData = new FormData();
+			if (content) formData.append("content", content);
+			if (parentMessageId) formData.append("parentMessageId", parentMessageId);
+			for (const image of images ?? []) formData.append("images", image);
+
+			return httpClient
+				.post(`discussions/${discussionId}/messages`, {
+					body: formData,
+					timeout: 120_000,
+				})
+				.json<CreateMessageResponse>();
+		},
 		onSuccess: ({ message }, { discussionId }) => {
 			queryClient.setQueriesData<InfiniteData<MessagesResponse>>(
 				{

@@ -17,10 +17,13 @@ const messageDetailsSelect = {
 			url: true,
 			fileName: true,
 			mimeType: true,
+			position: true,
+			lowQualityFileName: true,
+			highQualityFileName: true,
 			width: true,
 			height: true,
 		},
-		orderBy: { createdAt: "asc" },
+		orderBy: [{ position: "asc" }, { createdAt: "asc" }],
 	},
 	parentMessage: {
 		select: {
@@ -41,6 +44,39 @@ type MessageDetails = Prisma.MessageGetPayload<{
 	select: typeof messageDetailsSelect;
 }>;
 
+type MessageMediaDetails = MessageDetails["media"][number];
+
+const buildMessageImageUrl = (
+	messageId: string,
+	mediaId: string,
+	quality: "low" | "high",
+) =>
+	`/messages/${encodeURIComponent(messageId)}/images/${encodeURIComponent(mediaId)}/${quality}`;
+
+const buildMessageMediaResponse = (
+	media: MessageMediaDetails,
+	messageId: string,
+) => {
+	const lowQualityUrl = media.lowQualityFileName
+		? buildMessageImageUrl(messageId, media.id, "low")
+		: media.url;
+	const highQualityUrl = media.highQualityFileName
+		? buildMessageImageUrl(messageId, media.id, "high")
+		: media.url;
+
+	return {
+		id: media.id,
+		type: media.type,
+		url: lowQualityUrl ?? highQualityUrl ?? "",
+		lowQualityUrl,
+		highQualityUrl,
+		fileName: media.fileName,
+		mimeType: media.mimeType,
+		width: media.width,
+		height: media.height,
+	};
+};
+
 const buildMessageResponse = (
 	message: MessageDetails,
 	usersMap: Map<string, UserProfileDto>,
@@ -58,7 +94,11 @@ const buildMessageResponse = (
 		updatedAt: message.updatedAt,
 		editedAt: message.editedAt,
 		deletedAt: message.deletedAt,
-		media: isDeleted ? [] : message.media,
+		media: isDeleted
+			? []
+			: message.media.map((media) =>
+					buildMessageMediaResponse(media, message.id),
+				),
 		sender: usersMap.get(message.senderId) ?? null,
 		parentMessage: message.parentMessage
 			? {
@@ -75,5 +115,9 @@ const buildMessageResponse = (
 	};
 };
 
-export { buildMessageResponse, messageDetailsSelect };
-export type { MessageDetails };
+export {
+	buildMessageMediaResponse,
+	buildMessageResponse,
+	messageDetailsSelect,
+};
+export type { MessageDetails, MessageMediaDetails };

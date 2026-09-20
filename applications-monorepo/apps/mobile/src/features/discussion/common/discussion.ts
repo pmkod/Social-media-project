@@ -11,6 +11,18 @@ export type DiscussionMember = {
 	user: User | null;
 };
 
+export type MessageMedia = {
+	id: string;
+	type: "IMAGE" | "VIDEO" | "AUDIO" | "FILE";
+	url: string;
+	lowQualityUrl: string | null;
+	highQualityUrl: string | null;
+	fileName: string | null;
+	mimeType: string | null;
+	width: number | null;
+	height: number | null;
+};
+
 export type Message = {
 	id: string;
 	discussionId: string;
@@ -19,6 +31,7 @@ export type Message = {
 	isDeleted: boolean;
 	createdAt: string;
 	updatedAt: string;
+	media: MessageMedia[];
 	sender: User | null;
 };
 

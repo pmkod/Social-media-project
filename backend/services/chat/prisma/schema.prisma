@@ -87,15 +87,18 @@ model Message {
 }
 
 model MessageMedia {
-  id        String           @id @default(uuid())
-  messageId String           @map("message_id")
-  type      MessageMediaType
-  url       String           @db.VarChar(2048)
-  fileName  String?          @map("file_name") @db.VarChar(255)
-  mimeType  String?          @map("mime_type") @db.VarChar(127)
-  width     Int?
-  height    Int?
-  createdAt DateTime         @default(now()) @map("created_at")
+  id                      String           @id @default(uuid())
+  messageId               String           @map("message_id")
+  type                    MessageMediaType
+  url                     String?          @db.VarChar(2048)
+  fileName                String?          @map("file_name") @db.VarChar(255)
+  mimeType                String?          @map("mime_type") @db.VarChar(127)
+  position                Int              @default(1)
+  lowQualityFileName      String?          @map("low_quality_file_name") @db.VarChar(255)
+  highQualityFileName     String?          @map("high_quality_file_name") @db.VarChar(255)
+  width                   Int?
+  height                  Int?
+  createdAt               DateTime         @default(now()) @map("created_at")
 
   message Message @relation(fields: [messageId], references: [id], onDelete: Cascade)
 

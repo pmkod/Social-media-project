@@ -7,12 +7,20 @@ import { userServiceClient } from "@/core/services/user-service.client";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { requireUserAuthentication } from "@/features/authentication/middlewares/require-user-authentication.middleware";
 import { getActiveMembership } from "@/features/discussions/discussions.service";
-import { MessagesRoutesTag } from "../messages.constants";
+import {
+	MessageImageCompressionFormat,
+	MessagesRoutesTag,
+} from "../messages.constants";
 import {
 	buildMessageResponse,
 	messageDetailsSelect,
 } from "../messages.service";
 import { CreateMessageRequestBody } from "../messages.validation-schemas";
+import { compressMessageImage } from "../services/message-image-compression.service";
+import {
+	deleteMessageImage,
+	setMessageImage,
+} from "../services/message-image-storage.service";
 
 const routeDef = createRoute({
 	method: "post",
@@ -24,7 +32,7 @@ const routeDef = createRoute({
 		params: z.object({ discussionId: z.string().min(1) }),
 		body: {
 			content: {
-				"application/json": { schema: CreateMessageRequestBody },
+				"multipart/form-data": { schema: CreateMessageRequestBody },
 			},
 		},
 	},
@@ -43,7 +51,7 @@ const createMessageRoute = defineOpenAPIRoute<
 	handler: async (c) => {
 		const authenticatedUserId = c.get("authenticatedUser").id;
 		const { discussionId } = c.req.valid("param");
-		const { content, media = [], parentMessageId } = c.req.valid("json");
+		const { content, images, parentMessageId } = c.req.valid("form");
 		const membership = await getActiveMembership(
 			discussionId,
 			authenticatedUserId,
@@ -114,43 +122,102 @@ const createMessageRoute = defineOpenAPIRoute<
 			}
 		}
 
-		const message = await prisma.$transaction(async (tx) => {
-			const createdMessage = await tx.message.create({
-				data: {
-					discussionId,
-					senderId: authenticatedUserId,
-					content,
-					parentMessageId: parentMessageId || null,
-					media: media.length ? { create: media } : undefined,
-				},
-				select: messageDetailsSelect,
+		const messageId = crypto.randomUUID();
+		const uploadedFileNames: string[] = [];
+		let message;
+		try {
+			const imageRecords: Array<{
+				id: string;
+				type: "IMAGE";
+				url: null;
+				fileName: string | null;
+				mimeType: string;
+				position: number;
+				lowQualityFileName: string;
+				highQualityFileName: string;
+			}> = [];
+			for (const [index, image] of images.entries()) {
+				const compressedImage = await compressMessageImage(image, 50);
+				const mediaId = crypto.randomUUID();
+				const extensions: Record<string, string> = {
+					"image/jpeg": "jpg",
+					"image/png": "png",
+					"image/webp": "webp",
+				};
+				const lowExtension =
+					extensions[compressedImage.type] ??
+					MessageImageCompressionFormat.extension;
+				const highExtension = extensions[image.type] ?? "bin";
+				const storagePrefix = `messages/${discussionId}/${messageId}`;
+				const lowQualityFileName = `${storagePrefix}/${mediaId}_low.${lowExtension}`;
+				const highQualityFileName = `${storagePrefix}/${mediaId}_high.${highExtension}`;
+
+				for (const [file, fileName] of [
+					[compressedImage, lowQualityFileName],
+					[image, highQualityFileName],
+				] as const) {
+					uploadedFileNames.push(fileName);
+					await setMessageImage({ file, fileName });
+				}
+
+				imageRecords.push({
+					id: mediaId,
+					type: "IMAGE" as const,
+					url: null,
+					fileName: image.name.slice(0, 255) || null,
+					mimeType: image.type,
+					position: index + 1,
+					lowQualityFileName,
+					highQualityFileName,
+				});
+			}
+
+			message = await prisma.$transaction(async (tx) => {
+				const createdMessage = await tx.message.create({
+					data: {
+						id: messageId,
+						discussionId,
+						senderId: authenticatedUserId,
+						content: content || null,
+						parentMessageId: parentMessageId || null,
+						media: imageRecords.length
+							? { create: imageRecords }
+							: undefined,
+					},
+					select: messageDetailsSelect,
+				});
+				await tx.discussion.updateMany({
+					where: {
+						id: discussionId,
+						lastActivityAt: { lte: createdMessage.createdAt },
+					},
+					data: {
+						isStarted: true,
+						lastMessageId: createdMessage.id,
+						lastActivityAt: createdMessage.createdAt,
+					},
+				});
+				await tx.discussionMember.updateMany({
+					where: {
+						discussionId,
+						userId: authenticatedUserId,
+						hasLeft: false,
+						lastReadAt: { lt: createdMessage.createdAt },
+					},
+					data: { lastReadAt: createdMessage.createdAt },
+				});
+				await tx.discussionMember.updateMany({
+					where: { discussionId, hasLeft: false, isDeleted: true },
+					data: { isDeleted: false },
+				});
+				return createdMessage;
 			});
-			await tx.discussion.updateMany({
-				where: {
-					id: discussionId,
-					lastActivityAt: { lte: createdMessage.createdAt },
-				},
-				data: {
-					isStarted: true,
-					lastMessageId: createdMessage.id,
-					lastActivityAt: createdMessage.createdAt,
-				},
-			});
-			await tx.discussionMember.updateMany({
-				where: {
-					discussionId,
-					userId: authenticatedUserId,
-					hasLeft: false,
-					lastReadAt: { lt: createdMessage.createdAt },
-				},
-				data: { lastReadAt: createdMessage.createdAt },
-			});
-			await tx.discussionMember.updateMany({
-				where: { discussionId, hasLeft: false, isDeleted: true },
-				data: { isDeleted: false },
-			});
-			return createdMessage;
-		});
+		} catch (error) {
+			await Promise.allSettled(
+				uploadedFileNames.map((fileName) => deleteMessageImage(fileName)),
+			);
+			throw error;
+		}
 
 		const usersMap = await userServiceClient.fetchUsersBatch(
 			[

@@ -1,31 +1,30 @@
-import {
-	type InfiniteData,
-	useMutation,
-	useQueryClient,
-} from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { httpClient } from "@/core/http-clients/http-client";
+import type { CreateMessageResponse } from "../common/discussion";
 import { discussionQueryKeys } from "../common/discussion.query-keys";
-import type {
-	CreateMessageResponse,
-	DiscussionResponse,
-	DiscussionsResponse,
-	MessagesResponse,
-} from "../common/discussion";
 
 type CreateMessageInput = {
 	discussionId: string;
-	content: string;
+	content?: string;
+	images?: Array<{ uri: string; name: string; type: string }>;
 };
 
 export const useCreateMessage = () => {
 	const queryClient = useQueryClient();
 
 	return useMutation({
-		mutationFn: ({ discussionId, ...input }: CreateMessageInput) =>
-			httpClient
-				.post(`discussions/${discussionId}/messages`, { json: input })
-				.json<CreateMessageResponse>(),
-		onSuccess: ({ message }, { discussionId }) => {
+		mutationFn: ({ discussionId, content, images }: CreateMessageInput) => {
+			const formData = new FormData();
+			if (content) formData.append("content", content);
+			for (const image of images ?? []) {
+				formData.append("images", image as unknown as Blob);
+			}
+
+			return httpClient
+				.post(`discussions/${discussionId}/messages`, { body: formData })
+				.json<CreateMessageResponse>();
+		},
+		onSuccess: (_, { discussionId }) => {
 			queryClient.invalidateQueries({
 				queryKey: discussionQueryKeys.messagesRoot(discussionId),
 			});

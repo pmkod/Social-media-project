@@ -89,7 +89,7 @@ run_rustfs() {
 run_rustfs || exit 1
 
 # Lancement du frontend
-run_service "WEB-APP         " "clients/apps/web" "$CYAN" 3000
+run_service "WEB-APP         " "applications-monorepo/apps/web" "$CYAN" 3000
 
 # Lancement des microservices et de l'API Gateway
 run_service "USER-SERVICE    " "backend/services/user" "$GREEN" 8001

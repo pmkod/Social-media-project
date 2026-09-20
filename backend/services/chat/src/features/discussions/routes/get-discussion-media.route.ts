@@ -4,6 +4,7 @@ import { prisma } from "@/core/databases";
 import { Exception } from "@/core/exceptions/exception";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { requireUserAuthentication } from "@/features/authentication/middlewares/require-user-authentication.middleware";
+import { buildMessageMediaResponse } from "@/features/messages/messages.service";
 import { DiscussionsRoutesTag } from "../discussions.constants";
 import { getActiveMembership } from "../discussions.service";
 import { DiscussionIdParams } from "../discussions.validation-schemas";
@@ -64,6 +65,9 @@ const getDiscussionMediaRoute = defineOpenAPIRoute<
 				url: true,
 				fileName: true,
 				mimeType: true,
+				position: true,
+				lowQualityFileName: true,
+				highQualityFileName: true,
 				width: true,
 				height: true,
 				createdAt: true,
@@ -80,7 +84,11 @@ const getDiscussionMediaRoute = defineOpenAPIRoute<
 		const lastMedia = pageMedia.at(-1);
 
 		return c.json({
-			media: pageMedia,
+			media: pageMedia.map((item) => ({
+				...buildMessageMediaResponse(item, item.message.id),
+				createdAt: item.createdAt,
+				message: item.message,
+			})),
 			pagination: {
 				limit,
 				hasNextPage,

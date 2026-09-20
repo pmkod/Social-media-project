@@ -22,15 +22,11 @@ const saveSessionCredentials = ({
 }: SessionCredentials) => {
 	localStorage.setItem(SessionStorageKeys.sessionId, sessionId);
 	localStorage.setItem(SessionStorageKeys.sessionToken, sessionToken);
-	localStorage.removeItem("accessToken");
-	localStorage.removeItem("refreshToken");
 };
 
 const deleteSessionCredentials = () => {
 	localStorage.removeItem(SessionStorageKeys.sessionId);
 	localStorage.removeItem(SessionStorageKeys.sessionToken);
-	localStorage.removeItem("accessToken");
-	localStorage.removeItem("refreshToken");
 };
 
 const createSessionAuthorizationHeader = ({

@@ -25,6 +25,8 @@ type MessageMedia = {
 	id: string;
 	type: MessageMediaType;
 	url: string;
+	lowQualityUrl: string | null;
+	highQualityUrl: string | null;
 	fileName: string | null;
 	mimeType: string | null;
 	width: number | null;

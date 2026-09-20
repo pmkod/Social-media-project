@@ -795,6 +795,9 @@ export const MessageMediaScalarFieldEnum = {
   url: 'url',
   fileName: 'fileName',
   mimeType: 'mimeType',
+  position: 'position',
+  lowQualityFileName: 'lowQualityFileName',
+  highQualityFileName: 'highQualityFileName',
   width: 'width',
   height: 'height',
   createdAt: 'createdAt'

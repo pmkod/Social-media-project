@@ -16,6 +16,7 @@ import { create, useModal } from "@/core/components/ui/nice-modal.tsx";
 import { cn } from "@/core/lib/utils.ts";
 import * as m from "@/paraglide/messages.js";
 import type { MessageMedia } from "../common/discussion.ts";
+import { ProtectedMessageImage } from "./protected-message-image.tsx";
 
 type DiscussionMediaPreviewModalProps = {
 	items: MessageMedia[];
@@ -43,8 +44,8 @@ function DiscussionMediaTile({
 }) {
 	const content =
 		media.type === "IMAGE" ? (
-			<img
-				src={media.url}
+			<ProtectedMessageImage
+				src={media.lowQualityUrl || media.url}
 				alt={getMediaLabel(media)}
 				className="size-full object-cover"
 				loading="lazy"
@@ -119,8 +120,8 @@ const DiscussionMediaPreviewModal = create<DiscussionMediaPreviewModalProps>(
 					<DialogBody className="relative flex items-center justify-center bg-black/95 p-4">
 						{item ? (
 							item.type === "IMAGE" ? (
-								<img
-									src={item.url}
+								<ProtectedMessageImage
+									src={item.highQualityUrl || item.url}
 									alt={getMediaLabel(item)}
 									className="max-h-full max-w-full object-contain"
 								/>

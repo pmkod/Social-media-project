@@ -1,14 +1,21 @@
 import {
 	RiCloseLine,
 	RiEmotionHappyLine,
+	RiImageLine,
 	RiSendPlane2Fill,
 } from "@remixicon/react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { EmojiPickerPopover } from "@/core/components/ui/emoji-picker.tsx";
 import { IconButton } from "@/core/components/ui/icon-button.tsx";
+import { useSelectFiles } from "@/core/hooks/use-select-files.ts";
 import { insertTextAtSelection } from "@/core/lib/text-selection.ts";
 import * as m from "@/paraglide/messages.js";
-import { MESSAGE_MAX_LENGTH } from "../common/discussion.constants.ts";
+import {
+	MESSAGE_IMAGE_MAX_COUNT,
+	MESSAGE_IMAGE_MAX_FILE_SIZE,
+	MESSAGE_IMAGE_MIME_TYPES,
+	MESSAGE_MAX_LENGTH,
+} from "../common/discussion.constants.ts";
 import type { Message } from "../common/discussion.ts";
 import { useCreateMessage } from "../hooks/use-create-message.ts";
 
@@ -26,8 +33,22 @@ function DiscussionFooter({
 	onCancelReply,
 }: DiscussionFooterProps) {
 	const [content, setContent] = useState("");
+	const [images, setImages] = useState<File[]>([]);
+	const [imageError, setImageError] = useState<string | null>(null);
 	const textareaRef = useRef<HTMLTextAreaElement>(null);
 	const createMessage = useCreateMessage();
+	const { selectFiles } = useSelectFiles();
+	const imagePreviews = useMemo(
+		() => images.map((image) => ({ image, url: URL.createObjectURL(image) })),
+		[images],
+	);
+
+	useEffect(
+		() => () => {
+			for (const preview of imagePreviews) URL.revokeObjectURL(preview.url);
+		},
+		[imagePreviews],
+	);
 
 	useEffect(() => {
 		if (replyingTo) textareaRef.current?.focus();
@@ -35,20 +56,56 @@ function DiscussionFooter({
 
 	const sendMessage = async () => {
 		const normalizedContent = content.trim();
-		if (!normalizedContent || createMessage.isPending) return;
+		if ((!normalizedContent && images.length === 0) || createMessage.isPending)
+			return;
 
 		try {
 			await createMessage.mutateAsync({
 				discussionId,
-				content: normalizedContent,
+				content: normalizedContent || undefined,
+				images,
 				parentMessageId: replyingTo?.id,
 			});
 			setContent("");
+			setImages([]);
+			setImageError(null);
 			onCancelReply();
 			requestAnimationFrame(() => textareaRef.current?.focus());
 		} catch {
 			// The mutation error is displayed below the composer.
 		}
+	};
+
+	const handleImageSelect = async () => {
+		setImageError(null);
+		const selectedImages = await selectFiles({
+			accept: MESSAGE_IMAGE_MIME_TYPES.join(","),
+			multiple: true,
+		});
+		if (!selectedImages.length) return;
+
+		if (
+			selectedImages.some(
+				(image) =>
+					!MESSAGE_IMAGE_MIME_TYPES.includes(
+						image.type as (typeof MESSAGE_IMAGE_MIME_TYPES)[number],
+					) ||
+					image.size === 0 ||
+					image.size > MESSAGE_IMAGE_MAX_FILE_SIZE,
+			)
+		) {
+			setImageError(m.composer_invalid_media());
+			return;
+		}
+		if (images.length + selectedImages.length > MESSAGE_IMAGE_MAX_COUNT) {
+			setImageError(
+				m.composer_too_many_files({ maxMedia: MESSAGE_IMAGE_MAX_COUNT }),
+			);
+			return;
+		}
+
+		setImages((current) => [...current, ...selectedImages]);
+		if (createMessage.isError) createMessage.reset();
 	};
 
 	const handleEmojiSelect = (emoji: string) => {
@@ -102,6 +159,36 @@ function DiscussionFooter({
 						</div>
 					) : null}
 
+					{imagePreviews.length > 0 ? (
+						<div className="mb-2 flex gap-2 overflow-x-auto pb-1">
+							{imagePreviews.map(({ image, url }, index) => (
+								<div
+									key={`${image.name}-${image.lastModified}-${image.size}`}
+									className="relative size-20 shrink-0 overflow-hidden rounded-xl border border-border bg-muted"
+								>
+									<img
+										src={url}
+										alt={m.composer_image_preview({ index: index + 1 })}
+										className="size-full object-cover"
+									/>
+									<button
+										type="button"
+										onClick={() =>
+											setImages((current) =>
+												current.filter((_, itemIndex) => itemIndex !== index),
+											)
+										}
+										disabled={createMessage.isPending}
+										aria-label={m.composer_remove_media()}
+										className="absolute top-1 right-1 inline-flex size-6 items-center justify-center rounded-full bg-black/70 text-white transition hover:bg-black disabled:opacity-50"
+									>
+										<RiCloseLine className="size-4" />
+									</button>
+								</div>
+							))}
+						</div>
+					) : null}
+
 					<form
 						onSubmit={(event) => {
 							event.preventDefault();
@@ -125,6 +212,20 @@ function DiscussionFooter({
 								<RiEmotionHappyLine />
 							</IconButton>
 						</EmojiPickerPopover>
+						<IconButton
+							type="button"
+							variant="ghost"
+							size="lg"
+							className="rounded-full"
+							disabled={
+								createMessage.isPending ||
+								images.length >= MESSAGE_IMAGE_MAX_COUNT
+							}
+							onClick={() => void handleImageSelect()}
+							aria-label={m.composer_media()}
+						>
+							<RiImageLine />
+						</IconButton>
 						<textarea
 							ref={textareaRef}
 							value={content}
@@ -153,16 +254,16 @@ function DiscussionFooter({
 							type="submit"
 							size="lg"
 							className="rounded-full"
-							disabled={!content.trim()}
+							disabled={!content.trim() && images.length === 0}
 							isLoading={createMessage.isPending}
 							aria-label={m.discussion_send_message()}
 						>
 							<RiSendPlane2Fill />
 						</IconButton>
 					</form>
-					{createMessage.isError ? (
+					{imageError || createMessage.isError ? (
 						<p className="mt-2 px-1 text-xs text-destructive" role="alert">
-							{(createMessage.error as Error)?.message}
+							{imageError || (createMessage.error as Error)?.message}
 						</p>
 					) : null}
 				</div>

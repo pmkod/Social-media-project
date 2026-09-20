@@ -46,6 +46,9 @@ cp backend/services/session/.env.example backend/services/session/.env
 
 Le Session Service nécessite aussi une instance Redis accessible via `REDIS_URL` (par défaut `redis://localhost:6379/0`).
 
+Le Chat Service nécessite le compartiment S3/MinIO privé
+`social-media-project-discussion` (configurable avec `S3_DISCUSSION_BUCKET`).
+
 3. **Appliquer les schémas Prisma** :
 
 ```bash
@@ -135,3 +138,9 @@ Chaque service propose une interface interactive de documentation :
 | `POST /discussions/{discussionId}/messages` | chat | Oui |
 | `PATCH /messages/{messageId}` | chat | Oui |
 | `DELETE /messages/{messageId}` | chat | Oui |
+| `GET /messages/{messageId}/images/{imageId}/{quality}` | chat | Oui, membre actif de la discussion |
+
+Les images des messages sont envoyées avec `POST /discussions/{discussionId}/messages`
+en `multipart/form-data`. Le service conserve une version compressée et l'original
+dans le compartiment privé `social-media-project-discussion`; aucun objet de ce
+compartiment n'est exposé directement.

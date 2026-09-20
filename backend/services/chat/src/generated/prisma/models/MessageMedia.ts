@@ -27,11 +27,13 @@ export type AggregateMessageMedia = {
 }
 
 export type MessageMediaAvgAggregateOutputType = {
+  position: number | null
   width: number | null
   height: number | null
 }
 
 export type MessageMediaSumAggregateOutputType = {
+  position: number | null
   width: number | null
   height: number | null
 }
@@ -43,6 +45,9 @@ export type MessageMediaMinAggregateOutputType = {
   url: string | null
   fileName: string | null
   mimeType: string | null
+  position: number | null
+  lowQualityFileName: string | null
+  highQualityFileName: string | null
   width: number | null
   height: number | null
   createdAt: Date | null
@@ -55,6 +60,9 @@ export type MessageMediaMaxAggregateOutputType = {
   url: string | null
   fileName: string | null
   mimeType: string | null
+  position: number | null
+  lowQualityFileName: string | null
+  highQualityFileName: string | null
   width: number | null
   height: number | null
   createdAt: Date | null
@@ -67,6 +75,9 @@ export type MessageMediaCountAggregateOutputType = {
   url: number
   fileName: number
   mimeType: number
+  position: number
+  lowQualityFileName: number
+  highQualityFileName: number
   width: number
   height: number
   createdAt: number
@@ -75,11 +86,13 @@ export type MessageMediaCountAggregateOutputType = {
 
 
 export type MessageMediaAvgAggregateInputType = {
+  position?: true
   width?: true
   height?: true
 }
 
 export type MessageMediaSumAggregateInputType = {
+  position?: true
   width?: true
   height?: true
 }
@@ -91,6 +104,9 @@ export type MessageMediaMinAggregateInputType = {
   url?: true
   fileName?: true
   mimeType?: true
+  position?: true
+  lowQualityFileName?: true
+  highQualityFileName?: true
   width?: true
   height?: true
   createdAt?: true
@@ -103,6 +119,9 @@ export type MessageMediaMaxAggregateInputType = {
   url?: true
   fileName?: true
   mimeType?: true
+  position?: true
+  lowQualityFileName?: true
+  highQualityFileName?: true
   width?: true
   height?: true
   createdAt?: true
@@ -115,6 +134,9 @@ export type MessageMediaCountAggregateInputType = {
   url?: true
   fileName?: true
   mimeType?: true
+  position?: true
+  lowQualityFileName?: true
+  highQualityFileName?: true
   width?: true
   height?: true
   createdAt?: true
@@ -211,9 +233,12 @@ export type MessageMediaGroupByOutputType = {
   id: string
   messageId: string
   type: $Enums.MessageMediaType
-  url: string
+  url: string | null
   fileName: string | null
   mimeType: string | null
+  position: number
+  lowQualityFileName: string | null
+  highQualityFileName: string | null
   width: number | null
   height: number | null
   createdAt: Date
@@ -246,9 +271,12 @@ export type MessageMediaWhereInput = {
   id?: Prisma.StringFilter<"MessageMedia"> | string
   messageId?: Prisma.StringFilter<"MessageMedia"> | string
   type?: Prisma.EnumMessageMediaTypeFilter<"MessageMedia"> | $Enums.MessageMediaType
-  url?: Prisma.StringFilter<"MessageMedia"> | string
+  url?: Prisma.StringNullableFilter<"MessageMedia"> | string | null
   fileName?: Prisma.StringNullableFilter<"MessageMedia"> | string | null
   mimeType?: Prisma.StringNullableFilter<"MessageMedia"> | string | null
+  position?: Prisma.IntFilter<"MessageMedia"> | number
+  lowQualityFileName?: Prisma.StringNullableFilter<"MessageMedia"> | string | null
+  highQualityFileName?: Prisma.StringNullableFilter<"MessageMedia"> | string | null
   width?: Prisma.IntNullableFilter<"MessageMedia"> | number | null
   height?: Prisma.IntNullableFilter<"MessageMedia"> | number | null
   createdAt?: Prisma.DateTimeFilter<"MessageMedia"> | Date | string
@@ -259,9 +287,12 @@ export type MessageMediaOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   messageId?: Prisma.SortOrder
   type?: Prisma.SortOrder
-  url?: Prisma.SortOrder
+  url?: Prisma.SortOrderInput | Prisma.SortOrder
   fileName?: Prisma.SortOrderInput | Prisma.SortOrder
   mimeType?: Prisma.SortOrderInput | Prisma.SortOrder
+  position?: Prisma.SortOrder
+  lowQualityFileName?: Prisma.SortOrderInput | Prisma.SortOrder
+  highQualityFileName?: Prisma.SortOrderInput | Prisma.SortOrder
   width?: Prisma.SortOrderInput | Prisma.SortOrder
   height?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -275,9 +306,12 @@ export type MessageMediaWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.MessageMediaWhereInput | Prisma.MessageMediaWhereInput[]
   messageId?: Prisma.StringFilter<"MessageMedia"> | string
   type?: Prisma.EnumMessageMediaTypeFilter<"MessageMedia"> | $Enums.MessageMediaType
-  url?: Prisma.StringFilter<"MessageMedia"> | string
+  url?: Prisma.StringNullableFilter<"MessageMedia"> | string | null
   fileName?: Prisma.StringNullableFilter<"MessageMedia"> | string | null
   mimeType?: Prisma.StringNullableFilter<"MessageMedia"> | string | null
+  position?: Prisma.IntFilter<"MessageMedia"> | number
+  lowQualityFileName?: Prisma.StringNullableFilter<"MessageMedia"> | string | null
+  highQualityFileName?: Prisma.StringNullableFilter<"MessageMedia"> | string | null
   width?: Prisma.IntNullableFilter<"MessageMedia"> | number | null
   height?: Prisma.IntNullableFilter<"MessageMedia"> | number | null
   createdAt?: Prisma.DateTimeFilter<"MessageMedia"> | Date | string
@@ -288,9 +322,12 @@ export type MessageMediaOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   messageId?: Prisma.SortOrder
   type?: Prisma.SortOrder
-  url?: Prisma.SortOrder
+  url?: Prisma.SortOrderInput | Prisma.SortOrder
   fileName?: Prisma.SortOrderInput | Prisma.SortOrder
   mimeType?: Prisma.SortOrderInput | Prisma.SortOrder
+  position?: Prisma.SortOrder
+  lowQualityFileName?: Prisma.SortOrderInput | Prisma.SortOrder
+  highQualityFileName?: Prisma.SortOrderInput | Prisma.SortOrder
   width?: Prisma.SortOrderInput | Prisma.SortOrder
   height?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -308,9 +345,12 @@ export type MessageMediaScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"MessageMedia"> | string
   messageId?: Prisma.StringWithAggregatesFilter<"MessageMedia"> | string
   type?: Prisma.EnumMessageMediaTypeWithAggregatesFilter<"MessageMedia"> | $Enums.MessageMediaType
-  url?: Prisma.StringWithAggregatesFilter<"MessageMedia"> | string
+  url?: Prisma.StringNullableWithAggregatesFilter<"MessageMedia"> | string | null
   fileName?: Prisma.StringNullableWithAggregatesFilter<"MessageMedia"> | string | null
   mimeType?: Prisma.StringNullableWithAggregatesFilter<"MessageMedia"> | string | null
+  position?: Prisma.IntWithAggregatesFilter<"MessageMedia"> | number
+  lowQualityFileName?: Prisma.StringNullableWithAggregatesFilter<"MessageMedia"> | string | null
+  highQualityFileName?: Prisma.StringNullableWithAggregatesFilter<"MessageMedia"> | string | null
   width?: Prisma.IntNullableWithAggregatesFilter<"MessageMedia"> | number | null
   height?: Prisma.IntNullableWithAggregatesFilter<"MessageMedia"> | number | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"MessageMedia"> | Date | string
@@ -319,9 +359,12 @@ export type MessageMediaScalarWhereWithAggregatesInput = {
 export type MessageMediaCreateInput = {
   id?: string
   type: $Enums.MessageMediaType
-  url: string
+  url?: string | null
   fileName?: string | null
   mimeType?: string | null
+  position?: number
+  lowQualityFileName?: string | null
+  highQualityFileName?: string | null
   width?: number | null
   height?: number | null
   createdAt?: Date | string
@@ -332,9 +375,12 @@ export type MessageMediaUncheckedCreateInput = {
   id?: string
   messageId: string
   type: $Enums.MessageMediaType
-  url: string
+  url?: string | null
   fileName?: string | null
   mimeType?: string | null
+  position?: number
+  lowQualityFileName?: string | null
+  highQualityFileName?: string | null
   width?: number | null
   height?: number | null
   createdAt?: Date | string
@@ -343,9 +389,12 @@ export type MessageMediaUncheckedCreateInput = {
 export type MessageMediaUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumMessageMediaTypeFieldUpdateOperationsInput | $Enums.MessageMediaType
-  url?: Prisma.StringFieldUpdateOperationsInput | string
+  url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  position?: Prisma.IntFieldUpdateOperationsInput | number
+  lowQualityFileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  highQualityFileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   width?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   height?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -356,9 +405,12 @@ export type MessageMediaUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   messageId?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumMessageMediaTypeFieldUpdateOperationsInput | $Enums.MessageMediaType
-  url?: Prisma.StringFieldUpdateOperationsInput | string
+  url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  position?: Prisma.IntFieldUpdateOperationsInput | number
+  lowQualityFileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  highQualityFileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   width?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   height?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -368,9 +420,12 @@ export type MessageMediaCreateManyInput = {
   id?: string
   messageId: string
   type: $Enums.MessageMediaType
-  url: string
+  url?: string | null
   fileName?: string | null
   mimeType?: string | null
+  position?: number
+  lowQualityFileName?: string | null
+  highQualityFileName?: string | null
   width?: number | null
   height?: number | null
   createdAt?: Date | string
@@ -379,9 +434,12 @@ export type MessageMediaCreateManyInput = {
 export type MessageMediaUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumMessageMediaTypeFieldUpdateOperationsInput | $Enums.MessageMediaType
-  url?: Prisma.StringFieldUpdateOperationsInput | string
+  url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  position?: Prisma.IntFieldUpdateOperationsInput | number
+  lowQualityFileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  highQualityFileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   width?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   height?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -391,9 +449,12 @@ export type MessageMediaUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   messageId?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumMessageMediaTypeFieldUpdateOperationsInput | $Enums.MessageMediaType
-  url?: Prisma.StringFieldUpdateOperationsInput | string
+  url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  position?: Prisma.IntFieldUpdateOperationsInput | number
+  lowQualityFileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  highQualityFileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   width?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   height?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -416,12 +477,16 @@ export type MessageMediaCountOrderByAggregateInput = {
   url?: Prisma.SortOrder
   fileName?: Prisma.SortOrder
   mimeType?: Prisma.SortOrder
+  position?: Prisma.SortOrder
+  lowQualityFileName?: Prisma.SortOrder
+  highQualityFileName?: Prisma.SortOrder
   width?: Prisma.SortOrder
   height?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
 export type MessageMediaAvgOrderByAggregateInput = {
+  position?: Prisma.SortOrder
   width?: Prisma.SortOrder
   height?: Prisma.SortOrder
 }
@@ -433,6 +498,9 @@ export type MessageMediaMaxOrderByAggregateInput = {
   url?: Prisma.SortOrder
   fileName?: Prisma.SortOrder
   mimeType?: Prisma.SortOrder
+  position?: Prisma.SortOrder
+  lowQualityFileName?: Prisma.SortOrder
+  highQualityFileName?: Prisma.SortOrder
   width?: Prisma.SortOrder
   height?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -445,12 +513,16 @@ export type MessageMediaMinOrderByAggregateInput = {
   url?: Prisma.SortOrder
   fileName?: Prisma.SortOrder
   mimeType?: Prisma.SortOrder
+  position?: Prisma.SortOrder
+  lowQualityFileName?: Prisma.SortOrder
+  highQualityFileName?: Prisma.SortOrder
   width?: Prisma.SortOrder
   height?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
 export type MessageMediaSumOrderByAggregateInput = {
+  position?: Prisma.SortOrder
   width?: Prisma.SortOrder
   height?: Prisma.SortOrder
 }
@@ -501,6 +573,14 @@ export type EnumMessageMediaTypeFieldUpdateOperationsInput = {
   set?: $Enums.MessageMediaType
 }
 
+export type IntFieldUpdateOperationsInput = {
+  set?: number
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
 export type NullableIntFieldUpdateOperationsInput = {
   set?: number | null
   increment?: number
@@ -512,9 +592,12 @@ export type NullableIntFieldUpdateOperationsInput = {
 export type MessageMediaCreateWithoutMessageInput = {
   id?: string
   type: $Enums.MessageMediaType
-  url: string
+  url?: string | null
   fileName?: string | null
   mimeType?: string | null
+  position?: number
+  lowQualityFileName?: string | null
+  highQualityFileName?: string | null
   width?: number | null
   height?: number | null
   createdAt?: Date | string
@@ -523,9 +606,12 @@ export type MessageMediaCreateWithoutMessageInput = {
 export type MessageMediaUncheckedCreateWithoutMessageInput = {
   id?: string
   type: $Enums.MessageMediaType
-  url: string
+  url?: string | null
   fileName?: string | null
   mimeType?: string | null
+  position?: number
+  lowQualityFileName?: string | null
+  highQualityFileName?: string | null
   width?: number | null
   height?: number | null
   createdAt?: Date | string
@@ -564,9 +650,12 @@ export type MessageMediaScalarWhereInput = {
   id?: Prisma.StringFilter<"MessageMedia"> | string
   messageId?: Prisma.StringFilter<"MessageMedia"> | string
   type?: Prisma.EnumMessageMediaTypeFilter<"MessageMedia"> | $Enums.MessageMediaType
-  url?: Prisma.StringFilter<"MessageMedia"> | string
+  url?: Prisma.StringNullableFilter<"MessageMedia"> | string | null
   fileName?: Prisma.StringNullableFilter<"MessageMedia"> | string | null
   mimeType?: Prisma.StringNullableFilter<"MessageMedia"> | string | null
+  position?: Prisma.IntFilter<"MessageMedia"> | number
+  lowQualityFileName?: Prisma.StringNullableFilter<"MessageMedia"> | string | null
+  highQualityFileName?: Prisma.StringNullableFilter<"MessageMedia"> | string | null
   width?: Prisma.IntNullableFilter<"MessageMedia"> | number | null
   height?: Prisma.IntNullableFilter<"MessageMedia"> | number | null
   createdAt?: Prisma.DateTimeFilter<"MessageMedia"> | Date | string
@@ -575,9 +664,12 @@ export type MessageMediaScalarWhereInput = {
 export type MessageMediaCreateManyMessageInput = {
   id?: string
   type: $Enums.MessageMediaType
-  url: string
+  url?: string | null
   fileName?: string | null
   mimeType?: string | null
+  position?: number
+  lowQualityFileName?: string | null
+  highQualityFileName?: string | null
   width?: number | null
   height?: number | null
   createdAt?: Date | string
@@ -586,9 +678,12 @@ export type MessageMediaCreateManyMessageInput = {
 export type MessageMediaUpdateWithoutMessageInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumMessageMediaTypeFieldUpdateOperationsInput | $Enums.MessageMediaType
-  url?: Prisma.StringFieldUpdateOperationsInput | string
+  url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  position?: Prisma.IntFieldUpdateOperationsInput | number
+  lowQualityFileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  highQualityFileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   width?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   height?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -597,9 +692,12 @@ export type MessageMediaUpdateWithoutMessageInput = {
 export type MessageMediaUncheckedUpdateWithoutMessageInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumMessageMediaTypeFieldUpdateOperationsInput | $Enums.MessageMediaType
-  url?: Prisma.StringFieldUpdateOperationsInput | string
+  url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  position?: Prisma.IntFieldUpdateOperationsInput | number
+  lowQualityFileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  highQualityFileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   width?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   height?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -608,9 +706,12 @@ export type MessageMediaUncheckedUpdateWithoutMessageInput = {
 export type MessageMediaUncheckedUpdateManyWithoutMessageInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumMessageMediaTypeFieldUpdateOperationsInput | $Enums.MessageMediaType
-  url?: Prisma.StringFieldUpdateOperationsInput | string
+  url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   fileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  position?: Prisma.IntFieldUpdateOperationsInput | number
+  lowQualityFileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  highQualityFileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   width?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   height?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -625,6 +726,9 @@ export type MessageMediaSelect<ExtArgs extends runtime.Types.Extensions.Internal
   url?: boolean
   fileName?: boolean
   mimeType?: boolean
+  position?: boolean
+  lowQualityFileName?: boolean
+  highQualityFileName?: boolean
   width?: boolean
   height?: boolean
   createdAt?: boolean
@@ -638,6 +742,9 @@ export type MessageMediaSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   url?: boolean
   fileName?: boolean
   mimeType?: boolean
+  position?: boolean
+  lowQualityFileName?: boolean
+  highQualityFileName?: boolean
   width?: boolean
   height?: boolean
   createdAt?: boolean
@@ -651,6 +758,9 @@ export type MessageMediaSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   url?: boolean
   fileName?: boolean
   mimeType?: boolean
+  position?: boolean
+  lowQualityFileName?: boolean
+  highQualityFileName?: boolean
   width?: boolean
   height?: boolean
   createdAt?: boolean
@@ -664,12 +774,15 @@ export type MessageMediaSelectScalar = {
   url?: boolean
   fileName?: boolean
   mimeType?: boolean
+  position?: boolean
+  lowQualityFileName?: boolean
+  highQualityFileName?: boolean
   width?: boolean
   height?: boolean
   createdAt?: boolean
 }
 
-export type MessageMediaOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "messageId" | "type" | "url" | "fileName" | "mimeType" | "width" | "height" | "createdAt", ExtArgs["result"]["messageMedia"]>
+export type MessageMediaOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "messageId" | "type" | "url" | "fileName" | "mimeType" | "position" | "lowQualityFileName" | "highQualityFileName" | "width" | "height" | "createdAt", ExtArgs["result"]["messageMedia"]>
 export type MessageMediaInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   message?: boolean | Prisma.MessageDefaultArgs<ExtArgs>
 }
@@ -689,9 +802,12 @@ export type $MessageMediaPayload<ExtArgs extends runtime.Types.Extensions.Intern
     id: string
     messageId: string
     type: $Enums.MessageMediaType
-    url: string
+    url: string | null
     fileName: string | null
     mimeType: string | null
+    position: number
+    lowQualityFileName: string | null
+    highQualityFileName: string | null
     width: number | null
     height: number | null
     createdAt: Date
@@ -1125,6 +1241,9 @@ export interface MessageMediaFieldRefs {
   readonly url: Prisma.FieldRef<"MessageMedia", 'String'>
   readonly fileName: Prisma.FieldRef<"MessageMedia", 'String'>
   readonly mimeType: Prisma.FieldRef<"MessageMedia", 'String'>
+  readonly position: Prisma.FieldRef<"MessageMedia", 'Int'>
+  readonly lowQualityFileName: Prisma.FieldRef<"MessageMedia", 'String'>
+  readonly highQualityFileName: Prisma.FieldRef<"MessageMedia", 'String'>
   readonly width: Prisma.FieldRef<"MessageMedia", 'Int'>
   readonly height: Prisma.FieldRef<"MessageMedia", 'Int'>
   readonly createdAt: Prisma.FieldRef<"MessageMedia", 'DateTime'>

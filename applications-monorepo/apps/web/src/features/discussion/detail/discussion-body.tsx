@@ -1,5 +1,5 @@
+import { RiLoader4Line } from "@remixicon/react";
 import { useEffect, useMemo, useRef } from "react";
-import { Button } from "@/core/components/ui/button.tsx";
 import { EmptyBlock } from "@/core/components/ui/empty-block.tsx";
 import { ExceptionBlock } from "@/core/components/ui/exception-block.tsx";
 import { Skeleton } from "@/core/components/ui/skeleton.tsx";
@@ -68,7 +68,10 @@ function DiscussionBody({
 			160;
 		if (isFirstMessageRender || isNearBottom) {
 			requestAnimationFrame(() => {
-				container.scrollTo({ top: container.scrollHeight, behavior: "smooth" });
+				container.scrollTo({
+					top: container.scrollHeight,
+					behavior: isFirstMessageRender ? "auto" : "smooth",
+				});
 			});
 		}
 	}, [latestMessageId]);
@@ -76,16 +79,35 @@ function DiscussionBody({
 	const loadEarlierMessages = async () => {
 		const container = scrollContainerRef.current;
 		const previousHeight = container?.scrollHeight ?? 0;
+		const previousScrollTop = container?.scrollTop ?? 0;
 		await messagesQuery.fetchNextPage();
 		requestAnimationFrame(() => {
-			if (container)
-				container.scrollTop = container.scrollHeight - previousHeight;
+			const currentContainer = scrollContainerRef.current;
+			if (!currentContainer) return;
+
+			currentContainer.scrollTop =
+				previousScrollTop + currentContainer.scrollHeight - previousHeight;
 		});
+	};
+
+	const handleScroll = () => {
+		const container = scrollContainerRef.current;
+		if (
+			!container ||
+			container.scrollTop > 80 ||
+			!messagesQuery.hasNextPage ||
+			messagesQuery.isFetchingNextPage
+		) {
+			return;
+		}
+
+		void loadEarlierMessages();
 	};
 
 	return (
 		<div
 			ref={scrollContainerRef}
+			onScroll={handleScroll}
 			className="min-h-0 flex-1 overflow-y-auto overscroll-contain bg-muted/15"
 		>
 			{messagesQuery.isLoading ? (
@@ -107,17 +129,12 @@ function DiscussionBody({
 				/>
 			) : (
 				<div className="mx-auto flex w-full flex-col px-3 py-5 sm:px-5">
-					{messagesQuery.hasNextPage ? (
-						<div className="mb-5 flex justify-center">
-							<Button
-								type="button"
-								variant="secondary"
-								size="sm"
-								isLoading={messagesQuery.isFetchingNextPage}
-								onClick={() => void loadEarlierMessages()}
-							>
-								{m.discussion_load_earlier()}
-							</Button>
+					{messagesQuery.isFetchingNextPage ? (
+						<div className="flex justify-center py-2" role="status">
+							<RiLoader4Line
+								aria-label="Loading earlier messages"
+								className="size-4 animate-spin text-muted-foreground"
+							/>
 						</div>
 					) : null}
 

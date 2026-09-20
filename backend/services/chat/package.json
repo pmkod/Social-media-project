@@ -13,7 +13,8 @@
 		"@hono/zod-openapi": "^1.4.0",
 		"@prisma/adapter-pg": "7.8.0",
 		"@prisma/client": "7.8.0",
-		"hono": "^4.12.22"
+		"hono": "^4.12.22",
+		"sharp": "^0.35.3"
 	},
 	"devDependencies": {
 		"@scalar/hono-api-reference": "^0.10.13",
