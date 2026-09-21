@@ -13,7 +13,7 @@ export const useSignup = () => {
 	return useMutation({
 		mutationFn: async (body: SignupRequestBody) => {
 			const { userVerification } = await baseHttpClient
-				.post<UserVerificationResponse>("authentication/signup", {
+				.post<UserVerificationResponse>("user/signup", {
 					json: body,
 				})
 				.json();

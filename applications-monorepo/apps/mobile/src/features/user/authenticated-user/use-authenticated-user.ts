@@ -12,7 +12,7 @@ export const useAuthenticatedUser = () => {
 			if (!sessionCredentials) {
 				throw new Error("No session credentials found");
 			}
-			return httpClient.get<UseAuthenticatedUserQueryData>("users/me").json();
+			return httpClient.get<UseAuthenticatedUserQueryData>("user/get-me").json();
 		},
 		retry: false,
 	});

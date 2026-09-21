@@ -16,7 +16,7 @@ export const useCompleteSignup = () => {
 				throw new Error("Verification data not found");
 			}
 			const { session } = await baseHttpClient
-				.post<AuthenticatedResponse>("authentication/complete-signup", {
+				.post<AuthenticatedResponse>("user/complete-signup", {
 					json: {
 						userVerification: {
 							id: data.userVerification.id,

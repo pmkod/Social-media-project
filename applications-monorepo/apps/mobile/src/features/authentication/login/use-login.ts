@@ -12,7 +12,7 @@ export const useLogin = () => {
 	return useMutation({
 		mutationFn: async (body: LoginRequestBody) => {
 			const { userVerification } = await baseHttpClient
-				.post<UserVerificationResponse>("authentication/login", {
+				.post<UserVerificationResponse>("user/login", {
 					json: body,
 				})
 				.json();
