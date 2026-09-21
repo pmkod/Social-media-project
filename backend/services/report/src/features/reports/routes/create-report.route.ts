@@ -8,7 +8,7 @@ import { CreateReportSchema } from "../reports.validation-schemas";
 
 const routeDef = createRoute({
 	method: "post",
-	path: "/reports",
+	path: "/report/create-report",
 	summary: "Report a post, comment, user, or discussion",
 	tags: [ReportsRoutesTag],
 	middleware: [requireUserAuthentication],

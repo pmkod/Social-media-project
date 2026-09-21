@@ -16,7 +16,7 @@ import {
 
 const routeDef = createRoute({
 	method: "patch",
-	path: "/discussions/{discussionId}/read",
+	path: "/chat/mark-discussion-read/{discussionId}",
 	summary: "Mark a discussion as read",
 	tags: [DiscussionsRoutesTag],
 	middleware: [requireUserAuthentication],

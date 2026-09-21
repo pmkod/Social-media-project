@@ -9,7 +9,7 @@ import { BookmarksRoutesTag } from "../bookmarks.constants";
 
 const routeDef = createRoute({
 	method: "post",
-	path: "/posts/{postId}/bookmarks",
+	path: "/content/add-bookmark/{postId}",
 	summary: "Bookmark a post in a collection",
 	tags: [BookmarksRoutesTag],
 	middleware: [requireUserAuthentication],

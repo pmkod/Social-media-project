@@ -13,7 +13,7 @@ import { CompleteEmailChangeValidationSchema } from "../user.validation-schemas"
 
 const routeDef = createRoute({
 	method: "put",
-	path: "/users/me/email",
+	path: "/user/change-email",
 	summary: "Change current user email after verification",
 	tags: [UserRoutesTag],
 	middleware: [requireUserAuthentication],

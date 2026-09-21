@@ -34,7 +34,7 @@ const useBookmarks = ({
 				searchParams.set("bookmarkCollectionId", bookmarkCollectionId);
 			}
 			return httpClient
-				.get("bookmarks", { searchParams })
+				.get("content/get-bookmarks", { searchParams })
 				.json<BookmarksResponse>();
 		},
 		initialPageParam: null as BookmarksCursor | null,

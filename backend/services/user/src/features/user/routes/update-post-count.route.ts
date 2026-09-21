@@ -7,7 +7,7 @@ import { UserRoutesTag } from "../user.constants";
 
 const routeDef = createRoute({
 	method: "patch",
-	path: "/internal/users/{userId}/post-count",
+	path: "/internal/user/update-post-count/{userId}",
 	summary: "Update a user post count from the content service",
 	tags: [UserRoutesTag],
 	request: {

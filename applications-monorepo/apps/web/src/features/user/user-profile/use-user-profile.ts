@@ -12,7 +12,7 @@ const useUserProfile = ({ username }: UseUserProfileParams) =>
 		queryKey: userDetailsQueryKeys.byUsername(username),
 		queryFn: () =>
 			httpClient
-				.get(`users/by-username/${encodeURIComponent(username)}`)
+				.get(`user/get-user-by-username/${encodeURIComponent(username)}`)
 				.json<UserProfileResponse>(),
 		enabled: Boolean(username),
 		retry: false,

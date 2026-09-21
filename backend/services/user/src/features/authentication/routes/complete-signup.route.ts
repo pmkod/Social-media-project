@@ -19,7 +19,7 @@ import { verifyIfUserVerificationCompleted } from "../user-verification.service"
 const completeSignupRoute = defineOpenAPIRoute({
 	route: createRoute({
 		method: "post",
-		path: "/authentication/complete-signup",
+		path: "/user/complete-signup",
 		summary: "Complete signup",
 		tags: [AuthenticationRoutesTag],
 		request: {

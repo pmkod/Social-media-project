@@ -16,7 +16,7 @@ const useCompleteSignup = () => {
 				throw new Error("Verification data not found");
 			}
 			const { session } = await baseHttpClient
-				.post("authentication/complete-signup", {
+				.post("user/complete-signup", {
 					json: {
 						userVerification: {
 							id: data.userVerification.id,

@@ -21,7 +21,7 @@ const useLikeComment = () => {
 	return useMutation({
 		mutationFn: (commentId: string) =>
 			httpClient
-				.post(`comments/${commentId}/likes`)
+				.post(`content/like-comment/${commentId}`)
 				.json<LikeCommentResponse>(),
 		onSuccess: (response, commentId) => {
 			queryClient.setQueriesData<CommentDetailResponse>(

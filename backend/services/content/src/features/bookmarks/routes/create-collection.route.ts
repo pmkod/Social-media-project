@@ -11,7 +11,7 @@ import { CreateBookmarkCollectionSchema } from "../bookmarks.validation-schemas"
 
 const routeDef = createRoute({
 	method: "post",
-	path: "/collections",
+	path: "/content/create-collection",
 	summary: "Create a bookmark collection",
 	tags: [BookmarksRoutesTag],
 	middleware: [requireUserAuthentication],

@@ -14,7 +14,7 @@ const useSearchSuggestions = (query: string) => {
 		enabled: normalizedQuery.length > 0,
 		queryFn: () =>
 			httpClient
-				.get("search/suggestions", {
+				.get("user/get-search-suggestions", {
 					searchParams: { q: normalizedQuery },
 				})
 				.json<SearchSuggestionsResponse>(),

@@ -14,7 +14,7 @@ function useCommentDetail({
 		queryKey: commentDetailsQueryKeys.build({ postId, commentId }),
 		queryFn: () =>
 			httpClient
-				.get(`posts/${postId}/comments/${commentId}`)
+				.get(`content/get-comment-by-id/${postId}/${commentId}`)
 				.json<CommentDetailResponse>(),
 		enabled: Boolean(postId && commentId),
 	});

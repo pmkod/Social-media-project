@@ -24,7 +24,7 @@ const useEditBookmarkCollection = () => {
 	return useMutation({
 		mutationFn: ({ collectionId, ...input }: EditBookmarkCollectionInput) =>
 			httpClient
-				.put(`collections/${collectionId}`, { json: input })
+				.put(`content/edit-collection/${collectionId}`, { json: input })
 				.json<BookmarkCollectionResponse>(),
 		onSuccess: ({ bookmarkCollection }) => {
 			const collectionMatchesQuery = (queryKey: readonly unknown[]) => {

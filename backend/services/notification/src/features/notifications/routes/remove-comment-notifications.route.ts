@@ -7,7 +7,7 @@ import { NotificationsRoutesTag } from "../notifications.constants";
 
 const routeDef = createRoute({
 	method: "post",
-	path: "/internal/notifications/remove-by-comment",
+	path: "/internal/notification/remove-comment-notifications",
 	summary: "Remove the creation notification for a deleted comment",
 	tags: [NotificationsRoutesTag],
 	request: {

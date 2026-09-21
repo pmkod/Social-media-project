@@ -33,7 +33,7 @@ const FollowSuggestionsResponseBody = z.object({
 
 const routeDef = createRoute({
 	method: "get",
-	path: "/users/me/follow-suggestions",
+	path: "/user/get-follow-suggestions",
 	summary: "Get follow suggestions for the authenticated user",
 	tags: [UserRoutesTag],
 	middleware: [requireUserAuthentication],

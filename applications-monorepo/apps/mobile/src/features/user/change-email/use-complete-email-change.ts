@@ -7,7 +7,7 @@ export const useCompleteEmailChange = () => {
 		mutationFn: async () => {
 			const data = await getUserVerificationData();
 			return httpClient
-				.put("users/me/email", { json: { userVerification: data?.userVerification } })
+				.put("user/change-email", { json: { userVerification: data?.userVerification } })
 				.json<{ message: string; email: string }>();
 		},
 	});

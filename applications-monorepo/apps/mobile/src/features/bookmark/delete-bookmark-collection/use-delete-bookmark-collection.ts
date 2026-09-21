@@ -13,7 +13,7 @@ const useDeleteBookmarkCollection = () => {
 	return useMutation({
 		mutationFn: (collectionId: string) =>
 			httpClient
-				.delete(`collections/${collectionId}`)
+				.delete(`content/delete-collection/${collectionId}`)
 				.json<{ message: string; unbookmarkedPostIds: string[] }>(),
 		onSuccess: () => {
 			queryClient.invalidateQueries({

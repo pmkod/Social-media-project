@@ -31,7 +31,7 @@ const fetchSearchPostsPage = async ({
 	}
 
 	return await httpClient
-		.get("posts", { searchParams })
+		.get("content/search-posts", { searchParams })
 		.json<SearchPostsResponse>();
 };
 

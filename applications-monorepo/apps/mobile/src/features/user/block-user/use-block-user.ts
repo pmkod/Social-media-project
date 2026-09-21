@@ -29,7 +29,7 @@ export const useBlockUser = () => {
 	const queryClient = useQueryClient();
 	return useMutation({
 		mutationFn: (userId: string) =>
-			httpClient.post(`users/${userId}/block`).json<BlockUserResponse>(),
+			httpClient.post(`user/block-user/${userId}`).json<BlockUserResponse>(),
 		onSuccess: ({ blockedUser }, userId) => {
 			queryClient.setQueriesData<{ user: User }>(
 				{ queryKey: userDetailsQueryKeys.root },

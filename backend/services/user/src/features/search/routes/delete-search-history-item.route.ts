@@ -7,7 +7,7 @@ import { SearchRoutesTag } from "../search.constants";
 
 const routeDef = createRoute({
 	method: "delete",
-	path: "/search/history/{historyId}",
+	path: "/user/delete-search-history-item/{historyId}",
 	summary: "Delete one item from the authenticated user's search history",
 	tags: [SearchRoutesTag],
 	middleware: [requireUserAuthentication],

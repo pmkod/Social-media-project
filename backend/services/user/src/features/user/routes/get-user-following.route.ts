@@ -10,7 +10,7 @@ import { UserRoutesTag } from "../user.constants";
 
 const routeDef = createRoute({
 	method: "get",
-	path: "/users/{userId}/following",
+	path: "/user/get-user-following/{userId}",
 	summary: "Get users followed by a user with cursor pagination",
 	tags: [UserRoutesTag],
 	request: {

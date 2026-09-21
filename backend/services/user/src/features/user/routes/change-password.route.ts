@@ -14,7 +14,7 @@ import { ChangePasswordValidationSchema } from "../user.validation-schemas";
 
 const routeDef = createRoute({
 	method: "put",
-	path: "/users/me/password",
+	path: "/user/change-password",
 	summary: "Change current user password",
 	tags: [UserRoutesTag],
 	middleware: [requireUserAuthentication],

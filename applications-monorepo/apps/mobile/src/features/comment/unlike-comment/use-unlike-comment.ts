@@ -18,7 +18,7 @@ export const useUnlikeComment = () => {
 	return useMutation({
 		mutationFn: (commentId: string) =>
 			httpClient
-				.delete(`comments/${commentId}/likes`)
+				.delete(`content/unlike-comment/${commentId}`)
 				.json<UnlikeCommentResponse>(),
 		onSuccess: (response, commentId) => {
 			queryClient.setQueriesData<InfiniteData<{ data: Comment[] }>>(

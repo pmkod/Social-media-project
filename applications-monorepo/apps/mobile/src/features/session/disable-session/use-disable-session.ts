@@ -9,7 +9,7 @@ export const useDisableSession = () => {
 	return useMutation({
 		mutationFn: (sessionId: string) =>
 			httpClient
-				.patch(`sessions/${sessionId}/disable`)
+				.patch(`session/disable-session/${sessionId}`)
 				.json<{ session: Session }>(),
 		onSuccess: (_, sessionId) => {
 			queryClient.setQueryData<Session[]>(activeSessionsQueryKey.build(), (sessions) =>

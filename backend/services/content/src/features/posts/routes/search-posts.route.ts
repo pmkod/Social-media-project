@@ -12,7 +12,7 @@ import {
 
 const routeDef = createRoute({
 	method: "get",
-	path: "/posts",
+	path: "/content/search-posts",
 	summary: "Search all posts with cursor pagination",
 	tags: [PostsRoutesTag],
 	request: {

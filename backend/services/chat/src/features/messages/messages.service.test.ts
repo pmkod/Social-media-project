@@ -25,13 +25,13 @@ describe("message media response", () => {
 		const response = buildMessageMediaResponse(createMedia(), "message-id");
 
 		expect(response.url).toBe(
-			"/messages/message-id/images/image-id/low",
+			"/chat/get-message-image/message-id/image-id/low",
 		);
 		expect(response.lowQualityUrl).toBe(
-			"/messages/message-id/images/image-id/low",
+			"/chat/get-message-image/message-id/image-id/low",
 		);
 		expect(response.highQualityUrl).toBe(
-			"/messages/message-id/images/image-id/high",
+			"/chat/get-message-image/message-id/image-id/high",
 		);
 		expect(JSON.stringify(response)).not.toContain("private/low.webp");
 		expect(JSON.stringify(response)).not.toContain("private/high.jpg");

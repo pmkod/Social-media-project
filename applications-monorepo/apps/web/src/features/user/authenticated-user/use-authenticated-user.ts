@@ -12,7 +12,7 @@ const useAuthenticatedUser = () => {
 			if (!sessionCredentials) {
 				throw new Error();
 			}
-			return httpClient.get("users/me").json<UseAuthenticatedUserQueryData>();
+			return httpClient.get("user/get-me").json<UseAuthenticatedUserQueryData>();
 		},
 		retry: false,
 	});

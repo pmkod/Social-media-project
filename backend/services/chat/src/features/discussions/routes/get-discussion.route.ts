@@ -15,7 +15,7 @@ import { DiscussionIdParams } from "../discussions.validation-schemas";
 
 const routeDef = createRoute({
 	method: "get",
-	path: "/discussions/{discussionId}",
+	path: "/chat/get-discussion/{discussionId}",
 	summary: "Get one discussion",
 	tags: [DiscussionsRoutesTag],
 	middleware: [requireUserAuthentication],

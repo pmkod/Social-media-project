@@ -14,7 +14,7 @@ import { CommentsRoutesTag } from "../comments.constants";
 
 const routeDef = createRoute({
 	method: "post",
-	path: "/comments/{commentId}/likes",
+	path: "/content/like-comment/{commentId}",
 	summary: "Like a comment",
 	tags: [CommentsRoutesTag],
 	middleware: [requireUserAuthentication],

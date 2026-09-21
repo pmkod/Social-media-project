@@ -25,7 +25,7 @@ const useFollowUser = () => {
 
 	return useMutation({
 		mutationFn: ({ userId }: FollowUserInput) =>
-			httpClient.post(`users/${userId}/follow`).json<FollowResponse>(),
+			httpClient.post(`user/follow-user/${userId}`).json<FollowResponse>(),
 		onSuccess: ({ followedUser }) => {
 			queryClient.setQueriesData<{ user: User }>(
 				{ queryKey: userDetailsQueryKeys.root },

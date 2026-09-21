@@ -8,7 +8,7 @@ import { PostsRoutesTag } from "../posts.constants";
 
 const routeDef = createRoute({
 	method: "delete",
-	path: "/posts/{postId}",
+	path: "/content/delete-post/{postId}",
 	summary: "Delete a post",
 	tags: [PostsRoutesTag],
 	middleware: [requireUserAuthentication],

@@ -11,7 +11,7 @@ import { MessageIdParams } from "../messages.validation-schemas";
 
 const routeDef = createRoute({
 	method: "delete",
-	path: "/messages/{messageId}",
+	path: "/chat/delete-message/{messageId}",
 	summary: "Delete one of the authenticated user's messages",
 	tags: [MessagesRoutesTag],
 	middleware: [requireUserAuthentication],

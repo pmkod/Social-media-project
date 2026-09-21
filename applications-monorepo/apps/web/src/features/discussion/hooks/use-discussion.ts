@@ -7,7 +7,7 @@ const useDiscussion = (discussionId: string) =>
 	useQuery({
 		queryKey: discussionQueryKeys.detail(discussionId),
 		queryFn: () =>
-			httpClient.get(`discussions/${discussionId}`).json<DiscussionResponse>(),
+			httpClient.get(`chat/get-discussion/${discussionId}`).json<DiscussionResponse>(),
 		enabled: Boolean(discussionId),
 	});
 

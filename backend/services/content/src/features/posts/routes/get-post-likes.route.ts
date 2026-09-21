@@ -7,7 +7,7 @@ import { PostsRoutesTag } from "../posts.constants";
 
 const routeDef = createRoute({
 	method: "get",
-	path: "/posts/{postId}/likes",
+	path: "/content/get-post-likes/{postId}",
 	summary: "Get likes for a post",
 	tags: [PostsRoutesTag],
 	request: {

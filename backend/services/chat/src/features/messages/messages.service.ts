@@ -51,7 +51,7 @@ const buildMessageImageUrl = (
 	mediaId: string,
 	quality: "low" | "high",
 ) =>
-	`/messages/${encodeURIComponent(messageId)}/images/${encodeURIComponent(mediaId)}/${quality}`;
+	`/chat/get-message-image/${encodeURIComponent(messageId)}/${encodeURIComponent(mediaId)}/${quality}`;
 
 const buildMessageMediaResponse = (
 	media: MessageMediaDetails,

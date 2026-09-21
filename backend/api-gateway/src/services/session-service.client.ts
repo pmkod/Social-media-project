@@ -25,7 +25,7 @@ class SessionServiceClient {
 	): Promise<AuthenticatedUser> {
 		let response: Response;
 		try {
-			response = await fetch(`${this.baseUrl}/internal/sessions/verify`, {
+			response = await fetch(`${this.baseUrl}/internal/session/verify-session`, {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({ id: sessionId, token: sessionToken }),

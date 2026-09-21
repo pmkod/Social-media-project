@@ -16,12 +16,12 @@ La documentation OpenAPI est disponible sur `http://localhost:8006/scalar` en d�
 
 ## Routes
 
-- `POST /internal/sessions` : crée une session depuis un service interne et retourne son identifiant et son token brut.
-- `GET /sessions/active` : liste les sessions actives de l'utilisateur authentifié.
-- `GET /sessions/{sessionId}` : récupère les métadonnées d'une session.
-- `PATCH /sessions/{sessionId}/disable` : désactive une session.
-- `POST /sessions/logout-others` : désactive toutes les sessions sauf la session courante.
-- `POST /internal/sessions/verify` : vérifie une paire identifiant/token pour l'authentification centralisée de la gateway.
+- `POST /internal/session/create-session` : crée une session depuis un service interne et retourne son identifiant et son token brut.
+- `GET /session/get-all-active-sessions` : liste les sessions actives de l'utilisateur authentifié.
+- `GET /session/get-session/{sessionId}` : récupère les métadonnées d'une session.
+- `PATCH /session/disable-session/{sessionId}` : désactive une session.
+- `POST /session/logout-other-sessions` : désactive toutes les sessions sauf la session courante.
+- `POST /internal/session/verify-session` : vérifie une paire identifiant/token pour l'authentification centralisée de la gateway.
 
 Le token brut n'est jamais persisté. Seule son empreinte SHA-256 est stockée dans Redis et les routes de lecture ne la retournent pas.
 

@@ -13,7 +13,7 @@ export const useDeleteSearchHistoryItem = () => {
 	return useMutation({
 		mutationFn: (historyId: string) =>
 			httpClient
-				.delete(`search/history/${historyId}`)
+				.delete(`user/delete-search-history-item/${historyId}`)
 				.json<{ message: string }>(),
 		onSuccess: (_, historyId) => {
 			queryClient.setQueriesData<InfiniteData<SearchHistoryResponse>>(

@@ -34,7 +34,7 @@ export const useFollowSuggestions = ({
 			}
 
 			return httpClient
-				.get("users/me/follow-suggestions", { searchParams })
+				.get("user/get-follow-suggestions", { searchParams })
 				.json<FollowSuggestionsResponse>();
 		},
 		initialPageParam: null as FollowSuggestionsCursor | null,

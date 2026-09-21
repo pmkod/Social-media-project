@@ -43,7 +43,7 @@ const createComment = async (input: CreateCommentInput): Promise<Comment> => {
 	}
 
 	const response = await httpClient
-		.post("comments", {
+		.post("content/create-comment", {
 			body: formData,
 		})
 		.json<CreateCommentResponse>();

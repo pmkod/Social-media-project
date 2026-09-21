@@ -12,7 +12,7 @@ import {
 
 const routeDef = createRoute({
 	method: "get",
-	path: "/feed/following",
+	path: "/content/get-feed-following",
 	summary: "Get following feed with cursor pagination and counts",
 	tags: [PostsRoutesTag],
 	request: {

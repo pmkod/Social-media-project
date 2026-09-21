@@ -10,7 +10,7 @@ import {
 
 const routeDef = createRoute({
 	method: "post",
-	path: "/internal/sessions/verify",
+	path: "/internal/session/verify-session",
 	summary: "Verify active session credentials",
 	tags: [SessionsRoutesTag],
 	request: {

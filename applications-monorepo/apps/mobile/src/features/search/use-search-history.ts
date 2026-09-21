@@ -29,7 +29,7 @@ export const useSearchHistory = (limit = 20, enabled = true) =>
 			}
 
 			return httpClient
-				.get("search/history", { searchParams })
+				.get("user/get-search-history", { searchParams })
 				.json<SearchHistoryResponse>();
 		},
 		initialPageParam: null as SearchHistoryCursor | null,

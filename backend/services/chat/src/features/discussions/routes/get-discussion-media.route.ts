@@ -11,7 +11,7 @@ import { DiscussionIdParams } from "../discussions.validation-schemas";
 
 const routeDef = createRoute({
 	method: "get",
-	path: "/discussions/{discussionId}/media",
+	path: "/chat/get-discussion-media/{discussionId}",
 	summary: "Get media shared in a discussion",
 	tags: [DiscussionsRoutesTag],
 	middleware: [requireUserAuthentication],

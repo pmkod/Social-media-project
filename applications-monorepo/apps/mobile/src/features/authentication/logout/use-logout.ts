@@ -9,7 +9,7 @@ export const useLogout = () => {
 	return useMutation({
 		mutationFn: async () => {
 			try {
-				await httpClient.post("authentication/logout").json();
+				await httpClient.post("user/logout").json();
 			} catch {
 				// Ignore backend error during logout so credentials are still purged locally
 			} finally {

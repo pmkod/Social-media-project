@@ -7,7 +7,7 @@ import { requireUserAuthentication } from "../middlewares/require-user-authentic
 
 const routeDef = createRoute({
 	method: "post",
-	path: "/authentication/logout",
+	path: "/user/logout",
 	summary: "Logout user",
 	tags: [AuthenticationRoutesTag],
 	middleware: [requireUserAuthentication],

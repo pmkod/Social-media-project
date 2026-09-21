@@ -16,7 +16,7 @@ import { BookmarksRoutesTag } from "../bookmarks.constants";
 
 const routeDef = createRoute({
 	method: "get",
-	path: "/bookmarks",
+	path: "/content/get-bookmarks",
 	summary:
 		"Get the authenticated user's bookmarked posts, optionally filtered by collection",
 	tags: [BookmarksRoutesTag],

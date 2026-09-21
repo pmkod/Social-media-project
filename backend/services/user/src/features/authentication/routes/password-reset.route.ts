@@ -16,7 +16,7 @@ import { PasswordResetValidationSchema } from "../authentication.validation-sche
 const passwordResetRoute = defineOpenAPIRoute({
 	route: createRoute({
 		method: "post",
-		path: "/authentication/password-reset",
+		path: "/user/password-reset",
 		summary: "Request password reset",
 		tags: [AuthenticationRoutesTag],
 		request: {

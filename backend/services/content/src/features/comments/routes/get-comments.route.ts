@@ -11,7 +11,7 @@ import {
 
 const routeDef = createRoute({
 	method: "get",
-	path: "/comments",
+	path: "/content/get-comments",
 	summary: "Get comments or replies for a post",
 	tags: [CommentsRoutesTag],
 	request: {

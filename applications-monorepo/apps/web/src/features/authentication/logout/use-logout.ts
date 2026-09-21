@@ -6,7 +6,7 @@ const useLogout = () => {
 	return useMutation({
 		mutationFn: async () => {
 			try {
-				await httpClient.post("authentication/logout");
+				await httpClient.post("user/logout");
 			} finally {
 				deleteSessionCredentials();
 			}

@@ -18,7 +18,7 @@ import { ResendUserVerificationCodeValidationSchema } from "../authentication.va
 const resendUserVerificationCodeRoute = defineOpenAPIRoute({
 	route: createRoute({
 		method: "post",
-		path: "/authentication/resend-user-verification-code",
+		path: "/user/resend-user-verification-code",
 		summary: "Resend verification code",
 		tags: [AuthenticationRoutesTag],
 		request: {

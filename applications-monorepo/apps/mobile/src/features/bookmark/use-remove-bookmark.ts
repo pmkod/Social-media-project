@@ -28,7 +28,7 @@ const useRemoveBookmark = () => {
 	return useMutation({
 		mutationFn: ({ postId, bookmarkCollectionId }: RemoveBookmarkInput) =>
 			httpClient
-				.delete(`posts/${postId}/bookmarks`, {
+				.delete(`content/remove-bookmark/${postId}`, {
 					searchParams: bookmarkCollectionId ? { bookmarkCollectionId } : undefined,
 				})
 				.json<RemoveBookmarkResponse>(),

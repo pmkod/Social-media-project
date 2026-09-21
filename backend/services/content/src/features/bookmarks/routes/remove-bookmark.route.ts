@@ -9,7 +9,7 @@ import { BookmarksRoutesTag } from "../bookmarks.constants";
 
 const routeDef = createRoute({
 	method: "delete",
-	path: "/posts/{postId}/bookmarks",
+	path: "/content/remove-bookmark/{postId}",
 	summary: "Remove a post from a bookmark collection",
 	tags: [BookmarksRoutesTag],
 	middleware: [requireUserAuthentication],

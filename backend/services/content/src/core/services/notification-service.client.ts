@@ -30,7 +30,7 @@ class NotificationServiceClient {
 
 	async createNotification(data: CreateNotificationInput): Promise<void> {
 		try {
-			const response = await fetch(`${this.baseUrl}/internal/notifications`, {
+			const response = await fetch(`${this.baseUrl}/internal/notification/create-notification`, {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify(data),
@@ -51,7 +51,7 @@ class NotificationServiceClient {
 	async removeNotification(data: RemoveNotificationInput): Promise<void> {
 		try {
 			const response = await fetch(
-				`${this.baseUrl}/internal/notifications/remove`,
+				`${this.baseUrl}/internal/notification/remove-notification`,
 				{
 					method: "POST",
 					headers: { "Content-Type": "application/json" },
@@ -74,7 +74,7 @@ class NotificationServiceClient {
 	async removeNotificationsForPost(postId: string): Promise<void> {
 		try {
 			const response = await fetch(
-				`${this.baseUrl}/internal/notifications/remove-by-post`,
+				`${this.baseUrl}/internal/notification/remove-post-notifications`,
 				{
 					method: "POST",
 					headers: { "Content-Type": "application/json" },
@@ -97,7 +97,7 @@ class NotificationServiceClient {
 	async removeNotificationForComment(commentId: string): Promise<void> {
 		try {
 			const response = await fetch(
-				`${this.baseUrl}/internal/notifications/remove-by-comment`,
+				`${this.baseUrl}/internal/notification/remove-comment-notifications`,
 				{
 					method: "POST",
 					headers: { "Content-Type": "application/json" },

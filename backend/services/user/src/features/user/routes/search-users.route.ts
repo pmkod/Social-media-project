@@ -32,7 +32,7 @@ const SearchUsersResponseBody = z.object({
 
 const routeDef = createRoute({
 	method: "get",
-	path: "/users",
+	path: "/user/search-users",
 	summary: "Search users with cursor pagination",
 	tags: [UserRoutesTag],
 	request: {

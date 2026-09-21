@@ -37,7 +37,7 @@ const fetchCommentsPage = async ({
 	}
 
 	return await httpClient
-		.get("comments", {
+		.get("content/get-comments", {
 			searchParams,
 		})
 		.json<CommentsResponse>();

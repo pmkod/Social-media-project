@@ -23,7 +23,7 @@ class SessionServiceClient {
 	async createSession(input: CreateSessionInput): Promise<Session> {
 		let response: Response;
 		try {
-			response = await fetch(`${this.baseUrl}/internal/sessions`, {
+			response = await fetch(`${this.baseUrl}/internal/session/create-session`, {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify(input),
@@ -56,7 +56,7 @@ class SessionServiceClient {
 	async disableSession(userId: string, sessionId: string): Promise<void> {
 		let response: Response;
 		try {
-			response = await fetch(`${this.baseUrl}/sessions/${sessionId}/disable`, {
+			response = await fetch(`${this.baseUrl}/session/disable-session/${sessionId}`, {
 				method: "PATCH",
 				headers: {
 					"X-Authenticated-User-Id": userId,

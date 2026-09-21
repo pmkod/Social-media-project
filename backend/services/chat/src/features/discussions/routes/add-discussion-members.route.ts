@@ -16,7 +16,7 @@ import {
 
 const routeDef = createRoute({
 	method: "post",
-	path: "/discussions/{discussionId}/members",
+	path: "/chat/add-discussion-members/{discussionId}",
 	summary: "Add members to a group discussion",
 	tags: [DiscussionMembersRoutesTag],
 	middleware: [requireUserAuthentication],

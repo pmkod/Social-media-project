@@ -8,7 +8,7 @@ export const useActiveSessions = () =>
 		queryKey: activeSessionsQueryKey.build(),
 		queryFn: () =>
 			httpClient
-				.get("sessions/active")
+				.get("session/get-all-active-sessions")
 				.json<{ sessions: Session[] }>()
 				.then((response) => response.sessions),
 	});

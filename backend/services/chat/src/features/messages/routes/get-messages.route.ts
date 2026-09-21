@@ -14,7 +14,7 @@ import {
 
 const routeDef = createRoute({
 	method: "get",
-	path: "/discussions/{discussionId}/messages",
+	path: "/chat/get-messages/{discussionId}",
 	summary: "Get a discussion's messages, newest first",
 	tags: [MessagesRoutesTag],
 	middleware: [requireUserAuthentication],

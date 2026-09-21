@@ -17,7 +17,7 @@ const useDiscussions = (limit = 25) =>
 			}
 
 			return httpClient
-				.get("discussions", { searchParams })
+				.get("chat/get-discussions", { searchParams })
 				.json<DiscussionsResponse>();
 		},
 		initialPageParam: null as DiscussionsCursor | null,

@@ -17,7 +17,7 @@ import { CreateDiscussionRequestBody } from "../discussions.validation-schemas";
 
 const routeDef = createRoute({
 	method: "post",
-	path: "/discussions",
+	path: "/chat/create-discussion",
 	summary: "Create a private or group discussion",
 	tags: [DiscussionsRoutesTag],
 	middleware: [requireUserAuthentication],

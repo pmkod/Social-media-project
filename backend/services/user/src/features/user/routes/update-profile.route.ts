@@ -16,7 +16,7 @@ import { UpdateProfileValidationSchema } from "../user.validation-schemas";
 
 const routeDef = createRoute({
 	method: "put",
-	path: "/users/me",
+	path: "/user/update-profile",
 	summary: "Update current authenticated user profile",
 	tags: [UserRoutesTag],
 	middleware: [requireUserAuthentication],

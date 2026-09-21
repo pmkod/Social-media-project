@@ -10,7 +10,7 @@ import { UserRoutesTag } from "../user.constants";
 
 const routeDef = createRoute({
 	method: "get",
-	path: "/users/me",
+	path: "/user/get-me",
 	summary: "Get current authenticated user profile",
 	tags: [UserRoutesTag],
 	middleware: [requireUserAuthentication],

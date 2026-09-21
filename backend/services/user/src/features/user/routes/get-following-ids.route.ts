@@ -5,7 +5,7 @@ import { UserRoutesTag } from "../user.constants";
 
 const routeDef = createRoute({
 	method: "get",
-	path: "/internal/users/{userId}/following-ids",
+	path: "/internal/user/get-following-ids/{userId}",
 	summary: "Get followed user IDs for the content service",
 	tags: [UserRoutesTag],
 	request: { params: z.object({ userId: z.string() }) },

@@ -9,7 +9,7 @@ import { UserRoutesTag } from "../user.constants";
 
 const routeDef = createRoute({
 	method: "get",
-	path: "/users/me/blocked",
+	path: "/user/get-blocked-users",
 	summary: "Get users blocked by the authenticated user",
 	tags: [UserRoutesTag],
 	middleware: [requireUserAuthentication],

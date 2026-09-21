@@ -16,7 +16,7 @@ import {
 
 const routeDef = createRoute({
 	method: "patch",
-	path: "/discussions/{discussionId}",
+	path: "/chat/update-discussion/{discussionId}",
 	summary: "Update a group discussion",
 	tags: [DiscussionsRoutesTag],
 	middleware: [requireUserAuthentication],

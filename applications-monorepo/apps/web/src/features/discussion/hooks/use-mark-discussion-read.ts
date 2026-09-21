@@ -21,7 +21,7 @@ const useMarkDiscussionRead = () => {
 	return useMutation({
 		mutationFn: ({ discussionId, messageId }: MarkDiscussionReadInput) =>
 			httpClient
-				.patch(`discussions/${discussionId}/read`, {
+				.patch(`chat/mark-discussion-read/${discussionId}`, {
 					json: messageId ? { messageId } : {},
 				})
 				.json<{ readAt: string; unreadCount: number }>(),

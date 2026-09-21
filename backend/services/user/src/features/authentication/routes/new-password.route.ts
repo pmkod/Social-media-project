@@ -22,7 +22,7 @@ import { verifyIfUserVerificationCompleted } from "../user-verification.service"
 const newPasswordRoute = defineOpenAPIRoute({
 	route: createRoute({
 		method: "post",
-		path: "/authentication/new-password",
+		path: "/user/new-password",
 		summary: "Set new password after verification",
 		tags: [AuthenticationRoutesTag],
 		request: {

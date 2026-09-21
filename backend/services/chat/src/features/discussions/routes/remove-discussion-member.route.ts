@@ -14,7 +14,7 @@ import { DiscussionMemberParams } from "../discussions.validation-schemas";
 
 const routeDef = createRoute({
 	method: "delete",
-	path: "/discussions/{discussionId}/members/{userId}",
+	path: "/chat/remove-discussion-member/{discussionId}/{userId}",
 	summary: "Leave a group or remove one of its members",
 	tags: [DiscussionMembersRoutesTag],
 	middleware: [requireUserAuthentication],

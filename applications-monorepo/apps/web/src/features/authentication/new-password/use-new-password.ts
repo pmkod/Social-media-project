@@ -16,7 +16,7 @@ const useNewPassword = () => {
 				throw new Error("Verification data not found");
 			}
 			const { session } = await baseHttpClient
-				.post("authentication/new-password", {
+				.post("user/new-password", {
 					json: {
 						userVerification: {
 							id: data.userVerification.id,

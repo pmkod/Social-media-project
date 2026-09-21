@@ -23,7 +23,7 @@ export const useListFollowers = ({ userId }: { userId: string }) =>
 				searchParams.set("cursorCreatedAt", pageParam.createdAt);
 			}
 			return httpClient
-				.get(`users/${userId}/followers`, { searchParams })
+				.get(`user/get-user-followers/${userId}`, { searchParams })
 				.json<ListFollowersResponse>();
 		},
 		initialPageParam: null as ListFollowersCursor | null,

@@ -14,7 +14,7 @@ type CreateReportInput = {
 const useCreateReport = () => {
 	return useMutation({
 		mutationFn: (input: CreateReportInput) =>
-			httpClient.post("reports", { json: input }).json<CreateReportResponse>(),
+			httpClient.post("report/create-report", { json: input }).json<CreateReportResponse>(),
 	});
 };
 

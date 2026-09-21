@@ -4,7 +4,7 @@ import { httpClient } from "@/core/http-clients/http-client.ts";
 import { cn } from "@/core/lib/utils.ts";
 
 const isProtectedMessageImageUrl = (url?: string | null) =>
-	Boolean(url?.startsWith("/messages/"));
+	Boolean(url?.startsWith("/chat/get-message-image/"));
 
 const useProtectedMessageImageUrl = (url?: string | null) => {
 	const isProtected = isProtectedMessageImageUrl(url);

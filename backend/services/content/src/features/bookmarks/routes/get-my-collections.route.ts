@@ -7,7 +7,7 @@ import { BookmarksRoutesTag } from "../bookmarks.constants";
 
 const routeDef = createRoute({
 	method: "get",
-	path: "/collections",
+	path: "/content/get-my-collections",
 	summary: "Get the authenticated user's bookmark collections",
 	tags: [BookmarksRoutesTag],
 	middleware: [requireUserAuthentication],

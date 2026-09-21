@@ -16,7 +16,7 @@ const useUnblockUser = () => {
 	const queryClient = useQueryClient();
 	return useMutation({
 		mutationFn: (userId: string) =>
-			httpClient.delete(`users/${userId}/block`).json<UnblockUserResponse>(),
+			httpClient.delete(`user/unblock-user/${userId}`).json<UnblockUserResponse>(),
 		onSuccess: (_, userId) => {
 			queryClient.setQueriesData<{ user: User }>(
 				{ queryKey: userDetailsQueryKeys.root },

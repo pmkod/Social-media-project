@@ -10,7 +10,7 @@ export const useResendUserVerificationCode = () => {
 				throw new Error("Verification data not found");
 			}
 			return baseHttpClient
-				.post("authentication/resend-user-verification-code", {
+				.post("user/resend-user-verification-code", {
 					json: {
 						userVerification: {
 							id: data.userVerification.id,

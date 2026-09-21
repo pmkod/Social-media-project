@@ -5,7 +5,7 @@ import { UserRoutesTag } from "../user.constants";
 
 const routeDef = createRoute({
 	method: "get",
-	path: "/internal/users/{userId}/block-relationship-ids",
+	path: "/internal/user/get-block-relationship-ids/{userId}",
 	summary: "Get block relationship IDs for internal services",
 	tags: [UserRoutesTag],
 	request: { params: z.object({ userId: z.string() }) },

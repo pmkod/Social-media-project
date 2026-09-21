@@ -14,7 +14,7 @@ const useMessages = (discussionId: string, limit = 30) =>
 			}
 
 			return httpClient
-				.get(`discussions/${discussionId}/messages`, { searchParams })
+				.get(`chat/get-messages/${discussionId}`, { searchParams })
 				.json<MessagesResponse>();
 		},
 		initialPageParam: null as MessagesCursor | null,

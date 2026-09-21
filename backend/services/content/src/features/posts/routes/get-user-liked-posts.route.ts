@@ -12,7 +12,7 @@ import {
 
 const routeDef = createRoute({
 	method: "get",
-	path: "/posts/users/{userId}/likes",
+	path: "/content/get-user-liked-posts/{userId}",
 	summary: "Get posts liked by a user",
 	tags: [PostsRoutesTag],
 	request: {

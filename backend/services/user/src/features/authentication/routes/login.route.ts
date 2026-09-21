@@ -19,7 +19,7 @@ import { LoginValidationSchema } from "../authentication.validation-schemas";
 const loginRoute = defineOpenAPIRoute({
 	route: createRoute({
 		method: "post",
-		path: "/authentication/login",
+		path: "/user/login",
 		summary: "Login",
 		tags: [AuthenticationRoutesTag],
 		request: {

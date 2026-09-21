@@ -5,7 +5,7 @@ import { CommentsRoutesTag } from "../comments.constants";
 
 const routeDef = createRoute({
 	method: "get",
-	path: "/internal/comments/{id}/exists",
+	path: "/internal/content/check-comment-exists/{id}",
 	summary: "Check that a comment can be used as an internal service target",
 	tags: [CommentsRoutesTag],
 	request: {

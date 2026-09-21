@@ -16,7 +16,7 @@ export const useDeleteComment = () => {
 
 	return useMutation({
 		mutationFn: (comment: Comment) =>
-			httpClient.delete(`comments/${comment.id}`).json<{ message: string }>(),
+			httpClient.delete(`content/delete-comment/${comment.id}`).json<{ message: string }>(),
 		onSuccess: (_, comment) => {
 			queryClient.setQueriesData<InfiniteData<CommentListPage>>(
 				{ queryKey: commentListQueryKeys.root },

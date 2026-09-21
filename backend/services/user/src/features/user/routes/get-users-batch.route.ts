@@ -18,7 +18,7 @@ const GetUsersBatchRequestBody = z.object({
 
 const routeDef = createRoute({
 	method: "post",
-	path: "/users/batch",
+	path: "/user/get-users-batch",
 	summary: "Get multiple users by their IDs in batch",
 	tags: [UserRoutesTag],
 	request: {

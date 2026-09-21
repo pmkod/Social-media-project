@@ -47,7 +47,7 @@ export const useSearchUsers = ({
 			}
 
 			return httpClient
-				.get("users", { searchParams })
+				.get("user/search-users", { searchParams })
 				.json<SearchUsersResponse>();
 		},
 		initialPageParam: null as SearchUsersCursor | null,

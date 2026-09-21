@@ -9,7 +9,7 @@ type SessionCredentials = { sessionId: string; sessionToken: string };
 const sessionCredentialsByUserId = new Map<string, Promise<SessionCredentials>>();
 
 const createSession = async (userId: string): Promise<SessionCredentials> => {
-  const response = await fetch(`${Config.sessionServiceBaseUrl}/internal/sessions`, {
+  const response = await fetch(`${Config.sessionServiceBaseUrl}/internal/session/create-session`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
@@ -71,7 +71,7 @@ const cleanupApiSessions = async () => {
   await Promise.allSettled(
     entries.map(async ([_userId, credentialsPromise]) => {
       const { sessionId, sessionToken } = await credentialsPromise;
-      await fetch(`${Config.gatewayBaseUrl}/sessions/${sessionId}/disable`, {
+      await fetch(`${Config.gatewayBaseUrl}/session/disable-session/${sessionId}`, {
         method: "PATCH",
         headers: {
           Authorization: `Session ${sessionId}.${sessionToken}`,
@@ -85,7 +85,7 @@ const cleanupApiSessions = async () => {
 const createPostViaApi = async (userId: string, body: CreatePostBody): Promise<{ id: string }> => {
   const formData = new FormData();
   formData.append("text", body.text);
-  const response = await apiFetch<{ post: { id: string } }>("/posts", userId, {
+  const response = await apiFetch<{ post: { id: string } }>("/content/create-post", userId, {
     method: "POST",
     body: formData,
   });
@@ -97,7 +97,7 @@ const createCommentViaApi = async (userId: string, postId: string, body: CreateC
   formData.append("postId", postId);
   formData.append("content", body.content);
 
-  const response = await apiFetch<{ comment: { id: string } }>("/comments", userId, {
+  const response = await apiFetch<{ comment: { id: string } }>("/content/create-comment", userId, {
     method: "POST",
     body: formData,
   });
@@ -106,13 +106,13 @@ const createCommentViaApi = async (userId: string, postId: string, body: CreateC
 };
 
 const likePostViaApi = async (userId: string, postId: string): Promise<{ id: string }> => {
-  return apiFetch<{ id: string }>(`/posts/${postId}/likes`, userId, {
+  return apiFetch<{ id: string }>(`/content/like-post/${postId}`, userId, {
     method: "POST",
   });
 };
 
 const likeCommentViaApi = async (userId: string, commentId: string): Promise<{ id: string }> => {
-  return apiFetch<{ id: string }>(`/comments/${commentId}/like`, userId, {
+  return apiFetch<{ id: string }>(`/content/like-comment/${commentId}`, userId, {
     method: "POST",
   });
 };

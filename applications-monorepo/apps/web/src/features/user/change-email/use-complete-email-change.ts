@@ -7,7 +7,7 @@ const useCompleteEmailChange = () => {
 		mutationFn: () => {
 			const { userVerification } = getUserVerificationDataFromLocalStorage();
 			return httpClient
-				.put("users/me/email", { json: { userVerification } })
+				.put("user/change-email", { json: { userVerification } })
 				.json<{ message: string; email: string }>();
 		},
 	});

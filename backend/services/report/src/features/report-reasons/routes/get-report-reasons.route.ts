@@ -5,7 +5,7 @@ import { ReportReasonsRoutesTag } from "../report-reasons.constants";
 
 const routeDef = createRoute({
 	method: "get",
-	path: "/report-reasons",
+	path: "/report/get-report-reasons",
 	summary: "Get active report reasons",
 	tags: [ReportReasonsRoutesTag],
 	responses: {

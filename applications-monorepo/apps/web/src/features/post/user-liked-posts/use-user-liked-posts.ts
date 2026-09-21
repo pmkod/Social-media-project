@@ -31,7 +31,7 @@ const useUserLikedPosts = ({ userId }: UseUserLikedPostsParams) =>
 				searchParams.set("cursorCreatedAt", pageParam.createdAt);
 			}
 			return httpClient
-				.get(`posts/users/${userId}/likes`, { searchParams })
+				.get(`content/get-user-liked-posts/${userId}`, { searchParams })
 				.json<UserLikedPostsResponse>();
 		},
 		initialPageParam: null as UserLikedPostsCursor | null,

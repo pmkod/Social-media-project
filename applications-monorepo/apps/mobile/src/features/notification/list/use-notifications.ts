@@ -16,7 +16,7 @@ export const useNotifications = (limit = 25) =>
 				searchParams.set("cursorId", pageParam.id);
 			}
 			return httpClient
-				.get("notifications", { searchParams })
+				.get("notification/get-notifications", { searchParams })
 				.json<NotificationsResponse>();
 		},
 		initialPageParam: null as NotificationsCursor | null,

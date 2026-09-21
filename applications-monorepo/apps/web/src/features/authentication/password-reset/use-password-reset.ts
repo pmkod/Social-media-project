@@ -11,7 +11,7 @@ const usePasswordReset = () => {
 	return useMutation({
 		mutationFn: async (body: PasswordResetRequestBody) => {
 			const { userVerification } = await baseHttpClient
-				.post("authentication/password-reset", {
+				.post("user/password-reset", {
 					json: body,
 				})
 				.json<UserVerificationResponse>();

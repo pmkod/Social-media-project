@@ -20,7 +20,7 @@ export const useUnfollowUser = () => {
 
 	return useMutation({
 		mutationFn: ({ userId }: { userId: string }) =>
-			httpClient.delete(`users/${userId}/follow`).json<UnfollowResponse>(),
+			httpClient.delete(`user/unfollow-user/${userId}`).json<UnfollowResponse>(),
 		onSuccess: ({ unfollowedUser }) => {
 			queryClient.setQueriesData<{ user: User }>(
 				{ queryKey: userDetailsQueryKeys.root },

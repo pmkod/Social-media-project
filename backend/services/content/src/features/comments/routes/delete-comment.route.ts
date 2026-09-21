@@ -8,7 +8,7 @@ import { CommentsRoutesTag } from "../comments.constants";
 
 const routeDef = createRoute({
 	method: "delete",
-	path: "/comments/{id}",
+	path: "/content/delete-comment/{id}",
 	summary: "Delete a comment",
 	tags: [CommentsRoutesTag],
 	middleware: [requireUserAuthentication],

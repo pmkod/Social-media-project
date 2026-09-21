@@ -18,7 +18,7 @@ export const useCreateSearchHistory = () => {
 	return useMutation({
 		mutationFn: (input: CreateSearchHistoryInput) =>
 			httpClient
-				.post("search/history", { json: input })
+				.post("user/create-search-history", { json: input })
 				.json<SearchHistoryItem>(),
 		onSuccess: (historyItem) => {
 			queryClient.setQueriesData<InfiniteData<SearchHistoryResponse>>(

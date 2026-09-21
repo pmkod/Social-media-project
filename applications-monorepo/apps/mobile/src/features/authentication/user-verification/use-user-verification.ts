@@ -14,7 +14,7 @@ export const useUserVerification = () => {
 				throw new Error("Verification data not found");
 			}
 			return baseHttpClient
-				.post("authentication/user-verification", {
+				.post("user/do-user-verification", {
 					json: {
 						userVerification: {
 							id: data.userVerification.id,

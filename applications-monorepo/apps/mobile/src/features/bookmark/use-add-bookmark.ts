@@ -28,7 +28,7 @@ const useAddBookmark = () => {
 	return useMutation({
 		mutationFn: ({ postId, bookmarkCollectionId }: AddBookmarkInput) =>
 			httpClient
-				.post(`posts/${postId}/bookmarks`, {
+				.post(`content/add-bookmark/${postId}`, {
 					json: bookmarkCollectionId ? { bookmarkCollectionId } : {},
 				})
 				.json<AddBookmarkResponse>(),

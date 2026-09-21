@@ -5,7 +5,7 @@ import { CommentsRoutesTag } from "../comments.constants";
 
 const routeDef = createRoute({
 	method: "get",
-	path: "/comments/{commentId}/likes",
+	path: "/content/get-comment-likes/{commentId}",
 	summary: "Get likes for a comment",
 	tags: [CommentsRoutesTag],
 	request: {

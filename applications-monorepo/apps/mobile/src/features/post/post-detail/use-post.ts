@@ -11,7 +11,7 @@ export const usePost = ({ postId }: UsePostParams) => {
 	return useQuery({
 		queryKey: postDetailsQueryKeys.build(postId),
 		queryFn: async () =>
-			await httpClient.get(`posts/${postId}`).json<{ post: Post }>(),
+			await httpClient.get(`content/get-post-by-id/${postId}`).json<{ post: Post }>(),
 		enabled: Boolean(postId),
 	});
 };

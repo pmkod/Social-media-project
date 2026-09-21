@@ -13,7 +13,7 @@ const useSettingsUserVerification = () => {
 			if (!data?.userVerification) {
 				throw new Error("Verification data not found");
 			}
-			return baseHttpClient.post("authentication/user-verification", {
+			return baseHttpClient.post("user/do-user-verification", {
 				json: {
 					userVerification: {
 						id: data.userVerification.id,

@@ -8,7 +8,7 @@ import { UserRoutesTag } from "../user.constants";
 
 const routeDef = createRoute({
 	method: "get",
-	path: "/users/by-username/{username}",
+	path: "/user/get-user-by-username/{username}",
 	summary: "Get a public user profile by username",
 	tags: [UserRoutesTag],
 	request: { params: z.object({ username: z.string().min(1) }) },

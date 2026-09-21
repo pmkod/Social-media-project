@@ -14,7 +14,7 @@ const useMarkNotificationsSeen = () => {
 
 	return useMutation({
 		mutationFn: () =>
-			httpClient.patch("notifications/seen").json<{ updatedCount: number }>(),
+			httpClient.patch("notification/mark-notifications-seen").json<{ updatedCount: number }>(),
 		onSuccess: () => {
 			queryClient.setQueryData<InfiniteData<NotificationsResponse>>(
 				notificationListQueryKeys.all,

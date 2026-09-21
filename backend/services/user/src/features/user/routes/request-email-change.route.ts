@@ -17,7 +17,7 @@ import { RequestEmailChangeValidationSchema } from "../user.validation-schemas";
 
 const routeDef = createRoute({
 	method: "post",
-	path: "/users/me/email-change-request",
+	path: "/user/request-email-change",
 	summary: "Request an email address change",
 	tags: [UserRoutesTag],
 	middleware: [requireUserAuthentication],

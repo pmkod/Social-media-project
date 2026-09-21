@@ -24,7 +24,7 @@ import {
 
 const routeDef = createRoute({
 	method: "post",
-	path: "/discussions/{discussionId}/messages",
+	path: "/chat/create-message/{discussionId}",
 	summary: "Send a message",
 	tags: [MessagesRoutesTag],
 	middleware: [requireUserAuthentication],

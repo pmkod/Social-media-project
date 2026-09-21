@@ -18,17 +18,17 @@ Le service évite les doublons avec les identifiants métier de la notification 
 
 | Action | Route | Condition | Événement et destinataire | Identifiants utilisés |
 | --- | --- | --- | --- | --- |
-| Suivre un utilisateur | `POST /users/{id}/follow` | Une nouvelle relation de suivi est créée. Aucune notification n’est recréée si le suivi existe déjà. | `FOLLOW`, envoyé à l’utilisateur suivi. L’initiateur est l’utilisateur authentifié. | `recipientId + initiatorId + groupKey` (`targetId` nul) |
-| Aimer un post | `POST /posts/{postId}/likes` | Un nouveau like est effectivement créé. | `POST_LIKE`, envoyé à l’auteur du post. L’initiateur est l’utilisateur qui aime le post. | `targetId` du post + `initiatorId` + `groupKey` |
-| Aimer un commentaire | `POST /comments/{commentId}/likes` | Un nouveau like de commentaire est effectivement créé. | `COMMENT_LIKE`, envoyé à l’auteur du commentaire. L’initiateur est l’utilisateur qui aime le commentaire. | `targetId` du commentaire + `initiatorId` + `groupKey` (`COMMENT_LIKE:{commentId}:{postId}`) |
-| Ajouter un commentaire | `POST /comments` | Le commentaire est créé avec succès. | `POST_COMMENT` si le commentaire est directement rattaché au post, envoyé à l’auteur du post. | `targetId` du commentaire + `groupKey` du post |
-| Répondre à un commentaire | `POST /comments` | Le commentaire est créé avec un `parentCommentId`. | `COMMENT_REPLY`, envoyé à l’auteur du commentaire parent. | `targetId` de la réponse + `groupKey` du commentaire parent et du post |
+| Suivre un utilisateur | `POST /user/follow-user/{id}` | Une nouvelle relation de suivi est créée. Aucune notification n’est recréée si le suivi existe déjà. | `FOLLOW`, envoyé à l’utilisateur suivi. L’initiateur est l’utilisateur authentifié. | `recipientId + initiatorId + groupKey` (`targetId` nul) |
+| Aimer un post | `POST /content/like-post/{postId}` | Un nouveau like est effectivement créé. | `POST_LIKE`, envoyé à l’auteur du post. L’initiateur est l’utilisateur qui aime le post. | `targetId` du post + `initiatorId` + `groupKey` |
+| Aimer un commentaire | `POST /content/like-comment/{commentId}` | Un nouveau like de commentaire est effectivement créé. | `COMMENT_LIKE`, envoyé à l’auteur du commentaire. L’initiateur est l’utilisateur qui aime le commentaire. | `targetId` du commentaire + `initiatorId` + `groupKey` (`COMMENT_LIKE:{commentId}:{postId}`) |
+| Ajouter un commentaire | `POST /content/create-comment` | Le commentaire est créé avec succès. | `POST_COMMENT` si le commentaire est directement rattaché au post, envoyé à l’auteur du post. | `targetId` du commentaire + `groupKey` du post |
+| Répondre à un commentaire | `POST /content/create-comment` | Le commentaire est créé avec un `parentCommentId`. | `COMMENT_REPLY`, envoyé à l’auteur du commentaire parent. | `targetId` de la réponse + `groupKey` du commentaire parent et du post |
 
 ### Point d’entrée interne de création
 
 Le service de notification crée réellement l’enregistrement avec :
 
-- `POST /internal/notifications`
+- `POST /internal/notification/create-notification`
 - Fichier : `backend/services/notification/src/features/notifications/routes/create-notification.route.ts`
 
 Ce point d’entrée :
@@ -43,33 +43,33 @@ Les services `user` et `content` appellent ce point d’entrée via leur `notifi
 
 | Action | Route | Condition | Notifications supprimées | Identifiant utilisé |
 | --- | --- | --- | --- | --- |
-| Ne plus suivre un utilisateur | `DELETE /users/{id}/follow` | Une relation de suivi existante est supprimée. | La notification `FOLLOW` correspondant au suivi supprimé. | `recipientId + initiatorId + groupKey` (`targetId` nul) |
-| Bloquer un utilisateur | `POST /users/{id}/block` | Le blocage supprime les relations de suivi existantes dans les deux directions. | Les notifications `FOLLOW` associées à chaque relation supprimée : une pour le suivi de l’utilisateur authentifié vers la cible et une pour le suivi inverse, si elles existent. | `recipientId + initiatorId + groupKey` (`targetId` nul) |
-| Retirer son like d’un post | `DELETE /posts/{postId}/likes` | Un like existant est supprimé. | La notification `POST_LIKE` correspondant à ce like. | `targetId` du post + `initiatorId` + `groupKey` |
-| Retirer son like d’un commentaire | `DELETE /comments/{commentId}/likes` | Un like existant est supprimé. | La notification `COMMENT_LIKE` correspondant à ce like. | `targetId` du commentaire + `initiatorId` + `groupKey` |
-| Supprimer un commentaire | `DELETE /comments/{id}` | Le commentaire n’est pas déjà supprimé et est marqué comme supprimé. | Uniquement sa notification de création (`POST_COMMENT` ou `COMMENT_REPLY`). Les notifications de likes et des réponses restent conservées. | `targetId` du commentaire |
+| Ne plus suivre un utilisateur | `DELETE /user/unfollow-user/{id}` | Une relation de suivi existante est supprimée. | La notification `FOLLOW` correspondant au suivi supprimé. | `recipientId + initiatorId + groupKey` (`targetId` nul) |
+| Bloquer un utilisateur | `POST /user/block-user/{id}` | Le blocage supprime les relations de suivi existantes dans les deux directions. | Les notifications `FOLLOW` associées à chaque relation supprimée : une pour le suivi de l’utilisateur authentifié vers la cible et une pour le suivi inverse, si elles existent. | `recipientId + initiatorId + groupKey` (`targetId` nul) |
+| Retirer son like d’un post | `DELETE /content/unlike-post/{postId}` | Un like existant est supprimé. | La notification `POST_LIKE` correspondant à ce like. | `targetId` du post + `initiatorId` + `groupKey` |
+| Retirer son like d’un commentaire | `DELETE /content/unlike-comment/{commentId}` | Un like existant est supprimé. | La notification `COMMENT_LIKE` correspondant à ce like. | `targetId` du commentaire + `initiatorId` + `groupKey` |
+| Supprimer un commentaire | `DELETE /content/delete-comment/{id}` | Le commentaire n’est pas déjà supprimé et est marqué comme supprimé. | Uniquement sa notification de création (`POST_COMMENT` ou `COMMENT_REPLY`). Les notifications de likes et des réponses restent conservées. | `targetId` du commentaire |
 
-La suppression d’un post avec `DELETE /posts/{id}` ne supprime aucune notification existante.
+La suppression d’un post avec `DELETE /content/delete-post/{postId}` ne supprime aucune notification existante.
 
 ### Points d’entrée internes de suppression
 
 Suppression ciblée :
 
-- `POST /internal/notifications/remove`
+- `POST /internal/notification/remove-notification`
 - Reçoit `eventType`, `recipientId`, `initiatorId`, `targetId` et `groupKey`.
 - Supprime la notification correspondante si elle existe.
 - Décrémente le compteur non vu uniquement si la notification supprimée n’était pas déjà vue.
 
 Suppression par post :
 
-- `POST /internal/notifications/remove-by-post`
+- `POST /internal/notification/remove-post-notifications`
 - Reçoit `postId`.
 - Supprime les notifications dont le `targetId` ou le `groupKey` correspond au post.
 - Décrémente le compteur non vu de chaque destinataire du nombre de notifications supprimées qui n’étaient pas vues.
 
 Suppression par commentaire :
 
-- `POST /internal/notifications/remove-by-comment`
+- `POST /internal/notification/remove-comment-notifications`
 - Reçoit `commentId`.
 - Supprime uniquement la notification `POST_COMMENT` ou `COMMENT_REPLY` dont le `targetId` correspond au commentaire.
 - Conserve les notifications de likes du commentaire et les notifications de ses réponses.
@@ -95,4 +95,4 @@ Suppression par commentaire :
 
 ## À ne pas confondre avec une suppression
 
-`PATCH /notifications/seen` marque toutes les notifications de l’utilisateur authentifié comme vues et remet son compteur non vu à zéro. Cette action ne supprime aucune notification de la base de données.
+`PATCH /notification/mark-notifications-seen` marque toutes les notifications de l’utilisateur authentifié comme vues et remet son compteur non vu à zéro. Cette action ne supprime aucune notification de la base de données.

@@ -16,7 +16,7 @@ import { DoUserVerificationValidationSchema } from "../authentication.validation
 const doUserVerificationRoute = defineOpenAPIRoute({
 	route: createRoute({
 		method: "post",
-		path: "/authentication/user-verification",
+		path: "/user/do-user-verification",
 		summary: "Validate 6-digit verification code",
 		tags: [AuthenticationRoutesTag],
 		request: {

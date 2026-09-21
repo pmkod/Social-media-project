@@ -7,7 +7,7 @@ const useRequestEmailChange = () => {
 	return useMutation({
 		mutationFn: async (newEmail: string) => {
 			const response = await httpClient
-				.post("users/me/email-change-request", { json: { newEmail } })
+				.post("user/request-email-change", { json: { newEmail } })
 				.json<UserVerificationResponse>();
 
 			saveUserVerificationDataToLocalStorage(response.userVerification);

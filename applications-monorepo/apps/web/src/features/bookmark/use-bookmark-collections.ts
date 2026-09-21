@@ -37,7 +37,7 @@ const useBookmarkCollections = ({
 				searchParams.set("cursorCreatedAt", pageParam.createdAt);
 			}
 			return httpClient
-				.get("collections", { searchParams })
+				.get("content/get-my-collections", { searchParams })
 				.json<BookmarkCollectionsResponse>();
 		},
 		initialPageParam: null as BookmarkCollectionsCursor | null,

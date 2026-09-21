@@ -12,7 +12,7 @@ export const useUnblockUser = () => {
 	const queryClient = useQueryClient();
 	return useMutation({
 		mutationFn: (userId: string) =>
-			httpClient.delete(`users/${userId}/block`).json<{ message: string }>(),
+			httpClient.delete(`user/unblock-user/${userId}`).json<{ message: string }>(),
 		onSuccess: (_, userId) => {
 			queryClient.setQueriesData<{ user: User }>(
 				{ queryKey: userDetailsQueryKeys.root },

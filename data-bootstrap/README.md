@@ -67,7 +67,7 @@ USE_API=true bun run bootstrap
 MEDIA_OUTPUT_DIR=./generated-media bun run bootstrap
 ```
 
-Les fichiers seront créés dans `generated-media/`. Pour les servir, configurez votre API Gateway ou un serveur statique sur `MEDIA_BASE_URL`.
+Les fichiers seront créés dans `generated-media/`. Pour les servir, configurez un serveur statique ou un reverse proxy à l'adresse `MEDIA_BASE_URL`. La gateway API ne sert pas ces fichiers.
 
 ## Logs
 

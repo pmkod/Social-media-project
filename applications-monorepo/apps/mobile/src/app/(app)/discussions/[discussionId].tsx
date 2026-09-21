@@ -147,7 +147,7 @@ export default function DiscussionDetailScreen() {
 
 	const getMessageImageSource = (url: string) => {
 		const credentials = getSessionCredentialsSync();
-		const isProtectedMessageImage = url.startsWith("/messages/");
+		const isProtectedMessageImage = url.startsWith("/chat/get-message-image/");
 		return {
 			uri: url.startsWith("http")
 				? url

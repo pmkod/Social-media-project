@@ -34,7 +34,7 @@ const updateProfile = async (input: UpdateProfileInput) => {
 		formData.append("removeCoverPicture", "true");
 	}
 
-	return httpClient.put("users/me", { body: formData }).json<{ user: User }>();
+	return httpClient.put("user/update-profile", { body: formData }).json<{ user: User }>();
 };
 
 const useUpdateProfile = () => {

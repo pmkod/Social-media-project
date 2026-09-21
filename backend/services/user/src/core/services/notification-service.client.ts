@@ -30,7 +30,7 @@ class NotificationServiceClient {
 
 	async createNotification(data: CreateNotificationInput): Promise<void> {
 		try {
-			const response = await fetch(`${this.baseUrl}/internal/notifications`, {
+			const response = await fetch(`${this.baseUrl}/internal/notification/create-notification`, {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify(data),
@@ -51,7 +51,7 @@ class NotificationServiceClient {
 	async removeNotification(data: RemoveNotificationInput): Promise<void> {
 		try {
 			const response = await fetch(
-				`${this.baseUrl}/internal/notifications/remove`,
+				`${this.baseUrl}/internal/notification/remove-notification`,
 				{
 					method: "POST",
 					headers: { "Content-Type": "application/json" },

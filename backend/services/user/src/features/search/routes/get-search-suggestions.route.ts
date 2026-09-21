@@ -5,7 +5,7 @@ import { SearchRoutesTag } from "../search.constants";
 
 const routeDef = createRoute({
 	method: "get",
-	path: "/search/suggestions",
+	path: "/user/get-search-suggestions",
 	summary: "Get text search suggestions",
 	tags: [SearchRoutesTag],
 	request: {

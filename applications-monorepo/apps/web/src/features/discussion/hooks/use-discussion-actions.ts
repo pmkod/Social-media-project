@@ -16,7 +16,7 @@ const useDeleteDiscussion = () => {
 	return useMutation({
 		mutationFn: (discussionId: string) =>
 			httpClient
-				.delete(`discussions/${discussionId}`)
+				.delete(`chat/delete-discussion/${discussionId}`)
 				.json<{ message: string }>(),
 		onSuccess: (_, discussionId) => {
 			queryClient.setQueriesData<InfiniteData<DiscussionsResponse>>(
@@ -57,7 +57,7 @@ const useLeaveDiscussion = () => {
 			userId: string;
 		}) =>
 			httpClient
-				.delete(`discussions/${discussionId}/members/${userId}`)
+				.delete(`chat/remove-discussion-member/${discussionId}/${userId}`)
 				.json<{ message: string; userId: string }>(),
 		onSuccess: (_, { discussionId }) => {
 			queryClient.setQueriesData<InfiniteData<DiscussionsResponse>>(
@@ -98,7 +98,7 @@ const useRemoveDiscussionMember = () => {
 			userId: string;
 		}) =>
 			httpClient
-				.delete(`discussions/${discussionId}/members/${userId}`)
+				.delete(`chat/remove-discussion-member/${discussionId}/${userId}`)
 				.json<{ message: string; userId: string }>(),
 		onSuccess: (_, { discussionId, userId }) => {
 			queryClient.setQueryData<DiscussionResponse>(
@@ -153,7 +153,7 @@ const useSetDiscussionBlocked = () => {
 			isBlocked: boolean;
 		}) =>
 			httpClient
-				.patch(`discussions/${discussionId}/members/${userId}`, {
+				.patch(`chat/update-discussion-member/${discussionId}/${userId}`, {
 					json: { isBlocked },
 				})
 				.json<{ member: { isBlocked: boolean } }>(),
@@ -204,7 +204,7 @@ const useAddDiscussionMembers = () => {
 			users: User[];
 		}) =>
 			httpClient
-				.post(`discussions/${discussionId}/members`, {
+				.post(`chat/add-discussion-members/${discussionId}`, {
 					json: { userIds: users.map((user) => user.id) },
 				})
 				.json<{ addedUserIds: string[]; addedCount: number }>(),

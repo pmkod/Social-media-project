@@ -15,7 +15,7 @@ import { PostsRoutesTag } from "../posts.constants";
 
 const routeDef = createRoute({
 	method: "delete",
-	path: "/posts/{postId}/likes",
+	path: "/content/unlike-post/{postId}",
 	summary: "Unlike a post",
 	tags: [PostsRoutesTag],
 	middleware: [requireUserAuthentication],

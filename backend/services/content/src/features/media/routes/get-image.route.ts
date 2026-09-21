@@ -6,7 +6,7 @@ import { MediaRoutesTag } from "../media.constants";
 
 const routeDef = createRoute({
 	method: "get",
-	path: "/images/{fileName}",
+	path: "/content/get-image/{fileName}",
 	summary: "Serve image file from S3",
 	tags: [MediaRoutesTag],
 	request: {

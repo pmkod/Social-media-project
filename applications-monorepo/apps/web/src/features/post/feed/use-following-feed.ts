@@ -35,7 +35,7 @@ const fetchFollowingFeedPage = async ({
 	}
 
 	return await httpClient
-		.get("feed/following", {
+		.get("content/get-feed-following", {
 			searchParams,
 		})
 		.json<FollowingFeedResponse>();

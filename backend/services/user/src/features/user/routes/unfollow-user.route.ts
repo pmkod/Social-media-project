@@ -14,7 +14,7 @@ import { UserRoutesTag } from "../user.constants";
 
 const routeDef = createRoute({
 	method: "delete",
-	path: "/users/{id}/follow",
+	path: "/user/unfollow-user/{id}",
 	summary: "Unfollow a user",
 	tags: [UserRoutesTag],
 	middleware: [requireUserAuthentication],

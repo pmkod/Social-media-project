@@ -13,7 +13,7 @@ import {
 
 const routeDef = createRoute({
 	method: "patch",
-	path: "/sessions/{sessionId}/disable",
+	path: "/session/disable-session/{sessionId}",
 	summary: "Disable a session",
 	tags: [SessionsRoutesTag],
 	middleware: [requireUserAuthentication],

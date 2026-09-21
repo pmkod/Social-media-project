@@ -18,7 +18,7 @@ import { setPostMediaFile } from "../services/post-media-storage.service";
 
 const routeDef = createRoute({
 	method: "post",
-	path: "/posts",
+	path: "/content/create-post",
 	middleware: [requireUserAuthentication],
 	summary: "Create post",
 	tags: [PostsRoutesTag],

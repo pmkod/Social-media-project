@@ -8,7 +8,7 @@ import { NotificationsRoutesTag } from "../notifications.constants";
 
 const routeDef = createRoute({
 	method: "get",
-	path: "/notifications",
+	path: "/notification/get-notifications",
 	summary: "Get notifications with cursor pagination",
 	tags: [NotificationsRoutesTag],
 	middleware: [requireUserAuthentication],

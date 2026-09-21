@@ -91,56 +91,55 @@ Chaque service propose une interface interactive de documentation :
 
 | Endpoint | Service | Auth requise |
 | --- | --- | --- |
-| `POST /authentication/signup` | user | Non |
-| `POST /authentication/complete-signup` | user | Non |
-| `POST /authentication/login` | user | Non |
-| `POST /authentication/complete-login` | user | Non |
-| `POST /authentication/user-verification` | user | Non |
-| `POST /authentication/resend-user-verification-code` | user | Non |
-| `POST /authentication/password-reset` | user | Non |
-| `POST /authentication/new-password` | user | Non |
-| `POST /authentication/logout` | user | Oui |
-| `GET /sessions/active` | session | Oui |
-| `GET /sessions/{sessionId}` | session | Oui |
-| `PATCH /sessions/{sessionId}/disable` | session | Oui |
-| `POST /sessions/logout-others` | session | Oui |
-| `GET /users/me` | user | Oui |
-| `GET /users/{userId}` | user | Non |
-| `PUT /users/me` | user | Oui |
-| `POST /posts` | content | Oui |
-| `GET /feed/following` | content | Non |
-| `GET /posts/{id}` | content | Non |
-| `PUT /posts/{id}` | content | Oui |
-| `DELETE /posts/{id}` | content | Oui |
-| `POST /comments` | postId, parentCommentId?, content | Oui |
-| `GET /comments` | postId, parentCommentId?, page?, limit? | Non |
-| `DELETE /comments/{id}` | content | Oui |
-| `POST /posts/{postId}/likes` | content | Oui |
-| `DELETE /posts/{postId}/likes` | content | Oui |
-| `GET /posts/{postId}/likes` | content | Non |
-| `POST /comments/{commentId}/likes` | content | Oui |
-| `DELETE /comments/{commentId}/likes` | content | Oui |
-| `GET /comments/{commentId}/likes` | content | Non |
-| `GET /report-reasons` | report | Non |
-| `POST /reports` | report | Oui |
-| `GET /notifications` | notification | Oui |
-| `PATCH /notifications/seen` | notification | Oui |
-| `POST /discussions` | chat | Oui |
-| `GET /discussions` | chat | Oui |
-| `GET /discussions/{discussionId}` | chat | Oui |
-| `PATCH /discussions/{discussionId}` | chat | Oui |
-| `DELETE /discussions/{discussionId}` | chat | Oui |
-| `PATCH /discussions/{discussionId}/read` | chat | Oui |
-| `POST /discussions/{discussionId}/members` | chat | Oui |
-| `PATCH /discussions/{discussionId}/members/{userId}` | chat | Oui |
-| `DELETE /discussions/{discussionId}/members/{userId}` | chat | Oui |
-| `GET /discussions/{discussionId}/messages` | chat | Oui |
-| `POST /discussions/{discussionId}/messages` | chat | Oui |
-| `PATCH /messages/{messageId}` | chat | Oui |
-| `DELETE /messages/{messageId}` | chat | Oui |
-| `GET /messages/{messageId}/images/{imageId}/{quality}` | chat | Oui, membre actif de la discussion |
+| `POST /user/signup` | user | Non |
+| `POST /user/complete-signup` | user | Non |
+| `POST /user/login` | user | Non |
+| `POST /user/complete-login` | user | Non |
+| `POST /user/do-user-verification` | user | Non |
+| `POST /user/resend-user-verification-code` | user | Non |
+| `POST /user/password-reset` | user | Non |
+| `POST /user/new-password` | user | Non |
+| `POST /user/logout` | user | Oui |
+| `GET /session/get-all-active-sessions` | session | Oui |
+| `GET /session/get-session/{sessionId}` | session | Oui |
+| `PATCH /session/disable-session/{sessionId}` | session | Oui |
+| `POST /session/logout-other-sessions` | session | Oui |
+| `GET /user/get-me` | user | Oui |
+| `GET /user/get-user-by-id/{userId}` | user | Non |
+| `PUT /user/update-profile` | user | Oui |
+| `POST /content/create-post` | content | Oui |
+| `GET /content/get-feed-following` | content | Non |
+| `GET /content/get-post-by-id/{id}` | content | Non |
+| `DELETE /content/delete-post/{postId}` | content | Oui |
+| `POST /content/create-comment` | content | Oui |
+| `GET /content/get-comments` | content | Non |
+| `DELETE /content/delete-comment/{id}` | content | Oui |
+| `POST /content/like-post/{postId}` | content | Oui |
+| `DELETE /content/unlike-post/{postId}` | content | Oui |
+| `GET /content/get-post-likes/{postId}` | content | Non |
+| `POST /content/like-comment/{commentId}` | content | Oui |
+| `DELETE /content/unlike-comment/{commentId}` | content | Oui |
+| `GET /content/get-comment-likes/{commentId}` | content | Non |
+| `GET /report/get-report-reasons` | report | Non |
+| `POST /report/create-report` | report | Oui |
+| `GET /notification/get-notifications` | notification | Oui |
+| `PATCH /notification/mark-notifications-seen` | notification | Oui |
+| `POST /chat/create-discussion` | chat | Oui |
+| `GET /chat/get-discussions` | chat | Oui |
+| `GET /chat/get-discussion/{discussionId}` | chat | Oui |
+| `PATCH /chat/update-discussion/{discussionId}` | chat | Oui |
+| `DELETE /chat/delete-discussion/{discussionId}` | chat | Oui |
+| `PATCH /chat/mark-discussion-read/{discussionId}` | chat | Oui |
+| `POST /chat/add-discussion-members/{discussionId}` | chat | Oui |
+| `PATCH /chat/update-discussion-member/{discussionId}/{userId}` | chat | Oui |
+| `DELETE /chat/remove-discussion-member/{discussionId}/{userId}` | chat | Oui |
+| `GET /chat/get-messages/{discussionId}` | chat | Oui |
+| `POST /chat/create-message/{discussionId}` | chat | Oui |
+| `PATCH /chat/update-message/{messageId}` | chat | Oui |
+| `DELETE /chat/delete-message/{messageId}` | chat | Oui |
+| `GET /chat/get-message-image/{messageId}/{imageId}/{quality}` | chat | Oui, membre actif de la discussion |
 
-Les images des messages sont envoyées avec `POST /discussions/{discussionId}/messages`
+Les images des messages sont envoyées avec `POST /chat/create-message/{discussionId}`
 en `multipart/form-data`. Le service conserve une version compressée et l'original
 dans le compartiment privé `social-media-project-discussion`; aucun objet de ce
 compartiment n'est exposé directement.

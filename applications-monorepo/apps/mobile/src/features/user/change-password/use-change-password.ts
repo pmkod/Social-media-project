@@ -10,7 +10,7 @@ export const useChangePassword = () => {
 	return useMutation({
 		mutationFn: (body: ChangePasswordRequest) =>
 			httpClient
-				.put("users/me/password", { json: body })
+				.put("user/change-password", { json: body })
 				.json<{ message: string }>(),
 	});
 };

@@ -7,7 +7,7 @@ const useReportReasons = () =>
 	useQuery({
 		queryKey: reportReasonQueryKeys.root,
 		queryFn: () =>
-			httpClient.get("report-reasons").json<ReportReasonsResponse>(),
+			httpClient.get("report/get-report-reasons").json<ReportReasonsResponse>(),
 		staleTime: 5 * 60 * 1000,
 	});
 

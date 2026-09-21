@@ -12,7 +12,7 @@ import {
 
 const routeDef = createRoute({
 	method: "get",
-	path: "/discussions",
+	path: "/chat/get-discussions",
 	summary: "Get the authenticated user's discussions",
 	tags: [DiscussionsRoutesTag],
 	middleware: [requireUserAuthentication],

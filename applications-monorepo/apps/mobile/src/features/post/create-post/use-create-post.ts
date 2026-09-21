@@ -40,7 +40,7 @@ const createPost = async (input: CreatePostInput): Promise<Post> => {
 	}
 
 	const response = await httpClient
-		.post("posts", {
+		.post("content/create-post", {
 			body: formData,
 		})
 		.json<CreatedPostResponse>();

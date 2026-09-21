@@ -14,7 +14,7 @@ import { UserRoutesTag } from "../user.constants";
 
 const routeDef = createRoute({
 	method: "post",
-	path: "/users/{id}/follow",
+	path: "/user/follow-user/{id}",
 	summary: "Follow a user",
 	tags: [UserRoutesTag],
 	middleware: [requireUserAuthentication],

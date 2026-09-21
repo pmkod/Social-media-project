@@ -8,7 +8,7 @@ import { SessionSchema } from "../sessions.validation-schemas";
 
 const routeDef = createRoute({
 	method: "get",
-	path: "/sessions/active",
+	path: "/session/get-all-active-sessions",
 	summary: "Get all active sessions for a user",
 	tags: [SessionsRoutesTag],
 	middleware: [requireUserAuthentication],

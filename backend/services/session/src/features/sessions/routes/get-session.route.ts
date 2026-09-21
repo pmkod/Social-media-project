@@ -13,7 +13,7 @@ import {
 
 const routeDef = createRoute({
 	method: "get",
-	path: "/sessions/{sessionId}",
+	path: "/session/get-session/{sessionId}",
 	summary: "Get a session",
 	tags: [SessionsRoutesTag],
 	middleware: [requireUserAuthentication],

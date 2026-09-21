@@ -9,7 +9,7 @@ import { BookmarksRoutesTag } from "../bookmarks.constants";
 
 const routeDef = createRoute({
 	method: "delete",
-	path: "/collections/{collectionId}",
+	path: "/content/delete-collection/{collectionId}",
 	summary:
 		"Delete a bookmark collection and bookmarks that are no longer organized",
 	tags: [BookmarksRoutesTag],

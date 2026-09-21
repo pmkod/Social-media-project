@@ -31,7 +31,7 @@ const useUserPosts = ({ userId }: UseUserPostsParams) =>
 				searchParams.set("cursorCreatedAt", pageParam.createdAt);
 			}
 			return httpClient
-				.get(`posts/users/${userId}`, { searchParams })
+				.get(`content/get-user-posts/${userId}`, { searchParams })
 				.json<UserPostsResponse>();
 		},
 		initialPageParam: null as UserPostsCursor | null,

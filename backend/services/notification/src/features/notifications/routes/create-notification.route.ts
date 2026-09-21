@@ -7,7 +7,7 @@ import { CreateNotificationRequestBody } from "../notifications.validation-schem
 
 const routeDef = createRoute({
 	method: "post",
-	path: "/internal/notifications",
+	path: "/internal/notification/create-notification",
 	summary: "Create a notification from another service",
 	tags: [NotificationsRoutesTag],
 	request: {

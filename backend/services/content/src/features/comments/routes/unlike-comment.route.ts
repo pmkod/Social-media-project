@@ -14,7 +14,7 @@ import { CommentsRoutesTag } from "../comments.constants";
 
 const routeDef = createRoute({
 	method: "delete",
-	path: "/comments/{commentId}/likes",
+	path: "/content/unlike-comment/{commentId}",
 	summary: "Unlike a comment",
 	tags: [CommentsRoutesTag],
 	middleware: [requireUserAuthentication],

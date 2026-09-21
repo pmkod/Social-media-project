@@ -18,7 +18,7 @@ export const useLikePost = () => {
 
 	return useMutation({
 		mutationFn: async (postId: string) =>
-			await httpClient.post(`posts/${postId}/likes`).json<LikePostResponse>(),
+			await httpClient.post(`content/like-post/${postId}`).json<LikePostResponse>(),
 
 		onSuccess: (data, postId) => {
 			queryClient.setQueriesData<InfiniteData<{ posts: Post[] }>>(

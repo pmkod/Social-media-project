@@ -14,7 +14,7 @@ import {
 
 const routeDef = createRoute({
 	method: "get",
-	path: "/posts/{postId}/comments/{commentId}",
+	path: "/content/get-comment-by-id/{postId}/{commentId}",
 	summary: "Get a comment and its parent thread",
 	tags: [CommentsRoutesTag],
 	request: {

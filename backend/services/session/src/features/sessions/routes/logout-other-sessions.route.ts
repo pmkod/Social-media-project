@@ -7,7 +7,7 @@ import { sessionRepository } from "../sessions.repository";
 
 const routeDef = createRoute({
 	method: "post",
-	path: "/sessions/logout-others",
+	path: "/session/logout-other-sessions",
 	summary: "Disable every session except the current one",
 	tags: [SessionsRoutesTag],
 	middleware: [requireUserAuthentication],

@@ -23,7 +23,7 @@ const useCreateBookmarkCollection = () => {
 	return useMutation({
 		mutationFn: (input: CreateCollectionInput) =>
 			httpClient
-				.post("collections", { json: input })
+				.post("content/create-collection", { json: input })
 				.json<BookmarkCollectionResponse>(),
 		onSuccess: ({ bookmarkCollection }) => {
 			queryClient.invalidateQueries({

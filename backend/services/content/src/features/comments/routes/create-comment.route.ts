@@ -21,7 +21,7 @@ const CreateCommentRequestBody = z.object({
 
 const routeDef = createRoute({
 	method: "post",
-	path: "/comments",
+	path: "/content/create-comment",
 	summary: "Add a comment to a post",
 	tags: [CommentsRoutesTag],
 	middleware: [requireUserAuthentication],

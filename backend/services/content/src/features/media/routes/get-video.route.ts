@@ -7,7 +7,7 @@ import { MediaRoutesTag } from "../media.constants";
 
 const routeDef = createRoute({
 	method: "get",
-	path: "/videos/{fileName}",
+	path: "/content/get-video/{fileName}",
 	summary: "Serve video file from S3 with Range streaming support",
 	tags: [MediaRoutesTag],
 	request: {

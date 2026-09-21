@@ -55,7 +55,7 @@ export class UserServiceClient {
 		}
 
 		try {
-			const response = await fetch(`${this.baseUrl}/users/batch`, {
+			const response = await fetch(`${this.baseUrl}/user/get-users-batch`, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
@@ -92,7 +92,7 @@ export class UserServiceClient {
 	): Promise<BlockRelationshipIdsDto> {
 		try {
 			const response = await fetch(
-				`${this.baseUrl}/internal/users/${encodeURIComponent(userId)}/block-relationship-ids`,
+				`${this.baseUrl}/internal/user/get-block-relationship-ids/${encodeURIComponent(userId)}`,
 			);
 			if (!response.ok) {
 				return { blockedUserIds: [], blockedByUserIds: [] };
@@ -123,7 +123,7 @@ export class UserServiceClient {
 	async fetchFollowingIds(userId: string): Promise<string[]> {
 		try {
 			const response = await fetch(
-				`${this.baseUrl}/internal/users/${encodeURIComponent(userId)}/following-ids`,
+				`${this.baseUrl}/internal/user/get-following-ids/${encodeURIComponent(userId)}`,
 			);
 			if (!response.ok) return [];
 			const data = (await response.json()) as { userIds: string[] };
@@ -140,7 +140,7 @@ export class UserServiceClient {
 	async adjustPostCount(userId: string, delta: -1 | 1): Promise<void> {
 		try {
 			const response = await fetch(
-				`${this.baseUrl}/internal/users/${encodeURIComponent(userId)}/post-count`,
+				`${this.baseUrl}/internal/user/update-post-count/${encodeURIComponent(userId)}`,
 				{
 					method: "PATCH",
 					headers: { "Content-Type": "application/json" },

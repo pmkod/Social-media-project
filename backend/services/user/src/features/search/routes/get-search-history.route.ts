@@ -39,7 +39,7 @@ const SearchHistoryResponseBody = z.object({
 
 const routeDef = createRoute({
 	method: "get",
-	path: "/search/history",
+	path: "/user/get-search-history",
 	summary: "Get the authenticated user's recent searches",
 	tags: [SearchRoutesTag],
 	middleware: [requireUserAuthentication],

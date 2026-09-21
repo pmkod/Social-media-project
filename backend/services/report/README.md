@@ -4,8 +4,8 @@ Microservice de signalement des posts, commentaires et utilisateurs. Il écoute 
 
 ## Routes publiques via la gateway
 
-- `GET /report-reasons` : raisons actives utilisables par le frontend.
-- `POST /reports` : crée un signalement authentifié.
+- `GET /report/get-report-reasons` : raisons actives utilisables par le frontend.
+- `POST /report/create-report` : crée un signalement authentifié.
 
 ## Installation
 

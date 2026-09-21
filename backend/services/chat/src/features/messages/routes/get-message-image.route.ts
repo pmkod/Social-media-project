@@ -10,7 +10,7 @@ import { getMessageImage } from "../services/message-image-storage.service";
 
 const routeDef = createRoute({
 	method: "get",
-	path: "/messages/{messageId}/images/{imageId}/{quality}",
+	path: "/chat/get-message-image/{messageId}/{imageId}/{quality}",
 	summary: "Get a protected message image",
 	description:
 		"Returns a message image only when the authenticated user is still an active member of its discussion.",

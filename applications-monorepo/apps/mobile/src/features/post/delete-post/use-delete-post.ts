@@ -34,7 +34,7 @@ const useDeletePost = () => {
 
 	return useMutation({
 		mutationFn: (post: Post) =>
-			httpClient.delete(`posts/${post.id}`).json<{ message: string }>(),
+			httpClient.delete(`content/delete-post/${post.id}`).json<{ message: string }>(),
 		onSuccess: (_, post) => {
 			queryClient.setQueriesData<InfiniteData<PostListPage>>(
 				{ queryKey: postListQueryKeys.root },

@@ -18,7 +18,7 @@ const CreateSearchHistoryBody = z.object({
 
 const routeDef = createRoute({
 	method: "post",
-	path: "/search/history",
+	path: "/user/create-search-history",
 	summary: "Add an item to the authenticated user's search history",
 	tags: [SearchRoutesTag],
 	middleware: [requireUserAuthentication],

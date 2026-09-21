@@ -12,7 +12,7 @@ const useClearSearchHistory = () => {
 
 	return useMutation({
 		mutationFn: () =>
-			httpClient.delete("search/history").json<{ message: string }>(),
+			httpClient.delete("user/clear-search-history").json<{ message: string }>(),
 		onSuccess: () => {
 			queryClient.setQueriesData<InfiniteData<SearchHistoryResponse>>(
 				{ queryKey: searchQueryKeys.historyRoot },

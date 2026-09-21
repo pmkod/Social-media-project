@@ -19,7 +19,7 @@ import {
 
 const routeDef = createRoute({
 	method: "patch",
-	path: "/messages/{messageId}",
+	path: "/chat/update-message/{messageId}",
 	summary: "Edit one of the authenticated user's messages",
 	tags: [MessagesRoutesTag],
 	middleware: [requireUserAuthentication],

@@ -5,7 +5,7 @@ import { UserRoutesTag } from "../user.constants";
 
 const routeDef = createRoute({
 	method: "get",
-	path: "/internal/users/{userId}/exists",
+	path: "/internal/user/check-user-exists/{userId}",
 	summary:
 		"Check that an active user can be used as an internal service target",
 	tags: [UserRoutesTag],

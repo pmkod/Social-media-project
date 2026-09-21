@@ -14,7 +14,7 @@ const normalizeHeader = (value: string | undefined, maxLength: number) => {
 
 const routeDef = createRoute({
 	method: "post",
-	path: "/internal/sessions",
+	path: "/internal/session/create-session",
 	summary: "Create a session from a trusted service",
 	tags: [SessionsRoutesTag],
 	request: {

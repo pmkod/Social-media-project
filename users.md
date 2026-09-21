@@ -169,21 +169,21 @@ Tous les 20 utilisateurs ci-dessous ont été créés via l'API, validés (`acti
 
 ```bash
 # Étape 1 : Initialiser la connexion
-curl -s -X POST http://localhost:8000/authentication/login \
+curl -s -X POST http://localhost:8000/user/login \
   -H "Content-Type: application/json" \
   -d '{"emailOrUsername": "lucas.moreau@example.com", "password": "Password123!"}'
 ```
 
-### 2. Récupérer les suggestions de follow (`GET /users/me/follow-suggestions`)
+### 2. Récupérer les suggestions de follow (`GET /user/get-follow-suggestions`)
 
 ```bash
-curl -s -X GET http://localhost:8000/users/me/follow-suggestions \
+curl -s -X GET http://localhost:8000/user/get-follow-suggestions \
   -H "Authorization: Bearer <VOTRE_ACCESS_TOKEN>"
 ```
 
-### 3. Suivre un utilisateur (`POST /users/:id/follow`)
+### 3. Suivre un utilisateur (`POST /user/follow-user/{id}`)
 
 ```bash
-curl -s -X POST http://localhost:8000/users/cmsxwrwrt0006h80m8d120a1i/follow \
+curl -s -X POST http://localhost:8000/user/follow-user/cmsxwrwrt0006h80m8d120a1i \
   -H "Authorization: Bearer <VOTRE_ACCESS_TOKEN>"
 ```

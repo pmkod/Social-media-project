@@ -35,7 +35,7 @@ const useCreateMessage = () => {
 			for (const image of images ?? []) formData.append("images", image);
 
 			return httpClient
-				.post(`discussions/${discussionId}/messages`, {
+				.post(`chat/create-message/${discussionId}`, {
 					body: formData,
 					timeout: 120_000,
 				})

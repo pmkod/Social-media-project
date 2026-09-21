@@ -5,7 +5,7 @@ import { PostsRoutesTag } from "../posts.constants";
 
 const routeDef = createRoute({
 	method: "get",
-	path: "/internal/posts/{id}/exists",
+	path: "/internal/content/check-post-exists/{id}",
 	summary: "Check that a post can be used as an internal service target",
 	tags: [PostsRoutesTag],
 	request: {

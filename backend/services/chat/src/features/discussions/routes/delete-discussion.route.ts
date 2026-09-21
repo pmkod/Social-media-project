@@ -9,7 +9,7 @@ import { DiscussionIdParams } from "../discussions.validation-schemas";
 
 const routeDef = createRoute({
 	method: "delete",
-	path: "/discussions/{discussionId}",
+	path: "/chat/delete-discussion/{discussionId}",
 	summary: "Soft-delete a discussion for the authenticated member",
 	tags: [DiscussionsRoutesTag],
 	middleware: [requireUserAuthentication],

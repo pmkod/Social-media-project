@@ -10,7 +10,7 @@ const useLogoutOtherSessions = () => {
 	return useMutation({
 		mutationFn: () =>
 			httpClient
-				.post("sessions/logout-others")
+				.post("session/logout-other-sessions")
 				.json<{ disabledCount: number }>(),
 		onSuccess: () => {
 			const currentSessionId = getSessionId();

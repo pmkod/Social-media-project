@@ -8,7 +8,7 @@ import { NotificationsRoutesTag } from "../notifications.constants";
 
 const routeDef = createRoute({
 	method: "patch",
-	path: "/notifications/seen",
+	path: "/notification/mark-notifications-seen",
 	summary: "Mark all notifications as seen",
 	tags: [NotificationsRoutesTag],
 	middleware: [requireUserAuthentication],

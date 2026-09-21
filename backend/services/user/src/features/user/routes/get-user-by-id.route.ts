@@ -8,7 +8,7 @@ import { UserRoutesTag } from "../user.constants";
 
 const routeDef = createRoute({
 	method: "get",
-	path: "/users/{userId}",
+	path: "/user/get-user-by-id/{userId}",
 	summary: "Get user by ID",
 	tags: [UserRoutesTag],
 	request: {

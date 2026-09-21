@@ -19,7 +19,7 @@ import { SignupValidationSchema } from "../authentication.validation-schemas";
 const signupRoute = defineOpenAPIRoute({
 	route: createRoute({
 		method: "post",
-		path: "/authentication/signup",
+		path: "/user/signup",
 		summary: "Signup",
 		tags: [AuthenticationRoutesTag],
 		request: {

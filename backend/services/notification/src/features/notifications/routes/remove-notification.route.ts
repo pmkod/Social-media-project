@@ -7,7 +7,7 @@ import { RemoveNotificationRequestBody } from "../notifications.validation-schem
 
 const routeDef = createRoute({
 	method: "post",
-	path: "/internal/notifications/remove",
+	path: "/internal/notification/remove-notification",
 	summary: "Remove a notification when its source event is reverted",
 	tags: [NotificationsRoutesTag],
 	request: {

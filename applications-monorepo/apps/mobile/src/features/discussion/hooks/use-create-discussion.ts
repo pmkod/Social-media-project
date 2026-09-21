@@ -19,7 +19,7 @@ export const useCreateDiscussion = () => {
 	return useMutation({
 		mutationFn: (input: CreateDiscussionInput) =>
 			httpClient
-				.post("discussions", { json: input })
+				.post("chat/create-discussion", { json: input })
 				.json<CreateDiscussionResponse>(),
 		onSuccess: () => {
 			queryClient.invalidateQueries({

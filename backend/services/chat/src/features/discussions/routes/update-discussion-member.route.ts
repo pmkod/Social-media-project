@@ -14,7 +14,7 @@ import {
 
 const routeDef = createRoute({
 	method: "patch",
-	path: "/discussions/{discussionId}/members/{userId}",
+	path: "/chat/update-discussion-member/{discussionId}/{userId}",
 	summary: "Promote or demote a group member",
 	tags: [DiscussionMembersRoutesTag],
 	middleware: [requireUserAuthentication],

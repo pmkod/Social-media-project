@@ -19,7 +19,7 @@ export const useUnlikePost = () => {
 	return useMutation({
 		mutationFn: async (postId: string) =>
 			await httpClient
-				.delete(`posts/${postId}/likes`)
+				.delete(`content/unlike-post/${postId}`)
 				.json<UnlikePostResponse>(),
 		onSuccess: (data, postId) => {
 			queryClient.setQueriesData<InfiniteData<{ posts: Post[] }>>(

@@ -12,7 +12,7 @@ const UpdateUnseenNotificationsCountBody = z.union([
 
 const routeDef = createRoute({
 	method: "patch",
-	path: "/internal/users/{userId}/unseen-notifications-count",
+	path: "/internal/user/update-unseen-notifications-count/{userId}",
 	summary: "Update a user's unseen notification count",
 	tags: [UserRoutesTag],
 	request: {

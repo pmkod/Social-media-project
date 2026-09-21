@@ -1,19 +1,8 @@
 [
-	{ "path": "/authentication", "target": "http://localhost:8001" },
-	{ "path": "/users", "target": "http://localhost:8001" },
-	{ "path": "/search", "target": "http://localhost:8001" },
-	{ "path": "/posts", "target": "http://localhost:8002" },
-	{ "path": "/feed", "target": "http://localhost:8002" },
-	{ "path": "/comments", "target": "http://localhost:8002" },
-	{ "path": "/bookmarks", "target": "http://localhost:8002" },
-	{ "path": "/collections", "target": "http://localhost:8002" },
-	{ "path": "/media", "target": "http://localhost:8002" },
-	{ "path": "/images", "target": "http://localhost:8002" },
-	{ "path": "/videos", "target": "http://localhost:8002" },
-	{ "path": "/reports", "target": "http://localhost:8003" },
-	{ "path": "/report-reasons", "target": "http://localhost:8003" },
-	{ "path": "/notifications", "target": "http://localhost:8004" },
-	{ "path": "/discussions", "target": "http://localhost:8005" },
-	{ "path": "/messages", "target": "http://localhost:8005" },
-	{ "path": "/sessions", "target": "http://localhost:8006" }
+	{ "path": "/user/", "target": "http://localhost:8001" },
+	{ "path": "/content/", "target": "http://localhost:8002" },
+	{ "path": "/report/", "target": "http://localhost:8003" },
+	{ "path": "/notification/", "target": "http://localhost:8004" },
+	{ "path": "/chat/", "target": "http://localhost:8005" },
+	{ "path": "/session/", "target": "http://localhost:8006" }
 ]

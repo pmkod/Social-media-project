@@ -31,7 +31,7 @@ class UserServiceClient {
 		userIds: string[],
 		authenticatedUserId: string,
 	): Promise<UserProfileDto[]> {
-		const response = await fetch(`${this.baseUrl}/users/batch`, {
+		const response = await fetch(`${this.baseUrl}/user/get-users-batch`, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",

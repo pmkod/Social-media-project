@@ -11,7 +11,7 @@ import { UpdateBookmarkCollectionSchema } from "../bookmarks.validation-schemas"
 
 const routeDef = createRoute({
 	method: "put",
-	path: "/collections/{collectionId}",
+	path: "/content/edit-collection/{collectionId}",
 	summary: "Edit a bookmark collection",
 	tags: [BookmarksRoutesTag],
 	middleware: [requireUserAuthentication],

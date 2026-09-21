@@ -21,7 +21,7 @@ export const useCreateMessage = () => {
 			}
 
 			return httpClient
-				.post(`discussions/${discussionId}/messages`, { body: formData })
+				.post(`chat/create-message/${discussionId}`, { body: formData })
 				.json<CreateMessageResponse>();
 		},
 		onSuccess: (_, { discussionId }) => {

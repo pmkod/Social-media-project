@@ -13,7 +13,7 @@ const useDiscussionMedia = (discussionId: string, limit = 30) =>
 				searchParams.set("cursorId", pageParam.id);
 			}
 			return httpClient
-				.get(`discussions/${discussionId}/media`, { searchParams })
+				.get(`chat/get-discussion-media/${discussionId}`, { searchParams })
 				.json<DiscussionMediaResponse>();
 		},
 		initialPageParam: null as { createdAt: string; id: string } | null,

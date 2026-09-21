@@ -9,7 +9,7 @@ import { UserRoutesTag } from "../user.constants";
 
 const routeDef = createRoute({
 	method: "delete",
-	path: "/users/{id}/block",
+	path: "/user/unblock-user/{id}",
 	summary: "Unblock a user",
 	tags: [UserRoutesTag],
 	middleware: [requireUserAuthentication],

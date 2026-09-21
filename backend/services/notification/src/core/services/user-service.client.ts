@@ -32,7 +32,7 @@ class UserServiceClient {
 		if (uniqueIds.length === 0) return usersMap;
 
 		try {
-			const response = await fetch(`${this.baseUrl}/users/batch`, {
+			const response = await fetch(`${this.baseUrl}/user/get-users-batch`, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
@@ -65,7 +65,7 @@ class UserServiceClient {
 	): Promise<void> {
 		try {
 			const response = await fetch(
-				`${this.baseUrl}/internal/users/${encodeURIComponent(userId)}/unseen-notifications-count`,
+				`${this.baseUrl}/internal/user/update-unseen-notifications-count/${encodeURIComponent(userId)}`,
 				{
 					method: "PATCH",
 					headers: { "Content-Type": "application/json" },

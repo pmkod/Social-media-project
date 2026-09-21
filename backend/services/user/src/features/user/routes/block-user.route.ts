@@ -14,7 +14,7 @@ import { UserRoutesTag } from "../user.constants";
 
 const routeDef = createRoute({
 	method: "post",
-	path: "/users/{id}/block",
+	path: "/user/block-user/{id}",
 	summary: "Block a user and remove follows in both directions",
 	tags: [UserRoutesTag],
 	middleware: [requireUserAuthentication],
