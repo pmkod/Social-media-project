@@ -9,7 +9,7 @@ function PrivacyPolicyPage() {
 	return (
 		<main className="w-full px-6 py-10 sm:py-14">
 			<article className="mx-auto w-full max-w-3xl">
-				<p className="text-sm font-medium text-muted-foreground">Goodspace</p>
+				<p className="text-sm font-medium text-muted-foreground">Waka</p>
 				<h1 className="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">
 					{m.privacy_title()}
 				</h1>

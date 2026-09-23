@@ -64,7 +64,7 @@ export function Sidebar() {
 			<div className="space-y-6">
 				{/* Logo at Top */}
 				<div className="py-2 text-center lg:px-3 lg:text-left">
-					<Logo compactBelowLaptop />
+					<Logo />
 				</div>
 
 				{/* Navigation Links */}
