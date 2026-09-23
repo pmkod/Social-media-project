@@ -6,7 +6,7 @@ import {
 	PlusSquare,
 	Bell,
 	User as UserIcon,
-	MessageCircle,
+	// MessageCircle, // Module de discussion temporairement désactivé.
 	Bookmark,
 } from "lucide-react-native";
 import { Pressable, View, Text } from "react-native";
@@ -63,12 +63,14 @@ export default function AppLayout() {
 							>
 								<Bookmark size={20} color="#fafafa" />
 							</Pressable>
+							{/* Module de discussion temporairement désactivé.
 							<Pressable
 								onPress={() => router.push("/(app)/discussions" as any)}
 								className="p-2 rounded-full active:bg-[#18181b]"
 							>
 								<MessageCircle size={20} color="#fafafa" />
 							</Pressable>
+							*/}
 						</View>
 					),
 				}}

@@ -2,7 +2,7 @@ import {
 	type RemixiconComponentType,
 	RiAddLine,
 	RiBookmarkLine,
-	RiChat3Line,
+	// RiChat3Line, // Module de discussion temporairement désactivé.
 	RiHome5Line,
 	RiNotification3Line,
 	RiSearchLine,
@@ -81,11 +81,13 @@ export function Sidebar() {
 						label={m.nav_notifications()}
 						badgeCount={data?.user.unseenNotificationsCount}
 					/>
+					{/* Module de discussion temporairement désactivé.
 					<SidebarLink
 						to="/discussions"
 						icon={RiChat3Line}
 						label={m.nav_discussions()}
 					/>
+					*/}
 					<SidebarLink
 						to="/bookmark-collections"
 						icon={RiBookmarkLine}

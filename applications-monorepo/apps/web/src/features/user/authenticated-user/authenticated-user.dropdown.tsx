@@ -49,7 +49,7 @@ function AuthenticatedUserDropdown({
 				<button
 					type="button"
 					className={cn(
-						"flex w-full min-w-0 items-center gap-3 rounded-2xl p-2 text-left transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+						"flex w-full min-w-0 items-center gap-3 rounded p-3 cursor-pointer text-left transition-colors hover:bg-accent/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
 						compactBelowLaptop &&
 							"justify-center gap-0 lg:justify-start lg:gap-3",
 					)}
@@ -62,10 +62,10 @@ function AuthenticatedUserDropdown({
 							compactBelowLaptop && "hidden lg:block",
 						)}
 					>
-						<div className="truncate text-xs font-semibold text-foreground">
+						<div className="truncate text-sm font-semibold text-foreground">
 							{authenticatedUser.fullName}
 						</div>
-						<div className="truncate text-[11px] text-muted-foreground">
+						<div className="truncate text-xs text-muted-foreground">
 							@{authenticatedUser.username}
 						</div>
 					</div>
