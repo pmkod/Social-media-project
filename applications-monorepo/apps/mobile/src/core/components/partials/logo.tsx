@@ -24,7 +24,7 @@ export function Logo({ className, size = "md" }: LogoProps) {
 					className,
 				)}
 			>
-				Chillspace
+				Waka
 			</Text>
 		</View>
 	);
