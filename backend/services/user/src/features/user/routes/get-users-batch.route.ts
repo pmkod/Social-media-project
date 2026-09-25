@@ -2,11 +2,12 @@ import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
 import type { HonoEnv } from "@/core/types/hono-env";
+import { removeDuplicateStrings } from "@/core/utils/array.utils";
 import { UserRoutesTag } from "../user.constants";
 
 const GetUsersBatchRequestBody = z.object({
 	userIds: z
-		.array(z.string())
+		.array(z.string().nonempty())
 		.min(1, "At least one user ID is required")
 		.openapi({
 			example: ["user-123", "user-456"],
@@ -39,7 +40,7 @@ const getUsersBatchRoute = defineOpenAPIRoute<typeof routeDef, HonoEnv>({
 	route: routeDef,
 	handler: async (c) => {
 		const { userIds } = c.req.valid("json");
-		const uniqueIds = Array.from(new Set(userIds.filter(Boolean)));
+		const uniqueIds = removeDuplicateStrings(userIds);
 
 		if (uniqueIds.length === 0) {
 			return c.json({ users: [] });
