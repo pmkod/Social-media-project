@@ -32,14 +32,17 @@ class UserServiceClient {
 		if (uniqueIds.length === 0) return usersMap;
 
 		try {
-			const response = await fetch(`${this.baseUrl}/user/get-users-batch`, {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-					"X-Authenticated-User-Id": authenticatedUserId,
+			const response = await fetch(
+				`${this.baseUrl}/internal/user/get-users-batch`,
+				{
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+						"X-Authenticated-User-Id": authenticatedUserId,
+					},
+					body: JSON.stringify({ userIds: uniqueIds }),
 				},
-				body: JSON.stringify({ userIds: uniqueIds }),
-			});
+			);
 			if (!response.ok) {
 				console.error(
 					`[UserServiceClient] Failed to fetch notification initiators, status: ${response.status}`,

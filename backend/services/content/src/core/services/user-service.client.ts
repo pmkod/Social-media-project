@@ -39,6 +39,32 @@ export class UserServiceClient {
 		);
 	}
 
+	private async requestBlockRelationships(
+		userId: string,
+		otherUserIds: string[],
+	): Promise<BlockRelationshipIdsDto> {
+		const response = await fetch(
+			`${this.baseUrl}/internal/user/check-block-relationships`,
+			{
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ userId, otherUserIds }),
+			},
+		);
+		if (!response.ok) {
+			throw new Error(
+				`User service responded with status ${response.status}`,
+			);
+		}
+
+		const relationships =
+			(await response.json()) as BlockRelationshipIdsDto;
+		return {
+			blockedUserIds: relationships.blockedUserIds ?? [],
+			blockedByUserIds: relationships.blockedByUserIds ?? [],
+		};
+	}
+
 	async fetchAuthorsBatch(
 		userIds: string[],
 		authenticatedUserId?: string,
@@ -55,16 +81,19 @@ export class UserServiceClient {
 		}
 
 		try {
-			const response = await fetch(`${this.baseUrl}/user/get-users-batch`, {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-					...(authenticatedUserId
-						? { "X-Authenticated-User-Id": authenticatedUserId }
-						: {}),
-				},
-				body: JSON.stringify({ userIds: uniqueIds }),
-			});
+			const [response, relationships] = await Promise.all([
+				fetch(`${this.baseUrl}/internal/user/get-users-batch`, {
+					method: "POST",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify({ userIds: uniqueIds }),
+				}),
+				authenticatedUserId
+					? this.requestBlockRelationships(authenticatedUserId, uniqueIds)
+					: Promise.resolve({
+							blockedUserIds: [],
+							blockedByUserIds: [],
+						}),
+			]);
 
 			if (!response.ok) {
 				console.error(
@@ -74,8 +103,14 @@ export class UserServiceClient {
 			}
 
 			const users = (await response.json()) as UserProfileDto[];
+			const blockedUserIds = new Set(relationships.blockedUserIds);
+			const blockedByUserIds = new Set(relationships.blockedByUserIds);
 			for (const user of users) {
-				authorsMap.set(user.id, user);
+				authorsMap.set(user.id, {
+					...user,
+					isBlockedByAuthenticatedUser: blockedUserIds.has(user.id),
+					hasBlockedAuthenticatedInUser: blockedByUserIds.has(user.id),
+				});
 			}
 		} catch (error) {
 			console.error(

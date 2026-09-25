@@ -2,7 +2,6 @@ import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
 import type { HonoEnv } from "@/core/types/hono-env";
-import { getBlockRelationships } from "../services/get-block-relationships.service";
 import { UserRoutesTag } from "../user.constants";
 
 const GetUsersBatchRequestBody = z.object({
@@ -17,7 +16,7 @@ const GetUsersBatchRequestBody = z.object({
 
 const routeDef = createRoute({
 	method: "post",
-	path: "/user/get-users-batch",
+	path: "/internal/user/get-users-batch",
 	summary: "Get multiple users by their IDs in batch",
 	tags: [UserRoutesTag],
 	request: {
@@ -55,7 +54,6 @@ const getUsersBatchRoute = defineOpenAPIRoute<typeof routeDef, HonoEnv>({
 				id: true,
 				username: true,
 				fullName: true,
-				bio: true,
 				lowQualityProfilePictureFile: {
 					select: { id: true, filename: true },
 				},
@@ -64,21 +62,8 @@ const getUsersBatchRoute = defineOpenAPIRoute<typeof routeDef, HonoEnv>({
 				},
 			},
 		});
-		const authenticatedUser = c.get("authenticatedUser");
-		const authenticatedUserId = authenticatedUser?.id;
-		const blockRelationships = await getBlockRelationships(
-			authenticatedUserId,
-			users.map((user) => user.id),
-		);
-		return c.json(
-			users.map((user) => ({
-				...user,
-				isBlockedByAuthenticatedUser:
-					blockRelationships.blockedByAuthenticatedUserIds.has(user.id),
-				hasBlockedAuthenticatedInUser:
-					blockRelationships.hasBlockedAuthenticatedUserIds.has(user.id),
-			})),
-		);
+
+		return c.json(users);
 	},
 });
 
