@@ -4,7 +4,6 @@ import { prisma } from "@/core/databases";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import type { Prisma } from "@/generated/prisma/client";
 import { requireUserAuthentication } from "@/features/authentication/middlewares/require-user-authentication.middleware";
-import { hydrateProfileMediaFiles } from "../services/get-profile-media-files.service";
 import { UserRoutesTag } from "../user.constants";
 import { ProfileMediaFileResponseBody } from "../user.validation-schemas";
 
@@ -131,17 +130,20 @@ const getFollowSuggestionsRoute = defineOpenAPIRoute<
 				username: true,
 				fullName: true,
 				createdAt: true,
-				lowQualityProfilePictureFileId: true,
-				bestQualityProfilePictureFileId: true,
+				lowQualityProfilePictureFile: {
+					select: { id: true, filename: true },
+				},
+				bestQualityProfilePictureFile: {
+					select: { id: true, filename: true },
+				},
 			},
 		});
 
 		const hasNextPage = candidates.length > limit;
 		const usersToSend = hasNextPage ? candidates.slice(0, limit) : candidates;
 		const lastUser = usersToSend.at(-1);
-		const hydratedUsers = await hydrateProfileMediaFiles(usersToSend);
 
-		const users = hydratedUsers.map(({ createdAt, ...user }) => ({
+		const users = usersToSend.map(({ createdAt, ...user }) => ({
 			...user,
 			isFollowedByAuthenticatedUser: false,
 		}));

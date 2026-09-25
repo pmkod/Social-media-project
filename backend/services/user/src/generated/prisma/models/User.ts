@@ -324,6 +324,10 @@ export type UserWhereInput = {
   active?: Prisma.BoolFilter<"User"> | boolean
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  lowQualityProfilePictureFile?: Prisma.XOR<Prisma.FileNullableScalarRelationFilter, Prisma.FileWhereInput> | null
+  bestQualityProfilePictureFile?: Prisma.XOR<Prisma.FileNullableScalarRelationFilter, Prisma.FileWhereInput> | null
+  lowQualityCoverPictureFile?: Prisma.XOR<Prisma.FileNullableScalarRelationFilter, Prisma.FileWhereInput> | null
+  bestQualityCoverPictureFile?: Prisma.XOR<Prisma.FileNullableScalarRelationFilter, Prisma.FileWhereInput> | null
   userVerifications?: Prisma.UserVerificationListRelationFilter
   followers?: Prisma.FollowListRelationFilter
   following?: Prisma.FollowListRelationFilter
@@ -351,6 +355,10 @@ export type UserOrderByWithRelationInput = {
   active?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  lowQualityProfilePictureFile?: Prisma.FileOrderByWithRelationInput
+  bestQualityProfilePictureFile?: Prisma.FileOrderByWithRelationInput
+  lowQualityCoverPictureFile?: Prisma.FileOrderByWithRelationInput
+  bestQualityCoverPictureFile?: Prisma.FileOrderByWithRelationInput
   userVerifications?: Prisma.UserVerificationOrderByRelationAggregateInput
   followers?: Prisma.FollowOrderByRelationAggregateInput
   following?: Prisma.FollowOrderByRelationAggregateInput
@@ -381,6 +389,10 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   active?: Prisma.BoolFilter<"User"> | boolean
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  lowQualityProfilePictureFile?: Prisma.XOR<Prisma.FileNullableScalarRelationFilter, Prisma.FileWhereInput> | null
+  bestQualityProfilePictureFile?: Prisma.XOR<Prisma.FileNullableScalarRelationFilter, Prisma.FileWhereInput> | null
+  lowQualityCoverPictureFile?: Prisma.XOR<Prisma.FileNullableScalarRelationFilter, Prisma.FileWhereInput> | null
+  bestQualityCoverPictureFile?: Prisma.XOR<Prisma.FileNullableScalarRelationFilter, Prisma.FileWhereInput> | null
   userVerifications?: Prisma.UserVerificationListRelationFilter
   followers?: Prisma.FollowListRelationFilter
   following?: Prisma.FollowListRelationFilter
@@ -445,10 +457,6 @@ export type UserCreateInput = {
   password: string
   fullName?: string | null
   bio?: string | null
-  lowQualityProfilePictureFileId?: string | null
-  bestQualityProfilePictureFileId?: string | null
-  lowQualityCoverPictureFileId?: string | null
-  bestQualityCoverPictureFileId?: string | null
   postCount?: number
   followersCount?: number
   followingCount?: number
@@ -456,6 +464,10 @@ export type UserCreateInput = {
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  lowQualityProfilePictureFile?: Prisma.FileCreateNestedOneWithoutLowQualityProfilePictureUsersInput
+  bestQualityProfilePictureFile?: Prisma.FileCreateNestedOneWithoutBestQualityProfilePictureUsersInput
+  lowQualityCoverPictureFile?: Prisma.FileCreateNestedOneWithoutLowQualityCoverPictureUsersInput
+  bestQualityCoverPictureFile?: Prisma.FileCreateNestedOneWithoutBestQualityCoverPictureUsersInput
   userVerifications?: Prisma.UserVerificationCreateNestedManyWithoutUserInput
   followers?: Prisma.FollowCreateNestedManyWithoutFollowingInput
   following?: Prisma.FollowCreateNestedManyWithoutFollowerInput
@@ -499,10 +511,6 @@ export type UserUpdateInput = {
   password?: Prisma.StringFieldUpdateOperationsInput | string
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  lowQualityProfilePictureFileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  bestQualityProfilePictureFileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  lowQualityCoverPictureFileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  bestQualityCoverPictureFileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   postCount?: Prisma.IntFieldUpdateOperationsInput | number
   followersCount?: Prisma.IntFieldUpdateOperationsInput | number
   followingCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -510,6 +518,10 @@ export type UserUpdateInput = {
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lowQualityProfilePictureFile?: Prisma.FileUpdateOneWithoutLowQualityProfilePictureUsersNestedInput
+  bestQualityProfilePictureFile?: Prisma.FileUpdateOneWithoutBestQualityProfilePictureUsersNestedInput
+  lowQualityCoverPictureFile?: Prisma.FileUpdateOneWithoutLowQualityCoverPictureUsersNestedInput
+  bestQualityCoverPictureFile?: Prisma.FileUpdateOneWithoutBestQualityCoverPictureUsersNestedInput
   userVerifications?: Prisma.UserVerificationUpdateManyWithoutUserNestedInput
   followers?: Prisma.FollowUpdateManyWithoutFollowingNestedInput
   following?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
@@ -573,10 +585,6 @@ export type UserUpdateManyMutationInput = {
   password?: Prisma.StringFieldUpdateOperationsInput | string
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  lowQualityProfilePictureFileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  bestQualityProfilePictureFileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  lowQualityCoverPictureFileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  bestQualityCoverPictureFileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   postCount?: Prisma.IntFieldUpdateOperationsInput | number
   followersCount?: Prisma.IntFieldUpdateOperationsInput | number
   followingCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -690,6 +698,16 @@ export type UserNullableScalarRelationFilter = {
   isNot?: Prisma.UserWhereInput | null
 }
 
+export type UserListRelationFilter = {
+  every?: Prisma.UserWhereInput
+  some?: Prisma.UserWhereInput
+  none?: Prisma.UserWhereInput
+}
+
+export type UserOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
+}
+
 export type StringFieldUpdateOperationsInput = {
   set?: string
 }
@@ -742,6 +760,174 @@ export type UserUpdateOneWithoutSearchHistoryAsSearchedUserNestedInput = {
   delete?: Prisma.UserWhereInput | boolean
   connect?: Prisma.UserWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSearchHistoryAsSearchedUserInput, Prisma.UserUpdateWithoutSearchHistoryAsSearchedUserInput>, Prisma.UserUncheckedUpdateWithoutSearchHistoryAsSearchedUserInput>
+}
+
+export type UserCreateNestedManyWithoutLowQualityProfilePictureFileInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutLowQualityProfilePictureFileInput, Prisma.UserUncheckedCreateWithoutLowQualityProfilePictureFileInput> | Prisma.UserCreateWithoutLowQualityProfilePictureFileInput[] | Prisma.UserUncheckedCreateWithoutLowQualityProfilePictureFileInput[]
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutLowQualityProfilePictureFileInput | Prisma.UserCreateOrConnectWithoutLowQualityProfilePictureFileInput[]
+  createMany?: Prisma.UserCreateManyLowQualityProfilePictureFileInputEnvelope
+  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+}
+
+export type UserCreateNestedManyWithoutBestQualityProfilePictureFileInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutBestQualityProfilePictureFileInput, Prisma.UserUncheckedCreateWithoutBestQualityProfilePictureFileInput> | Prisma.UserCreateWithoutBestQualityProfilePictureFileInput[] | Prisma.UserUncheckedCreateWithoutBestQualityProfilePictureFileInput[]
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutBestQualityProfilePictureFileInput | Prisma.UserCreateOrConnectWithoutBestQualityProfilePictureFileInput[]
+  createMany?: Prisma.UserCreateManyBestQualityProfilePictureFileInputEnvelope
+  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+}
+
+export type UserCreateNestedManyWithoutLowQualityCoverPictureFileInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutLowQualityCoverPictureFileInput, Prisma.UserUncheckedCreateWithoutLowQualityCoverPictureFileInput> | Prisma.UserCreateWithoutLowQualityCoverPictureFileInput[] | Prisma.UserUncheckedCreateWithoutLowQualityCoverPictureFileInput[]
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutLowQualityCoverPictureFileInput | Prisma.UserCreateOrConnectWithoutLowQualityCoverPictureFileInput[]
+  createMany?: Prisma.UserCreateManyLowQualityCoverPictureFileInputEnvelope
+  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+}
+
+export type UserCreateNestedManyWithoutBestQualityCoverPictureFileInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutBestQualityCoverPictureFileInput, Prisma.UserUncheckedCreateWithoutBestQualityCoverPictureFileInput> | Prisma.UserCreateWithoutBestQualityCoverPictureFileInput[] | Prisma.UserUncheckedCreateWithoutBestQualityCoverPictureFileInput[]
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutBestQualityCoverPictureFileInput | Prisma.UserCreateOrConnectWithoutBestQualityCoverPictureFileInput[]
+  createMany?: Prisma.UserCreateManyBestQualityCoverPictureFileInputEnvelope
+  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+}
+
+export type UserUncheckedCreateNestedManyWithoutLowQualityProfilePictureFileInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutLowQualityProfilePictureFileInput, Prisma.UserUncheckedCreateWithoutLowQualityProfilePictureFileInput> | Prisma.UserCreateWithoutLowQualityProfilePictureFileInput[] | Prisma.UserUncheckedCreateWithoutLowQualityProfilePictureFileInput[]
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutLowQualityProfilePictureFileInput | Prisma.UserCreateOrConnectWithoutLowQualityProfilePictureFileInput[]
+  createMany?: Prisma.UserCreateManyLowQualityProfilePictureFileInputEnvelope
+  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+}
+
+export type UserUncheckedCreateNestedManyWithoutBestQualityProfilePictureFileInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutBestQualityProfilePictureFileInput, Prisma.UserUncheckedCreateWithoutBestQualityProfilePictureFileInput> | Prisma.UserCreateWithoutBestQualityProfilePictureFileInput[] | Prisma.UserUncheckedCreateWithoutBestQualityProfilePictureFileInput[]
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutBestQualityProfilePictureFileInput | Prisma.UserCreateOrConnectWithoutBestQualityProfilePictureFileInput[]
+  createMany?: Prisma.UserCreateManyBestQualityProfilePictureFileInputEnvelope
+  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+}
+
+export type UserUncheckedCreateNestedManyWithoutLowQualityCoverPictureFileInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutLowQualityCoverPictureFileInput, Prisma.UserUncheckedCreateWithoutLowQualityCoverPictureFileInput> | Prisma.UserCreateWithoutLowQualityCoverPictureFileInput[] | Prisma.UserUncheckedCreateWithoutLowQualityCoverPictureFileInput[]
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutLowQualityCoverPictureFileInput | Prisma.UserCreateOrConnectWithoutLowQualityCoverPictureFileInput[]
+  createMany?: Prisma.UserCreateManyLowQualityCoverPictureFileInputEnvelope
+  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+}
+
+export type UserUncheckedCreateNestedManyWithoutBestQualityCoverPictureFileInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutBestQualityCoverPictureFileInput, Prisma.UserUncheckedCreateWithoutBestQualityCoverPictureFileInput> | Prisma.UserCreateWithoutBestQualityCoverPictureFileInput[] | Prisma.UserUncheckedCreateWithoutBestQualityCoverPictureFileInput[]
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutBestQualityCoverPictureFileInput | Prisma.UserCreateOrConnectWithoutBestQualityCoverPictureFileInput[]
+  createMany?: Prisma.UserCreateManyBestQualityCoverPictureFileInputEnvelope
+  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+}
+
+export type UserUpdateManyWithoutLowQualityProfilePictureFileNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutLowQualityProfilePictureFileInput, Prisma.UserUncheckedCreateWithoutLowQualityProfilePictureFileInput> | Prisma.UserCreateWithoutLowQualityProfilePictureFileInput[] | Prisma.UserUncheckedCreateWithoutLowQualityProfilePictureFileInput[]
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutLowQualityProfilePictureFileInput | Prisma.UserCreateOrConnectWithoutLowQualityProfilePictureFileInput[]
+  upsert?: Prisma.UserUpsertWithWhereUniqueWithoutLowQualityProfilePictureFileInput | Prisma.UserUpsertWithWhereUniqueWithoutLowQualityProfilePictureFileInput[]
+  createMany?: Prisma.UserCreateManyLowQualityProfilePictureFileInputEnvelope
+  set?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  disconnect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  delete?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  update?: Prisma.UserUpdateWithWhereUniqueWithoutLowQualityProfilePictureFileInput | Prisma.UserUpdateWithWhereUniqueWithoutLowQualityProfilePictureFileInput[]
+  updateMany?: Prisma.UserUpdateManyWithWhereWithoutLowQualityProfilePictureFileInput | Prisma.UserUpdateManyWithWhereWithoutLowQualityProfilePictureFileInput[]
+  deleteMany?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
+}
+
+export type UserUpdateManyWithoutBestQualityProfilePictureFileNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutBestQualityProfilePictureFileInput, Prisma.UserUncheckedCreateWithoutBestQualityProfilePictureFileInput> | Prisma.UserCreateWithoutBestQualityProfilePictureFileInput[] | Prisma.UserUncheckedCreateWithoutBestQualityProfilePictureFileInput[]
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutBestQualityProfilePictureFileInput | Prisma.UserCreateOrConnectWithoutBestQualityProfilePictureFileInput[]
+  upsert?: Prisma.UserUpsertWithWhereUniqueWithoutBestQualityProfilePictureFileInput | Prisma.UserUpsertWithWhereUniqueWithoutBestQualityProfilePictureFileInput[]
+  createMany?: Prisma.UserCreateManyBestQualityProfilePictureFileInputEnvelope
+  set?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  disconnect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  delete?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  update?: Prisma.UserUpdateWithWhereUniqueWithoutBestQualityProfilePictureFileInput | Prisma.UserUpdateWithWhereUniqueWithoutBestQualityProfilePictureFileInput[]
+  updateMany?: Prisma.UserUpdateManyWithWhereWithoutBestQualityProfilePictureFileInput | Prisma.UserUpdateManyWithWhereWithoutBestQualityProfilePictureFileInput[]
+  deleteMany?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
+}
+
+export type UserUpdateManyWithoutLowQualityCoverPictureFileNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutLowQualityCoverPictureFileInput, Prisma.UserUncheckedCreateWithoutLowQualityCoverPictureFileInput> | Prisma.UserCreateWithoutLowQualityCoverPictureFileInput[] | Prisma.UserUncheckedCreateWithoutLowQualityCoverPictureFileInput[]
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutLowQualityCoverPictureFileInput | Prisma.UserCreateOrConnectWithoutLowQualityCoverPictureFileInput[]
+  upsert?: Prisma.UserUpsertWithWhereUniqueWithoutLowQualityCoverPictureFileInput | Prisma.UserUpsertWithWhereUniqueWithoutLowQualityCoverPictureFileInput[]
+  createMany?: Prisma.UserCreateManyLowQualityCoverPictureFileInputEnvelope
+  set?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  disconnect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  delete?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  update?: Prisma.UserUpdateWithWhereUniqueWithoutLowQualityCoverPictureFileInput | Prisma.UserUpdateWithWhereUniqueWithoutLowQualityCoverPictureFileInput[]
+  updateMany?: Prisma.UserUpdateManyWithWhereWithoutLowQualityCoverPictureFileInput | Prisma.UserUpdateManyWithWhereWithoutLowQualityCoverPictureFileInput[]
+  deleteMany?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
+}
+
+export type UserUpdateManyWithoutBestQualityCoverPictureFileNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutBestQualityCoverPictureFileInput, Prisma.UserUncheckedCreateWithoutBestQualityCoverPictureFileInput> | Prisma.UserCreateWithoutBestQualityCoverPictureFileInput[] | Prisma.UserUncheckedCreateWithoutBestQualityCoverPictureFileInput[]
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutBestQualityCoverPictureFileInput | Prisma.UserCreateOrConnectWithoutBestQualityCoverPictureFileInput[]
+  upsert?: Prisma.UserUpsertWithWhereUniqueWithoutBestQualityCoverPictureFileInput | Prisma.UserUpsertWithWhereUniqueWithoutBestQualityCoverPictureFileInput[]
+  createMany?: Prisma.UserCreateManyBestQualityCoverPictureFileInputEnvelope
+  set?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  disconnect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  delete?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  update?: Prisma.UserUpdateWithWhereUniqueWithoutBestQualityCoverPictureFileInput | Prisma.UserUpdateWithWhereUniqueWithoutBestQualityCoverPictureFileInput[]
+  updateMany?: Prisma.UserUpdateManyWithWhereWithoutBestQualityCoverPictureFileInput | Prisma.UserUpdateManyWithWhereWithoutBestQualityCoverPictureFileInput[]
+  deleteMany?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
+}
+
+export type UserUncheckedUpdateManyWithoutLowQualityProfilePictureFileNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutLowQualityProfilePictureFileInput, Prisma.UserUncheckedCreateWithoutLowQualityProfilePictureFileInput> | Prisma.UserCreateWithoutLowQualityProfilePictureFileInput[] | Prisma.UserUncheckedCreateWithoutLowQualityProfilePictureFileInput[]
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutLowQualityProfilePictureFileInput | Prisma.UserCreateOrConnectWithoutLowQualityProfilePictureFileInput[]
+  upsert?: Prisma.UserUpsertWithWhereUniqueWithoutLowQualityProfilePictureFileInput | Prisma.UserUpsertWithWhereUniqueWithoutLowQualityProfilePictureFileInput[]
+  createMany?: Prisma.UserCreateManyLowQualityProfilePictureFileInputEnvelope
+  set?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  disconnect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  delete?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  update?: Prisma.UserUpdateWithWhereUniqueWithoutLowQualityProfilePictureFileInput | Prisma.UserUpdateWithWhereUniqueWithoutLowQualityProfilePictureFileInput[]
+  updateMany?: Prisma.UserUpdateManyWithWhereWithoutLowQualityProfilePictureFileInput | Prisma.UserUpdateManyWithWhereWithoutLowQualityProfilePictureFileInput[]
+  deleteMany?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
+}
+
+export type UserUncheckedUpdateManyWithoutBestQualityProfilePictureFileNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutBestQualityProfilePictureFileInput, Prisma.UserUncheckedCreateWithoutBestQualityProfilePictureFileInput> | Prisma.UserCreateWithoutBestQualityProfilePictureFileInput[] | Prisma.UserUncheckedCreateWithoutBestQualityProfilePictureFileInput[]
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutBestQualityProfilePictureFileInput | Prisma.UserCreateOrConnectWithoutBestQualityProfilePictureFileInput[]
+  upsert?: Prisma.UserUpsertWithWhereUniqueWithoutBestQualityProfilePictureFileInput | Prisma.UserUpsertWithWhereUniqueWithoutBestQualityProfilePictureFileInput[]
+  createMany?: Prisma.UserCreateManyBestQualityProfilePictureFileInputEnvelope
+  set?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  disconnect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  delete?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  update?: Prisma.UserUpdateWithWhereUniqueWithoutBestQualityProfilePictureFileInput | Prisma.UserUpdateWithWhereUniqueWithoutBestQualityProfilePictureFileInput[]
+  updateMany?: Prisma.UserUpdateManyWithWhereWithoutBestQualityProfilePictureFileInput | Prisma.UserUpdateManyWithWhereWithoutBestQualityProfilePictureFileInput[]
+  deleteMany?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
+}
+
+export type UserUncheckedUpdateManyWithoutLowQualityCoverPictureFileNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutLowQualityCoverPictureFileInput, Prisma.UserUncheckedCreateWithoutLowQualityCoverPictureFileInput> | Prisma.UserCreateWithoutLowQualityCoverPictureFileInput[] | Prisma.UserUncheckedCreateWithoutLowQualityCoverPictureFileInput[]
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutLowQualityCoverPictureFileInput | Prisma.UserCreateOrConnectWithoutLowQualityCoverPictureFileInput[]
+  upsert?: Prisma.UserUpsertWithWhereUniqueWithoutLowQualityCoverPictureFileInput | Prisma.UserUpsertWithWhereUniqueWithoutLowQualityCoverPictureFileInput[]
+  createMany?: Prisma.UserCreateManyLowQualityCoverPictureFileInputEnvelope
+  set?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  disconnect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  delete?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  update?: Prisma.UserUpdateWithWhereUniqueWithoutLowQualityCoverPictureFileInput | Prisma.UserUpdateWithWhereUniqueWithoutLowQualityCoverPictureFileInput[]
+  updateMany?: Prisma.UserUpdateManyWithWhereWithoutLowQualityCoverPictureFileInput | Prisma.UserUpdateManyWithWhereWithoutLowQualityCoverPictureFileInput[]
+  deleteMany?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
+}
+
+export type UserUncheckedUpdateManyWithoutBestQualityCoverPictureFileNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutBestQualityCoverPictureFileInput, Prisma.UserUncheckedCreateWithoutBestQualityCoverPictureFileInput> | Prisma.UserCreateWithoutBestQualityCoverPictureFileInput[] | Prisma.UserUncheckedCreateWithoutBestQualityCoverPictureFileInput[]
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutBestQualityCoverPictureFileInput | Prisma.UserCreateOrConnectWithoutBestQualityCoverPictureFileInput[]
+  upsert?: Prisma.UserUpsertWithWhereUniqueWithoutBestQualityCoverPictureFileInput | Prisma.UserUpsertWithWhereUniqueWithoutBestQualityCoverPictureFileInput[]
+  createMany?: Prisma.UserCreateManyBestQualityCoverPictureFileInputEnvelope
+  set?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  disconnect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  delete?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  update?: Prisma.UserUpdateWithWhereUniqueWithoutBestQualityCoverPictureFileInput | Prisma.UserUpdateWithWhereUniqueWithoutBestQualityCoverPictureFileInput[]
+  updateMany?: Prisma.UserUpdateManyWithWhereWithoutBestQualityCoverPictureFileInput | Prisma.UserUpdateManyWithWhereWithoutBestQualityCoverPictureFileInput[]
+  deleteMany?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
 }
 
 export type UserCreateNestedOneWithoutFollowingInput = {
@@ -823,10 +1009,6 @@ export type UserCreateWithoutSearchHistoryAsSearcherInput = {
   password: string
   fullName?: string | null
   bio?: string | null
-  lowQualityProfilePictureFileId?: string | null
-  bestQualityProfilePictureFileId?: string | null
-  lowQualityCoverPictureFileId?: string | null
-  bestQualityCoverPictureFileId?: string | null
   postCount?: number
   followersCount?: number
   followingCount?: number
@@ -834,6 +1016,10 @@ export type UserCreateWithoutSearchHistoryAsSearcherInput = {
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  lowQualityProfilePictureFile?: Prisma.FileCreateNestedOneWithoutLowQualityProfilePictureUsersInput
+  bestQualityProfilePictureFile?: Prisma.FileCreateNestedOneWithoutBestQualityProfilePictureUsersInput
+  lowQualityCoverPictureFile?: Prisma.FileCreateNestedOneWithoutLowQualityCoverPictureUsersInput
+  bestQualityCoverPictureFile?: Prisma.FileCreateNestedOneWithoutBestQualityCoverPictureUsersInput
   userVerifications?: Prisma.UserVerificationCreateNestedManyWithoutUserInput
   followers?: Prisma.FollowCreateNestedManyWithoutFollowingInput
   following?: Prisma.FollowCreateNestedManyWithoutFollowerInput
@@ -880,10 +1066,6 @@ export type UserCreateWithoutSearchHistoryAsSearchedUserInput = {
   password: string
   fullName?: string | null
   bio?: string | null
-  lowQualityProfilePictureFileId?: string | null
-  bestQualityProfilePictureFileId?: string | null
-  lowQualityCoverPictureFileId?: string | null
-  bestQualityCoverPictureFileId?: string | null
   postCount?: number
   followersCount?: number
   followingCount?: number
@@ -891,6 +1073,10 @@ export type UserCreateWithoutSearchHistoryAsSearchedUserInput = {
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  lowQualityProfilePictureFile?: Prisma.FileCreateNestedOneWithoutLowQualityProfilePictureUsersInput
+  bestQualityProfilePictureFile?: Prisma.FileCreateNestedOneWithoutBestQualityProfilePictureUsersInput
+  lowQualityCoverPictureFile?: Prisma.FileCreateNestedOneWithoutLowQualityCoverPictureUsersInput
+  bestQualityCoverPictureFile?: Prisma.FileCreateNestedOneWithoutBestQualityCoverPictureUsersInput
   userVerifications?: Prisma.UserVerificationCreateNestedManyWithoutUserInput
   followers?: Prisma.FollowCreateNestedManyWithoutFollowingInput
   following?: Prisma.FollowCreateNestedManyWithoutFollowerInput
@@ -948,10 +1134,6 @@ export type UserUpdateWithoutSearchHistoryAsSearcherInput = {
   password?: Prisma.StringFieldUpdateOperationsInput | string
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  lowQualityProfilePictureFileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  bestQualityProfilePictureFileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  lowQualityCoverPictureFileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  bestQualityCoverPictureFileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   postCount?: Prisma.IntFieldUpdateOperationsInput | number
   followersCount?: Prisma.IntFieldUpdateOperationsInput | number
   followingCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -959,6 +1141,10 @@ export type UserUpdateWithoutSearchHistoryAsSearcherInput = {
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lowQualityProfilePictureFile?: Prisma.FileUpdateOneWithoutLowQualityProfilePictureUsersNestedInput
+  bestQualityProfilePictureFile?: Prisma.FileUpdateOneWithoutBestQualityProfilePictureUsersNestedInput
+  lowQualityCoverPictureFile?: Prisma.FileUpdateOneWithoutLowQualityCoverPictureUsersNestedInput
+  bestQualityCoverPictureFile?: Prisma.FileUpdateOneWithoutBestQualityCoverPictureUsersNestedInput
   userVerifications?: Prisma.UserVerificationUpdateManyWithoutUserNestedInput
   followers?: Prisma.FollowUpdateManyWithoutFollowingNestedInput
   following?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
@@ -1011,10 +1197,6 @@ export type UserUpdateWithoutSearchHistoryAsSearchedUserInput = {
   password?: Prisma.StringFieldUpdateOperationsInput | string
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  lowQualityProfilePictureFileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  bestQualityProfilePictureFileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  lowQualityCoverPictureFileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  bestQualityCoverPictureFileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   postCount?: Prisma.IntFieldUpdateOperationsInput | number
   followersCount?: Prisma.IntFieldUpdateOperationsInput | number
   followingCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1022,6 +1204,10 @@ export type UserUpdateWithoutSearchHistoryAsSearchedUserInput = {
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lowQualityProfilePictureFile?: Prisma.FileUpdateOneWithoutLowQualityProfilePictureUsersNestedInput
+  bestQualityProfilePictureFile?: Prisma.FileUpdateOneWithoutBestQualityProfilePictureUsersNestedInput
+  lowQualityCoverPictureFile?: Prisma.FileUpdateOneWithoutLowQualityCoverPictureUsersNestedInput
+  bestQualityCoverPictureFile?: Prisma.FileUpdateOneWithoutBestQualityCoverPictureUsersNestedInput
   userVerifications?: Prisma.UserVerificationUpdateManyWithoutUserNestedInput
   followers?: Prisma.FollowUpdateManyWithoutFollowingNestedInput
   following?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
@@ -1056,14 +1242,39 @@ export type UserUncheckedUpdateWithoutSearchHistoryAsSearchedUserInput = {
   searchHistoryAsSearcher?: Prisma.SearchHistoryUncheckedUpdateManyWithoutSearcherNestedInput
 }
 
-export type UserCreateWithoutFollowingInput = {
+export type UserCreateWithoutLowQualityProfilePictureFileInput = {
   id?: string
   email: string
   username: string
   password: string
   fullName?: string | null
   bio?: string | null
-  lowQualityProfilePictureFileId?: string | null
+  postCount?: number
+  followersCount?: number
+  followingCount?: number
+  unseenNotificationsCount?: number
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  bestQualityProfilePictureFile?: Prisma.FileCreateNestedOneWithoutBestQualityProfilePictureUsersInput
+  lowQualityCoverPictureFile?: Prisma.FileCreateNestedOneWithoutLowQualityCoverPictureUsersInput
+  bestQualityCoverPictureFile?: Prisma.FileCreateNestedOneWithoutBestQualityCoverPictureUsersInput
+  userVerifications?: Prisma.UserVerificationCreateNestedManyWithoutUserInput
+  followers?: Prisma.FollowCreateNestedManyWithoutFollowingInput
+  following?: Prisma.FollowCreateNestedManyWithoutFollowerInput
+  blockedUsers?: Prisma.BlockCreateNestedManyWithoutBlockerInput
+  blockedByUsers?: Prisma.BlockCreateNestedManyWithoutBlockedInput
+  searchHistoryAsSearcher?: Prisma.SearchHistoryCreateNestedManyWithoutSearcherInput
+  searchHistoryAsSearchedUser?: Prisma.SearchHistoryCreateNestedManyWithoutSearchedUserInput
+}
+
+export type UserUncheckedCreateWithoutLowQualityProfilePictureFileInput = {
+  id?: string
+  email: string
+  username: string
+  password: string
+  fullName?: string | null
+  bio?: string | null
   bestQualityProfilePictureFileId?: string | null
   lowQualityCoverPictureFileId?: string | null
   bestQualityCoverPictureFileId?: string | null
@@ -1074,6 +1285,316 @@ export type UserCreateWithoutFollowingInput = {
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  userVerifications?: Prisma.UserVerificationUncheckedCreateNestedManyWithoutUserInput
+  followers?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowingInput
+  following?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowerInput
+  blockedUsers?: Prisma.BlockUncheckedCreateNestedManyWithoutBlockerInput
+  blockedByUsers?: Prisma.BlockUncheckedCreateNestedManyWithoutBlockedInput
+  searchHistoryAsSearcher?: Prisma.SearchHistoryUncheckedCreateNestedManyWithoutSearcherInput
+  searchHistoryAsSearchedUser?: Prisma.SearchHistoryUncheckedCreateNestedManyWithoutSearchedUserInput
+}
+
+export type UserCreateOrConnectWithoutLowQualityProfilePictureFileInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutLowQualityProfilePictureFileInput, Prisma.UserUncheckedCreateWithoutLowQualityProfilePictureFileInput>
+}
+
+export type UserCreateManyLowQualityProfilePictureFileInputEnvelope = {
+  data: Prisma.UserCreateManyLowQualityProfilePictureFileInput | Prisma.UserCreateManyLowQualityProfilePictureFileInput[]
+  skipDuplicates?: boolean
+}
+
+export type UserCreateWithoutBestQualityProfilePictureFileInput = {
+  id?: string
+  email: string
+  username: string
+  password: string
+  fullName?: string | null
+  bio?: string | null
+  postCount?: number
+  followersCount?: number
+  followingCount?: number
+  unseenNotificationsCount?: number
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  lowQualityProfilePictureFile?: Prisma.FileCreateNestedOneWithoutLowQualityProfilePictureUsersInput
+  lowQualityCoverPictureFile?: Prisma.FileCreateNestedOneWithoutLowQualityCoverPictureUsersInput
+  bestQualityCoverPictureFile?: Prisma.FileCreateNestedOneWithoutBestQualityCoverPictureUsersInput
+  userVerifications?: Prisma.UserVerificationCreateNestedManyWithoutUserInput
+  followers?: Prisma.FollowCreateNestedManyWithoutFollowingInput
+  following?: Prisma.FollowCreateNestedManyWithoutFollowerInput
+  blockedUsers?: Prisma.BlockCreateNestedManyWithoutBlockerInput
+  blockedByUsers?: Prisma.BlockCreateNestedManyWithoutBlockedInput
+  searchHistoryAsSearcher?: Prisma.SearchHistoryCreateNestedManyWithoutSearcherInput
+  searchHistoryAsSearchedUser?: Prisma.SearchHistoryCreateNestedManyWithoutSearchedUserInput
+}
+
+export type UserUncheckedCreateWithoutBestQualityProfilePictureFileInput = {
+  id?: string
+  email: string
+  username: string
+  password: string
+  fullName?: string | null
+  bio?: string | null
+  lowQualityProfilePictureFileId?: string | null
+  lowQualityCoverPictureFileId?: string | null
+  bestQualityCoverPictureFileId?: string | null
+  postCount?: number
+  followersCount?: number
+  followingCount?: number
+  unseenNotificationsCount?: number
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userVerifications?: Prisma.UserVerificationUncheckedCreateNestedManyWithoutUserInput
+  followers?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowingInput
+  following?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowerInput
+  blockedUsers?: Prisma.BlockUncheckedCreateNestedManyWithoutBlockerInput
+  blockedByUsers?: Prisma.BlockUncheckedCreateNestedManyWithoutBlockedInput
+  searchHistoryAsSearcher?: Prisma.SearchHistoryUncheckedCreateNestedManyWithoutSearcherInput
+  searchHistoryAsSearchedUser?: Prisma.SearchHistoryUncheckedCreateNestedManyWithoutSearchedUserInput
+}
+
+export type UserCreateOrConnectWithoutBestQualityProfilePictureFileInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutBestQualityProfilePictureFileInput, Prisma.UserUncheckedCreateWithoutBestQualityProfilePictureFileInput>
+}
+
+export type UserCreateManyBestQualityProfilePictureFileInputEnvelope = {
+  data: Prisma.UserCreateManyBestQualityProfilePictureFileInput | Prisma.UserCreateManyBestQualityProfilePictureFileInput[]
+  skipDuplicates?: boolean
+}
+
+export type UserCreateWithoutLowQualityCoverPictureFileInput = {
+  id?: string
+  email: string
+  username: string
+  password: string
+  fullName?: string | null
+  bio?: string | null
+  postCount?: number
+  followersCount?: number
+  followingCount?: number
+  unseenNotificationsCount?: number
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  lowQualityProfilePictureFile?: Prisma.FileCreateNestedOneWithoutLowQualityProfilePictureUsersInput
+  bestQualityProfilePictureFile?: Prisma.FileCreateNestedOneWithoutBestQualityProfilePictureUsersInput
+  bestQualityCoverPictureFile?: Prisma.FileCreateNestedOneWithoutBestQualityCoverPictureUsersInput
+  userVerifications?: Prisma.UserVerificationCreateNestedManyWithoutUserInput
+  followers?: Prisma.FollowCreateNestedManyWithoutFollowingInput
+  following?: Prisma.FollowCreateNestedManyWithoutFollowerInput
+  blockedUsers?: Prisma.BlockCreateNestedManyWithoutBlockerInput
+  blockedByUsers?: Prisma.BlockCreateNestedManyWithoutBlockedInput
+  searchHistoryAsSearcher?: Prisma.SearchHistoryCreateNestedManyWithoutSearcherInput
+  searchHistoryAsSearchedUser?: Prisma.SearchHistoryCreateNestedManyWithoutSearchedUserInput
+}
+
+export type UserUncheckedCreateWithoutLowQualityCoverPictureFileInput = {
+  id?: string
+  email: string
+  username: string
+  password: string
+  fullName?: string | null
+  bio?: string | null
+  lowQualityProfilePictureFileId?: string | null
+  bestQualityProfilePictureFileId?: string | null
+  bestQualityCoverPictureFileId?: string | null
+  postCount?: number
+  followersCount?: number
+  followingCount?: number
+  unseenNotificationsCount?: number
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userVerifications?: Prisma.UserVerificationUncheckedCreateNestedManyWithoutUserInput
+  followers?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowingInput
+  following?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowerInput
+  blockedUsers?: Prisma.BlockUncheckedCreateNestedManyWithoutBlockerInput
+  blockedByUsers?: Prisma.BlockUncheckedCreateNestedManyWithoutBlockedInput
+  searchHistoryAsSearcher?: Prisma.SearchHistoryUncheckedCreateNestedManyWithoutSearcherInput
+  searchHistoryAsSearchedUser?: Prisma.SearchHistoryUncheckedCreateNestedManyWithoutSearchedUserInput
+}
+
+export type UserCreateOrConnectWithoutLowQualityCoverPictureFileInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutLowQualityCoverPictureFileInput, Prisma.UserUncheckedCreateWithoutLowQualityCoverPictureFileInput>
+}
+
+export type UserCreateManyLowQualityCoverPictureFileInputEnvelope = {
+  data: Prisma.UserCreateManyLowQualityCoverPictureFileInput | Prisma.UserCreateManyLowQualityCoverPictureFileInput[]
+  skipDuplicates?: boolean
+}
+
+export type UserCreateWithoutBestQualityCoverPictureFileInput = {
+  id?: string
+  email: string
+  username: string
+  password: string
+  fullName?: string | null
+  bio?: string | null
+  postCount?: number
+  followersCount?: number
+  followingCount?: number
+  unseenNotificationsCount?: number
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  lowQualityProfilePictureFile?: Prisma.FileCreateNestedOneWithoutLowQualityProfilePictureUsersInput
+  bestQualityProfilePictureFile?: Prisma.FileCreateNestedOneWithoutBestQualityProfilePictureUsersInput
+  lowQualityCoverPictureFile?: Prisma.FileCreateNestedOneWithoutLowQualityCoverPictureUsersInput
+  userVerifications?: Prisma.UserVerificationCreateNestedManyWithoutUserInput
+  followers?: Prisma.FollowCreateNestedManyWithoutFollowingInput
+  following?: Prisma.FollowCreateNestedManyWithoutFollowerInput
+  blockedUsers?: Prisma.BlockCreateNestedManyWithoutBlockerInput
+  blockedByUsers?: Prisma.BlockCreateNestedManyWithoutBlockedInput
+  searchHistoryAsSearcher?: Prisma.SearchHistoryCreateNestedManyWithoutSearcherInput
+  searchHistoryAsSearchedUser?: Prisma.SearchHistoryCreateNestedManyWithoutSearchedUserInput
+}
+
+export type UserUncheckedCreateWithoutBestQualityCoverPictureFileInput = {
+  id?: string
+  email: string
+  username: string
+  password: string
+  fullName?: string | null
+  bio?: string | null
+  lowQualityProfilePictureFileId?: string | null
+  bestQualityProfilePictureFileId?: string | null
+  lowQualityCoverPictureFileId?: string | null
+  postCount?: number
+  followersCount?: number
+  followingCount?: number
+  unseenNotificationsCount?: number
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userVerifications?: Prisma.UserVerificationUncheckedCreateNestedManyWithoutUserInput
+  followers?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowingInput
+  following?: Prisma.FollowUncheckedCreateNestedManyWithoutFollowerInput
+  blockedUsers?: Prisma.BlockUncheckedCreateNestedManyWithoutBlockerInput
+  blockedByUsers?: Prisma.BlockUncheckedCreateNestedManyWithoutBlockedInput
+  searchHistoryAsSearcher?: Prisma.SearchHistoryUncheckedCreateNestedManyWithoutSearcherInput
+  searchHistoryAsSearchedUser?: Prisma.SearchHistoryUncheckedCreateNestedManyWithoutSearchedUserInput
+}
+
+export type UserCreateOrConnectWithoutBestQualityCoverPictureFileInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutBestQualityCoverPictureFileInput, Prisma.UserUncheckedCreateWithoutBestQualityCoverPictureFileInput>
+}
+
+export type UserCreateManyBestQualityCoverPictureFileInputEnvelope = {
+  data: Prisma.UserCreateManyBestQualityCoverPictureFileInput | Prisma.UserCreateManyBestQualityCoverPictureFileInput[]
+  skipDuplicates?: boolean
+}
+
+export type UserUpsertWithWhereUniqueWithoutLowQualityProfilePictureFileInput = {
+  where: Prisma.UserWhereUniqueInput
+  update: Prisma.XOR<Prisma.UserUpdateWithoutLowQualityProfilePictureFileInput, Prisma.UserUncheckedUpdateWithoutLowQualityProfilePictureFileInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutLowQualityProfilePictureFileInput, Prisma.UserUncheckedCreateWithoutLowQualityProfilePictureFileInput>
+}
+
+export type UserUpdateWithWhereUniqueWithoutLowQualityProfilePictureFileInput = {
+  where: Prisma.UserWhereUniqueInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutLowQualityProfilePictureFileInput, Prisma.UserUncheckedUpdateWithoutLowQualityProfilePictureFileInput>
+}
+
+export type UserUpdateManyWithWhereWithoutLowQualityProfilePictureFileInput = {
+  where: Prisma.UserScalarWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateManyMutationInput, Prisma.UserUncheckedUpdateManyWithoutLowQualityProfilePictureFileInput>
+}
+
+export type UserScalarWhereInput = {
+  AND?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
+  OR?: Prisma.UserScalarWhereInput[]
+  NOT?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
+  id?: Prisma.StringFilter<"User"> | string
+  email?: Prisma.StringFilter<"User"> | string
+  username?: Prisma.StringFilter<"User"> | string
+  password?: Prisma.StringFilter<"User"> | string
+  fullName?: Prisma.StringNullableFilter<"User"> | string | null
+  bio?: Prisma.StringNullableFilter<"User"> | string | null
+  lowQualityProfilePictureFileId?: Prisma.StringNullableFilter<"User"> | string | null
+  bestQualityProfilePictureFileId?: Prisma.StringNullableFilter<"User"> | string | null
+  lowQualityCoverPictureFileId?: Prisma.StringNullableFilter<"User"> | string | null
+  bestQualityCoverPictureFileId?: Prisma.StringNullableFilter<"User"> | string | null
+  postCount?: Prisma.IntFilter<"User"> | number
+  followersCount?: Prisma.IntFilter<"User"> | number
+  followingCount?: Prisma.IntFilter<"User"> | number
+  unseenNotificationsCount?: Prisma.IntFilter<"User"> | number
+  active?: Prisma.BoolFilter<"User"> | boolean
+  createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
+}
+
+export type UserUpsertWithWhereUniqueWithoutBestQualityProfilePictureFileInput = {
+  where: Prisma.UserWhereUniqueInput
+  update: Prisma.XOR<Prisma.UserUpdateWithoutBestQualityProfilePictureFileInput, Prisma.UserUncheckedUpdateWithoutBestQualityProfilePictureFileInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutBestQualityProfilePictureFileInput, Prisma.UserUncheckedCreateWithoutBestQualityProfilePictureFileInput>
+}
+
+export type UserUpdateWithWhereUniqueWithoutBestQualityProfilePictureFileInput = {
+  where: Prisma.UserWhereUniqueInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutBestQualityProfilePictureFileInput, Prisma.UserUncheckedUpdateWithoutBestQualityProfilePictureFileInput>
+}
+
+export type UserUpdateManyWithWhereWithoutBestQualityProfilePictureFileInput = {
+  where: Prisma.UserScalarWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateManyMutationInput, Prisma.UserUncheckedUpdateManyWithoutBestQualityProfilePictureFileInput>
+}
+
+export type UserUpsertWithWhereUniqueWithoutLowQualityCoverPictureFileInput = {
+  where: Prisma.UserWhereUniqueInput
+  update: Prisma.XOR<Prisma.UserUpdateWithoutLowQualityCoverPictureFileInput, Prisma.UserUncheckedUpdateWithoutLowQualityCoverPictureFileInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutLowQualityCoverPictureFileInput, Prisma.UserUncheckedCreateWithoutLowQualityCoverPictureFileInput>
+}
+
+export type UserUpdateWithWhereUniqueWithoutLowQualityCoverPictureFileInput = {
+  where: Prisma.UserWhereUniqueInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutLowQualityCoverPictureFileInput, Prisma.UserUncheckedUpdateWithoutLowQualityCoverPictureFileInput>
+}
+
+export type UserUpdateManyWithWhereWithoutLowQualityCoverPictureFileInput = {
+  where: Prisma.UserScalarWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateManyMutationInput, Prisma.UserUncheckedUpdateManyWithoutLowQualityCoverPictureFileInput>
+}
+
+export type UserUpsertWithWhereUniqueWithoutBestQualityCoverPictureFileInput = {
+  where: Prisma.UserWhereUniqueInput
+  update: Prisma.XOR<Prisma.UserUpdateWithoutBestQualityCoverPictureFileInput, Prisma.UserUncheckedUpdateWithoutBestQualityCoverPictureFileInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutBestQualityCoverPictureFileInput, Prisma.UserUncheckedCreateWithoutBestQualityCoverPictureFileInput>
+}
+
+export type UserUpdateWithWhereUniqueWithoutBestQualityCoverPictureFileInput = {
+  where: Prisma.UserWhereUniqueInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutBestQualityCoverPictureFileInput, Prisma.UserUncheckedUpdateWithoutBestQualityCoverPictureFileInput>
+}
+
+export type UserUpdateManyWithWhereWithoutBestQualityCoverPictureFileInput = {
+  where: Prisma.UserScalarWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateManyMutationInput, Prisma.UserUncheckedUpdateManyWithoutBestQualityCoverPictureFileInput>
+}
+
+export type UserCreateWithoutFollowingInput = {
+  id?: string
+  email: string
+  username: string
+  password: string
+  fullName?: string | null
+  bio?: string | null
+  postCount?: number
+  followersCount?: number
+  followingCount?: number
+  unseenNotificationsCount?: number
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  lowQualityProfilePictureFile?: Prisma.FileCreateNestedOneWithoutLowQualityProfilePictureUsersInput
+  bestQualityProfilePictureFile?: Prisma.FileCreateNestedOneWithoutBestQualityProfilePictureUsersInput
+  lowQualityCoverPictureFile?: Prisma.FileCreateNestedOneWithoutLowQualityCoverPictureUsersInput
+  bestQualityCoverPictureFile?: Prisma.FileCreateNestedOneWithoutBestQualityCoverPictureUsersInput
   userVerifications?: Prisma.UserVerificationCreateNestedManyWithoutUserInput
   followers?: Prisma.FollowCreateNestedManyWithoutFollowingInput
   blockedUsers?: Prisma.BlockCreateNestedManyWithoutBlockerInput
@@ -1120,10 +1641,6 @@ export type UserCreateWithoutFollowersInput = {
   password: string
   fullName?: string | null
   bio?: string | null
-  lowQualityProfilePictureFileId?: string | null
-  bestQualityProfilePictureFileId?: string | null
-  lowQualityCoverPictureFileId?: string | null
-  bestQualityCoverPictureFileId?: string | null
   postCount?: number
   followersCount?: number
   followingCount?: number
@@ -1131,6 +1648,10 @@ export type UserCreateWithoutFollowersInput = {
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  lowQualityProfilePictureFile?: Prisma.FileCreateNestedOneWithoutLowQualityProfilePictureUsersInput
+  bestQualityProfilePictureFile?: Prisma.FileCreateNestedOneWithoutBestQualityProfilePictureUsersInput
+  lowQualityCoverPictureFile?: Prisma.FileCreateNestedOneWithoutLowQualityCoverPictureUsersInput
+  bestQualityCoverPictureFile?: Prisma.FileCreateNestedOneWithoutBestQualityCoverPictureUsersInput
   userVerifications?: Prisma.UserVerificationCreateNestedManyWithoutUserInput
   following?: Prisma.FollowCreateNestedManyWithoutFollowerInput
   blockedUsers?: Prisma.BlockCreateNestedManyWithoutBlockerInput
@@ -1188,10 +1709,6 @@ export type UserUpdateWithoutFollowingInput = {
   password?: Prisma.StringFieldUpdateOperationsInput | string
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  lowQualityProfilePictureFileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  bestQualityProfilePictureFileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  lowQualityCoverPictureFileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  bestQualityCoverPictureFileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   postCount?: Prisma.IntFieldUpdateOperationsInput | number
   followersCount?: Prisma.IntFieldUpdateOperationsInput | number
   followingCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1199,6 +1716,10 @@ export type UserUpdateWithoutFollowingInput = {
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lowQualityProfilePictureFile?: Prisma.FileUpdateOneWithoutLowQualityProfilePictureUsersNestedInput
+  bestQualityProfilePictureFile?: Prisma.FileUpdateOneWithoutBestQualityProfilePictureUsersNestedInput
+  lowQualityCoverPictureFile?: Prisma.FileUpdateOneWithoutLowQualityCoverPictureUsersNestedInput
+  bestQualityCoverPictureFile?: Prisma.FileUpdateOneWithoutBestQualityCoverPictureUsersNestedInput
   userVerifications?: Prisma.UserVerificationUpdateManyWithoutUserNestedInput
   followers?: Prisma.FollowUpdateManyWithoutFollowingNestedInput
   blockedUsers?: Prisma.BlockUpdateManyWithoutBlockerNestedInput
@@ -1251,10 +1772,6 @@ export type UserUpdateWithoutFollowersInput = {
   password?: Prisma.StringFieldUpdateOperationsInput | string
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  lowQualityProfilePictureFileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  bestQualityProfilePictureFileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  lowQualityCoverPictureFileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  bestQualityCoverPictureFileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   postCount?: Prisma.IntFieldUpdateOperationsInput | number
   followersCount?: Prisma.IntFieldUpdateOperationsInput | number
   followingCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1262,6 +1779,10 @@ export type UserUpdateWithoutFollowersInput = {
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lowQualityProfilePictureFile?: Prisma.FileUpdateOneWithoutLowQualityProfilePictureUsersNestedInput
+  bestQualityProfilePictureFile?: Prisma.FileUpdateOneWithoutBestQualityProfilePictureUsersNestedInput
+  lowQualityCoverPictureFile?: Prisma.FileUpdateOneWithoutLowQualityCoverPictureUsersNestedInput
+  bestQualityCoverPictureFile?: Prisma.FileUpdateOneWithoutBestQualityCoverPictureUsersNestedInput
   userVerifications?: Prisma.UserVerificationUpdateManyWithoutUserNestedInput
   following?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
   blockedUsers?: Prisma.BlockUpdateManyWithoutBlockerNestedInput
@@ -1303,10 +1824,6 @@ export type UserCreateWithoutBlockedUsersInput = {
   password: string
   fullName?: string | null
   bio?: string | null
-  lowQualityProfilePictureFileId?: string | null
-  bestQualityProfilePictureFileId?: string | null
-  lowQualityCoverPictureFileId?: string | null
-  bestQualityCoverPictureFileId?: string | null
   postCount?: number
   followersCount?: number
   followingCount?: number
@@ -1314,6 +1831,10 @@ export type UserCreateWithoutBlockedUsersInput = {
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  lowQualityProfilePictureFile?: Prisma.FileCreateNestedOneWithoutLowQualityProfilePictureUsersInput
+  bestQualityProfilePictureFile?: Prisma.FileCreateNestedOneWithoutBestQualityProfilePictureUsersInput
+  lowQualityCoverPictureFile?: Prisma.FileCreateNestedOneWithoutLowQualityCoverPictureUsersInput
+  bestQualityCoverPictureFile?: Prisma.FileCreateNestedOneWithoutBestQualityCoverPictureUsersInput
   userVerifications?: Prisma.UserVerificationCreateNestedManyWithoutUserInput
   followers?: Prisma.FollowCreateNestedManyWithoutFollowingInput
   following?: Prisma.FollowCreateNestedManyWithoutFollowerInput
@@ -1360,10 +1881,6 @@ export type UserCreateWithoutBlockedByUsersInput = {
   password: string
   fullName?: string | null
   bio?: string | null
-  lowQualityProfilePictureFileId?: string | null
-  bestQualityProfilePictureFileId?: string | null
-  lowQualityCoverPictureFileId?: string | null
-  bestQualityCoverPictureFileId?: string | null
   postCount?: number
   followersCount?: number
   followingCount?: number
@@ -1371,6 +1888,10 @@ export type UserCreateWithoutBlockedByUsersInput = {
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  lowQualityProfilePictureFile?: Prisma.FileCreateNestedOneWithoutLowQualityProfilePictureUsersInput
+  bestQualityProfilePictureFile?: Prisma.FileCreateNestedOneWithoutBestQualityProfilePictureUsersInput
+  lowQualityCoverPictureFile?: Prisma.FileCreateNestedOneWithoutLowQualityCoverPictureUsersInput
+  bestQualityCoverPictureFile?: Prisma.FileCreateNestedOneWithoutBestQualityCoverPictureUsersInput
   userVerifications?: Prisma.UserVerificationCreateNestedManyWithoutUserInput
   followers?: Prisma.FollowCreateNestedManyWithoutFollowingInput
   following?: Prisma.FollowCreateNestedManyWithoutFollowerInput
@@ -1428,10 +1949,6 @@ export type UserUpdateWithoutBlockedUsersInput = {
   password?: Prisma.StringFieldUpdateOperationsInput | string
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  lowQualityProfilePictureFileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  bestQualityProfilePictureFileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  lowQualityCoverPictureFileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  bestQualityCoverPictureFileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   postCount?: Prisma.IntFieldUpdateOperationsInput | number
   followersCount?: Prisma.IntFieldUpdateOperationsInput | number
   followingCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1439,6 +1956,10 @@ export type UserUpdateWithoutBlockedUsersInput = {
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lowQualityProfilePictureFile?: Prisma.FileUpdateOneWithoutLowQualityProfilePictureUsersNestedInput
+  bestQualityProfilePictureFile?: Prisma.FileUpdateOneWithoutBestQualityProfilePictureUsersNestedInput
+  lowQualityCoverPictureFile?: Prisma.FileUpdateOneWithoutLowQualityCoverPictureUsersNestedInput
+  bestQualityCoverPictureFile?: Prisma.FileUpdateOneWithoutBestQualityCoverPictureUsersNestedInput
   userVerifications?: Prisma.UserVerificationUpdateManyWithoutUserNestedInput
   followers?: Prisma.FollowUpdateManyWithoutFollowingNestedInput
   following?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
@@ -1491,10 +2012,6 @@ export type UserUpdateWithoutBlockedByUsersInput = {
   password?: Prisma.StringFieldUpdateOperationsInput | string
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  lowQualityProfilePictureFileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  bestQualityProfilePictureFileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  lowQualityCoverPictureFileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  bestQualityCoverPictureFileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   postCount?: Prisma.IntFieldUpdateOperationsInput | number
   followersCount?: Prisma.IntFieldUpdateOperationsInput | number
   followingCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1502,6 +2019,10 @@ export type UserUpdateWithoutBlockedByUsersInput = {
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lowQualityProfilePictureFile?: Prisma.FileUpdateOneWithoutLowQualityProfilePictureUsersNestedInput
+  bestQualityProfilePictureFile?: Prisma.FileUpdateOneWithoutBestQualityProfilePictureUsersNestedInput
+  lowQualityCoverPictureFile?: Prisma.FileUpdateOneWithoutLowQualityCoverPictureUsersNestedInput
+  bestQualityCoverPictureFile?: Prisma.FileUpdateOneWithoutBestQualityCoverPictureUsersNestedInput
   userVerifications?: Prisma.UserVerificationUpdateManyWithoutUserNestedInput
   followers?: Prisma.FollowUpdateManyWithoutFollowingNestedInput
   following?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
@@ -1543,10 +2064,6 @@ export type UserCreateWithoutUserVerificationsInput = {
   password: string
   fullName?: string | null
   bio?: string | null
-  lowQualityProfilePictureFileId?: string | null
-  bestQualityProfilePictureFileId?: string | null
-  lowQualityCoverPictureFileId?: string | null
-  bestQualityCoverPictureFileId?: string | null
   postCount?: number
   followersCount?: number
   followingCount?: number
@@ -1554,6 +2071,10 @@ export type UserCreateWithoutUserVerificationsInput = {
   active?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  lowQualityProfilePictureFile?: Prisma.FileCreateNestedOneWithoutLowQualityProfilePictureUsersInput
+  bestQualityProfilePictureFile?: Prisma.FileCreateNestedOneWithoutBestQualityProfilePictureUsersInput
+  lowQualityCoverPictureFile?: Prisma.FileCreateNestedOneWithoutLowQualityCoverPictureUsersInput
+  bestQualityCoverPictureFile?: Prisma.FileCreateNestedOneWithoutBestQualityCoverPictureUsersInput
   followers?: Prisma.FollowCreateNestedManyWithoutFollowingInput
   following?: Prisma.FollowCreateNestedManyWithoutFollowerInput
   blockedUsers?: Prisma.BlockCreateNestedManyWithoutBlockerInput
@@ -1611,10 +2132,6 @@ export type UserUpdateWithoutUserVerificationsInput = {
   password?: Prisma.StringFieldUpdateOperationsInput | string
   fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  lowQualityProfilePictureFileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  bestQualityProfilePictureFileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  lowQualityCoverPictureFileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  bestQualityCoverPictureFileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   postCount?: Prisma.IntFieldUpdateOperationsInput | number
   followersCount?: Prisma.IntFieldUpdateOperationsInput | number
   followingCount?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1622,6 +2139,10 @@ export type UserUpdateWithoutUserVerificationsInput = {
   active?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lowQualityProfilePictureFile?: Prisma.FileUpdateOneWithoutLowQualityProfilePictureUsersNestedInput
+  bestQualityProfilePictureFile?: Prisma.FileUpdateOneWithoutBestQualityProfilePictureUsersNestedInput
+  lowQualityCoverPictureFile?: Prisma.FileUpdateOneWithoutLowQualityCoverPictureUsersNestedInput
+  bestQualityCoverPictureFile?: Prisma.FileUpdateOneWithoutBestQualityCoverPictureUsersNestedInput
   followers?: Prisma.FollowUpdateManyWithoutFollowingNestedInput
   following?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
   blockedUsers?: Prisma.BlockUpdateManyWithoutBlockerNestedInput
@@ -1654,6 +2175,366 @@ export type UserUncheckedUpdateWithoutUserVerificationsInput = {
   blockedByUsers?: Prisma.BlockUncheckedUpdateManyWithoutBlockedNestedInput
   searchHistoryAsSearcher?: Prisma.SearchHistoryUncheckedUpdateManyWithoutSearcherNestedInput
   searchHistoryAsSearchedUser?: Prisma.SearchHistoryUncheckedUpdateManyWithoutSearchedUserNestedInput
+}
+
+export type UserCreateManyLowQualityProfilePictureFileInput = {
+  id?: string
+  email: string
+  username: string
+  password: string
+  fullName?: string | null
+  bio?: string | null
+  bestQualityProfilePictureFileId?: string | null
+  lowQualityCoverPictureFileId?: string | null
+  bestQualityCoverPictureFileId?: string | null
+  postCount?: number
+  followersCount?: number
+  followingCount?: number
+  unseenNotificationsCount?: number
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type UserCreateManyBestQualityProfilePictureFileInput = {
+  id?: string
+  email: string
+  username: string
+  password: string
+  fullName?: string | null
+  bio?: string | null
+  lowQualityProfilePictureFileId?: string | null
+  lowQualityCoverPictureFileId?: string | null
+  bestQualityCoverPictureFileId?: string | null
+  postCount?: number
+  followersCount?: number
+  followingCount?: number
+  unseenNotificationsCount?: number
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type UserCreateManyLowQualityCoverPictureFileInput = {
+  id?: string
+  email: string
+  username: string
+  password: string
+  fullName?: string | null
+  bio?: string | null
+  lowQualityProfilePictureFileId?: string | null
+  bestQualityProfilePictureFileId?: string | null
+  bestQualityCoverPictureFileId?: string | null
+  postCount?: number
+  followersCount?: number
+  followingCount?: number
+  unseenNotificationsCount?: number
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type UserCreateManyBestQualityCoverPictureFileInput = {
+  id?: string
+  email: string
+  username: string
+  password: string
+  fullName?: string | null
+  bio?: string | null
+  lowQualityProfilePictureFileId?: string | null
+  bestQualityProfilePictureFileId?: string | null
+  lowQualityCoverPictureFileId?: string | null
+  postCount?: number
+  followersCount?: number
+  followingCount?: number
+  unseenNotificationsCount?: number
+  active?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type UserUpdateWithoutLowQualityProfilePictureFileInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postCount?: Prisma.IntFieldUpdateOperationsInput | number
+  followersCount?: Prisma.IntFieldUpdateOperationsInput | number
+  followingCount?: Prisma.IntFieldUpdateOperationsInput | number
+  unseenNotificationsCount?: Prisma.IntFieldUpdateOperationsInput | number
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  bestQualityProfilePictureFile?: Prisma.FileUpdateOneWithoutBestQualityProfilePictureUsersNestedInput
+  lowQualityCoverPictureFile?: Prisma.FileUpdateOneWithoutLowQualityCoverPictureUsersNestedInput
+  bestQualityCoverPictureFile?: Prisma.FileUpdateOneWithoutBestQualityCoverPictureUsersNestedInput
+  userVerifications?: Prisma.UserVerificationUpdateManyWithoutUserNestedInput
+  followers?: Prisma.FollowUpdateManyWithoutFollowingNestedInput
+  following?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
+  blockedUsers?: Prisma.BlockUpdateManyWithoutBlockerNestedInput
+  blockedByUsers?: Prisma.BlockUpdateManyWithoutBlockedNestedInput
+  searchHistoryAsSearcher?: Prisma.SearchHistoryUpdateManyWithoutSearcherNestedInput
+  searchHistoryAsSearchedUser?: Prisma.SearchHistoryUpdateManyWithoutSearchedUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutLowQualityProfilePictureFileInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bestQualityProfilePictureFileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lowQualityCoverPictureFileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bestQualityCoverPictureFileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postCount?: Prisma.IntFieldUpdateOperationsInput | number
+  followersCount?: Prisma.IntFieldUpdateOperationsInput | number
+  followingCount?: Prisma.IntFieldUpdateOperationsInput | number
+  unseenNotificationsCount?: Prisma.IntFieldUpdateOperationsInput | number
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userVerifications?: Prisma.UserVerificationUncheckedUpdateManyWithoutUserNestedInput
+  followers?: Prisma.FollowUncheckedUpdateManyWithoutFollowingNestedInput
+  following?: Prisma.FollowUncheckedUpdateManyWithoutFollowerNestedInput
+  blockedUsers?: Prisma.BlockUncheckedUpdateManyWithoutBlockerNestedInput
+  blockedByUsers?: Prisma.BlockUncheckedUpdateManyWithoutBlockedNestedInput
+  searchHistoryAsSearcher?: Prisma.SearchHistoryUncheckedUpdateManyWithoutSearcherNestedInput
+  searchHistoryAsSearchedUser?: Prisma.SearchHistoryUncheckedUpdateManyWithoutSearchedUserNestedInput
+}
+
+export type UserUncheckedUpdateManyWithoutLowQualityProfilePictureFileInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bestQualityProfilePictureFileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lowQualityCoverPictureFileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bestQualityCoverPictureFileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postCount?: Prisma.IntFieldUpdateOperationsInput | number
+  followersCount?: Prisma.IntFieldUpdateOperationsInput | number
+  followingCount?: Prisma.IntFieldUpdateOperationsInput | number
+  unseenNotificationsCount?: Prisma.IntFieldUpdateOperationsInput | number
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type UserUpdateWithoutBestQualityProfilePictureFileInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postCount?: Prisma.IntFieldUpdateOperationsInput | number
+  followersCount?: Prisma.IntFieldUpdateOperationsInput | number
+  followingCount?: Prisma.IntFieldUpdateOperationsInput | number
+  unseenNotificationsCount?: Prisma.IntFieldUpdateOperationsInput | number
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lowQualityProfilePictureFile?: Prisma.FileUpdateOneWithoutLowQualityProfilePictureUsersNestedInput
+  lowQualityCoverPictureFile?: Prisma.FileUpdateOneWithoutLowQualityCoverPictureUsersNestedInput
+  bestQualityCoverPictureFile?: Prisma.FileUpdateOneWithoutBestQualityCoverPictureUsersNestedInput
+  userVerifications?: Prisma.UserVerificationUpdateManyWithoutUserNestedInput
+  followers?: Prisma.FollowUpdateManyWithoutFollowingNestedInput
+  following?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
+  blockedUsers?: Prisma.BlockUpdateManyWithoutBlockerNestedInput
+  blockedByUsers?: Prisma.BlockUpdateManyWithoutBlockedNestedInput
+  searchHistoryAsSearcher?: Prisma.SearchHistoryUpdateManyWithoutSearcherNestedInput
+  searchHistoryAsSearchedUser?: Prisma.SearchHistoryUpdateManyWithoutSearchedUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutBestQualityProfilePictureFileInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lowQualityProfilePictureFileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lowQualityCoverPictureFileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bestQualityCoverPictureFileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postCount?: Prisma.IntFieldUpdateOperationsInput | number
+  followersCount?: Prisma.IntFieldUpdateOperationsInput | number
+  followingCount?: Prisma.IntFieldUpdateOperationsInput | number
+  unseenNotificationsCount?: Prisma.IntFieldUpdateOperationsInput | number
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userVerifications?: Prisma.UserVerificationUncheckedUpdateManyWithoutUserNestedInput
+  followers?: Prisma.FollowUncheckedUpdateManyWithoutFollowingNestedInput
+  following?: Prisma.FollowUncheckedUpdateManyWithoutFollowerNestedInput
+  blockedUsers?: Prisma.BlockUncheckedUpdateManyWithoutBlockerNestedInput
+  blockedByUsers?: Prisma.BlockUncheckedUpdateManyWithoutBlockedNestedInput
+  searchHistoryAsSearcher?: Prisma.SearchHistoryUncheckedUpdateManyWithoutSearcherNestedInput
+  searchHistoryAsSearchedUser?: Prisma.SearchHistoryUncheckedUpdateManyWithoutSearchedUserNestedInput
+}
+
+export type UserUncheckedUpdateManyWithoutBestQualityProfilePictureFileInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lowQualityProfilePictureFileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lowQualityCoverPictureFileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bestQualityCoverPictureFileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postCount?: Prisma.IntFieldUpdateOperationsInput | number
+  followersCount?: Prisma.IntFieldUpdateOperationsInput | number
+  followingCount?: Prisma.IntFieldUpdateOperationsInput | number
+  unseenNotificationsCount?: Prisma.IntFieldUpdateOperationsInput | number
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type UserUpdateWithoutLowQualityCoverPictureFileInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postCount?: Prisma.IntFieldUpdateOperationsInput | number
+  followersCount?: Prisma.IntFieldUpdateOperationsInput | number
+  followingCount?: Prisma.IntFieldUpdateOperationsInput | number
+  unseenNotificationsCount?: Prisma.IntFieldUpdateOperationsInput | number
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lowQualityProfilePictureFile?: Prisma.FileUpdateOneWithoutLowQualityProfilePictureUsersNestedInput
+  bestQualityProfilePictureFile?: Prisma.FileUpdateOneWithoutBestQualityProfilePictureUsersNestedInput
+  bestQualityCoverPictureFile?: Prisma.FileUpdateOneWithoutBestQualityCoverPictureUsersNestedInput
+  userVerifications?: Prisma.UserVerificationUpdateManyWithoutUserNestedInput
+  followers?: Prisma.FollowUpdateManyWithoutFollowingNestedInput
+  following?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
+  blockedUsers?: Prisma.BlockUpdateManyWithoutBlockerNestedInput
+  blockedByUsers?: Prisma.BlockUpdateManyWithoutBlockedNestedInput
+  searchHistoryAsSearcher?: Prisma.SearchHistoryUpdateManyWithoutSearcherNestedInput
+  searchHistoryAsSearchedUser?: Prisma.SearchHistoryUpdateManyWithoutSearchedUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutLowQualityCoverPictureFileInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lowQualityProfilePictureFileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bestQualityProfilePictureFileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bestQualityCoverPictureFileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postCount?: Prisma.IntFieldUpdateOperationsInput | number
+  followersCount?: Prisma.IntFieldUpdateOperationsInput | number
+  followingCount?: Prisma.IntFieldUpdateOperationsInput | number
+  unseenNotificationsCount?: Prisma.IntFieldUpdateOperationsInput | number
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userVerifications?: Prisma.UserVerificationUncheckedUpdateManyWithoutUserNestedInput
+  followers?: Prisma.FollowUncheckedUpdateManyWithoutFollowingNestedInput
+  following?: Prisma.FollowUncheckedUpdateManyWithoutFollowerNestedInput
+  blockedUsers?: Prisma.BlockUncheckedUpdateManyWithoutBlockerNestedInput
+  blockedByUsers?: Prisma.BlockUncheckedUpdateManyWithoutBlockedNestedInput
+  searchHistoryAsSearcher?: Prisma.SearchHistoryUncheckedUpdateManyWithoutSearcherNestedInput
+  searchHistoryAsSearchedUser?: Prisma.SearchHistoryUncheckedUpdateManyWithoutSearchedUserNestedInput
+}
+
+export type UserUncheckedUpdateManyWithoutLowQualityCoverPictureFileInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lowQualityProfilePictureFileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bestQualityProfilePictureFileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bestQualityCoverPictureFileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postCount?: Prisma.IntFieldUpdateOperationsInput | number
+  followersCount?: Prisma.IntFieldUpdateOperationsInput | number
+  followingCount?: Prisma.IntFieldUpdateOperationsInput | number
+  unseenNotificationsCount?: Prisma.IntFieldUpdateOperationsInput | number
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type UserUpdateWithoutBestQualityCoverPictureFileInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postCount?: Prisma.IntFieldUpdateOperationsInput | number
+  followersCount?: Prisma.IntFieldUpdateOperationsInput | number
+  followingCount?: Prisma.IntFieldUpdateOperationsInput | number
+  unseenNotificationsCount?: Prisma.IntFieldUpdateOperationsInput | number
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lowQualityProfilePictureFile?: Prisma.FileUpdateOneWithoutLowQualityProfilePictureUsersNestedInput
+  bestQualityProfilePictureFile?: Prisma.FileUpdateOneWithoutBestQualityProfilePictureUsersNestedInput
+  lowQualityCoverPictureFile?: Prisma.FileUpdateOneWithoutLowQualityCoverPictureUsersNestedInput
+  userVerifications?: Prisma.UserVerificationUpdateManyWithoutUserNestedInput
+  followers?: Prisma.FollowUpdateManyWithoutFollowingNestedInput
+  following?: Prisma.FollowUpdateManyWithoutFollowerNestedInput
+  blockedUsers?: Prisma.BlockUpdateManyWithoutBlockerNestedInput
+  blockedByUsers?: Prisma.BlockUpdateManyWithoutBlockedNestedInput
+  searchHistoryAsSearcher?: Prisma.SearchHistoryUpdateManyWithoutSearcherNestedInput
+  searchHistoryAsSearchedUser?: Prisma.SearchHistoryUpdateManyWithoutSearchedUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutBestQualityCoverPictureFileInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lowQualityProfilePictureFileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bestQualityProfilePictureFileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lowQualityCoverPictureFileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postCount?: Prisma.IntFieldUpdateOperationsInput | number
+  followersCount?: Prisma.IntFieldUpdateOperationsInput | number
+  followingCount?: Prisma.IntFieldUpdateOperationsInput | number
+  unseenNotificationsCount?: Prisma.IntFieldUpdateOperationsInput | number
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userVerifications?: Prisma.UserVerificationUncheckedUpdateManyWithoutUserNestedInput
+  followers?: Prisma.FollowUncheckedUpdateManyWithoutFollowingNestedInput
+  following?: Prisma.FollowUncheckedUpdateManyWithoutFollowerNestedInput
+  blockedUsers?: Prisma.BlockUncheckedUpdateManyWithoutBlockerNestedInput
+  blockedByUsers?: Prisma.BlockUncheckedUpdateManyWithoutBlockedNestedInput
+  searchHistoryAsSearcher?: Prisma.SearchHistoryUncheckedUpdateManyWithoutSearcherNestedInput
+  searchHistoryAsSearchedUser?: Prisma.SearchHistoryUncheckedUpdateManyWithoutSearchedUserNestedInput
+}
+
+export type UserUncheckedUpdateManyWithoutBestQualityCoverPictureFileInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  username?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lowQualityProfilePictureFileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bestQualityProfilePictureFileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lowQualityCoverPictureFileId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  postCount?: Prisma.IntFieldUpdateOperationsInput | number
+  followersCount?: Prisma.IntFieldUpdateOperationsInput | number
+  followingCount?: Prisma.IntFieldUpdateOperationsInput | number
+  unseenNotificationsCount?: Prisma.IntFieldUpdateOperationsInput | number
+  active?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 
@@ -1759,6 +2640,10 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   active?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  lowQualityProfilePictureFile?: boolean | Prisma.User$lowQualityProfilePictureFileArgs<ExtArgs>
+  bestQualityProfilePictureFile?: boolean | Prisma.User$bestQualityProfilePictureFileArgs<ExtArgs>
+  lowQualityCoverPictureFile?: boolean | Prisma.User$lowQualityCoverPictureFileArgs<ExtArgs>
+  bestQualityCoverPictureFile?: boolean | Prisma.User$bestQualityCoverPictureFileArgs<ExtArgs>
   userVerifications?: boolean | Prisma.User$userVerificationsArgs<ExtArgs>
   followers?: boolean | Prisma.User$followersArgs<ExtArgs>
   following?: boolean | Prisma.User$followingArgs<ExtArgs>
@@ -1787,6 +2672,10 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   active?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  lowQualityProfilePictureFile?: boolean | Prisma.User$lowQualityProfilePictureFileArgs<ExtArgs>
+  bestQualityProfilePictureFile?: boolean | Prisma.User$bestQualityProfilePictureFileArgs<ExtArgs>
+  lowQualityCoverPictureFile?: boolean | Prisma.User$lowQualityCoverPictureFileArgs<ExtArgs>
+  bestQualityCoverPictureFile?: boolean | Prisma.User$bestQualityCoverPictureFileArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1807,6 +2696,10 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   active?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  lowQualityProfilePictureFile?: boolean | Prisma.User$lowQualityProfilePictureFileArgs<ExtArgs>
+  bestQualityProfilePictureFile?: boolean | Prisma.User$bestQualityProfilePictureFileArgs<ExtArgs>
+  lowQualityCoverPictureFile?: boolean | Prisma.User$lowQualityCoverPictureFileArgs<ExtArgs>
+  bestQualityCoverPictureFile?: boolean | Prisma.User$bestQualityCoverPictureFileArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectScalar = {
@@ -1831,6 +2724,10 @@ export type UserSelectScalar = {
 
 export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "username" | "password" | "fullName" | "bio" | "lowQualityProfilePictureFileId" | "bestQualityProfilePictureFileId" | "lowQualityCoverPictureFileId" | "bestQualityCoverPictureFileId" | "postCount" | "followersCount" | "followingCount" | "unseenNotificationsCount" | "active" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  lowQualityProfilePictureFile?: boolean | Prisma.User$lowQualityProfilePictureFileArgs<ExtArgs>
+  bestQualityProfilePictureFile?: boolean | Prisma.User$bestQualityProfilePictureFileArgs<ExtArgs>
+  lowQualityCoverPictureFile?: boolean | Prisma.User$lowQualityCoverPictureFileArgs<ExtArgs>
+  bestQualityCoverPictureFile?: boolean | Prisma.User$bestQualityCoverPictureFileArgs<ExtArgs>
   userVerifications?: boolean | Prisma.User$userVerificationsArgs<ExtArgs>
   followers?: boolean | Prisma.User$followersArgs<ExtArgs>
   following?: boolean | Prisma.User$followingArgs<ExtArgs>
@@ -1840,12 +2737,26 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   searchHistoryAsSearchedUser?: boolean | Prisma.User$searchHistoryAsSearchedUserArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
-export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
-export type UserIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  lowQualityProfilePictureFile?: boolean | Prisma.User$lowQualityProfilePictureFileArgs<ExtArgs>
+  bestQualityProfilePictureFile?: boolean | Prisma.User$bestQualityProfilePictureFileArgs<ExtArgs>
+  lowQualityCoverPictureFile?: boolean | Prisma.User$lowQualityCoverPictureFileArgs<ExtArgs>
+  bestQualityCoverPictureFile?: boolean | Prisma.User$bestQualityCoverPictureFileArgs<ExtArgs>
+}
+export type UserIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  lowQualityProfilePictureFile?: boolean | Prisma.User$lowQualityProfilePictureFileArgs<ExtArgs>
+  bestQualityProfilePictureFile?: boolean | Prisma.User$bestQualityProfilePictureFileArgs<ExtArgs>
+  lowQualityCoverPictureFile?: boolean | Prisma.User$lowQualityCoverPictureFileArgs<ExtArgs>
+  bestQualityCoverPictureFile?: boolean | Prisma.User$bestQualityCoverPictureFileArgs<ExtArgs>
+}
 
 export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "User"
   objects: {
+    lowQualityProfilePictureFile: Prisma.$FilePayload<ExtArgs> | null
+    bestQualityProfilePictureFile: Prisma.$FilePayload<ExtArgs> | null
+    lowQualityCoverPictureFile: Prisma.$FilePayload<ExtArgs> | null
+    bestQualityCoverPictureFile: Prisma.$FilePayload<ExtArgs> | null
     userVerifications: Prisma.$UserVerificationPayload<ExtArgs>[]
     followers: Prisma.$FollowPayload<ExtArgs>[]
     following: Prisma.$FollowPayload<ExtArgs>[]
@@ -2266,6 +3177,10 @@ readonly fields: UserFieldRefs;
  */
 export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  lowQualityProfilePictureFile<T extends Prisma.User$lowQualityProfilePictureFileArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$lowQualityProfilePictureFileArgs<ExtArgs>>): Prisma.Prisma__FileClient<runtime.Types.Result.GetResult<Prisma.$FilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  bestQualityProfilePictureFile<T extends Prisma.User$bestQualityProfilePictureFileArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$bestQualityProfilePictureFileArgs<ExtArgs>>): Prisma.Prisma__FileClient<runtime.Types.Result.GetResult<Prisma.$FilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  lowQualityCoverPictureFile<T extends Prisma.User$lowQualityCoverPictureFileArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$lowQualityCoverPictureFileArgs<ExtArgs>>): Prisma.Prisma__FileClient<runtime.Types.Result.GetResult<Prisma.$FilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  bestQualityCoverPictureFile<T extends Prisma.User$bestQualityCoverPictureFileArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$bestQualityCoverPictureFileArgs<ExtArgs>>): Prisma.Prisma__FileClient<runtime.Types.Result.GetResult<Prisma.$FilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   userVerifications<T extends Prisma.User$userVerificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$userVerificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserVerificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   followers<T extends Prisma.User$followersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$followersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FollowPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   following<T extends Prisma.User$followingArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$followingArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FollowPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -2573,6 +3488,10 @@ export type UserCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions
    */
   data: Prisma.UserCreateManyInput | Prisma.UserCreateManyInput[]
   skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -2643,6 +3562,10 @@ export type UserUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions
    * Limit how many Users to update.
    */
   limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -2709,6 +3632,82 @@ export type UserDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
    * Limit how many Users to delete.
    */
   limit?: number
+}
+
+/**
+ * User.lowQualityProfilePictureFile
+ */
+export type User$lowQualityProfilePictureFileArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the File
+   */
+  select?: Prisma.FileSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the File
+   */
+  omit?: Prisma.FileOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FileInclude<ExtArgs> | null
+  where?: Prisma.FileWhereInput
+}
+
+/**
+ * User.bestQualityProfilePictureFile
+ */
+export type User$bestQualityProfilePictureFileArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the File
+   */
+  select?: Prisma.FileSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the File
+   */
+  omit?: Prisma.FileOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FileInclude<ExtArgs> | null
+  where?: Prisma.FileWhereInput
+}
+
+/**
+ * User.lowQualityCoverPictureFile
+ */
+export type User$lowQualityCoverPictureFileArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the File
+   */
+  select?: Prisma.FileSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the File
+   */
+  omit?: Prisma.FileOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FileInclude<ExtArgs> | null
+  where?: Prisma.FileWhereInput
+}
+
+/**
+ * User.bestQualityCoverPictureFile
+ */
+export type User$bestQualityCoverPictureFileArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the File
+   */
+  select?: Prisma.FileSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the File
+   */
+  omit?: Prisma.FileOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FileInclude<ExtArgs> | null
+  where?: Prisma.FileWhereInput
 }
 
 /**

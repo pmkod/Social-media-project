@@ -18,6 +18,10 @@ model User {
   bestQualityProfilePictureFileId String?            @map("best_quality_profile_picture_file_id")
   lowQualityCoverPictureFileId    String?            @map("low_quality_cover_picture_file_id")
   bestQualityCoverPictureFileId   String?            @map("best_quality_cover_picture_file_id")
+  lowQualityProfilePictureFile    File?              @relation("UserLowQualityProfilePicture", fields: [lowQualityProfilePictureFileId], references: [id], onDelete: SetNull)
+  bestQualityProfilePictureFile   File?              @relation("UserBestQualityProfilePicture", fields: [bestQualityProfilePictureFileId], references: [id], onDelete: SetNull)
+  lowQualityCoverPictureFile      File?              @relation("UserLowQualityCoverPicture", fields: [lowQualityCoverPictureFileId], references: [id], onDelete: SetNull)
+  bestQualityCoverPictureFile     File?              @relation("UserBestQualityCoverPicture", fields: [bestQualityCoverPictureFileId], references: [id], onDelete: SetNull)
   postCount                       Int                @default(0) @map("post_count")
   followersCount                  Int                @default(0) @map("followers_count")
   followingCount                  Int                @default(0) @map("following_count")
@@ -52,10 +56,14 @@ model SearchHistory {
 }
 
 model File {
-  id        String   @id @default(uuid())
-  mimeType  String?  @map("mime_type") @db.VarChar(50)
-  filename  String   @db.VarChar(255)
-  createdAt DateTime @default(now()) @map("created_at")
+  id                             String   @id @default(uuid())
+  mimeType                       String?  @map("mime_type") @db.VarChar(50)
+  filename                       String   @db.VarChar(255)
+  createdAt                      DateTime @default(now()) @map("created_at")
+  lowQualityProfilePictureUsers  User[]   @relation("UserLowQualityProfilePicture")
+  bestQualityProfilePictureUsers User[]   @relation("UserBestQualityProfilePicture")
+  lowQualityCoverPictureUsers    User[]   @relation("UserLowQualityCoverPicture")
+  bestQualityCoverPictureUsers   User[]   @relation("UserBestQualityCoverPicture")
 
   @@map("file")
 }

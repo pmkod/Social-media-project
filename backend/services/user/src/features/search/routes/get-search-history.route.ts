@@ -3,10 +3,6 @@ import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { requireUserAuthentication } from "@/features/authentication/middlewares/require-user-authentication.middleware";
-import {
-	emptyProfileMediaFiles,
-	getProfileMediaFilesByUsers,
-} from "@/features/user/services/get-profile-media-files.service";
 import { ProfileMediaFileResponseBody } from "@/features/user/user.validation-schemas";
 import type { Prisma } from "@/generated/prisma/client";
 import { SearchRoutesTag } from "../search.constants";
@@ -141,8 +137,12 @@ const getSearchHistoryRoute = defineOpenAPIRoute<
 						id: true,
 						username: true,
 						fullName: true,
-						lowQualityProfilePictureFileId: true,
-						bestQualityProfilePictureFileId: true,
+						lowQualityProfilePictureFile: {
+							select: { id: true, filename: true },
+						},
+						bestQualityProfilePictureFile: {
+							select: { id: true, filename: true },
+						},
 					},
 				},
 			},
@@ -151,11 +151,6 @@ const getSearchHistoryRoute = defineOpenAPIRoute<
 		const hasNextPage = results.length > limit;
 		const items = hasNextPage ? results.slice(0, limit) : results;
 		const lastItem = items.at(-1);
-		const searchedUsers = items.flatMap((item) =>
-			item.searchedUser ? [item.searchedUser] : [],
-		);
-		const profileMediaFilesByUserId =
-			await getProfileMediaFilesByUsers(searchedUsers);
 		const searchedUserIds = items.flatMap((item) =>
 			item.searchedUserId ? [item.searchedUserId] : [],
 		);
@@ -180,8 +175,10 @@ const getSearchHistoryRoute = defineOpenAPIRoute<
 							id: item.searchedUser.id,
 							username: item.searchedUser.username,
 							fullName: item.searchedUser.fullName,
-							...(profileMediaFilesByUserId.get(item.searchedUser.id) ??
-								emptyProfileMediaFiles),
+							lowQualityProfilePictureFile:
+								item.searchedUser.lowQualityProfilePictureFile,
+							bestQualityProfilePictureFile:
+								item.searchedUser.bestQualityProfilePictureFile,
 							isFollowedByAuthenticatedUser: followedUserIds.has(
 								item.searchedUser.id,
 							),

@@ -3,7 +3,6 @@ import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
 import type { HonoEnv } from "@/core/types/hono-env";
 import { getBlockRelationships } from "../services/get-block-relationships.service";
-import { hydrateProfileMediaFiles } from "../services/get-profile-media-files.service";
 import { UserRoutesTag } from "../user.constants";
 
 const GetUsersBatchRequestBody = z.object({
@@ -37,10 +36,7 @@ const routeDef = createRoute({
 	},
 });
 
-const getUsersBatchRoute = defineOpenAPIRoute<
-	typeof routeDef,
-	HonoEnv
->({
+const getUsersBatchRoute = defineOpenAPIRoute<typeof routeDef, HonoEnv>({
 	route: routeDef,
 	handler: async (c) => {
 		const { userIds } = c.req.valid("json");
@@ -60,14 +56,12 @@ const getUsersBatchRoute = defineOpenAPIRoute<
 				username: true,
 				fullName: true,
 				bio: true,
-				lowQualityProfilePictureFileId: true,
-				bestQualityProfilePictureFileId: true,
-				lowQualityCoverPictureFileId: true,
-				bestQualityCoverPictureFileId: true,
-				postCount: true,
-				followersCount: true,
-				followingCount: true,
-				createdAt: true,
+				lowQualityProfilePictureFile: {
+					select: { id: true, filename: true },
+				},
+				bestQualityProfilePictureFile: {
+					select: { id: true, filename: true },
+				},
 			},
 		});
 		const authenticatedUser = c.get("authenticatedUser");
@@ -76,10 +70,8 @@ const getUsersBatchRoute = defineOpenAPIRoute<
 			authenticatedUserId,
 			users.map((user) => user.id),
 		);
-		const hydratedUsers = await hydrateProfileMediaFiles(users);
-
 		return c.json(
-			hydratedUsers.map((user) => ({
+			users.map((user) => ({
 				...user,
 				isBlockedByAuthenticatedUser:
 					blockRelationships.blockedByAuthenticatedUserIds.has(user.id),

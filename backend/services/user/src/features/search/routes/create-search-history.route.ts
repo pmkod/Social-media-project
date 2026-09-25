@@ -5,10 +5,6 @@ import { ExceptionCodes } from "@/core/exceptions/exception.codes";
 import { Exception } from "@/core/exceptions/exception";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { requireUserAuthentication } from "@/features/authentication/middlewares/require-user-authentication.middleware";
-import {
-	emptyProfileMediaFiles,
-	getProfileMediaFilesByUsers,
-} from "@/features/user/services/get-profile-media-files.service";
 import { SearchRoutesTag } from "../search.constants";
 
 const CreateSearchHistoryBody = z.object({
@@ -63,8 +59,12 @@ const createSearchHistoryRoute = defineOpenAPIRoute<
 						id: true,
 						username: true,
 						fullName: true,
-						lowQualityProfilePictureFileId: true,
-						bestQualityProfilePictureFileId: true,
+						lowQualityProfilePictureFile: {
+							select: { id: true, filename: true },
+						},
+						bestQualityProfilePictureFile: {
+							select: { id: true, filename: true },
+						},
 						followers: {
 							where: { followerId: authenticatedUser.id },
 							select: { followerId: true },
@@ -73,14 +73,7 @@ const createSearchHistoryRoute = defineOpenAPIRoute<
 					},
 				})
 			: null;
-		const searchedUser = searchedUserRecord
-			? {
-					...searchedUserRecord,
-					...((await getProfileMediaFilesByUsers([searchedUserRecord])).get(
-						searchedUserRecord.id,
-					) ?? emptyProfileMediaFiles),
-				}
-			: null;
+		const searchedUser = searchedUserRecord;
 		if (searchedUserId && !searchedUser) {
 			throw new Exception({
 				code: ExceptionCodes.user_not_found,

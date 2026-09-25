@@ -1,7 +1,6 @@
 import { prisma } from "@/core/databases";
 import type { Prisma } from "@/generated/prisma/client";
 import { getBlockRelationships } from "./get-block-relationships.service";
-import { hydrateProfileMediaFiles } from "./get-profile-media-files.service";
 
 const publicUserProfileSelect = {} satisfies Prisma.UserSelect;
 
@@ -16,10 +15,18 @@ const getPublicUserProfile = async (
 			username: true,
 			fullName: true,
 			bio: true,
-			lowQualityProfilePictureFileId: true,
-			bestQualityProfilePictureFileId: true,
-			lowQualityCoverPictureFileId: true,
-			bestQualityCoverPictureFileId: true,
+			lowQualityProfilePictureFile: {
+				select: { id: true, filename: true },
+			},
+			bestQualityProfilePictureFile: {
+				select: { id: true, filename: true },
+			},
+			lowQualityCoverPictureFile: {
+				select: { id: true, filename: true },
+			},
+			bestQualityCoverPictureFile: {
+				select: { id: true, filename: true },
+			},
 			postCount: true,
 			followersCount: true,
 			followingCount: true,
@@ -28,9 +35,8 @@ const getPublicUserProfile = async (
 	});
 
 	if (!user) return null;
-	const [hydratedUser] = await hydrateProfileMediaFiles([user]);
 
-	const isOwnProfile = authenticatedUserId === hydratedUser.id;
+	const isOwnProfile = authenticatedUserId === user.id;
 	const [follow, blockRelationships] = await Promise.all([
 		authenticatedUserId && !isOwnProfile
 			? prisma.follow.findUnique({
@@ -43,19 +49,19 @@ const getPublicUserProfile = async (
 					select: { followerId: true },
 				})
 			: null,
-		getBlockRelationships(authenticatedUserId, [hydratedUser.id]),
+		getBlockRelationships(authenticatedUserId, [user.id]),
 	]);
 	const isBlockedByAuthenticatedUser =
-		blockRelationships.blockedByAuthenticatedUserIds.has(hydratedUser.id);
+		blockRelationships.blockedByAuthenticatedUserIds.has(user.id);
 	const hasBlockedAuthenticatedInUser =
-		blockRelationships.hasBlockedAuthenticatedUserIds.has(hydratedUser.id);
+		blockRelationships.hasBlockedAuthenticatedUserIds.has(user.id);
 	const visibleUser = hasBlockedAuthenticatedInUser
 		? {
-				...hydratedUser,
+				...user,
 				bio: null,
 				createdAt: null,
 			}
-		: hydratedUser;
+		: user;
 
 	return {
 		...visibleUser,

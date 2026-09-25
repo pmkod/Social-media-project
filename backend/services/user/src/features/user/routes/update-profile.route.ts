@@ -6,10 +6,6 @@ import { Exception } from "@/core/exceptions/exception";
 import { deleteFile, setFile } from "@/core/services/storage.service";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { requireUserAuthentication } from "@/features/authentication/middlewares/require-user-authentication.middleware";
-import {
-	getProfileMediaFilesByUsers,
-	hydrateProfileMediaFiles,
-} from "../services/get-profile-media-files.service";
 import { compressProfileMediaFile } from "../services/profile-media-compression.service";
 import { UserRoutesTag } from "../user.constants";
 import { UpdateProfileValidationSchema } from "../user.validation-schemas";
@@ -97,6 +93,18 @@ const updateProfileRoute = defineOpenAPIRoute<
 				bestQualityProfilePictureFileId: true,
 				lowQualityCoverPictureFileId: true,
 				bestQualityCoverPictureFileId: true,
+				lowQualityProfilePictureFile: {
+					select: { id: true, filename: true },
+				},
+				bestQualityProfilePictureFile: {
+					select: { id: true, filename: true },
+				},
+				lowQualityCoverPictureFile: {
+					select: { id: true, filename: true },
+				},
+				bestQualityCoverPictureFile: {
+					select: { id: true, filename: true },
+				},
 			},
 		});
 
@@ -239,10 +247,18 @@ const updateProfileRoute = defineOpenAPIRoute<
 				username: true,
 				fullName: true,
 				bio: true,
-				lowQualityProfilePictureFileId: true,
-				bestQualityProfilePictureFileId: true,
-				lowQualityCoverPictureFileId: true,
-				bestQualityCoverPictureFileId: true,
+				lowQualityProfilePictureFile: {
+					select: { id: true, filename: true },
+				},
+				bestQualityProfilePictureFile: {
+					select: { id: true, filename: true },
+				},
+				lowQualityCoverPictureFile: {
+					select: { id: true, filename: true },
+				},
+				bestQualityCoverPictureFile: {
+					select: { id: true, filename: true },
+				},
 				postCount: true,
 				followersCount: true,
 				followingCount: true,
@@ -250,23 +266,18 @@ const updateProfileRoute = defineOpenAPIRoute<
 				updatedAt: true,
 			},
 		});
-		const previousMediaFiles = (
-			await getProfileMediaFilesByUsers([previousUser])
-		).get(previousUser.id);
-		const [hydratedUpdatedUser] = await hydrateProfileMediaFiles([updatedUser]);
-
 		const previousFileNames = [
 			profilePictureFiles || shouldRemoveProfilePicture
-				? previousMediaFiles?.lowQualityProfilePictureFile?.filename
+				? previousUser.lowQualityProfilePictureFile?.filename
 				: null,
 			profilePictureFiles || shouldRemoveProfilePicture
-				? previousMediaFiles?.bestQualityProfilePictureFile?.filename
+				? previousUser.bestQualityProfilePictureFile?.filename
 				: null,
 			coverPictureFiles || shouldRemoveCoverPicture
-				? previousMediaFiles?.lowQualityCoverPictureFile?.filename
+				? previousUser.lowQualityCoverPictureFile?.filename
 				: null,
 			coverPictureFiles || shouldRemoveCoverPicture
-				? previousMediaFiles?.bestQualityCoverPictureFile?.filename
+				? previousUser.bestQualityCoverPictureFile?.filename
 				: null,
 		];
 		await removeStoredFiles(previousFileNames);
@@ -289,7 +300,7 @@ const updateProfileRoute = defineOpenAPIRoute<
 			await prisma.file.deleteMany({ where: { id: { in: previousFileIds } } });
 		}
 
-		return c.json({ user: hydratedUpdatedUser });
+		return c.json({ user: updatedUser });
 	},
 });
 

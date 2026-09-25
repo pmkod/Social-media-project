@@ -5,7 +5,6 @@ import { ExceptionCodes } from "@/core/exceptions/exception.codes";
 import { Exception } from "@/core/exceptions/exception";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { requireUserAuthentication } from "@/features/authentication/middlewares/require-user-authentication.middleware";
-import { hydrateProfileMediaFiles } from "../services/get-profile-media-files.service";
 import { UserRoutesTag } from "../user.constants";
 
 const routeDef = createRoute({
@@ -35,8 +34,12 @@ const getMeRoute = defineOpenAPIRoute<typeof routeDef, HonoAuthenticatedEnv>({
 				fullName: true,
 				unseenNotificationsCount: true,
 				createdAt: true,
-				lowQualityProfilePictureFileId: true,
-				bestQualityProfilePictureFileId: true,
+				lowQualityProfilePictureFile: {
+					select: { id: true, filename: true },
+				},
+				bestQualityProfilePictureFile: {
+					select: { id: true, filename: true },
+				},
 			},
 		});
 
@@ -47,11 +50,9 @@ const getMeRoute = defineOpenAPIRoute<typeof routeDef, HonoAuthenticatedEnv>({
 				status: HttpStatus.NOT_FOUND.code,
 			});
 		}
-		const [hydratedUser] = await hydrateProfileMediaFiles([user]);
-
 		return c.json(
 			{
-				user: hydratedUser,
+				user,
 			},
 			HttpStatus.OK.code,
 		);

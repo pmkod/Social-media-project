@@ -174,6 +174,10 @@ export type FileWhereInput = {
   mimeType?: Prisma.StringNullableFilter<"File"> | string | null
   filename?: Prisma.StringFilter<"File"> | string
   createdAt?: Prisma.DateTimeFilter<"File"> | Date | string
+  lowQualityProfilePictureUsers?: Prisma.UserListRelationFilter
+  bestQualityProfilePictureUsers?: Prisma.UserListRelationFilter
+  lowQualityCoverPictureUsers?: Prisma.UserListRelationFilter
+  bestQualityCoverPictureUsers?: Prisma.UserListRelationFilter
 }
 
 export type FileOrderByWithRelationInput = {
@@ -181,6 +185,10 @@ export type FileOrderByWithRelationInput = {
   mimeType?: Prisma.SortOrderInput | Prisma.SortOrder
   filename?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  lowQualityProfilePictureUsers?: Prisma.UserOrderByRelationAggregateInput
+  bestQualityProfilePictureUsers?: Prisma.UserOrderByRelationAggregateInput
+  lowQualityCoverPictureUsers?: Prisma.UserOrderByRelationAggregateInput
+  bestQualityCoverPictureUsers?: Prisma.UserOrderByRelationAggregateInput
 }
 
 export type FileWhereUniqueInput = Prisma.AtLeast<{
@@ -191,6 +199,10 @@ export type FileWhereUniqueInput = Prisma.AtLeast<{
   mimeType?: Prisma.StringNullableFilter<"File"> | string | null
   filename?: Prisma.StringFilter<"File"> | string
   createdAt?: Prisma.DateTimeFilter<"File"> | Date | string
+  lowQualityProfilePictureUsers?: Prisma.UserListRelationFilter
+  bestQualityProfilePictureUsers?: Prisma.UserListRelationFilter
+  lowQualityCoverPictureUsers?: Prisma.UserListRelationFilter
+  bestQualityCoverPictureUsers?: Prisma.UserListRelationFilter
 }, "id">
 
 export type FileOrderByWithAggregationInput = {
@@ -218,6 +230,10 @@ export type FileCreateInput = {
   mimeType?: string | null
   filename: string
   createdAt?: Date | string
+  lowQualityProfilePictureUsers?: Prisma.UserCreateNestedManyWithoutLowQualityProfilePictureFileInput
+  bestQualityProfilePictureUsers?: Prisma.UserCreateNestedManyWithoutBestQualityProfilePictureFileInput
+  lowQualityCoverPictureUsers?: Prisma.UserCreateNestedManyWithoutLowQualityCoverPictureFileInput
+  bestQualityCoverPictureUsers?: Prisma.UserCreateNestedManyWithoutBestQualityCoverPictureFileInput
 }
 
 export type FileUncheckedCreateInput = {
@@ -225,6 +241,10 @@ export type FileUncheckedCreateInput = {
   mimeType?: string | null
   filename: string
   createdAt?: Date | string
+  lowQualityProfilePictureUsers?: Prisma.UserUncheckedCreateNestedManyWithoutLowQualityProfilePictureFileInput
+  bestQualityProfilePictureUsers?: Prisma.UserUncheckedCreateNestedManyWithoutBestQualityProfilePictureFileInput
+  lowQualityCoverPictureUsers?: Prisma.UserUncheckedCreateNestedManyWithoutLowQualityCoverPictureFileInput
+  bestQualityCoverPictureUsers?: Prisma.UserUncheckedCreateNestedManyWithoutBestQualityCoverPictureFileInput
 }
 
 export type FileUpdateInput = {
@@ -232,6 +252,10 @@ export type FileUpdateInput = {
   mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   filename?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lowQualityProfilePictureUsers?: Prisma.UserUpdateManyWithoutLowQualityProfilePictureFileNestedInput
+  bestQualityProfilePictureUsers?: Prisma.UserUpdateManyWithoutBestQualityProfilePictureFileNestedInput
+  lowQualityCoverPictureUsers?: Prisma.UserUpdateManyWithoutLowQualityCoverPictureFileNestedInput
+  bestQualityCoverPictureUsers?: Prisma.UserUpdateManyWithoutBestQualityCoverPictureFileNestedInput
 }
 
 export type FileUncheckedUpdateInput = {
@@ -239,6 +263,10 @@ export type FileUncheckedUpdateInput = {
   mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   filename?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lowQualityProfilePictureUsers?: Prisma.UserUncheckedUpdateManyWithoutLowQualityProfilePictureFileNestedInput
+  bestQualityProfilePictureUsers?: Prisma.UserUncheckedUpdateManyWithoutBestQualityProfilePictureFileNestedInput
+  lowQualityCoverPictureUsers?: Prisma.UserUncheckedUpdateManyWithoutLowQualityCoverPictureFileNestedInput
+  bestQualityCoverPictureUsers?: Prisma.UserUncheckedUpdateManyWithoutBestQualityCoverPictureFileNestedInput
 }
 
 export type FileCreateManyInput = {
@@ -262,6 +290,11 @@ export type FileUncheckedUpdateManyInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
+export type FileNullableScalarRelationFilter = {
+  is?: Prisma.FileWhereInput | null
+  isNot?: Prisma.FileWhereInput | null
+}
+
 export type FileCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   mimeType?: Prisma.SortOrder
@@ -283,6 +316,350 @@ export type FileMinOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
 }
 
+export type FileCreateNestedOneWithoutLowQualityProfilePictureUsersInput = {
+  create?: Prisma.XOR<Prisma.FileCreateWithoutLowQualityProfilePictureUsersInput, Prisma.FileUncheckedCreateWithoutLowQualityProfilePictureUsersInput>
+  connectOrCreate?: Prisma.FileCreateOrConnectWithoutLowQualityProfilePictureUsersInput
+  connect?: Prisma.FileWhereUniqueInput
+}
+
+export type FileCreateNestedOneWithoutBestQualityProfilePictureUsersInput = {
+  create?: Prisma.XOR<Prisma.FileCreateWithoutBestQualityProfilePictureUsersInput, Prisma.FileUncheckedCreateWithoutBestQualityProfilePictureUsersInput>
+  connectOrCreate?: Prisma.FileCreateOrConnectWithoutBestQualityProfilePictureUsersInput
+  connect?: Prisma.FileWhereUniqueInput
+}
+
+export type FileCreateNestedOneWithoutLowQualityCoverPictureUsersInput = {
+  create?: Prisma.XOR<Prisma.FileCreateWithoutLowQualityCoverPictureUsersInput, Prisma.FileUncheckedCreateWithoutLowQualityCoverPictureUsersInput>
+  connectOrCreate?: Prisma.FileCreateOrConnectWithoutLowQualityCoverPictureUsersInput
+  connect?: Prisma.FileWhereUniqueInput
+}
+
+export type FileCreateNestedOneWithoutBestQualityCoverPictureUsersInput = {
+  create?: Prisma.XOR<Prisma.FileCreateWithoutBestQualityCoverPictureUsersInput, Prisma.FileUncheckedCreateWithoutBestQualityCoverPictureUsersInput>
+  connectOrCreate?: Prisma.FileCreateOrConnectWithoutBestQualityCoverPictureUsersInput
+  connect?: Prisma.FileWhereUniqueInput
+}
+
+export type FileUpdateOneWithoutLowQualityProfilePictureUsersNestedInput = {
+  create?: Prisma.XOR<Prisma.FileCreateWithoutLowQualityProfilePictureUsersInput, Prisma.FileUncheckedCreateWithoutLowQualityProfilePictureUsersInput>
+  connectOrCreate?: Prisma.FileCreateOrConnectWithoutLowQualityProfilePictureUsersInput
+  upsert?: Prisma.FileUpsertWithoutLowQualityProfilePictureUsersInput
+  disconnect?: Prisma.FileWhereInput | boolean
+  delete?: Prisma.FileWhereInput | boolean
+  connect?: Prisma.FileWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.FileUpdateToOneWithWhereWithoutLowQualityProfilePictureUsersInput, Prisma.FileUpdateWithoutLowQualityProfilePictureUsersInput>, Prisma.FileUncheckedUpdateWithoutLowQualityProfilePictureUsersInput>
+}
+
+export type FileUpdateOneWithoutBestQualityProfilePictureUsersNestedInput = {
+  create?: Prisma.XOR<Prisma.FileCreateWithoutBestQualityProfilePictureUsersInput, Prisma.FileUncheckedCreateWithoutBestQualityProfilePictureUsersInput>
+  connectOrCreate?: Prisma.FileCreateOrConnectWithoutBestQualityProfilePictureUsersInput
+  upsert?: Prisma.FileUpsertWithoutBestQualityProfilePictureUsersInput
+  disconnect?: Prisma.FileWhereInput | boolean
+  delete?: Prisma.FileWhereInput | boolean
+  connect?: Prisma.FileWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.FileUpdateToOneWithWhereWithoutBestQualityProfilePictureUsersInput, Prisma.FileUpdateWithoutBestQualityProfilePictureUsersInput>, Prisma.FileUncheckedUpdateWithoutBestQualityProfilePictureUsersInput>
+}
+
+export type FileUpdateOneWithoutLowQualityCoverPictureUsersNestedInput = {
+  create?: Prisma.XOR<Prisma.FileCreateWithoutLowQualityCoverPictureUsersInput, Prisma.FileUncheckedCreateWithoutLowQualityCoverPictureUsersInput>
+  connectOrCreate?: Prisma.FileCreateOrConnectWithoutLowQualityCoverPictureUsersInput
+  upsert?: Prisma.FileUpsertWithoutLowQualityCoverPictureUsersInput
+  disconnect?: Prisma.FileWhereInput | boolean
+  delete?: Prisma.FileWhereInput | boolean
+  connect?: Prisma.FileWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.FileUpdateToOneWithWhereWithoutLowQualityCoverPictureUsersInput, Prisma.FileUpdateWithoutLowQualityCoverPictureUsersInput>, Prisma.FileUncheckedUpdateWithoutLowQualityCoverPictureUsersInput>
+}
+
+export type FileUpdateOneWithoutBestQualityCoverPictureUsersNestedInput = {
+  create?: Prisma.XOR<Prisma.FileCreateWithoutBestQualityCoverPictureUsersInput, Prisma.FileUncheckedCreateWithoutBestQualityCoverPictureUsersInput>
+  connectOrCreate?: Prisma.FileCreateOrConnectWithoutBestQualityCoverPictureUsersInput
+  upsert?: Prisma.FileUpsertWithoutBestQualityCoverPictureUsersInput
+  disconnect?: Prisma.FileWhereInput | boolean
+  delete?: Prisma.FileWhereInput | boolean
+  connect?: Prisma.FileWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.FileUpdateToOneWithWhereWithoutBestQualityCoverPictureUsersInput, Prisma.FileUpdateWithoutBestQualityCoverPictureUsersInput>, Prisma.FileUncheckedUpdateWithoutBestQualityCoverPictureUsersInput>
+}
+
+export type FileCreateWithoutLowQualityProfilePictureUsersInput = {
+  id?: string
+  mimeType?: string | null
+  filename: string
+  createdAt?: Date | string
+  bestQualityProfilePictureUsers?: Prisma.UserCreateNestedManyWithoutBestQualityProfilePictureFileInput
+  lowQualityCoverPictureUsers?: Prisma.UserCreateNestedManyWithoutLowQualityCoverPictureFileInput
+  bestQualityCoverPictureUsers?: Prisma.UserCreateNestedManyWithoutBestQualityCoverPictureFileInput
+}
+
+export type FileUncheckedCreateWithoutLowQualityProfilePictureUsersInput = {
+  id?: string
+  mimeType?: string | null
+  filename: string
+  createdAt?: Date | string
+  bestQualityProfilePictureUsers?: Prisma.UserUncheckedCreateNestedManyWithoutBestQualityProfilePictureFileInput
+  lowQualityCoverPictureUsers?: Prisma.UserUncheckedCreateNestedManyWithoutLowQualityCoverPictureFileInput
+  bestQualityCoverPictureUsers?: Prisma.UserUncheckedCreateNestedManyWithoutBestQualityCoverPictureFileInput
+}
+
+export type FileCreateOrConnectWithoutLowQualityProfilePictureUsersInput = {
+  where: Prisma.FileWhereUniqueInput
+  create: Prisma.XOR<Prisma.FileCreateWithoutLowQualityProfilePictureUsersInput, Prisma.FileUncheckedCreateWithoutLowQualityProfilePictureUsersInput>
+}
+
+export type FileCreateWithoutBestQualityProfilePictureUsersInput = {
+  id?: string
+  mimeType?: string | null
+  filename: string
+  createdAt?: Date | string
+  lowQualityProfilePictureUsers?: Prisma.UserCreateNestedManyWithoutLowQualityProfilePictureFileInput
+  lowQualityCoverPictureUsers?: Prisma.UserCreateNestedManyWithoutLowQualityCoverPictureFileInput
+  bestQualityCoverPictureUsers?: Prisma.UserCreateNestedManyWithoutBestQualityCoverPictureFileInput
+}
+
+export type FileUncheckedCreateWithoutBestQualityProfilePictureUsersInput = {
+  id?: string
+  mimeType?: string | null
+  filename: string
+  createdAt?: Date | string
+  lowQualityProfilePictureUsers?: Prisma.UserUncheckedCreateNestedManyWithoutLowQualityProfilePictureFileInput
+  lowQualityCoverPictureUsers?: Prisma.UserUncheckedCreateNestedManyWithoutLowQualityCoverPictureFileInput
+  bestQualityCoverPictureUsers?: Prisma.UserUncheckedCreateNestedManyWithoutBestQualityCoverPictureFileInput
+}
+
+export type FileCreateOrConnectWithoutBestQualityProfilePictureUsersInput = {
+  where: Prisma.FileWhereUniqueInput
+  create: Prisma.XOR<Prisma.FileCreateWithoutBestQualityProfilePictureUsersInput, Prisma.FileUncheckedCreateWithoutBestQualityProfilePictureUsersInput>
+}
+
+export type FileCreateWithoutLowQualityCoverPictureUsersInput = {
+  id?: string
+  mimeType?: string | null
+  filename: string
+  createdAt?: Date | string
+  lowQualityProfilePictureUsers?: Prisma.UserCreateNestedManyWithoutLowQualityProfilePictureFileInput
+  bestQualityProfilePictureUsers?: Prisma.UserCreateNestedManyWithoutBestQualityProfilePictureFileInput
+  bestQualityCoverPictureUsers?: Prisma.UserCreateNestedManyWithoutBestQualityCoverPictureFileInput
+}
+
+export type FileUncheckedCreateWithoutLowQualityCoverPictureUsersInput = {
+  id?: string
+  mimeType?: string | null
+  filename: string
+  createdAt?: Date | string
+  lowQualityProfilePictureUsers?: Prisma.UserUncheckedCreateNestedManyWithoutLowQualityProfilePictureFileInput
+  bestQualityProfilePictureUsers?: Prisma.UserUncheckedCreateNestedManyWithoutBestQualityProfilePictureFileInput
+  bestQualityCoverPictureUsers?: Prisma.UserUncheckedCreateNestedManyWithoutBestQualityCoverPictureFileInput
+}
+
+export type FileCreateOrConnectWithoutLowQualityCoverPictureUsersInput = {
+  where: Prisma.FileWhereUniqueInput
+  create: Prisma.XOR<Prisma.FileCreateWithoutLowQualityCoverPictureUsersInput, Prisma.FileUncheckedCreateWithoutLowQualityCoverPictureUsersInput>
+}
+
+export type FileCreateWithoutBestQualityCoverPictureUsersInput = {
+  id?: string
+  mimeType?: string | null
+  filename: string
+  createdAt?: Date | string
+  lowQualityProfilePictureUsers?: Prisma.UserCreateNestedManyWithoutLowQualityProfilePictureFileInput
+  bestQualityProfilePictureUsers?: Prisma.UserCreateNestedManyWithoutBestQualityProfilePictureFileInput
+  lowQualityCoverPictureUsers?: Prisma.UserCreateNestedManyWithoutLowQualityCoverPictureFileInput
+}
+
+export type FileUncheckedCreateWithoutBestQualityCoverPictureUsersInput = {
+  id?: string
+  mimeType?: string | null
+  filename: string
+  createdAt?: Date | string
+  lowQualityProfilePictureUsers?: Prisma.UserUncheckedCreateNestedManyWithoutLowQualityProfilePictureFileInput
+  bestQualityProfilePictureUsers?: Prisma.UserUncheckedCreateNestedManyWithoutBestQualityProfilePictureFileInput
+  lowQualityCoverPictureUsers?: Prisma.UserUncheckedCreateNestedManyWithoutLowQualityCoverPictureFileInput
+}
+
+export type FileCreateOrConnectWithoutBestQualityCoverPictureUsersInput = {
+  where: Prisma.FileWhereUniqueInput
+  create: Prisma.XOR<Prisma.FileCreateWithoutBestQualityCoverPictureUsersInput, Prisma.FileUncheckedCreateWithoutBestQualityCoverPictureUsersInput>
+}
+
+export type FileUpsertWithoutLowQualityProfilePictureUsersInput = {
+  update: Prisma.XOR<Prisma.FileUpdateWithoutLowQualityProfilePictureUsersInput, Prisma.FileUncheckedUpdateWithoutLowQualityProfilePictureUsersInput>
+  create: Prisma.XOR<Prisma.FileCreateWithoutLowQualityProfilePictureUsersInput, Prisma.FileUncheckedCreateWithoutLowQualityProfilePictureUsersInput>
+  where?: Prisma.FileWhereInput
+}
+
+export type FileUpdateToOneWithWhereWithoutLowQualityProfilePictureUsersInput = {
+  where?: Prisma.FileWhereInput
+  data: Prisma.XOR<Prisma.FileUpdateWithoutLowQualityProfilePictureUsersInput, Prisma.FileUncheckedUpdateWithoutLowQualityProfilePictureUsersInput>
+}
+
+export type FileUpdateWithoutLowQualityProfilePictureUsersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  filename?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  bestQualityProfilePictureUsers?: Prisma.UserUpdateManyWithoutBestQualityProfilePictureFileNestedInput
+  lowQualityCoverPictureUsers?: Prisma.UserUpdateManyWithoutLowQualityCoverPictureFileNestedInput
+  bestQualityCoverPictureUsers?: Prisma.UserUpdateManyWithoutBestQualityCoverPictureFileNestedInput
+}
+
+export type FileUncheckedUpdateWithoutLowQualityProfilePictureUsersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  filename?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  bestQualityProfilePictureUsers?: Prisma.UserUncheckedUpdateManyWithoutBestQualityProfilePictureFileNestedInput
+  lowQualityCoverPictureUsers?: Prisma.UserUncheckedUpdateManyWithoutLowQualityCoverPictureFileNestedInput
+  bestQualityCoverPictureUsers?: Prisma.UserUncheckedUpdateManyWithoutBestQualityCoverPictureFileNestedInput
+}
+
+export type FileUpsertWithoutBestQualityProfilePictureUsersInput = {
+  update: Prisma.XOR<Prisma.FileUpdateWithoutBestQualityProfilePictureUsersInput, Prisma.FileUncheckedUpdateWithoutBestQualityProfilePictureUsersInput>
+  create: Prisma.XOR<Prisma.FileCreateWithoutBestQualityProfilePictureUsersInput, Prisma.FileUncheckedCreateWithoutBestQualityProfilePictureUsersInput>
+  where?: Prisma.FileWhereInput
+}
+
+export type FileUpdateToOneWithWhereWithoutBestQualityProfilePictureUsersInput = {
+  where?: Prisma.FileWhereInput
+  data: Prisma.XOR<Prisma.FileUpdateWithoutBestQualityProfilePictureUsersInput, Prisma.FileUncheckedUpdateWithoutBestQualityProfilePictureUsersInput>
+}
+
+export type FileUpdateWithoutBestQualityProfilePictureUsersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  filename?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lowQualityProfilePictureUsers?: Prisma.UserUpdateManyWithoutLowQualityProfilePictureFileNestedInput
+  lowQualityCoverPictureUsers?: Prisma.UserUpdateManyWithoutLowQualityCoverPictureFileNestedInput
+  bestQualityCoverPictureUsers?: Prisma.UserUpdateManyWithoutBestQualityCoverPictureFileNestedInput
+}
+
+export type FileUncheckedUpdateWithoutBestQualityProfilePictureUsersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  filename?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lowQualityProfilePictureUsers?: Prisma.UserUncheckedUpdateManyWithoutLowQualityProfilePictureFileNestedInput
+  lowQualityCoverPictureUsers?: Prisma.UserUncheckedUpdateManyWithoutLowQualityCoverPictureFileNestedInput
+  bestQualityCoverPictureUsers?: Prisma.UserUncheckedUpdateManyWithoutBestQualityCoverPictureFileNestedInput
+}
+
+export type FileUpsertWithoutLowQualityCoverPictureUsersInput = {
+  update: Prisma.XOR<Prisma.FileUpdateWithoutLowQualityCoverPictureUsersInput, Prisma.FileUncheckedUpdateWithoutLowQualityCoverPictureUsersInput>
+  create: Prisma.XOR<Prisma.FileCreateWithoutLowQualityCoverPictureUsersInput, Prisma.FileUncheckedCreateWithoutLowQualityCoverPictureUsersInput>
+  where?: Prisma.FileWhereInput
+}
+
+export type FileUpdateToOneWithWhereWithoutLowQualityCoverPictureUsersInput = {
+  where?: Prisma.FileWhereInput
+  data: Prisma.XOR<Prisma.FileUpdateWithoutLowQualityCoverPictureUsersInput, Prisma.FileUncheckedUpdateWithoutLowQualityCoverPictureUsersInput>
+}
+
+export type FileUpdateWithoutLowQualityCoverPictureUsersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  filename?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lowQualityProfilePictureUsers?: Prisma.UserUpdateManyWithoutLowQualityProfilePictureFileNestedInput
+  bestQualityProfilePictureUsers?: Prisma.UserUpdateManyWithoutBestQualityProfilePictureFileNestedInput
+  bestQualityCoverPictureUsers?: Prisma.UserUpdateManyWithoutBestQualityCoverPictureFileNestedInput
+}
+
+export type FileUncheckedUpdateWithoutLowQualityCoverPictureUsersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  filename?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lowQualityProfilePictureUsers?: Prisma.UserUncheckedUpdateManyWithoutLowQualityProfilePictureFileNestedInput
+  bestQualityProfilePictureUsers?: Prisma.UserUncheckedUpdateManyWithoutBestQualityProfilePictureFileNestedInput
+  bestQualityCoverPictureUsers?: Prisma.UserUncheckedUpdateManyWithoutBestQualityCoverPictureFileNestedInput
+}
+
+export type FileUpsertWithoutBestQualityCoverPictureUsersInput = {
+  update: Prisma.XOR<Prisma.FileUpdateWithoutBestQualityCoverPictureUsersInput, Prisma.FileUncheckedUpdateWithoutBestQualityCoverPictureUsersInput>
+  create: Prisma.XOR<Prisma.FileCreateWithoutBestQualityCoverPictureUsersInput, Prisma.FileUncheckedCreateWithoutBestQualityCoverPictureUsersInput>
+  where?: Prisma.FileWhereInput
+}
+
+export type FileUpdateToOneWithWhereWithoutBestQualityCoverPictureUsersInput = {
+  where?: Prisma.FileWhereInput
+  data: Prisma.XOR<Prisma.FileUpdateWithoutBestQualityCoverPictureUsersInput, Prisma.FileUncheckedUpdateWithoutBestQualityCoverPictureUsersInput>
+}
+
+export type FileUpdateWithoutBestQualityCoverPictureUsersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  filename?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lowQualityProfilePictureUsers?: Prisma.UserUpdateManyWithoutLowQualityProfilePictureFileNestedInput
+  bestQualityProfilePictureUsers?: Prisma.UserUpdateManyWithoutBestQualityProfilePictureFileNestedInput
+  lowQualityCoverPictureUsers?: Prisma.UserUpdateManyWithoutLowQualityCoverPictureFileNestedInput
+}
+
+export type FileUncheckedUpdateWithoutBestQualityCoverPictureUsersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  mimeType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  filename?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lowQualityProfilePictureUsers?: Prisma.UserUncheckedUpdateManyWithoutLowQualityProfilePictureFileNestedInput
+  bestQualityProfilePictureUsers?: Prisma.UserUncheckedUpdateManyWithoutBestQualityProfilePictureFileNestedInput
+  lowQualityCoverPictureUsers?: Prisma.UserUncheckedUpdateManyWithoutLowQualityCoverPictureFileNestedInput
+}
+
+
+/**
+ * Count Type FileCountOutputType
+ */
+
+export type FileCountOutputType = {
+  lowQualityProfilePictureUsers: number
+  bestQualityProfilePictureUsers: number
+  lowQualityCoverPictureUsers: number
+  bestQualityCoverPictureUsers: number
+}
+
+export type FileCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  lowQualityProfilePictureUsers?: boolean | FileCountOutputTypeCountLowQualityProfilePictureUsersArgs
+  bestQualityProfilePictureUsers?: boolean | FileCountOutputTypeCountBestQualityProfilePictureUsersArgs
+  lowQualityCoverPictureUsers?: boolean | FileCountOutputTypeCountLowQualityCoverPictureUsersArgs
+  bestQualityCoverPictureUsers?: boolean | FileCountOutputTypeCountBestQualityCoverPictureUsersArgs
+}
+
+/**
+ * FileCountOutputType without action
+ */
+export type FileCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the FileCountOutputType
+   */
+  select?: Prisma.FileCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * FileCountOutputType without action
+ */
+export type FileCountOutputTypeCountLowQualityProfilePictureUsersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.UserWhereInput
+}
+
+/**
+ * FileCountOutputType without action
+ */
+export type FileCountOutputTypeCountBestQualityProfilePictureUsersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.UserWhereInput
+}
+
+/**
+ * FileCountOutputType without action
+ */
+export type FileCountOutputTypeCountLowQualityCoverPictureUsersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.UserWhereInput
+}
+
+/**
+ * FileCountOutputType without action
+ */
+export type FileCountOutputTypeCountBestQualityCoverPictureUsersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.UserWhereInput
+}
 
 
 export type FileSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -290,6 +667,11 @@ export type FileSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   mimeType?: boolean
   filename?: boolean
   createdAt?: boolean
+  lowQualityProfilePictureUsers?: boolean | Prisma.File$lowQualityProfilePictureUsersArgs<ExtArgs>
+  bestQualityProfilePictureUsers?: boolean | Prisma.File$bestQualityProfilePictureUsersArgs<ExtArgs>
+  lowQualityCoverPictureUsers?: boolean | Prisma.File$lowQualityCoverPictureUsersArgs<ExtArgs>
+  bestQualityCoverPictureUsers?: boolean | Prisma.File$bestQualityCoverPictureUsersArgs<ExtArgs>
+  _count?: boolean | Prisma.FileCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["file"]>
 
 export type FileSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -314,10 +696,24 @@ export type FileSelectScalar = {
 }
 
 export type FileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "mimeType" | "filename" | "createdAt", ExtArgs["result"]["file"]>
+export type FileInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  lowQualityProfilePictureUsers?: boolean | Prisma.File$lowQualityProfilePictureUsersArgs<ExtArgs>
+  bestQualityProfilePictureUsers?: boolean | Prisma.File$bestQualityProfilePictureUsersArgs<ExtArgs>
+  lowQualityCoverPictureUsers?: boolean | Prisma.File$lowQualityCoverPictureUsersArgs<ExtArgs>
+  bestQualityCoverPictureUsers?: boolean | Prisma.File$bestQualityCoverPictureUsersArgs<ExtArgs>
+  _count?: boolean | Prisma.FileCountOutputTypeDefaultArgs<ExtArgs>
+}
+export type FileIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type FileIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
 
 export type $FilePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "File"
-  objects: {}
+  objects: {
+    lowQualityProfilePictureUsers: Prisma.$UserPayload<ExtArgs>[]
+    bestQualityProfilePictureUsers: Prisma.$UserPayload<ExtArgs>[]
+    lowQualityCoverPictureUsers: Prisma.$UserPayload<ExtArgs>[]
+    bestQualityCoverPictureUsers: Prisma.$UserPayload<ExtArgs>[]
+  }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     mimeType: string | null
@@ -717,6 +1113,10 @@ readonly fields: FileFieldRefs;
  */
 export interface Prisma__FileClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  lowQualityProfilePictureUsers<T extends Prisma.File$lowQualityProfilePictureUsersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.File$lowQualityProfilePictureUsersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  bestQualityProfilePictureUsers<T extends Prisma.File$bestQualityProfilePictureUsersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.File$bestQualityProfilePictureUsersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  lowQualityCoverPictureUsers<T extends Prisma.File$lowQualityCoverPictureUsersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.File$lowQualityCoverPictureUsersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  bestQualityCoverPictureUsers<T extends Prisma.File$bestQualityCoverPictureUsersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.File$bestQualityCoverPictureUsersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -767,6 +1167,10 @@ export type FileFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.Internal
    */
   omit?: Prisma.FileOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FileInclude<ExtArgs> | null
+  /**
    * Filter, which File to fetch.
    */
   where: Prisma.FileWhereUniqueInput
@@ -785,6 +1189,10 @@ export type FileFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Extensions.I
    */
   omit?: Prisma.FileOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FileInclude<ExtArgs> | null
+  /**
    * Filter, which File to fetch.
    */
   where: Prisma.FileWhereUniqueInput
@@ -802,6 +1210,10 @@ export type FileFindFirstArgs<ExtArgs extends runtime.Types.Extensions.InternalA
    * Omit specific fields from the File
    */
   omit?: Prisma.FileOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FileInclude<ExtArgs> | null
   /**
    * Filter, which File to fetch.
    */
@@ -851,6 +1263,10 @@ export type FileFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Extensions.In
    */
   omit?: Prisma.FileOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FileInclude<ExtArgs> | null
+  /**
    * Filter, which File to fetch.
    */
   where?: Prisma.FileWhereInput
@@ -898,6 +1314,10 @@ export type FileFindManyArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
    * Omit specific fields from the File
    */
   omit?: Prisma.FileOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FileInclude<ExtArgs> | null
   /**
    * Filter, which Files to fetch.
    */
@@ -947,6 +1367,10 @@ export type FileCreateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs
    */
   omit?: Prisma.FileOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FileInclude<ExtArgs> | null
+  /**
    * The data needed to create a File.
    */
   data: Prisma.XOR<Prisma.FileCreateInput, Prisma.FileUncheckedCreateInput>
@@ -994,6 +1418,10 @@ export type FileUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs
    * Omit specific fields from the File
    */
   omit?: Prisma.FileOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FileInclude<ExtArgs> | null
   /**
    * The data needed to update a File.
    */
@@ -1061,6 +1489,10 @@ export type FileUpsertArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs
    */
   omit?: Prisma.FileOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FileInclude<ExtArgs> | null
+  /**
    * The filter to search for the File to update in case it exists.
    */
   where: Prisma.FileWhereUniqueInput
@@ -1087,6 +1519,10 @@ export type FileDeleteArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs
    */
   omit?: Prisma.FileOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FileInclude<ExtArgs> | null
+  /**
    * Filter which File to delete.
    */
   where: Prisma.FileWhereUniqueInput
@@ -1107,6 +1543,102 @@ export type FileDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
 }
 
 /**
+ * File.lowQualityProfilePictureUsers
+ */
+export type File$lowQualityProfilePictureUsersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the User
+   */
+  select?: Prisma.UserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the User
+   */
+  omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  where?: Prisma.UserWhereInput
+  orderBy?: Prisma.UserOrderByWithRelationInput | Prisma.UserOrderByWithRelationInput[]
+  cursor?: Prisma.UserWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.UserScalarFieldEnum | Prisma.UserScalarFieldEnum[]
+}
+
+/**
+ * File.bestQualityProfilePictureUsers
+ */
+export type File$bestQualityProfilePictureUsersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the User
+   */
+  select?: Prisma.UserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the User
+   */
+  omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  where?: Prisma.UserWhereInput
+  orderBy?: Prisma.UserOrderByWithRelationInput | Prisma.UserOrderByWithRelationInput[]
+  cursor?: Prisma.UserWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.UserScalarFieldEnum | Prisma.UserScalarFieldEnum[]
+}
+
+/**
+ * File.lowQualityCoverPictureUsers
+ */
+export type File$lowQualityCoverPictureUsersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the User
+   */
+  select?: Prisma.UserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the User
+   */
+  omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  where?: Prisma.UserWhereInput
+  orderBy?: Prisma.UserOrderByWithRelationInput | Prisma.UserOrderByWithRelationInput[]
+  cursor?: Prisma.UserWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.UserScalarFieldEnum | Prisma.UserScalarFieldEnum[]
+}
+
+/**
+ * File.bestQualityCoverPictureUsers
+ */
+export type File$bestQualityCoverPictureUsersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the User
+   */
+  select?: Prisma.UserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the User
+   */
+  omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  where?: Prisma.UserWhereInput
+  orderBy?: Prisma.UserOrderByWithRelationInput | Prisma.UserOrderByWithRelationInput[]
+  cursor?: Prisma.UserWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.UserScalarFieldEnum | Prisma.UserScalarFieldEnum[]
+}
+
+/**
  * File without action
  */
 export type FileDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1118,4 +1650,8 @@ export type FileDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
    * Omit specific fields from the File
    */
   omit?: Prisma.FileOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FileInclude<ExtArgs> | null
 }
