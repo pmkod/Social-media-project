@@ -50,7 +50,9 @@ class UserServiceClient {
 				return usersMap;
 			}
 
-			const users = (await response.json()) as UserProfileDto[];
+			const { users } = (await response.json()) as {
+				users: UserProfileDto[];
+			};
 			for (const user of users) usersMap.set(user.id, user);
 		} catch (error) {
 			console.error(

@@ -53,7 +53,8 @@ class UserServiceClient {
 			});
 		}
 
-		return (await response.json()) as UserProfileDto[];
+		const data = (await response.json()) as { users: UserProfileDto[] };
+		return data.users;
 	}
 
 	private async requestBlockRelationships(

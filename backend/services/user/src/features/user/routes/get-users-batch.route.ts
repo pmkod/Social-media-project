@@ -42,7 +42,7 @@ const getUsersBatchRoute = defineOpenAPIRoute<typeof routeDef, HonoEnv>({
 		const uniqueIds = Array.from(new Set(userIds.filter(Boolean)));
 
 		if (uniqueIds.length === 0) {
-			return c.json([]);
+			return c.json({ users: [] });
 		}
 
 		const users = await prisma.user.findMany({
@@ -55,15 +55,15 @@ const getUsersBatchRoute = defineOpenAPIRoute<typeof routeDef, HonoEnv>({
 				username: true,
 				fullName: true,
 				lowQualityProfilePictureFile: {
-					select: { id: true, filename: true },
+					select: { filename: true },
 				},
 				bestQualityProfilePictureFile: {
-					select: { id: true, filename: true },
+					select: { filename: true },
 				},
 			},
 		});
 
-		return c.json(users);
+		return c.json({ users });
 	},
 });
 

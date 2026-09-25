@@ -102,7 +102,9 @@ export class UserServiceClient {
 				return authorsMap;
 			}
 
-			const users = (await response.json()) as UserProfileDto[];
+			const { users } = (await response.json()) as {
+				users: UserProfileDto[];
+			};
 			const blockedUserIds = new Set(relationships.blockedUserIds);
 			const blockedByUserIds = new Set(relationships.blockedByUserIds);
 			for (const user of users) {
