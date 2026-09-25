@@ -1,7 +1,7 @@
 import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
-import { userServiceClient } from "@/core/services/user-service.client";
+import { userServiceClient } from "@/core/service-clients/user-service.client";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { requireUserAuthentication } from "@/features/authentication/middlewares/require-user-authentication.middleware";
 import { NotificationsRoutesTag } from "../notifications.constants";
@@ -69,9 +69,8 @@ const getNotificationsRoute = defineOpenAPIRoute<
 		const pageRows = hasNextPage
 			? notificationRows.slice(0, limit)
 			: notificationRows;
-		const initiatorsMap = await userServiceClient.fetchUsersBatch(
+		const initiators = await userServiceClient.fetchUsersBatch(
 			pageRows.map((row) => row.initiatorId),
-			authenticatedUserId,
 		);
 		const lastRow = pageRows.at(-1);
 
@@ -82,7 +81,10 @@ const getNotificationsRoute = defineOpenAPIRoute<
 				initiatorId: row.initiatorId,
 				targetId: row.targetId,
 				groupKey: row.groupKey,
-				initiator: initiatorsMap.get(row.initiatorId) ?? null,
+				initiator:
+					initiators.users.find(
+						(initiator) => initiator.id === row.initiatorId,
+					) ?? null,
 				isSeen: row.isSeen,
 				createdAt: row.createdAt,
 			})),
