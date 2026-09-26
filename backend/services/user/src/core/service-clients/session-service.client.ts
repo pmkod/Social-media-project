@@ -16,7 +16,7 @@ type CreateSessionInput = {
 };
 
 type CreateSessionResponse = {
-	session?: Partial<Session>;
+	session: Session;
 };
 
 const sessionServiceHttpClient = internalHttpClient.extend({
@@ -25,27 +25,9 @@ const sessionServiceHttpClient = internalHttpClient.extend({
 
 const sessionServiceClient = {
 	async createSession(input: CreateSessionInput): Promise<Session> {
-		let data: CreateSessionResponse;
-		try {
-			data = await sessionServiceHttpClient
-				.post("internal/session/create-session", { json: input })
-				.json<CreateSessionResponse>();
-		} catch (error) {
-			throw new Exception({
-				message:
-					error instanceof HTTPError
-						? "Session service could not create the session"
-						: "Session service is temporarily unavailable",
-				status: HttpStatus.SERVICE_UNAVAILABLE.code,
-			});
-		}
-
-		if (!data.session?.id || !data.session.token) {
-			throw new Exception({
-				message: "Session service returned an invalid response",
-				status: HttpStatus.SERVICE_UNAVAILABLE.code,
-			});
-		}
+		const data = await sessionServiceHttpClient
+			.post("internal/session/create-session", { json: input })
+			.json<CreateSessionResponse>();
 
 		return { id: data.session.id, token: data.session.token };
 	},
