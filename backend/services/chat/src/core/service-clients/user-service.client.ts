@@ -18,11 +18,20 @@ type UserProfileDto = {
 	hasBlockedAuthenticatedInUser?: boolean;
 };
 
-type FetchUsersBatchResponse = {
+type FetchActiveUsersBatchResponse = {
 	users: UserProfileDto[];
 };
 
-type BlockRelationshipsResponse = {
+type FetchActiveUserResponse = {
+	user:
+		| Omit<
+				UserProfileDto,
+				"isBlockedByAuthenticatedUser" | "hasBlockedAuthenticatedInUser"
+		  >
+		| null;
+};
+
+type BlockRelationshipIdsDto = {
 	blockedUserIds: string[];
 	blockedByUserIds: string[];
 };
@@ -33,22 +42,22 @@ const userServiceHttpClient = internalHttpClient.extend({
 
 const requestActiveUsersBatch = async (
 	userIds: string[],
-): Promise<FetchUsersBatchResponse> =>
+): Promise<FetchActiveUsersBatchResponse> =>
 	await userServiceHttpClient
 		.post("internal/user/get-active-users-batch", {
 			json: { userIds },
 		})
-		.json<FetchUsersBatchResponse>();
+		.json<FetchActiveUsersBatchResponse>();
 
 const requestBlockRelationships = async (
 	userId: string,
 	otherUserIds: string[],
-): Promise<BlockRelationshipsResponse> =>
+): Promise<BlockRelationshipIdsDto> =>
 	await userServiceHttpClient
 		.post("internal/user/check-block-relationships", {
 			json: { userId, otherUserIds },
 		})
-		.json<BlockRelationshipsResponse>();
+		.json<BlockRelationshipIdsDto>();
 
 const requestActiveUsersWithBlockRelationships = async (
 	userIds: string[],
@@ -69,7 +78,76 @@ const requestActiveUsersWithBlockRelationships = async (
 };
 
 const userServiceClient = {
+	async fetchActiveUser(userId: string): Promise<FetchActiveUserResponse> {
+		return await userServiceHttpClient
+			.get(`internal/user/get-active-user/${encodeURIComponent(userId)}`)
+			.json<FetchActiveUserResponse>();
+	},
+
 	async fetchActiveUsersBatch(
+		userIds: string[],
+	): Promise<FetchActiveUsersBatchResponse> {
+		return await requestActiveUsersBatch(userIds);
+	},
+
+	async fetchBlockRelationshipIds(
+		userId: string,
+	): Promise<BlockRelationshipIdsDto> {
+		try {
+			const relationships = await userServiceHttpClient
+				.get(
+					`internal/user/get-block-relationship-ids/${encodeURIComponent(userId)}`,
+				)
+				.json<BlockRelationshipIdsDto>();
+			return {
+				blockedUserIds: relationships.blockedUserIds ?? [],
+				blockedByUserIds: relationships.blockedByUserIds ?? [],
+			};
+		} catch (error) {
+			console.error(
+				"[UserServiceClient] Failed to fetch block relationship IDs:",
+				error,
+			);
+			return { blockedUserIds: [], blockedByUserIds: [] };
+		}
+	},
+
+	async hasBlockRelationship(userId: string, otherUserId: string) {
+		if (userId === otherUserId) return false;
+		const relationships = await this.fetchBlockRelationshipIds(userId);
+		return (
+			relationships.blockedUserIds.includes(otherUserId) ||
+			relationships.blockedByUserIds.includes(otherUserId)
+		);
+	},
+
+	async fetchFollowingIds(userId: string): Promise<string[]> {
+		try {
+			const data = await userServiceHttpClient
+				.get(`internal/user/get-following-ids/${encodeURIComponent(userId)}`)
+				.json<{ userIds: string[] }>();
+			return data.userIds ?? [];
+		} catch (error) {
+			console.error(
+				"[UserServiceClient] Failed to fetch following IDs:",
+				error,
+			);
+			return [];
+		}
+	},
+
+	async adjustPostCount(userId: string, delta: -1 | 1): Promise<void> {
+		try {
+			await userServiceHttpClient.patch(
+				`internal/user/update-post-count/${encodeURIComponent(userId)}`,
+				{ json: { delta } },
+			);
+		} catch (error) {
+			console.error("[UserServiceClient] Failed to update post count:", error);
+		}
+	},
+
+	async fetchActiveUsersBatchWithBlockRelationships(
 		userIds: string[],
 		authenticatedUserId: string,
 	): Promise<Map<string, UserProfileDto>> {
@@ -95,7 +173,7 @@ const userServiceClient = {
 		return usersMap;
 	},
 
-	async fetchActiveUsersBatchOrThrow(
+	async fetchActiveUsersBatchWithBlockRelationshipsOrThrow(
 		userIds: string[],
 		authenticatedUserId: string,
 	): Promise<Map<string, UserProfileDto>> {

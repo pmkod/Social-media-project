@@ -90,13 +90,16 @@ const updateMessageRoute = defineOpenAPIRoute<
 			},
 			select: messageDetailsSelect,
 		});
-		const usersMap = await userServiceClient.fetchActiveUsersBatch(
-			[
-				message.senderId,
-				...(message.parentMessage ? [message.parentMessage.senderId] : []),
-			],
-			authenticatedUserId,
-		);
+		const usersMap =
+			await userServiceClient.fetchActiveUsersBatchWithBlockRelationships(
+				[
+					message.senderId,
+					...(message.parentMessage
+						? [message.parentMessage.senderId]
+						: []),
+				],
+				authenticatedUserId,
+			);
 		return c.json({ message: buildMessageResponse(message, usersMap) });
 	},
 });

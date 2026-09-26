@@ -79,10 +79,11 @@ const createDiscussionRoute = defineOpenAPIRoute<
 			});
 		}
 
-		const usersMap = await userServiceClient.fetchActiveUsersBatchOrThrow(
-			memberIds,
-			authenticatedUserId,
-		);
+		const usersMap =
+			await userServiceClient.fetchActiveUsersBatchWithBlockRelationshipsOrThrow(
+				memberIds,
+				authenticatedUserId,
+			);
 		const missingUserIds = memberIds.filter(
 			(userId) => !usersMap.has(userId),
 		);

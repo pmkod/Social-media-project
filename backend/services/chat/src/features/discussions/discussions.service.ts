@@ -100,10 +100,11 @@ const buildDiscussionResponses = async (
 			]),
 		),
 	);
-	const usersMap = await userServiceClient.fetchActiveUsersBatch(
-		userIds,
-		authenticatedUserId,
-	);
+	const usersMap =
+		await userServiceClient.fetchActiveUsersBatchWithBlockRelationships(
+			userIds,
+			authenticatedUserId,
+		);
 
 	return await Promise.all(
 		discussions.map(async (discussion) => {

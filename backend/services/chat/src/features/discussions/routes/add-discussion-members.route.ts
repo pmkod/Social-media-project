@@ -53,10 +53,11 @@ const addDiscussionMembersRoute = defineOpenAPIRoute<
 				status: HttpStatus.BAD_REQUEST.code,
 			});
 		}
-		const usersMap = await userServiceClient.fetchActiveUsersBatchOrThrow(
-			uniqueUserIds,
-			authenticatedUserId,
-		);
+		const usersMap =
+			await userServiceClient.fetchActiveUsersBatchWithBlockRelationshipsOrThrow(
+				uniqueUserIds,
+				authenticatedUserId,
+			);
 		const missingUserIds = uniqueUserIds.filter(
 			(userId) => !usersMap.has(userId),
 		);

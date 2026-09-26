@@ -77,10 +77,11 @@ const getMessagesRoute = defineOpenAPIRoute<
 				]),
 			),
 		);
-		const usersMap = await userServiceClient.fetchActiveUsersBatch(
-			userIds,
-			authenticatedUserId,
-		);
+		const usersMap =
+			await userServiceClient.fetchActiveUsersBatchWithBlockRelationships(
+				userIds,
+				authenticatedUserId,
+			);
 		const lastMessage = pageMessages.at(-1);
 
 		return c.json({

@@ -80,10 +80,11 @@ const createMessageRoute = defineOpenAPIRoute<
 					status: HttpStatus.CONFLICT.code,
 				});
 			}
-			const usersMap = await userServiceClient.fetchActiveUsersBatchOrThrow(
-				[recipient.userId],
-				authenticatedUserId,
-			);
+			const usersMap =
+				await userServiceClient.fetchActiveUsersBatchWithBlockRelationshipsOrThrow(
+					[recipient.userId],
+					authenticatedUserId,
+				);
 			const recipientUser = usersMap.get(recipient.userId);
 			if (!recipientUser) {
 				throw new Exception({
@@ -219,13 +220,16 @@ const createMessageRoute = defineOpenAPIRoute<
 			throw error;
 		}
 
-		const usersMap = await userServiceClient.fetchActiveUsersBatch(
-			[
-				message.senderId,
-				...(message.parentMessage ? [message.parentMessage.senderId] : []),
-			],
-			authenticatedUserId,
-		);
+		const usersMap =
+			await userServiceClient.fetchActiveUsersBatchWithBlockRelationships(
+				[
+					message.senderId,
+					...(message.parentMessage
+						? [message.parentMessage.senderId]
+						: []),
+				],
+				authenticatedUserId,
+			);
 		return c.json(
 			{ message: buildMessageResponse(message, usersMap) },
 			HttpStatus.CREATED.code,

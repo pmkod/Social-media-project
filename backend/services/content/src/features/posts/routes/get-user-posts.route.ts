@@ -114,10 +114,10 @@ const getUserPostsRoute = defineOpenAPIRoute<
 
 		const postIds = items.map((post) => post.id);
 
-		const authorsResponse =
+		const singleAuthor =
 			items.length > 0
-				? await userServiceClient.fetchActiveUsersBatch([userId])
-				: { users: [] };
+				? (await userServiceClient.fetchActiveUser(userId)).user
+				: null;
 		const likedPostIds: string[] =
 			authenticatedUserId && postIds.length > 0
 				? (
@@ -143,10 +143,6 @@ const getUserPostsRoute = defineOpenAPIRoute<
 						})
 					).map((bookmark) => bookmark.postId)
 				: [];
-
-		const singleAuthor =
-			authorsResponse.users.find((author) => author.id === userId) ?? null;
-
 		return c.json({
 			posts: hydratedItems.map((post) => ({
 				...post,
