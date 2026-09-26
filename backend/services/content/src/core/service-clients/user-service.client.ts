@@ -1,28 +1,28 @@
 import { Configurations } from "../configurations";
 import { internalHttpClient } from "../http-clients/internal.http-client";
-import { removeDuplicateStrings } from "../utils/array.utils";
 
 type UserProfileFileDto = {
 	filename: string;
 };
 
-type UserProfileDto = {
-	id: string;
-	username: string;
-	fullName: string | null;
-	lowQualityProfilePictureFile: UserProfileFileDto | null;
-	bestQualityProfilePictureFile: UserProfileFileDto | null;
-	isBlockedByAuthenticatedUser: boolean;
-	hasBlockedAuthenticatedInUser: boolean;
+type FetchActiveUsersBatchResponse = {
+	users: {
+		id: string;
+		username: string;
+		fullName?: string | null;
+		lowQualityProfilePictureFile?: UserProfileFileDto | null;
+		bestQualityProfilePictureFile?: UserProfileFileDto | null;
+	}[];
 };
 
-type FetchUsersBatchResponse = {
-	users: Array<
-		Omit<
-			UserProfileDto,
-			"isBlockedByAuthenticatedUser" | "hasBlockedAuthenticatedInUser"
-		>
-	>;
+type FetchActiveUserResponse = {
+	user: {
+		id: string;
+		username: string;
+		fullName?: string | null;
+		lowQualityProfilePictureFile?: UserProfileFileDto | null;
+		bestQualityProfilePictureFile?: UserProfileFileDto | null;
+	} | null;
 };
 
 type BlockRelationshipIdsDto = {
@@ -34,57 +34,21 @@ const userServiceHttpClient = internalHttpClient.extend({
 	prefix: Configurations.server.userServiceUrl,
 });
 
-const requestBlockRelationships = async (
-	userId: string,
-	otherUserIds: string[],
-): Promise<BlockRelationshipIdsDto> =>
-	await userServiceHttpClient
-		.post("internal/user/check-block-relationships", {
-			json: { userId, otherUserIds },
-		})
-		.json<BlockRelationshipIdsDto>();
-
 const userServiceClient = {
-	async fetchActiveAuthorsBatch(
-		authorIds: string[],
-		authenticatedUserId?: string,
-	): Promise<Map<string, UserProfileDto>> {
-		const uniqueAuthorIds = removeDuplicateStrings(authorIds);
-		const authorsMap = new Map<string, UserProfileDto>();
-		if (uniqueAuthorIds.length === 0) return authorsMap;
+	async fetchActiveUser(userId: string): Promise<FetchActiveUserResponse> {
+		return await userServiceHttpClient
+			.get(`internal/user/get-active-user/${encodeURIComponent(userId)}`)
+			.json<FetchActiveUserResponse>();
+	},
 
-		try {
-			const [{ users }, relationships] = await Promise.all([
-				userServiceHttpClient
-					.post("internal/user/get-active-users-batch", {
-						json: { userIds: uniqueAuthorIds },
-					})
-					.json<FetchUsersBatchResponse>(),
-				authenticatedUserId
-					? requestBlockRelationships(authenticatedUserId, uniqueAuthorIds)
-					: Promise.resolve({
-							blockedUserIds: [],
-							blockedByUserIds: [],
-						}),
-			]);
-			const blockedUserIds = new Set(relationships.blockedUserIds);
-			const blockedByUserIds = new Set(relationships.blockedByUserIds);
-
-			for (const user of users) {
-				authorsMap.set(user.id, {
-					...user,
-					isBlockedByAuthenticatedUser: blockedUserIds.has(user.id),
-					hasBlockedAuthenticatedInUser: blockedByUserIds.has(user.id),
-				});
-			}
-		} catch (error) {
-			console.error(
-				"[UserServiceClient] Error calling user-service batch:",
-				error,
-			);
-		}
-
-		return authorsMap;
+	async fetchActiveUsersBatch(
+		userIds: string[],
+	): Promise<FetchActiveUsersBatchResponse> {
+		return await userServiceHttpClient
+			.post("internal/user/get-active-users-batch", {
+				json: { userIds: userIds },
+			})
+			.json<FetchActiveUsersBatchResponse>();
 	},
 
 	async fetchBlockRelationshipIds(

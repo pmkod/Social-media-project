@@ -121,9 +121,8 @@ const getUserLikedPostsRoute = defineOpenAPIRoute<
 			authenticatedUserId && authenticatedUserId === userId,
 		);
 
-		const authorsMap = await userServiceClient.fetchActiveAuthorsBatch(
+		const { users: authors } = await userServiceClient.fetchActiveUsersBatch(
 			authorIds,
-			authenticatedUserId,
 		);
 		const likedPostIds: string[] =
 			authenticatedUserId && postIds.length > 0
@@ -158,7 +157,7 @@ const getUserLikedPostsRoute = defineOpenAPIRoute<
 				...post,
 				isLikedByAuthenticatedUser: likedPostIds.includes(post.id),
 				isBookmarkedByAuthenticatedUser: bookmarkedPostIds.includes(post.id),
-				author: authorsMap.get(post.authorId) ?? null,
+				author: authors.find((author) => author.id === post.authorId) ?? null,
 			})),
 			pagination: { nextCursor, hasNextPage, limit },
 		});

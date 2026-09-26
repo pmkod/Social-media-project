@@ -104,11 +104,11 @@ const getPostByIdRoute = defineOpenAPIRoute<
 						},
 				})
 			: null;
-		const authorsMap = await userServiceClient.fetchActiveAuthorsBatch(
-			[post.authorId],
-			authenticatedUserId,
-		);
-		const author = authorsMap.get(post.authorId) ?? null;
+		const { users: authors } = await userServiceClient.fetchActiveUsersBatch([
+			post.authorId,
+		]);
+		const author =
+			authors.find((candidate) => candidate.id === post.authorId) ?? null;
 
 		return c.json({
 			post: {

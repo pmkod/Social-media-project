@@ -196,9 +196,8 @@ const getBookmarksRoute = defineOpenAPIRoute<
 		const postIds = items.map(({ post }) => post.id);
 		const authorIds = uniqueValues(items.map(({ post }) => post.authorId));
 
-		const authorsMap = await userServiceClient.fetchActiveAuthorsBatch(
+		const { users: authors } = await userServiceClient.fetchActiveUsersBatch(
 			authorIds,
-			ownerId,
 		);
 		const likedPostIds: string[] =
 			postIds.length > 0
@@ -215,7 +214,7 @@ const getBookmarksRoute = defineOpenAPIRoute<
 				...post,
 				isLikedByAuthenticatedUser: likedPostIds.includes(post.id),
 				isBookmarkedByAuthenticatedUser: true,
-				author: authorsMap.get(post.authorId) ?? null,
+				author: authors.find((author) => author.id === post.authorId) ?? null,
 			})),
 			pagination: { nextCursor, hasNextPage, limit },
 		});

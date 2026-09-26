@@ -3,14 +3,11 @@ import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
 import { ExceptionCodes } from "@/core/exceptions/exception.codes";
 import { Exception } from "@/core/exceptions/exception";
+import { uniqueValues } from "@/core/functions/collection.functions";
+import type { Prisma } from "@/generated/prisma/client";
 import { userServiceClient } from "@/core/service-clients/user-service.client";
 import type { HonoEnv } from "@/core/types/hono-env";
 import { CommentsRoutesTag } from "../comments.constants";
-import {
-	commentPresentationSelect,
-	hydrateComments,
-	type CommentPresentationRecord,
-} from "../services/comment-presentation.service";
 
 const routeDef = createRoute({
 	method: "get",
@@ -35,13 +32,25 @@ const getCommentByIdRoute = defineOpenAPIRoute<typeof routeDef, HonoEnv>({
 	route: routeDef,
 	handler: async (c) => {
 		const { postId, commentId } = c.req.valid("param");
+		const commentSelect = {
+			id: true,
+			postId: true,
+		authorId: true,
+		parentId: true,
+		content: true,
+		likesCount: true,
+		repliesCount: true,
+		exists: true,
+		createdAt: true,
+		updatedAt: true,
+	} satisfies Prisma.CommentSelect;
 		const post = await prisma.post.findFirst({
 			where: { id: postId, exists: true },
 			select: { authorId: true },
 		});
 		const comment = await prisma.comment.findFirst({
 			where: { id: commentId, postId },
-			select: commentPresentationSelect,
+			select: commentSelect,
 		});
 
 		if (!post || !comment) {
@@ -67,7 +76,7 @@ const getCommentByIdRoute = defineOpenAPIRoute<typeof routeDef, HonoEnv>({
 			});
 		}
 
-		const parentComments: CommentPresentationRecord[] = [];
+		const parentComments: Array<typeof comment> = [];
 		const visitedCommentIds = new Set([comment.id]);
 		let parentId = comment.parentId;
 
@@ -75,21 +84,54 @@ const getCommentByIdRoute = defineOpenAPIRoute<typeof routeDef, HonoEnv>({
 			visitedCommentIds.add(parentId);
 			const parentComment = await prisma.comment.findFirst({
 				where: { id: parentId, postId },
-				select: commentPresentationSelect,
+				select: commentSelect,
 			});
 			if (!parentComment) break;
 			parentComments.unshift(parentComment);
 			parentId = parentComment.parentId;
 		}
 
-		const [hydratedComment, ...hydratedParents] = await hydrateComments(
-			[comment, ...parentComments],
-			authenticatedUserId,
+		const commentsToPresent = [comment, ...parentComments];
+		const authorIds = uniqueValues(
+			commentsToPresent.map((currentComment) => currentComment.authorId),
+		);
+		const [authorsResponse, likedComments] = await Promise.all([
+			userServiceClient.fetchActiveUsersBatch(authorIds),
+			authenticatedUserId
+				? prisma.commentLike.findMany({
+						where: {
+							authorId: authenticatedUserId,
+							commentId: {
+								in: commentsToPresent.map((currentComment) => currentComment.id),
+							},
+						},
+						select: { commentId: true },
+					})
+				: Promise.resolve([]),
+		]);
+		const likedCommentIds = new Set(
+			likedComments.map((like) => like.commentId),
+		);
+		const [presentedComment, ...presentedParents] = commentsToPresent.map(
+			(currentComment) => {
+				const isDeleted = !currentComment.exists;
+				return {
+					...currentComment,
+					content: isDeleted ? "" : currentComment.content,
+					isDeleted,
+					isLikedByAuthenticatedUser:
+						!isDeleted && likedCommentIds.has(currentComment.id),
+					author:
+						authorsResponse.users.find(
+							(author) => author.id === currentComment.authorId,
+						) ?? null,
+				};
+			},
 		);
 
 		return c.json({
-			comment: hydratedComment,
-			parentComments: hydratedParents,
+			comment: presentedComment,
+			parentComments: presentedParents,
 		});
 	},
 });

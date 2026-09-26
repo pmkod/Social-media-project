@@ -1,13 +1,11 @@
 import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
+import { uniqueValues } from "@/core/functions/collection.functions";
+import type { Prisma } from "@/generated/prisma/client";
 import { userServiceClient } from "@/core/service-clients/user-service.client";
 import type { HonoEnv } from "@/core/types/hono-env";
 import { CommentsRoutesTag } from "../comments.constants";
-import {
-	commentPresentationSelect,
-	hydrateComments,
-} from "../services/comment-presentation.service";
 
 const routeDef = createRoute({
 	method: "get",
@@ -42,6 +40,18 @@ const getCommentsRoute = defineOpenAPIRoute<
 		const skip = (page - 1) * limit;
 		const authenticatedUser = c.get("authenticatedUser");
 		const authenticatedUserId = authenticatedUser?.id;
+		const commentSelect = {
+			id: true,
+			postId: true,
+		authorId: true,
+			parentId: true,
+			content: true,
+			likesCount: true,
+			repliesCount: true,
+			exists: true,
+			createdAt: true,
+			updatedAt: true,
+		} satisfies Prisma.CommentSelect;
 		const post = await prisma.post.findFirst({
 			where: { id: postId, exists: true },
 			select: { authorId: true },
@@ -70,13 +80,39 @@ const getCommentsRoute = defineOpenAPIRoute<
 			orderBy: { createdAt: "desc" },
 			skip,
 			take: limit,
-			select: commentPresentationSelect,
+			select: commentSelect,
 		});
 		const total = await prisma.comment.count({ where: commentsWhere });
-		const enrichedComments = await hydrateComments(
-			comments,
-			authenticatedUserId,
+		const authorIds = uniqueValues(comments.map((comment) => comment.authorId));
+		const [authorsResponse, likedComments] = await Promise.all([
+			userServiceClient.fetchActiveUsersBatch(authorIds),
+			authenticatedUserId && comments.length > 0
+				? prisma.commentLike.findMany({
+						where: {
+							authorId: authenticatedUserId,
+							commentId: { in: comments.map((comment) => comment.id) },
+						},
+						select: { commentId: true },
+					})
+				: Promise.resolve([]),
+		]);
+		const likedCommentIds = new Set(
+			likedComments.map((like) => like.commentId),
 		);
+		const enrichedComments = comments.map((comment) => {
+			const isDeleted = !comment.exists;
+			return {
+				...comment,
+				content: isDeleted ? "" : comment.content,
+				isDeleted,
+				isLikedByAuthenticatedUser:
+					!isDeleted && likedCommentIds.has(comment.id),
+				author:
+					authorsResponse.users.find(
+						(author) => author.id === comment.authorId,
+					) ?? null,
+			};
+		});
 
 		return c.json({
 			data: enrichedComments,

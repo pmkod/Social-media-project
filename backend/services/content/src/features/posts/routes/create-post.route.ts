@@ -51,8 +51,7 @@ const createPostRoute = defineOpenAPIRoute<
 
 		const { text, medias } = c.req.valid("form");
 
-		const authors = await userServiceClient.fetchActiveAuthorsBatch(
-			[authenticatedUserId],
+		const { user: author } = await userServiceClient.fetchActiveUser(
 			authenticatedUserId,
 		);
 		const postId = crypto.randomUUID();
@@ -146,7 +145,7 @@ const createPostRoute = defineOpenAPIRoute<
 				message: "Post created successfully",
 				post: {
 					...postToSend,
-					author: authors.get(authenticatedUserId) ?? null,
+					author,
 					isLikedByAuthenticatedUser: false,
 					isBookmarkedByAuthenticatedUser: false,
 				},

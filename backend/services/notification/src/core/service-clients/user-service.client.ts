@@ -1,21 +1,18 @@
 import { Configurations } from "../configurations";
 import { internalHttpClient } from "../http-clients/internal.http-client";
-import { removeDuplicateStrings } from "../utils/array.utils";
 
-type UserDto = {
-	id: string;
-	username: string;
-	fullName?: string | null;
-	lowQualityProfilePictureFile?: {
-		filename: string;
-	} | null;
-	bestQualityProfilePictureFile?: {
-		filename: string;
-	} | null;
-};
-
-type FetchUsersBatchResponse = {
-	users: UserDto[];
+type FetchActiveUsersBatchResponse = {
+	users: {
+		id: string;
+		username: string;
+		fullName?: string | null;
+		lowQualityProfilePictureFile?: {
+			filename: string;
+		} | null;
+		bestQualityProfilePictureFile?: {
+			filename: string;
+		} | null;
+	}[];
 };
 
 const userServiceHttpClient = internalHttpClient.extend({
@@ -25,15 +22,12 @@ const userServiceHttpClient = internalHttpClient.extend({
 const userServiceClient = {
 	async fetchActiveUsersBatch(
 		userIds: string[],
-	): Promise<FetchUsersBatchResponse> {
-		const uniqueUserIds = removeDuplicateStrings(userIds);
-		if (uniqueUserIds.length === 0) return { users: [] };
-
+	): Promise<FetchActiveUsersBatchResponse> {
 		return await userServiceHttpClient
 			.post("internal/user/get-active-users-batch", {
-				json: { userIds: uniqueUserIds },
+				json: { userIds: userIds },
 			})
-			.json<FetchUsersBatchResponse>();
+			.json<FetchActiveUsersBatchResponse>();
 	},
 
 	async updateUnseenNotificationsCount(

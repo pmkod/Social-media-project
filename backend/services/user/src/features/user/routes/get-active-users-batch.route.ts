@@ -39,16 +39,16 @@ const routeDef = createRoute({
 const getActiveUsersBatchRoute = defineOpenAPIRoute<typeof routeDef, HonoEnv>({
 	route: routeDef,
 	handler: async (c) => {
-		const { userIds } = c.req.valid("json");
-		const uniqueActiveUserIds = removeDuplicateStrings(userIds);
+		let { userIds } = c.req.valid("json");
+		userIds = removeDuplicateStrings(userIds);
 
-		if (uniqueActiveUserIds.length === 0) {
+		if (userIds.length === 0) {
 			return c.json({ users: [] });
 		}
 
 		const users = await prisma.user.findMany({
 			where: {
-				id: { in: uniqueActiveUserIds },
+				id: { in: userIds },
 				active: true,
 			},
 			select: {

@@ -1,0 +1,41 @@
+# Routes internes
+
+Inventaire des routes HTTP déclarées explicitement sous `/internal/**` dans les services du backend.
+
+## Session (`backend/services/session`)
+
+| Méthode | Route | Fonction | Source |
+|---|---|---|---|
+| `POST` | `/internal/session/create-session` | Créer une session depuis un service de confiance. | `src/features/sessions/routes/create-session.route.ts` |
+| `POST` | `/internal/session/verify-session` | Vérifier les identifiants d’une session active. | `src/features/sessions/routes/verify-session.route.ts` |
+
+## User (`backend/services/user`)
+
+| Méthode | Route | Fonction | Source |
+|---|---|---|---|
+| `POST` | `/internal/user/check-block-relationships` | Vérifier les relations de blocage entre un utilisateur et plusieurs utilisateurs. | `src/features/user/routes/check-block-relationships.route.ts` |
+| `GET` | `/internal/user/check-user-exists/{userId}` | Vérifier qu’un utilisateur actif existe. | `src/features/user/routes/check-user-exists.route.ts` |
+| `GET` | `/internal/user/get-active-user/{userId}` | Récupérer le profil d’un utilisateur actif. | `src/features/user/routes/get-active-user.route.ts` |
+| `POST` | `/internal/user/get-active-users-batch` | Récupérer plusieurs profils d’utilisateurs actifs par identifiants. | `src/features/user/routes/get-active-users-batch.route.ts` |
+| `GET` | `/internal/user/get-block-relationship-ids/{userId}` | Récupérer les identifiants des utilisateurs bloqués par cet utilisateur et de ceux qui le bloquent. | `src/features/user/routes/get-block-relationship-ids.route.ts` |
+| `GET` | `/internal/user/get-following-ids/{userId}` | Récupérer les identifiants des utilisateurs suivis. | `src/features/user/routes/get-following-ids.route.ts` |
+| `PATCH` | `/internal/user/update-post-count/{userId}` | Incrémenter ou décrémenter le compteur de publications. | `src/features/user/routes/update-post-count.route.ts` |
+| `PATCH` | `/internal/user/update-unseen-notifications-count/{userId}` | Modifier ou réinitialiser le compteur de notifications non lues. | `src/features/user/routes/update-unseen-notifications-count.route.ts` |
+
+## Content (`backend/services/content`)
+
+| Méthode | Route | Fonction | Source |
+|---|---|---|---|
+| `GET` | `/internal/content/check-comment-exists/{id}` | Vérifier qu’un commentaire existe et peut être utilisé comme cible. | `src/features/comments/routes/check-comment-exists.route.ts` |
+| `GET` | `/internal/content/check-post-exists/{id}` | Vérifier qu’une publication existe et peut être utilisée comme cible. | `src/features/posts/routes/check-post-exists.route.ts` |
+
+## Notification (`backend/services/notification`)
+
+| Méthode | Route | Fonction | Source |
+|---|---|---|---|
+| `POST` | `/internal/notification/create-notification` | Créer une notification à la demande d’un autre service. | `src/features/notifications/routes/create-notification.route.ts` |
+| `POST` | `/internal/notification/remove-comment-notifications` | Supprimer les notifications liées à la création d’un commentaire supprimé. | `src/features/notifications/routes/remove-comment-notifications.route.ts` |
+| `POST` | `/internal/notification/remove-notification` | Supprimer une notification correspondant à un événement annulé. | `src/features/notifications/routes/remove-notification.route.ts` |
+| `POST` | `/internal/notification/remove-post-notifications` | Supprimer les notifications liées à une publication supprimée. | `src/features/notifications/routes/remove-post-notifications.route.ts` |
+
+**Total : 16 routes.** Les chemins entre accolades représentent des paramètres d’URL.
