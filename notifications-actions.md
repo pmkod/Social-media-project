@@ -60,13 +60,6 @@ Suppression ciblée :
 - Supprime la notification correspondante si elle existe.
 - Décrémente le compteur non vu uniquement si la notification supprimée n’était pas déjà vue.
 
-Suppression par post :
-
-- `POST /internal/notification/remove-post-notifications`
-- Reçoit `postId`.
-- Supprime les notifications dont le `targetId` ou le `groupKey` correspond au post.
-- Décrémente le compteur non vu de chaque destinataire du nombre de notifications supprimées qui n’étaient pas vues.
-
 Suppression par commentaire :
 
 - `POST /internal/notification/remove-comment-notifications`

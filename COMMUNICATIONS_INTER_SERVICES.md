@@ -104,7 +104,6 @@ Ces appels sont actuellement attendus avec `await`, mais leurs erreurs sont abso
 | `POST /internal/notification/remove-notification` | Unlike d'un post | `content.post-unliked.v1` |
 | `POST /internal/notification/remove-notification` | Unlike d'un commentaire | `content.comment-unliked.v1` |
 | `POST /internal/notification/remove-comment-notifications` | Suppression d'un commentaire | `content.comment-deleted.v1` |
-| `POST /internal/notification/remove-post-notifications` | Suppression d'un post | `content.post-deleted.v1` — branche déclarée mais non appelée actuellement, voir les écarts |
 
 Types de notification actuellement produits : `POST_LIKE`, `COMMENT_LIKE`, `POST_COMMENT`, `COMMENT_REPLY`.
 
@@ -157,7 +156,6 @@ Il s'agit donc de dépendances de configuration inutilisées, pas de communicati
 
 ## Endpoints et dépendances déclarés mais non reliés
 
-- `NotificationServiceClient.removeNotificationsForPost()` existe côté Content et l'endpoint `/internal/notification/remove-post-notifications` existe côté Notification, mais aucune route Content n'appelle cette méthode lors de la suppression d'un post.
 - Report déclare les URLs Content et User sans client ni call site.
 - Content lit `USER_SERVICE_URL` dans sa configuration, mais cette variable manque dans `backend/services/content/.env.example` ; le fallback `http://localhost:8001` masque actuellement l'oubli.
 

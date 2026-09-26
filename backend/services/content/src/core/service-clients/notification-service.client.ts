@@ -53,20 +53,6 @@ const notificationServiceClient = {
 		}
 	},
 
-	async removeNotificationsForPost(postId: string): Promise<void> {
-		try {
-			await notificationServiceHttpClient.post(
-				"internal/notification/remove-post-notifications",
-				{ json: { postId } },
-			);
-		} catch (error) {
-			console.error(
-				"[NotificationServiceClient] Failed to remove post notifications:",
-				error,
-			);
-		}
-	},
-
 	async removeNotificationForComment(commentId: string): Promise<void> {
 		try {
 			await notificationServiceHttpClient.post(

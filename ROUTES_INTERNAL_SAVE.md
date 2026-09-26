@@ -28,6 +28,5 @@ Inventaire des routes HTTP déclarées explicitement sous `/internal/**` dans le
 | `POST` | `/internal/notification/create-notification` | Créer une notification à la demande d’un autre service. | `src/features/notifications/routes/create-notification.route.ts` |
 | `POST` | `/internal/notification/remove-comment-notifications` | Supprimer les notifications liées à la création d’un commentaire supprimé. | `src/features/notifications/routes/remove-comment-notifications.route.ts` |
 | `POST` | `/internal/notification/remove-notification` | Supprimer une notification correspondant à un événement annulé. | `src/features/notifications/routes/remove-notification.route.ts` |
-| `POST` | `/internal/notification/remove-post-notifications` | Supprimer les notifications liées à une publication supprimée. | `src/features/notifications/routes/remove-post-notifications.route.ts` |
 
-**Total : 15 routes.** Les chemins entre accolades représentent des paramètres d’URL.
+**Total : 14 routes.** Les chemins entre accolades représentent des paramètres d’URL.
