@@ -54,7 +54,7 @@ const addDiscussionMembersRoute = defineOpenAPIRoute<
 			});
 		}
 		const usersMap =
-			await userServiceClient.fetchActiveUsersBatchWithBlockRelationshipsOrThrow(
+			await userServiceClient.fetchActiveUsersBatchWithBlockRelationships(
 				uniqueUserIds,
 				authenticatedUserId,
 			);

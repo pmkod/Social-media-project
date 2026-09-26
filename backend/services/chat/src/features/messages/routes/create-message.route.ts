@@ -81,7 +81,7 @@ const createMessageRoute = defineOpenAPIRoute<
 				});
 			}
 			const usersMap =
-				await userServiceClient.fetchActiveUsersBatchWithBlockRelationshipsOrThrow(
+				await userServiceClient.fetchActiveUsersBatchWithBlockRelationships(
 					[recipient.userId],
 					authenticatedUserId,
 				);

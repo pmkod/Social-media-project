@@ -80,7 +80,7 @@ const createDiscussionRoute = defineOpenAPIRoute<
 		}
 
 		const usersMap =
-			await userServiceClient.fetchActiveUsersBatchWithBlockRelationshipsOrThrow(
+			await userServiceClient.fetchActiveUsersBatchWithBlockRelationships(
 				memberIds,
 				authenticatedUserId,
 			);
