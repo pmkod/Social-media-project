@@ -68,7 +68,7 @@ const getFeedFollowingRoute = defineOpenAPIRoute<
 			}
 			targetAuthorIds = [query.authorId];
 		} else if (authenticatedUserId) {
-			const followingIds =
+			const { userIds: followingIds } =
 				await userServiceClient.fetchFollowingIds(authenticatedUserId);
 			const allowedFollowingIds = followingIds.filter(
 				(id) => !hiddenUserIds.includes(id),

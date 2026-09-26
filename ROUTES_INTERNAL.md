@@ -9,7 +9,7 @@ Inventaire des routes HTTP déclarées explicitement sous `/internal/**` dans le
 | `POST` | `/internal/user/check-block-relationships` | Vérifier les relations de blocage entre un utilisateur et plusieurs utilisateurs. | `src/features/user/routes/check-block-relationships.route.ts` |
 | `GET` | `/internal/user/check-user-exists/{userId}` | Vérifier qu’un utilisateur actif existe. | `src/features/user/routes/check-user-exists.route.ts` |
 | `GET` | `/internal/user/get-block-relationship-ids/{userId}` | Récupérer les identifiants des utilisateurs bloqués par cet utilisateur et de ceux qui le bloquent. | `src/features/user/routes/get-block-relationship-ids.route.ts` |
-| `GET` | `/internal/user/get-following-ids/{userId}` | Récupérer les identifiants des utilisateurs suivis. | `src/features/user/routes/get-following-ids.route.ts` |
+
 
 ## Notification (`backend/services/notification`)
 

@@ -70,11 +70,12 @@ const userServiceClient = {
 			.json<BlockRelationshipIdsDto>();
 	},
 
-	async fetchFollowingIds(userId: string): Promise<string[]> {
-		const data = await userServiceHttpClient
+	async fetchFollowingIds(
+		userId: string,
+	): Promise<{ userIds: string[] }> {
+		return await userServiceHttpClient
 			.get(`internal/user/get-following-ids/${encodeURIComponent(userId)}`)
 			.json<{ userIds: string[] }>();
-		return data.userIds ?? [];
 	},
 
 	async updatePostCount({

@@ -82,19 +82,10 @@ const userServiceClient = {
 		);
 	},
 
-	async fetchFollowingIds(userId: string): Promise<string[]> {
-		try {
-			const data = await userServiceHttpClient
-				.get(`internal/user/get-following-ids/${encodeURIComponent(userId)}`)
-				.json<{ userIds: string[] }>();
-			return data.userIds ?? [];
-		} catch (error) {
-			console.error(
-				"[UserServiceClient] Failed to fetch following IDs:",
-				error,
-			);
-			return [];
-		}
+	async fetchFollowingIds(userId: string) {
+		return await userServiceHttpClient
+			.get(`internal/user/get-following-ids/${encodeURIComponent(userId)}`)
+			.json<{ userIds: string[] }>();
 	},
 
 	async updatePostCount({
