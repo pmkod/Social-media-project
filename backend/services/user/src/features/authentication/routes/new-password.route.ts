@@ -4,7 +4,7 @@ import { prisma } from "@/core/databases";
 import { ExceptionCodes } from "@/core/exceptions/exception.codes";
 import { Exception } from "@/core/exceptions/exception";
 import { getRequestClientMetadata } from "@/core/functions/request.functions";
-import { sessionServiceClient } from "@/core/services/session-service.client";
+import { sessionServiceClient } from "@/core/service-clients/session-service.client";
 import {
 	AuthenticationRoutesTag,
 	UserVerificationGoals,

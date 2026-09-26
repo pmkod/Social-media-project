@@ -1,5 +1,6 @@
 import { Configurations } from "../configurations";
 import { internalHttpClient } from "../http-clients/internal.http-client";
+import { removeDuplicateStrings } from "../utils/array.utils";
 
 type User = {
 	id: string;
@@ -23,9 +24,12 @@ const userServiceHttpClient = internalHttpClient.extend({
 
 const userServiceClient = {
 	async fetchUsersBatch(userIds: string[]): Promise<FetchUsersBatchResponse> {
+		const uniqueIds = removeDuplicateStrings(userIds);
+		if (uniqueIds.length === 0) return { users: [] };
+
 		return await userServiceHttpClient
 			.post("internal/user/get-users-batch", {
-				json: { userIds },
+				json: { userIds: uniqueIds },
 			})
 			.json<FetchUsersBatchResponse>();
 	},

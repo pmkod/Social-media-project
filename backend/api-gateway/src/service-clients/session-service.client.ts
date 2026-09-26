@@ -1,7 +1,9 @@
+import { HTTPError } from "ky";
 import { Configurations } from "../configurations";
 import { HttpStatus } from "../constants/http-status";
 import { Exception } from "../exceptions/exception";
 import { UnauthorizedException } from "../exceptions/unauthorized.exception";
+import { internalHttpClient } from "../http-clients/internal.http-client";
 import type { AuthenticatedUser } from "../types/authenticated-user";
 
 type VerifySessionResponse = {
@@ -12,45 +14,37 @@ type VerifySessionResponse = {
 	};
 };
 
-class SessionServiceClient {
-	private readonly baseUrl: string;
+const sessionServiceHttpClient = internalHttpClient.extend({
+	prefix: Configurations.session.serviceUrl,
+});
 
-	constructor(baseUrl = Configurations.session.serviceUrl) {
-		this.baseUrl = baseUrl.replace(/\/$/, "");
-	}
-
+const sessionServiceClient = {
 	async verifySession(
 		sessionId: string,
 		sessionToken: string,
 	): Promise<AuthenticatedUser> {
-		let response: Response;
+		let data: VerifySessionResponse;
 		try {
-			response = await fetch(`${this.baseUrl}/internal/session/verify-session`, {
-				method: "POST",
-				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({ id: sessionId, token: sessionToken }),
-			});
-		} catch (_error) {
+			data = await sessionServiceHttpClient
+				.post("internal/session/verify-session", {
+					json: { id: sessionId, token: sessionToken },
+				})
+				.json<VerifySessionResponse>();
+		} catch (error) {
+			if (
+				error instanceof HTTPError &&
+				(error.response.status === HttpStatus.UNAUTHORIZED.code ||
+					error.response.status === HttpStatus.NOT_FOUND.code)
+			) {
+				throw new UnauthorizedException();
+			}
+
 			throw new Exception({
 				message: "Authentication service is temporarily unavailable",
 				status: HttpStatus.SERVICE_UNAVAILABLE.code,
 			});
 		}
 
-		if (
-			response.status === HttpStatus.UNAUTHORIZED.code ||
-			response.status === HttpStatus.NOT_FOUND.code
-		) {
-			throw new UnauthorizedException();
-		}
-		if (!response.ok) {
-			throw new Exception({
-				message: "Authentication service is temporarily unavailable",
-				status: HttpStatus.SERVICE_UNAVAILABLE.code,
-			});
-		}
-
-		const data = (await response.json()) as VerifySessionResponse;
 		if (
 			!data.session?.id ||
 			!data.session.userId ||
@@ -64,7 +58,7 @@ class SessionServiceClient {
 		}
 
 		return { id: data.session.userId, sessionId: data.session.id };
-	}
-}
+	},
+};
 
-export const sessionServiceClient = new SessionServiceClient();
+export { sessionServiceClient };

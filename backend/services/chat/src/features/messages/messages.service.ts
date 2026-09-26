@@ -1,4 +1,4 @@
-import type { UserProfileDto } from "@/core/services/user-service.client";
+import type { UserProfileDto } from "@/core/service-clients/user-service.client";
 import { Prisma } from "@/generated/prisma/client";
 
 const messageDetailsSelect = {

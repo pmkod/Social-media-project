@@ -4,7 +4,7 @@ import { prisma } from "@/core/databases";
 import { uniqueValues } from "@/core/functions/collection.functions";
 import { ExceptionCodes } from "@/core/exceptions/exception.codes";
 import { Exception } from "@/core/exceptions/exception";
-import { userServiceClient } from "@/core/services/user-service.client";
+import { userServiceClient } from "@/core/service-clients/user-service.client";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { requireUserAuthentication } from "@/features/authentication/middlewares/require-user-authentication.middleware";
 import {

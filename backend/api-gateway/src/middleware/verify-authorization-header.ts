@@ -1,5 +1,5 @@
 import { parseSessionAuthorizationHeader } from "../functions/session-authorization.functions";
-import { sessionServiceClient } from "../services/session-service.client";
+import { sessionServiceClient } from "../service-clients/session-service.client";
 import type { AuthenticatedUser } from "../types/authenticated-user";
 
 type AuthenticationResult = { authenticatedUser: AuthenticatedUser };

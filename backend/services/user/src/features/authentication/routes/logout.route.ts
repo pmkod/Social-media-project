@@ -1,6 +1,6 @@
 import { createRoute, defineOpenAPIRoute } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
-import { sessionServiceClient } from "@/core/services/session-service.client";
+import { sessionServiceClient } from "@/core/service-clients/session-service.client";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { AuthenticationRoutesTag } from "../authentication.constants";
 import { requireUserAuthentication } from "../middlewares/require-user-authentication.middleware";

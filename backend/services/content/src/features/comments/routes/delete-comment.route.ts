@@ -1,7 +1,7 @@
 import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
-import { notificationServiceClient } from "@/core/services/notification-service.client";
+import { notificationServiceClient } from "@/core/service-clients/notification-service.client";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { requireUserAuthentication } from "@/features/authentication/middlewares/require-user-authentication.middleware";
 import { CommentsRoutesTag } from "../comments.constants";

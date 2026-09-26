@@ -3,7 +3,7 @@ import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
 import { ExceptionCodes } from "@/core/exceptions/exception.codes";
 import { Exception } from "@/core/exceptions/exception";
-import { userServiceClient } from "@/core/services/user-service.client";
+import { userServiceClient } from "@/core/service-clients/user-service.client";
 import type { HonoEnv } from "@/core/types/hono-env";
 import { PostsRoutesTag } from "../posts.constants";
 import {

@@ -7,7 +7,7 @@ import {
 	NotificationEventTypes,
 	NotificationGroupKeyBuilder,
 	notificationServiceClient,
-} from "@/core/services/notification-service.client";
+} from "@/core/service-clients/notification-service.client";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { requireUserAuthentication } from "@/features/authentication/middlewares/require-user-authentication.middleware";
 import { UserRoutesTag } from "../user.constants";

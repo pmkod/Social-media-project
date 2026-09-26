@@ -8,7 +8,7 @@ Le service de chat est volontairement exclu.
 
 À ce jour :
 
-- toutes les communications inter-services réellement implémentées utilisent HTTP via `fetch` ; les clients internes dédiés échangent du JSON, tandis que la Gateway relaie aussi les bodies multipart et binaires ;
+- toutes les communications inter-services réellement implémentées utilisent HTTP ; les clients internes dédiés utilisent `ky` et échangent du JSON, tandis que la Gateway relaie les requêtes publiques avec `fetch`, y compris les bodies multipart et binaires ;
 - aucun client, serveur ou contrat gRPC n'est présent ;
 - aucun producteur ou consommateur Kafka/NATS JetStream n'est présent ;
 - les appels marqués **asynchrones** ci-dessous sont donc des recommandations de migration, pas l'état actuel du transport.
@@ -42,7 +42,7 @@ La classification cible suit cette règle :
 |---|---|---|---|
 | `POST /internal/session/verify-session` | Toute requête publique contenant un header `Authorization` | La Gateway doit authentifier la requête avant de la transmettre | `SessionService.VerifySession` |
 
-Sources : `backend/api-gateway/src/middleware/verify-authorization-header.ts`, `backend/api-gateway/src/services/session-service.client.ts`.
+Sources : `backend/api-gateway/src/middleware/verify-authorization-header.ts`, `backend/api-gateway/src/service-clients/session-service.client.ts`.
 
 ### API Gateway → services métier
 
@@ -65,7 +65,7 @@ Sources : `backend/api-gateway/services.json`, `backend/api-gateway/src/index.ts
 | `POST /internal/session/create-session` | Fin d'inscription, fin de connexion, définition d'un nouveau mot de passe | Le token et l'identifiant de session sont nécessaires dans la réponse courante | `SessionService.CreateSession` |
 | `PATCH /session/disable-session/{sessionId}` | Déconnexion | La requête doit confirmer que la session visée a été désactivée | `SessionService.DisableSession` |
 
-Sources : `backend/services/user/src/core/services/session-service.client.ts` et les routes de `backend/services/user/src/features/authentication/routes/`.
+Sources : `backend/services/user/src/core/service-clients/session-service.client.ts` et les routes de `backend/services/user/src/features/authentication/routes/`.
 
 ### Content → User
 
@@ -75,7 +75,7 @@ Sources : `backend/services/user/src/core/services/session-service.client.ts` et
 | `GET /internal/user/get-block-relationship-ids/{userId}` | Filtrage des contenus et contrôle avant commentaire | La visibilité/autorisation dépend immédiatement du résultat | `UserService.GetBlockRelationshipIds` ou `UserService.HasBlockRelationship` |
 | `GET /internal/user/get-following-ids/{userId}` | Construction du feed « following » | La liste est nécessaire pour exécuter la requête de feed | `UserService.GetFollowingIds` |
 
-Sources : `backend/services/content/src/core/services/user-service.client.ts` et ses usages sous `backend/services/content/src/features/`.
+Sources : `backend/services/content/src/core/service-clients/user-service.client.ts` et ses usages sous `backend/services/content/src/features/`.
 
 Attention : les erreurs de lecture des relations de blocage retournent actuellement une liste vide. Cela produit un comportement *fail-open* et peut exposer un contenu qui aurait dû être masqué. La migration gRPC doit définir explicitement timeout, indisponibilité et politique *fail-closed* pour ces contrôles.
 
@@ -85,7 +85,7 @@ Attention : les erreurs de lecture des relations de blocage retournent actuellem
 |---|---|---|---|
 | `POST /internal/user/get-users-batch` | Hydratation des initiateurs dans `GET /notification/get-notifications` | Les profils sont inclus dans la réponse courante | `UserService.GetUsersBatch` |
 
-Source : `backend/services/notification/src/core/services/user-service.client.ts`.
+Source : `backend/services/notification/src/core/service-clients/user-service.client.ts`.
 
 À plus long terme, une projection locale des données minimales d'utilisateur dans Notification pourrait supprimer cet appel synchrone. Tant que cette projection n'existe pas, gRPC reste la bonne catégorie.
 
@@ -107,7 +107,7 @@ Ces appels sont actuellement attendus avec `await`, mais leurs erreurs sont abso
 
 Types de notification actuellement produits : `POST_LIKE`, `COMMENT_LIKE`, `POST_COMMENT`, `COMMENT_REPLY`.
 
-Sources : `backend/services/content/src/core/services/notification-service.client.ts` et les routes de likes/commentaires sous `backend/services/content/src/features/`.
+Sources : `backend/services/content/src/core/service-clients/notification-service.client.ts` et les routes de likes/commentaires sous `backend/services/content/src/features/`.
 
 Le service Content devrait publier des événements de domaine, sans dépendre des constantes internes de Notification. Notification devient consommateur et décide de créer, dédupliquer ou supprimer ses propres lignes.
 
@@ -121,7 +121,7 @@ Le service Content devrait publier des événements de domaine, sans dépendre d
 
 Type de notification actuellement produit : `FOLLOW`.
 
-Sources : `backend/services/user/src/core/services/notification-service.client.ts`, `follow-user.route.ts`, `unfollow-user.route.ts`, `block-user.route.ts`.
+Sources : `backend/services/user/src/core/service-clients/notification-service.client.ts`, `follow-user.route.ts`, `unfollow-user.route.ts`, `block-user.route.ts`.
 
 ### Content → User : compteur de posts
 
@@ -130,7 +130,7 @@ Sources : `backend/services/user/src/core/services/notification-service.client.t
 | `PATCH /internal/user/update-post-count/{userId}` avec `delta: 1` | Post créé | `content.post-created.v1` |
 | `PATCH /internal/user/update-post-count/{userId}` avec `delta: -1` | Post supprimé | `content.post-deleted.v1` |
 
-Source : `backend/services/content/src/core/services/user-service.client.ts`.
+Source : `backend/services/content/src/core/service-clients/user-service.client.ts`.
 
 `postCount` est une projection dénormalisée dans User. L'action Content ne doit pas échouer ni attendre à cause de cette projection. User consomme l'événement de manière idempotente et met son compteur à jour.
 
@@ -142,7 +142,7 @@ Source : `backend/services/content/src/core/services/user-service.client.ts`.
 | Même endpoint avec `delta: -1` | Notification non vue effectivement supprimée | `notification.deleted.v1` |
 | Même endpoint avec `reset: true` | Toutes les notifications sont marquées comme vues | `notification.all-seen.v1` |
 
-Sources : `backend/services/notification/src/core/services/user-service.client.ts` et les routes sous `backend/services/notification/src/features/notifications/routes/`.
+Sources : `backend/services/notification/src/core/service-clients/user-service.client.ts` et les routes sous `backend/services/notification/src/features/notifications/routes/`.
 
 L'événement doit être publié par Notification **après** le résultat de la déduplication ou de la suppression. Content/User ne peuvent pas mettre ce compteur à jour correctement eux-mêmes, car Notification est le seul service qui sait si une ligne a réellement été créée, supprimée ou si elle était déjà vue.
 

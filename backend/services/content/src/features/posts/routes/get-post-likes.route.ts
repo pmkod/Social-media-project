@@ -1,7 +1,7 @@
 import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
-import { userServiceClient } from "@/core/services/user-service.client";
+import { userServiceClient } from "@/core/service-clients/user-service.client";
 import type { HonoEnv } from "@/core/types/hono-env";
 import { PostsRoutesTag } from "../posts.constants";
 

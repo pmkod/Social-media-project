@@ -1,6 +1,6 @@
 import { prisma } from "@/core/databases";
 import { uniqueValues } from "@/core/functions/collection.functions";
-import { userServiceClient } from "@/core/services/user-service.client";
+import { userServiceClient } from "@/core/service-clients/user-service.client";
 import type { Prisma } from "@/generated/prisma/client";
 
 const commentPresentationSelect = {
