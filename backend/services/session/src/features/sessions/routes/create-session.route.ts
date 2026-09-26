@@ -1,7 +1,7 @@
 import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { SessionsRoutesTag } from "../sessions.constants";
-import { sessionRepository } from "../sessions.repository";
+import { sessionService } from "../sessions.service";
 import {
 	CreateSessionRequestBody,
 	SessionWithTokenSchema,
@@ -41,7 +41,7 @@ const createSessionRoute = defineOpenAPIRoute({
 	handler: async (c) => {
 		const data = c.req.valid("json");
 		const forwardedIpAddress = c.req.header("x-forwarded-for")?.split(",")[0];
-		const session = await sessionRepository.createSession({
+		const session = await sessionService.createSession({
 			userId: data.userId,
 			ipAddress:
 				data.ipAddress ??

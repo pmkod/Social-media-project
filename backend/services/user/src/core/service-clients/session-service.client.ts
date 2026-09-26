@@ -19,39 +19,37 @@ type CreateSessionResponse = {
 	session: Session;
 };
 
+type DisableSessionInput = {
+	userId: string;
+	sessionId: string;
+};
+
 const sessionServiceHttpClient = internalHttpClient.extend({
 	prefix: Configurations.server.sessionServiceUrl,
 });
 
 const sessionServiceClient = {
-	async createSession(input: CreateSessionInput): Promise<Session> {
-		const data = await sessionServiceHttpClient
+	async createSession(
+		input: CreateSessionInput,
+	): Promise<CreateSessionResponse> {
+		return await sessionServiceHttpClient
 			.post("internal/session/create-session", { json: input })
 			.json<CreateSessionResponse>();
-
-		return { id: data.session.id, token: data.session.token };
 	},
 
-	async disableSession(userId: string, sessionId: string): Promise<void> {
-		try {
-			await sessionServiceHttpClient.patch(
-				`session/disable-session/${encodeURIComponent(sessionId)}`,
-				{
-					headers: {
-						"X-Authenticated-User-Id": userId,
-						"X-Authenticated-Session-Id": sessionId,
-					},
+	async disableSession({
+		userId,
+		sessionId,
+	}: DisableSessionInput): Promise<void> {
+		await sessionServiceHttpClient.patch(
+			`session/disable-session/${encodeURIComponent(sessionId)}`,
+			{
+				headers: {
+					"X-Authenticated-User-Id": userId,
+					"X-Authenticated-Session-Id": sessionId,
 				},
-			);
-		} catch (error) {
-			throw new Exception({
-				message:
-					error instanceof HTTPError
-						? "Session service could not disable the session"
-						: "Session service is temporarily unavailable",
-				status: HttpStatus.SERVICE_UNAVAILABLE.code,
-			});
-		}
+			},
+		);
 	},
 };
 

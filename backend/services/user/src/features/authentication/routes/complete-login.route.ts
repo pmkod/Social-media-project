@@ -67,10 +67,12 @@ const completeLoginRoute = defineOpenAPIRoute({
 		const user = await prisma.user.findUniqueOrThrow({
 			where: { id: verificationInDb.userId, active: true },
 		});
+		const { ipAddress, userAgent } = getRequestClientMetadata(c);
 
-		const session = await sessionServiceClient.createSession({
+		const { session } = await sessionServiceClient.createSession({
 			userId: user.id,
-			...getRequestClientMetadata(c),
+			ipAddress,
+			userAgent,
 		});
 
 		await prisma.userVerification.update({

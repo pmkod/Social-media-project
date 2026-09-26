@@ -12,7 +12,9 @@ const verifyAuthorizationHeader = (
 
 	return sessionServiceClient
 		.verifySession(sessionId, sessionToken)
-		.then((authenticatedUser) => ({ authenticatedUser }));
+		.then(({ session }) => ({
+			authenticatedUser: { id: session.userId, sessionId: session.id },
+		}));
 };
 
 export { verifyAuthorizationHeader };

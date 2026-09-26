@@ -86,7 +86,7 @@ const completeSignupRoute = defineOpenAPIRoute({
 		});
 		const { ipAddress, userAgent } = getRequestClientMetadata(c);
 
-		const session = await sessionServiceClient.createSession({
+		const { session } = await sessionServiceClient.createSession({
 			userId: user.id,
 			ipAddress,
 			userAgent,

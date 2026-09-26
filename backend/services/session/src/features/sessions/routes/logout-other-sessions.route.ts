@@ -3,7 +3,7 @@ import { HttpStatus } from "@/core/constants/http-status";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { requireUserAuthentication } from "@/features/authentication/middlewares/require-user-authentication.middleware";
 import { SessionsRoutesTag } from "../sessions.constants";
-import { sessionRepository } from "../sessions.repository";
+import { sessionService } from "../sessions.service";
 
 const routeDef = createRoute({
 	method: "post",
@@ -31,7 +31,7 @@ const logoutOtherSessionsRoute = defineOpenAPIRoute<
 	handler: async (c) => {
 		const authenticatedUser = c.get("authenticatedUser");
 
-		const disabledCount = await sessionRepository.disableAllOtherSessions(
+		const disabledCount = await sessionService.disableAllOtherSessions(
 			authenticatedUser.id,
 			authenticatedUser.sessionId,
 		);

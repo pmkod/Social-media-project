@@ -2,13 +2,6 @@
 
 Inventaire des routes HTTP déclarées explicitement sous `/internal/**` dans les services du backend.
 
-## Session (`backend/services/session`)
-
-| Méthode | Route | Fonction | Source |
-|---|---|---|---|
-| `POST` | `/internal/session/create-session` | Créer une session depuis un service de confiance. | `src/features/sessions/routes/create-session.route.ts` |
-| `POST` | `/internal/session/verify-session` | Vérifier les identifiants d’une session active. | `src/features/sessions/routes/verify-session.route.ts` |
-
 ## User (`backend/services/user`)
 
 | Méthode | Route | Fonction | Source |

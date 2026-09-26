@@ -5,7 +5,7 @@ import { Exception } from "@/core/exceptions/exception";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { requireUserAuthentication } from "@/features/authentication/middlewares/require-user-authentication.middleware";
 import { SessionsRoutesTag } from "../sessions.constants";
-import { sessionRepository } from "../sessions.repository";
+import { sessionService } from "../sessions.service";
 import {
 	SessionIdParams,
 	SessionSchema,
@@ -39,7 +39,7 @@ const getSessionRoute = defineOpenAPIRoute<
 	handler: async (c) => {
 		const authenticatedUser = c.get("authenticatedUser");
 		const { sessionId } = c.req.valid("param");
-		const session = await sessionRepository.getSession(sessionId);
+		const session = await sessionService.getSession(sessionId);
 		if (!session || session.userId !== authenticatedUser.id) {
 			throw new Exception({
 				code: ExceptionCodes.session_not_found,

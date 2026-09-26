@@ -74,9 +74,12 @@ const newPasswordRoute = defineOpenAPIRoute({
 			data: { password: hashedPassword },
 		});
 
-		const session = await sessionServiceClient.createSession({
+		const { ipAddress, userAgent } = getRequestClientMetadata(c);
+
+		const { session } = await sessionServiceClient.createSession({
 			userId: user.id,
-			...getRequestClientMetadata(c),
+			ipAddress,
+			userAgent,
 		});
 
 		await prisma.userVerification.update({

@@ -1,5 +1,7 @@
 import { Configurations } from "@/core/configurations";
 import { getRedis } from "@/core/databases";
+import { HttpStatus } from "@/core/constants/http-status";
+import { Exception } from "@/core/exceptions/exception";
 import {
 	generateSessionToken,
 	hashSessionToken,
@@ -12,6 +14,7 @@ type StoredSession = Session & {
 };
 
 type CreateSessionInput = Pick<Session, "userId" | "ipAddress" | "userAgent">;
+type VerifySessionInput = Pick<Session, "id"> & { token: string };
 
 const sessionKey = (sessionId: string) =>
 	`${Configurations.redis.keyPrefix}:session:${sessionId}`;
@@ -162,23 +165,26 @@ const disableAllOtherSessions = async (
 	return otherSessions.length;
 };
 
-const verifySession = async (
-	id: string,
-	token: string,
-): Promise<Session | null> => {
+const verifySession = async ({
+	id,
+	token,
+}: VerifySessionInput): Promise<Session> => {
 	const storedSession = await getStoredSession(id);
 	if (
 		!storedSession ||
 		!storedSession.active ||
 		!sessionTokenMatchesHash(token, storedSession.tokenHash)
 	) {
-		return null;
+		throw new Exception({
+			message: "Invalid or inactive session",
+			status: HttpStatus.UNAUTHORIZED.code,
+		});
 	}
 
 	return toSession(storedSession);
 };
 
-const sessionRepository = {
+const sessionService = {
 	createSession,
 	disableAllOtherSessions,
 	disableSession,
@@ -187,4 +193,4 @@ const sessionRepository = {
 	verifySession,
 };
 
-export { sessionRepository };
+export { sessionService };

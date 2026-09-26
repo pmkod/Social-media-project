@@ -1,8 +1,7 @@
 import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
-import { Exception } from "@/core/exceptions/exception";
 import { SessionsRoutesTag } from "../sessions.constants";
-import { sessionRepository } from "../sessions.repository";
+import { sessionService } from "../sessions.service";
 import {
 	SessionSchema,
 	VerifySessionRequestBody,
@@ -38,14 +37,7 @@ const routeDef = createRoute({
 const verifySessionRoute = defineOpenAPIRoute({
 	route: routeDef,
 	handler: async (c) => {
-		const { id, token } = c.req.valid("json");
-		const session = await sessionRepository.verifySession(id, token);
-		if (!session) {
-			throw new Exception({
-				message: "Invalid or inactive session",
-				status: HttpStatus.UNAUTHORIZED.code,
-			});
-		}
+		const session = await sessionService.verifySession(c.req.valid("json"));
 
 		return c.json({ session });
 	},

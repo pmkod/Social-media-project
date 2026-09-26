@@ -23,10 +23,10 @@ const logoutRoute = defineOpenAPIRoute<typeof routeDef, HonoAuthenticatedEnv>({
 	handler: async (c) => {
 		const authenticatedUser = c.get("authenticatedUser");
 
-		await sessionServiceClient.disableSession(
-			authenticatedUser.id,
-			authenticatedUser.sessionId,
-		);
+		await sessionServiceClient.disableSession({
+			userId: authenticatedUser.id,
+			sessionId: authenticatedUser.sessionId,
+		});
 
 		return c.json({ message: "Logged out successfully" });
 	},
