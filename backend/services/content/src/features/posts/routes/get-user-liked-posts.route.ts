@@ -121,7 +121,7 @@ const getUserLikedPostsRoute = defineOpenAPIRoute<
 			authenticatedUserId && authenticatedUserId === userId,
 		);
 
-		const authorsMap = await userServiceClient.fetchAuthorsBatch(
+		const authorsMap = await userServiceClient.fetchActiveAuthorsBatch(
 			authorIds,
 			authenticatedUserId,
 		);

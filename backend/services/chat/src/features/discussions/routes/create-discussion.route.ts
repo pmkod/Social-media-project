@@ -79,11 +79,13 @@ const createDiscussionRoute = defineOpenAPIRoute<
 			});
 		}
 
-		const usersMap = await userServiceClient.fetchUsersBatchOrThrow(
+		const usersMap = await userServiceClient.fetchActiveUsersBatchOrThrow(
 			memberIds,
 			authenticatedUserId,
 		);
-		const missingUserIds = memberIds.filter((userId) => !usersMap.has(userId));
+		const missingUserIds = memberIds.filter(
+			(userId) => !usersMap.has(userId),
+		);
 		if (missingUserIds.length > 0) {
 			throw new Exception({
 				code: ExceptionCodes.users_not_found,

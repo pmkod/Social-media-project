@@ -2,7 +2,7 @@ import { Configurations } from "../configurations";
 import { internalHttpClient } from "../http-clients/internal.http-client";
 import { removeDuplicateStrings } from "../utils/array.utils";
 
-type User = {
+type UserDto = {
 	id: string;
 	username: string;
 	fullName?: string | null;
@@ -15,7 +15,7 @@ type User = {
 };
 
 type FetchUsersBatchResponse = {
-	users: User[];
+	users: UserDto[];
 };
 
 const userServiceHttpClient = internalHttpClient.extend({
@@ -23,13 +23,15 @@ const userServiceHttpClient = internalHttpClient.extend({
 });
 
 const userServiceClient = {
-	async fetchUsersBatch(userIds: string[]): Promise<FetchUsersBatchResponse> {
-		const uniqueIds = removeDuplicateStrings(userIds);
-		if (uniqueIds.length === 0) return { users: [] };
+	async fetchActiveUsersBatch(
+		userIds: string[],
+	): Promise<FetchUsersBatchResponse> {
+		const uniqueUserIds = removeDuplicateStrings(userIds);
+		if (uniqueUserIds.length === 0) return { users: [] };
 
 		return await userServiceHttpClient
-			.post("internal/user/get-users-batch", {
-				json: { userIds: uniqueIds },
+			.post("internal/user/get-active-users-batch", {
+				json: { userIds: uniqueUserIds },
 			})
 			.json<FetchUsersBatchResponse>();
 	},

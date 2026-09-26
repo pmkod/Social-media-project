@@ -53,7 +53,7 @@ const addDiscussionMembersRoute = defineOpenAPIRoute<
 				status: HttpStatus.BAD_REQUEST.code,
 			});
 		}
-		const usersMap = await userServiceClient.fetchUsersBatchOrThrow(
+		const usersMap = await userServiceClient.fetchActiveUsersBatchOrThrow(
 			uniqueUserIds,
 			authenticatedUserId,
 		);
@@ -90,7 +90,9 @@ const addDiscussionMembersRoute = defineOpenAPIRoute<
 			},
 			select: { userId: true },
 		});
-		const activeUserIds = new Set(activeMembers.map((member) => member.userId));
+		const activeUserIds = new Set(
+			activeMembers.map((member) => member.userId),
+		);
 		const addedUserIds = uniqueUserIds.filter(
 			(userId) => !activeUserIds.has(userId),
 		);

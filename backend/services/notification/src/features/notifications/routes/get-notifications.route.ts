@@ -69,7 +69,7 @@ const getNotificationsRoute = defineOpenAPIRoute<
 		const pageRows = hasNextPage
 			? notificationRows.slice(0, limit)
 			: notificationRows;
-		const initiators = await userServiceClient.fetchUsersBatch(
+		const initiators = await userServiceClient.fetchActiveUsersBatch(
 			pageRows.map((row) => row.initiatorId),
 		);
 		const lastRow = pageRows.at(-1);

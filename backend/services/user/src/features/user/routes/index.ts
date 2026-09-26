@@ -13,7 +13,7 @@ import { getUserByIdRoute } from "./get-user-by-id.route";
 import { getUserByUsernameRoute } from "./get-user-by-username.route";
 import { getUserFollowersRoute } from "./get-user-followers.route";
 import { getUserFollowingRoute } from "./get-user-following.route";
-import { getUsersBatchRoute } from "./get-users-batch.route";
+import { getActiveUsersBatchRoute } from "./get-active-users-batch.route";
 import { requestEmailChangeRoute } from "./request-email-change.route";
 import { searchUsersRoute } from "./search-users.route";
 import { unblockUserRoute } from "./unblock-user.route";
@@ -31,7 +31,7 @@ const userRoutes = [
 	getUserByIdRoute,
 	getUserFollowersRoute,
 	getUserFollowingRoute,
-	getUsersBatchRoute,
+	getActiveUsersBatchRoute,
 	updateProfileRoute,
 	changePasswordRoute,
 	requestEmailChangeRoute,

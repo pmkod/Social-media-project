@@ -80,12 +80,12 @@ const createMessageRoute = defineOpenAPIRoute<
 					status: HttpStatus.CONFLICT.code,
 				});
 			}
-			const usersMap = await userServiceClient.fetchUsersBatchOrThrow(
+			const usersMap = await userServiceClient.fetchActiveUsersBatchOrThrow(
 				[recipient.userId],
 				authenticatedUserId,
 			);
-			const recipientProfile = usersMap.get(recipient.userId);
-			if (!recipientProfile) {
+			const recipientUser = usersMap.get(recipient.userId);
+			if (!recipientUser) {
 				throw new Exception({
 					code: ExceptionCodes.recipient_not_found,
 					message: "Recipient not found",
@@ -93,8 +93,8 @@ const createMessageRoute = defineOpenAPIRoute<
 				});
 			}
 			if (
-				recipientProfile.isBlockedByAuthenticatedUser ||
-				recipientProfile.hasBlockedAuthenticatedInUser
+				recipientUser.isBlockedByAuthenticatedUser ||
+				recipientUser.hasBlockedAuthenticatedInUser
 			) {
 				throw new Exception({
 					code: ExceptionCodes.blocked_relationship,
@@ -219,7 +219,7 @@ const createMessageRoute = defineOpenAPIRoute<
 			throw error;
 		}
 
-		const usersMap = await userServiceClient.fetchUsersBatch(
+		const usersMap = await userServiceClient.fetchActiveUsersBatch(
 			[
 				message.senderId,
 				...(message.parentMessage ? [message.parentMessage.senderId] : []),

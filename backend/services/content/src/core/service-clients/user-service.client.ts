@@ -45,23 +45,23 @@ const requestBlockRelationships = async (
 		.json<BlockRelationshipIdsDto>();
 
 const userServiceClient = {
-	async fetchAuthorsBatch(
-		userIds: string[],
+	async fetchActiveAuthorsBatch(
+		authorIds: string[],
 		authenticatedUserId?: string,
 	): Promise<Map<string, UserProfileDto>> {
-		const uniqueIds = removeDuplicateStrings(userIds);
+		const uniqueAuthorIds = removeDuplicateStrings(authorIds);
 		const authorsMap = new Map<string, UserProfileDto>();
-		if (uniqueIds.length === 0) return authorsMap;
+		if (uniqueAuthorIds.length === 0) return authorsMap;
 
 		try {
 			const [{ users }, relationships] = await Promise.all([
 				userServiceHttpClient
-					.post("internal/user/get-users-batch", {
-						json: { userIds: uniqueIds },
+					.post("internal/user/get-active-users-batch", {
+						json: { userIds: uniqueAuthorIds },
 					})
 					.json<FetchUsersBatchResponse>(),
 				authenticatedUserId
-					? requestBlockRelationships(authenticatedUserId, uniqueIds)
+					? requestBlockRelationships(authenticatedUserId, uniqueAuthorIds)
 					: Promise.resolve({
 							blockedUserIds: [],
 							blockedByUserIds: [],

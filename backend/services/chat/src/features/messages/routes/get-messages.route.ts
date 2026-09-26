@@ -77,7 +77,7 @@ const getMessagesRoute = defineOpenAPIRoute<
 				]),
 			),
 		);
-		const usersMap = await userServiceClient.fetchUsersBatch(
+		const usersMap = await userServiceClient.fetchActiveUsersBatch(
 			userIds,
 			authenticatedUserId,
 		);

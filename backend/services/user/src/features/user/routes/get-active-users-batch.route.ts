@@ -5,26 +5,26 @@ import type { HonoEnv } from "@/core/types/hono-env";
 import { removeDuplicateStrings } from "@/core/utils/array.utils";
 import { UserRoutesTag } from "../user.constants";
 
-const GetUsersBatchRequestBody = z.object({
+const GetActiveUsersBatchRequestBody = z.object({
 	userIds: z
 		.array(z.string().nonempty())
 		.min(1, "At least one user ID is required")
 		.openapi({
 			example: ["user-123", "user-456"],
-			description: "List of user IDs to retrieve",
+			description: "List of active user IDs to retrieve",
 		}),
 });
 
 const routeDef = createRoute({
 	method: "post",
-	path: "/internal/user/get-users-batch",
-	summary: "Get multiple users by their IDs in batch",
+	path: "/internal/user/get-active-users-batch",
+	summary: "Get multiple active users by their IDs in batch",
 	tags: [UserRoutesTag],
 	request: {
 		body: {
 			content: {
 				"application/json": {
-					schema: GetUsersBatchRequestBody,
+					schema: GetActiveUsersBatchRequestBody,
 				},
 			},
 		},
@@ -36,19 +36,19 @@ const routeDef = createRoute({
 	},
 });
 
-const getUsersBatchRoute = defineOpenAPIRoute<typeof routeDef, HonoEnv>({
+const getActiveUsersBatchRoute = defineOpenAPIRoute<typeof routeDef, HonoEnv>({
 	route: routeDef,
 	handler: async (c) => {
 		const { userIds } = c.req.valid("json");
-		const uniqueIds = removeDuplicateStrings(userIds);
+		const uniqueActiveUserIds = removeDuplicateStrings(userIds);
 
-		if (uniqueIds.length === 0) {
+		if (uniqueActiveUserIds.length === 0) {
 			return c.json({ users: [] });
 		}
 
 		const users = await prisma.user.findMany({
 			where: {
-				id: { in: uniqueIds },
+				id: { in: uniqueActiveUserIds },
 				active: true,
 			},
 			select: {
@@ -68,4 +68,4 @@ const getUsersBatchRoute = defineOpenAPIRoute<typeof routeDef, HonoEnv>({
 	},
 });
 
-export { getUsersBatchRoute };
+export { getActiveUsersBatchRoute };

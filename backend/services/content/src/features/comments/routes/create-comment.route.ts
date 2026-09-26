@@ -158,7 +158,7 @@ const createCommentRoute = defineOpenAPIRoute<
 			},
 		});
 
-		const authorsMap = await userServiceClient.fetchAuthorsBatch(
+		const authorsMap = await userServiceClient.fetchActiveAuthorsBatch(
 			[authenticatedUserId],
 			authenticatedUserId,
 		);

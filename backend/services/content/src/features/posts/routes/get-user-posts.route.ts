@@ -116,7 +116,7 @@ const getUserPostsRoute = defineOpenAPIRoute<
 
 		const authorsMap =
 			items.length > 0
-				? await userServiceClient.fetchAuthorsBatch(
+				? await userServiceClient.fetchActiveAuthorsBatch(
 						[userId],
 						authenticatedUserId,
 					)

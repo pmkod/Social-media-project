@@ -26,7 +26,7 @@ async function hydrateComments(
 ) {
 	const authorIds = uniqueValues(comments.map((comment) => comment.authorId));
 	const [authorsMap, likedComments] = await Promise.all([
-		userServiceClient.fetchAuthorsBatch(authorIds, authenticatedUserId),
+		userServiceClient.fetchActiveAuthorsBatch(authorIds, authenticatedUserId),
 		authenticatedUserId && comments.length > 0
 			? prisma.commentLike.findMany({
 					where: {

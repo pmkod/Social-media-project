@@ -113,7 +113,7 @@ const searchPostsRoute = defineOpenAPIRoute<
 		const postIds = items.map((post) => post.id);
 		const authorIds = uniqueValues(items.map((post) => post.authorId));
 
-		const authorsMap = await userServiceClient.fetchAuthorsBatch(
+		const authorsMap = await userServiceClient.fetchActiveAuthorsBatch(
 			authorIds,
 			authenticatedUserId,
 		);

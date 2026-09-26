@@ -71,7 +71,7 @@ Sources : `backend/services/user/src/core/service-clients/session-service.client
 
 | Appel actuel | Utilisation | Pourquoi synchrone | RPC cible suggérée |
 |---|---|---|---|
-| `POST /internal/user/get-users-batch` | Hydratation des auteurs dans les posts, commentaires et bookmarks | Les profils font partie de la réponse HTTP en cours | `UserService.GetUsersBatch` |
+| `POST /internal/user/get-active-users-batch` | Hydratation des auteurs actifs dans les posts, commentaires et bookmarks | Les profils font partie de la réponse HTTP en cours | `UserService.GetActiveUsersBatch` |
 | `GET /internal/user/get-block-relationship-ids/{userId}` | Filtrage des contenus et contrôle avant commentaire | La visibilité/autorisation dépend immédiatement du résultat | `UserService.GetBlockRelationshipIds` ou `UserService.HasBlockRelationship` |
 | `GET /internal/user/get-following-ids/{userId}` | Construction du feed « following » | La liste est nécessaire pour exécuter la requête de feed | `UserService.GetFollowingIds` |
 
@@ -83,7 +83,7 @@ Attention : les erreurs de lecture des relations de blocage retournent actuellem
 
 | Appel actuel | Utilisation | Pourquoi synchrone | RPC cible suggérée |
 |---|---|---|---|
-| `POST /internal/user/get-users-batch` | Hydratation des initiateurs dans `GET /notification/get-notifications` | Les profils sont inclus dans la réponse courante | `UserService.GetUsersBatch` |
+| `POST /internal/user/get-active-users-batch` | Hydratation des initiateurs actifs dans `GET /notification/get-notifications` | Les profils sont inclus dans la réponse courante | `UserService.GetActiveUsersBatch` |
 
 Source : `backend/services/notification/src/core/service-clients/user-service.client.ts`.
 

@@ -90,7 +90,7 @@ const updateMessageRoute = defineOpenAPIRoute<
 			},
 			select: messageDetailsSelect,
 		});
-		const usersMap = await userServiceClient.fetchUsersBatch(
+		const usersMap = await userServiceClient.fetchActiveUsersBatch(
 			[
 				message.senderId,
 				...(message.parentMessage ? [message.parentMessage.senderId] : []),

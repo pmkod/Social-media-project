@@ -31,11 +31,11 @@ const userServiceHttpClient = internalHttpClient.extend({
 	prefix: Configurations.server.userServiceUrl,
 });
 
-const requestUsersBatch = async (
+const requestActiveUsersBatch = async (
 	userIds: string[],
 ): Promise<FetchUsersBatchResponse> =>
 	await userServiceHttpClient
-		.post("internal/user/get-users-batch", {
+		.post("internal/user/get-active-users-batch", {
 			json: { userIds },
 		})
 		.json<FetchUsersBatchResponse>();
@@ -50,12 +50,12 @@ const requestBlockRelationships = async (
 		})
 		.json<BlockRelationshipsResponse>();
 
-const requestUsersWithBlockRelationships = async (
+const requestActiveUsersWithBlockRelationships = async (
 	userIds: string[],
 	authenticatedUserId: string,
 ): Promise<UserProfileDto[]> => {
 	const [{ users }, relationships] = await Promise.all([
-		requestUsersBatch(userIds),
+		requestActiveUsersBatch(userIds),
 		requestBlockRelationships(authenticatedUserId, userIds),
 	]);
 	const blockedUserIds = new Set(relationships.blockedUserIds);
@@ -69,42 +69,50 @@ const requestUsersWithBlockRelationships = async (
 };
 
 const userServiceClient = {
-	async fetchUsersBatch(
+	async fetchActiveUsersBatch(
 		userIds: string[],
 		authenticatedUserId: string,
 	): Promise<Map<string, UserProfileDto>> {
-		const uniqueIds = removeDuplicateStrings(userIds);
+		const uniqueUserIds = removeDuplicateStrings(userIds);
 		const usersMap = new Map<string, UserProfileDto>();
-		if (uniqueIds.length === 0) return usersMap;
+		if (uniqueUserIds.length === 0) return usersMap;
 
 		try {
-			const users = await requestUsersWithBlockRelationships(
-				uniqueIds,
+			const users = await requestActiveUsersWithBlockRelationships(
+				uniqueUserIds,
 				authenticatedUserId,
 			);
-			for (const user of users) usersMap.set(user.id, user);
+			for (const user of users) {
+				usersMap.set(user.id, user);
+			}
 		} catch (error) {
-			console.error("[UserServiceClient] Failed to fetch chat users:", error);
+			console.error(
+				"[UserServiceClient] Failed to fetch chat users:",
+				error,
+			);
 		}
 
 		return usersMap;
 	},
 
-	async fetchUsersBatchOrThrow(
+	async fetchActiveUsersBatchOrThrow(
 		userIds: string[],
 		authenticatedUserId: string,
 	): Promise<Map<string, UserProfileDto>> {
-		const uniqueIds = removeDuplicateStrings(userIds);
-		if (uniqueIds.length === 0) return new Map();
+		const uniqueUserIds = removeDuplicateStrings(userIds);
+		if (uniqueUserIds.length === 0) return new Map();
 
 		try {
-			const users = await requestUsersWithBlockRelationships(
-				uniqueIds,
+			const users = await requestActiveUsersWithBlockRelationships(
+				uniqueUserIds,
 				authenticatedUserId,
 			);
 			return new Map(users.map((user) => [user.id, user]));
 		} catch (error) {
-			console.error("[UserServiceClient] Failed to validate chat users:", error);
+			console.error(
+				"[UserServiceClient] Failed to validate chat users:",
+				error,
+			);
 			throw new Exception({
 				message: "User service is temporarily unavailable",
 				status: HttpStatus.SERVICE_UNAVAILABLE.code,

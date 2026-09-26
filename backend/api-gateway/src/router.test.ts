@@ -7,7 +7,7 @@ describe("isInternalPath", () => {
 		"/internal/",
 		"/internal/session/verify-session",
 		"/internalized",
-		"/%69nternal/user/get-users-batch",
+		"/%69nternal/user/get-active-users-batch",
 		"/internal%2Fnotification/create-notification",
 	])("blocks the internal namespace: %s", (pathname) => {
 		expect(isInternalPath(pathname)).toBe(true);

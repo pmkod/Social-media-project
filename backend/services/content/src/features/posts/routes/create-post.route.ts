@@ -51,7 +51,7 @@ const createPostRoute = defineOpenAPIRoute<
 
 		const { text, medias } = c.req.valid("form");
 
-		const authors = await userServiceClient.fetchAuthorsBatch(
+		const authors = await userServiceClient.fetchActiveAuthorsBatch(
 			[authenticatedUserId],
 			authenticatedUserId,
 		);
