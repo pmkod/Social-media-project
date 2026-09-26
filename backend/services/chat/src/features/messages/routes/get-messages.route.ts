@@ -2,7 +2,10 @@ import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
 import { Exception } from "@/core/exceptions/exception";
-import { userServiceClient } from "@/core/service-clients/user-service.client";
+import {
+	userServiceClient,
+	type UserProfileDto,
+} from "@/core/service-clients/user-service.client";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { requireUserAuthentication } from "@/features/authentication/middlewares/require-user-authentication.middleware";
 import { getActiveMembership } from "@/features/discussions/discussions.service";
@@ -77,11 +80,26 @@ const getMessagesRoute = defineOpenAPIRoute<
 				]),
 			),
 		);
-		const usersMap =
-			await userServiceClient.fetchActiveUsersBatchWithBlockRelationships(
-				userIds,
-				authenticatedUserId,
-			);
+		const usersMap = new Map<string, UserProfileDto>();
+		if (userIds.length > 0) {
+			const [{ users }, relationships] = await Promise.all([
+				userServiceClient.fetchActiveUsersBatch(userIds),
+				userServiceClient.checkBlockRelationships(
+					authenticatedUserId,
+					userIds,
+				),
+			]);
+			const blockedUserIds = new Set(relationships.blockedUserIds);
+			const blockedByUserIds = new Set(relationships.blockedByUserIds);
+
+			for (const user of users) {
+				usersMap.set(user.id, {
+					...user,
+					isBlockedByAuthenticatedUser: blockedUserIds.has(user.id),
+					hasBlockedAuthenticatedInUser: blockedByUserIds.has(user.id),
+				});
+			}
+		}
 		const lastMessage = pageMessages.at(-1);
 
 		return c.json({

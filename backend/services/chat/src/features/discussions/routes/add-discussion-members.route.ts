@@ -53,11 +53,25 @@ const addDiscussionMembersRoute = defineOpenAPIRoute<
 				status: HttpStatus.BAD_REQUEST.code,
 			});
 		}
-		const usersMap =
-			await userServiceClient.fetchActiveUsersBatchWithBlockRelationships(
-				uniqueUserIds,
+		const [{ users }, relationships] = await Promise.all([
+			userServiceClient.fetchActiveUsersBatch(uniqueUserIds),
+			userServiceClient.checkBlockRelationships(
 				authenticatedUserId,
-			);
+				uniqueUserIds,
+			),
+		]);
+		const blockedUserIds = new Set(relationships.blockedUserIds);
+		const blockedByUserIds = new Set(relationships.blockedByUserIds);
+		const usersMap = new Map(
+			users.map((user) => [
+				user.id,
+				{
+					...user,
+					isBlockedByAuthenticatedUser: blockedUserIds.has(user.id),
+					hasBlockedAuthenticatedInUser: blockedByUserIds.has(user.id),
+				},
+			]),
+		);
 		const missingUserIds = uniqueUserIds.filter(
 			(userId) => !usersMap.has(userId),
 		);

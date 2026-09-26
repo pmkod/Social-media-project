@@ -79,11 +79,25 @@ const createDiscussionRoute = defineOpenAPIRoute<
 			});
 		}
 
-		const usersMap =
-			await userServiceClient.fetchActiveUsersBatchWithBlockRelationships(
-				memberIds,
+		const [{ users }, relationships] = await Promise.all([
+			userServiceClient.fetchActiveUsersBatch(memberIds),
+			userServiceClient.checkBlockRelationships(
 				authenticatedUserId,
-			);
+				memberIds,
+			),
+		]);
+		const blockedUserIds = new Set(relationships.blockedUserIds);
+		const blockedByUserIds = new Set(relationships.blockedByUserIds);
+		const usersMap = new Map(
+			users.map((user) => [
+				user.id,
+				{
+					...user,
+					isBlockedByAuthenticatedUser: blockedUserIds.has(user.id),
+					hasBlockedAuthenticatedInUser: blockedByUserIds.has(user.id),
+				},
+			]),
+		);
 		const missingUserIds = memberIds.filter(
 			(userId) => !usersMap.has(userId),
 		);

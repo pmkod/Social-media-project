@@ -2,7 +2,10 @@ import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
 import { ExceptionCodes } from "@/core/exceptions/exception.codes";
 import { Exception } from "@/core/exceptions/exception";
-import { userServiceClient } from "@/core/service-clients/user-service.client";
+import {
+	userServiceClient,
+	type UserProfileDto,
+} from "@/core/service-clients/user-service.client";
 import {
 	buildMessageResponse,
 	messageDetailsSelect,
@@ -100,11 +103,26 @@ const buildDiscussionResponses = async (
 			]),
 		),
 	);
-	const usersMap =
-		await userServiceClient.fetchActiveUsersBatchWithBlockRelationships(
-			userIds,
-			authenticatedUserId,
-		);
+	const usersMap = new Map<string, UserProfileDto>();
+	if (userIds.length > 0) {
+		const [{ users }, relationships] = await Promise.all([
+			userServiceClient.fetchActiveUsersBatch(userIds),
+			userServiceClient.checkBlockRelationships(
+				authenticatedUserId,
+				userIds,
+			),
+		]);
+		const blockedUserIds = new Set(relationships.blockedUserIds);
+		const blockedByUserIds = new Set(relationships.blockedByUserIds);
+
+		for (const user of users) {
+			usersMap.set(user.id, {
+				...user,
+				isBlockedByAuthenticatedUser: blockedUserIds.has(user.id),
+				hasBlockedAuthenticatedInUser: blockedByUserIds.has(user.id),
+			});
+		}
+	}
 
 	return await Promise.all(
 		discussions.map(async (discussion) => {

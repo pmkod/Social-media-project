@@ -1,6 +1,5 @@
 import { Configurations } from "../configurations";
 import { internalHttpClient } from "../http-clients/internal.http-client";
-import { removeDuplicateStrings } from "../utils/array.utils";
 
 type UserProfileFileDto = {
 	filename: string;
@@ -53,24 +52,22 @@ const userServiceClient = {
 	async fetchBlockRelationshipIds(
 		userId: string,
 	): Promise<BlockRelationshipIdsDto> {
-		const relationships = await userServiceHttpClient
+		return await userServiceHttpClient
 			.get(
 				`internal/user/get-block-relationship-ids/${encodeURIComponent(userId)}`,
 			)
 			.json<BlockRelationshipIdsDto>();
-		return {
-			blockedUserIds: relationships.blockedUserIds ?? [],
-			blockedByUserIds: relationships.blockedByUserIds ?? [],
-		};
 	},
 
-	async hasBlockRelationship(userId: string, otherUserId: string) {
-		if (userId === otherUserId) return false;
-		const relationships = await this.fetchBlockRelationshipIds(userId);
-		return (
-			relationships.blockedUserIds.includes(otherUserId) ||
-			relationships.blockedByUserIds.includes(otherUserId)
-		);
+	async checkBlockRelationships(
+		userId: string,
+		otherUserIds: string[],
+	): Promise<BlockRelationshipIdsDto> {
+		return await userServiceHttpClient
+			.post("internal/user/check-block-relationships", {
+				json: { userId, otherUserIds },
+			})
+			.json<BlockRelationshipIdsDto>();
 	},
 
 	async fetchFollowingIds(userId: string): Promise<string[]> {
@@ -84,40 +81,6 @@ const userServiceClient = {
 		await userServiceHttpClient.patch(
 			`internal/user/update-post-count/${encodeURIComponent(userId)}`,
 			{ json: { delta } },
-		);
-	},
-
-	async fetchActiveUsersBatchWithBlockRelationships(
-		userIds: string[],
-		authenticatedUserId: string,
-	): Promise<Map<string, UserProfileDto>> {
-		const uniqueUserIds = removeDuplicateStrings(userIds);
-		if (uniqueUserIds.length === 0) return new Map();
-
-		const [{ users }, relationships] = await Promise.all([
-			userServiceHttpClient
-				.post("internal/user/get-active-users-batch", {
-					json: { userIds: uniqueUserIds },
-				})
-				.json<FetchActiveUsersBatchResponse>(),
-			userServiceHttpClient
-				.post("internal/user/check-block-relationships", {
-					json: { userId: authenticatedUserId, otherUserIds: uniqueUserIds },
-				})
-				.json<BlockRelationshipIdsDto>(),
-		]);
-		const blockedUserIds = new Set(relationships.blockedUserIds);
-		const blockedByUserIds = new Set(relationships.blockedByUserIds);
-
-		return new Map(
-			users.map((user) => [
-				user.id,
-				{
-					...user,
-					isBlockedByAuthenticatedUser: blockedUserIds.has(user.id),
-					hasBlockedAuthenticatedInUser: blockedByUserIds.has(user.id),
-				},
-			]),
 		);
 	},
 };

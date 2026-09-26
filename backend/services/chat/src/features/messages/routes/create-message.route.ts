@@ -3,7 +3,10 @@ import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
 import { ExceptionCodes } from "@/core/exceptions/exception.codes";
 import { Exception } from "@/core/exceptions/exception";
-import { userServiceClient } from "@/core/service-clients/user-service.client";
+import {
+	userServiceClient,
+	type UserProfileDto,
+} from "@/core/service-clients/user-service.client";
 import type { HonoAuthenticatedEnv } from "@/core/types/hono-authenticated-env";
 import { requireUserAuthentication } from "@/features/authentication/middlewares/require-user-authentication.middleware";
 import { getActiveMembership } from "@/features/discussions/discussions.service";
@@ -80,12 +83,14 @@ const createMessageRoute = defineOpenAPIRoute<
 					status: HttpStatus.CONFLICT.code,
 				});
 			}
-			const usersMap =
-				await userServiceClient.fetchActiveUsersBatchWithBlockRelationships(
-					[recipient.userId],
+			const [{ users }, relationships] = await Promise.all([
+				userServiceClient.fetchActiveUsersBatch([recipient.userId]),
+				userServiceClient.checkBlockRelationships(
 					authenticatedUserId,
-				);
-			const recipientUser = usersMap.get(recipient.userId);
+					[recipient.userId],
+				),
+			]);
+			const recipientUser = users.find((user) => user.id === recipient.userId);
 			if (!recipientUser) {
 				throw new Exception({
 					code: ExceptionCodes.recipient_not_found,
@@ -94,8 +99,8 @@ const createMessageRoute = defineOpenAPIRoute<
 				});
 			}
 			if (
-				recipientUser.isBlockedByAuthenticatedUser ||
-				recipientUser.hasBlockedAuthenticatedInUser
+				relationships.blockedUserIds.includes(recipient.userId) ||
+				relationships.blockedByUserIds.includes(recipient.userId)
 			) {
 				throw new Exception({
 					code: ExceptionCodes.blocked_relationship,
@@ -220,16 +225,27 @@ const createMessageRoute = defineOpenAPIRoute<
 			throw error;
 		}
 
-		const usersMap =
-			await userServiceClient.fetchActiveUsersBatchWithBlockRelationships(
-				[
-					message.senderId,
-					...(message.parentMessage
-						? [message.parentMessage.senderId]
-						: []),
-				],
+		const userIds = [
+			message.senderId,
+			...(message.parentMessage ? [message.parentMessage.senderId] : []),
+		];
+		const [{ users }, relationships] = await Promise.all([
+			userServiceClient.fetchActiveUsersBatch(userIds),
+			userServiceClient.checkBlockRelationships(
 				authenticatedUserId,
-			);
+				userIds,
+			),
+		]);
+		const blockedUserIds = new Set(relationships.blockedUserIds);
+		const blockedByUserIds = new Set(relationships.blockedByUserIds);
+		const usersMap = new Map<string, UserProfileDto>();
+		for (const user of users) {
+			usersMap.set(user.id, {
+				...user,
+				isBlockedByAuthenticatedUser: blockedUserIds.has(user.id),
+				hasBlockedAuthenticatedInUser: blockedByUserIds.has(user.id),
+			});
+		}
 		return c.json(
 			{ message: buildMessageResponse(message, usersMap) },
 			HttpStatus.CREATED.code,
