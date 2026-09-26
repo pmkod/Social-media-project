@@ -29,10 +29,7 @@ const markNotificationsSeenRoute = defineOpenAPIRoute<
 			where: { recipientId: authenticatedUserId, isSeen: false },
 			data: { isSeen: true },
 		});
-		await userServiceClient.updateUnseenNotificationsCount(
-			authenticatedUserId,
-			{ reset: true },
-		);
+		await userServiceClient.resetUnseenNotificationCount(authenticatedUserId);
 
 		return c.json({ updatedCount: updated.count });
 	},

@@ -3,22 +3,13 @@ import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
 import { UserRoutesTag } from "../user.constants";
 
-const UpdateUnseenNotificationsCountBody = z.object({
-	delta: z.number().int(),
-});
-
 const routeDef = createRoute({
 	method: "patch",
-	path: "/internal/user/update-unseen-notifications-count/{userId}",
-	summary: "Update a user's unseen notification count",
+	path: "/internal/user/reset-unseen-notification-count/{userId}",
+	summary: "Reset a user's unseen notification count",
 	tags: [UserRoutesTag],
 	request: {
 		params: z.object({ userId: z.string() }),
-		body: {
-			content: {
-				"application/json": { schema: UpdateUnseenNotificationsCountBody },
-			},
-		},
 	},
 	responses: {
 		[HttpStatus.OK.code]: {
@@ -31,24 +22,23 @@ const routeDef = createRoute({
 					}),
 				},
 			},
-			description: "Notification count updated",
+			description: "Notification count reset",
 		},
 		[HttpStatus.NOT_FOUND.code]: { description: "User not found" },
 	},
 });
 
-const updateUnseenNotificationsCountRoute = defineOpenAPIRoute({
+const resetUnseenNotificationCountRoute = defineOpenAPIRoute({
 	route: routeDef,
 	handler: async (c) => {
 		const { userId } = c.req.valid("param");
-		const { delta } = c.req.valid("json");
 		const updatedUser = await prisma.user.update({
 			where: { id: userId },
-			data: { unseenNotificationsCount: { increment: delta } },
+			data: { unseenNotificationsCount: 0 },
 			select: { unseenNotificationsCount: true },
 		});
 		return c.json({ user: updatedUser });
 	},
 });
 
-export { updateUnseenNotificationsCountRoute };
+export { resetUnseenNotificationCountRoute };

@@ -43,8 +43,7 @@ const removeNotificationRoute = defineOpenAPIRoute({
 		await prisma.notification.delete({ where: { id: notification.id } });
 		if (!notification.isSeen) {
 			await userServiceClient.updateUnseenNotificationsCount(
-				notification.recipientId,
-				{ delta: -1 },
+				{ userId: notification.recipientId, delta: -1 },
 			);
 		}
 

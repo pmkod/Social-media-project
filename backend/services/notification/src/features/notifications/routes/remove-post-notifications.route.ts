@@ -54,7 +54,8 @@ const removePostNotificationsRoute = defineOpenAPIRoute({
 		}
 		await Promise.all(
 			Array.from(unseenCountsByRecipient, ([recipientId, count]) =>
-				userServiceClient.updateUnseenNotificationsCount(recipientId, {
+				userServiceClient.updateUnseenNotificationsCount({
+					userId: recipientId,
 					delta: -count,
 				}),
 			),

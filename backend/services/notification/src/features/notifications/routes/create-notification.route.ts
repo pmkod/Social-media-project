@@ -53,7 +53,8 @@ const createNotificationRoute = defineOpenAPIRoute({
 			select: { id: true },
 		});
 
-		await userServiceClient.updateUnseenNotificationsCount(data.recipientId, {
+		await userServiceClient.updateUnseenNotificationsCount({
+			userId: data.recipientId,
 			delta: 1,
 		});
 

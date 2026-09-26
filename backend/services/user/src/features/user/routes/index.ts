@@ -16,6 +16,7 @@ import { getUserFollowingRoute } from "./get-user-following.route";
 import { getActiveUsersBatchRoute } from "./get-active-users-batch.route";
 import { getActiveUserRoute } from "./get-active-user.route";
 import { requestEmailChangeRoute } from "./request-email-change.route";
+import { resetUnseenNotificationCountRoute } from "./reset-unseen-notification-count.route";
 import { searchUsersRoute } from "./search-users.route";
 import { unblockUserRoute } from "./unblock-user.route";
 import { unfollowUserRoute } from "./unfollow-user.route";
@@ -44,6 +45,7 @@ const userRoutes = [
 	unblockUserRoute,
 	updatePostCountRoute,
 	updateUnseenNotificationsCountRoute,
+	resetUnseenNotificationCountRoute,
 	getFollowingIdsRoute,
 	getBlockRelationshipIdsRoute,
 	checkBlockRelationshipsRoute,

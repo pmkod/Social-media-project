@@ -31,12 +31,17 @@ const userServiceClient = {
 	},
 
 	async updateUnseenNotificationsCount(
-		userId: string,
-		operation: { delta: number } | { reset: true },
+		{ userId, delta }: { userId: string; delta: number },
 	): Promise<void> {
 		await userServiceHttpClient.patch(
 			`internal/user/update-unseen-notifications-count/${encodeURIComponent(userId)}`,
-			{ json: operation },
+			{ json: { delta } },
+		);
+	},
+
+	async resetUnseenNotificationCount(userId: string): Promise<void> {
+		await userServiceHttpClient.patch(
+			`internal/user/reset-unseen-notification-count/${encodeURIComponent(userId)}`,
 		);
 	},
 };
