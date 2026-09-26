@@ -1,8 +1,6 @@
 import { createRoute, defineOpenAPIRoute, z } from "@hono/zod-openapi";
 import { HttpStatus } from "@/core/constants/http-status";
 import { prisma } from "@/core/databases";
-import { ExceptionCodes } from "@/core/exceptions/exception.codes";
-import { Exception } from "@/core/exceptions/exception";
 import { UserRoutesTag } from "../user.constants";
 
 const UpdateUnseenNotificationsCountBody = z.union([
@@ -34,17 +32,10 @@ const updateUnseenNotificationsCountRoute = defineOpenAPIRoute({
 	handler: async (c) => {
 		const { userId } = c.req.valid("param");
 		const operation = c.req.valid("json");
-		const user = await prisma.user.findUnique({
+		await prisma.user.findUniqueOrThrow({
 			where: { id: userId },
 			select: { id: true },
 		});
-		if (!user) {
-			throw new Exception({
-				code: ExceptionCodes.user_not_found,
-				message: "User not found",
-				status: HttpStatus.NOT_FOUND.code,
-			});
-		}
 
 		if ("reset" in operation) {
 			await prisma.user.update({
