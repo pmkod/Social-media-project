@@ -2,7 +2,6 @@ import { blockUserRoute } from "./block-user.route";
 import { changeEmailRoute } from "./change-email.route";
 import { changePasswordRoute } from "./change-password.route";
 import { checkBlockRelationshipsRoute } from "./check-block-relationships.route";
-import { checkUserExistsRoute } from "./check-user-exists.route";
 import { followUserRoute } from "./follow-user.route";
 import { getBlockRelationshipIdsRoute } from "./get-block-relationship-ids.route";
 import { getBlockedUsersRoute } from "./get-blocked-users.route";
@@ -49,7 +48,6 @@ const userRoutes = [
 	getFollowingIdsRoute,
 	getBlockRelationshipIdsRoute,
 	checkBlockRelationshipsRoute,
-	checkUserExistsRoute,
 ];
 
 export { userRoutes };

@@ -14,7 +14,6 @@ Inventaire des routes HTTP déclarées explicitement sous `/internal/**` dans le
 | Méthode | Route | Fonction | Source |
 |---|---|---|---|
 | `POST` | `/internal/user/check-block-relationships` | Vérifier les relations de blocage entre un utilisateur et plusieurs utilisateurs. | `src/features/user/routes/check-block-relationships.route.ts` |
-| `GET` | `/internal/user/check-user-exists/{userId}` | Vérifier qu’un utilisateur actif existe. | `src/features/user/routes/check-user-exists.route.ts` |
 | `GET` | `/internal/user/get-active-user/{userId}` | Récupérer le profil d’un utilisateur actif. | `src/features/user/routes/get-active-user.route.ts` |
 | `POST` | `/internal/user/get-active-users-batch` | Récupérer plusieurs profils d’utilisateurs actifs par identifiants. | `src/features/user/routes/get-active-users-batch.route.ts` |
 | `GET` | `/internal/user/get-block-relationship-ids/{userId}` | Récupérer les identifiants des utilisateurs bloqués par cet utilisateur et de ceux qui le bloquent. | `src/features/user/routes/get-block-relationship-ids.route.ts` |
@@ -31,4 +30,4 @@ Inventaire des routes HTTP déclarées explicitement sous `/internal/**` dans le
 | `POST` | `/internal/notification/remove-notification` | Supprimer une notification correspondant à un événement annulé. | `src/features/notifications/routes/remove-notification.route.ts` |
 | `POST` | `/internal/notification/remove-post-notifications` | Supprimer les notifications liées à une publication supprimée. | `src/features/notifications/routes/remove-post-notifications.route.ts` |
 
-**Total : 16 routes.** Les chemins entre accolades représentent des paramètres d’URL.
+**Total : 15 routes.** Les chemins entre accolades représentent des paramètres d’URL.
