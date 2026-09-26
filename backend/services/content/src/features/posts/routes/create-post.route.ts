@@ -138,7 +138,10 @@ const createPostRoute = defineOpenAPIRoute<
 			throw error;
 		}
 		const [postToSend] = await hydratePostMediaFiles([createdPost]);
-		await userServiceClient.adjustPostCount(authenticatedUserId, 1);
+		await userServiceClient.updatePostCount({
+			userId: authenticatedUserId,
+			delta: 1,
+		});
 
 		return c.json(
 			{

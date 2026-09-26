@@ -39,7 +39,10 @@ const deletePostRoute = defineOpenAPIRoute<
 			data: { exists: false },
 		});
 
-		await userServiceClient.adjustPostCount(authenticatedUserId, -1);
+		await userServiceClient.updatePostCount({
+			userId: authenticatedUserId,
+			delta: -1,
+		});
 
 		return c.json({ message: "Post deleted successfully" });
 	},

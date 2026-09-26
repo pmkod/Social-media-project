@@ -77,7 +77,13 @@ const userServiceClient = {
 		return data.userIds ?? [];
 	},
 
-	async adjustPostCount(userId: string, delta: -1 | 1): Promise<void> {
+	async updatePostCount({
+		userId,
+		delta,
+	}: {
+		userId: string;
+		delta: -1 | 1;
+	}): Promise<void> {
 		await userServiceHttpClient.patch(
 			`internal/user/update-post-count/${encodeURIComponent(userId)}`,
 			{ json: { delta } },
