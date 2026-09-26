@@ -1,3 +1,4 @@
+import { UnauthorizedException } from "@/exceptions/unauthorized.exception";
 import { Configurations } from "../configurations";
 import { internalHttpClient } from "../http-clients/internal.http-client";
 
@@ -15,11 +16,15 @@ const sessionServiceHttpClient = internalHttpClient.extend({
 
 const sessionServiceClient = {
 	async verifySession(sessionId: string, sessionToken: string) {
-		return await sessionServiceHttpClient
-			.post("internal/session/verify-session", {
-				json: { id: sessionId, token: sessionToken },
-			})
-			.json<VerifiedSessionResponse>();
+		try {
+			return await sessionServiceHttpClient
+				.post("internal/session/verify-session", {
+					json: { id: sessionId, token: sessionToken },
+				})
+				.json<VerifiedSessionResponse>();
+		} catch (_) {
+			throw new UnauthorizedException();
+		}
 	},
 };
 
