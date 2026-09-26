@@ -21,7 +21,16 @@ const routeDef = createRoute({
 		},
 	},
 	responses: {
-		[HttpStatus.OK.code]: { description: "Post count updated" },
+		[HttpStatus.OK.code]: {
+			content: {
+				"application/json": {
+					schema: z.object({
+						user: z.object({ postCount: z.number().int().nonnegative() }),
+					}),
+				},
+			},
+			description: "Post count updated",
+		},
 	},
 });
 
@@ -30,24 +39,12 @@ const updatePostCountRoute = defineOpenAPIRoute({
 	handler: async (c) => {
 		const { userId } = c.req.valid("param");
 		const { delta } = c.req.valid("json");
-		const user = await prisma.user.findUnique({
-			where: { id: userId },
-			select: { postCount: true },
-		});
-		if (!user) {
-			throw new Exception({
-				code: ExceptionCodes.user_not_found,
-				message: "User not found",
-				status: HttpStatus.NOT_FOUND.code,
-			});
-		}
-
 		const updatedUser = await prisma.user.update({
 			where: { id: userId },
-			data: { postCount: Math.max(0, user.postCount + delta) },
+			data: { postCount: { increment: delta } },
 			select: { postCount: true },
 		});
-		return c.json(updatedUser);
+		return c.json({ user: updatedUser });
 	},
 });
 

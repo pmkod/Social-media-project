@@ -10,7 +10,6 @@ Inventaire des routes HTTP déclarées explicitement sous `/internal/**` dans le
 | `GET` | `/internal/user/check-user-exists/{userId}` | Vérifier qu’un utilisateur actif existe. | `src/features/user/routes/check-user-exists.route.ts` |
 | `GET` | `/internal/user/get-block-relationship-ids/{userId}` | Récupérer les identifiants des utilisateurs bloqués par cet utilisateur et de ceux qui le bloquent. | `src/features/user/routes/get-block-relationship-ids.route.ts` |
 | `GET` | `/internal/user/get-following-ids/{userId}` | Récupérer les identifiants des utilisateurs suivis. | `src/features/user/routes/get-following-ids.route.ts` |
-| `PATCH` | `/internal/user/update-post-count/{userId}` | Incrémenter ou décrémenter le compteur de publications. | `src/features/user/routes/update-post-count.route.ts` |
 | `PATCH` | `/internal/user/update-unseen-notifications-count/{userId}` | Modifier ou réinitialiser le compteur de notifications non lues. | `src/features/user/routes/update-unseen-notifications-count.route.ts` |
 
 ## Notification (`backend/services/notification`)
