@@ -160,7 +160,7 @@ Il s'agit donc de dépendances de configuration inutilisées, pas de communicati
 - `NotificationServiceClient.removeNotificationsForPost()` existe côté Content et l'endpoint `/internal/notification/remove-post-notifications` existe côté Notification, mais aucune route Content n'appelle cette méthode lors de la suppression d'un post.
 - Report déclare les URLs Content et User sans client ni call site.
 - Content lit `USER_SERVICE_URL` dans sa configuration, mais cette variable manque dans `backend/services/content/.env.example` ; le fallback `http://localhost:8001` masque actuellement l'oubli.
-- Les endpoints internes `check-user-exists`, `check-post-exists` et `check-comment-exists` existent, mais aucun appel inter-service actif n'a été trouvé vers eux.
+- L'endpoint interne `check-user-exists` existe, mais aucun appel inter-service actif n'a été trouvé vers lui.
 
 ## Exigences de fiabilité pour les flux asynchrones
 

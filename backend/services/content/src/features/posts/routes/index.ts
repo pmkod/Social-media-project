@@ -1,4 +1,3 @@
-import { checkPostExistsRoute } from "./check-post-exists.route";
 import { createPostRoute } from "./create-post.route";
 import { deletePostRoute } from "./delete-post.route";
 import { getFeedFollowingRoute } from "./get-feed-following.route";
@@ -21,7 +20,6 @@ const postsRoutes = [
 	likePostRoute,
 	unlikePostRoute,
 	getPostLikesRoute,
-	checkPostExistsRoute,
 ];
 
 export { postsRoutes };

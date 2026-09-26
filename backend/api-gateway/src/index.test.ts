@@ -7,7 +7,6 @@ describe("internal routes", () => {
 		["GET", "/internal"],
 		["POST", "/internal/session/create-session"],
 		["OPTIONS", "/internal/user/get-active-users-batch"],
-		["GET", "/%69nternal/content/check-post-exists/123"],
 	])("returns 404 for %s %s", async (method, pathname) => {
 		const response = await app.request(pathname, { method });
 

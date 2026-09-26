@@ -1,4 +1,3 @@
-import { checkCommentExistsRoute } from "./check-comment-exists.route";
 import { createCommentRoute } from "./create-comment.route";
 import { deleteCommentRoute } from "./delete-comment.route";
 import { getCommentByIdRoute } from "./get-comment-by-id.route";
@@ -15,7 +14,6 @@ const commentsRoutes = [
 	likeCommentRoute,
 	unlikeCommentRoute,
 	getCommentLikesRoute,
-	checkCommentExistsRoute,
 ];
 
 export { commentsRoutes };

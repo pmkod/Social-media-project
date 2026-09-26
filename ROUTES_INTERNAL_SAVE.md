@@ -22,13 +22,6 @@ Inventaire des routes HTTP déclarées explicitement sous `/internal/**` dans le
 | `PATCH` | `/internal/user/update-post-count/{userId}` | Incrémenter ou décrémenter le compteur de publications. | `src/features/user/routes/update-post-count.route.ts` |
 | `PATCH` | `/internal/user/update-unseen-notifications-count/{userId}` | Modifier ou réinitialiser le compteur de notifications non lues. | `src/features/user/routes/update-unseen-notifications-count.route.ts` |
 
-## Content (`backend/services/content`)
-
-| Méthode | Route | Fonction | Source |
-|---|---|---|---|
-| `GET` | `/internal/content/check-comment-exists/{id}` | Vérifier qu’un commentaire existe et peut être utilisé comme cible. | `src/features/comments/routes/check-comment-exists.route.ts` |
-| `GET` | `/internal/content/check-post-exists/{id}` | Vérifier qu’une publication existe et peut être utilisée comme cible. | `src/features/posts/routes/check-post-exists.route.ts` |
-
 ## Notification (`backend/services/notification`)
 
 | Méthode | Route | Fonction | Source |
